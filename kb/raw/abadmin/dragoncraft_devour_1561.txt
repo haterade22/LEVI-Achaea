@@ -1,0 +1,25 @@
+Ability: Devour (Record #1561)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Destroy them in a single bite.
+Syntax: DEVOUR <target>
+Abfile:
+Use your massive jaws to rip your opponent's head from their shoulders.
+The more restoration broken limbs your victim suffers from, the faster
+you may complete your devouring.
+
+Note that a damaged torso will boost the speed of this ability
+significantly more than other limbs. If your devour would take less than
+six seconds to complete in total, it will not be interruptable via
+several of the standard methods, such as via the paralysis affliction or
+being knocked to the ground.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: dragonform

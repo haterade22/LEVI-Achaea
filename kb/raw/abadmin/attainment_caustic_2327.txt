@@ -1,0 +1,17 @@
+Ability: Caustic (Record #2327)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: A chemical that burns through denizen shields.
+Syntax: THROW CAUSTIC AT <target>
+Abfile:
+The caustic is a very toxic chemical that can remove a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_alchemist

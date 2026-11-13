@@ -1,0 +1,17 @@
+Ability: Hullmaintenance (Record #1750)
+Associated skill: Seafaring
+Skillpoints required: 45999
+Blurb: Repair and maintain the ship's deck and hull.
+Syntax: MAINTAIN HULL
+MAINTAIN NONE
+Abfile:
+Actively work to maintain the ship's hull, at a high ongoing endurance
+cost to you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

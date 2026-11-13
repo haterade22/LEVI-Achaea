@@ -1,0 +1,18 @@
+Ability: Effervescence (Record #2624)
+Associated skill: Duress
+Skillpoints required: 39999
+Blurb: An insidious vapour to lay low your foes.
+Syntax: MANIFEST EFFERVESCENCE
+Abfile:
+You may manifest a vapour that will linger in a location for a time,
+periodically robbing your foes of breath. Notably, holding one's breath
+is only a partial defence against this sinister gift of Whiirh.
+
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

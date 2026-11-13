@@ -1,0 +1,3 @@
+Ability: Elixlist (Record #1422)
+Associated skill: Vision
+Maps to record 1411 (LIST).

@@ -1,0 +1,21 @@
+Ability: Bear (Record #366)
+Associated skill: Metamorphosis
+Skillpoints required: 15999
+Blurb: The mighty grizzly bear.
+Syntax: MORPH BEAR
+Extra info: Powers: Alertness
+Block
+Scent
+Shred
+Vitality
+Abfile:
+The mighty grizzly bear.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 80 mana

@@ -1,0 +1,22 @@
+Ability: Whirl (Record #2096)
+Associated skill: Weaponmastery
+Skillpoints required: 2000
+Blurb: The most basic of blunt attacks.
+Syntax: WHIRL <target> [limb]
+Extra info: Either a flail or a morningstar.
+Abfile:
+This ability delivers a single, powerful blow with your chosen weapon.
+When striking a limb that is already damaged to the point of needing a
+restoration salve, it will deliver a fracture to that limb(*).
+
+* Excluding the legs.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_dualblunt

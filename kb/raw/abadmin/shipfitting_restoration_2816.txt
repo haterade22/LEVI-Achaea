@@ -1,0 +1,18 @@
+Ability: Restoration (Record #2816)
+Associated skill: Shipfitting
+Skillpoints required: 35999
+Blurb: Restore a ship to its original state.
+Syntax: SHIPFIT RESTORE <SAILS|HULL|TRIM|SHIP>
+Abfile:
+Inherited a second-hand ship with gaudy platinum trim and an alarmingly
+pink hull? Have no fear! A suitably knowledgeable shipfitter may restore
+any ship to its original state, though it will require ship commodities
+to do so.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Prefarar (Record #1964)
+Associated skill: Toxicology
+Skillpoints required: 8999
+Blurb: Increase the recipient's sensitivity.
+Syntax: None
+Extra info: Ingredients: 1 bloodroot, 1 ginseng, 1 purpleink or
+1 ferrum, 1 magnesium, 1 purpleink
+Abfile:
+Increase your victim's sensitivity to pain.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

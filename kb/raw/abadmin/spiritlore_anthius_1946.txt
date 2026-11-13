@@ -1,0 +1,24 @@
+Ability: Anthius (Record #1946)
+Associated skill: Spiritlore
+Skillpoints required: 38999
+Blurb: Anthius, The Crusader.
+Syntax: INVOKE JUDGEMENT <target> <direction>
+Extra info: Attune effect: immunity to the fear affliction.
+Abfile:
+Anthius was one of the faithful Templars who sought out and eliminated
+those that would corrupt the sanctity of Creation. By channeling this
+spirit, you are able to unleash holy judgement at a heretic in an
+adjacent location. The spectral fires will scythe past magical defences,
+and will not be denied.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Resource: 150 mana
+The ability name PALADIN is mapped to this ability.

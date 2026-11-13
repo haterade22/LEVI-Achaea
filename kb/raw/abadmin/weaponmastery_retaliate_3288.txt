@@ -1,0 +1,21 @@
+Ability: Retaliate (Record #3288)
+Associated skill: Weaponmastery
+Skillpoints required: 35000
+Blurb: Strike back in defence.
+Syntax: DEFEND <target>
+Abfile:
+Upon using this ability, you will attempt to take much of the damage
+from the blows that might otherwise harm the adventurer you are
+defending.
+
+So long as you are able, you will dole out retaliatory blows at those
+who dare threaten your charge.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_twohanded

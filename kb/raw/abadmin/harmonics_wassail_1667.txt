@@ -1,0 +1,17 @@
+Ability: Wassail (Record #1667)
+Associated skill: Harmonics
+Skillpoints required: 36999
+Blurb: Restore mana for allies with the jaunty Wassail.
+Syntax: PLAY WASSAIL
+Abfile:
+Replenishes mana for the bard and his allies every few seconds.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 100 mana

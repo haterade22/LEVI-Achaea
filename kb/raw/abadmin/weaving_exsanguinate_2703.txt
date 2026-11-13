@@ -1,0 +1,23 @@
+Ability: Exsanguinate (Record #2703)
+Associated skill: Weaving
+Skillpoints required: 49999
+Blurb: They'll never eat again.
+Syntax: WEAVE EXSANGUINATE <target>
+Abfile:
+By driving your blade into the guts of your foe, you'll ravage their
+internal organs, making them violently sick(*). If they're already
+bleeding significantly then they'll also lose any desire (or ability) to
+eat(**).
+
+* Gives nausea.
+** Gives anorexia.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

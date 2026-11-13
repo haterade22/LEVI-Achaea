@@ -1,0 +1,27 @@
+Ability: Comet (Record #2560)
+Associated skill: Ignition
+Skillpoints required: 17999
+Blurb: They cannot outrun the fire.
+Syntax: IGNITE COMET <target>
+Abfile:
+When standing near an appropriate source of heat(*), you may rocket
+across distances, smashing into those that would flee from you(**).
+
+If performed from within your crucible and your foe does not stand
+within a crucible already, your crucible shall shift with you to the new
+location.
+
+* Must be standing within your crucible or have a firewall between you
+and your target. If they are multiple rooms away and you do not stand
+within your crucible, firewalls will need to be between all of the
+locations.
+** The target must be in line of sight and will take damage as well as
+being set ablaze.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

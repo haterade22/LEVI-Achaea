@@ -1,0 +1,19 @@
+Ability: Dawnhand (Record #3036)
+Associated skill: Excision
+Skillpoints required: 5999
+Blurb: The Lightbringer guides your hand.
+Syntax: PERFORM DAWNHAND
+Abfile:
+The Lightbringer will guide your hand, bolstering your strength.
+
+* Grants +1 strength.
+** At dawn, grants +3 instead.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Truth (Record #1044)
+Associated skill: Devotion
+Skillpoints required: 1999
+Blurb: Dispel illusions with the power of your devotion.
+Syntax: PERFORM TRUTH
+Abfile:
+This ability allows you to detect certain types of hidden adventurers in your room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 devotion

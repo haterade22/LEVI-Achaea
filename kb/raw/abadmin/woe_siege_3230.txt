@@ -1,0 +1,23 @@
+Ability: Siege (Record #3230)
+Associated skill: Woe
+Skillpoints required: 55999
+Blurb: A city fallen and besieged.
+Syntax: RECITE SIEGE
+Abfile:
+The siege upon Shallam lost was one of great heroism and loss, but also
+one of great triumphs and great mistakes. By reciting this tale, a
+sliver of the chaos that befell that great battlefield will be made
+known, and fire shall once more rain from the heavens(*).
+
+* A random room in the local area with people in it is chosen. Everyone
+in that room takes damage.
+** This is a channelled action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance and 4.00 seconds of equilibrium

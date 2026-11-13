@@ -1,0 +1,19 @@
+Ability: Hypnotic (Record #2264)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: A chemical that dazes your victim into forgetfulness.
+Syntax: THROW HYPNOTIC AT <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+The hypnotic is a potent chemical, the fumes of which cause your victim to become extremely forgetful for a few seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_alchemist

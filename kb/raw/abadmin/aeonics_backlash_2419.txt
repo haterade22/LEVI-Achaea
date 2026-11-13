@@ -1,0 +1,18 @@
+Ability: Backlash (Record #2419)
+Associated skill: Aeonics
+Skillpoints required: 30999
+Blurb: Everything has a price.
+Syntax: CHRONO BACKLASH
+Abfile:
+By forcibly manipulating time, you are able to completely remove any
+excess age you may have built up due to overuse of your Aeonic
+abilities. However, the strain this puts on your body shall mean that
+further regression shall take much longer for a time.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

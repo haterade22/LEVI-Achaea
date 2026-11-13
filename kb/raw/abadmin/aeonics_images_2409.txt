@@ -1,0 +1,19 @@
+Ability: Images (Record #2409)
+Associated skill: Aeonics
+Skillpoints required: 4999
+Blurb: One of many.
+Syntax: CHRONO IMAGES [boost]
+Abfile:
+By tapping into alternative timelines, you may allow your enemies to see
+multiple copies of you, though only one is real. This will serve as a
+reflection to spare you from an attack; if you boost the ability, two
+reflections shall manifest.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 500 age

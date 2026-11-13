@@ -1,0 +1,4 @@
+Ability: Clawrend (Record #1558)
+Associated skill: Dragoncraft
+Maps to record 1557 (REND).
+Skill specialisation: dragonform

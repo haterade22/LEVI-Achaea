@@ -1,0 +1,17 @@
+Ability: Rondo (Record #1655)
+Associated skill: Harmonics
+Skillpoints required: 12999
+Blurb: Call out the rats with their favourite melody.
+Syntax: PLAY RONDO
+Abfile:
+Attracts increased numbers of rats to your current location for the current Achaean day. This is not a true harmonic in that it does not have a separate duration of its own, and cannot be called or sent away via the Andante or Battaglia.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 100 mana

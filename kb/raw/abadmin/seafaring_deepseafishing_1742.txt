@@ -1,0 +1,16 @@
+Ability: Deepseafishing (Record #1742)
+Associated skill: Seafaring
+Skillpoints required: 15999
+Blurb: Fish for the biggest there be.
+Syntax: CAST LINE [SHORT|MEDIUM|LONG]
+Abfile:
+You are able to fish off your ship, using "huge" bait only. See HELP
+FISHING for more information.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

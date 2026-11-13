@@ -1,0 +1,20 @@
+Ability: Vinewreathe (Record #739)
+Associated skill: Propagation
+Skillpoints required: 25999
+Blurb: Call upon Nature to hinder your foe.
+Syntax: VINEWREATHE <target>
+Abfile:
+Calling upon Nature, you may summon a mass of animated vines to hinder
+your target for a time, preventing any attempts they make to parry your
+thornrends.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium
+Resource: 500 mana

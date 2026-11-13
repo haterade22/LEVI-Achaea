@@ -1,0 +1,23 @@
+Ability: Conflagrate (Record #2217)
+Associated skill: Elementalism
+Skillpoints required: 44999
+Blurb: Summon forth a terrible conflagration.
+Syntax: CAST CONFLAGRATE AT <target>
+Abfile:
+This higher order fire spell will cause a conflagration to engulf your
+target. This conflagration will deal periodic damage until the person is
+able to extinguish it. The only way to do this is to remove all traces
+of the ablaze affliction from their person.
+
+For the purposes of this spell, suitably vulnerable requires that the
+target has two or more stacks of the ablaze affliction.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.35 seconds of equilibrium
+Resource: 150 mana

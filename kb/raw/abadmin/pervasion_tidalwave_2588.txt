@@ -1,0 +1,19 @@
+Ability: Tidalwave (Record #2588)
+Associated skill: Pervasion
+Skillpoints required: 25999
+Blurb: Upon raging waters shall you come.
+Syntax: MANIFEST TIDALWAVE <direction>
+Abfile:
+Summon forth a tidal wave, carrying you away in a direction for several
+rooms. This will carry you over walls, but not through closed doors. Any
+firewall in the path of your wave shall be immediately snuffed at your
+passing. If the room you begin in is flooded, you shall not be hindered
+in your movement.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Sustenance (Record #2695)
+Associated skill: Attainment
+Skillpoints required: 47999
+Blurb: Sleep is for the weak. Food too.
+Syntax: CONFIG DEPRIVATION [ON|OFF]
+Abfile:
+You will no longer grow more tired or more hungry.
+
+Note that this only applies to the natural effects of the passage of
+time; some special abilities may still cause hunger or tiredness.
+
+This is automatically OFF for all who reach level 80, but you can toggle
+this with the DEPRIVATION configuration.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

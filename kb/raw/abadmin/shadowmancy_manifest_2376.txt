@@ -1,0 +1,22 @@
+Ability: Manifest (Record #2376)
+Associated skill: Shadowmancy
+Skillpoints required: 399
+Blurb: Forge weapons from the shadows that surround you.
+Syntax: SHADOW MANIFEST|BANISH|UNMAKE <SCYTHE|DAGGER>
+Abfile:
+The very shadows shall come together to form your blade. You may
+manifest both a dagger and scythe, which will be utilised for different
+abilities that you shall learn as your abilities improve. If you already
+have either a dagger or scythe in existence, performing this ability
+shall summon it back to you, rather than creating a new one.
+
+Note that for the initial manifestation, you must be surrounded by
+magical darkness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

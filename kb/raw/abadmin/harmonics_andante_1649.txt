@@ -1,0 +1,16 @@
+Ability: Andante (Record #1649)
+Associated skill: Harmonics
+Skillpoints required: 2499
+Blurb: Call your harmonics to you.
+Syntax: CALL HARMONICS
+Abfile:
+With the Andante, the bard calls all current harmonics to his current location, subject to whatever limits there may be on his ability to sustain multiple harmonics in one place.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

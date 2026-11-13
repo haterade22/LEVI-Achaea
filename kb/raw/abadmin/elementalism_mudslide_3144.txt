@@ -1,0 +1,21 @@
+Ability: Mudslide (Record #3144)
+Associated skill: Elementalism
+Skillpoints required: 34999
+Blurb: A sludge to send them sprawling.
+Syntax: CAST MUDSLIDE AT <target>
+Abfile:
+Summon up a sticky tide of mud to knock your foe sprawling and leave
+them covered in sludge.
+
+* Deals some damage, and gives the slickness affliction as well as
+knocking the target prone.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium
+Resource: 90 mana

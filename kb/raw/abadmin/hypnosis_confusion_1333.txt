@@ -1,0 +1,15 @@
+Ability: Confusion (Record #1333)
+Associated skill: Hypnosis
+Skillpoints required: 46999
+Blurb: Causes the mind to become confounded.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

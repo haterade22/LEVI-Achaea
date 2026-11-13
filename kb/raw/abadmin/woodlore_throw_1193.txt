@@ -1,0 +1,3 @@
+Ability: Throw (Record #1193)
+Associated skill: Woodlore
+Maps to record 1192 (GRAB).

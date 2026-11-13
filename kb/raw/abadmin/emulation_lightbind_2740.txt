@@ -1,0 +1,23 @@
+Ability: Lightbind (Record #2740)
+Associated skill: Emulation
+Skillpoints required: 49999
+Blurb: Some things must not walk free.
+Syntax: ENACT LIGHTBIND <target>
+Abfile:
+Though the Aldar could never replicate the desired functionality of the
+golden chain, they did determine a way to bind someone quite
+effectively. By summoning bonds of light, you may chain a person to you.
+They will find it difficult to move away until they get at least some
+distance(*).
+
+* The bonds fail after the two people are not in the same or adjacent
+rooms.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium

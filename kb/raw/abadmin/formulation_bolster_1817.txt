@@ -1,0 +1,26 @@
+Ability: Bolster (Record #1817)
+Associated skill: Formulation
+Skillpoints required: 60000
+Blurb: Force your body beyond its limits.
+Syntax: BOLSTER
+Extra info: Requires: enhanced form
+Abfile:
+This potent ability allows an alchemist who has imbibed the enhancement
+formula to drive their body into a state of advanced healing. Even the
+most terrible injuries can be healed, although the toll upon the
+alchemist's mental reserves is excessively high.
+
+It is also theorised that extended use of this ability will cause the
+backlash from the alchemists physiology reverting from an enhanced state
+to be exponentially more dangerous.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance
+Resource: 351 mana

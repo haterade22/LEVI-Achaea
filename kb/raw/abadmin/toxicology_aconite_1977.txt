@@ -1,0 +1,17 @@
+Ability: Aconite (Record #1977)
+Associated skill: Toxicology
+Skillpoints required: 46999
+Blurb: Cause sheer stupidity in your opponent.
+Syntax: None
+Extra info: Ingredients: 2 goldenseal, 1 lobelia, 1 yellowink or
+2 plumbum, 1 argentum, 1 yellowink
+Abfile:
+Afflict your victim with sheer stupidity.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

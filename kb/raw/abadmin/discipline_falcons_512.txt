@@ -1,0 +1,3 @@
+Ability: Falcons (Record #512)
+Associated skill: Discipline
+Maps to record 511 (FALCON).

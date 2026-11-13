@@ -1,0 +1,25 @@
+Ability: Adapt (Record #3108)
+Associated skill: Runelore
+Skillpoints required: 60000
+Blurb: Battle waits for no one.
+Syntax:
+Abfile:
+When you wield a runeblade with a configuration upon the blade, usually
+it takes a short while for the runic configuration to become active.
+However, the true master of runelore has learned to adapt him or herself
+to a change in the flow of battle and to turn this to their advantage:
+thus, when swapping from runeblade to another runeblade in your primary
+hand of a different type(*), you may eliminate this delay entirely(**).
+
+* Going from say, a scimitar to a battleaxe or flail to a morningstar
+would let you skip the delay in a runic configuration becoming active.
+Going from a scimitar to a scimitar would not.
+** You may only adapt once every 10 seconds or so.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

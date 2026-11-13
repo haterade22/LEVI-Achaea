@@ -1,0 +1,16 @@
+Ability: Startle (Record #2992)
+Associated skill: Malignity
+Skillpoints required: 31999
+Blurb: The beasts of burden need a brutal hand.
+Syntax: HYENA STARTLE <target>
+Abfile:
+This ability will allow your hyena to startle an opponent's steed,
+tossing the wretch off.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

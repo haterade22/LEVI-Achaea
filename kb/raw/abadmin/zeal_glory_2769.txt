@@ -1,0 +1,25 @@
+Ability: Glory (Record #2769)
+Associated skill: Zeal
+Skillpoints required: 55999
+Blurb: The verse of glory.
+Syntax: RECITE GLORY
+Abfile:
+A verse inspiring victory and tenacity, this holy power will bring forth
+a blessed protection on a given location when recited against a foe of
+Creation. For one minute after activation if an individual blessed by
+devotion to the gods falls in battle and is raised by the grace of the
+stars, he or she shall be pulled from the location to a random adjacent
+location. This effect can fire up to three times before it runs its
+course, and it can not be brought forth again for a short time in the
+location(*).
+
+* This cooldown is on the location, not on the priest.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

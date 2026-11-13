@@ -1,0 +1,16 @@
+Ability: Spy (Record #344)
+Associated skill: Metamorphosis
+Skillpoints required: 3999
+Blurb: From far up above, looking down at a particular adventurer.
+Syntax: SPY <target>
+This ability will be hidden on ablistings.
+Abfile:
+Using your lofty vantage point in the sky, you attempt to spy on an outdoors adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

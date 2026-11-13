@@ -1,0 +1,18 @@
+Ability: Gauge (Record #2549)
+Associated skill: Ignition
+Skillpoints required: 699
+Blurb: The briefest glance to divine their end.
+Syntax: GAUGE <target>
+Abfile:
+Gauge your target's vital power with but a glance, discerning how much
+health they have remaining. This ability does not consume either balance
+or equilibrium, but has a short time after use during which you may not
+use it again.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

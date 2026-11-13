@@ -1,0 +1,18 @@
+Ability: Devilmark (Record #977)
+Associated skill: Occultism
+Skillpoints required: 43999
+Blurb: The Mark of the Devil grants great power.
+Syntax: DEVILMARK
+WIPE DEVILMARK
+Abfile:
+You can give yourself the mark of the devil. When flinging the tarot DEVIL card, the devil is bound to you by your will for a longer period of time up to a possible three services. The mark of the devil vanishes as soon as this term of service expires. You may also wipe the devilmark from your body to prematurely end the services of a devil.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana

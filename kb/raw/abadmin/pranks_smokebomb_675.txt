@@ -1,0 +1,19 @@
+Ability: Smokebomb (Record #675)
+Associated skill: Pranks
+Skillpoints required: 14999
+Blurb: Choke all in the room with a plume of smoke.
+Syntax: CONSTRUCT SMOKE BOMB
+THROW SMOKEBOMB <direction>/AT GROUND
+Extra info: Requires: 1 iron
+Abfile:
+This bomb, when it explodes, will spew out a foul gas that will choke those in the room. The fumes induce hunger in those that inhale them. You can make two bombs out of a single commodity.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name SMOKE BOMB is mapped to this ability.

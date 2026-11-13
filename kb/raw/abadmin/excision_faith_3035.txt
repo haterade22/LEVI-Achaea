@@ -1,0 +1,21 @@
+Ability: Faith (Record #3035)
+Associated skill: Excision
+Skillpoints required: 1999
+Blurb: The armour which does not rust or break.
+Syntax: PERFORM FAITH
+Abfile:
+Your foes will come at you with sword and spell, but they will not avail
+them: for you are clad not only in plate and chain but beneath the aegis
+of your faith.
+
+* Grants damage resistance to cutting, blunt, and magic damage. Less so
+in the case of magic.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of equilibrium

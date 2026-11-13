@@ -1,0 +1,18 @@
+Ability: Hypersense (Record #928)
+Associated skill: Telepathy
+Skillpoints required: 30999
+Blurb: Hypersensitivity to telepathic activity.
+Syntax: MIND HYPERSENSE [ON|OFF]
+Extra info: Also drains willpower.
+Abfile:
+You are now able to cast a net of telepathic power over the local area. Like a spider at the centre of his web, any attempts at telepathic locking within your net will vibrate the invisible strands of mental power and alert you to the attempts.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 mana
+Drain: Mana

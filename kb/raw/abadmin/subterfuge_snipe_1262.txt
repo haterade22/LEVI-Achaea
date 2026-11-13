@@ -1,0 +1,17 @@
+Ability: Snipe (Record #1262)
+Associated skill: Subterfuge
+Skillpoints required: 50999
+Blurb: The ability to sharpshoot.
+Syntax: SNIPE <target> <direction>
+Extra info: Cooldown if target not in the direction specified: 0.50 seconds of balance.
+Abfile:
+Using this ability, you can improve your accuracy at shooting. Use it instead of the SHOOT command.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

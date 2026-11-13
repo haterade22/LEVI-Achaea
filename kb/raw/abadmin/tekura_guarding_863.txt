@@ -1,0 +1,22 @@
+Ability: Guarding (Record #863)
+Associated skill: Tekura
+Skillpoints required: 35999
+Blurb: Guarding a body part and counterattacking.
+Syntax: GUARD <head/torso/left arm/right arm/left leg/right leg>
+Abfile:
+This ability is similar to, but an improvement on, the parrying ability
+that those with sufficient skill in weaponry can use. It allows you to
+not only guard a single location on your body against attack, but
+counter any attacks made to there by automatically throwing your
+opponent from his mount and stunning him.
+
+When in the cat stance, you may switch which limb you are guarding while
+off balance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

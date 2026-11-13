@@ -1,0 +1,4 @@
+Ability: Breathstream (Record #1551)
+Associated skill: Dragoncraft
+Maps to record 1550 (STREAM).
+Skill specialisation: dragonform

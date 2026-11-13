@@ -1,0 +1,16 @@
+Ability: Backhandspring (Record #673)
+Associated skill: Pranks
+Skillpoints required: 11499
+Blurb: Leap out of the room striking someone on the way out.
+Syntax: BHS/BACKHANDSPRING <target> <direction>
+Abfile:
+With the backwards handspring, you may leave the room while simultaneously kicking someone on your way out.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

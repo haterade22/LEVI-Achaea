@@ -1,0 +1,18 @@
+Ability: Deluge (Record #2194)
+Associated skill: Weatherweaving
+Skillpoints required: 36999
+Blurb: A great flood of water.
+Syntax: CAST DELUGE
+Abfile:
+This powerful water spell shall summon forth a great deluge of water,
+flooding your immediate location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

@@ -1,0 +1,3 @@
+Ability: Hound (Record #1832)
+Associated skill: Domination
+Maps to record 1000 (LYCANTHA).

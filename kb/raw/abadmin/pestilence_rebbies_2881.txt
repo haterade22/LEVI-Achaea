@@ -1,0 +1,23 @@
+Ability: Rebbies (Record #2881)
+Associated skill: Pestilence
+Skillpoints required: 5999
+Blurb: An unpleasant transformative disease.
+Syntax:
+Abfile:
+Its origins shrouded in mystery, this disease is a slow-working
+infection that breaks down and reshapes the body over time. In itself it
+is not particularly dangerous: the truly nightmarish aspect of its
+function is that the modifications are passed on to any of the
+infected's progeny. One of the immediate symptoms, however, is that
+salve applied to the skin can leave it extremely tender(*).
+
+* Applying salves to the skin or torso area will result in being
+afflicted with sensitivity.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

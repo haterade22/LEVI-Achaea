@@ -1,0 +1,19 @@
+Ability: Aeon (Record #619)
+Associated skill: Tarot
+Skillpoints required: 39999
+Blurb: Curse your foe with the mark of Chronos.
+Syntax: FLING AEON AT <target>
+Abfile:
+The Aeon tarot will give the curse of Chronos the Eternal to an
+adventurer, slowing his passage through time.
+
+You cannot command entities while off balance from flinging this card.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.70 seconds of balance

@@ -1,0 +1,25 @@
+Ability: Frenzy (Record #3093)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: By stinger and claw.
+Syntax: FRENZY <target> <sting venom> <claw venom> [limb]
+This ability will be hidden on ablistings.
+Abfile:
+Unleash a frenzy at your prey, first plunging your venom-filled stinger
+into them before ripping at them with your claws.
+
+You may sting with: darkshade, vardrax, euphorbia, kalmia, or sumac(*).
+You must have a vial of venom on hand to envenom your claws with.
+
+* You may only sting with sumac every so often: your venom sacs have a
+limited amount and take time to refill after each use.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Skill specialisation: meta_druid

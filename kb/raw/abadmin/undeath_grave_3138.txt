@@ -1,0 +1,26 @@
+Ability: Grave (Record #3138)
+Associated skill: Undeath
+Skillpoints required: 50999
+Blurb: The fate of all.
+Syntax: SOULBLEED GRAVE
+Abfile:
+If you stand within a location that has fallen under the Underworld's
+influence, you may channel the inevitability of the grave against all
+who stand in the area(*). No matter how fast they flee and how far they
+run, if you complete this fell ritual they will die(**).
+
+* This skill will mark all those in your area for death and begin a 60
+second channel where you cannot perform any actions.
+** If this channel completes and you have not died or been interrupted,
+all those marked for death will die no matter where they happen to be.
+*** This ability has a long cooldown for both the caster and on the
+area, and consumes one of your lives to use.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 2
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of balance

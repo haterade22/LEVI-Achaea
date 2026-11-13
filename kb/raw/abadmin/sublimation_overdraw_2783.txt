@@ -1,0 +1,23 @@
+Ability: Overdraw (Record #2783)
+Associated skill: Sublimation
+Skillpoints required: 29999
+Blurb: A pragmatic price.
+Syntax: MANIPULATE OVERDRAW
+Abfile:
+You may overdraw from the Wellspring when carrying out an act of
+manipulation, substantiation, or alignment. Doing so is very taxing and
+will cause you to be unable to tap the Wellspring for a time (passively
+and actively). See the relevant abilities for the effects of overdrawing
+in a given case.
+
+* To overdraw, append the word OVERDRAW to the end of an action. For
+instance, MANIPULATE SOLAR <target> OVERDRAW.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

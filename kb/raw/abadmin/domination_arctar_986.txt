@@ -1,0 +1,22 @@
+Ability: Arctar (Record #986)
+Associated skill: Domination
+Skillpoints required: 1499
+Blurb: Arctar, the Defender.
+Syntax: COMMAND ORB
+Abfile:
+Arctar, the Defender. Enigmatic, skilful, Guardian of the Chaos Throne.
+
+When you summon him, he will send to you a chaos orb. This orb may then
+be COMMANDed to explode, granting you a temporary defence against that
+which would harm you.
+
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name ORB is mapped to this ability.

@@ -1,0 +1,18 @@
+Ability: Dazzle (Record #1058)
+Associated skill: Devotion
+Skillpoints required: 24499
+Blurb: Confuse and dazzle an opponent.
+Syntax: PERFORM DAZZLE <target>
+Abfile:
+This will dazzle the mind of an adventurer and cause them to become
+struck down with a case of stupidity.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 250 devotion

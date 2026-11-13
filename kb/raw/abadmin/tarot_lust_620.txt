@@ -1,0 +1,16 @@
+Ability: Lust (Record #620)
+Associated skill: Tarot
+Skillpoints required: 43999
+Blurb: Cause an opponent to hopelessly lust after you.
+Syntax: FLING LUST AT <target>
+Abfile:
+With this Tarot, you may instill a lust for you in another adventurer, so that he or she will consider you an ally.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

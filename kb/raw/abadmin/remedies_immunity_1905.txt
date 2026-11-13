@@ -1,0 +1,17 @@
+Ability: Immunity (Record #1905)
+Associated skill: Remedies
+Skillpoints required: 3999
+Blurb: A brew to help you shrug off deadly poisons.
+Syntax: None
+Extra info: Ingredients: 1 sac, 1 ash, 2 echinacea or
+1 stannum, 1 plumbum, 2 dolomite
+Abfile:
+The immunity elixir will protect you from poisons that kill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

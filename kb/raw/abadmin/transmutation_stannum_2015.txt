@@ -1,0 +1,16 @@
+Ability: Stannum (Record #2015)
+Associated skill: Transmutation
+Skillpoints required: 299
+Blurb: Restore sanity with the stannum mineral.
+Syntax: EXTRACT STANNUM
+TRANSMUTATE <#> <mineral> TO STANNUM
+Abfile:
+The stannum mineral will restore sanity to whoever eats it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

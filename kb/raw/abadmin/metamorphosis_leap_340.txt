@@ -1,0 +1,17 @@
+Ability: Leap (Record #340)
+Associated skill: Metamorphosis
+Skillpoints required: 2599
+Blurb: Safely jump over obstacles.
+Syntax: LEAP <direction>
+This ability will be hidden on ablistings.
+Abfile:
+This ability will allow you to leap over various obstacles in your way.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

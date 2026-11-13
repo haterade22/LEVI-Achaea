@@ -1,0 +1,3 @@
+Ability: Decaylist (Record #2662)
+Associated skill: Vision
+Maps to record 1412 (LISTS).

@@ -1,0 +1,25 @@
+Ability: Funeral (Record #3232)
+Associated skill: Woe
+Skillpoints required: 60000
+Blurb: The tale to end all tales.
+Syntax: RECITE FUNERAL
+Abfile:
+All tales speak of dread Woe's final rest, yet with its speaking you may
+yet put another to theirs in turn. Recite this story over the corpse of
+a mighty denizen(*), and all within the location that have not
+participated in a funeral recently(**) will be bolstered(***).
+
+* The denizen must be one immune to critical strikes and of a
+sufficiently potent level. The corpse is destroyed.
+** You can only recite a funeral every 24 hours and participate in one
+every 24 hours.
+*** Everyone in the audience receives some experience.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance

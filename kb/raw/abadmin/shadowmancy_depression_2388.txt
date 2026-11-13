@@ -1,0 +1,24 @@
+Ability: Depression (Record #2388)
+Associated skill: Shadowmancy
+Skillpoints required: 17999
+Blurb: Turn their focus inward.
+Syntax: SHADOW INSTILL <weapon> WITH DEPRESSION
+Abfile:
+This instillation causes your foe to become depressed.
+Depression is a curse created by an ancient Tsol'teth Overlord, and its
+danger is in its long term effects. For each phobia or madness that the
+victim suffers from, they will suffer in both body and mind when the
+symptoms manifest themselves.
+
+Note that if the subject already suffers from depression, this
+instillation shall give nausea, then hypochondria, and finally, if all
+other afflictions are present, both anorexia and masochism
+simultaneously.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

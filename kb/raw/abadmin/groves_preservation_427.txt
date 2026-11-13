@@ -1,0 +1,16 @@
+Ability: Preservation (Record #427)
+Associated skill: Groves
+Skillpoints required: 10999
+Blurb: For one year, shield your grove from damage.
+Syntax: GROVE PRESERVATION
+Abfile:
+For one Achaean year, this ability will render your grove immune to damage from certain abilities.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 sunlight

@@ -1,0 +1,18 @@
+Ability: Bind (Record #1253)
+Associated skill: Subterfuge
+Skillpoints required: 37999
+Blurb: Hog-tie an unconscious or sleeping opponent.
+Syntax: BIND <target>
+Extra info: Failure cooldown: 0.50 seconds.
+Abfile:
+If your target is sleeping or unconscious, and you have a length of rope on your person, you may hog-tie your unlucky target. This requires much longer to writhe out of than web does, for instance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+The ability name BINDING is mapped to this ability.

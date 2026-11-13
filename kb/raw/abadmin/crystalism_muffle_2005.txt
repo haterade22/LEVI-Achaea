@@ -1,0 +1,20 @@
+Ability: Muffle (Record #2005)
+Associated skill: Crystalism
+Skillpoints required: 21999
+Blurb: Muffle your crystalline vibrations.
+Syntax: VIBES MUFFLE
+Abfile:
+Using the power of earth, you may muffle all of your crystalline
+vibrations at your current location. This will result in them being put
+into a dormant state in which they will not do anything. However, while
+in this state they will not decay over time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 400 mana

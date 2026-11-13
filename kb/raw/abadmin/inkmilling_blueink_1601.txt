@@ -1,0 +1,17 @@
+Ability: Blueink (Record #1601)
+Associated skill: InkMilling
+Skillpoints required: 1199
+Blurb: Create a blue ink.
+Syntax: MILL FOR BLUE
+Extra info: Reagents: 1 x blue, 1 x uncommon
+Abfile:
+AB INKMILLING REAGENTS lists the different types of reagents.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

@@ -1,0 +1,22 @@
+Ability: Evolution (Record #3027)
+Associated skill: Dominion
+Skillpoints required: 50999
+Blurb: A superior state of being.
+Syntax: HOUND EVOLUTION
+Abfile:
+As you shall achieve the transcendent state of being, it is only
+appropriate that your loyal companion shares in your transformation.
+Though fine tuned manipulation of such matters is beyond you, with
+sufficient application of karma you can somewhat overcome this lack.
+
+* This improves your hound's offensive capabilities rather
+significantly.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10% karma

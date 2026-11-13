@@ -1,0 +1,17 @@
+Ability: Fullsense (Record #320)
+Associated skill: Shindo
+Skillpoints required: 57999
+Blurb: Reach out with your mind to touch others nearby.
+Syntax: FULLSENSE
+Abfile:
+Scouring the surroundings with your well-honed senses, both physical and mental, you may detect the presences of all adventurers within the local area.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

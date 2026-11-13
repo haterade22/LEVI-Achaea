@@ -1,0 +1,16 @@
+Ability: Nativity (Record #2137)
+Associated skill: Woodlore
+Skillpoints required: 30000
+Blurb: Your connection with nature is formidable indeed.
+Syntax:
+Abfile:
+Your bond with nature is so strong that you may now summon your animal
+companions anywhere that you may be in Sapience.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Ripples (Record #1025)
+Associated skill: Spirituality
+Skillpoints required: 20999
+Blurb: Your angel watches for chaos ripples.
+Syntax: ANGEL RIPPLES
+Abfile:
+With this ability, you will be able to see a list of all chaos entities currently on the Prime Material Plane.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 15 Angel power

@@ -1,0 +1,19 @@
+Ability: Glare (Record #616)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Startle your target into clumsiness.
+Syntax: QUARTERSTAFF|QSTAFF GLARE <target>
+Extra info: Gives denizen affliction: Clumsiness
+Abfile:
+Assault your target with the brightened tip of your quarterstaff, causing the target to become clumsy for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 14 rage
+Skill specialisation: br_druid

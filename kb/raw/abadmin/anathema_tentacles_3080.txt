@@ -1,0 +1,25 @@
+Ability: Tentacles (Record #3080)
+Associated skill: Anathema
+Skillpoints required: 30999
+Blurb: They shall not escape your grasp.
+Syntax: MUTATE TENTACLES
+FLAIL TENTACLES
+Abfile:
+One of the more complex basic mutations, you may mutate tentacles of
+your own to clutch at your enemies that would seek to leave your
+location(*). You may also flail your tentacles, yanking those in the sky
+back to the ground.
+
+* This is similar to the tentacles of an Occultism practitioner, though
+due to your less refined touch with the delicate aspects of auric
+manipulation you will find your tentacles last a far shorter time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 2% karma

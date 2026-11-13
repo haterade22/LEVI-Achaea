@@ -1,0 +1,16 @@
+Ability: Energy (Record #412)
+Associated skill: Groves
+Skillpoints required: 0
+Blurb: Determine how much sunlight your grove has stored.
+Syntax: GROVE ENERGY
+Abfile:
+By communing with your grove, you may discover how much sunlight energy remains.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 1 sunlight

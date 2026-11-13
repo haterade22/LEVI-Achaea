@@ -1,0 +1,23 @@
+Ability: Rift (Record #2408)
+Associated skill: Aeonics
+Skillpoints required: 3999
+Blurb: Distance is no barrier.
+Syntax: CHRONO RIFT <target> [BOOST]
+Abfile:
+This ability will allow you to open a rift to serve as a portal between
+you and another adventurer. Note that there is a delay between you
+creating the rift and it fully manifesting; a monolith at either end
+shall prevent the rift from being opened.
+
+Note that if you boost the rift, a monolith on your end of the attempt
+shall not prevent it from opening, though one on the target's end shall
+still.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 140 age

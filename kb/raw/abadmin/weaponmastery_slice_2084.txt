@@ -1,0 +1,17 @@
+Ability: Slice (Record #2084)
+Associated skill: Weaponmastery
+Skillpoints required: 15000
+Blurb: Speed is the mark of a true master.
+Syntax: SLICE <target> [limb] [venom]
+Abfile:
+Deliver a swift strike with your blade, sacrificing damage for speed.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

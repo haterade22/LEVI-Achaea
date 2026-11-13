@@ -1,0 +1,30 @@
+Ability: Degenerate (Record #2423)
+Associated skill: Aeonics
+Skillpoints required: 45999
+Blurb: The ravages of time.
+Syntax: CHRONO DEGENERATE <target> [BOOST]
+Abfile:
+If a target is sufficiently afflicted(*), you may drastically accelerate
+the effects of said afflictions.
+
+Against adventurers, this will cause the unfortunate subject to age in
+an instant, decreasing their constitution by one for each affliction.
+When boosted, the target will lose two constitution per affliction.
+
+When used against a physically-plagued denizen(**), this aeonic command
+will deal significant magical damage and cannot be boosted.
+
+* Valid adventurer afflictions are: weariness, clumsiness, healthleech,
+nausea, asthma, and paralysis.
+** Valid battlerage afflictions against denizens are: inhibit, weakness,
+sensitivity, and clumsiness.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 700 age

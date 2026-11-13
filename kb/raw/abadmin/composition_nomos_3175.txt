@@ -1,0 +1,23 @@
+Ability: Nomos (Record #3175)
+Associated skill: Composition
+Skillpoints required: 9999
+Blurb: That most disciplined resolve.
+Syntax: COMPOSE NOMOS
+Abfile:
+The relentless march of your nomos shall crush the resolve of your
+enemies, destroying reflections raised about their person and revealing
+them for who they are beneath(*).
+
+* If they have only one reflection, it is destroyed. Otherwise the
+number of reflections protecting them is halved.
+
+When used on denizens while refrained, it will break shields.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Aeon (Record #2415)
+Associated skill: Aeonics
+Skillpoints required: 15999
+Blurb: The curse of the Lord of Time.
+Syntax: CHRONO AEON <target> [BOOST]
+Abfile:
+The curse of Aeon, Lord of Time, shall strike down a target who lacks
+the speed defence. All of their actions while the curse remains shall be
+delayed to a major degree. If they are protected by the speed defence,
+it shall be stripped instead of them receiving the curse.
+
+Note that the curse will fade on its own after a while. If boosted, the
+curse shall remain indefinitely until cured.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 360 age

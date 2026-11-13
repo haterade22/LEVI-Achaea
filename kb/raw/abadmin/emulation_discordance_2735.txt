@@ -1,0 +1,23 @@
+Ability: Discordance (Record #2735)
+Associated skill: Emulation
+Skillpoints required: 27999
+Blurb: A fluxing of chaotic power.
+Syntax: ENACT DISCORDANCE
+Abfile:
+There were very few forays into this field of study before it was simply
+agreed upon to be abandoned. The effects were simply too unpredictable,
+even if sometimes beneficial. By enacting this power, you will change
+the health of everyone in your location to better over represent the
+whole.
+
+* There is only so much this can modify a person's health by, and only
+so much a given person can influence the overall result.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

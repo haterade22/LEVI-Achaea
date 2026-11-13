@@ -1,0 +1,17 @@
+Ability: Disperse (Record #2381)
+Associated skill: Shadowmancy
+Skillpoints required: 5999
+Blurb: Melt away into the darkness.
+Syntax: SHADOW DISPERSE
+Abfile:
+While wearing your cloak, you may draw the shadows in about your person.
+When leaving a location shrouded in magical darkness, the direction you
+left in has a chance to be hidden.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

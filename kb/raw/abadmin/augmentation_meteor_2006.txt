@@ -1,0 +1,29 @@
+Ability: Meteor (Record #2006)
+Associated skill: Augmentation
+Skillpoints required: 14999
+Blurb: Turn arrows into flaming meteors.
+Syntax: BEGIN CREATION OF METEOR
+SHOOT <target> WITH METEOR
+Abfile:
+This item is destroyed upon use.
+
+Type:
+   Created arrow.
+
+Actions:
+   14, 16, chant "minlo ecta tu ecta oloth rhedo", 3
+
+Comms:
+   1 diamond dust, 1 arrow
+
+Creates an arrow that will be able to be shot by someone with the skill
+of archery at anyone within three rooms of your line of sight. It will
+descend upon the hapless victim like a meteor.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

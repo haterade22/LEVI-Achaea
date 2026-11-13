@@ -1,0 +1,16 @@
+Ability: Eavesdrop (Record #1231)
+Associated skill: Subterfuge
+Skillpoints required: 16999
+Blurb: Listen even through closed doors.
+Syntax: EAVESDROP <direction>
+Abfile:
+Your skills have improved to the point where you can now listen even through closed doors.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

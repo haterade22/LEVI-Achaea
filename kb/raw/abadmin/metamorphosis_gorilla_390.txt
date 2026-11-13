@@ -1,0 +1,20 @@
+Ability: Gorilla (Record #390)
+Associated skill: Metamorphosis
+Skillpoints required: 41999
+Blurb: An agile yet powerful primate.
+Syntax: MORPH GORILLA
+Extra info: Powers: Alertness
+Pound
+Leap
+Swinging
+Abfile:
+An agile yet powerful primate.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 120 mana

@@ -1,0 +1,15 @@
+Ability: Compounds (Record #2219)
+Associated skill: Vision
+Skillpoints required: 48999
+Blurb: See what compounds are active at your location.
+Syntax: COMPOUNDS
+Abfile:
+See what formulation compounds are active at your current location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

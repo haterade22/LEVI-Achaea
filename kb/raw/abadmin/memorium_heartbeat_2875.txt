@@ -1,0 +1,21 @@
+Ability: Heartbeat (Record #2875)
+Associated skill: Memorium
+Skillpoints required: 37999
+Blurb: Their pulse shall sound their end.
+Syntax: TRACE <logograph> <target> <delay> HEARTBEATS
+Abfile:
+When tracing your logographs, you can now alter them in very minor ways,
+causing their effects to manifest later rather than immediately. This
+time is measured in the beats of your enemy's heart. For this reason,
+the accelerate ability shall also reduce the delay time when used in
+combination with this.
+
+The delay must be between 1 and 5 heartbeats.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

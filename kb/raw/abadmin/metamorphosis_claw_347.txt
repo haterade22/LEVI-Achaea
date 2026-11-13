@@ -1,0 +1,17 @@
+Ability: Claw (Record #347)
+Associated skill: Metamorphosis
+Skillpoints required: 5999
+Blurb: Attack an opponent with your claws.
+Syntax: CLAW <target>
+This ability will be hidden on ablistings.
+Abfile:
+Attack an opponent with your claws.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Independence (Record #2688)
+Associated skill: Attainment
+Skillpoints required: 12599
+Blurb: A newbie no more.
+Syntax:
+Abfile:
+Time to stand on your own two feet!
+
+* You no longer have access to the Ring of Portals. See HELP LANDMARKS
+for help getting around.
+* You are no longer welcome in Minia, Lodi, and Mount Gheladan.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

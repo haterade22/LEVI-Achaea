@@ -1,0 +1,26 @@
+Ability: Eagle (Record #387)
+Associated skill: Metamorphosis
+Skillpoints required: 36999
+Blurb: The king of all flighted birds.
+Syntax: MORPH EAGLE
+Extra info: Powers: Fly
+Hoist
+Land
+Nightsight
+ScanArea
+Spy
+Swoop
+Track
+Traverse
+View
+Abfile:
+The king of all flighted birds.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

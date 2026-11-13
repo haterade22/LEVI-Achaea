@@ -1,0 +1,17 @@
+Ability: Battaglia (Record #1663)
+Associated skill: Harmonics
+Skillpoints required: 28999
+Blurb: Project your harmonics into neighboring rooms.
+Syntax: PLAY BATTAGLIA <direction>
+Abfile:
+Send harmonics in the direction specified. For example, PLAY BATTAGLIA EAST will attempt to send all harmonics out of your current location towards the east. Harmonics do not always move, depending on limits in adjacent rooms.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

@@ -1,0 +1,21 @@
+Ability: Croon (Record #3060)
+Associated skill: Anathema
+Skillpoints required: 399
+Blurb: They shall listen and tremble.
+Syntax:
+Abfile:
+The mysteries of the outer spheres are beyond the capacity of the
+unenlightened mind to truly comprehend. Once you have mutated your
+mouths - the first step on the road to assuming the form of the
+Unnamable, you may reveal a fraction of some of these terrible truths to
+the uninitiated(*).
+
+* See relevant ability files for details on each.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

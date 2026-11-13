@@ -1,0 +1,23 @@
+Ability: Rake (Record #3263)
+Associated skill: Valour
+Skillpoints required: 34999
+Blurb: Command your eagle to fall upon a foe.
+Syntax: EAGLE RAKE <target>
+Abfile:
+Command your eagle to fall upon a denizen opponent, raking them with its
+talons and dealing damage(*). Note that you can only command your loyal
+in this fashion every so often(**).
+
+* This damage is based on your eagle's trained strength and whether it
+is a Nightrender (see AB VALOUR NIGHTRENDER).
+** Every 30 seconds.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Cooldown

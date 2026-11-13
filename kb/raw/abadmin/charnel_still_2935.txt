@@ -1,0 +1,20 @@
+Ability: Still (Record #2935)
+Associated skill: Charnel
+Skillpoints required: 44999
+Blurb: The silence of the grave.
+Syntax: ACCURSED STILL [direction]
+Abfile:
+Bring the stillness of the grave to a location that labours beneath the
+endless eternity, quelling sound above a whisper(*).
+
+* All forms of telepathic communication are greatly stifled, only
+permitting one per person every 3 seconds. This effect lasts one minute.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of equilibrium

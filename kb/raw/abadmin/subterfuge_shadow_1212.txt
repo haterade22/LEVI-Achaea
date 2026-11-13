@@ -1,0 +1,16 @@
+Ability: Shadow (Record #1212)
+Associated skill: Subterfuge
+Skillpoints required: 1999
+Blurb: Shadowing a target in order to track them.
+Syntax: SHADOW <target>
+Abfile:
+From on the ground or in the trees you are able to shadow an adventurer from an adjacent location. This will cause you to enter their location and begin following them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

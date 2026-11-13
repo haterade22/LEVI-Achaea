@@ -1,0 +1,19 @@
+Ability: Extinguish (Record #2401)
+Associated skill: Shadowmancy
+Skillpoints required: 55999
+Blurb: The shadows are your dominion.
+Syntax: SHADOW EXTINGUISH
+Abfile:
+The greatest demonstration of your might over the masses manifests
+through this ability. With nothing but your mastery over darkness, bring
+down blackness upon an entire area, cloaking every location within in
+magical darkness. Be warned, all standing in the area will be warned of
+the impending darkness before it falls.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

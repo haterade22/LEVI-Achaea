@@ -1,0 +1,22 @@
+Ability: Intimidate (Record #2340)
+Associated skill: Weaponmastery
+Skillpoints required: 58999
+Blurb: Make them fear for their life.
+Syntax: INTIMIDATE <target>
+Abfile:
+You may intimidate a vulnerable opponent, causing them to lose
+coordination to the point that they will extend any tumbling attempts
+they attempt. Vulnerable for the purposes of this ability requires a
+target be prone with both legs broken.
+
+Note that this ability may be performed without balance, but requires
+equilibrium.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualcutting

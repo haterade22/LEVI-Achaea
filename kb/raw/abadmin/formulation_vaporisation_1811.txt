@@ -1,0 +1,19 @@
+Ability: Vaporisation (Record #1811)
+Associated skill: Formulation
+Skillpoints required: 32000
+Blurb: A compound that reacts violently with water.
+Syntax: WIELD VAPORISATION
+THROW VAPORISATION <AT GROUND|direction>
+Extra info: Reagents: 2 magnesium, 1 malachite
+Abfile:
+This powder reacts violently with water, able to boil away liquid or
+turn ice to steam.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

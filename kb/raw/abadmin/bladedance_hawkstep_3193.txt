@@ -1,0 +1,21 @@
+Ability: Hawkstep (Record #3193)
+Associated skill: Bladedance
+Skillpoints required: 34999
+Blurb: Move and strike, move and strike.
+Syntax: DANCE HAWKSTEP
+Abfile:
+This dance is one of swift motion and exacting precision. When dancing
+the hawkstep attempts to hinder your escape from a room (by such things
+as rites of piety and the like) shall be less likely to succeed.
+
+* Note that you can only dance one thing at a time, so the hawkstep is
+exclusive with the dance of the harrying, for example.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

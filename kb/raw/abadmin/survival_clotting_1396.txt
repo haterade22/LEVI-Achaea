@@ -1,0 +1,17 @@
+Ability: Clotting (Record #1396)
+Associated skill: Survival
+Skillpoints required: 19999
+Blurb: Reduce the level of your bleeding.
+Syntax: CLOT [amount]
+Abfile:
+This will permit you to partially clot your bleeding. You may attempt to
+clot a specified amount of bleeding.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 60 mana

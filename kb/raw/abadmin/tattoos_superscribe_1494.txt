@@ -1,0 +1,15 @@
+Ability: Superscribe (Record #1494)
+Associated skill: Tattoos
+Skillpoints required: 60000
+Blurb: Ink your own tattoos faster than before.
+Syntax: None
+Abfile:
+Superscribing is the ability to hold two tattoos on each of your body parts. It will work automatically. Furthermore, you will be able to ink tattoos on yourself faster than before.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

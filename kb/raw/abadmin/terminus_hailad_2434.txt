@@ -1,0 +1,21 @@
+Ability: Hailad (Record #2434)
+Associated skill: Terminus
+Skillpoints required: 999
+Blurb: You can take them all.
+Syntax: INTONE HAILAD
+This ability will be hidden on ablistings.
+Abfile:
+Upon uttering this word, all(*) denizens in your location shall
+immediately become hostile to you.
+
+* This does not work against denizens loyal to other adventurers or
+organisations.
+Useable on: denizens and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Word balance

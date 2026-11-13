@@ -1,0 +1,17 @@
+Ability: Treewatch (Record #1437)
+Associated skill: Vision
+Skillpoints required: 4999
+Blurb: Watch the forest canopies for movement.
+Syntax: TREEWATCH [ON|OFF]
+RELAX TREEWATCH
+Abfile:
+While this ability is active, it will, at the cost of a mana drain, alert you to movement within the trees.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

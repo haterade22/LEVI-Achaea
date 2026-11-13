@@ -1,0 +1,15 @@
+Ability: Loneliness (Record #1315)
+Associated skill: Hypnosis
+Skillpoints required: 3999
+Blurb: Fear of being left on your own.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

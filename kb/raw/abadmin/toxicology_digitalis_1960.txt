@@ -1,0 +1,17 @@
+Ability: Digitalis (Record #1960)
+Associated skill: Toxicology
+Skillpoints required: 3999
+Blurb: Causes unbearable shyness.
+Syntax: None
+Extra info: Ingredients: 1 bellwort, 1 lobelia, 1 redink or
+1 cuprum, 1 argentum, 1 redink
+Abfile:
+Cause unbearable shyness in your victim.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

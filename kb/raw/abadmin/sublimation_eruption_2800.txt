@@ -1,0 +1,25 @@
+Ability: Eruption (Record #2800)
+Associated skill: Sublimation
+Skillpoints required: 31999
+Blurb: Delayed devastation.
+Syntax: ALIGN ERUPTION <target>
+This ability will be hidden on ablistings.
+Abfile:
+This act of alignment will cause a minor volcanic eruption beneath the
+feet of your target, dealing damage. This takes some time to enact, but
+does not take concentration. You may perform other actions while the
+eruption is being prepared. Note that you must start this within three
+rooms of your target, but it shall strike them on completion so long as
+they remain within the same area as they were on initiation.
+
+Overdraw effect: the eruption will complete more swiftly.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: continent-wide
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 5% Wellspring Energy

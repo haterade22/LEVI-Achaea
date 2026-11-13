@@ -1,0 +1,22 @@
+Ability: Steadfast (Record #3032)
+Associated skill: Excision
+Skillpoints required: 399
+Blurb: You will stand unmoved.
+Syntax: BLOCK <direction> [STEADFAST]
+Abfile:
+Though your fellows from the other schools of weaponmastery may block
+directions, none of them have quite the steadfast vigour you possess. By
+blocking a direction in a steadfast way, you will be much more
+formidable in this aspect(*).
+
+* Functionally, blocking a direction with the steadfast argument
+appended will cause you to serve as two people blocking said direction,
+instead of just one.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 2
+Useable entangled: No
+Useable paralysed: No

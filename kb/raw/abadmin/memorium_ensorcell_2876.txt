@@ -1,0 +1,22 @@
+Ability: Ensorcell (Record #2876)
+Associated skill: Memorium
+Skillpoints required: 49999
+Blurb: Bound in blood and fate besides.
+Syntax: CRUX ENSORCELL <target>
+Abfile:
+Higher mastery with your ritual blade will enable you to both bind and
+let in a single stroke. When you ensorcell your foe, they will find it
+difficult to flee from your arcane power(*), and you shall claim the
+life which sustains them in preparation for higher workings(**).
+
+* They have a chance to fail to leave on movement attempts.
+** You will gain their blood upon your ritual blade, similar to let.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

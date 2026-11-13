@@ -1,0 +1,18 @@
+Ability: Heal (Record #1533)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Purge yourself of afflictions.
+Syntax: DRAGONHEAL
+Abfile:
+Use your superior dragon immune system to throw off multiple afflictions at once. Due to the nature of this ability, you will be unable to muster the concentration to activate it if you are afflicted with both weariness and recklessness simultaneously.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 1500 mana
+Skill specialisation: dragonform

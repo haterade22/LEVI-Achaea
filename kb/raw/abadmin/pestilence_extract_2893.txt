@@ -1,0 +1,21 @@
+Ability: Extract (Record #2893)
+Associated skill: Pestilence
+Skillpoints required: 17999
+Blurb: Call them home post haste.
+Syntax: SWARM EXTRACT <swarm>
+Abfile:
+If one of your swarms has burrowed into a victim, you may call them
+urgently to return with predictably bloody results. A swarm ripping
+itself free in this manner will cause blood to splatter the location(*),
+bodily harm, and convey any plague it is carrying.
+
+* See AB MEMORIUM SANGUINEHAND.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

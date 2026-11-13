@@ -1,0 +1,16 @@
+Ability: Scytherus (Record #1306)
+Associated skill: Venom
+Skillpoints required: 55999
+Blurb: A venom that thins the blood.
+Syntax: SECRETE SCYTHERUS
+BITE <target>
+Abfile:
+A nasty venom that will thin the victim's blood allowing your toxins to be more effective.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

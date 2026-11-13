@@ -1,0 +1,16 @@
+Ability: Preserve (Record #1594)
+Associated skill: Cooking
+Skillpoints required: 18999
+Blurb: Salt your food to increase its life span.
+Syntax: PRESERVE <food>
+Extra info: Cost: 3 salt
+Abfile:
+Using salt, you are now able to preserve food to increase its life span. Be warned, doing so will leech a large portion of the nutrients from the food.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

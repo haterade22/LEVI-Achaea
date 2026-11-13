@@ -1,0 +1,27 @@
+Ability: Mushroom (Record #1988)
+Associated skill: Conjuration
+Skillpoints required: 24999
+Blurb: The mushroom sigil.
+Syntax: BEGIN CREATION OF MUSHROOM SIGIL
+ATTACH <mushroom sigil> TO <item>
+Abfile:
+This item is destroyed upon use.
+
+Type:
+   Created item.
+
+Actions:
+   3xchant "mil usra shal hract reed oom oon mez", 1
+
+Comms:
+   1 elemental ice
+
+The powerful mushroom sigil is capable of destroying most normal items that it is attached to.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

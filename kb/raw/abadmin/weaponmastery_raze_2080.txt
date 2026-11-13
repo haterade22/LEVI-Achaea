@@ -1,0 +1,19 @@
+Ability: Raze (Record #2080)
+Associated skill: Weaponmastery
+Skillpoints required: 4500
+Blurb: Remove the defences that would keep your weapons from your foe.
+Syntax: RAZE <target>
+Abfile:
+This ability will allow you to raze the defences that would protect your
+opponent from your attacks, such as the aura of rebounding or magical
+shields.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: knight_snb

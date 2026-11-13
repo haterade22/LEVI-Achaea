@@ -1,0 +1,16 @@
+Ability: Nightsight (Record #1446)
+Associated skill: Vision
+Skillpoints required: 399
+Blurb: Use infravision to see in the dark.
+Syntax: NIGHTSIGHT [ON|OFF]
+RELAX NIGHTSIGHT
+Abfile:
+You will gain the ability to see in normal darkness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

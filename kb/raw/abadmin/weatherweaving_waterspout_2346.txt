@@ -1,0 +1,24 @@
+Ability: Waterspout (Record #2346)
+Associated skill: Weatherweaving
+Skillpoints required: 41000
+Blurb: Bend water to your will.
+Syntax: CAST WATERSPOUT AT <target>
+Abfile:
+Summon water to create a spout to envelop your foe in frigid cold.
+
+If the target is an adventurer, this will give them confusion. If they
+are already confused, this spell will give them dizziness; if they have
+both dizziness and confusion, this spell will give them vertigo. If the
+room is flooded, your waterspout will also deal damage in these cases.
+
+When used against a denizen, this spell will deal cold damage.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,36 @@
+Ability: Phylactery (Record #2383)
+Associated skill: Shadowmancy
+Skillpoints required: 9999
+Blurb: A prison for the fallen.
+Syntax: PHYLACTERY CREATE
+PHYLACTERY RECALL
+PHYLACTERY LIST
+PHYLACTERY RELEASE <shadow>
+Abfile:
+The true masters of the art are able to contain the shadows of those
+they vanquish in battle. However, even they require a receptacle of
+sufficient power to store the shadows, and thus the phylactery was
+conceived.
+
+To create a phylactery, you must stand within a darkened room and
+possess six bone and two silver commodities. The phylactery must be
+forged from an organic substance to retain its power, and wood has been
+found to lack a sufficient lifespan.
+
+If you were to lose your phylactery, you may RECALL it at any time from
+anywhere through your bond with it. Note that due to this bond, only you
+will be able to utilise your phylactery, and you will be unable to
+utilise a phylactery created by someone else.
+
+Finally, you may LIST those shadows that you have currently bound within
+your phylactery. You may only store a given number of shadows within the
+phylactery, so choose wisely. Note that you can RELEASE a shadow at any
+time, if you deem it no longer worthwhile to retain it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

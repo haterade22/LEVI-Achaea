@@ -1,0 +1,20 @@
+Ability: Momentum (Record #2095)
+Associated skill: Weaponmastery
+Skillpoints required: 999
+Blurb: Strike them with ever greater power.
+Syntax: MOMENTUM
+Abfile:
+The skilled wielder of the flail or morningstar is capable of using the
+momentum of previous attacks to perform greater feats. Each whirl based
+attack performed with one of these weapons that lands shall raise the
+momentum of the knight's following attacks, to potentially devastating
+effect.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualblunt

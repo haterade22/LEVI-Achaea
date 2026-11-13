@@ -1,0 +1,29 @@
+Ability: Dissonance (Record #774)
+Associated skill: Crystalism
+Skillpoints required: 46999
+Blurb: Cause your enemies to become dissonant.
+Syntax: EMBED DISSONANCE
+Abfile:
+ Shapes required: Cylinder, Sphere, Spiral
+
+Every person vibrates with a certain fundamental frequency. This
+vibration will cause that fundamental frequency to be disturbed, and for
+those under its influence to begin vibrating dissonantly. Those that
+vibrate dissonantly will become more and more vulnerable to the workings
+of sorcery as their traditional defences against it become degraded(*).
+
+* Each time you vibrate dissonantly your elemental and magical
+resistance is degraded for as long as the affliction persists upon your
+person.
+** Dissonance is a special affliction, and is always the last goldenseal
+affliction to be cured.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

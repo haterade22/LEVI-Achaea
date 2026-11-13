@@ -1,0 +1,21 @@
+Ability: Regrowth (Record #2746)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Life shall be denied them.
+Syntax: ENACT REGROWTH <target>
+Extra info: Gives denizen affliction: Inhibit
+Abfile:
+The lost seed of Yggdrasil's powers are myriad and varied. With this
+attempted replication, you may call forth the binding vines to grasp
+your foe, preventing them from being able to heal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 24 rage
+Skill specialisation: br_psion

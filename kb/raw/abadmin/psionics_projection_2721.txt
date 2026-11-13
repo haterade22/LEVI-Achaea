@@ -1,0 +1,24 @@
+Ability: Projection (Record #2721)
+Associated skill: Psionics
+Skillpoints required: 42999
+Blurb: Your will made manifest.
+Syntax: PSI PROJECTION
+PSI PROJECTION CREATE
+PSI PROJECTION LOCATE
+PSI PROJECTION SWAP
+PSI PROJECTION DESTROY
+Abfile:
+By creating a psychic projection of yourself in a location, you may
+overlay it with yourself from anywhere on the same plane and continent.
+Doing so will swap your location with the projection(*).
+
+* The projection will fade after three swaps.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

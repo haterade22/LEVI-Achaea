@@ -1,0 +1,19 @@
+Ability: Flamebath (Record #2297)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Bathe your target in your incendiary breath.
+Syntax: FLAMEBATH <target>
+Extra info: Uses denizen afflictions: Sensitivity or Clumsy
+Abfile:
+Bathe your target in a mighty blast of flame, doing massive damage to those who are sensitive or clumsy.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_red_dragon

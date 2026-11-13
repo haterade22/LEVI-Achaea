@@ -1,0 +1,25 @@
+Ability: Copies (Record #2794)
+Associated skill: Sublimation
+Skillpoints required: 27999
+Blurb: One is just a number, after all.
+Syntax: SUBSTANTIATE COPIES
+This ability will be hidden on ablistings.
+Abfile:
+The concept of individuality is difficult to subvert, but a student of
+the school of Substantiation is no stranger to such complexities.
+Substantiate copies into existence and images of all that stand in your
+location excepting you shall be formed(*).
+
+Overdraw effect: targets you as well.
+
+* Creates a reflection.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 6% Wellspring Energy

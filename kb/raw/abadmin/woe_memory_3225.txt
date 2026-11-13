@@ -1,0 +1,21 @@
+Ability: Memory (Record #3225)
+Associated skill: Woe
+Skillpoints required: 40999
+Blurb: The lines of past and present thin.
+Syntax: RECITE MEMORY
+Abfile:
+A tale of mustering for war, of plots most dire and the breath before a
+storm. Speak this tale and you will be transported to the Pantheon of
+the Gods for a mustering of your own, though only if close enough and
+unbarred by a monolith(*).
+
+* Same plane and continent, and not on a ship.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.50 seconds of equilibrium

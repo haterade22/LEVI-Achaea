@@ -1,0 +1,18 @@
+Ability: Hands (Record #1041)
+Associated skill: Devotion
+Skillpoints required: 299
+Blurb: Lay hands on a person to heal him.
+Syntax: PERFORM HANDS [target]
+Abfile:
+This ability will allow you to lay hands on yourself or another to heal
+some damage.
+Useable on: adventurers, denizens, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 150 devotion

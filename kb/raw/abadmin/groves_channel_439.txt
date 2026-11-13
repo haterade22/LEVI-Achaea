@@ -1,0 +1,18 @@
+Ability: Channel (Record #439)
+Associated skill: Groves
+Skillpoints required: 21999
+Blurb: Transfer energy to the grove of another.
+Syntax: GROVE CHANNEL <target>
+GROVE CHANNEL STOP
+Abfile:
+This ability will allow you to transfer sunlight energy from one grove to another. Both you and the target adventurer must be standing in your respective groves. This can be a useful ability though it should be noted some energy is lost maintaining the channel.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Sunlight
+Drain: Sunlight

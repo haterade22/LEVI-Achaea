@@ -1,0 +1,18 @@
+Ability: Noose (Record #1226)
+Associated skill: Subterfuge
+Skillpoints required: 11999
+Blurb: Covert and deadly assassination from the trees.
+Syntax: CRAFT NOOSE
+NOOSE <target>
+Extra info: Noose cooldown: 4.00 seconds of balance.
+Abfile:
+While you are in the trees you can craft a noose from the vines hanging everywhere. Then, if there is a sole victim below you, you can NOOSE <adventurer>. This is a long process as you have to move with utter silence. If anyone else enters the location, your attempt will be ruined.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

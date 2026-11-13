@@ -1,0 +1,18 @@
+Ability: Soulshield (Record #2281)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Defend yourself against damage.
+Syntax: SOULSHIELD
+Abfile:
+A necromantic shield protects you, absorbing any damage you take for the next 12 seconds. The shield has a cost, however, and the backlash against you will cause 9% of the damage absorbed, every second, for the next 10 seconds.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 37.00 seconds
+Resource: 20 rage
+Skill specialisation: br_infernal

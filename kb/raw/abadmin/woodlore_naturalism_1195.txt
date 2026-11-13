@@ -1,0 +1,15 @@
+Ability: Naturalism (Record #1195)
+Associated skill: Woodlore
+Skillpoints required: 7999
+Blurb: Discover who exterminated a room last.
+Syntax: NATURALISM
+Abfile:
+Naturalism allows you to detect the foul stain of a Necromancer's soul on an exterminated room, letting you see who did it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

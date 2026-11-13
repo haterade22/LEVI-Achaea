@@ -1,0 +1,21 @@
+Ability: Mutilate (Record #2400)
+Associated skill: Shadowmancy
+Skillpoints required: 51999
+Blurb: Beyond all recognition.
+Syntax: SHADOW MUTILATE <target> [venom]
+Abfile:
+If you hold someone's shadow within your phylactery, you may shred it
+with a manifested dagger, causing significant health and mana damage to
+the unfortunate soul. This will cause you to lose their shadow from your
+phylactery. You may also apply a venom in the process.
+
+Unlike other phylactery-related abilities, they must be in your location
+for you to do this.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

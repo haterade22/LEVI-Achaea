@@ -1,0 +1,20 @@
+Ability: Pulverise (Record #2070)
+Associated skill: Weaponmastery
+Skillpoints required: 25000
+Blurb: Pulp your opponent's limbs with crushing blows.
+Syntax: PULVERISE <target> <LEFT|RIGHT> <ARM|LEG>
+Extra info: Weapon: warhammer
+Abfile:
+This ability can target either the arms or legs of your opponent. When
+striking the arms they will suffer from wrist fractures, and when
+hitting the legs you will deliver torn tendons.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

@@ -1,0 +1,16 @@
+Ability: Oculus (Record #1291)
+Associated skill: Venom
+Skillpoints required: 16999
+Blurb: Forces the recipient's eyelids open.
+Syntax: SECRETE OCULUS
+BITE <target>
+Abfile:
+Forces your victim's eyelids open clearing his eyes of blindness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

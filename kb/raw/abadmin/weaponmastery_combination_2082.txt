@@ -1,0 +1,18 @@
+Ability: Combination (Record #2082)
+Associated skill: Weaponmastery
+Skillpoints required: 8000
+Blurb: Link your blade and shield attacks into devastating combinations.
+Syntax: COMBINATION <target> <sword attack> [limb] [venom] <shield attack> [arguments]
+Abfile:
+By performing both sword and shield attacks in synch, you are able to
+unleash vicious combinations against your opponents.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

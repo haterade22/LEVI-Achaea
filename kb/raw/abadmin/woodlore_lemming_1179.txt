@@ -1,0 +1,21 @@
+Ability: Lemming (Record #1179)
+Associated skill: Woodlore
+Skillpoints required: 7999
+Blurb: Summon a suspiciously helpful lemming to your aid.
+Syntax: SUMMON LEMMING
+Abfile:
+The lemming will race around and between the legs of an opponent, making
+them afraid of heights.
+
+* Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

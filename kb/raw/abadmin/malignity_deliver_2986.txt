@@ -1,0 +1,17 @@
+Ability: Deliver (Record #2986)
+Associated skill: Malignity
+Skillpoints required: 52463
+Blurb: An exercise in logistics.
+Syntax: HYENA DELIVER [GROUP] <item> TO <lucky recipient>
+Abfile:
+With this ability, you may order your hyena to deliver a small item or
+group of items from your inventory into the inventory of another
+adventurer.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

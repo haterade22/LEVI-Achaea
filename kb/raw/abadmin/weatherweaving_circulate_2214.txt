@@ -1,0 +1,22 @@
+Ability: Circulate (Record #2214)
+Associated skill: Weatherweaving
+Skillpoints required: 4999
+Blurb: Circulate electricity throughout your body.
+Syntax: CAST CIRCULATE
+Abfile:
+With this spell, you will be able to grant yourself the ability to
+circulate electricity through your body with greater ease, reducing the
+damage you take from lightning-based attacks.
+
+In addition, possessing this defence will reduce the equilibrium penalty
+caused by the confusion affliction.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 300 mana

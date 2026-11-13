@@ -1,0 +1,23 @@
+Ability: Eclipse (Record #2892)
+Associated skill: Pestilence
+Skillpoints required: 42999
+Blurb: Darkness beneath the writhing clouds.
+Syntax: SWARM ECLIPSE <swarm>
+Abfile:
+There will always be those that think that they can outfly your swarms.
+They are wrong. By directing one of your swarms made up of flying
+insects to eclipse the sky in a location, any who try to take to the air
+to escape that location will find that your minions are not so simply
+evaded(*). If you attempt to take to the skies yourself, your swarm will
+immediately disperse from its task.
+
+* They will be knocked back to the ground and off balance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of equilibrium

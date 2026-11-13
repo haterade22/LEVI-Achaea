@@ -1,0 +1,15 @@
+Ability: Runebinding (Record #1163)
+Associated skill: Runelore
+Skillpoints required: 48999
+Blurb: Bind your runes to your body.
+Syntax: N/A
+Abfile:
+You have reached a high degree of sympathy with earth magic, allowing you to bind runes to your body for longer than ever before.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

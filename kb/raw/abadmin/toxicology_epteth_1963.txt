@@ -1,0 +1,17 @@
+Ability: Epteth (Record #1963)
+Associated skill: Toxicology
+Skillpoints required: 6999
+Blurb: Shrivel up the arms of your unlucky victim.
+Syntax: None
+Extra info: Ingredients: 1 valerian, 1 bellwort, 1 yellowink or
+1 realgar, 1 cuprum, 1 yellowink
+Abfile:
+Cause your victim's arms to shrivel.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

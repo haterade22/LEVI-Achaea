@@ -1,0 +1,19 @@
+Ability: Tower (Record #1844)
+Associated skill: Armoursmithing
+Skillpoints required: 42999
+Blurb: The largest and most cumbersome shield.
+Syntax: FORGE FOR TOWER
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+4 Steel
+Abfile:
+The largest and most cumbersome shield.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

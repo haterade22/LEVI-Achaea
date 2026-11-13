@@ -1,0 +1,38 @@
+Ability: Maligus (Record #1932)
+Associated skill: Spiritlore
+Skillpoints required: 7999
+Blurb: Maligus, The Cleric.
+Syntax: INVOKE SOULREND <target>
+CURSE <target> <affliction> INVOKE SOULREND
+Extra info: Curse mana cost: Invoke mana cost + curse mana cost.
+ Attune effect: curses will drain a small amount of health and mana from the target.
+Abfile:
+The practitioners of Apostasy have long been feared for their mastery of
+unholy powers, and Maligus in life was no exception. Upon binding his
+spirit, you will gain the ability to forceably attune a vodun doll to
+the soul of an unfortunate subject, improving its detail potentially far
+quicker than would normally be possible. This ability will be more
+effective against those who lack mental fortitude.
+
+Additionally, various afflictions, listed from most impactful to least,
+improve the power of a soulrend if the victim suffers from them:
+manaleech, confusion, shyness, paranoia, dementia.
+
+This ability can be combined with curses.
+
+* The rend takes place before the affliction is delivered from a
+curse, so cursing a modifier affliction and soulrending at once does not
+benefit from the modifier affliction in that curse instance.
+** Note that with the exception of manaleech, if these modifier
+afflictions are masked they are 33% less impactful.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 50 mana
+The ability name APOSTATE is mapped to this ability.

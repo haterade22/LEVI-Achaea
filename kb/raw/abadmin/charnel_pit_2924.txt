@@ -1,0 +1,19 @@
+Ability: Pit (Record #2924)
+Associated skill: Charnel
+Skillpoints required: 15999
+Blurb: To claim the unwary.
+Syntax: CRYPT RESHAPE PIT
+Abfile:
+Many an unwary intruder has been dispatched with a simple hole in the
+ground. Place these well, and trap them appropriately(*).
+
+* Note that you can only build pits out of rooms with a single up exit.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

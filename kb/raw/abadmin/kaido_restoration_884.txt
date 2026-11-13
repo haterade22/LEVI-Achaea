@@ -1,0 +1,22 @@
+Ability: Restoration (Record #884)
+Associated skill: Kaido
+Skillpoints required: 16999
+Blurb: Healing damaged limbs by force of will.
+Syntax: RESTORE
+Extra info: Listed are the base costs, these increase with 1/2/3/4 limbs broken.
+Abfile:
+By channeling mental power into healing, you can heal any broken limbs
+you may have at one time.
+
+This will also cure a fracture if you are in the same location as the
+person who applied it, it will cure two fractures if not.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

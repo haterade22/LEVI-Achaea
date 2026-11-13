@@ -1,0 +1,21 @@
+Ability: Itchpowder (Record #691)
+Associated skill: Pranks
+Skillpoints required: 46999
+Blurb: Employ the irritating itchpowder.
+Syntax: SLIP <target> ITCHPOWDER
+Abfile:
+Like the mickey, once you've gotten some itchpowder through the Props
+ability, you can slip it on someone, making him or her itch
+uncontrollably until an epidermal salve is applied.
+
+This will cause the unfortunate individual to be periodically afflicted
+with impatience.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

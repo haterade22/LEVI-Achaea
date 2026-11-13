@@ -1,0 +1,26 @@
+Ability: Presence (Record #3069)
+Associated skill: Anathema
+Skillpoints required: 15999
+Blurb: You are the terror that walks.
+Syntax: UNNAMABLE PRESENCE [RELAX]
+Abfile:
+You may radiate the terrible presence of the Unnamable, a terror so
+profound that it shall inspire fear in any mortal not warded against its
+threat in some form(*).
+
+* Citizens of Ashtan are immune outside the arena unless they are one of
+your personal enemies.
+** Gives the fear affliction. If it hits someone who already has fear,
+forces a fear tick on that person.
+*** While you are suffused with this presence, any manaleech affliction
+you inflict upon someone shall also ravage their body.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 2.50% karma

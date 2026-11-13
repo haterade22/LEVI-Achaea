@@ -1,0 +1,17 @@
+Ability: Bite (Record #1559)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Clamp your meal between your jaws.
+Syntax: BITE <target>
+Abfile:
+Wrap your massive jaws around your opponent, ripping into their flesh with your teeth. If you can manage to get your prey in a prone position first it will render a much more damaging bite.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Skill specialisation: dragonform

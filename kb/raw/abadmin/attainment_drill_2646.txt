@@ -1,0 +1,18 @@
+Ability: Drill (Record #2646)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Pierce the heavens.
+Syntax: MANIFEST DRILL <target>
+Abfile:
+Form a drill from the very air itself, piercing through any magical
+shields your foes would attempt to cower behind.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_air_lord

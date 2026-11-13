@@ -1,0 +1,17 @@
+Ability: Follow (Record #3007)
+Associated skill: Dominion
+Skillpoints required: 2999
+Blurb: The hunt begins.
+Syntax: HOUND FOLLOW <target>
+Abfile:
+Your hound has learned to serve you well enough that you may command it
+to follow a particular adventurer. When the hound loses the adventurer,
+generally because the adventurer goes indoors, it will stop following.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,24 @@
+Ability: Concussive (Record #1814)
+Associated skill: Formulation
+Skillpoints required: 45000
+Blurb: A compound that reacts violently when exposed to the air.
+Syntax: WIELD CONCUSSIVE
+THROW CONCUSSIVE <AT GROUND|direction>
+Extra info: Reagents: 2 magnesium, 2 argentum, 1 potash
+Abfile:
+This compound will cause a violent explosion. While it lacks much
+damaging potential, it will cause a concussive wave, able to launch any
+who do not have themselves suitably secured from the location.
+
+When the alchemist is at the centre of the detonation, he or she is able
+to be more accurate, allowing for the explosion to occasionally bypass
+defences which would otherwise hold a subject in place.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

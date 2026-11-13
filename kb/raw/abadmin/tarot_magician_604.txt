@@ -1,0 +1,16 @@
+Ability: Magician (Record #604)
+Associated skill: Tarot
+Skillpoints required: 1499
+Blurb: Replenish your mana with the might of the Magician.
+Syntax: FLING MAGICIAN AT <target>
+Abfile:
+The Magician represents the power of magic and the power of the mind. This card will replenish the mana of the adventurer it is thrown at.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

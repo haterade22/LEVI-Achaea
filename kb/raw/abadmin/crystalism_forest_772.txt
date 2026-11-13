@@ -1,0 +1,21 @@
+Ability: Forest (Record #772)
+Associated skill: Crystalism
+Skillpoints required: 42999
+Blurb: Cause a forest of sharp crystal to arise.
+Syntax: EMBED FOREST
+Abfile:
+ Shapes required: Diamond, Pyramid
+
+This vibration causes a forest of small, very sharp crystals to arise,
+damaging anyone who falls in the room, provided they are not levitating.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana
+The ability name CRYSTALFOREST is mapped to this ability.

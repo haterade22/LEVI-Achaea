@@ -1,0 +1,22 @@
+Ability: Pinshot (Record #1248)
+Associated skill: Subterfuge
+Skillpoints required: 32999
+Blurb: Focus your fire upon the feet of your victim.
+Syntax: PINSHOT <target>
+Abfile:
+This powerful ability will focus your fire upon the feet of your victim,
+making it difficult for them to flee from you. In addition, if your
+loyal snake is present when the arrow lands, they will strike out
+immediately at your unlucky foe.
+
+If you evade from a room, all of your pinshots will be yanked loose of
+your hapless victims.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

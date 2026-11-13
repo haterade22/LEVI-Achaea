@@ -1,0 +1,27 @@
+Ability: Skullcap (Record #2211)
+Associated skill: Propagation
+Skillpoints required: 45999
+Blurb: A plant that grows in the harsher environments.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH SKULLCAP
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: You will be able to see when adventurers fall in battle as if you
+had the deathsight defence.
+Body: You will recover more quickly from smoking the skullcap plant.
+Arms: Your thornrend attacks will funnel power into an arcane storm if
+one is present (requires feedback on your target) OR bypass the shield
+defence against denizens(*).
+Legs: Move more swiftly through deserts.
+
+* Your thornrend attacks will bypass, but not strip, the magical shield
+defence on denizens.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

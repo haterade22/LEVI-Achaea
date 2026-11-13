@@ -1,0 +1,17 @@
+Ability: Transcendence (Record #968)
+Associated skill: Occultism
+Skillpoints required: 23999
+Blurb: Open a gateway to the Plane of Chaos.
+Syntax: TRANSCENDENCE
+ENTER GATEWAY
+Abfile:
+Open a gateway to the Chaos Plane, allowing you to go there and bargain for the services of the Chaos Entities. Once the gate is opened, ENTER GATEWAY to enter the Chaos Plane. Once there, you can either wait the quarter part of an Achaean day (in which case you will be unceremoniously ejected), or you can seek the exit, which is hidden in the Whirlpool of Chaos.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 6% karma

@@ -1,0 +1,17 @@
+Ability: Warding (Record #1054)
+Associated skill: Devotion
+Skillpoints required: 16999
+Blurb: Drive your enemies off with overwhelming fear.
+Syntax: PERFORM RITE OF WARDING
+Abfile:
+This ability will set up a rite that will ward off any of your enemies that enter the room, by giving them fear.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium
+Resource: 180 devotion

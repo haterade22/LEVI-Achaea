@@ -1,0 +1,3 @@
+Ability: Trapdisarm (Record #685)
+Associated skill: Pranks
+Maps to record 684 (DISARM).

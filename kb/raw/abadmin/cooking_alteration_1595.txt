@@ -1,0 +1,16 @@
+Ability: Alteration (Record #1595)
+Associated skill: Cooking
+Skillpoints required: 35999
+Blurb: Make minor alterations to recipes you prepare.
+Syntax: PREPARE <recipe> [<ADD|EXCLUDE> <#> <ingredient>] [passcode]
+Abfile:
+Creativity is key when cooking, and you may now add your own unique touches to recipes you prepare. You may add or exclude up to 2 portions of any ingredient required in a recipe's creation, though you may never remove all traces of an ingredient.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

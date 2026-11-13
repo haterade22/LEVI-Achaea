@@ -1,0 +1,19 @@
+Ability: Stencils (Record #2516)
+Associated skill: Tattoos
+Skillpoints required: 60000
+Blurb: Ink tattoos to stencils.
+Syntax: INK <tattooname> ON <stencil>
+PRESS <stencil|tattooname> TO <body part> [OF <adventurer>]
+Abfile:
+With this ability, you may ink tattoos onto prepared stencils, allowing
+for later application even by those without knowledge in the skill of
+tattoos. Blank stencils can be purchased from the various city markets.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name STENCIL is mapped to this ability.

@@ -1,0 +1,23 @@
+Ability: Ague (Record #945)
+Associated skill: Occultism
+Skillpoints required: 0
+Blurb: A chill that enters from the aura to the body.
+Syntax: AGUE <target>
+Abfile:
+You can afflict a person's aura with an ague. This will cause the
+unfortunate wretch to freeze in two or three stages. If the target has a
+caloric salve applied, this will nullify the caloric salve. If not, then
+it will set him or her shivering, which will regularly cause a loss of
+equilibrium. If you chill a shivering person, you will freeze him or her
+completely. If two of their limbs are broken to the point of needing a
+restoration salve, it will perform this freeze twice in a single cast.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: 100 mana

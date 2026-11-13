@@ -1,0 +1,25 @@
+Ability: Hunt (Record #3045)
+Associated skill: Excision
+Skillpoints required: 19999
+Blurb: The light shines on all.
+Syntax: PERFORM HUNT
+Abfile:
+You may hunt the enemy of Creation that you have begun your crusade
+against, immediately transporting yourself to their location.
+
+* This ability is stopped by a monolith on the caster's end. It is also
+stopped by a monolith on the target's end, but not if they are ablaze.
+** This ability only works if your target is in the same area, unless
+said target is ablaze: then it requires the same continent/plane.
+*** There is a cooldown before you may perform this ability again,
+though not if used against an ablaze target.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of wrath balance
+Resource: 5% Holy Wrath

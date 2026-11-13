@@ -1,0 +1,16 @@
+Ability: Mastery (Record #1956)
+Associated skill: Spiritlore
+Skillpoints required: 60000
+Blurb: Mastery of the spiritual arts.
+Syntax:
+Abfile:
+Now that you have mastered the spiritual arts in their entirety, you
+will be able to attune up to three spirits at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

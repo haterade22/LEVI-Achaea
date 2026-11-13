@@ -1,0 +1,19 @@
+Ability: Livestrike (Record #2503)
+Associated skill: Shikudo
+Skillpoints required: 24999
+Blurb: Rob them of breath with a single blow.
+Syntax: LIVESTRIKE
+Abfile:
+A powerful thrust aimed at the solar plexus, this staff attack will rob
+your target of breath, delivering asthma.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

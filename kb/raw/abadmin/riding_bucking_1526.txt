@@ -1,0 +1,3 @@
+Ability: Bucking (Record #1526)
+Associated skill: Riding
+Maps to record 1525 (MOUNTKICK).

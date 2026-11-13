@@ -1,0 +1,24 @@
+Ability: Preservation (Record #2917)
+Associated skill: Charnel
+Skillpoints required: 55999
+Blurb: Sleep now, oh sleep.
+Syntax: ACCURSED PERFORM THE RITUAL OF PRESERVATION
+Abfile:
+The ritual of Preservation is one performed upon the self, and grants
+the power to preserve and consign. All those that you deliver the
+killing stroke to shall have their bodies preserved(*), and their soul
+immediately consigned into the tender clutches of the Finality(**). This
+ritual lasts for around half an Achaean day.
+
+* The corpse will look different.
+** They will be immediately forced to embrace death upon true death.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Skill specialisation: charnel_rituals

@@ -1,0 +1,26 @@
+Ability: Leach (Record #2398)
+Associated skill: Shadowmancy
+Skillpoints required: 45999
+Blurb: Their weakness is your strength.
+Syntax: SHADOW INSTILL <weapon> WITH LEACH
+Abfile:
+The leaching instillation was conceptualised to allow Tsol'teth warriors
+to fight on and appear tireless and implacable. The first strike of this
+instillation delivers the fabled parasitic curse. If parasite is already
+present, the subject is struck down with healthleech; if both are
+present, they are afflicted with manaleech. Finally, if all afflictions
+are present, you shall claim the very shadow of your foe with your
+strike.
+
+The parasitic curse will cause all natural regeneration(*) to be given
+to you instead of the afflicted subject.
+
+* This does not include regeneration from tattoos.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

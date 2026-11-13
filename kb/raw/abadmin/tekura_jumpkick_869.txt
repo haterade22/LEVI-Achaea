@@ -1,0 +1,16 @@
+Ability: Jumpkick (Record #869)
+Associated skill: Tekura
+Skillpoints required: 56999
+Blurb: Attack someone in an adjacent room with a flying kick.
+Syntax: JPK <target>
+Abfile:
+With this ability, you are able to demonstrate your ability to combine style and power in a single move, the jump kick. Starting in an adjacent location, you will fly in, slam your outstretched foot into your unlucky victim's body, knocking him to the floor, stunning him, and doing a fair amount of damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

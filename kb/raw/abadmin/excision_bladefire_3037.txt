@@ -1,0 +1,23 @@
+Ability: Bladefire (Record #3037)
+Associated skill: Excision
+Skillpoints required: 3999
+Blurb: Your sword shall cleave the shadows.
+Syntax: PERFORM BLADEFIRE
+Abfile:
+You may now strike with flame as well as steel; after preparing to do
+so, for the next 20 seconds or three strikes of your weapon(*) your
+weapon shall set your target ablaze (or increase their burning) when it
+strikes.
+
+* On skills that strike twice such as doubleslash or doublewhirl, this
+will only fire once per use.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of wrath balance
+Resource: 10% Holy Wrath

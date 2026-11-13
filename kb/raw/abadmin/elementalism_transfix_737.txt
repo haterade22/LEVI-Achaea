@@ -1,0 +1,26 @@
+Ability: Transfix (Record #737)
+Associated skill: Elementalism
+Skillpoints required: 50999
+Blurb: Mesmerize your target into inaction.
+Syntax: CAST TRANSFIX AT <target>
+Abfile:
+By creating a mesmerising pattern of fire, you may transfix an opponent
+into inaction. Blindness will prevent this, but this will remove the
+blindness in the process. When the blindness is removed, if you are
+moderately resonant with both the Elemental Planes of Air and Fire, your
+target will also be afflicted with stupidity.
+
+* Note that you only gain resonance and the associated effects when
+transfix unblinds. When it transfixes proper, your resonance decay will
+be reset but you will not gain any of the associated benefits on that
+cast.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 200 mana

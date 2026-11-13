@@ -1,0 +1,20 @@
+Ability: Cleave (Record #2360)
+Associated skill: Weaving
+Skillpoints required: 2999
+Blurb: A sundering blow.
+Syntax: WEAVE CLEAVE <target>
+Abfile:
+Using an axe, cleave through magical protections surrounding your
+foe(*). When you cleave through a magical shield, also knock your target
+prone.
+
+* Strips aura of rebounding and magical shield (both at the same time).
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

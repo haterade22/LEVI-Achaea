@@ -1,0 +1,17 @@
+Ability: Trumpet (Record #374)
+Associated skill: Metamorphosis
+Skillpoints required: 23999
+Blurb: Knock your foe to the ground with a mighty blast of sound.
+Syntax: TRUMPET <target>
+This ability will be hidden on ablistings.
+Abfile:
+With your mighty bulk, you are able to blast a wall of sound at someone, attempting to knock them to the ground even from the trees or air.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

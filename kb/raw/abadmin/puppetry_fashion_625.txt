@@ -1,0 +1,41 @@
+Ability: Fashion (Record #625)
+Associated skill: Puppetry
+Skillpoints required: 0
+Blurb: Fashion puppets from wood.
+Syntax: FASHION PUPPET OF <target>
+PUPPET UNRAVEL <target>
+Extra info: Initial fashion cooldown: 2.00 seconds of balance, 50 mana, and 2 Wood
+Standard fashion cooldown: 2.00 seconds of balance, 50 mana
+Unravel cooldown: 10.00 seconds of balance, 750 mana
+Abfile:
+ Requires: 2 Wood
+
+In order to fashion a puppet, you first need to get yourself 2 wood
+commodities. After you fashion the first time, you will have for
+yourself a crude humanoid puppet. In order to make it actually useful,
+you must then wield the puppet, and FASHION PUPPET OF <target>.
+
+As you fashion your puppet of an adventurer over and over, you'll notice
+that it gets closer and closer to being a semi-living puppet. Further,
+the more fashions you have with your puppet, the more Puppetry powers
+will be able to be channeled through the puppet.
+
+Additionally, your puppet will decay at a rate of 50% every 6 minutes
+after the last fashion. This effect does not occur for puppets of allied
+adventurers.
+
+If you find yourself in need of destroying a puppet that is no longer in
+your possession, you may unravel it from afar. Note that this is a
+difficult feat, and will result in being thrown off balance for a long
+period of time.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance
+Resource: Mana

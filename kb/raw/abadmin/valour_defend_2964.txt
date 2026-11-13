@@ -1,0 +1,18 @@
+Ability: Defend (Record #2964)
+Associated skill: Valour
+Skillpoints required: 41999
+Blurb: Attempt to protect someone else with swordwork.
+Syntax: DEFEND <target>
+Abfile:
+Upon using this ability, you will attempt to take much of the damage
+from the blows that might otherwise harm the adventurer you are
+defending.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

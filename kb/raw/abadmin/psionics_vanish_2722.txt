@@ -1,0 +1,24 @@
+Ability: Vanish (Record #2722)
+Associated skill: Psionics
+Skillpoints required: 47999
+Blurb: Perception is everything.
+Syntax: PSI VANISH <PARTIAL|TOTAL>
+Abfile:
+This advanced psionic ability will permit you to consistently annihilate
+the knowledge of your presence from the minds of those in your
+proximity. You may select partial(*) or total(**), total having all of
+the benefits of partial but lasting half as long. This ability is very
+taxing, and you may only enact any form of vanish every so often.
+
+* A partial vanish shall hide your presence in a room.
+** A total vanish shall hide your entry and exit, as well as your
+presence on alertness.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 2.50 seconds of equilibrium

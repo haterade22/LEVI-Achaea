@@ -1,0 +1,20 @@
+Ability: Fortification (Record #709)
+Associated skill: Elementalism
+Skillpoints required: 3299
+Blurb: Protect your open channels from attack.
+Syntax: FORTIFY <channel>
+FORTIFY ALL
+Abfile:
+Using this ability will provide you protection against abilities that may attack your open elemental channels. These abilities will first have to attack your fortification before destroying your channel. However, fortify does have a regular willpower cost associated with it.
+
+If you choose to fortify all, the mana and eq costs will be the cost of fortifying a single channel multiplied by the number of channels you have open.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 100 mana

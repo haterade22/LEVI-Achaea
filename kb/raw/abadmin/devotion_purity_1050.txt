@@ -1,0 +1,22 @@
+Ability: Purity (Record #1050)
+Associated skill: Devotion
+Skillpoints required: 9999
+Blurb: Damage the Unholy.
+Syntax: PERFORM PURITY <target>
+Abfile:
+Call upon your faith to the Bloodsworn and assail a foe's soul with your
+righteousness and pious fury. This holy prayer will bypass any magical
+shields or prismatic barriers around your target.
+
+This ability does not cost devotion when used against denizens.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 devotion

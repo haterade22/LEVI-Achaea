@@ -1,0 +1,24 @@
+Ability: Rixil (Record #984)
+Associated skill: Domination
+Skillpoints required: 299
+Blurb: Rixil, the spectre.
+Syntax: COMMAND SYCOPHANT AT <target>
+Abfile:
+Rixil, when summoned, will send to you a sycophant, which, when
+COMMANDed, will significantly increase the recovery time from your
+victim's next attempt to focus their mind.
+
+When primebonded, the sycophant shall drain the mana of your enemies;
+this mana is increased if they are shivering, and increased even more so
+if they are frozen.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of entity balance
+Resource: 50 mana
+The ability name SYCOPHANT is mapped to this ability.

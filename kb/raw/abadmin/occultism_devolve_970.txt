@@ -1,0 +1,22 @@
+Ability: Devolve (Record #970)
+Associated skill: Occultism
+Skillpoints required: 29999
+Blurb: Devolving your enemy will make them unrecognizable.
+Syntax: DEVOLVE <target>
+Abfile:
+You have the power to terribly curse your opponent so that his or her
+appearance de-evolves into a primitive state, causing any allies to turn
+on him or her in disgust and to crush their own opinion of their
+worth(*).
+
+* Gives disloyalty and shyness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+The ability name DEVOLUTION is mapped to this ability.

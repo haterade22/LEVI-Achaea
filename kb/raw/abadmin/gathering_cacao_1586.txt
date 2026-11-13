@@ -1,0 +1,16 @@
+Ability: Cacao (Record #1586)
+Associated skill: Gathering
+Skillpoints required: 41499
+Blurb: Cacao pods that can be refined into chocolate.
+Syntax: GATHER CACAO
+Abfile:
+While in a jungle environment, you can gather some of these rare pods that can be refined into chocolate beans for cooking.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

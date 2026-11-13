@@ -1,0 +1,26 @@
+Ability: Comprehension (Record #1987)
+Associated skill: Conjuration
+Skillpoints required: 20999
+Blurb: Understand all mortal languages for a time.
+Syntax: BEGIN CREATION OF NECKLACE OF COMPREHENSION
+Abfile:
+This item must be worn.
+
+Type:
+   Created item.
+
+Actions:
+   3x10, 9, 16, 1, 2x13, 4, 9, 15
+
+Comms:
+   2 elemental ice, 3 gold, 4 silver, 3 stag's horn
+
+The Necklace of Comprehension will permit you, when worn, to understand, but not speak, Achaean (common) and any Achaean racial language, excepting Dragon.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

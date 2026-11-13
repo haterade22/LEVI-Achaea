@@ -1,0 +1,17 @@
+Ability: Gimmegimme (Record #1687)
+Associated skill: Voicecraft
+Skillpoints required: 16999
+Blurb: A chant of generosity sure to pay off.
+Syntax: CHANT GIMMEGIMME AT <target>
+Abfile:
+Afflicts your target with generosity.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 200 mana and 20 willpower

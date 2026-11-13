@@ -1,0 +1,24 @@
+Ability: Combustion (Record #2797)
+Associated skill: Sublimation
+Skillpoints required: 7999
+Blurb: A spark in the right place and moment.
+Syntax: ALIGN COMBUSTION
+This ability will be hidden on ablistings.
+Abfile:
+Align matters just so that a flame ignites, radiating outward from you
+and setting all others in the location ablaze. They will also be dealt
+damage, and this damage is increased substantially against an already
+ablaze target at the time of cast.
+
+Overdraw effect: the flames will ignite any clouds of hunger-inducing
+gas in the location, destroying them.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 1.50% Wellspring Energy

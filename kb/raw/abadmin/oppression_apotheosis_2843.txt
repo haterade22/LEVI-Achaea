@@ -1,0 +1,35 @@
+Ability: Apotheosis (Record #2843)
+Associated skill: Oppression
+Skillpoints required: 60000
+Blurb: There can be but one.
+Syntax: APOTHEOSIS CHALLENGE <infernal>
+APOTHEOSIS STANDINGS
+Abfile:
+All serve the Lord, but only one can be the strongest.
+All are the Lord's tools, but only one can be the sharpest.
+All are the Lord's army, but only one can be His sword.
+
+In his wisdom the Lord of Evil has granted his most faithful knights to
+pit themselves against one another. There is no surrender. There is no
+mercy. There is no second chance(*). Many may enter the infernal arena
+but only one shall leave unbowed.
+
+Visit the arena within the Lord of Evil's temple upon the western Isle
+and you may issue an apotheosis challenge to another knight of Evil that
+also stands there. To take up the Infernal arms is acceptance
+enough(**). The knight of Evil who triumphs over the most of his fellows
+shall be elevated above all others come year's end(***).
+
+* You may only face a given person once per Achaean year. There are no
+do overs!
+** Standing in the acceptance location leaves you open to be challenged.
+You will not have the option to refuse and the battle is to the death.
+*** The Apotheosis reward is awarded at each year's end.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

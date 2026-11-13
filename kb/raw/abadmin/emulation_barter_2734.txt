@@ -1,0 +1,28 @@
+Ability: Barter (Record #2734)
+Associated skill: Emulation
+Skillpoints required: 23999
+Blurb: There is power in such things.
+Syntax: ENACT BARTER <amount of gold>
+Abfile:
+The golden sovereign has been the currency of Sapience long before
+modern civilisation, but even before the metal held power. The specifics
+are likely beyond all but the Logos and perhaps the Lord Merchant, but
+the Aldar did make certain discoveries.
+
+By extracting the power in the metal, they were able to restore
+themselves greatly(*), though it did result in the metal being
+destroyed. Many considered this a failed experiment as the costs became
+so high, but there were some that felt it was a worthwhile discovery
+nevertheless.
+
+* You may destroy a specified amount of gold and restore your endurance
+by an equivalent amount.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

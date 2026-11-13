@@ -1,0 +1,3 @@
+Ability: Squinting (Record #1429)
+Associated skill: Vision
+Maps to record 1428 (SQUINT).

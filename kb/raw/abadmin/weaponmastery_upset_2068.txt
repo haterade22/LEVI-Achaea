@@ -1,0 +1,19 @@
+Ability: Upset (Record #2068)
+Associated skill: Weaponmastery
+Skillpoints required: 20000
+Blurb: Bring them down in a tangle of limbs.
+Syntax: BATTLEFURY UPSET <target>
+Abfile:
+Against an opponent who has suffered at least one badly damaged leg, you
+may exploit their motions to gain an opening with which to tangle your
+weapon with their legs. This will bring them crashing to the ground.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of battlefury balance
+Skill specialisation: knight_twohanded

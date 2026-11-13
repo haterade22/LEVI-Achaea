@@ -1,0 +1,21 @@
+Ability: Kail (Record #2433)
+Associated skill: Terminus
+Skillpoints required: 999
+Blurb: Turn aside your foes.
+Syntax: INTONE KAIL
+This ability will be hidden on ablistings.
+Abfile:
+This word of power shall summon forth a prismatic barrier to protect
+you(*).
+
+* This ability incurs an equilibrium cost in addition to the standard
+word balance cost.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 12.00 seconds of word balance

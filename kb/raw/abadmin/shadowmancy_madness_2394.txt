@@ -1,0 +1,22 @@
+Ability: Madness (Record #2394)
+Associated skill: Shadowmancy
+Skillpoints required: 35999
+Blurb: Insanity is a torture all its own.
+Syntax: SHADOW INSTILL <weapon> WITH MADNESS
+Abfile:
+This instillation shall bring down the curse of madness on your victim.
+This particular curse causes the unfortunate subject to be periodically
+afflicted with a random phobia; additionally, it doubles the recovery
+time of focus attempts, and significantly increases the mana cost.
+
+If this instillation strikes someone already afflicted by madness, they
+will suffer vertigo, then hallucinations. If all three afflictions are
+present, they shall be stunned.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

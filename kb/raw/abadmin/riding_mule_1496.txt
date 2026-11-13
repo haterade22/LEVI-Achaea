@@ -1,0 +1,15 @@
+Ability: Mule (Record #1496)
+Associated skill: Riding
+Skillpoints required: 299
+Blurb: Bumble along upon a stubborn mule.
+Syntax: None
+Abfile:
+You can ride upon a mule (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Thirdeye (Record #1448)
+Associated skill: Vision
+Skillpoints required: 29999
+Blurb: Give yourself the power of the third eye.
+Syntax: THIRDEYE
+Abfile:
+This powerful ability will allow you to see everybody on the continent's location with the WHO command. It will also reveal shrouded persons in the room with you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 30 mana

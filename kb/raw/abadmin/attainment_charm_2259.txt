@@ -1,0 +1,19 @@
+Ability: Charm (Record #2259)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Lull your victim into serving you.
+Syntax: PLAY CHARM AT <target>
+Extra info: Gives denizen affliction: Charm
+Abfile:
+A beguiling song that charms your victim.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 43.00 seconds
+Resource: 32 rage
+Skill specialisation: br_bard

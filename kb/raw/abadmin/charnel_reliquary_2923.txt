@@ -1,0 +1,19 @@
+Ability: Reliquary (Record #2923)
+Associated skill: Charnel
+Skillpoints required: 11999
+Blurb: Where treasures are laid to rest.
+Syntax: CRYPT RESHAPE RELIQUARY
+Abfile:
+The reliquary is a mysterious chamber within the depths of the Charnel
+crypt. Its true purpose is shrouded in mystery, though there are
+whisperings that it is utilised in some of the higher rituals of the
+art.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Swell (Record #2655)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Reclaim your due.
+Syntax: MANIFEST SWELL <target>
+Abfile:
+Draw the vital waters from your target, reducing their health
+periodically and bolstering your own(*).
+
+* This is weaker damage than a standard damage over time battlerage
+attack due to healing you on each of the ticks.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 42.00 seconds
+Resource: 30 rage
+Skill specialisation: br_water_lord

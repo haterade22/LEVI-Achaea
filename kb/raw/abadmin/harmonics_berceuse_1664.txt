@@ -1,0 +1,17 @@
+Ability: Berceuse (Record #1664)
+Associated skill: Harmonics
+Skillpoints required: 30999
+Blurb: Put an enemy to sleep with this soporific tune.
+Syntax: PLAY BERCEUSE
+Abfile:
+Continuously attempts to afflict all of the bard's enemies with sleep.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 150 mana

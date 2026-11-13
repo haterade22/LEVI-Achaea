@@ -1,0 +1,19 @@
+Ability: Bind (Record #405)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Send forth a stream of entangling webbing.
+Syntax: HYDRA BIND <target>
+This ability will be hidden on ablistings.
+Abfile:
+Bind an adventurer up in your many hydra heads, preventing most forms of action.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of hydra head balance
+Resource: 150 mana
+Skill specialisation: meta_druid

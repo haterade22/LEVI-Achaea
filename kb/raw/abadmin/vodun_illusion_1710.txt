@@ -1,0 +1,19 @@
+Ability: Illusion (Record #1710)
+Associated skill: Vodun
+Skillpoints required: 1499
+Blurb: Cause your victim to see an image of your choosing.
+Syntax: VODUN ILLUSION [LETHAL] <illusion>
+Extra info: Fashions:
+Required: 5
+Used    : 1
+Abfile:
+Cause your doll's namesake to see something specific. You may embed a single newline in the illusion by including the characters \n at the appropriate spot.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

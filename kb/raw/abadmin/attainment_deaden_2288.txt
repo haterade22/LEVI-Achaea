@@ -1,0 +1,19 @@
+Ability: Deaden (Record #2288)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Slow your target's mind.
+Syntax: DEADEN <target>
+Extra info: Gives denizen affliction: Aeon
+Abfile:
+Exert a mental clamp around your opponent's mind, slowing the mental processes and all of your opponents actions, giving the effect of the aeon affliction.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 24 rage
+Skill specialisation: br_gold_dragon

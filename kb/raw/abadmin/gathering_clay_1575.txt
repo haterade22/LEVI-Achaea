@@ -1,0 +1,16 @@
+Ability: Clay (Record #1575)
+Associated skill: Gathering
+Skillpoints required: 0
+Blurb: Red clay occasionally contains flakes of gold.
+Syntax: GATHER CLAY
+Abfile:
+Red clay is found in riverbeds and occasionally contains flakes of gold.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

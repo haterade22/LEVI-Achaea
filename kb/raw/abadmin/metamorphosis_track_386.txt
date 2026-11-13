@@ -1,0 +1,20 @@
+Ability: Track (Record #386)
+Associated skill: Metamorphosis
+Skillpoints required: 36999
+Blurb: Traverse to and aerially follow someone.
+Syntax: TRACK <target>
+PURSUE <target>
+Extra info: PURSUE: 1.00 seconds of equilibrium and 50 mana.
+This ability will be hidden on ablistings.
+Abfile:
+While flying, you will be able to fly to an adventurer very quickly using TRACK. PURSUE is a complementary ability, and allows you to aerially pursue someone. Your target must be on the ground, and you will follow him from the air while he moves.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 50 mana

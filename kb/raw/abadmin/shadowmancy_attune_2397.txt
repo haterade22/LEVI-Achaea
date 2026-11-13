@@ -1,0 +1,23 @@
+Ability: Attune (Record #2397)
+Associated skill: Shadowmancy
+Skillpoints required: 40999
+Blurb: Minor alterations can have major repercussions.
+Syntax: SHADOW ATTUNE <target> TO <MADNESS|DEGENERATION>
+SHADOW UNATTUNE <target>
+Abfile:
+By attuning a person's shadow, you will cause them to be periodically
+afflicted. Attuning to madness gives periodic phobias and insanities;
+attuning to degeneration gives afflictions that will hinder the target.
+
+Attuning requires the use of a manifested dagger.
+If the target has all applicable phobias and insanities, madness
+will instead deal damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

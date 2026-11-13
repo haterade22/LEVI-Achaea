@@ -1,0 +1,3 @@
+Ability: Keylist (Record #1420)
+Associated skill: Vision
+Maps to record 1411 (LIST).

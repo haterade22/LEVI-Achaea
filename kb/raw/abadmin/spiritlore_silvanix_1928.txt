@@ -1,0 +1,21 @@
+Ability: Silvanix (Record #1928)
+Associated skill: Spiritlore
+Skillpoints required: 2999
+Blurb: Silvanix, The Fool.
+Syntax: INVOKE ARROWCATCHING ON|OFF
+Extra info: Attune effect: the tumble ability will have a reduced balance.
+Abfile:
+The skilled jester has deft wits and defter hands, and Silvanix was no
+exception. By binding his spirit, you will be able to snatch arrows from
+the very air.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Drain: Mana
+The ability name JESTER is mapped to this ability.

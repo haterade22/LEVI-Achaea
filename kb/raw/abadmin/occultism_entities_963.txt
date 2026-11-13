@@ -1,0 +1,16 @@
+Ability: Entities (Record #963)
+Associated skill: Occultism
+Skillpoints required: 15999
+Blurb: Sense the whereabouts of Chaos Entities in the land.
+Syntax: ENTITIES [LOYAL]
+Abfile:
+The disruptions in reality caused by entities of Chaos are quite distinctive to one trained in the sublime arts of Occultism. By reaching out with your consciousness, you may find the locations of these disruptions throughout the Prime Material Plane. Unlike those of lesser, uninitiated minds, you are able to perform this feat from any plane, and even pinpoint those entities loyal specificially to you whether on the Prime Material Plane or otherwise.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Corrosion (Record #3065)
+Associated skill: Anathema
+Skillpoints required: 25999
+Blurb: Like an acid, ever burning.
+Syntax: CROON CORROSION <target>
+Abfile:
+As Chaos erodes and destroys that which is lesser, so shall the enemies
+of Chaos be worn down and away. Croon to your victim of this truth, and
+their nature shall be revealed for the easily broken thing that it
+is(*).
+
+* Gives manaleech.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.10% karma

@@ -1,0 +1,20 @@
+Ability: Spider (Record #2931)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A single deadly bite.
+Syntax: TRACE SPIDER <target>
+Abfile:
+The spider logograph shall leap to a foe and bite them; those that
+suffer from being inhibited or sensitive shall suffer to a much greater
+extent than those who do not.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_pariah

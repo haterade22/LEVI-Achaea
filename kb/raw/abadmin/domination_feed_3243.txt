@@ -1,0 +1,25 @@
+Ability: Feed (Record #3243)
+Associated skill: Domination
+Skillpoints required: 55999
+Blurb: A transaction most profane.
+Syntax: PRIMEBOND FEED <chaos lord>
+Abfile:
+Melding your knowledge of Occultism with the bonds you have wrought with
+the Lords of the Chaos Court, you may pour karma down one of these
+established connections to empower the servants of that Chaos Lord that
+stand alongside you.
+
+* Doubles the tick rate of that entity and forces a tick to happen very
+shortly after the empowerment, though that entity will be destroyed
+within eighteen seconds.
+** You may only perform this ability once per minute.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 8% karma

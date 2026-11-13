@@ -1,0 +1,18 @@
+Ability: Wheel (Record #614)
+Associated skill: Tarot
+Skillpoints required: 26999
+Blurb: Spin the wheel and take your chances.
+Syntax: FLING WHEEL AT GROUND
+Abfile:
+The Wheel of Fortune is mysterious and represents luck, neither good nor bad. Sometimes it will bring good things, sometimes bad. The effects of this card are permanent, except those affecting adventurer statistics.
+
+Use of this card which affects anyone unwillingly could result in very serious repercussions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

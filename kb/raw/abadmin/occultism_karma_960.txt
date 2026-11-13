@@ -1,0 +1,21 @@
+Ability: Karma (Record #960)
+Associated skill: Occultism
+Skillpoints required: 12999
+Blurb: Sense how much karma you have accumulated.
+Syntax: KARMA
+STUDY <item>
+Abfile:
+You may now utilize karma by probing the occult mysteries found in
+various valuable items found across the land. KARMA will tell you how
+high your karma level is. When you STUDY <item>, your karma level will
+rise, and the karmic value of the item you are studying will be slowly
+consumed by this thirst for knowledge.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

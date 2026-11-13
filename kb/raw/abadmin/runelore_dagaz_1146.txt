@@ -1,0 +1,20 @@
+Ability: Dagaz (Record #1146)
+Associated skill: Runelore
+Skillpoints required: 13999
+Blurb: This rune will heal afflictions from you at random.
+Syntax: SKETCH DAGAZ ON GROUND
+Abfile:
+ Inks required: 1 Green, 1 Red
+Symbol: Rising Sun
+
+Use earth magic to cure you of what ails you.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

@@ -1,0 +1,20 @@
+Ability: Gate (Record #449)
+Associated skill: Groves
+Skillpoints required: 38999
+Blurb: Open a gateway of light.
+Syntax: GROVE GATE <adventurer>
+EVOKE GATE <adventurer>
+Extra info: GROVE cooldown: 3.00 seconds of equilibrium and 150 sunlight.
+EVOKE cooldown: 3.00 seconds of equilibrium, 150 imbued sunlight, and 250 mana.
+Abfile:
+Grove gate will allow you to open a two-way portal between you and any adventurer, anywhere on the same continent as yourself. It is also possible to evoke a portal from an imbued quarterstaff, though the range of this gateway will be limited to the local area.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Sunlight

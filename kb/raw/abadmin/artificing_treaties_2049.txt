@@ -1,0 +1,37 @@
+Ability: Treaties (Record #2049)
+Associated skill: Artificing
+Skillpoints required: 4999
+Blurb: Thus is agreement made.
+Syntax:
+Abfile:
+Though the creation of your arcane staff is doubtlessly what the
+uneducated might consider the height of the work you carry out in your
+workshop, the true student of Artifice knows better. Your staff is a
+foci, and one grand at that; but it is the treaties with the Elemental
+Planes which you will carve into crystal which shall unlock your full
+potential.
+
+While within your workshop, you may establish treaties with the denizens
+of the Elemental Planes. As you progress through Artifice your ability
+to create treaties with more and more powerful denizens of said planes
+will become possible, and there are rumours that at the very height of
+mastery... well. They are simply rumours.
+
+TREATY FORM <denizen>: attempt to form an agreement with a denizen of an
+Elemental Plane. See relevant ability files for costs or other factors
+that may be involved on a per treaty basis.
+TREATY LIST: see what treaties you have established, and for how long
+they will last(*).
+ELEMENTAL SUMMON <elemental>: see the ELEMENTALS ability file for more
+details.
+
+* Treaties do not last forever and will need to be renewed once they
+lapse.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

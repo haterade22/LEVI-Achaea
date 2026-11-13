@@ -1,0 +1,22 @@
+Ability: Judgement (Record #1023)
+Associated skill: Spirituality
+Skillpoints required: 16999
+Blurb: Pass a sentence of death upon the evil.
+Syntax: JUDGE <target>
+Abfile:
+Through supplication and prayer, you may seek judgement that an
+adventurer has committed a crime punishable by death, and await his
+sentence.
+
+This ability takes some time to work, though less if the heretic
+possesses the justice affliction at the time you begin.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

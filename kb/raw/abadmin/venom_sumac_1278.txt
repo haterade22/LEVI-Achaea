@@ -1,0 +1,16 @@
+Ability: Sumac (Record #1278)
+Associated skill: Venom
+Skillpoints required: 10
+Blurb: Minor damage.
+Syntax: SECRETE SUMAC
+BITE <target>
+Abfile:
+This venom will cause minor damage to adventurers and denizens. This venom cannot be used to envenom a weapon.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

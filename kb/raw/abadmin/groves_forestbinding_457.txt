@@ -1,0 +1,25 @@
+Ability: Forestbinding (Record #457)
+Associated skill: Groves
+Skillpoints required: 50999
+Blurb: Prevent all entry and exit from the forest.
+Syntax: GROVE FORESTBINDING
+Abfile:
+This powerful ability will prevent entry to and egress from the forest
+that is bound for all those not in an organisation aligned with
+Nature(*).
+
+Only one forest may be bound at a given time. The grove energy cost is
+doubled after the first use, if used again within 24 Achaean days.
+
+* This does not block the movement of those in an entirely incorporeal
+state such as blackwind or astralform.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.50 seconds of equilibrium
+Resource: 3000 sunlight

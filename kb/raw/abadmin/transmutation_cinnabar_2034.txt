@@ -1,0 +1,16 @@
+Ability: Cinnabar (Record #2034)
+Associated skill: Transmutation
+Skillpoints required: 60000
+Blurb: A mineral of sulphur and mercury.
+Syntax: EXTRACT CINNABAR
+TRANSMUTATE <#> <mineral> TO CINNABAR
+Abfile:
+When smoked, the cinnabar mineral will cure curse-related afflictions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

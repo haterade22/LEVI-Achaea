@@ -1,0 +1,20 @@
+Ability: Crusade (Record #3044)
+Associated skill: Excision
+Skillpoints required: 17999
+Blurb: Of singular focus and relentless drive.
+Syntax: PERFORM CRUSADE <target>
+Abfile:
+Sometimes a particular enemy of Creation will require your singular
+focus to destroy. You may now focus your crusade upon him or her, and by
+doing so enable you to perform various higher abilities against their
+person. See relevant ability files for details.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of wrath balance
+Resource: 12% Holy Wrath

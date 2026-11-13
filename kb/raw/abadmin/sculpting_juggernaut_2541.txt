@@ -1,0 +1,26 @@
+Ability: Juggernaut (Record #2541)
+Associated skill: Sculpting
+Skillpoints required: 53999
+Blurb: The unstoppable force.
+Syntax: TERRAN JUGGERNAUT <target> <direction>
+Abfile:
+By channeling the fury of Garash, you may gather yourself and charge
+into a room against a target(*). You will smash through any ice or
+stonewalls in your path and knock over any totem the target may be
+propping before it can activate. The tremors of your passing shall even
+disrupt those totems stood by those other than your target.
+
+In addition, the target will be knocked prone and take damage. If the
+target has a shield or prismatic barrier, the damage is reduced. If they
+do not, they are also stunned for a short time.
+
+* This ability has a windup time during which you may not do anything.
+People will follow you when performing this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

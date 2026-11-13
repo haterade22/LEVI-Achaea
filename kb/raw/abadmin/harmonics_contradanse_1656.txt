@@ -1,0 +1,17 @@
+Ability: Contradanse (Record #1656)
+Associated skill: Harmonics
+Skillpoints required: 14999
+Blurb: Periodically afflict your enemies' minds.
+Syntax: PLAY CONTRADANSE
+Abfile:
+This harmonic periodically strikes your non-deaf enemies with a random mental affliction.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 90 mana

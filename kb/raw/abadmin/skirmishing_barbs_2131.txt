@@ -1,0 +1,20 @@
+Ability: Barbs (Record #2131)
+Associated skill: Skirmishing
+Skillpoints required: 46999
+Blurb: Chivalry is a construct of the city dwellers.
+Syntax: CRAFT BARBS
+ATTACH BARBS TO <weapon>
+Extra info: Commodities: 1 iron
+Abfile:
+You may now craft barbs to attach to your chosen weapon. This will
+occasionally cause the wounds you inflict to be torn open to a greater
+degree, decreasing the effectiveness of attempts to clot the injuries.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

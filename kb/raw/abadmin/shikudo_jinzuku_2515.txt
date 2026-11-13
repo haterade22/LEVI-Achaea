@@ -1,0 +1,19 @@
+Ability: Jinzuku (Record #2515)
+Associated skill: Shikudo
+Skillpoints required: 53999
+Blurb: A sharp thrust to the kidneys.
+Syntax: JINZUKU
+Abfile:
+This swift strike to the kidney's will instill a craving in your target,
+causing them to become addicted to the consumption of curatives.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

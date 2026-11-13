@@ -1,0 +1,15 @@
+Ability: Targetthrow (Record #1470)
+Associated skill: Weaponry
+Skillpoints required: 26999
+Blurb: The ability to throw at specific body parts.
+Syntax: None
+Abfile:
+Your eagle eye and throwing ability now enable you to throw not just at a target, but at a specific body part on a person. Use the TARGETING ability in conjunction with this.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Squeeze (Record #2230)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Command the earth to crush your target.
+Syntax: CAST SQUEEZE <target>
+Abfile:
+Command the earth to form a great stone hand to crush the life out of
+your target.
+
+You must have an earth channel opened to cast this spell.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_magi

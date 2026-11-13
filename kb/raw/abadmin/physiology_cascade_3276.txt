@@ -1,0 +1,21 @@
+Ability: Cascade (Record #3276)
+Associated skill: Physiology
+Skillpoints required: 45999
+Blurb: Failure upon failure.
+Syntax: Append CASCADE to the end of appropriate attacks
+Abfile:
+Your grasp over the humours of your subjects is now such that you may
+meld your mastery of physiology with your alchemical workings directly.
+Causing cascade failures requires a sufficiently prepared subject:
+
+Vitrification: requires a target's sanguine humour has been tempered at
+least twice and brings it back into balance by one temper. However, you
+will perform the vitrification far more swiftly than normal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

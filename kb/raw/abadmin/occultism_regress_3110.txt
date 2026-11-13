@@ -1,0 +1,24 @@
+Ability: Regress (Record #3110)
+Associated skill: Occultism
+Skillpoints required: 9999
+Blurb: As before, so again.
+Syntax: REGRESS <target>
+Abfile:
+The skilled Occultism practitioner will learn to devolve their enemies
+to an earlier state of being. However, such mastery is far beyond the
+grasp of the student, and so simple exercises should be practiced in
+preparation for such higher techniques. Known symptoms in a subject
+involve joint failure(*) and organ malfunction, though to date both have
+proved temporary and ultimately harmless long term.
+
+* This ability will prone your target.
+** If they're already prone, they'll be afflicted with anorexia.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

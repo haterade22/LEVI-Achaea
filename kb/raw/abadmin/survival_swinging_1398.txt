@@ -1,0 +1,16 @@
+Ability: Swinging (Record #1398)
+Associated skill: Survival
+Skillpoints required: 32999
+Blurb: Climbing up into the trees.
+Syntax: SWING UP/DOWN
+Abfile:
+When in a forest location, you will be able to swing up into the trees.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

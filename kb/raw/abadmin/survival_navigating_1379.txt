@@ -1,0 +1,17 @@
+Ability: Navigating (Record #1379)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Navigate to various landmarks in Sapience.
+Syntax: WALK TOWARD <landmark>
+Abfile:
+Your geographic knowledge allows you to navigate to certain major landmarks in Sapience, such as major city-states, provided you are close enough to them.
+
+HELP LANDMARKS contains a full list of landmarks towards which you can navigate.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

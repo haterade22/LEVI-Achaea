@@ -1,0 +1,17 @@
+Ability: Vengeance (Record #3129)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: You will not go quietly.
+Syntax: VENGEANCE ON/OFF
+Abfile:
+Should you fall in your conquest, the soulforged essence of your undead
+form shall strike at all those in your location, dealing damage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance

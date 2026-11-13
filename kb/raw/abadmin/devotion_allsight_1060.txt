@@ -1,0 +1,17 @@
+Ability: Allsight (Record #1060)
+Associated skill: Devotion
+Skillpoints required: 28999
+Blurb: Gain insight into all movement into and out of holy areas.
+Syntax: PERFORM RITE OF ALLSIGHT
+Abfile:
+When activated, this ability will inform you whenever any of your enemies enters or leaves the room that the Rite is in.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium
+Resource: 180 devotion

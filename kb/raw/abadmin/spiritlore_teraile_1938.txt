@@ -1,0 +1,27 @@
+Ability: Teraile (Record #1938)
+Associated skill: Spiritlore
+Skillpoints required: 20999
+Blurb: Teraile, The Swordsman.
+Syntax: INVOKE BLOODLET <target>
+Extra info: Attune effect: curses will inflict bleeding.
+Abfile:
+The skill of the practitioners of the legendary Two Arts can not be
+overstated. By binding the spirit of one of the long dead masters of
+this art, you will be able to lacerate the flesh of your enemies.
+
+This ability will cause the victim to gain the haemophilia affliction,
+there by removing their ability to clot their wounds. If your victim
+already has haemophilia, they will suffer bleeding.
+
+This ability may be combined with curses.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 20 mana
+The ability name BLADEMASTER is mapped to this ability.

@@ -1,0 +1,22 @@
+Ability: Nishnatoba (Record #3215)
+Associated skill: Woe
+Skillpoints required: 4999
+Blurb: The end of the beginning.
+Syntax: RECITE NISHNATOBA
+Abfile:
+The tale of the great battle upon Nishnatoba is one foundational to
+history, as is the last charge that came at its grand culmination. Speak
+this tale and all of your citymates that are members of the standing
+army in your location will rally behind you(*), ready to charge into
+battle.
+
+* They will be added to your group.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 17.00 seconds of voice balance and 2.50 seconds of equilibrium

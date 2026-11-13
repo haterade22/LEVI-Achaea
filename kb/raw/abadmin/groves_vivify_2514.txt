@@ -1,0 +1,26 @@
+Ability: Vivify (Record #2514)
+Associated skill: Groves
+Skillpoints required: 55999
+Blurb: Bring forth life from blight.
+Syntax: VIVIFY
+Abfile:
+The Blighted Isle upon which the city of Mhaldor stands is an affront to
+Nature and her ilk. While standing upon the tainted land you may perform
+this act of cleansing, calling forth growth to drive back the
+corruption. The servants of Evil shall find that their mastery of
+necromantic essence grows weaker, the more of their domain becomes
+cleansed.
+
+Take note: prolonged use of vivification will take a heavy toll on your
+sunlight reserves. You will find each subsequent cleansing incurs a
+higher cost than the last.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1000 sunlight

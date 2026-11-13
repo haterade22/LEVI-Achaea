@@ -1,0 +1,30 @@
+Ability: Flame (Record #360)
+Associated skill: Metamorphosis
+Skillpoints required: 12999
+Blurb: Blast your foe with magical flame.
+Syntax: SUMMON FIRE
+FLAME <target>
+FLAME <icewall-direction>
+FLAME GROUND
+BELCH
+RELAX FLAME
+HYDRA FLAME <target>*
+This ability will be hidden on ablistings.
+Abfile:
+Before this ability may be used, you must build up fire inside you. Type
+SUMMON FIRE to begin this process. When you are ready to breathe yellow
+fire, you may FLAME <target> or FLAME <icewall-direction>. BELCH or
+RELAX FLAME will get rid of the flame prematurely.
+
+* Hydra morph only. Unleashes a devastating blast of magical fire
+towards your target. This version can be used against denizens.
+
+Useable on: adventurers, room, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium

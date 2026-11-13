@@ -1,0 +1,17 @@
+Ability: Bliss (Record #1048)
+Associated skill: Devotion
+Skillpoints required: 5999
+Blurb: Give an adventurer a glimpse of paradise.
+Syntax: PERFORM BLISS <target>
+Abfile:
+This will give your companion a glimpse of Paradise. The vision will be so calming and refreshing that the target will receive many beneficial blessings.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.50 seconds of equilibrium
+Resource: 1000 devotion

@@ -1,0 +1,27 @@
+Ability: Incinerate (Record #396)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Reduce your weakened foe to ashes in a white-hot blast.
+Syntax: SUMMON FIRE
+INCINERATE <target>
+BELCH
+RELAX FLAME
+This ability will be hidden on ablistings.
+Abfile:
+After building up white fire within you, you may turn your thermal
+destruction on an opponent, causing him massive damage and possibly
+instant death. BELCH will get rid of the flame prematurely.
+
+* Kills if the target is below 40% of maximum health, this threshold
+rising based on how badly they are on fire (50% at one stack of burning,
+55% at two, 60% at three).
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 100 mana

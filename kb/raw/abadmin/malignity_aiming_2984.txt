@@ -1,0 +1,15 @@
+Ability: Aiming (Record #2984)
+Associated skill: Malignity
+Skillpoints required: 12999
+Blurb: Increase your accuracy in shooting.
+Syntax: AIM <target> <direction>
+Abfile:
+Increase the accuracy of your shooting.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

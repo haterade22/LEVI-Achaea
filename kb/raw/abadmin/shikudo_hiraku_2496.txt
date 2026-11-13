@@ -1,0 +1,19 @@
+Ability: Hiraku (Record #2496)
+Associated skill: Shikudo
+Skillpoints required: 6999
+Blurb: Some people simply talk too much.
+Syntax: HIRAKU
+Abfile:
+Aim a strike at the face of your foe with your staff, shattering teeth
+and making it impossible for them to eat(*). If they are also prone,
+they will be stunned for a short time.
+
+* They will be afflicted with anorexia and stuttering.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

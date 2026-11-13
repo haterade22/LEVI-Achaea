@@ -1,0 +1,18 @@
+Ability: Arrowcatch (Record #1631)
+Associated skill: Swashbuckling
+Skillpoints required: 23999
+Blurb: Pluck arrows from the air with the greatest of ease.
+Syntax: ARROWCATCH [ON|OFF]
+RELAX ARROWCATCH
+Abfile:
+At the cost of a constant mana drain, this ability will give you a chance to pluck arrows fired at you from the air.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Drain: Mana

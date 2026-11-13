@@ -1,0 +1,22 @@
+Ability: Degeneration (Record #2385)
+Associated skill: Shadowmancy
+Skillpoints required: 11999
+Blurb: Attack their physical capability.
+Syntax: SHADOW INSTILL <weapon> WITH DEGENERATION
+Abfile:
+This instillation of a weapon shall cause the target to be afflicted
+with progressively more debilitating afflictions. It shall first afflict
+them with clumsiness, then weariness, and finally paralysis. If they
+suffer from all of the afflictions, it shall deal non-trivial damage(*).
+* The damage is significantly less if you do not have the target
+attuned, and halved if you do not possess the target's shadow within
+your phylactery.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,3 @@
+Ability: Blocking (Record #368)
+Associated skill: Metamorphosis
+Maps to record 367 (BLOCK).

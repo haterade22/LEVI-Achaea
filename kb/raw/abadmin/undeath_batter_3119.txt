@@ -1,0 +1,19 @@
+Ability: Batter (Record #3119)
+Associated skill: Undeath
+Skillpoints required: 999
+Blurb: Until they move no more.
+Syntax: SOULBLEED BATTER <target>
+Abfile:
+Hammer at your foe with your undying fists. If they are protected with a
+shield or prismatic barrier, this will be broken; if they are prone they
+will take damage and be stunned, and if they are not prone they will be
+knocked prone and take less damage but also be stunned.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance

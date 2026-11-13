@@ -1,0 +1,16 @@
+Ability: Trample (Record #1531)
+Associated skill: Riding
+Skillpoints required: 60000
+Blurb: Frenzy your steed to trample all prone in your location.
+Syntax: TRAMPLE
+Abfile:
+Whip your steed into a fury and trample the ground. Anyone who is prone in your location will be in danger of having their limbs crushed under your steed's deadly rampage. The number of limbs crushed is based partly on chance and partly on your steed's level. The amount of damage is based upon the level of your steed and number of limbs crushed.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

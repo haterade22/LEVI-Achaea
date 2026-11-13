@@ -1,0 +1,16 @@
+Ability: Focusing (Record #1394)
+Associated skill: Survival
+Skillpoints required: 16999
+Blurb: Curing mental afflictions by sheer will.
+Syntax: FOCUS
+Abfile:
+Your mental survival skills have adapted to the point where you can cure mental afflictions merely by focusing your mind. Be warned though that the mana cost for this is high.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 250 mana

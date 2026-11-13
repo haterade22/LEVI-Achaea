@@ -1,0 +1,19 @@
+Ability: Theft (Record #2693)
+Associated skill: Attainment
+Skillpoints required: 17999
+Blurb: Everyone's a target.
+Syntax:
+Abfile:
+You have advanced to the point that you may become the target of
+attempted theft.
+
+To help protect yourself, see HELP THEFT and the Selfishness ability in
+Survival.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

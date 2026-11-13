@@ -1,0 +1,3 @@
+Ability: Venomlist (Record #1416)
+Associated skill: Vision
+Maps to record 1411 (LIST).

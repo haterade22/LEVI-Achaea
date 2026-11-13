@@ -1,0 +1,17 @@
+Ability: Gale (Record #2185)
+Associated skill: Weatherweaving
+Skillpoints required: 13999
+Blurb: Hurl the unsecured to the corners of the globe.
+Syntax: CAST GALE
+Abfile:
+This powerful wind spell will allow you to throw all those not secured
+by the mass defence from your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium

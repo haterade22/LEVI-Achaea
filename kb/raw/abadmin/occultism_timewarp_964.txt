@@ -1,0 +1,17 @@
+Ability: Timewarp (Record #964)
+Associated skill: Occultism
+Skillpoints required: 16999
+Blurb: Warping time in a location will move vibes.
+Syntax: TIMEWARP
+Abfile:
+You are a master of time itself and can warp the field of time in your location. If there are any vibes in your location, one will be randomly dislocated outside of time.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.25 seconds of equilibrium
+Resource: 1% karma

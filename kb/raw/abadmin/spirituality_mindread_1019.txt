@@ -1,0 +1,17 @@
+Ability: Mindread (Record #1019)
+Associated skill: Spirituality
+Skillpoints required: 12999
+Blurb: Your angel reports to you on local conversations.
+Syntax: ANGEL MINDREAD
+Abfile:
+This ability will cause your angel to report to you any tells that adventurers in the room with you receive.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 100 Angel power

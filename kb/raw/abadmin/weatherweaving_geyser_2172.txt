@@ -1,0 +1,18 @@
+Ability: Geyser (Record #2172)
+Associated skill: Weatherweaving
+Skillpoints required: 3999
+Blurb: Knock someone out of the trees or the sky.
+Syntax: CAST GEYSER AT <target>
+Abfile:
+Using this ability, you may knock a flying or treed adventurer out of
+the skies or trees.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

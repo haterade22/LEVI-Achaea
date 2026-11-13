@@ -1,0 +1,25 @@
+Ability: Field (Record #2803)
+Associated skill: Formulation
+Skillpoints required: 0
+Blurb: Choose your field of study.
+Syntax: FIELD SELECT <FORMULATION|SUBLIMATION>
+Abfile:
+Alchemists of Sapience have diverged into two distinct paths. The
+traditional alchemical practice of Formulation and the field of
+Sublimation. You may select your field once every 24 hours to swap
+between the two, and at a cost of 100 lessons(*).
+
+* The first switch is free.
+** ADMINISTRATIVE NOTE: Sublimation is controlled by the City of Hashan.
+If you are an enemy, might be an enemy, or have hostile intent against
+this organisation we strongly advise against selecting this as your
+field. They can and will remove your ability to functionally utilise
+this skill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

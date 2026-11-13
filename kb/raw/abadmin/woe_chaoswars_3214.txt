@@ -1,0 +1,19 @@
+Ability: Chaoswars (Record #3214)
+Associated skill: Woe
+Skillpoints required: 1999
+Blurb: So let us speak of ambitions great.
+Syntax: RECITE CHAOSWARS
+Abfile:
+From aeons long ago when the first war was waged comes this story of
+alliances and betrayals. When you speak this tale, all who are present
+at the culmination shall find that for a time they will be unable to
+change those they consider ally or enemy by any means.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.00 seconds of equilibrium

@@ -1,0 +1,15 @@
+Ability: Stupidity (Record #1334)
+Associated skill: Hypnosis
+Skillpoints required: 49999
+Blurb: Abject, stumbling idiocy.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

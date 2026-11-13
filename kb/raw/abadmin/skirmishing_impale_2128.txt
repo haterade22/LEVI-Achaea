@@ -1,0 +1,22 @@
+Ability: Impale (Record #2128)
+Associated skill: Skirmishing
+Skillpoints required: 39999
+Blurb: Drive your blade straight through your target.
+Syntax: IMPALE <target>
+WITHDRAW BLADE
+Abfile:
+This wicked ability may be used when your hapless victim has fallen to
+the ground and lies there, helpless. With it, you will drive your
+spear/trident into his body, causing regular damage as long as he is on
+the weapon. Further, while impaled, he will find himself unable to move,
+though you too will be unable to move.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of balance

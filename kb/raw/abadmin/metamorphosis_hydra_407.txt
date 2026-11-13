@@ -1,0 +1,47 @@
+Ability: Hydra (Record #407)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: A fearsome creature steeped in mystery.
+Syntax: MORPH HYDRA
+Extra info: Powers: Alertness
+Block
+Fitness
+Might
+Nightsight
+Resistance
+Scent
+Stampede
+Temperance
+Vitality
+Secretion
+Abfile:
+Group 1 abilities:
+        Bite
+        Flame
+        Freeze
+
+Group 2 abilities:
+        Snap
+        Roar
+
+Group 3 abilities:
+        Sting
+        Negate
+        Armclamp
+        Legclamp
+        Bind
+        Shatter
+
+** Group abilities can be used in conjunction with each other to unleash a devastating flurry of blows on your opponent. Abilities in group 1 are accessed like normal, while abilities in group 2 can be accessed while off-balance if your previous attack was an ability from group 1. Group 3 abilities are on their own balance, and can be used any time that it is available.
+
+A fearsome creature, shrouded in mystery. Its multiple heads are capable of a varied number of abilities.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 140 mana
+Skill specialisation: meta_druid

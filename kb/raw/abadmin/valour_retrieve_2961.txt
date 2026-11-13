@@ -1,0 +1,16 @@
+Ability: Retrieve (Record #2961)
+Associated skill: Valour
+Skillpoints required: 29999
+Blurb: Secure it in the talons.
+Syntax: EAGLE RETRIEVE <item>
+Abfile:
+Using this ability will cause your eagle to try and pick up an object in
+the room that it is in, and deliver it back to you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

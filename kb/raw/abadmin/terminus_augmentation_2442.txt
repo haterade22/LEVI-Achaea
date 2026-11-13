@@ -1,0 +1,27 @@
+Ability: Augmentation (Record #2442)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: Only the best.
+Syntax:
+Abfile:
+You have now unlocked the augmentation research tree. This tree allows
+you to make improvements to the tools of Shadowmancy, among other
+things.
+
+Note that augmented items only function at their improved capacity while
+you retain knowledge of the requisite ability from this tree.
+
+Research available in this tree:
+Dalem               A superior model.
+Mainaad             You have certainly not lost your edge.
+Balateth            Strike like lightning.
+Tah'maal            Yet closer to the elusive legend.
+Mainaas             The greatest feat of augmentation.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

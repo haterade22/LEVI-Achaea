@@ -1,0 +1,17 @@
+Ability: Clarity (Record #307)
+Associated skill: Shindo
+Skillpoints required: 28999
+Blurb: Behold no deception.
+Syntax: CLARITY
+Abfile:
+Those who would hide in the shadows cannot escape your well-trained eyes and ears. Your increased awareness may also see the truth behind magical illusions, although the chances of detecting this type of artifice are less reliable.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 650 mana

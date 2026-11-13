@@ -1,0 +1,17 @@
+Ability: Deckhandaura (Record #1790)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Summon the aura of the deckhand.
+Syntax:
+Abfile:
+This ability grants access to the deckhand ship aura. See AB SEAFARING
+SHIPAURA for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: deckhand1

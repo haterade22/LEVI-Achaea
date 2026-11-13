@@ -1,0 +1,15 @@
+Ability: Retrieve (Record #542)
+Associated skill: Discipline
+Skillpoints required: 35999
+Blurb: Command your falcon to fetch an object for you.
+Syntax: FALCON RETRIEVE <item>
+Abfile:
+Using this ability will cause your falcon to try and pick up an object (which musn't be too large) in the room that it is in, and deliver it back to you. Upon doing so, it would probably be appropriate to say some kind words to your falcon and maybe pet it a bit.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

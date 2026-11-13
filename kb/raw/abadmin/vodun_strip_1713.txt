@@ -1,0 +1,19 @@
+Ability: Strip (Record #1713)
+Associated skill: Vodun
+Skillpoints required: 4999
+Blurb: Strip someone's defences.
+Syntax: VODUN STRIP
+Extra info: Fashions:
+Required: 15
+Used    : 1
+Abfile:
+This ability will strip a defence from your doll's namesake.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

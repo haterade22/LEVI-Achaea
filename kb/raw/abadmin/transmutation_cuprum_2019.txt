@@ -1,0 +1,16 @@
+Ability: Cuprum (Record #2019)
+Associated skill: Transmutation
+Skillpoints required: 3999
+Blurb: A mineral alloy of copper.
+Syntax: EXTRACT CUPRUM
+TRANSMUTATE <#> <mineral> TO CUPRUM
+Abfile:
+The cuprum mineral will relieve afflictions caused by unnatural altruism.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

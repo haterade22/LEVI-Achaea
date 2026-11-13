@@ -1,0 +1,19 @@
+Ability: Mainaad (Record #2444)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: You have certainly not lost your edge.
+Syntax: INTONE MAINAAD <SCYTHE|DAGGER>
+This ability will be hidden on ablistings.
+Abfile:
+By uttering this word over one of the respective weapons created via
+Shadowmancy, you may enhance its cutting edge, causing it to deal more
+damage against your foes.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of word balance

@@ -1,0 +1,18 @@
+Ability: Desolation (Record #2221)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Punish the faithless with a desolating rite.
+Syntax: PERFORM RITE OF DESOLATION ON <target>
+Abfile:
+This rite will torture the unfaithful, causing their very bones to ache. The pain will last for several seconds, doing damage to your target for the duration.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_priest

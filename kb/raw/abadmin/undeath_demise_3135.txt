@@ -1,0 +1,17 @@
+Ability: Demise (Record #3135)
+Associated skill: Undeath
+Skillpoints required: 40999
+Blurb: You cannot be stopped.
+Syntax:
+Abfile:
+Each time you slay one of the living, you will now immediately regain
+balance (though not equilibrium). Your march is endless, and they are so
+much meat for the grinder.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,30 @@
+Ability: Litany (Record #2467)
+Associated skill: Terminus
+Skillpoints required: 40999
+Blurb: A power out of legend.
+Syntax: INTONE LITANY <delay> <command>
+This ability will be hidden on ablistings.
+Abfile:
+One of the most feared powers of the Tsol'teth Overlords was their
+ability to bend an entire battlefield to their will with nothing but the
+power of their voice. After mastering this research tree, that power is
+now yours.
+
+When you utter the litany and specify the command that you wish to
+dictate, all those that stand in your location or adjacent to it shall
+be forced to carry out that command(*).
+
+* The delay must be no less than 4 (seconds) and no longer than 10
+(seconds).
+* The delay time determines the windup time.
+* This ability both has a windup time and informs both your location and
+those adjacent when you begin to initiate it.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 9.00 seconds of word balance

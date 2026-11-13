@@ -1,0 +1,22 @@
+Ability: Kola (Record #2207)
+Associated skill: Propagation
+Skillpoints required: 29999
+Blurb: A small nut with surprising potency.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH KOLA
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Maintaining the metawake defence will cost less mana and
+willpower.
+Body: Awaken swiftly as if you had the kola defence.
+Arms: Your thornrend attack will secrete a sap that will attempt to put
+your target to sleep.
+Legs: Move faster through jungles and valleys.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

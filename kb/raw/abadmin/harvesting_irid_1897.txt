@@ -1,0 +1,16 @@
+Ability: Irid (Record #1897)
+Associated skill: Harvesting
+Skillpoints required: 35999
+Blurb: Iridescent moss growing underground.
+Syntax: HARVEST MOSS
+Abfile:
+Irid moss, an incandescent moss growing underground, may be eaten to restore some health and mana.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

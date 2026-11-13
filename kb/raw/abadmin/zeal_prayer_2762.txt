@@ -1,0 +1,27 @@
+Ability: Prayer (Record #2762)
+Associated skill: Zeal
+Skillpoints required: 7999
+Blurb: Chaining the holy verses.
+Syntax: VERSES
+Abfile:
+You may now chain holy verses together. Each verse you recite(*)
+somewhat quickly after a prior one will form a prayer; a prayer of two
+or more verses that you allow to finish without reciting further will
+grant you conviction. Conviction is used to enact some of the more
+powerful holy verses.
+
+Additionally, certain verses can only be utilised once per prayer, and
+others may require a prayer of a certain length before they can be
+recited.
+
+* Verses that specifically target yourself do not increase your prayer's
+length. Prayers that target others or that are somewhat indiscriminate
+do.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

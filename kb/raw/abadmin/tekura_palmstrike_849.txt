@@ -1,0 +1,17 @@
+Ability: Palmstrike (Record #849)
+Associated skill: Tekura
+Skillpoints required: 5999
+Blurb: A strike with your palm to the face.
+Syntax: PMP <target>
+Abfile:
+This blow will attack the sensitive areas of your opponent's face. It
+will deliver impatience if they do not have it, or stupidity if they do.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of arm balance

@@ -1,0 +1,21 @@
+Ability: Crossplank (Record #1737)
+Associated skill: Seafaring
+Skillpoints required: 999
+Blurb: Cross a plank extended over water to another ship.
+Syntax: SHIP CROSS [GANG]PLANK
+Abfile:
+Your balance is now steady enough to traverse a gangplank set over the
+water between your ship and another.
+
+This requires the ship the be adjacent to another ship, for both to be
+grappled, and for the Captain to SHIP EXTEND PLANK. SHIP WITHDRAW PLANK
+is the obvious counterpart to the Captain's command.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

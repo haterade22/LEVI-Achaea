@@ -1,0 +1,19 @@
+Ability: Excise (Record #2725)
+Associated skill: Psionics
+Skillpoints required: 55999
+Blurb: A single cut at the fundamental level.
+Syntax: PSI EXCISE <target>
+Abfile:
+If your enemy's mind is sufficiently weakened, you can deliver a single
+precise stroke to cause the whole to collapse in upon itself(*).
+
+* Requires below 30% of mana.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

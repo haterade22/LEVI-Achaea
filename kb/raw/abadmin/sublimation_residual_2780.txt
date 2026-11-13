@@ -1,0 +1,41 @@
+Ability: Residual (Record #2780)
+Associated skill: Sublimation
+Skillpoints required: 999
+Blurb: Waste not even the scraps.
+Syntax:
+Abfile:
+Those that have dedicated themselves to the study of the Wellspring
+shall find that specialisation comes at a cost. With their focus upon
+the various schools of Sublimation, their grasp of the biological
+sciences falters, reducing their ability to utilise the physiology
+inundate ability substantially, as follows:
+* Choleric, melancholic, and sanguine's effects are halved.
+* Phlegmatic will no longer give weariness at all, and the progression
+is changed to lethargy, anorexia, slickness at 2, 6, and 8 tempers
+respectively.
+
+However, such a loss is a minor inconvenience at best. After learning to
+utilise residual energy in their everyday lives, Alchemists may empower
+their wrack and truewrack attacks to give the following passive
+benefits:
+* Choleric: wrack and truewrack attempts will deal unblockable damage.
+* Melancholic: wrack and truewrack attempts shall deal mana damage.
+* Sanguine: wrack and truewrack attempts shall incur bleeding.
+* Phlegmatic: above two tempers, your truewrack attempts will no longer
+miss due to clumsiness. Above five tempers, your truewrack attempts will
+have a reduced balance cost (increasing for each stack above five).
+
+Note that all residual effects scale to the number of tempers of the
+relevant humour present on the target.
+
+NOTE: should your connection to the Wellspring be severed, the passive
+benefits will also no longer function.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

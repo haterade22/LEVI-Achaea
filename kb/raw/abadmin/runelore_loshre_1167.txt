@@ -1,0 +1,21 @@
+Ability: Loshre (Record #1167)
+Associated skill: Runelore
+Skillpoints required: 54999
+Blurb: Cause an opponent to become afflicted with anorexia.
+Syntax: SKETCH LOSHRE ON GROUND/<totem>
+Abfile:
+ Inks required: 1 Blue
+Symbol: Apple Core
+
+Gives anorexia to those who see it upon entering. Disappears after one
+use unless it is on a totem.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,16 @@
+Ability: Prepare (Record #1590)
+Associated skill: Cooking
+Skillpoints required: 0
+Blurb: Prepare existing recipes.
+Syntax: PREPARE <recipe> [passcode]
+Abfile:
+With a basic understanding of cooking, you are able to prepare recipes created by other people. To find recipes, you may use the NDS system.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of balance

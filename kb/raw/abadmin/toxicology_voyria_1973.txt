@@ -1,0 +1,17 @@
+Ability: Voyria (Record #1973)
+Associated skill: Toxicology
+Skillpoints required: 28999
+Blurb: The deadliest venom known to mankind.
+Syntax: None
+Extra info: Ingredients: 3 ginseng, 2 skullcap, 2 goldenseal, 1 goldink, 1 redink or
+3 ferrum, 2 malachite, 2 plumbum, 1 goldink, 1 redink
+Abfile:
+This deadly venom will induce a quick death for its victim.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

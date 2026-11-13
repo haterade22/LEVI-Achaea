@@ -1,0 +1,22 @@
+Ability: Elephant (Record #377)
+Associated skill: Metamorphosis
+Skillpoints required: 23999
+Blurb: Largest of the land mammals.
+Syntax: MORPH ELEPHANT
+Extra info: Powers: Block
+Fitness
+Stampede
+Trumpet
+Vitality
+Yank
+Abfile:
+Largest of the land mammals.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

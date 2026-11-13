@@ -1,0 +1,21 @@
+Ability: Blast (Record #1544)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Unleash your breath against your prey.
+Syntax: BLAST <target>
+Abfile:
+Unleash the fury of your breath weapon upon your enemy.
+
+This strips shield and/or lyre if present.
+
+** Requires summoned breath.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Skill specialisation: dragonform

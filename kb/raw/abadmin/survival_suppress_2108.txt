@@ -1,0 +1,31 @@
+Ability: Suppress (Record #2108)
+Associated skill: Survival
+Skillpoints required: 58999
+Blurb: Suppress protective vibrations.
+Syntax: SUPPRESS REVERBERATION [direction]
+Abfile:
+You may now suppress active reverberation vibrations in a room. Given
+the difficulties involved, this requires all of your concentration, and
+may be interrupted.
+
+In addition, if a magi is present you require a secondary influence to
+assist in your attempt to disrupt said vibration. You may accomplish
+this by throwing a cube sigil at the ground, although the influence
+shall only last a short while.
+
+Sometimes it is not possible to enter a location, but one must still
+remove a reverberation vibration that protects more dangerous barriers.
+In order to do this, you may specify a direction in which to suppress
+vibrations. This requires you be adjacent to the location you are
+targeting and the channel time is somewhat increased compared to doing
+it in the location proper.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 150 mana

@@ -1,0 +1,36 @@
+Ability: Proficiencies (Record #1462)
+Associated skill: Weaponry
+Skillpoints required: 0
+Blurb: Gaining proficiencies in individual weapons.
+Syntax: PROFICIENCIES
+Abfile:
+With this ability, you will find yourself able to specialize in specific weapons, such as the longsword, broadsword, javelin, halberd, flail, and many others. In order to gain proficiency, you must first seek out someone with the knowledge to teach you that specific weapon. Once you have located such a person, you must then ensure that you have enough lessons to persuade the teacher to teach you. If you do not have enough, the teacher will inform you how many you need.
+
+To learn a weapon proficiency:
+  LEARN PROFICIENCY IN <weapon name> FROM <whomever>.
+
+After you have given your lessons to the teacher, you must go out and practice with the weapon you are seeking proficiency in. Simply go out and use the weapon as it was intended, and eventually you will master it.
+
+Typing PROFICIENCIES will show you what you are currently proficient in, and what you are practicing to be proficient in.
+
+TEACHERS
+Below is a partial list of teachers for the various weapon groups:
+Straight, edged swords :      Swordmaster Colbey, of Delos
+Rapier and scimitar    :      King Tu'eras, of the Tsol'aa
+Polearms               :      Captain Korlosh, of Delos
+Maces, flails, etc     :      Lieutenant Serentesh, of Delos
+Battleaxes, Handaxes   :      Shale Ironrock, of Delos
+Spear, Javelin         :      Etarni the Hunter, of Tomacula
+Hammers                :      Geld, of Hashan
+Dagger, Dirk           :      A shady-looking man in Hashan
+Quarterstaff           :      Seasone
+Lance                  :      Lady Lhadia, of Matsuhama's temple
+Trident, Whip          :      Clynalia, of Delos
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

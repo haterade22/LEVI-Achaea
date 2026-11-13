@@ -1,0 +1,19 @@
+Ability: Talons (Record #1861)
+Associated skill: Weaponsmithing
+Skillpoints required: 18999
+Blurb: Steel talons to equip falcons with.
+Syntax: FORGE FOR TALONS
+FORGE (to continue after interruption)
+Extra info: Commodities: 2 Leather
+2 Steel
+Abfile:
+Steel talons to equip falcons with.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

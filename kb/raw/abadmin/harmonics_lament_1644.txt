@@ -1,0 +1,17 @@
+Ability: Lament (Record #1644)
+Associated skill: Harmonics
+Skillpoints required: 0
+Blurb: The shadowy lament may cause fear in those who hear it.
+Syntax: PLAY LAMENT
+Abfile:
+This harmonic regularly attempts to afflict your enemies with fear.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 120 mana

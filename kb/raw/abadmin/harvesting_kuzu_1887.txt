@@ -1,0 +1,16 @@
+Ability: Kuzu (Record #1887)
+Associated skill: Harvesting
+Skillpoints required: 14999
+Blurb: The fast-growing jungle vine.
+Syntax: HARVEST KUZU
+Abfile:
+The fast-growing kuzu vine of the jungles has thickening properties that make it a necessary ingredient in all salves.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

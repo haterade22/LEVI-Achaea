@@ -1,0 +1,28 @@
+Ability: Eminence (Record #2913)
+Associated skill: Charnel
+Skillpoints required: 60000
+Blurb: Power everlasting.
+Syntax: ACCURSED PERFORM THE RITUAL OF EMINENCE
+Abfile:
+He who strives to escape his Accursed fate shall find only a blacker one
+besides. The ritual of Eminence shall gain you great power, but subsume
+more of you in the process; he who walks under its terrible aegis shall
+drive imperfection from his person(*), be eternal beyond other
+Accursed(**), and shall radiate such a malign aura that where ever he
+may walk pestilence shall be made manifest(***).
+
+* Passive affliction healing.
+** Significant passive health healing.
+*** Periodically afflicts everyone in a location with a random plague.
+
+(This lasts approximately an hour of being logged in.)
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Skill specialisation: charnel_rituals

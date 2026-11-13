@@ -1,0 +1,16 @@
+Ability: Backflip (Record #1616)
+Associated skill: Swashbuckling
+Skillpoints required: 299
+Blurb: Flip over obstructions that stand in your way.
+Syntax: BACKFLIP <direction>
+Abfile:
+Like a monkey on kola you can flip over obstructions such as adventurers blocking you or icewalls.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

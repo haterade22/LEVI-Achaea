@@ -1,0 +1,25 @@
+Ability: Paste (Record #2539)
+Associated skill: Sculpting
+Skillpoints required: 45999
+Blurb: You are nothing if not decisive.
+Syntax: TERRAN PASTE <target>
+Abfile:
+When either flying or in the trees, you may launch yourself down at one
+who walks upon the ground, crushing them beneath your weight. This
+incurs a stun and non trivial damage.
+
+If used after assuming the form of a Titan, it will be usable from any
+elevation against any foe(*), and additionally break limbs if your
+target is already prone.
+
+* When in Titan form, this skill can be used against denizens, dealing a
+large amount of damage.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

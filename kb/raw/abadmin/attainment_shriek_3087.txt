@@ -1,0 +1,20 @@
+Ability: Shriek (Record #3087)
+Associated skill: Attainment
+Skillpoints required: 5543
+Blurb: A crude application of the voice.
+Syntax: UNNAMABLE SHRIEK <target>
+Abfile:
+Let loose a sound imbued with power to damage your foe(*).
+
+* Requires you mutate your mouths first.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_unnamable

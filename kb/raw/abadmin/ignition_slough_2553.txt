@@ -1,0 +1,16 @@
+Ability: Slough (Record #2553)
+Associated skill: Ignition
+Skillpoints required: 2999
+Blurb: Impurities shall not be suffered.
+Syntax: SLOUGH IMPURITIES
+Abfile:
+Slough off impurities that plague you, curing a random affliction from
+your perfect being.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

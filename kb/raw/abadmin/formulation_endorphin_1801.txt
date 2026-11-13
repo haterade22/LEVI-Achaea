@@ -1,0 +1,20 @@
+Ability: Endorphin (Record #1801)
+Associated skill: Formulation
+Skillpoints required: 2999
+Blurb: Soothe the body with a potent endorphin.
+Syntax: WIELD ENDORPHIN
+THROW ENDORPHIN <AT GROUND|DIRECTION>
+Extra info: Reagents: 1 cuprum, 1 argentum
+Abfile:
+This compound produces a gas which, when inhaled, will heal the body of
+some damage.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

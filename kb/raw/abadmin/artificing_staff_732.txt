@@ -1,0 +1,41 @@
+Ability: Staff (Record #732)
+Associated skill: Artificing
+Skillpoints required: 999
+Blurb: The greatest of Elemental foci.
+Syntax: WORKSHOP CONSTRUCT STAFF
+STAFF CAST <spell> at <target>
+STAFF INSERT <crystal>
+STAFF REMOVE <crystal>
+STAFF DISMANTLE
+Extra info: CAST STAFF mana cost: 1000
+STAFFCAST mana cost: 150
+Abfile:
+A foci tried and tested for working with the elements, the Elemental
+Staff is truly a masterwork of arcane ingenuity. When you first craft
+your staff, you will only be able to cast one spell through it, and that
+spell is DISSOLUTION: a blast of pure arcane force.
+
+However, as your skill in Artificing grows and you find yourself able to
+refine various crystals to insert into your staff, your foci shall
+become more formidable, unlocking if not more powerful, then more
+complex spells that may be cast through it. Certain crystals may also
+impart special properties upon your staff: see their ability files for
+details.
+
+* Note that an Elemental Staff may only hold up to four crystals at a
+given time.
+** If you lose your staff (and it does not reset to you), you may
+dismantle that staff wherever it may be. This will permanently destroy
+it and you will need to make a new one.
+*** Constructing a staff is a lengthy operation during which you may do
+nothing.
+Useable on: adventurers, denizens, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: Mana

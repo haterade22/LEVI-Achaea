@@ -1,0 +1,19 @@
+Ability: Break (Record #635)
+Associated skill: Puppetry
+Skillpoints required: 9999
+Blurb: Break both the arms or both the legs of someone.
+Syntax: PUPPET BREAK ARMS/LEGS
+Extra info: Fashions:
+Required: 15
+Used    : 2
+Abfile:
+With this ability, you may break both the arms or legs of your victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

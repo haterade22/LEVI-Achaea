@@ -1,0 +1,17 @@
+Ability: Grapple (Record #3291)
+Associated skill: Woodlore
+Skillpoints required: 55500
+Blurb: Spring one of your own traps to haul yourself out of danger.
+Syntax: GRAPPLE <direction>
+Abfile:
+Spring a trap you have laid in the given direction to haul yourself into
+the adjacent room. It is destroyed if you are successfully moved.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

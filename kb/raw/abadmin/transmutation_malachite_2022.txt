@@ -1,0 +1,16 @@
+Ability: Malachite (Record #2022)
+Associated skill: Transmutation
+Skillpoints required: 10499
+Blurb: Ground malachite will raise an anti-weapon field.
+Syntax: EXTRACT MALACHITE
+TRANSMUTATE <#> <mineral> TO MALACHITE
+Abfile:
+When smoked, the malachite mineral will raise an anti-weapons field.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Retribution (Record #3046)
+Associated skill: Excision
+Skillpoints required: 30999
+Blurb: They will be avenged.
+Syntax: PERFORM RETRIBUTION
+Abfile:
+By swearing to avenge any of your comrades(*) that fall in battle, any
+time one of them is slain by an enemy of Creation(**), you will
+immediately recover balance. In addition to this, your own arc attempts
+will strike members of the faithful for less damage than it normally
+would.
+
+* Any member of Targossas or one of the Bloodsworn's orders.
+** Anyone not from the above groups.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Ri'shen (Record #1930)
+Associated skill: Spiritlore
+Skillpoints required: 4999
+Blurb: Ri'shen, The Master.
+Syntax: INVOKE REGENERATION
+Extra info: Attune effect: increased health regeneration.
+Abfile:
+One who has mastered the practices of kaido is able to restore their
+body from almost any injury. While the power granted to you through the
+connection with Ri'Shen is not to that level, it will allow you to
+perform lesser feats of regeneration.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Resource: 300 mana
+The ability name MONK is mapped to this ability.

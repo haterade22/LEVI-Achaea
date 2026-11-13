@@ -1,0 +1,30 @@
+Ability: Doom (Record #2413)
+Associated skill: Aeonics
+Skillpoints required: 11999
+Blurb: Their days are numbered.
+Syntax: CHRONO DOOM <target> [BOOST]
+Abfile:
+By gathering your full Aeonic might, you may eradicate someone from the
+timestream, destroying them utterly.
+
+Note that this takes all of your considerable concentration; you may not
+perform any other actions while preparing your target's end. A target
+being afflicted with aeon when you initiate this ability shall slightly
+speed up the completion time; this stacks with the boosted bonus.
+
+Additionally, note that by boosting this ability, hindrances such as
+paralysis and entanglements shall not abort your attempt; the subject
+must leave if they wish to survive. The ability will also complete
+slightly faster. However, this comes with a price. If you then fail to
+complete your attempt to bring about the doom of your victim, the aeonic
+backlash shall completely annihilate you from existence, killing you
+instantly.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 720 age

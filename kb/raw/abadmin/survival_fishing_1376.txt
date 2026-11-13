@@ -1,0 +1,15 @@
+Ability: Fishing (Record #1376)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Ply the waterways of Sapience for fish galore.
+Syntax: None
+Abfile:
+Fishing is a complicated subject that has its own help file: HELP FISHING. Know, however, that the higher your survival skill rises the greater will be your chance of successfully hooking a fish.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

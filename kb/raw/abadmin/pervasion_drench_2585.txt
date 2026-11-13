@@ -1,0 +1,22 @@
+Ability: Drench (Record #2585)
+Associated skill: Pervasion
+Skillpoints required: 14999
+Blurb: Soak them to the bone.
+Syntax: MANIFEST DRENCH <target>
+Extra info: Flux effect: If your foe suffers from asthma, slickness, and anorexia, tendrils of your summoned water will slither into their mouth and nose, robbing them of focus.
+Abfile:
+Drench your foe with water, soaking him with icy water that will leech
+away at them(*).
+
+* Gives weariness if they are an adventurer or deals cold damage if they
+are a denizen. If the target is already weary, they will become dazed by
+the cold, receiving confusion.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

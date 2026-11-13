@@ -1,0 +1,18 @@
+Ability: Dirk (Record #1852)
+Associated skill: Weaponsmithing
+Skillpoints required: 699
+Blurb: A weapon made for stabbing.
+Syntax: FORGE FOR DIRK
+FORGE (to continue after interruption)
+Extra info: Commodities: 2 steel, 1 iron
+Abfile:
+A weapon made for stabbing.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

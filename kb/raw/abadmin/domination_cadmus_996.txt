@@ -1,0 +1,25 @@
+Ability: Cadmus (Record #996)
+Associated skill: Domination
+Skillpoints required: 26999
+Blurb: Cadmus, the cursed shaman.
+Syntax: COMMAND BUBONIS AT <target>
+Abfile:
+The plague lord will send to you a bubonis, which when commanded, will
+inflict such torment upon your foe with a single touch that their lungs
+will fill with fluid(*). If they are already suffering in such a way,
+they shall be struck down with slickness.
+
+When primebonded, the bubonis shall act of its own will, inflicting your
+foe with maladies of the mind.
+* Gives asthma.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of entity balance
+Resource: 50 mana
+The ability name BUBONIS is mapped to this ability.

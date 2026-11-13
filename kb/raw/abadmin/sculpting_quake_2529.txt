@@ -1,0 +1,21 @@
+Ability: Quake (Record #2529)
+Associated skill: Sculpting
+Skillpoints required: 10999
+Blurb: The land shall tremble at your command.
+Syntax: MANIFEST QUAKE
+Abfile:
+To anger a servant of Garash is to anger the earth itself. At your
+bidding the earth shall violently quake, throwing all that stand within
+your location to the ground and having a chance to disrupt their
+balance.
+
+If you have shaped your form more than once, you will lose one
+level of shaping but this ability will not consume balance.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

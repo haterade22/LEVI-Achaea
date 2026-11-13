@@ -1,0 +1,17 @@
+Ability: Telesense (Record #906)
+Associated skill: Telepathy
+Skillpoints required: 699
+Blurb: Detect attempts to mind lock you or others nearby.
+Syntax: MIND TELESENSE [ON|OFF]
+Abfile:
+Due to your heightened telepathic awareness, you are able to detect attempts to lock your mind.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana
+Drain: Mana

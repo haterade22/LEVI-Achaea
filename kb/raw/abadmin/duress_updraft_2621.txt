@@ -1,0 +1,25 @@
+Ability: Updraft (Record #2621)
+Associated skill: Duress
+Skillpoints required: 31999
+Blurb: A powerful gale-like surge.
+Syntax: MANIFEST UPDRAFT <target>
+Abfile:
+This powerful surge of wind will have various effects based on your
+target's current state. If they are upon the ground and outdoors, they
+will be launched into the sky. If they are upon the ground but indoors,
+they will slam into the ceiling, taking damage and falling back to the
+ground. If they are in the sky, they shall be forced upwards, taking
+fairly significant damage. Additionally, the recovery time for this
+ability is twice as fast if your target is suffering from the tension
+affliction.
+
+Note that dying to updraft neither leaves a corpse, and bypasses the
+starburst defence.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Backflip (Record #664)
+Associated skill: Pranks
+Skillpoints required: 3999
+Blurb: Flip over obstructions.
+Syntax: BACKFLIP <direction>
+Abfile:
+You may BACKFLIP past obstructions that would otherwise be impassable by normal means.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

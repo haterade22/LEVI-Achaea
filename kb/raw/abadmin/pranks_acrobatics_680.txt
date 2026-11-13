@@ -1,0 +1,17 @@
+Ability: Acrobatics (Record #680)
+Associated skill: Pranks
+Skillpoints required: 20999
+Blurb: Masterful footwork to make yourself a difficult target.
+Syntax: ACROBATICS [ON|OFF]
+RELAX ACROBATICS
+Abfile:
+With this ability, you will exercise your dexterity, becoming far more difficult to hit. Be warned that it comes with a serious endurance drain.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Invert (Record #2374)
+Associated skill: Weaving
+Skillpoints required: 37999
+Blurb: A slight change of pace.
+Syntax: WEAVE INVERT <target> <old weave> <new weave>
+Abfile:
+Invert your unweavings on a target, swapping one weaves status for
+another. For instance, invert your target's body and spirit weaves, and
+the spirit weave gains the progression of the body weave and the body
+weave gains the progression of the spirit weave.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

@@ -1,0 +1,27 @@
+Ability: Weaponmaintenance (Record #1757)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Ship's weapons repair and upkeep.
+Syntax: SHIP WEAPON MAINTAIN <weapon>
+Extra info: Commodities: 1 wood
+1 iron
+1 rope
+Abfile:
+Actively work to maintain the ship's onboard weapons. You will need to
+have the required commodities in your inventory at the beginning of the
+session, and complete eight MAINTAIN or REPAIRs to either add one month
+to the life of the weapon or repair some of the damage the weapon has
+taken.
+This ability allows you to actively work to maintain the ship's onboard
+weapons. You will need to have the required commodities in your
+inventory at the beginning of the session, and complete eight sessions
+to add one month to the life of the weapon.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: weapons3

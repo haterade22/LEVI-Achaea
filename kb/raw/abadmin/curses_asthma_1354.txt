@@ -1,0 +1,17 @@
+Ability: Asthma (Record #1354)
+Associated skill: Curses
+Skillpoints required: 16999
+Blurb: Creates difficulty when breathing.
+Syntax: CURSE <target> ASTHMA
+Abfile:
+Make it difficult for your victim to breathe.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana

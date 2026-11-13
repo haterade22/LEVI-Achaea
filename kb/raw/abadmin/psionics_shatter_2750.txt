@@ -1,0 +1,17 @@
+Ability: Shatter (Record #2750)
+Associated skill: Psionics
+Skillpoints required: 19999
+Blurb: The psyche is such a delicate construct.
+Syntax: PSI SHATTER <target>
+Abfile:
+Attempt to shatter the psyche of your foe, dealing psyche damage if it
+does not slay them outright.
+Useable on: adventurers and denizens
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of equilibrium

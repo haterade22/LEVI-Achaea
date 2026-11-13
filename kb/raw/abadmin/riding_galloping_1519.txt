@@ -1,0 +1,3 @@
+Ability: Galloping (Record #1519)
+Associated skill: Riding
+Maps to record 1518 (GALLOP).

@@ -1,0 +1,20 @@
+Ability: Encipher (Record #955)
+Associated skill: Occultism
+Skillpoints required: 7999
+Blurb: Hide your writings from prying eyes.
+Syntax: ENCIPHER <journal/letter>
+TRANSLATE <journal/letter>
+Abfile:
+Secrecy is one of the hallmarks of Occultism. In order to guard your writings
+from the uninitiated, you can hide your writings in a cipher. TRANSLATE will
+decipher the text so anyone may read.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

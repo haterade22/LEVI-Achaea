@@ -1,0 +1,17 @@
+Ability: Gecko (Record #1979)
+Associated skill: Toxicology
+Skillpoints required: 60000
+Blurb: Causes the recipient to become foully oily.
+Syntax: None
+Extra info: Ingredients: 1 valerian, 1 bloodroot, 1 kelp, 1 purpleink or
+1 magnesium, 1 realgar, 1 aurum, 1 purpleink
+Abfile:
+Cause your victim to secrete foul oils from his skin.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

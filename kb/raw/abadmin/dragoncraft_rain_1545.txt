@@ -1,0 +1,21 @@
+Ability: Rain (Record #1545)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Rain your draconic fury down upon the ground.
+Syntax: BREATHRAIN
+Abfile:
+While flying above your pitiful victims you can rain your breath weapon
+down upon all those below.
+
+** Requires summoned breath.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 1000 mana
+Skill specialisation: dragonform

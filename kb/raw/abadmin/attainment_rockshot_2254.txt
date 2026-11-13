@@ -1,0 +1,19 @@
+Ability: Rockshot (Record #2254)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: A single, precise blow to the head.
+Syntax: CAST ROCKSHOT AT <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+Summon a small pebble of earth, then channel a gust of air to fling the pebble in a precise shot at your victim's head, afflicting with temporary amnesia.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_sylvan

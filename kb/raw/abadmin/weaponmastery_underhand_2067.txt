@@ -1,0 +1,22 @@
+Ability: Underhand (Record #2067)
+Associated skill: Weaponmastery
+Skillpoints required: 15000
+Blurb: Deliver a devastating rising stroke.
+Syntax: UNDERHAND <target>
+Abfile:
+This raising strike aimed at the torso aims to crack the ribs of your
+opponent. The more cracked ribs they suffer from, the less healing
+elixirs or tonics shall restore them for.
+Additionally, while afflicted with cracked ribs, the target shall
+periodically receive sensitivity. This periodic afflicting becomes
+faster based on how many fractures are present.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

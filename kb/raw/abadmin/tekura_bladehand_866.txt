@@ -1,0 +1,16 @@
+Ability: Bladehand (Record #866)
+Associated skill: Tekura
+Skillpoints required: 46999
+Blurb: A swift strike to the side of the neck.
+Syntax: BLP <target>
+Abfile:
+A quick strike to the side of the neck, this punch inflicts dizziness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of arm balance

@@ -1,0 +1,29 @@
+Ability: Nauthiz (Record #1155)
+Associated skill: Runelore
+Skillpoints required: 29999
+Blurb: Suck the nourishment from your foes.
+Syntax: SKETCH NAUTHIZ ON GROUND
+Abfile:
+ Inks required: 1 Blue, 1 Yellow
+
+Symbol: Leech
+
+This destructive rune is unique in that it functions differently under
+certain conditions.
+
+When sketched in a magically flooded location(*), it will cause the
+water to be drained away immediately, consuming the rune in the process.
+
+When sketched out of water it will persist, and will suck the
+nourishment from your enemies standing in the room.
+
+* Nauthiz is special in that it can be sketched even through water.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

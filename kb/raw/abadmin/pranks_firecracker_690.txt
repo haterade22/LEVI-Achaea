@@ -1,0 +1,18 @@
+Ability: Firecracker (Record #690)
+Associated skill: Pranks
+Skillpoints required: 42999
+Blurb: Construct festive firecrackers.
+Syntax: CONSTRUCT FIRECRACKER
+LIGHT FIRECRACKER
+Extra info: Requires: 1 iron
+Abfile:
+The firecracker is an essentially useless little prank designed to make celebratory occasions more festive. You'll find that a single piece of iron will make three firecrackers.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

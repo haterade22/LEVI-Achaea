@@ -1,0 +1,22 @@
+Ability: Slith (Record #3228)
+Associated skill: Woe
+Skillpoints required: 49999
+Blurb: Of friendship slain by duty.
+Syntax: RECITE SLITH <target>
+Abfile:
+Speak the solemn tale of when Woe and Death's Demise parted ways
+forevermore, and see one perish as that ancient alliance did(*).
+
+* This is a channeled action, at the culmination of which your target is
+slain.
+** The channel resolves faster the more stacks of the crescendo
+affliction are present on the target when you begin the recital.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance

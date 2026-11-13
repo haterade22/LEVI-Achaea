@@ -1,0 +1,22 @@
+Ability: Surveying (Record #1383)
+Associated skill: Survival
+Skillpoints required: 299
+Blurb: Gain information on the characteristics of your location.
+Syntax: SURVEY
+SURVEY REGION <commodity>
+SURVEY FOR MAP
+Abfile:
+You've learned the lay of the land enough to be able to determine some
+basic information about your surroundings from a simple glance.
+
+This includes information about your environment, area, whether or not
+the area has been reclaimed for Nature, and nearby landmarks if you are
+in the wilderness.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

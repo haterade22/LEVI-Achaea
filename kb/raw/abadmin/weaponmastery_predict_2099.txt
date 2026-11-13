@@ -1,0 +1,18 @@
+Ability: Predict (Record #2099)
+Associated skill: Weaponmastery
+Skillpoints required: 15000
+Blurb: Predict when your blows will damage their limbs.
+Syntax: PREDICT <target>
+Abfile:
+The trained weapons master is able to determine approximately when their
+blows will cause their target's limbs to break.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: knight_dualblunt

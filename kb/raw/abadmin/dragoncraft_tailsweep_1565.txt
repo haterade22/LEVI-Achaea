@@ -1,0 +1,17 @@
+Ability: Tailsweep (Record #1565)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Knock your enemies to the ground with your swinging tail.
+Syntax: TAILSWEEP
+Abfile:
+Try to knock your enemies down with your enormous tail.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Skill specialisation: dragonform

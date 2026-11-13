@@ -1,0 +1,20 @@
+Ability: Morningstar (Record #1862)
+Associated skill: Weaponsmithing
+Skillpoints required: 20999
+Blurb: An iron ball connected to a handle by a chain.
+Syntax: FORGE FOR MORNINGSTAR
+FORGE (to continue after interruption)
+Extra info: Commodities: 3 Iron
+3 Steel
+1 Wood
+Abfile:
+An iron ball connected to a handle by a chain.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

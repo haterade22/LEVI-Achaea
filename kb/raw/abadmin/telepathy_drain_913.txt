@@ -1,0 +1,16 @@
+Ability: Drain (Record #913)
+Associated skill: Telepathy
+Skillpoints required: 5999
+Blurb: Draw mana from your subject's mind into your own.(*)
+Syntax: MIND DRAIN [target]
+Abfile:
+Almost the reverse of Suffuse, this drains mental strength from your target and bestows it upon you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

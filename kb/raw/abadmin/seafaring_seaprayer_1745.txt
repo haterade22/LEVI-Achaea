@@ -1,0 +1,21 @@
+Ability: Seaprayer (Record #1745)
+Associated skill: Seafaring
+Skillpoints required: 22500
+Blurb: Return to your ship after death.
+Syntax: PERFORM SEAPRAYER RITUAL
+PRAY TO SEA SPIRITS
+Abfile:
+First, you must PERFORM SEAPRAYER RITUAL while upon a ship where you
+have at least boarding permissions and there is a consecrated figurehead
+mounted to the ship. Then, if you chance to die, you have the option to
+PRAY TO SEA SPIRITS to return to that ship after you walk the Halls of
+Death, rather than embracing death. You can only have one ship
+designated for return via seaprayer at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

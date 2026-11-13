@@ -1,0 +1,22 @@
+Ability: Consign (Record #3130)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: Death awaits the living.
+Syntax:
+Abfile:
+The Soulbleed Nexus requires fuel. As the loyal undead you are, you will
+provide it.
+
+Any living you kill will be freed of their mortal shackles and forced
+into the halls of Ugrach, without reprieve or resurrection(*).
+
+*Your killing blows will bypass the starburst defence and force the
+victim to embrace death, instantly.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

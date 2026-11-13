@@ -1,0 +1,3 @@
+Ability: Throwing (Record #1469)
+Associated skill: Weaponry
+Maps to record 1468 (THROW).

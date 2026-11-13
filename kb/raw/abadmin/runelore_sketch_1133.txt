@@ -1,0 +1,16 @@
+Ability: Sketch (Record #1133)
+Associated skill: Runelore
+Skillpoints required: 0
+Blurb: Sketch runes with expert precision.
+Syntax: SKETCH RUNE ON <ITEM|GROUND|PERSON>
+Abfile:
+The art of sketching mystical runes.
+Useable on: adventurers, room, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

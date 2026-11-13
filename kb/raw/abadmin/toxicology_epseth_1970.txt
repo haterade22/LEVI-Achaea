@@ -1,0 +1,17 @@
+Ability: Epseth (Record #1970)
+Associated skill: Toxicology
+Skillpoints required: 22999
+Blurb: Cause the legs of your victim to become useless.
+Syntax: None
+Extra info: Ingredients: 1 valerian, 1 bellwort, 1 purpleink or
+1 realgar, 1 cuprum, 1 purpleink
+Abfile:
+Cause the legs of your victim to become useless.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Firelash (Record #704)
+Associated skill: Elementalism
+Skillpoints required: 299
+Blurb: Attack with elemental fire.
+Syntax: CAST FIRELASH AT <target>/<icewall>/<totem>/GROUND/VINES
+Abfile:
+By lashing out with fire, you may damage an adventurer or a denizen,
+melt an icewall, clear an overgrowthed totem, or melt ice-covered
+ground. Note that you can hit adventurers with this from an adjacent
+location, and when cast in room against an adventurer it will also set
+them ablaze.
+Useable on: adventurers, denizens, and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 120 mana

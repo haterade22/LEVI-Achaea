@@ -1,0 +1,18 @@
+Ability: Heila (Record #2452)
+Associated skill: Terminus
+Skillpoints required: 15999
+Blurb: None stand above you.
+Syntax: INTONE HEILA
+This ability will be hidden on ablistings.
+Abfile:
+Speak this word and bring all that fly above you in the skies down to
+your level.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of word balance

@@ -1,0 +1,18 @@
+Ability: Hourglass (Record #1487)
+Associated skill: Tattoos
+Skillpoints required: 30999
+Blurb: Send the sands of time to put your victim to sleep.
+Syntax: TOUCH HOURGLASS <target>
+Extra info: Inks: 1 Blue ink
+2 Yellow inks
+Abfile:
+The hourglass tattoo, when used on another adventurer, will cause him to fall into a deep sleep, from which waking will be difficult.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

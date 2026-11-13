@@ -1,0 +1,22 @@
+Ability: Provoke (Record #3253)
+Associated skill: Attainment
+Skillpoints required: 59999
+Blurb: I challenge thee!
+Syntax: PROVOKE <target>
+Abfile:
+Let out a fierce bellow to provoke a denizen, forcing it to focus its
+attacks on you for a short duration.
+
+Note: This ability consumes 2.5s of both balance and equilibrium, while
+also requiring you to be on both balance and equilibrium in addition to
+your arms and legs being whole, not being paralysed, and not being tied.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds
+Resource: 32 rage

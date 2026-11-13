@@ -1,0 +1,3 @@
+Ability: Nausea (Record #2351)
+Associated skill: Curses
+Maps to record 1368 (VOMITING).

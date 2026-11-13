@@ -1,0 +1,22 @@
+Ability: Insertion (Record #2712)
+Associated skill: Psionics
+Skillpoints required: 9999
+Blurb: A subtle touch of misdirection.
+Syntax: PSI INSERTION <target> <CITY|PARTY|ARMY|TELL> <talker> <message>
+Abfile:
+Interfering in an individuals telepathic communication channels is a
+trivial enough process if one knows how. It is said that the true born
+Aldar could project their influence across an entire network, but alas
+such is lost to all but the barest few. You may target an individual and
+make them see a message on the channel you so desire, though the
+telesense defence will make it apparent to them that someone is
+interfering (though they will not see who).
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

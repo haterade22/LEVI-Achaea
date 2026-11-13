@@ -1,0 +1,17 @@
+Ability: Flex (Record #1534)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Destroy pesky bindings.
+Syntax: DRAGONFLEX
+Abfile:
+Use your great size and muscles to snap through those feeble attempts to bind.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: dragonform

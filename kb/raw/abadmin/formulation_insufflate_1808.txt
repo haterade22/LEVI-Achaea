@@ -1,0 +1,18 @@
+Ability: Insufflate (Record #1808)
+Associated skill: Formulation
+Skillpoints required: 20000
+Blurb: This compound will allow you to convert water into oxygen.
+Syntax: IMBIBE INSUFFLATE
+Extra info: Reagents: 1 gypsum, 1 dolomite
+Abfile:
+This compound will alter your physiology, allowing you to convert
+foreign substances into oxygen. For the most part this can be used to
+allow one to breathe under water.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

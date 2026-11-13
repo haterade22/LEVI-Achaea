@@ -1,0 +1,35 @@
+Ability: Cleanseaura (Record #972)
+Associated skill: Occultism
+Skillpoints required: 32999
+Blurb: Cleanse away the natural defences of an aura.
+Syntax: CLEANSEAURA <target>
+Abfile:
+This obscure occultic ability allows one to strip away the natural
+defences of a target's aura, exposing them to more invasive assaults.
+
+When used against an adventurer, you will require your target's mana be
+40% or lower to be successful. In this weakened state, certain eldritch
+entities will be able to exploit the victim's aura to great effect(*).
+
+Against denizens, this will cause your foe to take ten percent more
+damage from occult abilities(**), chaos hounds(***), and the
+weaponmastery attacks of your fellow Unnamables(****). In this case, the
+equilibrium and karma cost of this occultic art shall be greatly
+reduced.
+
+* See AB DOMINATION GLAAKI for details.
+** OCCULTISM WARP and ATTEND.
+*** DOMINATION LYCANTHA.
+**** All weapon-based attacks in the WEAPONMASTERY skill when performed
+by an Unnamable.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1% karma

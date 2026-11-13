@@ -1,0 +1,18 @@
+Ability: Appraise (Record #1249)
+Associated skill: Subterfuge
+Skillpoints required: 32999
+Blurb: View the contents of another adventurer's inventory.
+Syntax: APPRAISE <adventurer>
+Abfile:
+This will list an adventurer's entire inventory.
+
+This will incur a short loss of equilibrium if your target has a bell
+tattoo.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

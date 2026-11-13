@@ -1,0 +1,16 @@
+Ability: Potash (Record #2030)
+Associated skill: Transmutation
+Skillpoints required: 26999
+Blurb: Heal your mind and body with potash.
+Syntax: EXTRACT POTASH
+TRANSMUTATE <#> <mineral> TO POTASH
+Abfile:
+The potash mineral will heal both health and mana.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

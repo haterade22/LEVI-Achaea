@@ -1,0 +1,17 @@
+Ability: Lifebind (Record #3127)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: One and many.
+Syntax: SOULBLEED SHACKLE LIVING
+Abfile:
+You may now shackle all of the living in a location with soulbleed (see
+AB UNDEATH SHACKLE for details).
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 2
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

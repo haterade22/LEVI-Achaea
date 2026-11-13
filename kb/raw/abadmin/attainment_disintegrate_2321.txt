@@ -1,0 +1,17 @@
+Ability: Disintegrate (Record #2321)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Channel fire with your rage to destroy a denizen's shield.
+Syntax: CAST DISINTEGRATE AT <target>
+Abfile:
+This spell will use your rage to remove a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_magi

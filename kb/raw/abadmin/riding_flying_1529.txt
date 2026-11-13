@@ -1,0 +1,16 @@
+Ability: Flying (Record #1529)
+Associated skill: Riding
+Skillpoints required: 50999
+Blurb: Fly the winds upon a winged steed.
+Syntax: SPUR <steed> SKYWARDS
+Abfile:
+If your steed has wings or can otherwise fly, you can now fly it up into the skies.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

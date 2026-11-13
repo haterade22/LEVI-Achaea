@@ -1,0 +1,17 @@
+Ability: Blade (Record #2577)
+Associated skill: Pervasion
+Skillpoints required: 999
+Blurb: A basic manipulation of water.
+Syntax: MANIFEST BLADE <target>
+Abfile:
+Conjure forth a blade of ice to slash at your foe. If they are protected
+by a magical shield, the shield will be destroyed; if they are not, they
+will take damage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Warpaint (Record #1605)
+Associated skill: InkMilling
+Skillpoints required: 14999
+Blurb: Create warpaints for people to wear.
+Syntax: MIX <colour> INTO <vial>
+APPLY <warpaint> [style/extra]
+WIPE OFF PAINT
+Abfile:
+Mix two inks of the specified colour into a vial of water to create a
+vial of colour warpaint that can be applied to a person's face.
+
+Style can be one of swirling, checkered, tribal, or half-faced.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

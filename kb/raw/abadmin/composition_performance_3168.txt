@@ -1,0 +1,28 @@
+Ability: Performance (Record #3168)
+Associated skill: Composition
+Skillpoints required: 1
+Blurb: The fundamentals of the stage.
+Syntax: COMPOSE <song> [movement]
+PERFORMANCE SHOW
+PERFORMANCE END
+Abfile:
+The fundamental of the performer, what more critical piece of the
+undertaking can there be than the beginning? Performances are split into
+two parts:
+
+Songs: these strike all your enemies in your location periodically in
+some manner dependent on the type of song you are playing.
+
+Movements: these passively benefit all of your allies in your location
+in some way as long as your song is playing.
+
+When starting out, your performance can only contain one movement, but
+as your skill grows, so too will the scope of your performance.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

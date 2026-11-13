@@ -1,0 +1,24 @@
+Ability: Freeze (Record #710)
+Associated skill: Elementalism
+Skillpoints required: 3999
+Blurb: Chill another adventurer.
+Syntax: CAST FREEZE AT GROUND/<target>
+Extra info: Ground cooldown: 4.00 seconds of equilibrium and 200 mana
+Targetted cooldown: 3.00 seconds of equilibrium and 100 mana
+Abfile:
+When casting freeze at the ground, you will cause a coating of ice to
+cover it, causing others to slip occasionally. When casting it at
+another adventurer, you will first strip the insulation defence if the
+target has it, then cause the target to shiver, and finally freeze him.
+If you successfully cast this upon a target (for example, a heat
+vibration does not stop it), it also causes damage.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: Mana

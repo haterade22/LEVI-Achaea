@@ -1,0 +1,18 @@
+Ability: Drive (Record #2083)
+Associated skill: Weaponmastery
+Skillpoints required: 10000
+Blurb: Deny them of breath with a precise strike to the throat.
+Syntax: DRIVE <target>
+Abfile:
+By driving the edge of your shield into your opponent's throat, you may
+cut off their air supply, inflicting them with a case of asthma.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

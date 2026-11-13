@@ -1,0 +1,16 @@
+Ability: Xentio (Record #1279)
+Associated skill: Venom
+Skillpoints required: 299
+Blurb: Loss of coordination.
+Syntax: SECRETE XENTIO
+BITE <target>
+Abfile:
+Cause a loss of coordination in your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Warp (Record #947)
+Associated skill: Occultism
+Skillpoints required: 999
+Blurb: Cause your enemy's body to warp beyond recognition.
+Syntax: WARP <target>
+Abfile:
+Your power to warp reality can be focused on a single individual, causing horrific mutations and cancerous growths that are ultimately quite lethal.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 80 mana

@@ -1,0 +1,16 @@
+Ability: Evasives (Record #1765)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Manoeuvres to avoid enemies and enemy weapons.
+Syntax: SHIP MANOEUVRE EVASIVES
+Abfile:
+Manoeuvre your ship in an erratic fashion.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm4

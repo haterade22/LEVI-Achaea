@@ -1,0 +1,31 @@
+Ability: Enkindle (Record #3281)
+Associated skill: Spiritlore
+Skillpoints required: 52999
+Blurb: For the most desperate of times.
+Syntax: SPIRIT ENKINDLE
+SPIRIT SLACKEN <spirit>
+SPIRIT SLACKEN SOLIDIFY <spirit>
+Abfile:
+The master practitioner can learn to slacken bonds to the point of
+breaking while in communion, and yet in a time of need draw them all
+back to full potence for a brief time, though with dire consequences.
+
+* Slackening a bond puts it into a dormant status, it keeps its
+attunement. You cannot have a slackened and active bond with the same
+spirit.
+* You can have as many slackened bonds as you can have active bonds and
+these limits do not impact one another, so you can have five active and
+five slackened for instance.
+* When you enkindle, all active bonds are severed and all slackened
+bonds are made active. After five minutes all bonds will be broken and
+you will be unable to commune for a further five minutes.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 500 mana and 200 willpower

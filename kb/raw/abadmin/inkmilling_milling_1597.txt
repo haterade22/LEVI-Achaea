@@ -1,0 +1,20 @@
+Ability: Milling (Record #1597)
+Associated skill: InkMilling
+Skillpoints required: 0
+Blurb: Mill reagents to create inks or pigments.
+Syntax: PUT <reagent> IN <mill>
+MILL FOR [#] <ink colour>
+MILL [#] <red/yellow/blue> PIGMENT
+Abfile:
+ Put the reagents into your mill and then mill them into ink(s).
+
+Note: when making pigments, the reagents need to be in your inventory or
+rift.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

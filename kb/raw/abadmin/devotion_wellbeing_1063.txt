@@ -1,0 +1,3 @@
+Ability: Wellbeing (Record #1063)
+Associated skill: Devotion
+Maps to record 1062 (WELL-BEING).

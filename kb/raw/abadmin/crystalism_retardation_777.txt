@@ -1,0 +1,26 @@
+Ability: Retardation (Record #777)
+Associated skill: Crystalism
+Skillpoints required: 56999
+Blurb: Slow time in your location.
+Syntax: EMBED RETARDATION
+Abfile:
+ Shapes required: Disc
+
+The retardation vibration slows time in the location, giving the aeon
+effect to everyone in the room, including you. Unfortunately, due to its
+time-bending effects, this vibration will disable any crystalline
+vibrations in the room with it that offer passive effects, and affect
+any weapons or projectiles thrown from outside of the vibration's
+effect.
+
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

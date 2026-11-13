@@ -1,0 +1,18 @@
+Ability: Magnetlaunch (Record #3279)
+Associated skill: Sculpting
+Skillpoints required: 40999
+Blurb: Survey the supremacy of Garash's domain.
+Syntax: TERRAN MAGNET LAUNCH
+Abfile:
+Your powers over magnetism let you launch yourself straight up into the
+air, and maintain that position relative to the supreme power of the
+Earth.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

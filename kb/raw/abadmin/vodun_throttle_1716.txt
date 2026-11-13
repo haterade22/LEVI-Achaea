@@ -1,0 +1,25 @@
+Ability: Throttle (Record #1716)
+Associated skill: Vodun
+Skillpoints required: 11499
+Blurb: Crush the life out of your victim.
+Syntax: VODUN THROTTLE
+Extra info: Fashions:
+Requires: 1
+Used: 0 when in room with target.
+Used: 1 when in area with target.
+Abfile:
+As long as the doll's living twin is in the area you can inflict the
+effigy with a choking curse, and watch in joy as its likeness
+asphyxiates.
+
+Be warned, your vodun doll will be destroyed if brought to zero fashions
+by this violent act.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

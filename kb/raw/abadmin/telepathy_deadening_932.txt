@@ -1,0 +1,17 @@
+Ability: Deadening (Record #932)
+Associated skill: Telepathy
+Skillpoints required: 37499
+Blurb: Dull your opponent's mind.(*)
+Syntax: MIND DEADENING [target]
+Abfile:
+This ability will cause your opponent's mind to be dull. If you start a mind lock while your opponent is in this condition, your ability to lock and hold his mind will be increased.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 200 mana

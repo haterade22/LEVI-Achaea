@@ -1,0 +1,28 @@
+Ability: Dispersal (Record #2792)
+Associated skill: Sublimation
+Skillpoints required: 15999
+Blurb: Before its even close.
+Syntax: SUBSTANTIATE DISPERSAL <type1> [type2]
+This ability will be hidden on ablistings.
+Abfile:
+Impose your will upon reality, causing certain forms of energy entering
+your location to be dispersed when focussed upon you(*).
+
+Valid types are cutting, blunt, fire, cold, poison, electricity,
+psychic, or asphyxiation.
+
+Overdraw effect: you may specify a second type of energy to disperse,
+and the effect remains for longer.
+
+* You may reduce the damage taken by that type for yourself in the
+location.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 3% Wellspring Energy

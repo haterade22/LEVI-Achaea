@@ -1,0 +1,15 @@
+Ability: Sight (Record #879)
+Associated skill: Kaido
+Skillpoints required: 7999
+Blurb: Restoring your sight.
+Syntax: SIGHT
+Abfile:
+You have sufficient control over your body to instantly repair your eyes when blinded.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Butterfly (Record #1197)
+Associated skill: Woodlore
+Skillpoints required: 39999
+Blurb: Summon a butterfly to assist you in combat.
+Syntax: SUMMON BUTTERFLY
+Abfile:
+Though small and seemingly harmless, the butterfly is a powerful ally in
+combat, buzzing about your enemy's head and restoring their hearing.
+
+* Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

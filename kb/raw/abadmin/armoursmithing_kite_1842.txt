@@ -1,0 +1,19 @@
+Ability: Kite (Record #1842)
+Associated skill: Armoursmithing
+Skillpoints required: 30999
+Blurb: A large, protective shield.
+Syntax: FORGE FOR KITE
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+3 Steel
+Abfile:
+A large, protective shield.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

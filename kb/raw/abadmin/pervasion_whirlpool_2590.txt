@@ -1,0 +1,18 @@
+Ability: Whirlpool (Record #2590)
+Associated skill: Pervasion
+Skillpoints required: 30999
+Blurb: To resist is futile.
+Syntax: MANIFEST WHIRLPOOL
+Abfile:
+Summon forth a whirlpool, dragging in all those in adjacent rooms that
+are also submerged by water.
+
+You can only initiate this ability in a flooded room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

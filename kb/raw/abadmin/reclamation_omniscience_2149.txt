@@ -1,0 +1,19 @@
+Ability: Omniscience (Record #2149)
+Associated skill: Reclamation
+Skillpoints required: 10999
+Blurb: Knowledge is power.
+Syntax: RECLAMATION OMNISCIENCE
+RECLAMATION TERMINATE OMNISCIENCE/ALL
+Abfile:
+While active, you will know whenever someone moves in or out of
+locations reclaimed by you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

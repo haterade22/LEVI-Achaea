@@ -1,0 +1,16 @@
+Ability: Dampen (Record #749)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: Attempt to dampen a vibration, destroying it.
+Syntax: DAMPEN <vibration>
+Abfile:
+This ability gives you the power to destroy a vibration. You may only destroy vibrations that you are capable of embedding.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

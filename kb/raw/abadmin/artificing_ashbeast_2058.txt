@@ -1,0 +1,21 @@
+Ability: Ashbeast (Record #2058)
+Associated skill: Artificing
+Skillpoints required: 60000
+Blurb: A harbinger of Fire.
+Syntax: ELEMENTAL SURGE
+Abfile:
+This mighty servant of Kkractle can be commanded to surge the heat of
+its flames, annihilating all inanimate constructs of hated water in your
+location(*).
+
+* Destroys icewalls, flood, and frozen ground.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 10 willpower

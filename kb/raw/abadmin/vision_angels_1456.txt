@@ -1,0 +1,15 @@
+Ability: Angels (Record #1456)
+Associated skill: Vision
+Skillpoints required: 49999
+Blurb: Gain information on the status of a Guardian Angel.
+Syntax: ANGELS
+Abfile:
+This ability will give you information on the status of any visible Guardian Angels in your location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

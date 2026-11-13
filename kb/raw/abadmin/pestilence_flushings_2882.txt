@@ -1,0 +1,22 @@
+Ability: Flushings (Record #2882)
+Associated skill: Pestilence
+Skillpoints required: 9999
+Blurb: Even the vital will be purged.
+Syntax:
+Abfile:
+A most unpleasant disease that in the distant past inspired all manner
+of modern day curses, flushings is an insidious plague which causes a
+violent reaction to the consumption of ginseng(*). The reaction causes
+the body to turn against itself, and purge even that which sustains
+it(**).
+
+* Also applies to ferrum minerals.
+** Each time you eat ginseng/ferrum you will bleed from your pores.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

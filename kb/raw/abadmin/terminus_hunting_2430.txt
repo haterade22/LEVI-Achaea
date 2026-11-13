@@ -1,0 +1,23 @@
+Ability: Hunting (Record #2430)
+Associated skill: Terminus
+Skillpoints required: 999
+Blurb: The acquisition of strength.
+Syntax:
+Abfile:
+You have now unlocked the hunting research tree. This tree has a focus
+on being able to defeat denizens more efficiently.
+
+Research available in this tree:
+Trusad              Your precision is without compare.
+Tsuura              The first step is survival.
+Kail                Turn aside your foes.
+Hailad              You can take them all.
+Laiad               The weak of will shall serve your ends.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

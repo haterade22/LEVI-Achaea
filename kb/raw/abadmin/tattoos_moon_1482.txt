@@ -1,0 +1,24 @@
+Ability: Moon (Record #1482)
+Associated skill: Tattoos
+Skillpoints required: 12999
+Blurb: Regeneration of mana through the power of light.
+Syntax: TOUCH MOON
+Extra info: Inks: 1 Blue ink
+1 Red ink
+1 Yellow ink
+Abfile:
+This is a tattoo that will work automatically. When you have it
+inscribed upon you (and activated), it will automatically restore a
+portion of your mana anytime you have less than full mana. Each time it
+works, there is a small chance of the tattoo fading. Activating this
+tattoo will take balance.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

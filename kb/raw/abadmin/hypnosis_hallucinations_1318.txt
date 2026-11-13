@@ -1,0 +1,15 @@
+Ability: Hallucinations (Record #1318)
+Associated skill: Hypnosis
+Skillpoints required: 9999
+Blurb: Vivid hallucinations to plague your foe.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

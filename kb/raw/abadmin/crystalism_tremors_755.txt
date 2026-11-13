@@ -1,0 +1,22 @@
+Ability: Tremors (Record #755)
+Associated skill: Crystalism
+Skillpoints required: 3999
+Blurb: Cause ground-shaking quakes.
+Syntax: EMBED TREMORS
+Abfile:
+ Shapes required: Disc, Egg
+
+A low, rumbling vibration, this is powerful enough to knock
+non-levitating enemies off of their feet. If the adventurer is
+levitating, it will strip the defence.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

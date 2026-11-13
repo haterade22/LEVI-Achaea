@@ -1,0 +1,19 @@
+Ability: Oration (Record #3238)
+Associated skill: Zeal
+Skillpoints required: 48999
+Blurb: Creation shall flourish.
+Syntax:
+Abfile:
+The enemies of Creation shall learn that your cause is a righteous one,
+whether they care to hear or not(*).
+
+* You will never stumble over your recitals when directed against one
+afflicted with justice.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

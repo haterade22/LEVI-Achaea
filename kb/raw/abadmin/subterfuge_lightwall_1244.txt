@@ -1,0 +1,18 @@
+Ability: Lightwall (Record #1244)
+Associated skill: Subterfuge
+Skillpoints required: 27999
+Blurb: Create a palpable wall of light.
+Syntax: CONJURE LIGHTWALL <direction>
+SNUFF LIGHTWALLS
+Abfile:
+This will conjure a wall of light, which, when passed through, will afflict the unfortunate individual with the darkshade affliction. It also drastically speeds up the progression of the affliction for anyone standing in its presence.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 45 mana

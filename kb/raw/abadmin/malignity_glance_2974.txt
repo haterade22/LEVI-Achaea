@@ -1,0 +1,18 @@
+Ability: Glance (Record #2974)
+Associated skill: Malignity
+Skillpoints required: 1499
+Blurb: See as the beast sees.
+Syntax: HYENA GLANCE
+Abfile:
+Look through the eyes of your hyena, seeing its immediate
+surroundings(*).
+
+* Does not work if it is in someone's inventory or similar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

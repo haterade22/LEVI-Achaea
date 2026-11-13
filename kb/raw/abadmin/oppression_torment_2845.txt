@@ -1,0 +1,18 @@
+Ability: Torment (Record #2845)
+Associated skill: Oppression
+Skillpoints required: 11999
+Blurb: In body and mind.
+Syntax: HELLFORGE INVEST TORMENT
+Abfile:
+Imbue necromantic energy into your blade, taking the place of a venom.
+When your blade strikes your foe it shall give the healthleech
+affliction; if they are already leeching their health away, they will
+become confused.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Scorpion (Record #864)
+Associated skill: Tekura
+Skillpoints required: 41999
+Blurb: A devastatingly powerful attack stance.
+Syntax: SCS
+Abfile:
+A truly lethal stance, the scorpion sacrifices defence for offense.
+Punches and kicks will both deliver enhanced damage(*), and your kicks
+and punches will be executed at the fastest possible speed. You will
+however find that you are able to block far less often in this stance.
+
+(*) Note that this does not change how quickly you may break a target's
+limbs, only how much health damage they take from your attacks.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

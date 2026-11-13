@@ -1,0 +1,19 @@
+Ability: Scorch (Record #2299)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Blacken your victim's skin.
+Syntax: SCORCH <target>
+Extra info: Gives denizen affliction: Inhibit
+Abfile:
+Use your mighty breath to blacken your target's skin, slowing the healing process.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 25.00 seconds
+Resource: 18 rage
+Skill specialisation: br_red_dragon

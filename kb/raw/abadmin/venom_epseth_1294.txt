@@ -1,0 +1,16 @@
+Ability: Epseth (Record #1294)
+Associated skill: Venom
+Skillpoints required: 22999
+Blurb: Cause the legs of your victim to become useless.
+Syntax: SECRETE EPSETH
+BITE <target>
+Abfile:
+Cause the legs of your victim to become useless.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

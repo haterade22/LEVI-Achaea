@@ -1,0 +1,24 @@
+Ability: Timewell (Record #2427)
+Associated skill: Aeonics
+Skillpoints required: 55999
+Blurb: Your might made manifest.
+Syntax: CHRONO TIMEWELL [BOOST]
+Abfile:
+One of the greatest of the Aeonic arts is the ability to summon forth a
+timewell. This ability shall bring forth a disruption, making many
+ranged attacks fail to be able to be performed upon one standing within
+its disruptive field.
+
+Notably, this ability shall not dissipate if the creator falls in
+battle.
+
+If boosted, the timewell shall last longer than normal.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 700 age

@@ -1,0 +1,24 @@
+Ability: Devastate (Record #2076)
+Associated skill: Weaponmastery
+Skillpoints required: 50000
+Blurb: Destroy their limbs utterly.
+Syntax: DEVASTATE <target> ARMS|LEGS [<venom>]
+Abfile:
+This ability delivers a single, powerful strike across your opponent's
+body, targeting either their arms or their legs. The more wrist
+fractures or torn tendons they suffer from respectively, the greater the
+damage to their limbs.
+
+If the limb is already broken prior to the devastate attempt, the level
+of limb damage will be increased.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

@@ -1,0 +1,17 @@
+Ability: Gouge (Record #2127)
+Associated skill: Skirmishing
+Skillpoints required: 33999
+Blurb: Lay them open with a precision strike.
+Syntax: GOUGE <target> [limb] [venom]
+Abfile:
+This attack with your chosen weapon causes significant bleeding as well
+as the weariness affliction, if used against an adventurer.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

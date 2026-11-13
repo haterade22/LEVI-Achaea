@@ -1,0 +1,15 @@
+Ability: Physiology (Record #1388)
+Associated skill: Survival
+Skillpoints required: 5999
+Blurb: Discern your ailments more efficiently.
+Syntax: Passive
+Abfile:
+Due to your increased knowledge of the physiology of sentient life, you are able to discern your own ailments at a much quicker speed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

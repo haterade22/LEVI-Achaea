@@ -1,0 +1,26 @@
+Ability: Orb (Record #1998)
+Associated skill: Conjuration
+Skillpoints required: 60000
+Blurb: The chaos-destroying orb sigil.
+Syntax: BEGIN CREATION OF ORB SIGIL
+THROW ORB AT <chaos entity>
+Abfile:
+Type:
+   Created item.
+
+Actions:
+   3xchant "solip preena het epi re enla", 1
+
+Comms:
+   1 diamond dust
+
+By throwing the orb sigil at a chaos entity, you stand a good chance of
+destroying it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Haidar (Record #3210)
+Associated skill: Sagas
+Skillpoints required: 14999
+Blurb: Of great escape and glory.
+Syntax: RECITE HAIDAR
+Abfile:
+The tale of Haidar, the Lion, is one of arts reclaimed and more: and yet
+at its core it is a tale about escape.
+
+As you recite this saga, each time you reach another section of the
+tale, you will free yourself from various attempts to entangle your
+person.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance

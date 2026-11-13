@@ -1,0 +1,19 @@
+Ability: Blunder (Record #2671)
+Associated skill: Survival
+Skillpoints required: 41999
+Blurb: An indiscriminate charge.
+Syntax: BLUNDER
+Abfile:
+You may now prepare to blunder through any traps or tribulations that
+bar your path(*). This mindset lasts only a short time before expiring.
+
+* You will hit traps and ground runes regardless of if you are enemied
+to the person who placed them while this is active.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

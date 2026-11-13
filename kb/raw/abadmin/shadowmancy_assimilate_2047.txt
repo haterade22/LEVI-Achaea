@@ -1,0 +1,33 @@
+Ability: Assimilate (Record #2047)
+Associated skill: Shadowmancy
+Skillpoints required: 58999
+Blurb: You will take it all.
+Syntax: SHADOW ASSIMILATE <target> <STRENGTH|SPEED|YEARS>
+Abfile:
+With a victim's shadow held within your phylactery, you may take of that
+which is their province and make of it your own.
+
+Strength: for the next thirty seconds, your unnatural strength will
+permit you to surpass simple physical realities, striking with your
+scythe even when paralysed.
+
+Speed: for the next forty seconds, your reap and cull abilities will be
+somewhat faster, though they will deal somewhat less damage as well.
+
+Years: for the next thirty seconds, each time you land a blow on your
+victim and they survive the assault, you will steal of their years and
+restore your youth if needed.
+
+* Only one assimilation bonus may be in play at once, and they only
+apply against the target you used the shadow of to instigate the
+process.
+** Consumes the shadow upon use.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of balance

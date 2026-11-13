@@ -1,0 +1,19 @@
+Ability: Encircle (Record #3283)
+Associated skill: Bladedance
+Skillpoints required: 55000
+Blurb: Work with an ally to encircle foes.
+Syntax: ENCIRCLE WITH <ally>
+ENCIRCLE WITH NOBODY
+Abfile:
+Stand beside an ally, ready to encircle your foe.
+
+Using this ability on a mutual ally will allow you to circle behind your
+target from the front position, so long as your partner is in the room.
+Useable on: adventurers
+Pre checks: balance
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

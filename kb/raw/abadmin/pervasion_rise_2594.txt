@@ -1,0 +1,18 @@
+Ability: Rise (Record #2594)
+Associated skill: Pervasion
+Skillpoints required: 38999
+Blurb: A battlefield fit for you.
+Syntax: MANIFEST RISE
+Abfile:
+If a location is flooded, you may cause the water level to rapidly rise,
+making it far easier for you to enact a final end for your foes(*).
+
+* See AB PERVASION DROWN.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

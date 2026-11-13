@@ -1,0 +1,33 @@
+Ability: Destruction (Record #2732)
+Associated skill: Emulation
+Skillpoints required: 15999
+Blurb: Elemental fury to ravage and rage.
+Syntax: ENACT DESTRUCTION <target> <direction>
+Abfile:
+The study of the elements was something of an unfortunate field to be
+engaged in historically. In the early days there were concerns about
+intruding upon the realm of Agatheis, as He was a mysterious god even to
+the Aldar.
+
+Later, said god's betrayal in the War of Humanity made most Aldar avoid
+this field at all costs. Nevertheless, some advancements were made,
+particularly when trying to replicate the destructive power of the newly
+met Dragon's breath.
+
+By calling upon elemental destruction, you will send a blast of power to
+ravage a foe you can see in your line of sight. Focussing on the
+elements in this way is unpredictable, and your results may vary:
+
+Ice shall deal damage and freeze the target.
+Fire shall do damage and set the target ablaze.
+Lightning shall deal more damage than the other two, but has no
+secondary effect.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: line of sight
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

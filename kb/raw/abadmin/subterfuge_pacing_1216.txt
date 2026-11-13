@@ -1,0 +1,18 @@
+Ability: Pacing (Record #1216)
+Associated skill: Subterfuge
+Skillpoints required: 3499
+Blurb: The ability to anticipate and keep pace with others.
+Syntax: PACING [ON|OFF]
+RELAX PACING
+Extra info: Relax cooldown: 3.00 seconds of balance.
+Abfile:
+At a constant endurance drain, you will be able to follow those while they sprint away.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

@@ -1,0 +1,23 @@
+Ability: Path (Record #2484)
+Associated skill: Tekura
+Skillpoints required: 60000
+Blurb: Switch to a new school of study.
+Syntax: SCHOOL SWITCH SHIKUDO
+Abfile:
+You have reached such mastery of Tekura that you are now ready to
+advance to a new school of martial study if you so desire. Be warned.
+Doing so will put you back to inept in your primary skill and you will
+need to learn the new skill again. Additionally, Shikudo is a far more
+complex school, and should only be considered by the advanced.
+
+You will be able to return to Tekura and retain your skill investment,
+but there is a cooldown on switching of 24 hours and a cost of 100
+lessons.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Behead (Record #1472)
+Associated skill: Weaponry
+Skillpoints required: 60000
+Blurb: He was an ugly bugger anyway.
+Syntax: BEHEAD <unlucky adventurer target>
+Abfile:
+Once you have an opponent prone (which, for our purposes, includes being on the ground, tied up in any way, paralysed, sleeping, frozen, or otherwise unable to move), you may, if you are wielding a sword or battleaxe, try to behead him. Simply BEHEAD <target> and wait a few seconds. If your opponent is still in the room when you are ready to finish the beheading, he will die, and his head will be separated from his body.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

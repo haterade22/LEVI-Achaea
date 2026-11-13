@@ -1,0 +1,17 @@
+Ability: Istria (Record #992)
+Associated skill: Domination
+Skillpoints required: 12999
+Blurb: Istria, the pathfinder.
+Syntax: ORDER PATHFINDER HOME
+Abfile:
+When called upon, Istria, known as the Pathfinder, will send to you a pathfinder entity. Wherever you summon the pathfinder entity will be home to it. Later, you may simply ORDER PATHFINDER HOME to be taken back to where the pathfinder was summoned from.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+The ability name PATHFINDER is mapped to this ability.

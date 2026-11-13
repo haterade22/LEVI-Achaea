@@ -1,0 +1,15 @@
+Ability: Touch (Record #747)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: Determine how many facets you may refine.
+Syntax: TOUCH CRYSTAL
+Abfile:
+When done in the presence of a Master Crystal, this will tell you how many facets it has.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

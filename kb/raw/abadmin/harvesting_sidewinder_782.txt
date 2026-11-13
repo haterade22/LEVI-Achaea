@@ -1,0 +1,15 @@
+Ability: Sidewinder (Record #782)
+Associated skill: Harvesting
+Skillpoints required: 49999
+Blurb: The powdered skin of a sidewinder.
+Syntax: HARVEST SKIN
+Abfile:
+When you encounter a dead sidewinder, you will be able to strip its skin from it.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

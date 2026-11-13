@@ -1,0 +1,29 @@
+Ability: Solar (Record #2786)
+Associated skill: Sublimation
+Skillpoints required: 25999
+Blurb: An intermediary form of energy.
+Syntax: MANIPULATE SOLAR <target>
+This ability will be hidden on ablistings.
+Abfile:
+Solar energy is easy to manipulate, but exceptionally hard to direct. To
+achieve such is a milestone in the school of Manipulation. Direct a ray
+of solar energy at a target, and they shall be struck down with
+sensitive skin for the next five seconds, or until they take a blow of
+sufficient damage(*).
+
+Overdraw effect: even when the Sun is not visible in the sky you may
+channel its power. Additionally, it shall do damage in this case.
+
+* A blow that deals over ten percent of the target's health shall end
+this effect immediately (though that blow shall still be granted the
+sensitive bonus).
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 6% Wellspring Energy

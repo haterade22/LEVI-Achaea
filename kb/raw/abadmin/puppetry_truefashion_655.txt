@@ -1,0 +1,15 @@
+Ability: Truefashion (Record #655)
+Associated skill: Puppetry
+Skillpoints required: 60000
+Blurb: Fashion faster than ever before.
+Syntax: None
+Abfile:
+With TRUEFASHION, you have achieved a level of skill whereby sometimes you can get two fashions in the time it normally takes to get one.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

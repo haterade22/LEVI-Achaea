@@ -1,0 +1,23 @@
+Ability: Marduk (Record #993)
+Associated skill: Domination
+Skillpoints required: 15999
+Blurb: Marduk, the eater of souls.
+Syntax: ORDER SOULMASTER POSSESS <target>
+ORDER <target> <command>
+Abfile:
+Marduk will send to you a soulmaster entity. This entity may be ordered
+to POSSESS an adventurer. When it does, it will take a few seconds to
+gain control of the victim's mind. Once it has done this, you may ORDER
+<target> <command>. Doing this is quite difficult for the soulmaster
+though, so you will be restricted to doing it once every few seconds.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+The ability name SOULMASTER is mapped to this ability.

@@ -1,0 +1,72 @@
+Ability: Fireweapon (Record #1754)
+Associated skill: Seafaring
+Skillpoints required: 2999
+Blurb: Basic use of shipboard weapons.
+Syntax: LOAD <weapon> WITH <ammo>
+UNLOAD <ammo> FROM <weapon>
+FIRE <weapon> (When ship's target is set)
+FIRE <weapon> AT <target ship>
+FIRE <weapon> AT SEAMONSTER (For attacking seamonsters)
+FIRE <weapon> UP (For firing flares)
+Abfile:
+ You now know your way around the basic weapons and armaments of a ship.
+
+Different types of ship ammunition have different effects upon your foe.
+
+Versus Ships
+------------
+Flare      - Burn brightly for a time, for signals, among other things.
+           - Reveals nearby cloaked ships.
+           - Available in numerous colours.
+           - Fire from all ship weapons
+Chainshot  - Sails damage, and will bind sails.
+           - Sails will be unusable until they are CLEARed.
+           - When dipped this will set the sails on fire.
+           - Fire from an Onager.
+Hookshot   - For grappling.
+           - Fired from an Arcanian Arm.
+           - Slows down target ship incrementally
+           - Will reel in an immobilised vessel until adjacent
+           - Effects last until target vessel chops the tether
+Darts      - Hull damage and leaking.
+           - When dipped they will set fires.
+           - Rowing crew will be interrupted when hit.
+           - Fire from a Ballista.
+Spidershot - Binds a weapon on the enemy ship rendering it
+             inoperable until it is CLEARed.
+           - Fire from an Onager.
+Starshot   - Encircles the ship's figurehead, causing any melded
+             sailors to be unmelded.
+           - The figurehead will remain unusable until it is CLEARed.
+           - When dipped, it will start a fire on the bow.
+           - Fire from an Onager.
+War disc   - Causes the crew to duck and cower.
+           - This will interrupt the crew for a short duration
+             during which they will halt their current task and not
+             accept orders.
+           - Fire from an Arcanian Arm.
+
+Versus Seamonsters
+------------------
+Flare      - Prevent a seamonster from moving for a very short time.
+           - Fire from all ship weapons.
+Chainshot  - Slow a seamonster's movement speed for a short time.
+           - Fire from an Onager.
+Darts      - Damage a seamonster.
+           - Fire from a Ballista.
+Spidershot - Decrease the damage of a seamonster's next attack.
+           - Fire from an Onager.
+Starshot   - Slow a seamonster's attack speed for a short time.
+           - Fire from an Onager.
+War disc   - Damage a seamonster (short range)
+           - Fire from an Arcanian Arm.
+
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

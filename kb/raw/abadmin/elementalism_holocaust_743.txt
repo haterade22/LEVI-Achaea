@@ -1,0 +1,20 @@
+Ability: Holocaust (Record #743)
+Associated skill: Elementalism
+Skillpoints required: 60000
+Blurb: Create a delayed explosion of immense power.
+Syntax: CAST HOLOCAUST <seconds> (Between 10 and 60)
+Abfile:
+This extremely powerful spell creates a magical bomb with a timer on it.
+
+When the time runs out, the bomb will explode in a massive, fiery
+holocaust.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1500 mana

@@ -1,0 +1,16 @@
+Ability: Diversify (Record #2470)
+Associated skill: Terminus
+Skillpoints required: 60000
+Blurb: Mediocrity is unacceptable.
+Syntax:
+Abfile:
+Your mastery has reached such a point that you may now learn up to two
+research trees to completion, gaining the capstone ability of both.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Pyroflare (Record #2568)
+Associated skill: Ignition
+Skillpoints required: 45999
+Blurb: And to ash shall they return.
+Syntax: IGNITE PYROFLARE <target>
+Abfile:
+By focusing your intent upon a target, you may summon forth a tremendous
+flare to scourge them from existence. While focusing you may perform no
+actions and on completion your foe shall suffer extreme damage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

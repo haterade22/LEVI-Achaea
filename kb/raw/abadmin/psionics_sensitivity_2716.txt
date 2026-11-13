@@ -1,0 +1,17 @@
+Ability: Sensitivity (Record #2716)
+Associated skill: Psionics
+Skillpoints required: 23999
+Blurb: The faintest changes are yours to know.
+Syntax: passive
+Abfile:
+Your mind is now so attuned to those around you that you will be able to
+detect when the body, mind or spirit of someone you have began the
+unweaving of reaches a critical level.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

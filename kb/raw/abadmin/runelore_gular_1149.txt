@@ -1,0 +1,24 @@
+Ability: Gular (Record #1149)
+Associated skill: Runelore
+Skillpoints required: 18999
+Blurb: Drawing on the power of the earth, raise a stone wall.
+Syntax: SKETCH GULAR ON GROUND <direction>
+Abfile:
+ Inks required: 1 Red
+Symbol: None
+
+This rune will cause a wall of stone to rise up from the ground,
+blocking the progress of all who would travel that way.
+
+If a stonewall already exists in the specified direction, Gular will
+instead destroy it.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

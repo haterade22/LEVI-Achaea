@@ -1,0 +1,18 @@
+Ability: Wildgrowth (Record #455)
+Associated skill: Groves
+Skillpoints required: 45999
+Blurb: Ensnare your enemies with tenacious plantlife.
+Syntax: EVOKE WILDGROWTH
+Extra info: Imbued sunlight.
+Abfile:
+On using this technique, wild growth will sprout from the earth wherever you go for a short period of time. Any personal enemies attempting to leave your location by most conventional means risk being hindered by this plantlife.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 sunlight and 150 mana

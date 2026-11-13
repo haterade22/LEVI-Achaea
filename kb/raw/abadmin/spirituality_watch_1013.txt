@@ -1,0 +1,17 @@
+Ability: Watch (Record #1013)
+Associated skill: Spirituality
+Skillpoints required: 4999
+Blurb: Have your angel keep watch on your enemies.
+Syntax: ANGEL WATCH [ON|OFF]
+Abfile:
+When you turn on this ability, your angel will begin reporting on the movements of your enemies when they are near to you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 10 Angel power

@@ -1,0 +1,17 @@
+Ability: Evasion (Record #1202)
+Associated skill: Woodlore
+Skillpoints required: 55449
+Blurb: Elude the intruding eyes below.
+Syntax: EVASION [ON|OFF]
+RELAX EVASION
+Abfile:
+Your masterful knowledge over the skies will allow you to perform skilful evasive techniques while flying, avoiding the piercing gazes of those on the ground below. Note that such action is very physically demanding, and such will incur a heavy endurance drain.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

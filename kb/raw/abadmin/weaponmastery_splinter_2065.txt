@@ -1,0 +1,23 @@
+Ability: Splinter (Record #2065)
+Associated skill: Weaponmastery
+Skillpoints required: 9000
+Blurb: Splinter the defences protecting your opponent.
+Syntax: SPLINTER <target>
+Abfile:
+This ability allows the user to smash through defences that would keep
+them from their opponent. If both the rebounding aura and shield defence
+are present, both are stripped, if only one is present, a follow-up
+damaging blow will be dealt.
+
+This can only be done using a warhammer of some description.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

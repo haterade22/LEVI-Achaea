@@ -1,0 +1,22 @@
+Ability: Shield (Record #2862)
+Associated skill: Memorium
+Skillpoints required: 2999
+Blurb: To ward against the wicked.
+Syntax: TRACE SHIELD ME
+Abfile:
+One of the lesser logographs, the shield cannot be worked into an
+epitaph, though is one of the most useful logographs all the same. When
+traced for your person it shall convey resistence to injury; the wiser
+the tracer, the greater the benefit(*).
+
+* The amount of damage resistance this conveys is related to your
+intelligence stat.
+Useable on: self
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance

@@ -1,0 +1,34 @@
+Ability: Latch (Record #2602)
+Associated skill: Pervasion
+Skillpoints required: 57999
+Blurb: Exert your will upon their inferior form.
+Syntax: MANIFEST LATCH <target>
+Abfile:
+Exert your will upon the vital fluids that course through the inferior
+form of your foe. Based on your preparation, this act has various
+effects.
+
+For each of: addiction, haemophilia, nausea, lethargy, and severe
+bleeding(*) up to a total of four, the effects are as follows:
+2: You shall bind your foe with watery tentacles, hindering their
+chances to flee from you.
+3: If your foe's blood is running from open wounds, double the amount of
+bleeding they are currently suffering from(**). If they are not
+bleeding, gives a moderate amount of bleeding.
+4: When this is successful it will knock your target off of elixir
+balance; it will fade next time they successfully sip a health elixir.
+While in this state they will be ready for your ultimate contempt(***).
+
+* This requires 200 bleeding or more. All afflictions must be given by
+you and one of your four requirements must be the bleeding for the
+strongest form of this ability.
+** There is a cap on the amount of bleeding this will give.
+*** See AB PERVASION DESICCATE for details.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

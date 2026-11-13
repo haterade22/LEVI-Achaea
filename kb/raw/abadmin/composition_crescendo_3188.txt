@@ -1,0 +1,21 @@
+Ability: Crescendo (Record #3188)
+Associated skill: Composition
+Skillpoints required: 57999
+Blurb: The rising swell of song.
+Syntax: passive
+Abfile:
+As you approach mastery of the performing arts, so too are your
+performances enhanced greatly. Now, all who are passively influenced by
+one of your songs who have a crescendo building about them will find
+that that crescendo draws faster with greater speed(*).
+
+* Each time your passive song hits someone the crescendo affliction
+gains a stack if present.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

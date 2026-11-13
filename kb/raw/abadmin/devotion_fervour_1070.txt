@@ -1,0 +1,22 @@
+Ability: Fervour (Record #1070)
+Associated skill: Devotion
+Skillpoints required: 42999
+Blurb: Call rites to you in the heat of battle.
+Syntax: DSL/RSL/RAZE <target>
+PERFORM RITE OF <demons/healing/cleansing>
+Abfile:
+You have gained such control over your devotion that you are now able to
+perform certain rites immediately after utilising certain weaponmastery
+attacks, these include doubleslashing, razeslashing, razing your
+opponent, and most standard attacks across specializations. This is a
+devotion ability particular to the Paladin class.
+Useable on: adventurers, denizens, and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Devotion
+Skill specialisation: devo_paladin

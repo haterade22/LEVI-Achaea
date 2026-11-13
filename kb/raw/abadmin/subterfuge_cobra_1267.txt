@@ -1,0 +1,3 @@
+Ability: Cobra (Record #1267)
+Associated skill: Subterfuge
+Maps to record 1265 (SNAKE).

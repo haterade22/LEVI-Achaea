@@ -1,0 +1,24 @@
+Ability: Infamy (Record #3235)
+Associated skill: Woe
+Skillpoints required: 35999
+Blurb: A silver tongue to topple empires.
+Syntax: GOSSIP SPREAD <gossip>
+GOSSIP LISTEN
+Abfile:
+The silver tongue of Woe's Prince was as infamous as any of his fell
+deeds. With whispers and honey he brought kings to their knees and
+collapsed empires with a word, his argent web spun like a fattened
+spider. While you cannot quite match Pazuzu's level of charisma, you
+will find it easy to influence the general public(*) and insert your own
+gossip into the murmurs of the trifling masses.
+
+* Within inns and similar, generally.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

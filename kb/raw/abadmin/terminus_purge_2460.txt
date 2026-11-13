@@ -1,0 +1,19 @@
+Ability: Purge (Record #2460)
+Associated skill: Terminus
+Skillpoints required: 25999
+Blurb: The mind is malleable.
+Syntax: RESEARCH FORGET
+Abfile:
+You are now able to purge your mind of progress in a given research
+tree. This will not remove your ability to access that tree, just any
+progress you have made in currently studying it.
+
+This has a 24 hours cooldown.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

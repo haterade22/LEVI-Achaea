@@ -1,0 +1,16 @@
+Ability: Inscribing (Record #599)
+Associated skill: Tarot
+Skillpoints required: 0
+Blurb: The ability to inscribe images upon blank Tarot cards.
+Syntax: INSCRIBE BLANK WITH [1-20] <IMAGE>
+Abfile:
+With this ability, you may inscribe blank tarot cards with the various images of the Major Arcana.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10 mana

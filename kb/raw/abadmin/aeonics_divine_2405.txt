@@ -1,0 +1,19 @@
+Ability: Divine (Record #2405)
+Associated skill: Aeonics
+Skillpoints required: 399
+Blurb: The timelines do not lie.
+Syntax: CHRONO DIVINE <target> [BOOST]
+Abfile:
+By following the timeline, you may seek out another adventurer and
+determine their location.
+
+When boosted, this ability will cost no balance or equilibrium.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 40 age

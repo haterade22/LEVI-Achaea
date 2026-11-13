@@ -1,0 +1,25 @@
+Ability: Talon (Record #2809)
+Associated skill: Tattoos
+Skillpoints required: 55999
+Blurb: Bypass protective wards.
+Syntax: TOUCH TALON <target>
+Abfile:
+This tattoo has but one charge and requires a full 20 black inks to
+place upon your skin, but it shall allow you to pull an individual from
+behind the protective wards of a house(*). The process takes some time,
+but the only means by which it may be avoided is for your target to
+leave the dwelling in question(**).
+
+* House in this context refers to player housing, not the house
+organisations.
+** If the target is in a bed during the initiation and termination of
+this process, the talon tattoo will instead move them to outside that
+bed. The talon is not wiped in this case.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

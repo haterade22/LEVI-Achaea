@@ -1,0 +1,23 @@
+Ability: Cheetah (Record #342)
+Associated skill: Metamorphosis
+Skillpoints required: 2599
+Blurb: A creature quick of eye and fleet of foot.
+Syntax: MORPH CHEETAH
+Extra info: Powers: Alertness
+Bite
+Fitness
+Leap
+Nightsight
+Scent
+Sprint
+Abfile:
+The Cheetah is quick of eye and fleet of foot.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 40 mana

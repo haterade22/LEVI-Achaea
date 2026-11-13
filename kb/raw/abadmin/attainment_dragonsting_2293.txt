@@ -1,0 +1,19 @@
+Ability: Dragonsting (Record #2293)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Cause sensitivity with a sting of your tail.
+Syntax: DRAGONSTING <target>
+Extra info: Gives denizen affliction: Sensitivity
+Abfile:
+Swing your mighty tail around and stab your target with an acid-covered spine, causing sensitivity for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 27.00 seconds
+Resource: 25 rage
+Skill specialisation: br_black_dragon

@@ -1,0 +1,33 @@
+Ability: Truename (Record #978)
+Associated skill: Occultism
+Skillpoints required: 46999
+Blurb: Find the truename of your enemy.
+Syntax: TRUENAME CORPSE
+TRUENAMES
+TRUENAMES FORGET <target>
+UTTER TRUENAME <target>
+Abfile:
+Your occult knowledge has grown to such an extent that you can discern
+the truename of an individual, the name that vibrates to that person's
+soul, from his or her corpse. TRUENAMES will tell you whose truenames
+you have and how many times you may utter it. If the truename of a
+person is uttered in front of him or her, that person will be harmed in
+body and mind and be inflicted by the Aeon curse. Once uttered, that
+particular truename will be forgotten.
+
+Truename requires entity balance and you cannot command an entity until
+you recover equilibrium from using it.
+
+Due to the mental strain of remembering an individual's truename, you
+are only able to remember up to three for each person, for a total of
+fifty people.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1% karma

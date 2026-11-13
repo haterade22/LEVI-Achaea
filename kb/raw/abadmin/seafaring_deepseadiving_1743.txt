@@ -1,0 +1,26 @@
+Ability: Deepseadiving (Record #1743)
+Associated skill: Seafaring
+Skillpoints required: 16999
+Blurb: Dive deep for the sea's hidden treasures.
+Syntax: SHIP ENTER BELL - Available to all with deepseadiving.
+SHIP LOWER BELL - The Captain can order the bell lowered into the ocean.
+SHIP RAISE BELL - The Captain can raise the bell back up to the deck.
+Abfile:
+Using a diving bell, dive for treasure in the deep seas. Once the bell
+is lowered fully divers can go DOWN to access the ocean floor and UP
+from the arrival location to enter the bell once more.
+
+Be ware. There are many perils to be encountered at sea, ignorance high
+amongst them. Should a ship move, either by intention or currents, any
+divers on the ocean floor will perish. Should a careless Captain raise
+the diving bell while divers remain on the ocean floor, the unfortunate
+divers will perish.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

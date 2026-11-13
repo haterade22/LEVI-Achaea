@@ -1,0 +1,19 @@
+Ability: Shaping (Record #2522)
+Associated skill: Sculpting
+Skillpoints required: 0
+Blurb: The perfect form of Garash.
+Syntax:
+Abfile:
+When caught in the throes of battle, the chosen of Garash are able to
+sculpt their forms to achieve even greater perfection. Doing so shall
+both enhance your abilities and unlock new ones, though if you slow your
+assault you'll soon find that your form deteriorates back to its normal
+state of mere superiority.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Devil (Record #622)
+Associated skill: Tarot
+Skillpoints required: 50999
+Blurb: Call a Devil to serve you, though no more than once.
+Syntax: FLING DEVIL AT GROUND
+SUPPRESS DEVIL
+Abfile:
+The Devil is a rather unique card. When you fling it at the ground, a Devil will be called up, who will serve you once, and only once. He will possess your body and, the next Tarot card you fling, he will cause you to immediately fling another one of six random tarot cards.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

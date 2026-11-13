@@ -1,0 +1,25 @@
+Ability: Girding (Record #2818)
+Associated skill: Shipfitting
+Skillpoints required: 46999
+Blurb: Disguise your ship from seamonsters.
+Syntax: SHIPFIT GIRD HULL
+Abfile:
+The dragons of the deep are no laughing matter, and their putrid stench
+carries for miles. One knowledgeable enough in the ways of shipfitting
+can use their scales to disguise a ship, such that wandering seamonsters
+will not rise from the deeps to investigate their passing. Doing so will
+require two hundred handfuls of scales.
+
+This is not permanent, and after a time the stench will fade.
+
+Note well: This will not prevent an already-present seamonster from
+attacking your ship, it will only prevent new seamonsters from rising to
+the surface.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

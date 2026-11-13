@@ -1,0 +1,23 @@
+Ability: Duality (Record #523)
+Associated skill: Weaponmastery
+Skillpoints required: 8999
+Blurb: The ability to wield and use two weapons simultaneously.
+Syntax: DSL|DOUBLESLASH <target> [limb] [venom1] [venom2]
+Abfile:
+The scimitar and axe are the weapons of the true warrior, and you are
+skilled enough with this noble weapon to wield two and use two of them
+at once.
+
+You may optionally specify a limb and venoms to use.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_dualcutting
+The ability name DSL is mapped to this ability.
+The ability name DOUBLESLASH is mapped to this ability.

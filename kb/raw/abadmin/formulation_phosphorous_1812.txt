@@ -1,0 +1,20 @@
+Ability: Phosphorous (Record #1812)
+Associated skill: Formulation
+Skillpoints required: 38000
+Blurb: A compound to create a blinding flash.
+Syntax: WIELD PHOSPHOROUS
+THROW PHOSPHOROUS <direction|AT GROUND>
+Extra info: Reagents: 1 arsenic, 2 magnesium
+Abfile:
+When exposed to the open air, this compound will produce a blinding
+flash. The blindness induced is so damaging that not even the mindseye
+tattoo can allow one to see until they have recovered.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Beckon (Record #1021)
+Associated skill: Spirituality
+Skillpoints required: 14999
+Blurb: Draws in people from adjacent locations.
+Syntax: ANGEL BECKON [<target>]
+Extra info: Roomwide cooldown: 4.00 seconds of equilibrium and 35 Angel power
+Target cooldown: 1.50 seconds of equilibrium, 35 Angel power, and 30 mana
+Abfile:
+This ability will cause your angel to draw all those in adjacent locations to your location. If you target a specific adventurer (who must be in an adjacent location), then it will draw only that adventurer in. If the adventurer(s) being drawn in can't move normally, then angel beckon will do nothing.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 35 Angel power and mana

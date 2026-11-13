@@ -1,0 +1,20 @@
+Ability: Bleed (Record #640)
+Associated skill: Puppetry
+Skillpoints required: 18999
+Blurb: Make them bleed.
+Syntax: PUPPET BLEED
+Extra info: Fashions:
+Required: 10
+Used    : 1
+Abfile:
+Cause blood to begin pouring from the pores of your unlucky opponent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 1 fashions

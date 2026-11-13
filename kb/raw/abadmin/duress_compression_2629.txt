@@ -1,0 +1,20 @@
+Ability: Compression (Record #2629)
+Associated skill: Duress
+Skillpoints required: 55999
+Blurb: An example must be made.
+Syntax: AERO COMPRESSION <target>
+Abfile:
+After you have elevated the pressure surrounding a target
+sufficiently(*), you may crush their skull like a grape, ending their
+life in a manner fitting one who has dared cross you.
+
+* The target must have had the pressure surrounding them elevated at
+least six times.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

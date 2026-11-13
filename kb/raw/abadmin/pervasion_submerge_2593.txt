@@ -1,0 +1,16 @@
+Ability: Submerge (Record #2593)
+Associated skill: Pervasion
+Skillpoints required: 37999
+Blurb: Water shall reclaim its due.
+Syntax: SUBMERGE
+Abfile:
+When in a flooded location, you may send your power outwards, flooding
+all adjacent rooms as well.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

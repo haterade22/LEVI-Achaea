@@ -1,0 +1,16 @@
+Ability: Observe (Record #2965)
+Associated skill: Valour
+Skillpoints required: 45999
+Blurb: A bird's-eye view.
+Syntax: EAGLE OBSERVE
+Abfile:
+If your eagle is flying, it will report back to you the health levels of
+everyone who is in the local area and outdoors.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

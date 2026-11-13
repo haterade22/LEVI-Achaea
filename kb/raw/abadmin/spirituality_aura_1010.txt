@@ -1,0 +1,17 @@
+Ability: Aura (Record #1010)
+Associated skill: Spirituality
+Skillpoints required: 1499
+Blurb: Shield yourself with an aura of protection.
+Syntax: ANGEL AURA [<target>]
+Abfile:
+This ability will cause your angel to raise a magical shield (like the tattoo), of whomever you choose. If you do not specify anyone, then it will raise a shield around you.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 10 Angel power and 100 mana

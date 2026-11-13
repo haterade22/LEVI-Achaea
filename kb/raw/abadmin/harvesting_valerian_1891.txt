@@ -1,0 +1,16 @@
+Ability: Valerian (Record #1891)
+Associated skill: Harvesting
+Skillpoints required: 24999
+Blurb: A mountain-dwelling plant with smokeable properties.
+Syntax: HARVEST VALERIAN
+Abfile:
+The mountain-dwelling blue valerian plant can be smoked to cure both slickness and disfigurement.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,25 @@
+Ability: Hyena (Record #348)
+Associated skill: Metamorphosis
+Skillpoints required: 5999
+Blurb: A vicious, stealthy creature with a chilling howl.
+Syntax: MORPH HYENA
+Extra info: Powers: Alertness
+Claw
+Elusiveness
+Fitness
+Howl
+Leap
+Nightsight
+Scent
+Stealth
+Abfile:
+A vicious, stealthy creature with a chilling howl.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 60 mana

@@ -1,0 +1,21 @@
+Ability: Storm (Record #1548)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Fill the air with your deadly breath.
+Syntax: BREATHSTORM
+Abfile:
+Aiming your breath weapon high into the air causing it to rain back down to the ground upon all enemies within the room.
+
+** Requires summoned breath.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Resource: 400 mana
+Skill specialisation: dragonform
+The ability name BREATHSTORM is mapped to this ability.

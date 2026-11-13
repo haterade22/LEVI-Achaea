@@ -1,0 +1,26 @@
+Ability: Instill (Record #975)
+Associated skill: Occultism
+Skillpoints required: 40999
+Blurb: Instill your victim's aura with diseases of the body.
+Syntax: INSTILL <target> WITH <affliction>
+Abfile:
+This ability will allow you to instill your victim's aura with various
+afflictions. You may select from: asthma, clumsiness, healthleech,
+sensitivity, slickness, paralysis, or darkshade.
+
+This process inflicts a minorly taxing influence upon the subject(*),
+though the influence is more significant if you are in possession of a
+truename derived by the power of the Imperator(**).
+
+* Does some small amount of health and mana damage.
+** From the Glaaki ability in domination.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 50 mana

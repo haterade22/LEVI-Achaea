@@ -1,0 +1,21 @@
+Ability: Waterfall (Record #2654)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A terrible deluge indeed.
+Syntax: MANIFEST WATERFALL <target>
+Extra info: Uses denizen afflictions: weakness or aeon.
+Abfile:
+Bring down a deluge of water and ice upon a target, dealing massive
+damage providing they are either hindered by being weak or having the
+aeon affliction.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_water_lord

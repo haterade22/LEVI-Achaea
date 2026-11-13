@@ -1,0 +1,25 @@
+Ability: Illusion (Record #1569)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Confuse the lesserforms with your intellect.
+Syntax: CONJURE ILLUSION [LETHAL] <illusion>
+CONJURE <target> ILLUSION [LETHAL] <illusion>
+Abfile:
+Impose your mighty will onto the Veil to create an illusion of your
+choosing. You may embed a single newline by using the character sequence
+\n in your illusion. For limitations and restrictions, please refer to
+HELP ILLUSIONS.
+
+You may conjure an illusion while off balance, but the equilibrium cost
+will be increased to 3 seconds.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 25 mana
+Skill specialisation: dragonform

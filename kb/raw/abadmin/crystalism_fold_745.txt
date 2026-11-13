@@ -1,0 +1,15 @@
+Ability: Fold (Record #745)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: Fold pearls into a master crystal.
+Syntax: FOLD PEARL INTO <master crystal>
+Abfile:
+The ability to fold pearls into a master crystal allows a magi to refine for the crystals necessary for the crystal arts.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

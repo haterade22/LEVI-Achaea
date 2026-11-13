@@ -1,0 +1,22 @@
+Ability: Vivisect (Record #2846)
+Associated skill: Oppression
+Skillpoints required: 57999
+Blurb: They shall serve as example.
+Syntax: VIVISECT <target>
+Abfile:
+Evil as you are, you find yourself enjoying live experimentation,
+preferably on people you know. Once your victim is splayed out and
+helpless, meaning all four of his or her limbs are withered, you may
+perform your experiments, killing your victim in horrifying agony.
+
+Successful completion of this ability will thwart the ressurective
+capability of the starburst tattoo.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

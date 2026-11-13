@@ -1,0 +1,16 @@
+Ability: Watch (Record #418)
+Associated skill: Groves
+Skillpoints required: 1199
+Blurb: Command your grove to report certain activity within it.
+Syntax: GROVE WATCH/UNWATCH
+Abfile:
+This strange ability will allow you to share a mental kinship with others in your grove. It will cause you to receive much information that would normally be seen only by the individual adventurers in your grove. UNWATCH will stop you watching again.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10 sunlight

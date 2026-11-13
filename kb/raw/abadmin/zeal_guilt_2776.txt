@@ -1,0 +1,21 @@
+Ability: Guilt (Record #2776)
+Associated skill: Zeal
+Skillpoints required: 10999
+Blurb: Remind them of their failings.
+Syntax: RECITE GUILT <target>
+Abfile:
+This verse reminds a foe of their life's failings, forcing them to
+confront them. Attempts to focus their mind shall only serve to worsen
+their situation(*).
+
+* Focus still cures an affliction, but it also gives a new mental
+affliction in the cured one's place.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

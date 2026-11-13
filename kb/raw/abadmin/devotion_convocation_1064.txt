@@ -1,0 +1,20 @@
+Ability: Convocation (Record #1064)
+Associated skill: Devotion
+Skillpoints required: 34999
+Blurb: Call to you someone in a Rite of Convocation.
+Syntax: PERFORM RITE OF CONVOCATION
+PERFORM CONVOCATION <target>
+Extra info: Rite cooldown: 4.00 seconds of equilibrium and 600 devotion.
+Summon cooldown: 6.00 seconds of equilibrium, 600 devotion, 500 mana.
+Abfile:
+This powerful ability will allow you to create a Rite of Convocation. Anyone in a Rite of Convocation set up by you can then be summoned by you by doing PERFORM CONVOCATION <adventurer>, providing that adventurer does not have certain defences set up, such as the mass salve.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium
+Resource: Devotion and mana

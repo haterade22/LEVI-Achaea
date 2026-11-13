@@ -1,0 +1,21 @@
+Ability: Sun (Record #601)
+Associated skill: Tarot
+Skillpoints required: 0
+Blurb: Create a portable light source.
+Syntax: FLING SUN AT GROUND
+Abfile:
+This Tarot will create a small ball of light to illuminate your
+surroundings.
+
+In addition, for as long as the globe of light remains at your location,
+it shall periodically heal you of afflictions.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

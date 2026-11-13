@@ -1,0 +1,26 @@
+Ability: Monolith (Record #1992)
+Associated skill: Conjuration
+Skillpoints required: 36999
+Blurb: The monolith sigil.
+Syntax: BEGIN CREATION OF MONOLITH SIGIL
+Abfile:
+Put it on the ground.
+
+Type:
+   Created item.
+
+Actions:
+   3xchant "me ol nok oloth lilo ib te het", 1
+
+Comms:
+   1 gold, 1 silver
+
+The monolith sigil will prevent most forms of magical instant travel into the room.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

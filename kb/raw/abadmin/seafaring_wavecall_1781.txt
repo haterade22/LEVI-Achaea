@@ -1,0 +1,22 @@
+Ability: Wavecall (Record #1781)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: A seaspell to summon an immense wave for instant movement.
+Syntax: INVOKE WAVECALL <direction> <distance between 1-8>
+This ability will be hidden on ablistings.
+Abfile:
+A seaspell to summon a wave to propel your ship a great distance,
+instantaneously, at a great cost in personal endurance, hull damage, as
+well as figurehead power. All costs increase with greater distance.
+
+Personnel on other ships nearby with SHIPWARNING active will be
+informed of the direction in which a ship wavecalls away.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

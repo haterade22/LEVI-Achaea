@@ -1,0 +1,19 @@
+Ability: Tornado (Record #2611)
+Associated skill: Duress
+Skillpoints required: 6999
+Blurb: An insatiable hunger.
+Syntax: MANIFEST TORNADO
+Abfile:
+You may manifest a tornado in a location, making any that fly in the sky
+have difficulty leaving your location(*).
+
+* This is indiscriminate and shall hit your allies as well as your
+enemies. It will not however capture fellow Elemental Lords of Air.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

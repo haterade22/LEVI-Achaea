@@ -1,0 +1,16 @@
+Ability: Kola (Record #1902)
+Associated skill: Harvesting
+Skillpoints required: 52999
+Blurb: The nut of this jungle tree can keep you quite alert.
+Syntax: HARVEST KOLA
+Abfile:
+The kola tree of the jungle bears nuts which, when eaten, make the user feel quite awake and alert.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

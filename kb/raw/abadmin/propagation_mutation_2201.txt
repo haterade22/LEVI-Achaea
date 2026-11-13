@@ -1,0 +1,16 @@
+Ability: Mutation (Record #2201)
+Associated skill: Propagation
+Skillpoints required: 5999
+Blurb: The first step toward mastery.
+Syntax:
+Abfile:
+You are now able to propagate up to two of the four possible locations
+simultaneously.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

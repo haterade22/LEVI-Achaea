@@ -1,0 +1,16 @@
+Ability: Multiplication (Record #2208)
+Associated skill: Propagation
+Skillpoints required: 32999
+Blurb: Greater control over the viridian.
+Syntax:
+Abfile:
+You have reached a point in your training where you are able to
+propagate three of the four possible locations simultaneously.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Reckoning (Record #3195)
+Associated skill: Sagas
+Skillpoints required: 5999
+Blurb: Arcanum undone.
+Syntax: RECITE RECKONING
+Abfile:
+The Tale of the first Reckoning one is of wizards and warriors, dragons
+and despots, triumph and victory: but at its core it is a tale of magic,
+and its thwarting.
+
+When you complete this grand tale, all icewalls, firewalls, and
+lightwalls in your location will be undone, destroyed in an instant.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium and 20.00 seconds of voice balance

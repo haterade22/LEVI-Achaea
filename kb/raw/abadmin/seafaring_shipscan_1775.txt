@@ -1,0 +1,18 @@
+Ability: Shipscan (Record #1775)
+Associated skill: Seafaring
+Skillpoints required: 10999
+Blurb: View ships within range.
+Syntax: SHIPSCAN BRIEF|NORMAL
+SHIPSCAN <ship>
+Abfile:
+Gain information on ships in your nearby area.
+Note that the targeted version of shipscan requires watch rank 4 and
+also requires the ship be within standard shipscan range.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Sleep (Record #629)
+Associated skill: Puppetry
+Skillpoints required: 699
+Blurb: Put someone to sleep.
+Syntax: PUPPET SLEEP
+Extra info: Fashions:
+Required: 10
+Used    : 1
+Abfile:
+Either put your victim to sleep, or remove a sleep-related defence.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

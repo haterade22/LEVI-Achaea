@@ -1,0 +1,17 @@
+Ability: Continuo (Record #1665)
+Associated skill: Harmonics
+Skillpoints required: 32999
+Blurb: Regenerate physical well-being with this movement.
+Syntax: PLAY CONTINUO
+Abfile:
+Replenishes health for the bard and his allies every few seconds.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 200 mana

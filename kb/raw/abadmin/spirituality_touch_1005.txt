@@ -1,0 +1,16 @@
+Ability: Touch (Record #1005)
+Associated skill: Spirituality
+Skillpoints required: 0
+Blurb: Assess the power of your angel.
+Syntax: ANGEL TOUCH
+Abfile:
+Using this ability, you will be able to assess the current power of your Angel. When she runs out of power, she will be forced to disappear and regain power.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

@@ -1,0 +1,18 @@
+Ability: Tailsmash (Record #2353)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: A casual flick of your mighty tail.
+Syntax: TAILSMASH <target>
+Abfile:
+With a casual blow from your tail, shatter the magical shield that
+surrounds your target.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: dragonform

@@ -1,0 +1,29 @@
+Ability: Props (Record #657)
+Associated skill: Pranks
+Skillpoints required: 299
+Blurb: Wish for the props that every good jester needs.
+Syntax: PROPS
+WISH FOR [2-10] <prop>
+Abfile:
+With this ability, you may throw some gold up into the air and wish for
+balloons, mickeys, itching powder, or blackjacks. You must have the
+relevant ability to wish for the associated prop.
+
+Costs
+-----
+  Balloon   :  20 gold
+  Blackjack : 500 gold
+  Mickey    :  20 gold
+  Itchpowder:  20 gold
+
+You may optionally wish for multiple (up to 10) props at once. When
+doing so, the gold cost and balance use will be multiplied.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

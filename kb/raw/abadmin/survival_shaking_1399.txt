@@ -1,0 +1,16 @@
+Ability: Shaking (Record #1399)
+Associated skill: Survival
+Skillpoints required: 36999
+Blurb: Shaking a tree to see what falls out.
+Syntax: SHAKE TREES
+SHAKE RIGGING
+Abfile:
+By using this ability, you will be able to try and shake people loose who might be hiding up in the trees or rigging.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

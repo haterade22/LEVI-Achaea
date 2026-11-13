@@ -1,0 +1,19 @@
+Ability: Hammer (Record #2222)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Obliterate your target with an overpowering smash.
+Syntax: HAMMER <target>
+Extra info: Uses denizen afflictions: Clumsiness or Amnesia
+Abfile:
+Swing your mace in a mighty blow at your target. This attack will do significantly increased damage to those who are too clumsy to see it coming or forgetful enough to neglect to dodge it.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_priest

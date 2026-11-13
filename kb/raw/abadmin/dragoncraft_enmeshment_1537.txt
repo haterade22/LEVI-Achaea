@@ -1,0 +1,22 @@
+Ability: Enmeshment (Record #1537)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Entangle your foe with ethereal bindings.
+Syntax: ENMESH <target>
+Abfile:
+Will the fabric of the veil to bind your quarry with ethereal tendrils.
+
+The tendrils will erupt after a short delay, preventing your victim from
+parrying your fearsome claws until they escape.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 400 mana
+Skill specialisation: dragonform
+The ability name ENMESH is mapped to this ability.

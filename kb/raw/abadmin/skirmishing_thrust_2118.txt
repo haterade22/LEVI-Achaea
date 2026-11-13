@@ -1,0 +1,16 @@
+Ability: Thrust (Record #2118)
+Associated skill: Skirmishing
+Skillpoints required: 5999
+Blurb: The most basic of skirmishing attacks.
+Syntax: THRUST <target> [limb] [venom]
+Abfile:
+This is a basic thrust with a spear or trident.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

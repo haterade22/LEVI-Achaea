@@ -1,0 +1,24 @@
+Ability: Milk (Record #1593)
+Associated skill: Cooking
+Skillpoints required: 7999
+Blurb: Use milk to prepare new ingredients.
+Syntax: PREPARE <ingredient>
+Abfile:
+Milk is a key component in the creation of other ingredients, which you have the knowledge of making.
+
+Ingredient: Butter
+Recipe: 4 milk
+
+Ingredient: Cheese
+Recipe: 3 milk, 1 salt
+
+Neither recipe requires cooking.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

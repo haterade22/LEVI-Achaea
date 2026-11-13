@@ -1,0 +1,18 @@
+Ability: Wavescythe (Record #1798)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Seaspell to break a ship's shield.
+Syntax: INVOKE WAVESCYTHE <target ship>
+Extra info: Power cost: 200
+This ability will be hidden on ablistings.
+Abfile:
+A seaspell to shatter the magical shield of a ship within a small
+radius.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

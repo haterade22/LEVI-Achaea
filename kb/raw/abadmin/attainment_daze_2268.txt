@@ -1,0 +1,19 @@
+Ability: Daze (Record #2268)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Stun your victim with Shin energy.
+Syntax: SHIN DAZE <target>
+Extra info: Gives denizen affliction: Stun
+Abfile:
+Hurl a precise blast of Shin energy at the eyes of your target, stunning it for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 33.00 seconds
+Resource: 26 rage
+Skill specialisation: br_blademaster

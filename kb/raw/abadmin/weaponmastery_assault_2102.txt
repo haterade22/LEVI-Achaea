@@ -1,0 +1,31 @@
+Ability: Assault (Record #2102)
+Associated skill: Weaponmastery
+Skillpoints required: 44000
+Blurb: Unleash a terrible assault against a helpless opponent.
+Syntax: ASSAULT <target> <HEAD|TORSO>
+Extra info: Requires: 7 momentum
+Uses: 5 momentum
+Abfile:
+This brutal attack can only be performed against a prone opponent. It
+deals significant damage, and has different results based on the limb
+targeted.
+
+Head: raises the damaged state of the limb by a full level if possible.
+Torso: fractures multiple of your target's ribs in one strike(*).
+
+When targeted against the head it consumes 7 momentum; when targeted
+against the torso only 3. This ability also has a longer balance cost
+when used against the head.
+
+* Two ribs if the target has no internal trauma. Three if they have mild
+internal trauma. Four if they have serious internal trauma.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance
+Skill specialisation: knight_dualblunt

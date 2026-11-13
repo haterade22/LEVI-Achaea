@@ -1,0 +1,17 @@
+Ability: Library (Record #2921)
+Associated skill: Charnel
+Skillpoints required: 7999
+Blurb: The repository of your knowledge.
+Syntax: CRYPT RESHAPE LIBRARY
+Abfile:
+This chamber in your crypt is where you may store your ritual tablets.
+See AB CHARNEL TABLETS for the details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

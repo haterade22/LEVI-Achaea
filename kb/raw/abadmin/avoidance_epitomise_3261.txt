@@ -1,0 +1,23 @@
+Ability: Epitomise (Record #3261)
+Associated skill: Avoidance
+Skillpoints required: 60000
+Blurb: A shadow of perfection.
+Syntax: EPITOMISE
+Abfile:
+The master of avoidance may, for but a brief time(*) and only so
+often(**), enter a state of such epitomised martial perfection that they
+shall find themselves able to avoid onslaughts of multiple adventurers
+when surrounded(***).
+
+* Nine seconds duration.
+** Fifty seconds cooldown.
+*** When multiple attackers attempt to assault you, they will find that
+many of their attacks outright miss.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

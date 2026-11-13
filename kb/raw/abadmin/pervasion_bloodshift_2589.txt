@@ -1,0 +1,20 @@
+Ability: Bloodshift (Record #2589)
+Associated skill: Pervasion
+Skillpoints required: 2799
+Blurb: Consistency and composition are so very malleable.
+Syntax: MANIFEST BLOODSHIFT <target> <venom>
+Abfile:
+Alter the composition of a target's very blood(*), transforming it into
+a deadly venom of your choice(**).
+
+* You may not alter the composition of a fellow Elemental Lord of Water.
+** Some venoms are not derivable through this method: notably, if it
+cannot be envenomed upon a blade, it is beyond your reach.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

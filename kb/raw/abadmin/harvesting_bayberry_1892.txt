@@ -1,0 +1,16 @@
+Ability: Bayberry (Record #1892)
+Associated skill: Harvesting
+Skillpoints required: 26999
+Blurb: A hill-dwelling tree with valuable bark.
+Syntax: HARVEST BAYBERRY
+Abfile:
+Growing in places such as the Dakhota and Shamtota hills, the bayberry bush has valuable bark which when eaten will cause blindness.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

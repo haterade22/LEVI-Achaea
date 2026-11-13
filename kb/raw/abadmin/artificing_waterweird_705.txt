@@ -1,0 +1,18 @@
+Ability: Waterweird (Record #705)
+Associated skill: Artificing
+Skillpoints required: 5000
+Blurb: A minor servant of Sllshya.
+Syntax: None
+Abfile:
+This minor servant of Sllshya will allow you to cross over any body of
+water so long as it remains by your side. In addition, you will be
+unmoved by any currents that would seek to sweep you away.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Mana

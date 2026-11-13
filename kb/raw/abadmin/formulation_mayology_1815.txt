@@ -1,0 +1,34 @@
+Ability: Mayology (Record #1815)
+Associated skill: Formulation
+Skillpoints required: 50000
+Blurb: The culmination of the Mayan experiment.
+Syntax: AMALGAMATE DESTRUCTIVE
+IMBIBE DESTRUCTIVE
+Extra info: Reagents: 1 plumbum, 1 aurum, 1 potash, 1 ferrum, 1 argentum, 1 cuprum, 1 realgar
+Abfile:
+This serum is possibly the most potent compound of those discovered by
+modernday alchemists. Able to drive the consumer's body far beyond
+mortal limits, rumour has it that it was an attempt to replicate the
+divine miracle performed by Maya which raised the adventurers of
+Sapience to partial divinity in the battle with the Worldreaver, but
+through the application of science.
+
+Although the experiment inevitably failed, the result was a serum which
+could speed up the alchemist's balance and equilibrium to an incredible
+degree. However, the price is high indeed. Any who consume this compound
+shall find their body will break down under the strain, resulting in
+certain death shortly after. For this reason it is dismissed as a
+failure in many circles, although as a last resort it is without
+compare.
+
+Note: The strain from this serum will cause your homunculus to
+be continuously destroyed for the duration of the effect.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name DESTRUCTIVE is mapped to this ability.

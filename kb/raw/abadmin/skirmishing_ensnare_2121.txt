@@ -1,0 +1,21 @@
+Ability: Ensnare (Record #2121)
+Associated skill: Skirmishing
+Skillpoints required: 18999
+Blurb: Mesmerise them with your flawless skill.
+Syntax: ENSNARE <target>
+Abfile:
+You may ensnare the gaze of a prone opponent with your flawless skill
+with your chosen weapon. This shall cause them to be transfixed if the
+blindness defence is not present; otherwise it shall strip the blindness
+defence.
+
+Note: your target must be prone.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

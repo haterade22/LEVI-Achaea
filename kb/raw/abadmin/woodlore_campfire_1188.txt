@@ -1,0 +1,22 @@
+Ability: Campfire (Record #1188)
+Associated skill: Woodlore
+Skillpoints required: 20999
+Blurb: Build a campfire to soothe the body and soul.
+Syntax: BUILD CAMPFIRE
+STOKE CAMPFIRE
+Abfile:
+ Commodities: 3 wood to build, 1 wood to stoke.
+
+When you build a campfire, those in the room with it will regenerate
+endurance and willpower at a greatly increased rate. When the fire
+starts to burn out, you may stoke it to keep it going.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 8.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Corrosive (Record #1803)
+Associated skill: Formulation
+Skillpoints required: 7999
+Blurb: An acid to eat away at various defences.
+Syntax: WIELD CORROSIVE
+THROW CORROSIVE <AT GROUND|direction>
+Extra info: 2 magnesium, 3 cinnabar
+Abfile:
+This potent acid reacts violently when it comes into contact with
+certain defences, chief among them magical shields.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

@@ -1,0 +1,22 @@
+Ability: Choke (Record #2586)
+Associated skill: Pervasion
+Skillpoints required: 17999
+Blurb: Fill their lungs with water.
+Syntax: MANIFEST CHOKE <target>
+Extra info: Flux effect: If nausea and weariness are present, also gives paralysis.
+Abfile:
+Fill the lungs of your target with water, causing them to be unable to
+breathe(*).
+
+* Gives asthma if they are an adventurer or deals asphyxiation damage if
+they are a denizen. If cast on someone already suffering asthma, they'll
+become so deprived of oxygen that they will begin to hallucinate.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Heartseed (Record #742)
+Associated skill: Propagation
+Skillpoints required: 58999
+Blurb: Send Nature's touch to destroy your enemy from within.
+Syntax: HEARTSEED <target>
+Abfile:
+Among the most dangerous and forbidden of a sylvan's spells, the
+Heartseed embodies Nature at its most baneful. Draining your victim's
+vitality to speed its growth, the germination of a Heartseed will
+rapidly end the life of he or she whom it is sent to plague.
+If your victim manages to avoid their fate and cure the heartseed, their
+body will be wracked by the process, causing them significant damage for
+each injured limb they suffer from.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.50 seconds of equilibrium
+Resource: 750 mana

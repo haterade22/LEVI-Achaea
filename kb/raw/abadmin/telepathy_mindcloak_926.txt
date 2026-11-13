@@ -1,0 +1,16 @@
+Ability: Mindcloak (Record #926)
+Associated skill: Telepathy
+Skillpoints required: 26999
+Blurb: Stealth telepathy.
+Syntax: MIND CLOAK [ON|OFF]
+Abfile:
+This ability will allow you to, at a regular drain of mental power, attempt mind locks that will be harder to detect than normal. It will go undetected by adventurers who are using Telesense, for instance. In addition, this will make it more difficult for a locked mind to recognise and reject your own. Cloaking your mind comes with a heavy mental cost any time you are actively engaged in locking another's mind.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

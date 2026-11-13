@@ -1,0 +1,31 @@
+Ability: Lament (Record #2459)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: And thus, they fell.
+Syntax: UTTER LAMENT
+This ability will be hidden on ablistings.
+Abfile:
+The power to tap the ancestral memories of the Tsol'teth line is one
+usually restricted to those of the true blood, but due to your studies
+you are now able to glance back a single generation.
+
+Speak the lamentation of deSangre, and all those that you see as allies
+shall be granted an enhancement truly terrible in nature. Whenever one
+under the effect of the lamentation slays another(*), they shall become
+stronger, faster, tougher(**).
+
+Due to the taxing nature of tapping the ancestral memories, this ability
+carries a fairly significant cooldown.
+
+* Killing an enemy does not reset the lamentation timer.
+** Each kill grants them +1 to each stat and a balance/equilibrium
+bonus.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of word balance

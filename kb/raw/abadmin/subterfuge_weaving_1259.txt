@@ -1,0 +1,18 @@
+Ability: Weaving (Record #1259)
+Associated skill: Subterfuge
+Skillpoints required: 43999
+Blurb: Weave and dodge like the cobra itself.
+Syntax: WEAVING [ON|OFF]
+RELAX WEAVING
+Abfile:
+At the cost of a heavy mana drain, you may boost your effective avoidance massively. This is cumulative with whatever level you are at in your avoidance skill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Drain: Mana

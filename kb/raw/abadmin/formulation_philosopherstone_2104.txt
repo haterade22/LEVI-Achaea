@@ -1,0 +1,35 @@
+Ability: Philosopherstone (Record #2104)
+Associated skill: Formulation
+Skillpoints required: 60000
+Blurb: The pinnacle of Alchemical learning.
+Syntax: TRANSMUTATE PHILOSOPHER STONE
+Abfile:
+The Philosopher's Stone is the pinnacle of Alchemical learning and
+mastery. The Stone is created in four steps, with each step providing
+increased power and insight to the Alchemist who creates it. The
+nigredo, or blackening comes first. Following this is the albedo, the
+whitening. Then the citrinitas, or yellowing. The final step is the
+rubedo, or reddening.
+
+Most Alchemists will only be able to ever complete the nigredo, and none
+have ever completed the final step of rubedo. What powers it ultimately
+holds is unknown, but many theories have been whispered in the vaunted
+halls of the Cauda Pavonis.
+
+* This ability may only ever be used once. Upon completion, the balance
+cost for amalgamating formulas is removed, allowing for swift mixtures
+to be used immediately as needed.
+
+
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 7.50 seconds of equilibrium
+Resource: 2000 mana

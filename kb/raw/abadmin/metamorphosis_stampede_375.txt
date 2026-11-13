@@ -1,0 +1,17 @@
+Ability: Stampede (Record #375)
+Associated skill: Metamorphosis
+Skillpoints required: 23999
+Blurb: No one gets in the way of your fearsome bulk.
+Syntax: STAMPEDE <target>
+This ability will be hidden on ablistings.
+Abfile:
+From an adjacent location, you may use your elephantine bulk to stampede over someone.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

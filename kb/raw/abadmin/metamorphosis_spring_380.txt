@@ -1,0 +1,18 @@
+Ability: Spring (Record #380)
+Associated skill: Metamorphosis
+Skillpoints required: 29999
+Blurb: Leap out from a burrow to attack.
+Syntax: SPRING <target>
+Extra info: Cooldown upon completion: 2.50 seconds of balance.
+This ability will be hidden on ablistings.
+Abfile:
+From the safety of your burrow (at most one level down), you may spring out, attacking your enemy viciously. This is a delayed ability.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Peace (Record #1359)
+Associated skill: Curses
+Skillpoints required: 26999
+Blurb: Fill your enemy's mind with thoughts of peace.
+Syntax: CURSE <target> PEACE
+Abfile:
+Fill your enemy's mind with thoughts of peace, granting the pacifism
+affliction.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 60 mana

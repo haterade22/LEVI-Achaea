@@ -1,0 +1,20 @@
+Ability: Chariot (Record #607)
+Associated skill: Tarot
+Skillpoints required: 5999
+Blurb: Create an infernal chariot to ride.
+Syntax: FLING CHARIOT AT GROUND
+BOARD CHARIOT
+SPUR CHARIOT SKYWARDS
+LAND
+DISMOUNT
+Abfile:
+The Chariot will create an infernal chariot upon which you may ride. It has the ability to fly also. BOARD CHARIOT will board your chariot. SPUR CHARIOT SKYWARDS will drive it up to the sky. LAND will bring you back down again. While in the Chariot, you may move about using the usual commands. Be warned: flinging cards at the ground while flying is a useless endeavour.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

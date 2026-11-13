@@ -1,0 +1,24 @@
+Ability: Guide (Record #3280)
+Associated skill: Charnel
+Skillpoints required: 49999
+Blurb: You need but show them the way.
+Syntax: ACCURSED GUIDE <target>
+Abfile:
+Sometimes there are those of ambition that simply need a guiding hand,
+to be shown a path to transcendence beneath the eternal sands. While
+standing in your ritual chamber, you may send forth a portal to such an
+individual, though it is taxing like all worthy endeavours, and requires
+all of your focus.
+
+* This creates a portal to someone on the same continent as you, and is
+a channel. The portal is two-way, beware!
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: INVALID
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 300 willpower and 400 mana

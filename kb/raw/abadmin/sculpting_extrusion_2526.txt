@@ -1,0 +1,22 @@
+Ability: Extrusion (Record #2526)
+Associated skill: Sculpting
+Skillpoints required: 4999
+Blurb: From the threshold of defeat.
+Syntax: TERRAN EXTRUSION
+Abfile:
+While this ability is active, if your health falls to critical
+conditions the magma that makes up your superior form shall attempt to
+reinforce injured areas, significantly restoring your health. Note that
+once this happens the ability will be deactivated and it will be some
+time before you are able to reactivate it.
+
+Additionally, you must be at full health to activate this ability
+initially.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

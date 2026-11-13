@@ -1,0 +1,3 @@
+Ability: Pony (Record #1501)
+Associated skill: Riding
+Maps to record 1500 (PONIES).

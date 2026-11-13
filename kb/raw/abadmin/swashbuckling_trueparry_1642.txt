@@ -1,0 +1,16 @@
+Ability: Trueparry (Record #1642)
+Associated skill: Swashbuckling
+Skillpoints required: 55999
+Blurb: Such is your mastery that you may parry a larger area.
+Syntax: PARRY left leg|left arm|right leg|right arm|head|torso
+TRUEPARRY centre|left|right|none
+Abfile:
+The trueparry ability, combined with the weaponry parry ability, allows you to actively defend attacks against two parts of your body. 'centre' parries attacks to both the head and torso. If you do not have the weaponry parry ability, then trueparry allows parrying, but not trueparrying.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

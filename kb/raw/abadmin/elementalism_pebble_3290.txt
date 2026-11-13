@@ -1,0 +1,22 @@
+Ability: Pebble (Record #3290)
+Associated skill: Elementalism
+Skillpoints required: 30000
+Blurb: Hurl a pebble to break one of your foe's limbs.
+Syntax: CAST PEBBLE AT <target>
+Abfile:
+Compress a handful of earth into a single dense pebble and hurl it at a
+target. Should the pebble strike true, it will shatter one of your
+target's healthy limbs, as well as causing damage. If every limb has
+already been broken, the pebble will still wound your target, and your
+resonance will not grow.
+
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium
+Resource: 90 mana

@@ -1,0 +1,19 @@
+Ability: Trill (Record #2258)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Your opponent's psyche is no match for your voice.
+Syntax: PLAY TRILL AT <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+A high-pitched chant that will make your target forgetful for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_bard

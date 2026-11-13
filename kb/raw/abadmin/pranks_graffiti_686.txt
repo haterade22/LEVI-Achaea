@@ -1,0 +1,19 @@
+Ability: Graffiti (Record #686)
+Associated skill: Pranks
+Skillpoints required: 30999
+Blurb: Scrawl messages on walls.
+Syntax: SCRAWL <colour> <text>
+SCRUB WALLS
+IDENTIFY GRAFFITI
+Extra info: Write cooldown: 6.00 seconds of equilibrium, 500 mana
+Identify cooldown: 3.00 seconds of balance
+Abfile:
+While in any outdoor urban location, you can scrawl coloured graffiti on the wall. It will last until someone uses a bucket of water to scrub it off, with SCRUB WALLS.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Jadeicon (Record #3205)
+Associated skill: Sagas
+Skillpoints required: 11999
+Blurb: When dream turns to nightmare.
+Syntax: RECITE JADEICON
+Abfile:
+The power of dreams is one so frequently underestimated, and perhaps no
+tale tells this so clearly as that of the jade icon. For a time after
+this retelling, any attempt to put someone to sleep in the location will
+still succeed, but the one who would seek to impose said slumber shall
+suffer in their turn(*).
+
+* Afflicts anyone who gives the sleep affliction to another with a
+mental affliction.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.30 seconds of equilibrium

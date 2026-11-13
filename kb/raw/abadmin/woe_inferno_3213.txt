@@ -1,0 +1,20 @@
+Ability: Inferno (Record #3213)
+Associated skill: Woe
+Skillpoints required: 999
+Blurb: Of an origin most malign.
+Syntax: RECITE INFERNO
+Abfile:
+It began, as it so often does, with fire. Speak the tale of the
+birthplace of Woe and the landscape shall become most hellish in its
+turn(*).
+
+* Firewalls will be raised over all available exits of your location.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.00 seconds of equilibrium

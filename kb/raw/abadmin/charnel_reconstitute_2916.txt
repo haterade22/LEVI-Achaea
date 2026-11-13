@@ -1,0 +1,21 @@
+Ability: Reconstitute (Record #2916)
+Associated skill: Charnel
+Skillpoints required: 28999
+Blurb: Your bonds are of your own devising.
+Syntax: ACCURSED RECONSTITUTE
+Abfile:
+The form of the Accursed ever strives to return to its state of
+vitiation. Yet moments of freedom can yet be yours. By breaking yourself
+down into the sand of the desert, for a scant few moments you will be
+free of your curse, though such is ever short-lived.
+
+* You can slip out of entanglements every 10 seconds immediately.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Resource: 500 mana

@@ -1,0 +1,19 @@
+Ability: Javelin (Record #1865)
+Associated skill: Weaponsmithing
+Skillpoints required: 28999
+Blurb: Nothing hurts quite as much as being hit by a javelin.
+Syntax: FORGE FOR JAVELIN
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Obsidian
+3 Wood
+Abfile:
+Nothing hurts quite as much as being hit by a javelin.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

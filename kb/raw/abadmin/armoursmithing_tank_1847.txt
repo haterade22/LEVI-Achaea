@@ -1,0 +1,18 @@
+Ability: Tank (Record #1847)
+Associated skill: Armoursmithing
+Skillpoints required: 55999
+Blurb: The deadly weapons of war.
+Syntax: FORGE FOR TANK
+FORGE (to continue after interruption)
+Extra info: Commodities: 25 Steel
+Abfile:
+The deadly weapons of war.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

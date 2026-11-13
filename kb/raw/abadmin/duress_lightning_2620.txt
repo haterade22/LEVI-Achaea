@@ -1,0 +1,29 @@
+Ability: Lightning (Record #2620)
+Associated skill: Duress
+Skillpoints required: 29999
+Blurb: Become the storm.
+Syntax: MANIFEST LIGHTNING <target>
+Abfile:
+Become living lightning itself, allowing you to cross vast distances in
+an instant.
+
+If you are on the ground and enact this ability against someone flying
+above you in the skies, you shall instantly move to the flying elevation
+at no balance cost.
+
+If you enact this ability against someone on the same continent who is
+also outdoors while you are flying, you shall immediately transverse to
+their location (though be warned, you will transverse to the ground
+rather than the sky). This manifestation of lightning does incur a short
+balance cost.
+
+Note that both forms of becoming lightning carry a short delay before
+you may do so again.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

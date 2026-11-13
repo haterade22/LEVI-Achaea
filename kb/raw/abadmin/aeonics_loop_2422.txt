@@ -1,0 +1,34 @@
+Ability: Loop (Record #2422)
+Associated skill: Aeonics
+Skillpoints required: 40999
+Blurb: Over, and over, and over again.
+Syntax: CHRONO LOOP [BOOST]
+CHRONO ASSERT
+Abfile:
+This Aeonics spell is cast upon a scythe manifested via Shadowmancy.
+While imbued into the blade of a scythe, the next attack with that
+scythe shall lock your foe into a timeloop, which, until cured, shall
+result in all Shadowmancy-based instills delivering two afflictions
+instead of one.
+
+NOTE: While the loop is active, venoms on your scythe will lay dormant
+and not deliver their effects.
+
+When boosted, the loop effect shall benefit the attack it is delivered
+upon with this effect as well as subsequent ones.
+
+Note that this spell is unique in that, due to its instability, you must
+have regressed to below a quarter of your maximum possible age in order
+to invoke it.
+
+If you wish to purge the effect from your weapon, you may simply CHRONO
+ASSERT.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 350 age

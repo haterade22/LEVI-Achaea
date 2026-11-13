@@ -1,0 +1,19 @@
+Ability: Path (Record #2485)
+Associated skill: Shikudo
+Skillpoints required: 0
+Blurb: Switch to a new school of study.
+Syntax: SCHOOL SWITCH TEKURA
+Abfile:
+If you wish to return to your previous studies of Tekura, you may do so.
+Your progress in the arts of Shikudo shall be remembered and you may
+return to the Shikudo school later if so desired.
+
+Switching costs 100 lessons and may only be done once every 24 hours.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

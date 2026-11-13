@@ -1,0 +1,17 @@
+Ability: Clearing (Record #1402)
+Associated skill: Survival
+Skillpoints required: 45555
+Blurb: Clear away rubble.
+Syntax: CLEAR RUBBLE
+Abfile:
+With this ability, you will be able to clear away piles of rubble that
+may block your path.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance

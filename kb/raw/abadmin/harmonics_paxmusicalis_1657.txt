@@ -1,0 +1,17 @@
+Ability: Paxmusicalis (Record #1657)
+Associated skill: Harmonics
+Skillpoints required: 15999
+Blurb: Declare an intermittent musical peace.
+Syntax: PLAY PAXMUSICALIS
+Abfile:
+This harmonic acts to prevent all aggressive acts, but only on an irregular basis, in the place where it has been played.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 200 mana

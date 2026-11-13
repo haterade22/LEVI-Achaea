@@ -1,0 +1,18 @@
+Ability: Mastery (Record #2461)
+Associated skill: Terminus
+Skillpoints required: 35999
+Blurb: Master your chosen field.
+Syntax:
+Abfile:
+You are now able to complete your study of a research tree, learning it
+all the way to completion.
+
+Note that you may only master one research tree at this time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

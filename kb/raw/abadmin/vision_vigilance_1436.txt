@@ -1,0 +1,17 @@
+Ability: Vigilance (Record #1436)
+Associated skill: Vision
+Skillpoints required: 3999
+Blurb: Increase your awareness to danger.
+Syntax: VIGILANCE [ON|OFF]
+RELAX VIGILANCE
+Abfile:
+At the cost of a regular mana drain, this will increase your chances of noticing an insidious attempt to hypnotise you. Should you be the victim of a successful pickpocket attempt, you are more likely to catch the perpetrator red-handed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

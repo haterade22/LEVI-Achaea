@@ -1,0 +1,17 @@
+Ability: Vortex (Record #1261)
+Associated skill: Subterfuge
+Skillpoints required: 48999
+Blurb: Suck an unwilling target into a wormhole.
+Syntax: WORM VORTEX <target>
+Abfile:
+Suck an adventurer, willing or not, through a wormhole.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 500 mana

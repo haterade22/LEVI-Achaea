@@ -1,0 +1,19 @@
+Ability: Creator (Record #615)
+Associated skill: Tarot
+Skillpoints required: 29999
+Blurb: Create an illusion in an adjacent room.
+Syntax: FLING CREATOR <direction> [LETHAL] <illusion text>
+Abfile:
+This Tarot card will allow you to create an illusion of your choosing in
+an adjacent location. You may embed a single newline by including the
+characters \n at the appropriate spot. For limitations and restrictions,
+please refer to HELP ILLUSIONS.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

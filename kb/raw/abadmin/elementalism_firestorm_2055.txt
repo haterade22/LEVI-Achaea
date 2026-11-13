@@ -1,0 +1,22 @@
+Ability: Firestorm (Record #2055)
+Associated skill: Elementalism
+Skillpoints required: 39999
+Blurb: The very world shall burn at your command.
+Syntax: CAST FIRESTORM
+Abfile:
+This formidable higher order fire spell will call a rampant firestorm
+into being. This will spread to all adjacent rooms and will periodically
+sear the flesh of any who stand within said locations.
+
+Be warned. Fire is truly an indiscriminate force. You shall not be
+spared from a firestorm, even if you were the one to call it forth.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

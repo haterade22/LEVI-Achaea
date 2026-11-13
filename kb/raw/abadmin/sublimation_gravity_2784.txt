@@ -1,0 +1,25 @@
+Ability: Gravity (Record #2784)
+Associated skill: Sublimation
+Skillpoints required: 3999
+Blurb: The fundamental force.
+Syntax: MANIPULATE GRAVITY <target> [overdraw target]
+This ability will be hidden on ablistings.
+Abfile:
+Manipulate the fundamental force of gravity, increasing it upon an enemy
+and sending them prone.
+
+Overdraw effect: on cast this will also throw a random person in the
+room into the sky if possible (neither you or the original target). You
+may alternatively specify a target (MANIPULATE GRAVITY PLAYER1 PLAYER2
+OVERDRAW) and the second player specified will be hit with the overdraw
+effect if they are a viable candidate.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 2.50% Wellspring Energy

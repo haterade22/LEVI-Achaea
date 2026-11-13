@@ -1,0 +1,27 @@
+Ability: Burst (Record #2938)
+Associated skill: Kaido
+Skillpoints required: 50999
+Blurb: When the external will not supply.
+Syntax: KAI BURST
+Abfile:
+Sometimes there will be no simple way to take in kai energy the
+conventional way. Though the highest workings of kaido may be out of
+your reach in these situations, by sending a burst of uncontrolled kai
+energy outward you may somewhat mitigate this limitation(*). This is
+taxing however, and may only be done every so often, as well as
+stripping any active kai boost defence you may have established(**).
+
+* This fills your kai to a little under half.
+** Once every 90 seconds, and you cannot reraise your boost defence
+until this time has expired.
+*** Note if you're above a certain kai threshold you can't use this
+ability (i.e. when it would be pointless to do so).
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

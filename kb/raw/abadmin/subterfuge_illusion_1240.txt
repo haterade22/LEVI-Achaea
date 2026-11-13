@@ -1,0 +1,25 @@
+Ability: Illusion (Record #1240)
+Associated skill: Subterfuge
+Skillpoints required: 23999
+Blurb: Create an illusion of your choosing.
+Syntax: CONJURE [target] ILLUSION <illusion>
+CONJURE [target] ILLUSION LETHAL <illusion>
+Abfile:
+Create an illusion of your choosing in the room you are in, optionally
+targeted at a specific person. You may conjure an illusion without
+balance, but this will increase the equilibrium cost to 3.1 seconds. It
+is also possible to bite someone immediately after conjuring your
+illusion, before you have recovered equilibrium. You may embed a single
+newline in your illusion by including the character sequence \n at the
+appropriate spot. For limitations and restrictions on illusions, please
+refer to HELP ILLUSIONS.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 25 mana

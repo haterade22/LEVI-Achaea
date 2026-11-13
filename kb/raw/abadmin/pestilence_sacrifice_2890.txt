@@ -1,0 +1,28 @@
+Ability: Sacrifice (Record #2890)
+Associated skill: Pestilence
+Skillpoints required: 40999
+Blurb: The price of power.
+Syntax: SWARM SACRIFICE <swarm>
+Abfile:
+When need is high, you may sacrifice one of your swarms by flooding it
+with your arcane power creating a pulsating burst of damage. It is a
+costly use of your minions, though doing so will cause all in your
+location (except yourself) to be struck down with the arcane plague that
+said swarm was carrying. They shall also suffer damage from the excess
+energy released.
+
+This will tick up to three extra times - once for every 500 insects over
+1000 consumed in the swarm. Each extra tick does less damage and no
+plague.
+
+* This will destroy the swarm utilised on use, including all insects
+contained therein.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Illusion (Record #727)
+Associated skill: Elementalism
+Skillpoints required: 36999
+Blurb: Cast an illusion of your choosing.
+Syntax: CAST ILLUSION [LETHAL] <illusion>
+CAST <target> ILLUSION [LETHAL] <illusion>
+Abfile:
+With this spell, you can create an illusion of your choosing in the room
+about you. You may embed a single newline by using the character
+sequence \n in your illusion.
+
+For limitations and restrictions, please read HELP ILLUSIONS in full.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana

@@ -1,0 +1,39 @@
+Ability: Lock (Record #904)
+Associated skill: Telepathy
+Skillpoints required: 299
+Blurb: Focus your telepathic power to lock minds with someone.
+Syntax: MIND LOCK <target>
+MIND CEASE <target>
+MIND UNLOCK <target>
+MIND STATUS
+Abfile:
+This is the ability that most of the Telepathic arts are focused around.
+It is the skill of breaking down the barriers of resistance in another
+person and locking your mind to theirs. The adventurer must be in the
+same area as you, for even your powerful mind has its limits.
+
+The time it takes to gain a mind lock can vary depending on your target.
+Your skill in Telepathy vs. their skill in Philosophy and your willpower
+vs. their willpower are the prime factors in how long it will take to
+attain the lock.
+
+A mind lock attempt can be stopped prematurely via MIND CEASE.
+
+Once you have initiated a lock, approximately every 10 seconds, the
+locked mind automatically gets a chance to break the lock. The chance of
+breaking the lock is determined by a comparison of your current
+willpower vs. the target's current willpower, and your Telepathy level
+vs. the target's Philosophy level, and various mental defences for both
+individuals.
+
+MIND STATUS will show you whom your mind is locked with, as well as any
+continuous abilities that are being channelled through the lock.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 80 mana

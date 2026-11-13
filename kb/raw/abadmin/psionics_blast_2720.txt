@@ -1,0 +1,27 @@
+Ability: Blast (Record #2720)
+Associated skill: Psionics
+Skillpoints required: 37999
+Blurb: Sometimes a hammer can replace the scalpel.
+Syntax: PSI BLAST <target>
+Abfile:
+Sometimes you require a more overt display of force. Though your gifts
+do not lend themselves overly to offensive acts, an unfocussed blast of
+psychic power is more than within your grasp. Providing a target's mind
+is sufficiently weakened(*), you may direct this blast to ravage their
+mind, leaving their mental defences in ruins. This will permit you to
+not only strike at their flesh with your woven weapons, but also at
+their mind(**).
+
+* They must have at least three of: impatience, stupidity, blackout,
+dizziness, epilepsy, and unwoven mind.
+** Your weaving attacks shall drain mana when striking a target with a
+ravaged mind.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

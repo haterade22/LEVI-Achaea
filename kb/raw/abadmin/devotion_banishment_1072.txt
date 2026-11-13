@@ -1,0 +1,17 @@
+Ability: Banishment (Record #1072)
+Associated skill: Devotion
+Skillpoints required: 46999
+Blurb: Send the unholy Chaos entities back to their hell.
+Syntax: PERFORM RITE OF BANISHMENT
+Abfile:
+This rite will occasionally attempt to destroy a chaos entity, provided that a minion of chaos, sent by the Chaos Prince, Dameron, is not in the room. Also, it is rumoured that those occultists to have formed a pact with the greatest of the Chaos Lords may be capable of defeating this potent rite.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 450 devotion

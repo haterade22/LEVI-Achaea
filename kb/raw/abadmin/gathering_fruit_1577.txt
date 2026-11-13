@@ -1,0 +1,16 @@
+Ability: Fruit (Record #1577)
+Associated skill: Gathering
+Skillpoints required: 699
+Blurb: Delicious and juicy edibles.
+Syntax: GATHER FRUIT
+Abfile:
+Every time you successfully gather fruits from a jungle or garden environment, you also have a chance to gather some seeds which can be used in cooking.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

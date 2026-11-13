@@ -1,0 +1,26 @@
+Ability: Hew (Record #2069)
+Associated skill: Weaponmastery
+Skillpoints required: 25000
+Blurb: Deliver precision strikes against your opponent's limbs.
+Syntax: HEW <target> <LEFT|RIGHT ARM|LEG>
+Extra info: Weapon: bastard sword
+Abfile:
+This ability can target either the arms or legs of your opponent. When
+striking the arms they will suffer from wrist fractures, and when
+hitting the legs you will deliver torn tendons.
+
+Wrist fractures will periodically afflict with lethargy. Torn tendons
+periodically gives clumsiness, and also makes it more difficult to leave
+the room.
+
+Afflictions relapse faster based on how many fractures are present.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

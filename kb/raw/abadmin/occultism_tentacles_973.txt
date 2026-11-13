@@ -1,0 +1,17 @@
+Ability: Tentacles (Record #973)
+Associated skill: Occultism
+Skillpoints required: 35999
+Blurb: Master your body and create tentacles of your own.
+Syntax: TENTACLES
+Abfile:
+You can warp your body so that it sprouts tentacles, which seek out your enemies of their own accord, holding them in your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1% karma

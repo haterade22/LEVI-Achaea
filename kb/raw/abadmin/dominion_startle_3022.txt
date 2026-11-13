@@ -1,0 +1,16 @@
+Ability: Startle (Record #3022)
+Associated skill: Dominion
+Skillpoints required: 31999
+Blurb: They won't see this coming.
+Syntax: HOUND STARTLE <target>
+Abfile:
+This ability will allow your hound to startle an opponent's steed,
+tossing the hapless fool off.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

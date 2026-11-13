@@ -1,0 +1,19 @@
+Ability: Shine (Record #1008)
+Associated skill: Spirituality
+Skillpoints required: 299
+Blurb: Cause your guardian angel to radiate light.
+Syntax: ANGEL SHINE [<target>]
+Extra info: Roomwide cooldown: 2.00 seconds of equilibrium
+Target cooldown: 1.50 seconds of equilibrium and 100 mana
+Abfile:
+Upon doing this, your Angel will begin radiating light, the better to avoid fumbling about in the darkness. If you direct this ability at an adventurer, it will blind that adventurer.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 5 Angel power and mana

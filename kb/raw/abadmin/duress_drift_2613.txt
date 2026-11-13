@@ -1,0 +1,15 @@
+Ability: Drift (Record #2613)
+Associated skill: Duress
+Skillpoints required: 10999
+Blurb: As light as a feather.
+Syntax: AERO DRIFT
+Abfile:
+Drift on the wind, carrying yourself up into the sky.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Needle (Record #2508)
+Associated skill: Shikudo
+Skillpoints required: 40999
+Blurb: Rob them of breath.
+Syntax: NEEDLE
+Abfile:
+A precision strike against the throat, you may crush someone's windpipe
+with a single thrust of your weapon.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

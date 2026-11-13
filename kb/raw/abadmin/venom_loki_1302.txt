@@ -1,0 +1,29 @@
+Ability: Loki (Record #1302)
+Associated skill: Venom
+Skillpoints required: 42999
+Blurb: An unpredictable toxin.
+Syntax: SECRETE LOKI
+BITE <target>
+Abfile:
+While the unpredictable loki toxin is well documented to deliver a
+random venom when introduced to the victim's bloodstream, that's not the
+entire story.
+
+When injected through the fangs of one of the descendents of its
+namesake, the Loki venom first lies insidious within the bloodstream,
+apparently not doing anything at all: and yet having a severe effect in
+truth(*). Repeated bites of the loki venom will continue to deliver the
+well known effect.
+
+* Significant negative poison resist, and hypnotic impulses relapse a
+short time after first being introduced.
+
+* This venom can be used to envenom arrows, but not other weapons.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

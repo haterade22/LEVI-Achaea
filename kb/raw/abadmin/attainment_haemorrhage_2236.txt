@@ -1,0 +1,21 @@
+Ability: Haemorrhage (Record #2236)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: A more powerful version of the bleed curse.
+Syntax: CURSE <target> HAEMORRHAGE
+Abfile:
+Expend your rage to inflict a more powerful bleed curse on your target,
+causing it to take heavy damage for a short time as the blood literally
+bursts from its body.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_shaman

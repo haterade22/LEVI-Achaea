@@ -1,0 +1,18 @@
+Ability: Chorale (Record #1668)
+Associated skill: Harmonics
+Skillpoints required: 39999
+Blurb: A group harmonic that gives experience to the listeners.
+Syntax: PLAY CHORALE
+PLAY CHORALE CRESCENDO
+Abfile:
+From four to eight bards must combine in the Chorale. One plays, then each join in (same command in each case) and then when one decides that the time is right, performs the crescendo with PLAY CHORALE CRESCENDO. The crescendo grants experience to everyone hearing. The amount of experience varies with the number of bards in the Chorale. One person may only receive the benefits of hearing a Chorale once per Achaean month.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 400 mana

@@ -1,0 +1,19 @@
+Ability: Icebreath (Record #391)
+Associated skill: Metamorphosis
+Skillpoints required: 46999
+Blurb: Breathe frigidly cold air.
+Syntax: FREEZE <target>/GROUND
+Extra info: GROUND cooldown: 3.00 seconds of equilibrium
+<target> cooldown: 2.00 seconds of equilibrium
+This ability will be hidden on ablistings.
+Abfile:
+With this ability, you may freeze another adventurer, or the ground beneath you. The first time you freeze an adventurer, he will begin shivering violently, causing him to occassionally lose his equilibrium. The second time you do it, he will become stiff with the cold. If you freeze the ground, a coat of ice will form which will hinder those moving in and out.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium

@@ -1,0 +1,19 @@
+Ability: Mace (Record #1006)
+Associated skill: Spirituality
+Skillpoints required: 299
+Blurb: Summon a spiritual mace to aid you.
+Syntax: SUMMON MACE
+CALL MACE
+SMITE <target> <limb> [CHASTEN <BODY|MIND|affliction>]
+Abfile:
+Using your inherent link to the spirit world, you may summon a spiritual mace, with which to smite down your enemies. Note that your spiritual mace can be used with the targeting abilities in weaponry.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.90 seconds of balance
+The ability name SMITE is mapped to this ability.

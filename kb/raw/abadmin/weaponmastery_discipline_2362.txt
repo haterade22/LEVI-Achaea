@@ -1,0 +1,19 @@
+Ability: Discipline (Record #2362)
+Associated skill: Weaponmastery
+Skillpoints required: 30999
+Blurb: Your form is flawless.
+Syntax: DISCIPLINE
+Abfile:
+The true knight does not suffer any potential flaws in form or
+technique. You may now drive the hated imperfection of clumsiness from
+your being, though doing so is taxing and carries a long delay before
+you may do so again.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualblunt

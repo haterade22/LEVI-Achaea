@@ -1,0 +1,31 @@
+Ability: Adchachel (Record #2673)
+Associated skill: Spiritlore
+Skillpoints required: 60000
+Blurb: Demiurge Adchachel, The Rose of Pain.
+Syntax: INVOKE BLASPHEMY
+Extra info: Attune bonus: halves the willpower drain while spiritwalking.
+Abfile:
+Demiurge Adchachel was one of the key leaders in the battle of the deeps
+during the Black Wave. Having consumed the heart of Agith'maal, the
+Tsol'teth's insidious remnant twisted and consumed him, changing the
+charismatic Black Lotus of Mystery into something not remotely
+resembling that which came before. Going on to sire many children, the
+Rose Of Pain can trace his line all the way to the hand that destroyed
+great Seleucar, his black influence stretching down the centuries long
+after he was immolated in the purging flames that ended his reign of
+terror.
+
+By channeling this fell spirit, you may corrupt even the most sacred of
+locations, destroying a random holy rite that protects a room. If the
+presence of a practitioner of the holy art Devotion stands in said
+location, their pure influence shall cause this process to take some
+time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name OUTCAST is mapped to this ability.

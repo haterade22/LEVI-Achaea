@@ -1,0 +1,16 @@
+Ability: Sidekick (Record #846)
+Associated skill: Tekura
+Skillpoints required: 2499
+Blurb: A powerful thrusting kick.
+Syntax: SDK <target>
+Abfile:
+This kick drives your leg straight into an opponent's torso.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

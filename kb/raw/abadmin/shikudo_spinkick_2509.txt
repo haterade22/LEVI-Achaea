@@ -1,0 +1,21 @@
+Ability: Spinkick (Record #2509)
+Associated skill: Shikudo
+Skillpoints required: 44999
+Blurb: A crushing kick backed up by momentum.
+Syntax: SPINKICK
+Abfile:
+This powerful kick will strike a target's torso if they're on their feet
+or their head if they are sprawled upon the ground(*). In the event you
+strike your foes head, they will take significantly more damage.
+
+* If they are prone with a damaged head, this kick will immediately
+mangle the target's head.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

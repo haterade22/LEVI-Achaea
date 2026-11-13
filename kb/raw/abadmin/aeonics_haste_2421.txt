@@ -1,0 +1,18 @@
+Ability: Haste (Record #2421)
+Associated skill: Aeonics
+Skillpoints required: 37999
+Blurb: Be slow and dead.
+Syntax: CHRONO HASTE <target|BOOST>
+Abfile:
+Direct your command of time to increase the rate of balance recovery of
+another. If you boost this ability, you may boost all those that stand
+with you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 470 age

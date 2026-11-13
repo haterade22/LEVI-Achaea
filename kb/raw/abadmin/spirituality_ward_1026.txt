@@ -1,0 +1,17 @@
+Ability: Ward (Record #1026)
+Associated skill: Spirituality
+Skillpoints required: 23999
+Blurb: Cause fear in most chaos entities.
+Syntax: ANGEL WARD
+Abfile:
+Ward will cause all Chaos Entities in the room to have to fight to maintain their composure. If they fail, they will flee in fear.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of equilibrium
+Resource: 15 Angel power

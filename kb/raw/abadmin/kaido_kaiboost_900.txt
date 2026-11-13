@@ -1,0 +1,16 @@
+Ability: Kaiboost (Record #900)
+Associated skill: Kaido
+Skillpoints required: 52999
+Blurb: Increase your receptiveness to Kai energy.
+Syntax: KAI BOOST
+Abfile:
+As you become more efficient in the art of handling Kai, you gain the ability to double the amount of Kai energy you get.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 11 Kai energy

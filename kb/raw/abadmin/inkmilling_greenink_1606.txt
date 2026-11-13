@@ -1,0 +1,17 @@
+Ability: Greenink (Record #1606)
+Associated skill: InkMilling
+Skillpoints required: 18999
+Blurb: Create a green ink.
+Syntax: MILL FOR GREEN
+Extra info: Reagents: 2 x blue, 1 x yellow, 2 x uncommon, 1 x scarce
+Abfile:
+AB INKMILLING REAGENTS lists the different types of reagents.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

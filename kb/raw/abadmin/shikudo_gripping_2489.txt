@@ -1,0 +1,17 @@
+Ability: Gripping (Record #2489)
+Associated skill: Shikudo
+Skillpoints required: 1299
+Blurb: Hold fast to your staff against all odds.
+Syntax: GRIP
+RELAX GRIP
+Abfile:
+By gripping tightly with your hands, prevent your staff from being
+knocked out of your hands.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

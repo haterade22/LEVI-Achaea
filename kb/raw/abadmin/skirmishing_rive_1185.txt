@@ -1,0 +1,16 @@
+Ability: Rive (Record #1185)
+Associated skill: Skirmishing
+Skillpoints required: 4999
+Blurb: Shatter an opponent's shield.
+Syntax: RIVE <target>
+Abfile:
+With expert precision, you may shatter an opponent's shield with a well-aimed thrust of a spear or trident.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.25 seconds of balance

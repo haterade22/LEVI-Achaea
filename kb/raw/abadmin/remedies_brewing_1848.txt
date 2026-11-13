@@ -1,0 +1,16 @@
+Ability: Brewing (Record #1848)
+Associated skill: Remedies
+Skillpoints required: 0
+Blurb: Combine herbs and other ingredients into curative elixirs and salves.
+Syntax: BREW <# batches> <remedy> IN <pot>
+Abfile:
+With a pot and the proper ingredients in your rift or inventory, you may
+brew curative elixirs and salves.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

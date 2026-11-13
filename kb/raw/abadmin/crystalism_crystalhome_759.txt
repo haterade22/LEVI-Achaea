@@ -1,0 +1,23 @@
+Ability: Crystalhome (Record #759)
+Associated skill: Crystalism
+Skillpoints required: 12999
+Blurb: Transport yourself back to the Master Crystal.
+Syntax: CRYSTALHOME
+Extra info: A 4.00 second delay
+Abfile:
+This ability will allow you to return automatically to your Master
+Crystal, with a short delay.
+Note:
+   - You must belong to a House with a Master Crystal and be at
+     least of House Rank 3
+   - Targossas and Eleusis may access their Master Crystal at
+     City Rank 2
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

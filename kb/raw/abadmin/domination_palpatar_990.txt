@@ -1,0 +1,27 @@
+Ability: Palpatar (Record #990)
+Associated skill: Domination
+Skillpoints required: 7999
+Blurb: Palpatar, the Glutton of Glaaki.
+Syntax: COMMAND WORM AT <target>
+Abfile:
+When you call upon the Glutton of Glaaki he shall send one of his vile
+worms to aid you. When commanded at a victim it shall infest them with
+the Glutton's maggots, which shall periodically leech away their
+health(*), though they wither and die given some time.
+
+When primebonded, the worm shall burrow into your target's belly, making
+them violently ill periodically(**).
+
+* Gives healthleech on a tick.
+** Gives nausea.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of entity balance
+Resource: 50 mana
+The ability name WORM is mapped to this ability.

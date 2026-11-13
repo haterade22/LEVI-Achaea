@@ -1,0 +1,19 @@
+Ability: Roar (Record #404)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: The roar of the hydra has force all its own.
+Syntax: HYDRA ROAR <target>
+This ability will be hidden on ablistings.
+Abfile:
+The sheer power of your roar can knock those that hear it from their
+feet.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 150 mana
+Skill specialisation: meta_druid

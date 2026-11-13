@@ -1,0 +1,20 @@
+Ability: Bulk (Record #3079)
+Associated skill: Anathema
+Skillpoints required: 999
+Blurb: Grow, oh grow.
+Syntax: MUTATE BULK
+Abfile:
+A simple manipulation of mass, swell your bulk to a far greater size(*).
+
+* Increases your strength by one point, and conveys some minor
+resistance to cutting and blunt damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.50% karma

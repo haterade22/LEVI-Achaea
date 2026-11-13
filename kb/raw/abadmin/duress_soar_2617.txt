@@ -1,0 +1,21 @@
+Ability: Soar (Record #2617)
+Associated skill: Duress
+Skillpoints required: 20999
+Blurb: To the clouds and above.
+Syntax: AERO SOAR <LOW|HIGH|STRATOSPHERE>
+Abfile:
+You may now soar to the clouds and above, granting access to various
+special locations with exits all around the world.
+
+Low: takes you to on the clouds.
+High: takes you to high above the clouds.
+Stratosphere: takes you to a special room only accessible to paragons of
+Whiirh.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

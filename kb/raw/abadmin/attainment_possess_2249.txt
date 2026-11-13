@@ -1,0 +1,20 @@
+Ability: Possess (Record #2249)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Seize control of your target's intent for a short time.
+Syntax: POSSESS <target>
+Extra info: Gives denizen affliction: Charm
+Abfile:
+Override a target's will with the insertion of a minor demonic spirit,
+charming it to your cause for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 43.00 seconds
+Resource: 32 rage
+Skill specialisation: br_apostate

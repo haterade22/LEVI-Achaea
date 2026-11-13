@@ -1,0 +1,18 @@
+Ability: Farsee (Record #1434)
+Associated skill: Vision
+Skillpoints required: 2499
+Blurb: Attempt to locate another adventurer from afar.
+Syntax: FARSEE <target>
+Abfile:
+Use this ability to locate adventurers from afar.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 20 mana
+The ability name FARSIGHT is mapped to this ability.

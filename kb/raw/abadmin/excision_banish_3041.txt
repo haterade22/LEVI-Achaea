@@ -1,0 +1,21 @@
+Ability: Banish (Record #3041)
+Associated skill: Excision
+Skillpoints required: 15999
+Blurb: The Anathema will not go unchallenged.
+Syntax: PERFORM BANISH <target>
+Abfile:
+Pray to the Bloodsworn gods to strike down one of the Anathema(*),
+punishing the heretic for their transgressions.
+
+* This ability is used against members of the Unnamable class.
+** It shall decrement their amount of chaotic manifestation, as well as
+dealing damage to them.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of wrath balance

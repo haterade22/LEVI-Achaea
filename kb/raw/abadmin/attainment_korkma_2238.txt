@@ -1,0 +1,19 @@
+Ability: Korkma (Record #2238)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Bind the spirit of Korkma, the Terrifying.
+Syntax: INVOKE KORKMA <target>
+Extra info: Gives denizen affliction: Fear
+Abfile:
+Summon Korkma, the spirit of fear incarnate, to overwhelm your opponent and send it fleeing in terror.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 34.00 seconds
+Resource: 29 rage
+Skill specialisation: br_shaman

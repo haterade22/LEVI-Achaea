@@ -1,0 +1,15 @@
+Ability: Hypochondria (Record #1337)
+Associated skill: Hypnosis
+Skillpoints required: 60000
+Blurb: The conviction that one is constantly afflicted.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

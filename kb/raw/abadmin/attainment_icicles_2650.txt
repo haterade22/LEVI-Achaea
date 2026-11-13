@@ -1,0 +1,19 @@
+Ability: Icicles (Record #2650)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: A rain of freezing death.
+Syntax: MANIFEST ICICLES <target>
+Abfile:
+Forge an array of lethally sharp icicles from the vapour that eternally
+surrounds you, casting them at your target to deal damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_water_lord

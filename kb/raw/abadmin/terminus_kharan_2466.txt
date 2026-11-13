@@ -1,0 +1,22 @@
+Ability: Kharan (Record #2466)
+Associated skill: Terminus
+Skillpoints required: 40999
+Blurb: They shall do your bidding.
+Syntax: INTONE KHARAN <target> <command>
+This ability will be hidden on ablistings.
+Abfile:
+This word of power shall allow you to command a subject to carry out a
+single action. Unfortunately, as this is a fairly temperamental word of
+power, it requires that the subject in question lack the deafness
+defence.
+
+Additionally, this word of power will consume equilibrium.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.50 seconds of word balance

@@ -1,0 +1,26 @@
+Ability: Catapult (Record #1187)
+Associated skill: Woodlore
+Skillpoints required: 18999
+Blurb: A trap that will throw your enemies out of the room.
+Syntax: ASSEMBLE CATAPULT TRAP
+LAY CATAPULT <direction> <direction to throw person>
+Abfile:
+ Commodities: 1 Rope, 1 Wood
+
+The catapult trap is laid in a direction like all traps, but is also set
+to throw its victim in a particular direction.
+
+So, for instance, say you are in a room with north and west exits. You
+might do: LAY CATAPULT NORTH WEST. Then, when one of your enemies either
+tries to leave the room going north, or tries to enter the room from the
+north, he will be thrown west and thrown off-balance momentarily.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -38,6 +38,23 @@ FISTSIGIL = """Ability: Fistsigil (Record #46)
 Associated skill: Conjuration
 Maps to record 785 (FIST)."""
 
+# An empty slot, from the full run (2026-11-13): no name, no skill.
+EMPTY = """Ability:  (Record #3293)
+Associated skill:
+Skillpoints required: 0
+Blurb:
+Syntax:
+Abfile:
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No"""
+
 ROOM = "The seethe and churn of magma writes an ashen end for Kalys, Ashtan's molten embrace marking his smouldering epitaph."
 
 LIST = """Item ID       Item Name                           Power                Level
@@ -86,6 +103,12 @@ class AbadminRoute(unittest.TestCase):
     def test_a_pointer_record_is_a_record(self):
         files, *_ = ki.route_abadmin(ki.parse(capture(("abadmin show 46", FISTSIGIL))), {})
         self.assertEqual(files, {ab_path("conjuration_fistsigil_46.txt"): FISTSIGIL + "\n"})
+
+    def test_an_empty_slot_is_a_record(self):
+        # v4.7.496 read "(.+)" as the name, so ids 3293-3296 read as no answer.
+        files, _, free, unanswered = ki.route_abadmin(ki.parse(capture(("abadmin show 3293", EMPTY))), {})
+        self.assertEqual(files, {ab_path("unknown_unnamed_3293.txt"): EMPTY + "\n"})
+        self.assertEqual((free, unanswered), ([], []))
 
     def test_a_room_line_before_the_record_is_not_part_of_it(self):
         files, *_ = ki.route_abadmin(ki.parse(capture(("abadmin show 46", ROOM + "\n" + FISTSIGIL))), {})

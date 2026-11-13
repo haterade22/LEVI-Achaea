@@ -1,0 +1,19 @@
+Ability: Toxin (Record #2357)
+Associated skill: Formulation
+Skillpoints required: 42999
+Blurb: Death with a single breath.
+Syntax: WIELD TOXIN
+THROW TOXIN <AT GROUND|direction>
+Extra info: Reagents: 2 arsenic, 1 potash, 1 magnesium
+Abfile:
+A single breath of the gas released by this compound is enough to
+produce the most deadly of reactions, striking down the unfortunate
+individual with the voyria plague.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

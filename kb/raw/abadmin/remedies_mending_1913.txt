@@ -1,0 +1,17 @@
+Ability: Mending (Record #1913)
+Associated skill: Remedies
+Skillpoints required: 41499
+Blurb: A salve to repair your broken body.
+Syntax: None
+Extra info: Ingredients: 1 diamond dust, 1 kelp, 1 kuzu, 2 ginger or
+1 aurum, 1 arsenic, 2 antimony
+Abfile:
+The salve of mending can be used to heal minor broken limbs as well as putting your body out if you are on fire.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

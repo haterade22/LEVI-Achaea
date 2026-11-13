@@ -1,0 +1,17 @@
+Ability: Command (Record #925)
+Associated skill: Telepathy
+Skillpoints required: 24999
+Blurb: Force a subject to do your bidding.
+Syntax: MIND COMMAND <command>
+Abfile:
+You have gained sufficient knowledge of the workings of the mind to caress it into doing exactly what you wish. Your target must be undeaf if you wish for them to hear your command.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

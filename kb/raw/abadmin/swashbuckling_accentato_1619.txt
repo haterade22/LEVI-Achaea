@@ -1,0 +1,17 @@
+Ability: Accentato (Record #1619)
+Associated skill: Swashbuckling
+Skillpoints required: 999
+Blurb: Let your songblessed rapier sing out to harm your opponent.
+Syntax: TUNESMITH <your songblessed rapier> ACCENTATO
+Abfile:
+Deliver a devastating burst of magical damage with your next jab.
+This damage will increase with the number of mental afflictions the target suffers from.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana

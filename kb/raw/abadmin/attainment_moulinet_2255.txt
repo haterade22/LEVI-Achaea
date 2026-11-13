@@ -1,0 +1,18 @@
+Ability: Moulinet (Record #2255)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Slash your opponent with a long, looping cut.
+Syntax: MOULINET <target>
+Abfile:
+The moulinet is a circular cut, using the wrist to quickly slash down the length of your target's body.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_bard

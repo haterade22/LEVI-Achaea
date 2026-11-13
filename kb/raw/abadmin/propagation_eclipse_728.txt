@@ -1,0 +1,19 @@
+Ability: Eclipse (Record #728)
+Associated skill: Propagation
+Skillpoints required: 50999
+Blurb: Bedazzle your foe with a celestial bolt.
+Syntax: ECLIPSE <target>
+Abfile:
+Calling upon the vast brilliance of sky-bound celestial bodies, you may
+overwhelm a target's senses. Unless they are sufficiently restrained,
+your victim may evade the effects of the spell.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 600 mana

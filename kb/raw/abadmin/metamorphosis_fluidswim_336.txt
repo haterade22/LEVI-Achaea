@@ -1,0 +1,16 @@
+Ability: Fluidswim (Record #336)
+Associated skill: Metamorphosis
+Skillpoints required: 999
+Blurb: Safe and rapid swimming.
+Syntax: SWIM <direction>
+This ability will be hidden on ablistings.
+Abfile:
+Move across flooding, rivers, lakes, and oceans with confidence and speed.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

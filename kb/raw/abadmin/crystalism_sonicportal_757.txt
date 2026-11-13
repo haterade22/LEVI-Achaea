@@ -1,0 +1,21 @@
+Ability: Sonicportal (Record #757)
+Associated skill: Crystalism
+Skillpoints required: 7999
+Blurb: Open a portal to someone.
+Syntax: EMBED SONICPORTAL <target>
+Abfile:
+ Shapes required: Sphere, Torus
+
+When you embed this vibration, a portal will appear soon after leading
+between you and your target.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

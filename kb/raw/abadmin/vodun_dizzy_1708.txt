@@ -1,0 +1,19 @@
+Ability: Dizzy (Record #1708)
+Associated skill: Vodun
+Skillpoints required: 299
+Blurb: Cause your enemy to become unsteady on his feet.
+Syntax: VODUN DIZZY
+Extra info: Fashions:
+Required: 5
+Used    : 1
+Abfile:
+Curse your victim with the dizziness affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

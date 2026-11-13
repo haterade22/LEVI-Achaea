@@ -1,0 +1,16 @@
+Ability: Lobelia (Record #1894)
+Associated skill: Harvesting
+Skillpoints required: 29999
+Blurb: A beautiful scarlet wildflower with therapeutic properties.
+Syntax: HARVEST LOBELIA
+Abfile:
+A gorgeous, scarlet wildflower that grows in the forests, the lobelia is rumoured to have therapeutic properties, curing such ailments as berserking, recklessness, vertigo, and other phobias and mental illnesses.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

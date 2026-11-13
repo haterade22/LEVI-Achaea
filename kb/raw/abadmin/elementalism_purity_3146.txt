@@ -1,0 +1,23 @@
+Ability: Purity (Record #3146)
+Associated skill: Elementalism
+Skillpoints required: 60000
+Blurb: Life's water will ever run clear.
+Syntax: CAST PURITY
+Abfile:
+With major resonance to the Elemental Plane of Water achieved, you may
+cast this higher order spell to keep your blood and body ever clean of
+many malign forces(*). This removes all of your resonance with all
+Elemental Planes, lasts ten seconds and carries a long cooldown.
+
+* You will become immune to many afflictions (primarily those cured by
+herbs and minerals) while this defence lasts.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 1000 mana

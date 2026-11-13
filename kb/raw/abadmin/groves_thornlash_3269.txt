@@ -1,0 +1,22 @@
+Ability: Thornlash (Record #3269)
+Associated skill: Groves
+Skillpoints required: 39999
+Blurb: Lash your prey with Nature's fury
+Syntax: GROVE THORNLASH <target>
+Abfile:
+Tap into Nature's fury and command your grove to lash at a denizen,
+dealing significant cutting damage to them. The potency of this
+invocation is determined by the Druid or Sylvan casting it(*).
+
+* The damage dealt by this ability will scale with the higher of your
+strength or intelligence stat.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

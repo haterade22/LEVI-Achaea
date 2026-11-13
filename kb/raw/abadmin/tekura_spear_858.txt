@@ -1,0 +1,16 @@
+Ability: Spear (Record #858)
+Associated skill: Tekura
+Skillpoints required: 21999
+Blurb: A jabbing punch with an outstretched hand.
+Syntax: SPP <target> left/right
+Abfile:
+This punch is used with a rigid hand. With your knowledge of musculature, you're able to hit just the right spot in the target's arms to damage his arms.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of arm balance

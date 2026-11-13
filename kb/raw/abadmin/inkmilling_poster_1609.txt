@@ -1,0 +1,25 @@
+Ability: Poster (Record #1609)
+Associated skill: InkMilling
+Skillpoints required: 31999
+Blurb: Posters that can be hung in rooms like graffiti.
+Syntax: POSTER <poster> DYE <colour>
+POSTER <poster> TITLE <title>
+POSTER <poster> DESCRIBE
+Abfile:
+ After purchasing a blank poster you can -
+   (Only by the inkmiller)
+DYE: dye a white poster with an ink of the required colour.
+TITLE: give your poster a short title.
+DESCRIBE: enter the editor to describe what your poster looks like.
+   (By anyone)
+HANG POSTER to display your glorious artwork for all to see. Only one
+poster may be hung in any given location.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

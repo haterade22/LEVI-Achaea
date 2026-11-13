@@ -1,0 +1,17 @@
+Ability: Swing (Record #1614)
+Associated skill: Swashbuckling
+Skillpoints required: 0
+Blurb: Swing gracefully up into the trees overhead.
+Syntax: SWING UP
+SWING DOWN
+Abfile:
+When in a forest location, you will be able to swing up into the trees, or down from them again.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

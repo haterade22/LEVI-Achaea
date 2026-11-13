@@ -1,0 +1,16 @@
+Ability: Tripleslash (Record #3136)
+Associated skill: Undeath
+Skillpoints required: 50999
+Blurb: Technique undreamed of.
+Syntax:
+Abfile:
+Your onslaughts are so furious that they shall now strike thrice instead
+of twice.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

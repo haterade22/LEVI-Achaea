@@ -1,0 +1,18 @@
+Ability: Demolition (Record #2533)
+Associated skill: Sculpting
+Skillpoints required: 20999
+Blurb: Stone is no barrier to your kind.
+Syntax: TERRAN DEMOLITION
+Abfile:
+The fools that think to bar your path with stonewalls shall find
+themselves suitably chastised. By manifesting a demolition, you can
+destroy all stone walls in your location, though the more walls
+destroyed the longer the balance incurred.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

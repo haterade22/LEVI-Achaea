@@ -1,0 +1,20 @@
+Ability: Willow (Record #2491)
+Associated skill: Shikudo
+Skillpoints required: 1999
+Blurb: A form which emphasises speed.
+Syntax: ADOPT WILLOW FORM
+Extra info: Transitions: Willows in Rain Storm
+Attacks: DART, SWEEP, HIRU, FLASHHEEL, HIRAKU
+Abfile:
+Willows Shaken by the Wind is the Shikudo form which emphasises speed.
+All Shikudo strikes and kicks performed in this form shall be faster
+than normal, and you will be so fast that you may even knock arrows out
+of the air as they seek you, providing you are wielding your staff.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

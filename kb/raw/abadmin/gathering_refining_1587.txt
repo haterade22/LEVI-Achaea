@@ -1,0 +1,25 @@
+Ability: Refining (Record #1587)
+Associated skill: Gathering
+Skillpoints required: 46499
+Blurb: Turn ordinary items into something extraordinary.
+Syntax: REFINE FOR <reagent> [INTO <vial>]
+Abfile:
+Certain gatherable items may be refined into more valuable commodities. Liquids will require you to have a container capable of holding liquids (such as a vial) in your inventory.
+
+Commodity     Refined from
+----------------------------
+Salt          Saltwater
+Sugar         Sugarcane
+Flour         Grain
+Oil           Olives
+Spices        Seeds
+Chocolate     Cacao
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

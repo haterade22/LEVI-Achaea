@@ -1,0 +1,18 @@
+Ability: Swiftmount (Record #3029)
+Associated skill: Dominion
+Skillpoints required: 56999
+Blurb: Mount or vault your steeds at increased speed.
+Syntax:
+Abfile:
+You have reached such a level of training in the arts of war that you
+regain balance while Mounting a steed much more rapidly. Furthermore, if
+you have the ability Vault in Riding, you can use it without any loss of
+balance at all.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Revive (Record #2218)
+Associated skill: Reclamation
+Skillpoints required: 52999
+Blurb: Breathe life back into the fallen.
+Syntax: REVIVE <target>
+Abfile:
+While standing on your reclaimed ground, you can breathe life back into
+the corpse of a fallen adventurer.
+
+NOTE: this ability will only work if the target is a mutual ally, or if
+they are a member of the same city as you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

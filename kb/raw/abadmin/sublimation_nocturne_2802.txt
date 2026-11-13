@@ -1,0 +1,24 @@
+Ability: Nocturne (Record #2802)
+Associated skill: Sublimation
+Skillpoints required: 60000
+Blurb: Annihilate them.
+Syntax: ALIGN NOCTURNE <target1> <target2> <target3>
+This ability will be hidden on ablistings.
+Abfile:
+Long has the legend of Eternal Night been pored over by scholars. This
+greatest act of the school of Alignment attempts to replicate that feat,
+even if only in part. Utilising three anchor points, configure things
+just so, and bring down a threefold meteor strike against your foes. Any
+that remain at the culmination shall be slain outright.
+
+Overdraw effect: the channel is reduced from twelve seconds to ten.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 15% Wellspring Energy

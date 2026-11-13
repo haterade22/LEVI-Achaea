@@ -1,0 +1,19 @@
+Ability: Spear (Record #1853)
+Associated skill: Weaponsmithing
+Skillpoints required: 1499
+Blurb: The standard weapon of the footman.
+Syntax: FORGE FOR SPEAR
+FORGE (to continue after interruption)
+Extra info: Commodities: 3 Steel
+4 Wood
+Abfile:
+The standard weapon of the footman.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

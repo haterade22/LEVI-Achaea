@@ -1,0 +1,15 @@
+Ability: Track (Record #544)
+Associated skill: Discipline
+Skillpoints required: 39999
+Blurb: Order your falcon to follow and track someone.
+Syntax: FALCON TRACK <target>
+Abfile:
+This ability is an improved version of falcon follow. With track, even if the falcon temporarily loses its target, because the target went indoors, the falcon will continue to follow the target once the target comes back outside.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

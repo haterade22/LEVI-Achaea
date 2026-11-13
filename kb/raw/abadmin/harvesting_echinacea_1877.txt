@@ -1,0 +1,16 @@
+Ability: Echinacea (Record #1877)
+Associated skill: Harvesting
+Skillpoints required: 699
+Blurb: The purple-coneflower that grows in the forests.
+Syntax: HARVEST ECHINACEA
+Abfile:
+Echinacea is a purple coneflower that grows in the forests. Eating it will give you the gift of the third eye, which will allow you to see where people are when you type 'who' as well as allow you to see otherwise invisible people.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

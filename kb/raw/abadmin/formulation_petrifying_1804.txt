@@ -1,0 +1,23 @@
+Ability: Petrifying (Record #1804)
+Associated skill: Formulation
+Skillpoints required: 10000
+Blurb: Partial petrification comes with many advantages.
+Syntax: IMBIBE PETRIFYING
+Extra info: Reagents: 2 ferrum, 1 plumbum
+Abfile:
+This compound alters the physiology of the alchemist. By partially
+turning one's bones into a dense, iron-like substance, the user shall
+find themselves slowed but more able to resist physical damage. However,
+they should be wary of attacks that draw their power from lightning, as
+they will be particularly vulnerable to such.
+
+If the compound is highly volatile, its effects shall expire after five
+minutes.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

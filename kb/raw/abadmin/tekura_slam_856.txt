@@ -1,0 +1,23 @@
+Ability: Slam (Record #856)
+Associated skill: Tekura
+Skillpoints required: 15999
+Blurb: A throw to target the head.
+Syntax: SLT <target>
+Abfile:
+This throw targets the head of the subject. When executed, it shall
+cause their brains to be scrambled for a time, removing their ability to
+naturally reject your mental locks.
+
+It can only be used against a prone opponent, and the effect will last
+longer if the target's head is already damaged when the slam is
+performed.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

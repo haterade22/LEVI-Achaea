@@ -1,0 +1,18 @@
+Ability: Well-being (Record #1062)
+Associated skill: Devotion
+Skillpoints required: 32999
+Blurb: A rite to keep those nearby fed and rested.
+Syntax: PERFORM RITE OF WELL-BEING
+Abfile:
+The rite of well-being is a beneficial rite to all in the room. While in it, one will not grow any hungrier or sleepier. It lasts for quite a bit longer than the standard rite.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 120 devotion
+The ability name WELLBEING is mapped to this ability.

@@ -1,0 +1,20 @@
+Ability: Hyperfocus (Record #2511)
+Associated skill: Shikudo
+Skillpoints required: 52999
+Blurb: A single opportunity is enough.
+Syntax: HYPERFOCUS <limb|NONE>
+Abfile:
+By hyperfocussing upon a specific limb, you will be able to identify
+gaps in your target's defence, avoiding all attempts to parry strikes
+against that limb. However, focus of this nature comes with a cost:
+though you will be able to bypass parry attempts, your strike on the
+hyperfocussed limb shall only deal half as much damage to that limb as
+normal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

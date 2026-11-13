@@ -1,0 +1,16 @@
+Ability: Scrutinise (Record #1807)
+Associated skill: Formulation
+Skillpoints required: 18000
+Blurb: Determine specifics about your compounds.
+Syntax: SCRUTINISE <compound>
+Abfile:
+You are now able to determine specifics about how volatile, potent, or
+stable a compound is.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

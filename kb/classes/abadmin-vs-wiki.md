@@ -7,20 +7,128 @@ The game's record wins where the two differ (CLAUDE.md). Every cost here is the 
 equilibrium is that base times `ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`: the Aldar
 Diadem, x0.85, and Rain), as `kb/mechanics/balance-and-queueing.md` ("Our speed factors") says.
 
-Records: 287 (55 of them pointers to another record). Differ from the wiki: 4. Not listed on the wiki page of their skill: 0. Skills the wiki pages do not cover: 3.
+Only a value that both sides state is compared. An empty wiki cell, or a game cost with no number
+("Equilibrium"), is a gap, not a difference; such a cost differs only when its clock does. A wiki cost
+that names one cost per sub-command agrees when one of them is the game's. A record's Extra info can
+name a cost per mode that its Cooldown line does not (FREEZE: Cooldown 2.20 s, "Targetted cooldown:
+3.00 seconds"); where that is the wiki's cost, the row says so, and which one the game spends is open.
+
+Records: 3079 (197 of them pointers to another record; 4 empty slots with no name or skill, ids 3293, 3294, 3295, 3296). Differ from the wiki: 57. Not listed on the wiki page of their skill: 48. Skills the wiki pages do not cover: 30.
 
 ## Where the game and the wiki differ
 
 | ID | Skill | Ability | Game cost | Wiki cost | Game target | Wiki target | Differs |
 |---|---|---|---|---|---|---|---|
-| 38 | Physiology | Truewrack | 2.80 seconds of balance | 2.80 seconds of balance | adventurers | -- | target |
-| 123 | Necromancy | Feed | 5.00 seconds of equilibrium | 5.00 seconds of equilibrium | adventurers | -- | target |
-| 127 | Necromancy | Lifevision | 3.50 seconds of equilibrium | 3.50 seconds of equilibrium | none | Adventurers | target |
-| 220 | Apostasy | Contemplation | 1.00 seconds of equilibrium | -- | adventurers | Adventurers | cost |
+| 335 | Metamorphosis | Snap | 3.25 seconds of balance | 3.25 seconds of balance | adventurers | Adventurers and denizens | target |
+| 360 | Metamorphosis | Flame | Equilibrium | Equilibrium | adventurers, room, and self | Adventurers, room, denizens, and self | target |
+| 374 | Metamorphosis | Trumpet | 3.00 seconds of balance | 3.00 seconds of equilibrium | adventurers | Adventurers | cost |
+| 385 | Metamorphosis | Hoist | 4.50 seconds of balance | 4.00 seconds of balance. (Deposit and Release) | adventurers | Adventurers | cost, but its Extra info gives the wiki's |
+| 536 | Discipline | Deliver | -- | 3.00 seconds of balance | adventurers | Self | target |
+| 605 | Tarot | Priestess | 3.00 seconds of balance | 3.00 seconds of balance | adventurers and denizens | Adventurers | target |
+| 710 | Elementalism | Freeze | 2.20 seconds of equilibrium | Ground: 4.00 seconds of equilibrium Targetted: 3.00 seconds of equilibrium | adventurers and room | Adventurers and room | cost, but its Extra info gives the wiki's |
+| 713 | Artificing | Sandling | 4.00 seconds of equilibrium | 4.00 seconds of equilibrium channels=Earth | self | Adventurers and self | target |
+| 848 | Tekura | Bodyblock | 1.00 seconds of balance | 1.00 seconds of balance | adventurers and denizens | Self | target |
+| 853 | Tekura | Evade | 1.00 seconds of balance | 1.00 seconds of balance | adventurers | Self | target |
+| 943 | Telepathy | Radiance | 4.00 seconds of equilibrium | 20.00 seconds of equilibrium | adventurers | Adventurers | cost |
+| 1000 | Domination | Lycantha | 2.20 seconds of entity balance | 3.50 seconds of entity balance | adventurers and denizens | Adventurers and denizens | cost |
+| 1024 | Spirituality | Strip | 1.80 seconds of equilibrium | 1.80 seconds of equilibrium | adventurers and denizens | Adventurers | target |
+| 1031 | Spirituality | Care | 1.80 seconds of equilibrium | 1.80 seconds of equilibrium | adventurers and denizens | Self | target |
+| 1049 | Devotion | Pilgrimage | 4.00 seconds of equilibrium | Rite: 5.00 seconds of equilibrium Travel: 3.50 seconds of equilibrium | adventurers | Adventurers | cost, but its Extra info gives the wiki's |
+| 1051 | Devotion | Penitence | 1.00 seconds of equilibrium | 1.00 seconds of equilibrium | adventurers and denizens | Adventurers | target |
+| 1056 | Devotion | Piety | 3.80 seconds of equilibrium | 3.00 seconds of equilibrium | room | Room | cost |
+| 1064 | Devotion | Convocation | 3.80 seconds of equilibrium | Rite: 4.00 seconds of equilibrium Summon: 6.00 seconds of equilibrium | adventurers | Adventurers | cost, but its Extra info gives the wiki's |
+| 1275 | Venom | Bite | 1.90 seconds of balance | 4.00 seconds of balance | adventurers and denizens | Adventurers and denizens | cost |
+| 1307 | Venom | Nechamandra | -- | -- | adventurers and denizens | Adventurers | target |
+| 1926 | Spiritlore | Arius | 3.00 seconds of equilibrium | 3.00 seconds of balance attune=Increased mana regeneration. | adventurers and denizens | Adventurers and denizens | cost |
+| 2102 | Weaponmastery | Assault | 2.80 seconds of balance | 2.60 seconds of balance | adventurers | Adventurers | cost |
+| 2170 | Weatherweaving | Aerial | 3.00 seconds of equilibrium | 4.00 seconds of equilibrium | none | 250 mana | cost |
+| 2215 | Weatherweaving | Fog | 4.00 seconds of equilibrium | 4.00 seconds of equilibrium | room | Room channels=Air and Water | target |
+| 2377 | Shadowmancy | Cull | -- | -- | adventurers and denizens | Adventurers | target |
+| 2382 | Shadowmancy | Strike | -- | -- | adventurers and denizens | Adventurers | target |
+| 2423 | Aeonics | Degenerate | -- | -- | adventurers and denizens | Adventurers | target |
+| 2680 | Pranks | Gallowshumour | 2.10 seconds of balance | 2.10 seconds of balance | adventurers and denizens | Adventurers | target |
+| 2770 | Zeal | Burn | 1.60 seconds of prayer balance | 1.70 seconds of prayer balance | none | -- | cost |
+| 2773 | Zeal | Purge | 1.60 seconds of prayer balance | 2.30 seconds of prayer balance | adventurers | Adventurers | cost |
+| 2776 | Zeal | Guilt | 1.60 seconds of prayer balance | 1.70 seconds of prayer balance | none | -- | cost |
+| 2785 | Sublimation | Thermal | 2.60 seconds of balance | 3.00 seconds of balance | none | Room | cost |
+| 2791 | Sublimation | Identity | 3.00 seconds of balance | 3.00 seconds of word balance | none | Self | cost |
+| 2793 | Sublimation | Sympathy | 3.00 seconds of balance | 3.00 seconds of damage | none | Adventurers | cost |
+| 2794 | Sublimation | Copies | 3.00 seconds of balance | 3.00 seconds of word balance | none | Adventurers and room | cost |
+| 2795 | Sublimation | Radiation | 3.00 seconds of balance | 3.00 seconds of word balance | none | Room | cost |
+| 2839 | Oppression | Predator | 1.20 seconds of equilibrium | 2.50 seconds of equilibrium | none | -- | cost |
+| 2899 | Charnel | Arise | 2.40 seconds of equilibrium | 3.00 seconds of equilibrium | none | -- | cost |
+| 3040 | Excision | Decree | 3.60 seconds of equilibrium | 3.00 seconds of balance | none | -- | cost |
+| 3058 | Excision | Damnation | 4.00 seconds of equilibrium | 3.00 seconds of balance | none | -- | cost |
+| 3071 | Anathema | Pierce | 3.00 seconds of equilibrium | 3.00 seconds of anathema balance | none | -- | cost |
+| 3075 | Anathema | Catastrophe | 5.00 seconds of equilibrium | 5.00 seconds of anathema balance | none | -- | cost |
+| 3104 | Excision | Condemn | 4.00 seconds of wrath balance | 6.00 seconds of wrath balance | none | -- | cost |
+| 3151 | Bladedance | Flourish | 2.10 seconds of balance | 2.10 seconds of balance. | adventurers and denizens | Adventurers | target |
+| 3158 | Bladedance | Punctuate | 2.00 seconds of balance | 2.00 seconds of equilibrium | adventurers and denizens | Adventurers and denizens | cost |
+| 3160 | Bladedance | Sunrise | 2.20 seconds of balance | 2.30 seconds of balance | adventurers | Adventurers | cost |
+| 3161 | Bladedance | Sunset | 2.20 seconds of balance | 2.30 seconds of balance | adventurers | Adventurers | cost |
+| 3162 | Bladedance | Heelsnap | 2.20 seconds of balance | 2.30 seconds of balance | adventurers and denizens | Adventurers and denizens | cost |
+| 3165 | Bladedance | Highsun | 2.20 seconds of balance | 2.30 seconds of balance | adventurers and denizens | Adventurers and denizens | cost |
+| 3195 | Sagas | Reckoning | 2.50 seconds of equilibrium and 20.00 seconds of voice balance | 2.50 seconds of equilibrium and 20.00 seconds of voice balance | room | Self | target |
+| 3197 | Sagas | Eternalnight | 1.50 seconds of equilibrium and 16.00 seconds of voice balance | 1.50 seconds of balance and 16.00 seconds of voice balance | adventurers | Adventurers | cost |
+| 3198 | Sagas | Vertani | 18.00 seconds of voice balance and 3.00 seconds of equilibrium | 2.30 seconds of balance and 16.00 seconds of voice balance | none | Aventurers | cost |
+| 3204 | Sagas | Descent | 2.80 seconds of equilibrium and 25.00 seconds of voice balance | 25.00 seconds of voice balance and 2.80 seconds of equilibrium | adventurers | Room | target |
+| 3205 | Sagas | Jadeicon | 16.00 seconds of voice balance and 2.30 seconds of equilibrium | 2.30 seconds of balance and 16.00 seconds of voice balance | none | Room | cost |
+| 3206 | Sagas | Redsea | 18.00 seconds of voice balance and 2.50 seconds of equilibrium | 18.00 seconds of voice balance | none | Room | cost |
+| 3211 | Bladedance | Flick | 2.10 seconds of balance | 2.10 seconds of balance | adventurers and denizens | Adventurers | target |
+| 3278 | Woe | Condemned | 15.00 seconds of voice balance and 3.00 seconds of equilibrium | 16.00 seconds of voice balance and 2.00 seconds of equilibrium | none | -- | cost |
 
 ## Not listed on the wiki page of their skill
 
-None.
+| ID | Skill | Ability | Cost | Target | File |
+|---|---|---|---|---|---|
+| 380 | Metamorphosis | Spring | 2.00 seconds of balance | adventurers | `kb/raw/abadmin/metamorphosis_spring_380.txt` |
+| 611 | Tarot | Hierophant | 3.00 seconds of balance | adventurers | `kb/raw/abadmin/tarot_hierophant_611.txt` |
+| 718 | Crystalism | Ring | 3.00 seconds of equilibrium | room | `kb/raw/abadmin/crystalism_ring_718.txt` |
+| 1057 | Devotion | Hellsight | 2.50 seconds of equilibrium | adventurers | `kb/raw/abadmin/devotion_hellsight_1057.txt` |
+| 1070 | Devotion | Fervour | -- | adventurers, denizens, and room | `kb/raw/abadmin/devotion_fervour_1070.txt` |
+| 1075 | Devotion | Damnation | 5.00 seconds of equilibrium | adventurers | `kb/raw/abadmin/devotion_damnation_1075.txt` |
+| 1330 | Hypnosis | Nausea | -- | adventurers | `kb/raw/abadmin/hypnosis_nausea_1330.txt` |
+| 1986 | Shadowmancy | Atrophy | -- | none | `kb/raw/abadmin/shadowmancy_atrophy_1986.txt` |
+| 2005 | Crystalism | Muffle | 3.50 seconds of equilibrium | none | `kb/raw/abadmin/crystalism_muffle_2005.txt` |
+| 2174 | Weatherweaving | Stormhammer | 6.00 seconds of equilibrium | adventurers and denizens | `kb/raw/abadmin/weatherweaving_stormhammer_2174.txt` |
+| 2176 | Weatherweaving | Rainstorm | 4.00 seconds of equilibrium | room | `kb/raw/abadmin/weatherweaving_rainstorm_2176.txt` |
+| 2177 | Weatherweaving | Simultaneity | 4.00 seconds of equilibrium | none | `kb/raw/abadmin/weatherweaving_simultaneity_2177.txt` |
+| 2195 | Weatherweaving | Shockwave | 3.40 seconds of equilibrium | adventurers | `kb/raw/abadmin/weatherweaving_shockwave_2195.txt` |
+| 2346 | Weatherweaving | Waterspout | 3.00 seconds of equilibrium | adventurers and denizens | `kb/raw/abadmin/weatherweaving_waterspout_2346.txt` |
+| 2354 | Kaido | Transition | -- | self | `kb/raw/abadmin/kaido_transition_2354.txt` |
+| 2670 | Devotion | Congregation | 3.00 seconds of equilibrium | room | `kb/raw/abadmin/devotion_congregation_2670.txt` |
+| 2739 | Emulation | Wrath | 1.30 seconds of equilibrium | none | `kb/raw/abadmin/emulation_wrath_2739.txt` |
+| 2750 | Psionics | Shatter | 3.10 seconds of equilibrium | adventurers and denizens | `kb/raw/abadmin/psionics_shatter_2750.txt` |
+| 2796 | Sublimation | Imposition | 4.00 seconds of balance | none | `kb/raw/abadmin/sublimation_imposition_2796.txt` |
+| 2803 | Formulation | Field | -- | none | `kb/raw/abadmin/formulation_field_2803.txt` |
+| 2805 | TwoArts | Infuseearth | -- | none | `kb/raw/abadmin/twoarts_infuseearth_2805.txt` |
+| 2807 | Subterfuge | Case | 2.50 seconds of balance | none | `kb/raw/abadmin/subterfuge_case_2807.txt` |
+| 2904 | Charnel | Desolation | 3.00 seconds of equilibrium | none | `kb/raw/abadmin/charnel_desolation_2904.txt` |
+| 2910 | Charnel | Accursed | 10.00 seconds of equilibrium | none | `kb/raw/abadmin/charnel_accursed_2910.txt` |
+| 2913 | Charnel | Eminence | 10.00 seconds of equilibrium | none | `kb/raw/abadmin/charnel_eminence_2913.txt` |
+| 2917 | Charnel | Preservation | 3.00 seconds of equilibrium | none | `kb/raw/abadmin/charnel_preservation_2917.txt` |
+| 2940 | Evileye | Paralysis | 1.90 seconds of balance | none | `kb/raw/abadmin/evileye_paralysis_2940.txt` |
+| 2967 | Valour | Nightrender | -- | none | `kb/raw/abadmin/valour_nightrender_2967.txt` |
+| 3084 | Anathema | Tumours | -- | none | `kb/raw/abadmin/anathema_tumours_3084.txt` |
+| 3085 | Anathema | Venomsacs | -- | none | `kb/raw/abadmin/anathema_venomsacs_3085.txt` |
+| 3096 | Subterfuge | Distraction | 6.00 seconds of equilibrium | none | `kb/raw/abadmin/subterfuge_distraction_3096.txt` |
+| 3110 | Occultism | Regress | 2.50 seconds of equilibrium | none | `kb/raw/abadmin/occultism_regress_3110.txt` |
+| 3115 | Tarot | Heretic | -- | none | `kb/raw/abadmin/tarot_heretic_3115.txt` |
+| 3237 | Woe | Scene | 2.50 seconds of equilibrium | none | `kb/raw/abadmin/woe_scene_3237.txt` |
+| 3239 | Sagas | Troubadour | -- | none | `kb/raw/abadmin/sagas_troubadour_3239.txt` |
+| 3256 | Memorium | Blasphemy | -- | none | `kb/raw/abadmin/memorium_blasphemy_3256.txt` |
+| 3262 | Malignity | Maul | Cooldown | denizens | `kb/raw/abadmin/malignity_maul_3262.txt` |
+| 3263 | Valour | Rake | Cooldown | denizens | `kb/raw/abadmin/valour_rake_3263.txt` |
+| 3265 | Woodlore | Bushwhack | 2.00 seconds of equilibrium | denizens | `kb/raw/abadmin/woodlore_bushwhack_3265.txt` |
+| 3266 | Dominion | Maul | 30.00 seconds | denizens | `kb/raw/abadmin/dominion_maul_3266.txt` |
+| 3267 | Alchemy | Repress | 4.00 seconds of balance | room | `kb/raw/abadmin/alchemy_repress_3267.txt` |
+| 3268 | Alchemy | Calcinate | 4.00 seconds of balance | room | `kb/raw/abadmin/alchemy_calcinate_3268.txt` |
+| 3273 | Elementalism | Meteorite | 2.40 seconds of equilibrium | none | `kb/raw/abadmin/elementalism_meteorite_3273.txt` |
+| 3288 | Weaponmastery | Retaliate | -- | none | `kb/raw/abadmin/weaponmastery_retaliate_3288.txt` |
+| 3289 | Crystalism | Overload | -- | none | `kb/raw/abadmin/crystalism_overload_3289.txt` |
+| 3290 | Elementalism | Pebble | 2.30 seconds of equilibrium | adventurers | `kb/raw/abadmin/elementalism_pebble_3290.txt` |
+| 3291 | Woodlore | Grapple | 2.50 seconds of balance | none | `kb/raw/abadmin/woodlore_grapple_3291.txt` |
+| 3292 | Psionics | Pulse | 1.00 seconds of equilibrium | adventurers | `kb/raw/abadmin/psionics_pulse_3292.txt` |
 
 ## Skills the wiki pages do not cover
 
@@ -28,6 +136,33 @@ None.
 
 | Skill | Records | IDs |
 |---|---|---|
-| Attainment | 12 | 122-2115 |
-| Tattoos | 1 | 45-45 |
-| Weaponsmithing | 1 | 67-67 |
+| Armoursmithing | 18 | 1604-3255 |
+| Attainment | 204 | 122-3253 |
+| Augmentation | 13 | 1999-3254 |
+| Avoidance | 3 | 3260-3275 |
+| Chivalry | 9 | 2059-3287 |
+| Conjuration | 19 | 1980-2109 |
+| Cooking | 7 | 1590-1596 |
+| Dragoncraft | 38 | 1532-2826 |
+| Duress | 30 | 2605-2852 |
+| Gathering | 15 | 1575-1589 |
+| Harmonics | 32 | 1644-2658 |
+| Harvesting | 29 | 782-2035 |
+| Ignition | 34 | 2546-3277 |
+| InkMilling | 17 | 1597-2821 |
+| Pervasion | 31 | 2575-2696 |
+| Remedies | 16 | 1848-2520 |
+| Riding | 29 | 1495-1759 |
+| Sculpting | 29 | 1901-3279 |
+| Seafaring | 64 | 1301-2820 |
+| Shipfitting | 10 | 2810-2819 |
+| Survival | 35 | 1376-3272 |
+| Swashbuckling | 31 | 1614-2216 |
+| Tattoos | 29 | 45-2809 |
+| Toxicology | 27 | 1874-2521 |
+| Transmutation | 23 | 2012-2034 |
+| Undeath | 20 | 3119-3138 |
+| Vision | 34 | 1407-2219 |
+| Voicecraft | 30 | 1675-1704 |
+| Weaponry | 10 | 1462-1472 |
+| Weaponsmithing | 23 | 67-2355 |

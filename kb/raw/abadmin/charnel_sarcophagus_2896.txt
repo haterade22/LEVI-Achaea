@@ -1,0 +1,24 @@
+Ability: Sarcophagus (Record #2896)
+Associated skill: Charnel
+Skillpoints required: 19999
+Blurb: The heart of your power.
+Syntax: SARCOPHAGUS BUILD
+SARCOPHAGUS ENTER
+SARCOPHAGUS CALL
+Abfile:
+Your crypt may be your domain, but that which it is built to protect is
+the beating heart of your power: your sarcophagus. The greatest works of
+Charnel require this be built, and it must be raised in a tomb
+constructed within the depths of your crypt. You may call it from an
+unshaped location in your crypt to move it there, and thus relocate your
+tomb (this is mostly useful when changing the layout of your crypt and
+needing to destroy your old tomb).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

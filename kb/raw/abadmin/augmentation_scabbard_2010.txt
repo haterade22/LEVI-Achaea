@@ -1,0 +1,33 @@
+Ability: Scabbard (Record #2010)
+Associated skill: Augmentation
+Skillpoints required: 56999
+Blurb: Enchant a scabbard of stasis.
+Syntax: BEGIN ENCHANTMENT OF <item>* WITH STASIS
+Abfile:
+ To use:
+   See HELP SHEATHE.
+
+Type:
+   Enchanted item.
+
+* Usable items:
+   Scabbard, sheath, beltloop, belthook, baldric.
+
+Actions:
+   2x16, 3x13, 2x14, 15, chant "drabbacs statorium", 11, 2x16, 3x17, 16
+
+Comms:
+   3 gold, 3 elemental ice, 3 stag's horn, 3 diamond dust, 2 silver
+
+This magical enchantment gives the same advantages to a scabbard as with
+a bag of stasis, slowing the decay rate of weapons stored inside it.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

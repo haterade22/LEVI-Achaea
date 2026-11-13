@@ -1,0 +1,21 @@
+Ability: Scourge (Record #2894)
+Associated skill: Pestilence
+Skillpoints required: 60000
+Blurb: A black fate indeed.
+Syntax: SWARM SCOURGE <swarm> <target>
+Abfile:
+An enemy who is sufficiently weakened and vulnerable to your myriad
+minions can be dispatched post haste. May their fate be a lesson to
+those that would consider opposing your will(*).
+
+* They will need to be suffering from thinned blood, haemophilia, and
+the pyramides disease as well as 200 bleeding.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

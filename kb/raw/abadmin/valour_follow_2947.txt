@@ -1,0 +1,18 @@
+Ability: Follow (Record #2947)
+Associated skill: Valour
+Skillpoints required: 2999
+Blurb: Ever watchful.
+Syntax: EAGLE FOLLOW <target>
+Abfile:
+You have established enough of a rapport with your eagle now that you
+may ask it to follow, from the air, a particular adventurer. When the
+eagle loses the adventurer, generally because the adventurer goes
+indoors, it will stop following.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

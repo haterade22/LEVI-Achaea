@@ -1,0 +1,16 @@
+Ability: Crossbows (Record #1241)
+Associated skill: Subterfuge
+Skillpoints required: 24999
+Blurb: A powerful projectile weapon.
+Syntax: SHOOT <target> <direction>
+Abfile:
+The crossbow is more powerful, but less accurate, than the longbow.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

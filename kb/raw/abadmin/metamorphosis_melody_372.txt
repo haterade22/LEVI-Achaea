@@ -1,0 +1,23 @@
+Ability: Melody (Record #372)
+Associated skill: Metamorphosis
+Skillpoints required: 20999
+Blurb: Sing a melody of invulnerability about you.
+Syntax: SING MELODY
+This ability will be hidden on ablistings.
+Abfile:
+While you are singing this gorgeous melody, people will not be able to
+attack through the prismatic barrier. However, due to the difficulty of
+this, you cannot do anything else and maintain your song at the same
+time.
+
+When this barrier is lost there is a 3 second cooldown before another
+can be raised.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

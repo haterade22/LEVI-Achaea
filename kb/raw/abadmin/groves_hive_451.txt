@@ -1,0 +1,25 @@
+Ability: Hive (Record #451)
+Associated skill: Groves
+Skillpoints required: 40999
+Blurb: Create a hive of stinging bees to defend your grove.
+Syntax: GROVE HIVE
+HARVEST HIVE
+TAP HIVE
+CALL BEES
+CALL NEW SWARM
+Extra info: GROVE HIVE cooldown: 6.00 seconds of equilibrium and 120 sunlight.
+TAP HIVE cooldown: 4.8 seconds of balance.
+CALL BEES cooldown: 4.00 seconds of equilibrium.
+CALL NEW SWARM cooldown: 5.00 seconds of equilibrium and 500 mana.
+Abfile:
+Hive will create a hive of bees in your grove that will live there and protect it. TAP HIVE will call forth the bees, who will proceed to attack your enemies in your grove. Bees are also capable of following you around Sapience (see HELP DENIZENS for more commands). An added benefit to this magical hive is that you may HARVEST HIVE. Doing this will not only feed you and heal your mind and body fully, but it will also attempt to increase a random skill of yours slightly. If the random skill happens to be Transcendent already, then no benefit will be gained. This ability may only be used infrequently.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Sunlight and mana

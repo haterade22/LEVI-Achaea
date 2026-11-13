@@ -1,0 +1,20 @@
+Ability: Wavedance (Record #3242)
+Associated skill: Bladedance
+Skillpoints required: 42999
+Blurb: For never do you tire.
+Syntax: DANCE WAVEDANCE
+Abfile:
+Dancing as the waves do, you shall be as relentless as they in turn, and
+yet never quite unleashed(*).
+
+* You will not be parried while dancing this dance, but will also do no
+limb damage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

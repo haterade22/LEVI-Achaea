@@ -1,0 +1,25 @@
+Ability: Eerion (Record #985)
+Associated skill: Domination
+Skillpoints required: 699
+Blurb: Eerion, the demon jester.
+Syntax: COMMAND GREMLIN AT <target>
+Abfile:
+When you call upon Eerion, he will send to you a foul little gremlin,
+who will, when COMMANDed, shatter the magical shields surrounding your
+target. If your target labours under the whispering madness affliction,
+you will recover faster from this ability.
+
+When primebonded, the gremlin shall race around the legs of your target,
+inspiring dizziness in them; if they are already dizzy, it shall knock
+them off balance.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of equilibrium
+Resource: 50 mana
+The ability name GREMLIN is mapped to this ability.

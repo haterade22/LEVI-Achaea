@@ -1,0 +1,20 @@
+Ability: Spikes (Record #2902)
+Associated skill: Charnel
+Skillpoints required: 38999
+Blurb: Your domain has teeth.
+Syntax: CRYPT TRAP BUILD SPIKES
+CRYPT TRAP DISMANTLE SPIKES
+Abfile:
+A simple trap, but a deadly one nevertheless. Bringing forth spikes in a
+location shall cause any that approach from the upward direction
+(voluntary or otherwise) to impale themselves on their dagger-like
+points, suffering terribly in the process.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

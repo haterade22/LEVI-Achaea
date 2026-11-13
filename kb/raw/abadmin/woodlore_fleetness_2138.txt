@@ -1,0 +1,17 @@
+Ability: Fleetness (Record #2138)
+Associated skill: Woodlore
+Skillpoints required: 44999
+Blurb: Navigate the forests with expert skill.
+Syntax: FLEETNESS
+Abfile:
+This ability grants a defence that, when activated, will allow you to
+move faster through the forests.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

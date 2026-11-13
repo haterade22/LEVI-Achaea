@@ -1,0 +1,19 @@
+Ability: Splintmail (Record #1845)
+Associated skill: Armoursmithing
+Skillpoints required: 44999
+Blurb: Good armour made of strips of metal and leather.
+Syntax: FORGE FOR SPLINTMAIL
+FORGE (to continue after interruption)
+Extra info: Commodities: 5 Leather
+18 Steel
+Abfile:
+Good armour made of strips of metal and leather.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

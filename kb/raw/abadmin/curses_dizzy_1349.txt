@@ -1,0 +1,18 @@
+Ability: Dizzy (Record #1349)
+Associated skill: Curses
+Skillpoints required: 7999
+Blurb: Causes problems when trying to move.
+Syntax: CURSE <target> DIZZY
+Abfile:
+Afflict your target with severe dizziness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana
+The ability name DIZZINESS is mapped to this ability.

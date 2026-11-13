@@ -1,0 +1,20 @@
+Ability: Force (Record #1055)
+Associated skill: Devotion
+Skillpoints required: 18999
+Blurb: Make an adventurer follow your wish.
+Syntax: PERFORM FORCE <target> <command>
+Abfile:
+Using your powers over those who fall under your gaze, you
+may force an adventurer to bend to your will and carry out your
+commands.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 2000 devotion

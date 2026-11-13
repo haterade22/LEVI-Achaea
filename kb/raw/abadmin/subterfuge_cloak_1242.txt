@@ -1,0 +1,23 @@
+Ability: Cloak (Record #1242)
+Associated skill: Subterfuge
+Skillpoints required: 25999
+Blurb: Hide your actions from others.
+Syntax: CONJURE CLOAK
+CONJURE CLOAK <target>
+DISPEL ME
+Abfile:
+This will conjure up a cloak that will disguise many actions from
+observers.
+
+DISPEL ME will remove a subterfuge induced cloak from your person.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 70 mana

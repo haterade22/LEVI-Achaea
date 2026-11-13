@@ -1,0 +1,20 @@
+Ability: Discard (Record #2420)
+Associated skill: Aeonics
+Skillpoints required: 35999
+Blurb: The mind is your weapon.
+Syntax: CHRONO DISCARD <amount> [BOOST]
+Abfile:
+You may discard away your vitality in order to expand your mind,
+swapping health for mana at a 50% loss (so discard 1000 health, get 500
+mana).
+When boosted, this ability will not incur an equilibrium cost.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 150 age

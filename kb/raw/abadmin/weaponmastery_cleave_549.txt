@@ -1,0 +1,22 @@
+Ability: Cleave (Record #549)
+Associated skill: Weaponmastery
+Skillpoints required: 43999
+Blurb: Rend your opponent's body in two.
+Syntax: CLEAVE <target>
+Abfile:
+If you are wielding a sword in your hand, you may try to cleave
+someone's body asunder. Your opponent does not have to be in the room
+with you when you begin a cleave, but by the time you get the second
+cleave-related message, he must be in the room, or the cleave will be
+stopped. If you do successfully cleave your opponent, you will so
+destroy his body that there will be nothing left for anyone to immolate.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: knight_dualcutting

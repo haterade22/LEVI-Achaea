@@ -1,0 +1,18 @@
+Ability: Shatter (Record #406)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Shatter protective shielding from your opponent.
+Syntax: HYDRA SHATTER <adventurer>
+This ability will be hidden on ablistings.
+Abfile:
+Your many heads will strike out at your target, shattering any protective shield found.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of hydra head balance
+Skill specialisation: meta_druid

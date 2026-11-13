@@ -1,0 +1,21 @@
+Ability: Heat (Record #753)
+Associated skill: Crystalism
+Skillpoints required: 1499
+Blurb: Fill a room with soothing warmth.
+Syntax: EMBED HEAT
+Abfile:
+ Shapes required: Pyramid
+
+This vibration will heat up the room around you, counteracting the
+normal effects of cold weather.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

@@ -1,0 +1,18 @@
+Ability: Track (Record #2963)
+Associated skill: Valour
+Skillpoints required: 38999
+Blurb: There is no hiding from the light.
+Syntax: EAGLE TRACK <target>
+Abfile:
+This ability is an improved version of the follow ability. With track,
+even if the eagle temporarily loses its target, because the target went
+indoors, it will continue to follow the target once the target comes
+back outside.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

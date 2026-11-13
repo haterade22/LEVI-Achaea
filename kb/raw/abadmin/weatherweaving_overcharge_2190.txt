@@ -1,0 +1,31 @@
+Ability: Overcharge (Record #2190)
+Associated skill: Weatherweaving
+Skillpoints required: 25999
+Blurb: To the point of instability, and no further.
+Syntax: OVERCHARGE <spell1> <spell2> <target>
+Abfile:
+This ability is used in place of synchronisation. You may overcharge two
+spells, causing various effects.
+
+Lightning spells: take 15 units of arcane energy each. They deliver
+paralysis, and damage if paralysis is already present. They shall also
+temporarily extend focus mind recovery time, though this effect is short
+lived.
+Wind spells: take 13 units of arcane energy each, and deliver asthma.
+They deliver damage if asthma is already present.
+Water spells: they take 13 units of arcane energy each, and deliver
+weariness. If weariness is already present on the target, they deliver
+damage.
+
+Static, thunderclap, and bolt are lightning spells; cyclone and
+razorwind are wind spells. Waterspout and hailstone are water spells.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 50 mana and arcane power

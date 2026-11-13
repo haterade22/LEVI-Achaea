@@ -1,0 +1,26 @@
+Ability: Tiwaz (Record #1159)
+Associated skill: Runelore
+Skillpoints required: 37999
+Blurb: This rune will remove the defenses of your enemies.
+Syntax: SKETCH TIWAZ ON GROUND|<totem>
+EMPOWER TIWAZ <target>
+Abfile:
+ Inks required: 1 Blue, 2 Red
+
+Symbol: Upwards-Pointing Arrow
+
+Strips away a defence of any enemy who enters and sees it. It disappears
+after one use, unless it is on a totem.
+
+When sketched upon the ground, it may also be empowered against a target
+in the sky or trees above, and will draw them back down to your level.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

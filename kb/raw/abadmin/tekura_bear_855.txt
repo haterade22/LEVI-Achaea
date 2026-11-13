@@ -1,0 +1,19 @@
+Ability: Bear (Record #855)
+Associated skill: Tekura
+Skillpoints required: 13999
+Blurb: A highly specialised stance.
+Syntax: BRS
+Abfile:
+One of the most dangerous offensively orientated stances, those in the
+bear stance perform both more damaging throws as well as finding
+themselves able to intercept their enemies from fleeing on occasion.
+However, both kicks and punches will be somewhat slowed.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

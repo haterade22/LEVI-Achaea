@@ -1,0 +1,42 @@
+Ability: Piridon (Record #997)
+Associated skill: Domination
+Skillpoints required: 30999
+Blurb: Piridon, the shapechanger.
+Syntax: None
+Abfile:
+When you summon Piridon, he will send to you a doppleganger. The
+doppleganger will look like you, though it must be referred to as
+'doppleganger'. The doppleganger is much different from other entities
+in that it may be remotely commanded.
+
+ORDER DOPPLEGANGER CHANNEL <ab>|CLOAK|EXITS|LOOK|MOVE <dir>|RETURN|SEEK
+<who>
+
+CHANNEL <ab>  : Allows you to channel certain Occult abilities through
+                your doppleganger. These include: Ague, Devolve,
+                Eldritchmists, Quicken, Shrivel, Timewarp, and Warp.
+CLOAK         : Masks your doppleganger's entry and exit.
+EXITS         : Shows the exits from the room your doppleganger is in.
+LOOK          : Your doppleganger looks at the room it is in.
+MOVE <dir>    : Your doppleganger moves in a specific direction.
+RETURN        : Your doppleganger returns to you.
+SEEK <who>    : Your doppleganger seeks a specific adventurer. If he
+                is flying, it will go and wait underneath.
+                Trees present no obstacle to this.
+
+Special note about channeling: the channel to your doppleganger is a
+two-way link, however briefly it may be in operation. Any backlash from
+an attack channeled through your doppleganger has a very high likelihood
+of continuing through that link and harming you directly.
+
+
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+The ability name DOPPLEGANGER is mapped to this ability.

@@ -1,0 +1,18 @@
+Ability: Scry (Record #712)
+Associated skill: Elementalism
+Skillpoints required: 5999
+Blurb: Locate another adventurer.
+Syntax: CAST SCRY AT <target>
+Abfile:
+By summoning up an image in a pool of water, you are able to scry for
+the location of a target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 30 mana

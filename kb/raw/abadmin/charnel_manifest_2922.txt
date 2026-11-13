@@ -1,0 +1,17 @@
+Ability: Manifest (Record #2922)
+Associated skill: Charnel
+Skillpoints required: 9999
+Blurb: A chamber for rituals and more.
+Syntax: CRYPT RESHAPE MANIFEST
+Abfile:
+Your ritual manifest is where higher arcane rituals are performed, with
+more specialised needs than the interment chamber.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,24 @@
+Ability: Glacial (Record #2043)
+Associated skill: Artificing
+Skillpoints required: 40999
+Blurb: There is cold, then there is Cold.
+Syntax: WORKSHOP REFINE GLACIAL CRYSTAL
+Abfile:
+When set into your staff, this crystal will enhance your control over
+your spell of horripilation, allowing you to bleed off the excess water
+to bind your target with bonds of water, making it hard for them to
+leave the location for a time(*).
+
+* The duration of the bonds is highly variable. If they are frozen, they
+shall last for 45 seconds. If they are only shivering, they will last
+for 35 seconds. If they are neither shivering nor frozen but lacking the
+insulation defence, they will last 25 seconds. Otherwise, they will only
+last 15 seconds.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

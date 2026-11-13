@@ -1,0 +1,18 @@
+Ability: Transition (Record #2354)
+Associated skill: Kaido
+Skillpoints required: 48999
+Blurb: Push yourself beyond your limits.
+Syntax: KAI TRANSITION <stance>
+Abfile:
+By enhancing your abilities with kai energy, you are able to immediately
+transition to a different stance at no balance or equilibrium cost.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10 Kai energy
+Skill specialisation: tekura_monk

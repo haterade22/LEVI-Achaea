@@ -1,0 +1,17 @@
+Ability: Speed (Record #1915)
+Associated skill: Remedies
+Skillpoints required: 52999
+Blurb: An elixir to slow your perception of time.
+Syntax: None
+Extra info: Ingredients: 2 sidewinder skins, 1 kuzu, 1 goldenseal, 1 ginger or
+1 antimony, 1 gypsum, 2 plumbum
+Abfile:
+The speed elixir can increase your ability to dodge some attacks, such as tekura and weapon attacks.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

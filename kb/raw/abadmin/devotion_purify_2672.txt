@@ -1,0 +1,20 @@
+Ability: Purify (Record #2672)
+Associated skill: Devotion
+Skillpoints required: 54999
+Blurb: Cleanse the land of necromantic corruption.
+Syntax: PERFORM PURIFY
+Abfile:
+Drive out necromantic corruption, destroying the hands of the grave that
+may clutch at the living in a location. If a Necromancer stands guard
+over said hands, there is a delay during which the faithful may perform
+no other actions, so focussed on their task are they.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 1
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.80 seconds of equilibrium
+Resource: 500 mana

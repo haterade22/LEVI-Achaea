@@ -1,0 +1,25 @@
+Ability: Downpour (Record #2587)
+Associated skill: Pervasion
+Skillpoints required: 20999
+Blurb: A deluge to make them kneel.
+Syntax: MANIFEST DOWNPOUR <target>
+Abfile:
+Summon forth a deluge of water to batter your foe. If they have the
+audacity to face you on their feet then alternative means will need to
+be employed.
+
+If they are already in their rightful place at your feet the deluge
+shall freeze them with its chill and deal damage based on how frozen
+they are afterwards. This damage will be reduced upon repeated casts
+and will require greater balance at maximum damage.
+
+Due to the focus required for this skill it is unique in that it must
+always be the first attack in a flux, if so utilised.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

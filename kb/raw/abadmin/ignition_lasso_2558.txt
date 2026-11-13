@@ -1,0 +1,16 @@
+Ability: Lasso (Record #2558)
+Associated skill: Ignition
+Skillpoints required: 14999
+Blurb: The skywalkers were always cowards.
+Syntax: IGNITE LASSO <target>
+Abfile:
+Bring forth a lasso of flame to drag those that would fly overhead down
+to the ground, causing some damage and setting them ablaze.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Denounce (Record #3034)
+Associated skill: Excision
+Skillpoints required: 999
+Blurb: Let no evil go unchallenged.
+Syntax: PERFORM DENOUNCE <target>
+Abfile:
+Rousing your wrath against an enemy of creation, you may denounce his
+wicked ways, shattering defences that may try to keep you from excising
+the corruption that stands before you(*).
+
+* Destroys rebounding if present. If your target is burning, it will
+also strip any prismatic barrier present.
+** The wrath cost of this ability is reduced against an ablaze target.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of wrath balance
+Resource: 20% Holy Wrath

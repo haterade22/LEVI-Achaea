@@ -1,0 +1,20 @@
+Ability: Lullaby (Record #776)
+Associated skill: Crystalism
+Skillpoints required: 53999
+Blurb: Put your enemies to sleep.
+Syntax: EMBED LULLABY
+Abfile:
+ Shapes required: Pyramid
+
+The powerful lullaby vibration will put your enemies to sleep.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

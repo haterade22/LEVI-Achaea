@@ -1,0 +1,17 @@
+Ability: Sustenance (Record #1046)
+Associated skill: Devotion
+Skillpoints required: 3999
+Blurb: The Gods will provide for you.
+Syntax: PERFORM RITE OF SUSTENANCE
+Abfile:
+At the cost of some devotion, you may feed yourself with this ability. You need to be holding a bowl of some sort in order for this to work. Upon performing the rite, your bowl will be filled with Divine manna, which will provide you with great sustenance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 1500 devotion

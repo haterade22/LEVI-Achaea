@@ -1,0 +1,17 @@
+Ability: Scan (Record #931)
+Associated skill: Telepathy
+Skillpoints required: 35999
+Blurb: Scan the mind of your subject.
+Syntax: MIND SCAN
+Abfile:
+An improvement on Divine, this will allow you to see considerably more information about the locked adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

@@ -1,0 +1,18 @@
+Ability: Symphony (Record #2658)
+Associated skill: Harmonics
+Skillpoints required: 54999
+Blurb: A rousing piece to sustain your music.
+Syntax: PLAY SYMPHONY
+Abfile:
+By playing this piece of music you shall cause all of your harmonics in
+the current location to swell back to full force, refreshing their time
+until termination.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

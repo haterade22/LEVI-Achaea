@@ -1,0 +1,26 @@
+Ability: Scorpion (Record #2872)
+Associated skill: Memorium
+Skillpoints required: 55999
+Blurb: The striking predator of the sands.
+Syntax: TRACE SCORPION <target>
+Abfile:
+This logograph is unique in that it takes more power to imbue than blood
+alone can provide. For this reason, it requires some preparation: it can
+only be traced as the final logograph in your epitaph, and said epitaph
+must be sufficiently long(*). However, such preparation comes with
+expected results: the scorpion shall inflict your foe with a terrible
+curse, thinning their blood(**). Notably, this logograph is so complex
+that it does not suffer alterations of any kind: you cannot utilise the
+scorpion with the heartbeat ability.
+
+* At least a length of four.
+** Gives the thinned blood affliction (similar to the scytherus venom).
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

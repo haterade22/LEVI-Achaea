@@ -1,0 +1,19 @@
+Ability: Hallowed (Record #3056)
+Associated skill: Excision
+Skillpoints required: 20999
+Blurb: They shall not leave this holy place.
+Syntax: PERFORM HALLOWED
+Abfile:
+You may declare a location to be hallowed ground, bringing forth a rite
+of piety. This rite will cause it to be difficult for any of your
+enemies to leave the location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of wrath balance
+Resource: 4% Holy Wrath

@@ -1,0 +1,22 @@
+Ability: Anarchy (Record #3067)
+Associated skill: Anathema
+Skillpoints required: 55999
+Blurb: Let Chaos reign.
+Syntax: UNNAMABLE ANARCHY
+Abfile:
+While radiating the presence of the Unnamable, if you dedicate your
+focus to the task you may unleash true anarchy upon Creation. Your
+unnamable presence shall extend to adjacent locations, though such
+requires all of your concentration to maintain(*).
+
+* This is a channeled action.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of anathema balance
+Resource: 2% karma

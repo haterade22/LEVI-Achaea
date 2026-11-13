@@ -1,0 +1,20 @@
+Ability: Fulmination (Record #2196)
+Associated skill: Weatherweaving
+Skillpoints required: 60000
+Blurb: Your fury is terrible indeed.
+Syntax: CAST FULMINATION <delay>
+Abfile:
+This most powerful of the lightning spells allows you to summon forth a
+sphere of condensed electricity. You may set a delay between 10 and 60
+seconds on the construct, after which time it will become unstable. Woe
+to any who are present for that eventuality.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1500 mana

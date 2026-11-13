@@ -1,0 +1,3 @@
+Ability: Blocking (Record #1219)
+Associated skill: Subterfuge
+Maps to record 1218 (BLOCK).

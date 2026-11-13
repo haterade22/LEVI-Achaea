@@ -1,0 +1,19 @@
+Ability: Inventory (Record #650)
+Associated skill: Puppetry
+Skillpoints required: 40999
+Blurb: See the inventory of your target.
+Syntax: PUPPET INVENTORY
+Extra info: Fashions:
+Required: 25
+Used    : 1
+Abfile:
+See the possessions in the inventory of your victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

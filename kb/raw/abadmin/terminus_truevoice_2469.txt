@@ -1,0 +1,17 @@
+Ability: Truevoice (Record #2469)
+Associated skill: Terminus
+Skillpoints required: 55999
+Blurb: True voice of the Tsol'teth.
+Syntax:
+Abfile:
+Your voice now possesses such power that your incantations can bypass
+even the power of the silence vibrations that magi may bring forth in
+their feeble attempts to thwart you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

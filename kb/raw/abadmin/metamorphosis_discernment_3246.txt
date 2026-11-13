@@ -1,0 +1,18 @@
+Ability: Discernment (Record #3246)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb: Assess their wounds.
+Syntax: DISCERN <target>
+This ability will be hidden on ablistings.
+Abfile:
+You will be able to quickly assess the wounds of your prey, gauging
+roughly how severe their bleeding is.
+Useable on: none
+Pre checks: equilibrium and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium

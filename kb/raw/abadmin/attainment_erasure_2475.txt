@@ -1,0 +1,21 @@
+Ability: Erasure (Record #2475)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: They shall be undone.
+Syntax: CHRONO ERASURE <target>
+Extra info: Uses denizen afflictions: Weakness or Amnesia
+Abfile:
+Your command of time allows you to erase the very concept of a denizen
+from the timestream, inflicting catastrophic damage against their
+person.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_depthswalker

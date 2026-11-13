@@ -1,0 +1,22 @@
+Ability: Tap (Record #2779)
+Associated skill: Sublimation
+Skillpoints required: 0
+Blurb: Tap the power of the Wellspring.
+Syntax: TAP WELLSPRING
+Abfile:
+Due to long exposure, you have learned the process of tapping the
+Wellspring of energy which lays beneath the city of Hashan. Every so
+often your reserves of energy shall refill from the Wellspring
+passively.
+
+You may enact the process actively yourself, though you may only do this
+so often or risk catastrophic harm to yourself.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

@@ -1,0 +1,18 @@
+Ability: Thi (Record #2439)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: No wound can stop you.
+Syntax: INTONE THI
+This ability will be hidden on ablistings.
+Abfile:
+This word will fully restore your health, mana, willpower and endurance.
+Note that it may only be uttered once every 8 hours.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of word balance

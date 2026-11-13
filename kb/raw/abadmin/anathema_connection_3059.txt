@@ -1,0 +1,24 @@
+Ability: Connection (Record #3059)
+Associated skill: Anathema
+Skillpoints required: 1
+Blurb: The fundamental which underpins.
+Syntax: KARMA
+KARMA DRAW
+Abfile:
+Each Unnamable requires vast amounts of karma to facilitate their works,
+and the Living Book of Eschaton is the greatest repository of karma
+there is. Those citizens of Ashtan who undertake this path may seek it
+out, and TOUCH it to begin the process.
+
+Once a connection is established, the student of Anathema may DRAW upon
+the connection when in the Eschaton's presence, restoring some of their
+karmic reserves. Note however, this process is painful, and doing so in
+excess may have consequences.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

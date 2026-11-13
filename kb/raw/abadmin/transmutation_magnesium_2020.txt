@@ -1,0 +1,16 @@
+Ability: Magnesium (Record #2020)
+Associated skill: Transmutation
+Skillpoints required: 6666
+Blurb: A mineral to return movement to the muscles.
+Syntax: EXTRACT MAGNESIUM
+TRANSMUTATE <#> <mineral> TO MAGNESIUM
+Abfile:
+The magnesium mineral will cure paralysis and slickness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Algiz (Record #1143)
+Associated skill: Runelore
+Skillpoints required: 9999
+Blurb: A rune of protection from damage.
+Syntax: SKETCH ALGIZ ON ME/<target>
+Abfile:
+ Inks required: 1 Green
+Symbol: Elk
+
+As long as it lasts, this grants a reduction by 10% of all damage types
+to the adventurer.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

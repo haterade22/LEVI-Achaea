@@ -1,0 +1,19 @@
+Ability: Follow (Record #521)
+Associated skill: Discipline
+Skillpoints required: 6999
+Blurb: Order your falcon to aerially follow someone.
+Syntax: FALCON FOLLOW <target>
+Abfile:
+You have established enough of a rapport with your falcon now that you
+may order it to follow, from the air, a particular adventurer. When the
+falcon loses the adventurer, generally because the adventurer goes
+indoors, it will stop following.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Punishment (Record #2836)
+Associated skill: Oppression
+Skillpoints required: 24999
+Blurb: Their weakness shall not go unanswered.
+Syntax: HELLFORGE INVEST PUNISHMENT
+Abfile:
+Imbue your blade with necromantic energy, taking the place of a venom
+application. On your next blow you shall cause terrible suffering to the
+heathen that dares oppose you(*).
+
+* This damage scales to the number of mental afflictions your victim
+suffers from.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

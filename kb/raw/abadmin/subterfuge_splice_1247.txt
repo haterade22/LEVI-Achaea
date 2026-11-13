@@ -1,0 +1,16 @@
+Ability: Splice (Record #1247)
+Associated skill: Subterfuge
+Skillpoints required: 32999
+Blurb: Create a dimensional wormhole.
+Syntax: WORM SPLICE <target>
+Abfile:
+This command takes two Serpents with the ability to splice. Target the other Serpent and then execute this command. It will take quite awhile, but when finished, a wormhole will be formed between your two locations.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

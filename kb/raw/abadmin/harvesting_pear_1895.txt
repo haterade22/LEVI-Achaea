@@ -1,0 +1,16 @@
+Ability: Pear (Record #1895)
+Associated skill: Harvesting
+Skillpoints required: 32999
+Blurb: The fruit of the prickly pear cactus.
+Syntax: HARVEST PEAR
+Abfile:
+The desert-dwelling prickly pear cactus has a lovely fruit necessary in certain concoctions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

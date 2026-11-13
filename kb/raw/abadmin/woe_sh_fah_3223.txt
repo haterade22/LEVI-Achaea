@@ -1,0 +1,21 @@
+Ability: Sh'fah (Record #3223)
+Associated skill: Woe
+Skillpoints required: 32999
+Blurb: An ancient foe cast down.
+Syntax: RECITE SH'FAH
+Abfile:
+The story of the crystal legion that fell prey to Pazuzu unchained after
+so long guarding his prison is one often overlooked, but for those who
+comprehend the great task these warriors were appointed to, it is one
+that can only give them over to reflection(*).
+
+* Grants everyone in the location a reflection.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.50 seconds of equilibrium

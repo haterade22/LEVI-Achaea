@@ -1,0 +1,17 @@
+Ability: Mana (Record #1907)
+Associated skill: Remedies
+Skillpoints required: 12999
+Blurb: A brew to replenish your mental strength.
+Syntax: None
+Extra info: Ingredients: 1 slipper, 1 bellwort, 1 hawthorn, 1 bloodroot or
+1 cuprum, 1 calamine, 1 magnesium
+Abfile:
+The mana elixir will replenish your mana when sipped.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Thermal (Record #2785)
+Associated skill: Sublimation
+Skillpoints required: 2999
+Blurb: A slight shunting of heat.
+Syntax: MANIPULATE THERMAL
+This ability will be hidden on ablistings.
+Abfile:
+Thermal energy is surprisingly difficult to manipulate directly.
+Nevertheless, shunting it out of a location is simple enough. Drain a
+location of heat and cause all within to be given a level of freeze.
+
+Overdraw effect: destroys all firewalls in the current location.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance
+Resource: 4% Wellspring Energy

@@ -1,0 +1,24 @@
+Ability: Hailstone (Record #2193)
+Associated skill: Weatherweaving
+Skillpoints required: 34999
+Blurb: Simple is best.
+Syntax: CAST HAILSTONE AT <target>
+Abfile:
+Summon forth a hailstone to strike your target in the side of the head.
+
+If the target is an adventurer, this will give them clumsiness. If they
+are already clumsy, it shall give epilepsy. If they have epilepsy, it
+shall give impatience.
+
+This spell also causes cold damage to both adventurers and denizens.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 33 mana

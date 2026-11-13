@@ -1,0 +1,18 @@
+Ability: Leapstrike (Record #2265)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Destroy your enemy on your way down.
+Syntax: LEAPSTRIKE <target>
+Abfile:
+Fire a blast of Shin energy at the ground below you, using it to propel you high in the air. On your way down, strike your target with one knee, focusing all of your weight and downward energy in one devastating blow.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_blademaster

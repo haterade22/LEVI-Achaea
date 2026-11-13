@@ -1,0 +1,16 @@
+Ability: Expand (Record #2710)
+Associated skill: Psionics
+Skillpoints required: 5999
+Blurb: The mind shall not be constrained.
+Syntax: PSI EXPAND
+Abfile:
+Expand your mental faculties, restoring some mana.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

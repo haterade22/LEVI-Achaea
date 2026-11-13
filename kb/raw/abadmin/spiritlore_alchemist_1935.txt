@@ -1,0 +1,3 @@
+Ability: Alchemist (Record #1935)
+Associated skill: Spiritlore
+Maps to record 1934 (ASPAR).

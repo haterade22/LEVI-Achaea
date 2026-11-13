@@ -1,0 +1,3 @@
+Ability: Contemplation (Record #1037)
+Associated skill: Spirituality
+Maps to record 1036 (CONTEMPLATE).

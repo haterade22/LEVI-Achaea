@@ -1,0 +1,16 @@
+Ability: Rites (Record #1045)
+Associated skill: Devotion
+Skillpoints required: 2999
+Blurb: List what rites are active.
+Syntax: RITES
+Abfile:
+This ability will show you what rites are operating in your room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

@@ -1,0 +1,18 @@
+Ability: Shear (Record #2180)
+Associated skill: Weatherweaving
+Skillpoints required: 5999
+Blurb: Slice away shields with a blade of wind.
+Syntax: CAST SHEAR AT <target>
+Abfile:
+This spell will allow you to slice through magical shields that protect
+your enemy.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.45 seconds of equilibrium
+Resource: 38 mana

@@ -1,0 +1,24 @@
+Ability: Enheduanna (Record #3216)
+Associated skill: Woe
+Skillpoints required: 6999
+Blurb: Weep for what was lost.
+Syntax: RECITE ENHEDUANNA
+Abfile:
+The tragic tale of Enheduanna is one of sorrow and betrayal, love and
+hatred, and terrible, terrible wrath. At the culmination of this tale
+all in your location that hear you, ally or enemy, will be suffused with
+a fragment of that terrible fury, all of their actions becoming
+enhanced(*).
+
+* Balance and equilibrium time is reduced while present in the room
+where this tale was spoken for those that heard it, though not for long.
+** This tale may only be spoken once every minute.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance

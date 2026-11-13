@@ -1,0 +1,17 @@
+Ability: Jink (Record #1767)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Slide around obstructing ships.
+Syntax: JINK CLEAR|LARBOARD or LEFT|STARBOARD or RIGHT|SHOW
+Abfile:
+Avoid collisions with other ships by setting the jink direction
+beforehand.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm4

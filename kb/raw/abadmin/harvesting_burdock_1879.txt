@@ -1,0 +1,16 @@
+Ability: Burdock (Record #1879)
+Associated skill: Harvesting
+Skillpoints required: 1999
+Blurb: A dark root of the burdock plant.
+Syntax: HARVEST BURDOCK
+Abfile:
+Very little is known about this mysterious root.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

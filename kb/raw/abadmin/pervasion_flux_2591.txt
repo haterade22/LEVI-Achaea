@@ -1,0 +1,23 @@
+Ability: Flux (Record #2591)
+Associated skill: Pervasion
+Skillpoints required: 33999
+Blurb: Your control was never in question.
+Syntax: FLUX <target> <task1> <task2>
+Abfile:
+For one such as you multitasking when it comes to your element is
+trivial. You may now strike your foe with up to two abilities at a
+time(*). In addition, the first ability used in this way is more
+powerful, and may have secondary effects(**).
+
+* Abilities that can be fluxed are: choke, drench, perspire, thin, roil,
+parch, wreck, latch, coldfate, torrent, blade, and downpour.
+** See the individual ability files for more specifics on a per ability
+basis.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

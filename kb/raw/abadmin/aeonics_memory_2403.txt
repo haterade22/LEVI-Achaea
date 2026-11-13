@@ -1,0 +1,29 @@
+Ability: Memory (Record #2403)
+Associated skill: Aeonics
+Skillpoints required: 0
+Blurb: Remember what was.
+Syntax: CHRONO MEMORY
+CHRONO RETURN
+Abfile:
+In a display of power beyond the comprehension of any current
+practitioner of Aeonics, Parni deSangre, he who was Tenith'oru,
+imprinted the memory of his fallen protege upon the timestream so
+indelibly that with sufficient training, a practitioner of the time arts
+may step back through the years and see what once was(*).
+
+* This is the method through which one shall study Aeonics and later
+Terminus: they may LEARN from Kosuira.
+
+As the first of the overland cities to enter into an alliance with the
+Tsol'teth of Anzari-tarin, citizens of Hashan may study Terminus in a
+facility within their own walls. Use of the Forbidden Art to visit the
+Child Sorceress is no longer permitted by Hashan law.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

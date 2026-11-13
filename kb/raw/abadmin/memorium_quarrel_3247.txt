@@ -1,0 +1,25 @@
+Ability: Quarrel (Record #3247)
+Associated skill: Memorium
+Skillpoints required: 49999
+Blurb: Blood settles all disputes.
+Syntax: QUARREL <target> <direction> <logograph>
+Abfile:
+Your hands may be denied the weapons of war, but to walk your path is to
+make of denial a tomb and destiny both. Wielding your own blood, you may
+craft arrows to strike at your enemies, each imbued with a logograph
+that is known to you.
+
+* All logographs may be used except the fissure and the shield.
+** This attack's damage, accuracy, and balance scales to any artefact
+bow
+in your inventory that has the shooting upgrade.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

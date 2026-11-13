@@ -1,0 +1,17 @@
+Ability: Dispel (Record #1229)
+Associated skill: Subterfuge
+Skillpoints required: 14999
+Blurb: Rid your environment of illusions.
+Syntax: DISPEL ME
+DISPEL <target>
+Abfile:
+Use this ability to dispel most illusions associated with yourself or another adventurer.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 mana

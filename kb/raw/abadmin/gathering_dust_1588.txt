@@ -1,0 +1,16 @@
+Ability: Dust (Record #1588)
+Associated skill: Gathering
+Skillpoints required: 53499
+Blurb: Valuable diamond dust gathered underground.
+Syntax: GATHER DUST
+Abfile:
+By carefully searching every inch of naturally formed underground locations, you may stumble upon a pinch of valuable diamond dust.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

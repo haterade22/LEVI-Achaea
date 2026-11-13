@@ -1,0 +1,16 @@
+Ability: Aurum (Record #2032)
+Associated skill: Transmutation
+Skillpoints required: 31499
+Blurb: Aurum will strengthen your body.
+Syntax: EXTRACT AURUM
+TRANSMUTATE <#> <mineral> TO AURUM
+Abfile:
+The aurum mineral will help cure afflictions caused by physical weakness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

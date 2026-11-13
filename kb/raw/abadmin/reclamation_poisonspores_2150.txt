@@ -1,0 +1,22 @@
+Ability: Poisonspores (Record #2150)
+Associated skill: Reclamation
+Skillpoints required: 13999
+Blurb: A far less gentle fate.
+Syntax: RECLAMATION POISONSPORES
+RECLAMATION TERMINATE POISONSPORES/ALL
+Abfile:
+These spores are far more deadly than simple sleep spores, and will
+cause the victim to suffer if they are unfortunate enough to inhale
+them.
+
+Poison, sleep, refresh spores and pollen are all mutually exclusive.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

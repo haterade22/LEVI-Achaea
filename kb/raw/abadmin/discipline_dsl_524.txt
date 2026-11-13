@@ -1,0 +1,3 @@
+Ability: Dsl (Record #524)
+Associated skill: Discipline
+Maps to record 523 (DUALITY).

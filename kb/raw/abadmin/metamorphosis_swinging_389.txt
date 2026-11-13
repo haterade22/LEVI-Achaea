@@ -1,0 +1,18 @@
+Ability: Swinging (Record #389)
+Associated skill: Metamorphosis
+Skillpoints required: 41999
+Blurb: Swinging up into the treetops.
+Syntax: SWING UP
+SWING DOWN
+This ability will be hidden on ablistings.
+Abfile:
+When in a forest location, you will be able to swing up into the trees.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

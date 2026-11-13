@@ -1,0 +1,16 @@
+Ability: Disarm (Record #1182)
+Associated skill: Woodlore
+Skillpoints required: 12999
+Blurb: Attempt to disarm a trap.
+Syntax: DISARM <trap type> <direction>
+Abfile:
+Using this ability, you will attempt to disarm a trap in the direction specified. If you are successful, and not in the arena, then you will get the commodities that went into its making. If you are unsuccessful, you will fall victim to the trap. You will only be able to disarm traps laid by those with skill equal to or less than your own.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

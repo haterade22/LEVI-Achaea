@@ -1,0 +1,17 @@
+Ability: Grab (Record #1192)
+Associated skill: Skirmishing
+Skillpoints required: 2999
+Blurb: Use an axe to pull someone in from a nearby room.
+Syntax: BTHROW AXE AT <target> <direction>
+Abfile:
+This ability will allow you to bring someone in another room to you by throwing your axe at them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+The ability name THROW is mapped to this ability.

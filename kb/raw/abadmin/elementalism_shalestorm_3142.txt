@@ -1,0 +1,23 @@
+Ability: Shalestorm (Record #3142)
+Associated skill: Elementalism
+Skillpoints required: 25999
+Blurb: A downpour of stone.
+Syntax: CAST SHALESTORM AT <target>
+Abfile:
+This higher order earth spell will summon up a storm of rocks to
+periodically pummel your victim(*). For every two times the rocks pummel
+a victim, your resonance with the Elemental Plane of Earth will
+decrease. The storm will cease once your resonance is gone entirely.
+
+* This will do damage and break a random limb of your victim if your
+victim is unshielded. If they are shielded, it will break the shield.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium
+Resource: 100 mana

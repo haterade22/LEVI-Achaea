@@ -1,0 +1,18 @@
+Ability: Strip (Record #1024)
+Associated skill: Spirituality
+Skillpoints required: 18999
+Blurb: Order your angel to strip a defence from a heretic.
+Syntax: ANGEL STRIP <target>
+Abfile:
+You may order your angel to strip a defence from your opponent. It will
+always strip magical shields first.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of equilibrium
+Resource: 10 Angel power and 100 mana

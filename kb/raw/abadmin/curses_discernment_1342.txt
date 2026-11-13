@@ -1,0 +1,16 @@
+Ability: Discernment (Record #1342)
+Associated skill: Curses
+Skillpoints required: 0
+Blurb: Discern the severity of your victim's wounds.
+Syntax: DISCERN <target>
+Abfile:
+With a practiced eye, determine how severely your victim is bleeding.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

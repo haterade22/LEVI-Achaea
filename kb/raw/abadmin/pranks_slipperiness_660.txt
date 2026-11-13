@@ -1,0 +1,16 @@
+Ability: Slipperiness (Record #660)
+Associated skill: Pranks
+Skillpoints required: 699
+Blurb: Slip out of that which would bind you.
+Syntax: SLIPPERINESS
+Abfile:
+Once you've activated slipperiness, you will be able to WRITHE from entanglements faster than normal. Additionally, your agility will allow you to partially avoid attacks from denizens, reducing your damage taken. There is no ongoing cost to this ability.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

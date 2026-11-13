@@ -1,0 +1,17 @@
+Ability: Shock (Record #2042)
+Associated skill: Artificing
+Skillpoints required: 44999
+Blurb: Your foci will be positively electrifying.
+Syntax: WORKSHOP REFINE SHOCK CRYSTAL
+Abfile:
+When set into a staff alongside a lightning crystal, when casting your
+lightning spell through your foci your target will also be struck down
+with the stupidity affliction.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

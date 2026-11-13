@@ -1,0 +1,16 @@
+Ability: Curare (Record #1285)
+Associated skill: Venom
+Skillpoints required: 5999
+Blurb: A venom of muscular paralysis.
+Syntax: SECRETE CURARE
+BITE <target>
+Abfile:
+Cause your victim's body to freeze with paralysis.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

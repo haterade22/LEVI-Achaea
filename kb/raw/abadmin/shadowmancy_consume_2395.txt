@@ -1,0 +1,20 @@
+Ability: Consume (Record #2395)
+Associated skill: Shadowmancy
+Skillpoints required: 37999
+Blurb: They shall sustain you.
+Syntax: SHADOW CONSUME <target>
+Abfile:
+While wielding a manifested dagger of shadows, you may plunge it into
+the shadow of your foe, leaching away some of their mana(*) and adding
+it to your own.
+
+*This does increased mana drain for each of DEPRESSION, RETRIBUTION, and
+SHADOW MADNESS present.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

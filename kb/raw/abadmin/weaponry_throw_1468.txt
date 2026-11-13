@@ -1,0 +1,16 @@
+Ability: Throw (Record #1468)
+Associated skill: Weaponry
+Skillpoints required: 18999
+Blurb: Greatly improve your chances of hitting when throwing.
+Syntax: None
+Abfile:
+You have now gained skill enough to drastically improve your chances of hitting an opponent with a thrown weapon.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name THROWING is mapped to this ability.

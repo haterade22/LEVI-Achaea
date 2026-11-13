@@ -1,0 +1,16 @@
+Ability: Strata (Record #2535)
+Associated skill: Sculpting
+Skillpoints required: 27999
+Blurb: You will not be broken.
+Syntax: TERRAN STRATA
+Abfile:
+By forming protective strata over your person, you will take
+significantly less damage from cutting and blunt attacks.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

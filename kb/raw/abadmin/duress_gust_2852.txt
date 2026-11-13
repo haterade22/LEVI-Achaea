@@ -1,0 +1,20 @@
+Ability: Gust (Record #2852)
+Associated skill: Duress
+Skillpoints required: 18999
+Blurb: Beneath Whiirh's domain.
+Syntax: GUST <direction>
+Abfile:
+Become one with the winds when under the open sky(*), surging past
+barriers in a given direction(**).
+
+* You cannot use this when indoors or when moving to an indoors
+location.
+** Walls and similar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

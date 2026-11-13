@@ -1,0 +1,34 @@
+Ability: Deteriorate (Record #2425)
+Associated skill: Aeonics
+Skillpoints required: 50999
+Blurb: Madness comes to all.
+Syntax: CHRONO DETERIORATE <target> [BOOST]
+Abfile:
+If a target is sufficiently afflicted(*), you may drastically accelerate
+the effects of said afflictions.
+
+Against adventurers, this will cause the unfortunate subject to age in
+an instant, decreasing their intelligence by one for each affliction.
+When boosted, the target will lose two intelligence per affliction.
+
+In addition, adventurers suffering under this status will take
+significantly more health and mana loss from the depression affliction.
+
+When used against a mind-addled denizen(**), this aeonic command will
+deal significant magical damage and cannot be boosted.
+
+* Valid adventurer afflictions are: stupidity, confusion,
+hallucinations, depression, shadowmancy madness, vertigo, masochism,
+agoraphobia, and claustrophobia.
+** Valid battlerage afflictions against denizens are: recklessness,
+charm, fear, aeon, and amnesia.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 300 age

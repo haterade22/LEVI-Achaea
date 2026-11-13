@@ -1,0 +1,33 @@
+Ability: Specialise (Record #550)
+Associated skill: Weaponmastery
+Skillpoints required: 999
+Blurb: Gain proficiency in one of the schools of weaponry.
+Syntax: SPECIALISE IN <weapon style>
+Abfile:
+The decision to specialise in a specific school of weaponry shall
+dictate the rest of your growth as a knight. You shall learn abilities
+specific to your chosen school as you progress further in weaponmastery.
+
+The different schools are:
+Two handed: a style which focuses on single, powerful blows with
+warhammers and bastard swords.
+Sword and shield: a style that focuses on combination attacks using a
+shield and either a longsword or a broadsword, balancing offense and
+defence.
+Dual cutting: a style that focuses on wielding two bladed weapons
+simultaneously. Typically based around swifter strikes to overwhelm
+opponents using scimitars or battleaxes.
+Dual blunt: a style that focuses on wielding two blunt weapons
+simultaneously, and generating momentum to unleash exceptionally
+damaging strikes against an opponent using flails or morningstars.
+
+Note: you may switch your specialisation, but it shall cost you 100
+lessons each time that you do so (outside of your initial selection).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

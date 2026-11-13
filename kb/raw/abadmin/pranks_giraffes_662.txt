@@ -1,0 +1,19 @@
+Ability: Giraffes (Record #662)
+Associated skill: Pranks
+Skillpoints required: 2999
+Blurb: Twist a balloon into a giraffe.
+Syntax: INFLATE BALLOON INTO GIRAFFE
+MOUNT GIRAFFE
+STEP INTO TREES
+Abfile:
+This ability requires the presence of a balloon in your inventory.  MOUNT GIRAFFE will allow you to mount it, and then you can move it around as usual. You are also able to STEP INTO TREES from on its back.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+The ability name GIRAFFE is mapped to this ability.

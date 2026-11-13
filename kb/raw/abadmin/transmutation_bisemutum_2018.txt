@@ -1,0 +1,16 @@
+Ability: Bisemutum (Record #2018)
+Associated skill: Transmutation
+Skillpoints required: 2749
+Blurb: A mineral to quicken the mind.
+Syntax: EXTRACT BISEMUTUM
+TRANSMUTATE <#> <mineral> TO BISEMUTUM
+Abfile:
+The bisemutum mineral will quicken the speed of learning.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

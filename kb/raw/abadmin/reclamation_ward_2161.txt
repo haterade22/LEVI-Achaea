@@ -1,0 +1,18 @@
+Ability: Ward (Record #2161)
+Associated skill: Reclamation
+Skillpoints required: 51999
+Blurb: Over your dead body.
+Syntax: RECLAMATION WARD
+RELAX WARD
+Abfile:
+This ability will grant a defence that will prevent any room you are
+standing in from having your claim stripped from it.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 350 mana

@@ -1,0 +1,17 @@
+Ability: Brains (Record #3086)
+Associated skill: Anathema
+Skillpoints required: 18999
+Blurb: It's so simple with more than one.
+Syntax:
+Abfile:
+This manifestation will bolster your mental capacity, increasing how
+quickly you recover from attempts to focus your mind while you can
+maintain your superior mutated state.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

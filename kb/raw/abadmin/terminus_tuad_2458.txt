@@ -1,0 +1,23 @@
+Ability: Tuad (Record #2458)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: Deny their salvation.
+Syntax: INTONE TUAD <direction>
+This ability will be hidden on ablistings.
+Abfile:
+With this word of power, you may shatter an ice or stonewall that bars
+your path, causing it to explode and deal damage(*) to all that stand on
+either side of it. Note that stonewalls shall cause more damage when
+they shatter.
+
+*This strips magical shields if one is present, but does no damage in
+cases where this occurs.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 7.50 seconds of word balance

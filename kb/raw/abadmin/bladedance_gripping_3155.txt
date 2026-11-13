@@ -1,0 +1,17 @@
+Ability: Gripping (Record #3155)
+Associated skill: Bladedance
+Skillpoints required: 399
+Blurb: Strong hands will save your life.
+Syntax: GRIP
+RELAX GRIP
+Abfile:
+While utilising this ability, you will prevent items from being knocked
+out of your hands.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

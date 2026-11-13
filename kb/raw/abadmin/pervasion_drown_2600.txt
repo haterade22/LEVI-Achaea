@@ -1,0 +1,27 @@
+Ability: Drown (Record #2600)
+Associated skill: Pervasion
+Skillpoints required: 53999
+Blurb: Consign them to the deep.
+Syntax: DROWN <target>
+Abfile:
+Providing you are underwater, in a location with a raised water
+level(*), or in a flooded location with your target and they
+lack the ability to breathe under said water, you may begin the
+process of drowning them. This takes all of your concentration
+and will fail if they become able to breathe water during the
+focusing period. If your location has a raised water level or
+is underwater, the process will be faster.
+
+Additionally, the process will be faster if the target is asthmatic or
+nauseous(**) at the time of beginning the drown attempt.
+
+* See AB PERVASION RISE.
+** If the target has both, it will be faster still.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

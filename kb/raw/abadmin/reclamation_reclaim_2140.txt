@@ -1,0 +1,28 @@
+Ability: Reclaim (Record #2140)
+Associated skill: Reclamation
+Skillpoints required: 0
+Blurb: The greatest oak sprouts from a tiny seed.
+Syntax: RECLAMATION BEGIN
+Abfile:
+This ability is the basis upon which all other reclamation abilities are
+built. You may reclaim a room for nature, which will be the first of
+many. You may only perform most reclamation abilities in a room you have
+reclaimed unless otherwise stated.
+
+This ability takes concentration to perform in most cases, although it
+will be quicker in forests and instantaneous if in your grove. You may
+only reclaim one room in this way at a time.
+
+In addition, attempts to exterminate a room that you have reclaimed
+shall first remove your claim upon it, before damaging nature; a
+powerful asset indeed.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 300 mana

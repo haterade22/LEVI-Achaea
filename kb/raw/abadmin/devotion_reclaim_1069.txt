@@ -1,0 +1,16 @@
+Ability: Reclaim (Record #1069)
+Associated skill: Devotion
+Skillpoints required: 42500
+Blurb: Reclaim one of your rites.
+Syntax: PERFORM RECLAIM <rite>
+Abfile:
+This ability will allow you to remove one of your rites from your location, regaining some of the devotion used to summon it.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Presences (Record #1028)
+Associated skill: Spirituality
+Skillpoints required: 30999
+Blurb: Searches out all in the local area.
+Syntax: ANGEL PRESENCES
+Abfile:
+Using this ability, you will be able to gain information on the status of the other people in the same area as you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 50 Angel power

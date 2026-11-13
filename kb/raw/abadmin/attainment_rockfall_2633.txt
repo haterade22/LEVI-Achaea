@@ -1,0 +1,19 @@
+Ability: Rockfall (Record #2633)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: A stunning deluge of stone.
+Syntax: MANIFEST ROCKFALL <target>
+Abfile:
+Manifest a cascading deluge of stone above your target, burying them
+under the downpour and stunning them.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 33.00 seconds
+Resource: 26 rage
+Skill specialisation: br_earth_lord

@@ -1,0 +1,17 @@
+Ability: Perspire (Record #2581)
+Associated skill: Pervasion
+Skillpoints required: 4999
+Blurb: They are right to fear your contempt.
+Syntax: MANIFEST PERSPIRE <target>
+Abfile:
+Force your foe to begin sweating(*), and forces them prone.
+
+* Gives slickness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

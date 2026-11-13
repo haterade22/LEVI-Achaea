@@ -1,0 +1,27 @@
+Ability: Confront (Record #3053)
+Associated skill: Excision
+Skillpoints required: 42999
+Blurb: The vanguard, always.
+Syntax: PERFORM CONFRONT <target>
+Abfile:
+Confront an enemy of Creation and strike them down.
+
+* Deals damage to a denizen or adventurer, bypassing but not stripping
+magical shields and similar.
+
+** If your target is ablaze, they shall also suffer some mana loss
+(though less than their health). The amount of mana is increased the
+more they are burning.
+
+*** This does magical fire damage normally. If the target adventurer is
+ablaze, it does unblockable damage instead.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium

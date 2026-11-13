@@ -1,0 +1,17 @@
+Ability: Partita (Record #1662)
+Associated skill: Harmonics
+Skillpoints required: 26999
+Blurb: Protect other harmonics from disturbance.
+Syntax: PLAY PARTITA
+Abfile:
+This harmonic protects other harmonics in the room against most things which might destroy them, with some notable exceptions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.06 seconds of equilibrium
+Resource: 200 mana

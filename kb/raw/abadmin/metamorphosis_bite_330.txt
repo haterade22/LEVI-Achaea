@@ -1,0 +1,24 @@
+Ability: Bite (Record #330)
+Associated skill: Metamorphosis
+Skillpoints required: 699
+Blurb: Bite into your target, afflicting them with toxins.
+Syntax: BITE <target>
+HYDRA BITE <target>*
+This ability will be hidden on ablistings.
+Abfile:
+ Sink your jaws into an unruly opponent.
+When utilised in the basilisk morph, against adventurers, this has a
+chance to deliver the loki venom.
+
+* Hydra morph only. Delivers your secreted venom into the bloodstream of
+your adventurer foe.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

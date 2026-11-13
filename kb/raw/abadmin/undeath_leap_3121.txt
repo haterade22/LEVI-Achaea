@@ -1,0 +1,17 @@
+Ability: Leap (Record #3121)
+Associated skill: Undeath
+Skillpoints required: 999
+Blurb: Tireless are the dead.
+Syntax: LEAP <direction>
+Abfile:
+Though your sinew and flesh has long decayed, the strength of undeath
+empowers you enough to leap over walls and obstructions.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 2
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.20 seconds of balance

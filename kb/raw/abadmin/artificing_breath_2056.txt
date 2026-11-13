@@ -1,0 +1,28 @@
+Ability: Breath (Record #2056)
+Associated skill: Artificing
+Skillpoints required: 41999
+Blurb: A subtle superior of air.
+Syntax: ELEMENTAL BREATHMELD <target|STOP>
+Abfile:
+This superior servant of Whiirh is truly a subtle and deadly summoning.
+By commanding it to meld with the breath of your target, each time they
+breathe more heavily than normal due to moving while burdened by density
+or laboured breathing, your servant shall teleport you to their new
+location, so long as they stand not upon either a monolith sigil and
+remain upon the same continent as you.
+
+* A monolith on the Magi's end will prevent the travel as well, as will
+their relevant elemental being slain.
+** An elemental may only perform a breathmelding once every two minutes,
+and the effect lasts for one minute on a given target.
+*** You may abort a breathmeld at any time, though this does not clear
+the cooldown.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

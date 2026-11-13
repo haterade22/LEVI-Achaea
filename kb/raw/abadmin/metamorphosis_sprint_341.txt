@@ -1,0 +1,16 @@
+Ability: Sprint (Record #341)
+Associated skill: Metamorphosis
+Skillpoints required: 2599
+Blurb: Dash off in a particular direction.
+Syntax: SPRINT <direction> [1-10]
+This ability will be hidden on ablistings.
+Abfile:
+Quickly sprint in a chosen direction.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

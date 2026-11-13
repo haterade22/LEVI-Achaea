@@ -1,0 +1,16 @@
+Ability: Arsenic (Record #2026)
+Associated skill: Transmutation
+Skillpoints required: 18999
+Blurb: A toxic mineral to induce blindness.
+Syntax: EXTRACT ARSENIC
+TRANSMUTATE <#> <mineral> TO ARSENIC
+Abfile:
+The arsenic mineral will grant blindness to whoever eats it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

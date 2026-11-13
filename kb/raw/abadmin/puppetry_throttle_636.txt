@@ -1,0 +1,22 @@
+Ability: Throttle (Record #636)
+Associated skill: Puppetry
+Skillpoints required: 11499
+Blurb: Choke the life out of your victim.
+Syntax: PUPPET THROTTLE
+Extra info: Fashions required: 1
+Abfile:
+As long as the puppets living twin is in the area you may wrap your
+fingers tightly around your puppets throat, and watch in joy as its
+likeness asphyxiates.
+
+Be warned, your puppet will be destroyed if brought to zero fashions by
+this violent act.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

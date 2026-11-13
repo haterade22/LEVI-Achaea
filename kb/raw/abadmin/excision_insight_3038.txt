@@ -1,0 +1,18 @@
+Ability: Insight (Record #3038)
+Associated skill: Excision
+Skillpoints required: 4999
+Blurb: Misdirection is no refuge.
+Syntax: PERFORM INSIGHT <target>
+Abfile:
+Your foes may cloak themselves in deception and secrecy, but your eyes
+will not be so easily deceived. Seek out an individual and know where
+they may be.
+Useable on: none
+Pre checks:
+Ability range: continent-wide
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of wrath balance

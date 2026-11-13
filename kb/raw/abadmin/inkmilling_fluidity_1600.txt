@@ -1,0 +1,15 @@
+Ability: Fluidity (Record #1600)
+Associated skill: InkMilling
+Skillpoints required: 999
+Blurb: Mastery of inkmilling increases tattooing speed.
+Syntax: None
+Abfile:
+Inking tattoos is now slightly faster. This is cumulative with the bonus from being transcendent in Tattoos.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

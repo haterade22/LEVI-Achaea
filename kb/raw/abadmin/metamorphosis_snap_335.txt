@@ -1,0 +1,23 @@
+Ability: Snap (Record #335)
+Associated skill: Metamorphosis
+Skillpoints required: 999
+Blurb: Deliver a powerful bite from your jaws.
+Syntax: SNAP <target>
+HYDRA SNAP <target>*
+This ability will be hidden on ablistings.
+Abfile:
+Snap at an adventurer opponent with your beak or maw.
+
+* Hydra morph only.
+** When using HYDRA SNAP <target>, this skill can be used against
+denizens to deal damage.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

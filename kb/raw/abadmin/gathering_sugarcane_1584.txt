@@ -1,0 +1,16 @@
+Ability: Sugarcane (Record #1584)
+Associated skill: Gathering
+Skillpoints required: 26999
+Blurb: Sweet-tasting plant that rots your teeth.
+Syntax: GATHER SUGARCANE
+Abfile:
+Filled with sweet syrup that can be refined into sugar, sugarcanes can be found growing in Achaea's grasslands.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

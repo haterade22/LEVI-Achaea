@@ -1,0 +1,21 @@
+Ability: Universe (Record #621)
+Associated skill: Tarot
+Skillpoints required: 46999
+Blurb: Transport yourself around the land.
+Syntax: FLING UNIVERSE AT GROUND
+UNIVERSE LIST
+TOUCH <location>
+Abfile:
+The Universe tarot will allow you to quickly travel throughout Achaea,
+with instant transport to a number of locations on the mainland of
+Sapience and continent of Meropis.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

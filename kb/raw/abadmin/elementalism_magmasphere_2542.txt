@@ -1,0 +1,18 @@
+Ability: Magmasphere (Record #2542)
+Associated skill: Elementalism
+Skillpoints required: 60000
+Blurb: A delayed eruption of magmatic fury.
+Syntax: CAST MAGMASPHERE <seconds> (Between 10 and 60)
+Abfile:
+This powerful spell creates a sphere of magma that, after some time has
+elapsed (specified by you), will violently explode. The flying stone has
+a chance to break the limbs of any in the current location in addition
+to the significant damage that it will always deal.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

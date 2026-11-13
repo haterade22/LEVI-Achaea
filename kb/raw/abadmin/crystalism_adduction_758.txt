@@ -1,0 +1,21 @@
+Ability: Adduction (Record #758)
+Associated skill: Crystalism
+Skillpoints required: 9999
+Blurb: Suck those around you into your room.
+Syntax: EMBED ADDUCTION
+Abfile:
+ Shapes required: Disc, Polyhedron
+
+The adduction vibration will attempt to pull in people from adjacent
+locations.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

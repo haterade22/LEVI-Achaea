@@ -1,0 +1,28 @@
+Ability: Case (Record #2807)
+Associated skill: Subterfuge
+Skillpoints required: 36999
+Blurb: The more you know...
+Syntax: CASE <target>
+CASE LIST
+Abfile:
+Each time you case an individual you will gain a better grasp of their
+belongings and how they store them. This information becomes outdated
+over time, though repeated cases will allow you to maintain your
+knowledge and so improve upon it. You can only case a target every so
+often(*).
+
+Casing a subject in this way significantly improves the effectiveness of
+attempts to pickpocket specific items from a target. You will lose all
+of your accumulated cases on an individual if that individual slays you
+or a mark does so on their behalf.
+
+* Around once every 50 minutes.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

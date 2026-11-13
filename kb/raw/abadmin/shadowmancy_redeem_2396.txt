@@ -1,0 +1,17 @@
+Ability: Redeem (Record #2396)
+Associated skill: Shadowmancy
+Skillpoints required: 37999
+Blurb: Grant respite to a former foe.
+Syntax: SHADOW REDEEM <person>
+Abfile:
+You may release the shadow of someone from your phylactery, fully
+healing the health and mana of the owner where ever they may be. Note
+that this has a long per target cooldown.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

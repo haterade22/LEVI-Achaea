@@ -1,0 +1,17 @@
+Ability: Steadygoing (Record #1763)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Maximising steadiness while under weigh.
+Syntax: SHIP MANOEUVRE STEADYGOING
+Abfile:
+Begin manoeuvres that will provide a steadier base for your ship's
+weapons.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm2

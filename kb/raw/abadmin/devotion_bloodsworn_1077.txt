@@ -1,0 +1,50 @@
+Ability: Bloodsworn (Record #1077)
+Associated skill: Devotion
+Skillpoints required: 60000
+Blurb: Bond with another via a blood oath.
+Syntax: BLOODSWEAR <priest or paladin>
+BLOODSWORN ON/OFF
+BLOODSWORN REJECT
+Extra info: Bloodswear <target> cooldown: Flat 1000 mana cost.
+Bloodswear on cooldown: 6.00 seconds of equilibrium, 1000 mana, 5 mana per second drain.
+Bloodswear off: no costs.
+Bloodswear reject: no costs.
+Abfile:
+The bond of the bloodsworn is one of the most revered rituals of
+devotion-users. When two Devotionists feel strongly that they wish
+to become one, they bloodswear to each other, and from that moment on,
+have the capability to bond their very souls to each other. When the
+BLOODSWORN ON ritual is performed by both of the Devotionists,
+their maximum health and manas will be 65% of the -sum- of both their
+normal maximum health and maximum mana respectively. Further, some
+portion of the health or mana healed by either of the Devotionists,
+when using elixirs of health or mana, will also be healed on his or her
+bloodsworn. The hands ability shall also heal an additional amount when
+performed on your bloodsworn.
+
+The bloodsworn ability will automatically turn off if the Priest and
+Paladin are away from each other for greater than approximately 60
+seconds.
+
+As with many phenomena that grant great power unto the user, the power
+of the bloodsworn comes at a price. While the bloodsworn pact is
+activated, with BLOODSWORN ON, the mana of both of the Devotionists
+will drain away. Further, and far more seriously, if either dies while
+the ability is active, the other will be critically damaged in body.
+Such is the price of power.
+
+If you wish to break your blood bond, you may do so by rejecting your
+bloodsworn, but be aware that you will not be able to become bloodsworn
+to another until the New Year.
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 1000 mana
+Drain: 5 mana per second

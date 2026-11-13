@@ -1,0 +1,18 @@
+Ability: Intoxicant (Record #1810)
+Associated skill: Formulation
+Skillpoints required: 28000
+Blurb: Paralyse the lungs of the unprotected.
+Syntax: WIELD INTOXICANT
+THROW INTOXICANT <AT GROUND|DIRECTION>
+Extra info: Reagents: 2 potash, 1 cinnabar.
+Abfile:
+This airborn substance will cause paralysis of the lungs if inhaled.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

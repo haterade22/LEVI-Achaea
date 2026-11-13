@@ -1,0 +1,29 @@
+Ability: Concealment (Record #1990)
+Associated skill: Conjuration
+Skillpoints required: 28999
+Blurb: The obfuscating orb of concealment.
+Syntax: BEGIN CREATION OF ORB OF CONCEALMENT
+Abfile:
+ To use:
+   Simply keep it in your inventory.
+
+Type:
+   Created item.
+
+Actions:
+   16, 14, 12, 10, 8, 6, 4, chant "aisyalam" , 4, 6, 8, 10, 12, 14, 16
+
+Comms:
+   5 silver, 1 gold
+
+This orb will conceal most of your inventory from others.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name ORBOFCONCEALMENT is mapped to this ability.

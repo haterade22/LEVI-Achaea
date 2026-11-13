@@ -1,0 +1,17 @@
+Ability: Glance (Record #905)
+Associated skill: Telepathy
+Skillpoints required: 499
+Blurb: Look through the eyes of your subject.
+Syntax: MIND GLANCE
+Abfile:
+This allows you to look through the eyes of the adventurer you have locked minds with.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

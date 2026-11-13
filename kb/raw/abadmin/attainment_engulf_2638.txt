@@ -1,0 +1,18 @@
+Ability: Engulf (Record #2638)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Let them fade away to ash.
+Syntax: MANIFEST ENGULF <target>
+Abfile:
+Engulf your target in incandescent flame, causing them to suffer damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_fire_lord

@@ -1,0 +1,16 @@
+Ability: Entities (Record #1457)
+Associated skill: Vision
+Skillpoints required: 54999
+Blurb: Discover the whereabouts of any Chaos entities in the land.
+Syntax: ENTITIES
+Abfile:
+The Entities of the Chaos Plane cause disruptions in the relatively orderly continuum in which we live. This ability allows you to detect these disruptions and pinpoint where the Entities are.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

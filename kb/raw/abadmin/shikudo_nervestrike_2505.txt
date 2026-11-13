@@ -1,0 +1,19 @@
+Ability: Nervestrike (Record #2505)
+Associated skill: Shikudo
+Skillpoints required: 31999
+Blurb: Deny them control.
+Syntax: NERVESTRIKE
+Abfile:
+A precise strike to the side of the neck with your staff will paralyse
+your foe, leaving them unable to act.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

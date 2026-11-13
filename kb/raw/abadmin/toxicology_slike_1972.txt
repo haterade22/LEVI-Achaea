@@ -1,0 +1,17 @@
+Ability: Slike (Record #1972)
+Associated skill: Toxicology
+Skillpoints required: 26999
+Blurb: Give the curse of anorexia to your victim.
+Syntax: None
+Extra info: Ingredients: 2 ginseng, 1 elm, 1 greenink or
+2 ferrum, 1 cinnabar, 1 greenink
+Abfile:
+Causes your victim to fall prey to anorexia.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

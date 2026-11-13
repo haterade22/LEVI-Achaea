@@ -1,0 +1,16 @@
+Ability: Darkshade (Record #1284)
+Associated skill: Venom
+Skillpoints required: 4999
+Blurb: Makes the victim allergic to sunlight.
+Syntax: SECRETE DARKSHADE
+BITE <target>
+Abfile:
+Give your target an allergy to sunlight.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

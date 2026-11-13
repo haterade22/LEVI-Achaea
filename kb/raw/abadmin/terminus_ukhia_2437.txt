@@ -1,0 +1,18 @@
+Ability: Ukhia (Record #2437)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: Your blood is not for them to spill.
+Syntax: INTONE UKHIA
+This ability will be hidden on ablistings.
+Abfile:
+This word of power conveys a defence that shall have a chance to
+entirely remove the willpower cost on an attempt to clot your bleeding.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of word balance

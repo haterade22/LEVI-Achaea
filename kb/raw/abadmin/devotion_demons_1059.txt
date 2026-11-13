@@ -1,0 +1,17 @@
+Ability: Demons (Record #1059)
+Associated skill: Devotion
+Skillpoints required: 26999
+Blurb: Summon demons to torment the unrighteous.
+Syntax: PERFORM RITE OF DEMONS
+Abfile:
+This rite will cause your enemies to be tormented by vengeful demons.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 360 devotion

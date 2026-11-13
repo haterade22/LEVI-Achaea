@@ -1,0 +1,29 @@
+Ability: Workshop (Record #725)
+Associated skill: Artificing
+Skillpoints required: 1
+Blurb: Where it all begins.
+Syntax: WORKSHOP CONSTRUCT <foci>
+WORKSHOP REFINE <crystal>
+WORKSHOP INVENTORY
+Abfile:
+Many will see a Magi upon the field of battle, laying about their
+enemies with fire and lightning, and never give thought to the time and
+effort that goes into achieving such power. Within the Workshops of
+Artifice you will create your foci. Work on your treaties with the
+Elemental Planes, and grow truly mighty. This is where mastery truly
+begins:
+
+WORKSHOP CONSTRUCT <foci>: eventually you will be able to create an
+Elemental Foci.
+WORKSHOP REFINE <crystal>: within the workshop and with the right
+reagents you will learn to refine special crystals to enhance the use of
+your foci.
+WORKSHOP INVENTORY: see what crystals you have stored in this workshop.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

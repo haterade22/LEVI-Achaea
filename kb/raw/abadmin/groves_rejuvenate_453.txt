@@ -1,0 +1,17 @@
+Ability: Rejuvenate (Record #453)
+Associated skill: Groves
+Skillpoints required: 42999
+Blurb: Restore an exterminated room to its natural state.
+Syntax: REJUVENATE
+Abfile:
+This ability will allow you to rejuvenate land that has been exterminated by a foul Necromancer. It requires the presence of a cube of elemental ice in your inventory.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1000 mana

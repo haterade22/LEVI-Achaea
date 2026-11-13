@@ -1,0 +1,24 @@
+Ability: Wolverine (Record #381)
+Associated skill: Metamorphosis
+Skillpoints required: 29999
+Blurb: Pound for pound, one of the most vicious animals.
+Syntax: MORPH WOLVERINE
+Extra info: Powers: Burrow
+Digging
+Claw
+Ambush
+Elusiveness
+Nightsight
+Sniff
+Spring
+Abfile:
+Pound for pound, one of the most vicious animals.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 22 mana

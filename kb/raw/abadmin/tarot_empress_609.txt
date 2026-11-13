@@ -1,0 +1,19 @@
+Ability: Empress (Record #609)
+Associated skill: Tarot
+Skillpoints required: 9999
+Blurb: Summon your friends to you.
+Syntax: FLING EMPRESS AT <target>
+SNIFF EMPRESS <target>
+Abfile:
+With this ability, you may summon someone from anywhere within the local area, provided you are on his or her allies list. If you have forced yourself onto that list via the Lust tarot, then you will be able to summon that person from anywhere on the continent.
+
+You may also SNIFF a card inscribed with this image to determine if you have someone lusted.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

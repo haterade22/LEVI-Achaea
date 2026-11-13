@@ -1,0 +1,17 @@
+Ability: Yank (Record #376)
+Associated skill: Metamorphosis
+Skillpoints required: 23999
+Blurb: Use your trunk to pull someone towards you.
+Syntax: YANK <target>
+This ability will be hidden on ablistings.
+Abfile:
+From an adjacent location, you may yank an adventurer into your location with your trunk, providing that the adventurer isn't being held there by some means.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

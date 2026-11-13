@@ -1,0 +1,16 @@
+Ability: Dolomite (Record #2016)
+Associated skill: Transmutation
+Skillpoints required: 699
+Blurb: A milky white mineral.
+Syntax: EXTRACT DOLOMITE
+TRANSMUTATE <#> <mineral> TO DOLOMITE
+Abfile:
+The dolomite mineral will grant the gift of the third eye, allowing the ability to see both invisible people, and the locations of others on WHO.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

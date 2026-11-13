@@ -1,0 +1,25 @@
+Ability: Anticipate (Record #3248)
+Associated skill: Weaponmastery
+Skillpoints required: 38999
+Blurb: You see every blow that's coming.
+Syntax: ANTICIPATE
+Abfile:
+Once you have gained an understanding of the flow of a given battle, you
+may enter a state of heightened anticipation, during which you will
+mitigate most attempts to physically strike at you.
+
+* Requires maximum ferocity and resets to zero.
+** For six seconds (or until it fires three times), you will reduce most
+physical damage blows to zero.
+*** This ability has identical bypass conditions as the shield of
+absorption artefact.
+Useable on: none
+Pre checks: equilibrium and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Skill specialisation: knight_snb

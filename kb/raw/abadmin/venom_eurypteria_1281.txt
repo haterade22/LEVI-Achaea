@@ -1,0 +1,16 @@
+Ability: Eurypteria (Record #1281)
+Associated skill: Venom
+Skillpoints required: 1499
+Blurb: Gives the victim delusions of invulnerability.
+Syntax: SECRETE EURYPTERIA
+BITE <target>
+Abfile:
+Afflict your victim with recklessness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

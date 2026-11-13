@@ -1,0 +1,24 @@
+Ability: Homeport (Record #1301)
+Associated skill: Seafaring
+Skillpoints required: 60000
+Blurb: A seaspell to return you to safe harbour.
+Syntax: INVOKE HOMEPORT
+Abfile:
+This powerful seaspell will return your vessel to the harbour that it
+last departed. Once cast, provided you are not already docked at a
+harbour, the spell will summon a powerful storm to transport you
+great distances.
+
+Be warned, using the Homeport ability will come at a great cost,
+destroying your figurehead in the process (or draining and dismounting
+resetting ones). Your vessel must be in prime condition to withstand the
+rigours of this journey, and any damage to this ship while returning
+will cause the spell to fail.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

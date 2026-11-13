@@ -1,0 +1,16 @@
+Ability: Vault (Record #1516)
+Associated skill: Riding
+Skillpoints required: 26999
+Blurb: Impressively vault onto your steed.
+Syntax: VAULT <denizen>
+Abfile:
+Instead of mounting a steed, you can vault onto it, cutting your balance time by two-thirds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name VAULTING is mapped to this ability.

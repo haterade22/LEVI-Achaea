@@ -1,0 +1,22 @@
+Ability: Infuseearth (Record #2805)
+Associated skill: TwoArts
+Skillpoints required: 48999
+Blurb: The unyielding earth shall empower your blade.
+Syntax: INFUSE EARTH
+Abfile:
+Channel shin energy into your blade, infusing it with the ferocity of
+the unyielding earth. When so empowered you will strike past attempts to
+dodge your blows, finding your mark no matter the difficulty of the
+cut(*).
+
+* Does not apply to multislash.
+** Your blade may only be infused with one element at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 Shin energy

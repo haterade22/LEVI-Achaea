@@ -1,0 +1,22 @@
+Ability: Dousing (Record #1387)
+Associated skill: Survival
+Skillpoints required: 3999
+Blurb: Only you can stop forest fires!
+Syntax: FILL BUCKET WITH WATER
+DOUSE ROOM|GROUND
+DOUSE <person>|<item>
+DOUSE SAIL[S]
+Abfile:
+With this ability, you may fill a bucket with water in any watery
+location, and then, while standing in a burning location, douse the
+fires that rage.
+Dousing the ground shall also extinguish any firewalls which may have
+been erected in the location.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

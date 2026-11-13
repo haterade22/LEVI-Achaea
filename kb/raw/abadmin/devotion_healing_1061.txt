@@ -1,0 +1,23 @@
+Ability: Healing (Record #1061)
+Associated skill: Devotion
+Skillpoints required: 30999
+Blurb: A powerful healing ability.
+Syntax: PERFORM RITE OF HEALING
+Abfile:
+This ability will cause a rite to spring into existence which will
+occasionally heal an affliction from you and your allies that are in the
+room.
+
+Note that this ability is mutually exclusive with ANGEL CARE;only one of
+these two effects may take effect at any one time even when both are
+active.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 360 devotion

@@ -1,0 +1,18 @@
+Ability: Torrent (Record #2250)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Drown them where they stand.
+Syntax: CAST TORRENT AT <target>
+Abfile:
+Channel a gout of water at a victim's face, preventing them from breathing and causing damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_sylvan

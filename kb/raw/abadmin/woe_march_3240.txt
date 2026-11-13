@@ -1,0 +1,24 @@
+Ability: March (Record #3240)
+Associated skill: Woe
+Skillpoints required: 57959
+Blurb: A prelude to the beginning and the end.
+Syntax:
+Abfile:
+The great march to memory was the prelude to the final clash with the
+Prince of Woe, and it is manifest not through tale but through
+reenactment.
+
+You may now tell many of the tales of Woe while on the march, though
+some particularly ominous ones still require the stillness of
+contemplation to be fully comprehended(*).
+
+* Recitals are no longer interrupted by moving, though channeled
+recitals are excluded.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

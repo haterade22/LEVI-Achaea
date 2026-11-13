@@ -1,0 +1,22 @@
+Ability: Colours (Record #1255)
+Associated skill: Subterfuge
+Skillpoints required: 9999
+Blurb: Dye your arrows to categorise them.
+Syntax: INSPECT QUIVER
+DYE <number of arrows> ARROW[S] <colour>
+SWITCH <colour>
+Abfile:
+First, one should inspect his quiver to discover how many arrows he has in it. Then, you may dye a number of arrows a certain colour.
+
+Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver.
+
+To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

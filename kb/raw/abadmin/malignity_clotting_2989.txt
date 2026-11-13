@@ -1,0 +1,16 @@
+Ability: Clotting (Record #2989)
+Associated skill: Malignity
+Skillpoints required: 23999
+Blurb: Reduce the level of your bleeding.
+Syntax: CLOT
+Abfile:
+This will permit you to partially clot your bleeding.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 60 mana

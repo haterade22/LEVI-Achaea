@@ -1,0 +1,22 @@
+Ability: Chaoslords (Record #3221)
+Associated skill: Woe
+Skillpoints required: 23999
+Blurb: Of uplifting and twisted rule.
+Syntax: RECITE CHAOSLORDS
+Abfile:
+When the Chaos Lords first arose and those in power shifted by the day,
+so too did their vulnerabilities change seemingly at random. At the
+culmination of this tale, a field of damage absorption shall be created,
+periodically changing to make a given damage type utterly negated in
+your location(*).
+
+* The shifting cannot be controlled.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 3.00 seconds of equilibrium

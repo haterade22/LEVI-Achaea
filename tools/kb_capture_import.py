@@ -145,7 +145,9 @@ def slug(cmd):
 # A pointer record holds only its first two lines and "Maps to record 785 (FIST).". An id with no
 # ability answers "No such record.". (v4.7.494 matched "Pulse (Psionics)  ABADMIN ID: 3292", the
 # header of the AB command: the files in kb/raw/ab/ hold AB answers and stay as they are.)
-AB_HEAD = re.compile(r"^Ability: (.+) \(Record #(\d+)\)\s*$")
+# An empty slot has no name and no skill ("Ability:  (Record #3293)", ids 3293-3296 in the full run):
+# it is filed as unknown_unnamed_<id>.txt.
+AB_HEAD = re.compile(r"^Ability: (.*?) ?\(Record #(\d+)\)\s*$")
 AB_SKILL = re.compile(r"^Associated skill: (.+?)\s*$")
 AB_NONE = "No such record."
 AB_CMD = re.compile(r"^abadmin show (\d+)$")
@@ -179,7 +181,7 @@ def ab_records(blocks):
         for line in b["lines"]:
             m = AB_HEAD.match(line)
             if m:
-                rec = {"ability": m.group(1).strip(), "skill": "", "lines": [line]}
+                rec = {"ability": m.group(1).strip() or "unnamed", "skill": "", "lines": [line]}
                 out[int(m.group(2))] = rec
             elif rec is not None:
                 rec["lines"].append(line)

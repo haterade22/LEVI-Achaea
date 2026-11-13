@@ -1,0 +1,54 @@
+Ability: Eagle (Record #2941)
+Associated skill: Valour
+Skillpoints required: 1
+Blurb: Your loyal companion.
+Syntax: EAGLE
+Abfile:
+The golden eagles serve only those loyal to the Bloodsworn divine,
+forming a lifelong partnership with a paladin in their struggle against
+the forces of Evil, Chaos, and Darkness.
+
+Your eagle comes to you with assorted statistics which have been
+randomly assigned.
+
+If you cause your eagle to die, you will be refused another eagle.
+
+There is absolutely no excuse for killing or conspiring to kill your
+eagle.
+
+Below is a list of commands that may be used once you have gotten your
+eagle.
+EAGLE ASSESS    : See information about your eagle.
+EAGLE RECALL : Recall your eagle to your shoulder.
+EAGLE SANCTUARY : Order your eagle to a sanctuary where it will be safe.
+EAGLE LAND      : Order your eagle to land on the ground.
+EAGLE CIRCLE    : Order your eagle to fly up into the skies.
+EAGLE TRAIN : Order your eagle to go train, in order to raise a stat.
+EAGLE REPORT : Gain information on where your eagle is and who they
+are tracking and attacking.
+EAGLE REPORT LOCATION : This will tell you the location of your loyal
+(this will incur an equilibrium cost.)
+EAGLE SLAY      : Order your eagle to slay someone.
+EAGLE HUNT : When your eagle is hungry, have it go hunt for its food.
+EAGLE FLEE : Set the amount of health remaining when your eagle will
+flee battle.
+EAGLE SLEEP     : Order your eagle to sleep.
+EAGLE FEED RAT  : Feed the corpses of rats to your eagle.
+
+As your eagle gains in
+* Stamina:  its health will increase.
+* Speed: it will attack more quickly as well as fly from place to place
+* Strength: it will attack with more power.
+
+You will gain other abilities later on that are related to your eagle.
+
+EAGLE REQUEST: You must visit Anost in the excised Ruins of the
+Dawnspear in order to request your eagle.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

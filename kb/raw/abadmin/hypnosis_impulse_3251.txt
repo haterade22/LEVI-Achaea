@@ -1,0 +1,23 @@
+Ability: Impulse (Record #3251)
+Associated skill: Hypnosis
+Skillpoints required: 30999
+Blurb: Some pressure here, some manipulation there.
+Syntax: IMPULSE <target> <suggestion>
+Abfile:
+It is one thing to sink your mark into a hypnotic trance and set their
+mind into a downward spiral, but quite another to simply lay them low
+with a glance. Nevertheless, you are now equal to both tasks.
+
+By triggering impulses in the mind of your victim, you may inflict them
+with one of the trivial suggestions(*) that are known to you.
+
+* See ab hypnosis for the list of trivial suggestions.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.70 seconds of equilibrium

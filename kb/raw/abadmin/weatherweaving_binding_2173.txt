@@ -1,0 +1,19 @@
+Ability: Binding (Record #2173)
+Associated skill: Weatherweaving
+Skillpoints required: 6999
+Blurb: The magic of channel binding.
+Syntax: BIND <channel>/ALL
+Abfile:
+Like fortification, binding provides protection against losing your channels due to others attacking them. If a channel that is unfortified is attacked, binding will protect that channel a large percentage of the time. It has a willpower loss associated with it, however.
+
+If you choose to BIND ALL, the mana and equilibrium costs will be what it costs for a single channel binding, multiplied by however many channels you have open.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 150 mana

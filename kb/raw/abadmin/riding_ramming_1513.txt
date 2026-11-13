@@ -1,0 +1,3 @@
+Ability: Ramming (Record #1513)
+Associated skill: Riding
+Maps to record 1512 (RAM).

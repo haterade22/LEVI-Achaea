@@ -1,0 +1,20 @@
+Ability: Anoint (Record #2753)
+Associated skill: Zeal
+Skillpoints required: 0
+Blurb: Your pledge.
+Syntax: ANOINT ASH
+Abfile:
+A wielder of the holy verses must first gain the ability to imbue their
+words with a remnant of Phoenix Song. Travel to Anost in the excised
+Ruins of the Dawnspear and ANOINT your brow with the holy ash that can
+be found there.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

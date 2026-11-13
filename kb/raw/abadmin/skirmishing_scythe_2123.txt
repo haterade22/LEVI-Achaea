@@ -1,0 +1,20 @@
+Ability: Scythe (Record #2123)
+Associated skill: Skirmishing
+Skillpoints required: 23999
+Blurb: Slice through the defences that would protect your foes.
+Syntax: SCYTHE <target>
+Abfile:
+This ability with your chosen weapon will allow you to randomly strip a
+defence from an enemy. It shall always target defences in this order:
+prismatic barriers, reflections, mass, then a random defence.
+
+* Note that it strips all reflections at once, not just one.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

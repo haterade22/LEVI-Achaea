@@ -1,0 +1,19 @@
+Ability: Incense (Record #2223)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Order your angel to enrage your opponent.
+Syntax: ANGEL INCENSE <target>
+Extra info: Gives denizen affliction: Recklessness
+Abfile:
+Your angel absorbs your rage and channels it into your target instead, making it impossible for the target to shield itself for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds
+Resource: 18 rage
+Skill specialisation: br_priest

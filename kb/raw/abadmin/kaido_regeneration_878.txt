@@ -1,0 +1,18 @@
+Ability: Regeneration (Record #878)
+Associated skill: Kaido
+Skillpoints required: 5999
+Blurb: Regain health through strength of mind.
+Syntax: REGENERATION [ON|OFF]
+RELAX REGENERATION
+Extra info: Also drains willpower.
+Abfile:
+At an ongoing mental drain, you are able to channel your mental energy into healing yourself.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

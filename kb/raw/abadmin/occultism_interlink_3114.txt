@@ -1,0 +1,27 @@
+Ability: Interlink (Record #3114)
+Associated skill: Occultism
+Skillpoints required: 38999
+Blurb: They shall warp under your will.
+Syntax: BODYWARP <target> <limb> [lesser occultic work]
+Abfile:
+Through extensive study of the Unnamables, the Occultists of Ashtan have
+determined how to mutate the bodies of others in a more controlled
+manner than previously believed possible(*). This greater working builds
+upon the lesser forms of warping, though requires a far greater degree
+of finesse. However, it comes with the unique benefit that lesser
+occultic workings(**) may be introduced into the process.
+
+* Does limb damage and a minor amount of health damage. The limb damage
+is increased against a limb that is already broken to requiring a
+mending salve.
+** Lesser works which can be combined are: ague, shrivel, and regress.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of equilibrium
+Resource: 50 mana and 2 willpower

@@ -1,0 +1,21 @@
+Ability: Dilation (Record #2414)
+Associated skill: Aeonics
+Skillpoints required: 13999
+Blurb: Given time all rules can be broken.
+Syntax: CHRONO DILATION [BOOST]
+Abfile:
+A meditative state which allows you to alter the flow of time around
+you, making you regress to your natural age much faster.
+
+If boosted, the amount of age that you shall regress by on each tick
+shall be increased.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium
+Resource: 200 age

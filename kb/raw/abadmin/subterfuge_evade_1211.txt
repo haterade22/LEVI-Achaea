@@ -1,0 +1,22 @@
+Ability: Evade (Record #1211)
+Associated skill: Subterfuge
+Skillpoints required: 1499
+Blurb: Misleading your pursuer.
+Syntax: EVADE <direction|GRATE>
+Abfile:
+No difficult feat for one trained in the arts of subterfuge, you may
+silently evade past obstructions, at once losing anyone who may be
+following you.
+
+* You may also evade through sewer grates while out of phase with
+reality, assuming you have learned how to enter them normally via the
+survival skill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

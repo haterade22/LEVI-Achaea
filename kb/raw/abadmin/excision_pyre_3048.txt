@@ -1,0 +1,22 @@
+Ability: Pyre (Record #3048)
+Associated skill: Excision
+Skillpoints required: 33999
+Blurb: Consign them to the flame.
+Syntax: PERFORM PYRE <target>
+Abfile:
+Begin consigning a heretic to the flame, purging Creation of their
+blight(*).
+
+* Gives the pyre affliction. This makes it impossible to cure
+ablaze/burning below the level of the pyre (so if you have level 3 pyre,
+you cannot cure burning lower than level 3).
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of wrath balance
+Resource: 5% Holy Wrath

@@ -1,0 +1,16 @@
+Ability: Snapkick (Record #843)
+Associated skill: Tekura
+Skillpoints required: 299
+Blurb: A straight-forward kick.
+Syntax: SNK <target> left/right
+Abfile:
+This low, and easy-to-perform kick attacks the legs of an opponent.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

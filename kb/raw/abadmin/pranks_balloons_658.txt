@@ -1,0 +1,17 @@
+Ability: Balloons (Record #658)
+Associated skill: Pranks
+Skillpoints required: 299
+Blurb: Take to the skies with balloons.
+Syntax: INFLATE BALLOON
+Abfile:
+The first of a few balloon-related abilities, this allows the jester to inflate a normal balloon and fly up to the skies with it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name BALLOON is mapped to this ability.

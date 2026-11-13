@@ -1,0 +1,16 @@
+Ability: Cull (Record #2377)
+Associated skill: Shadowmancy
+Skillpoints required: 399
+Blurb: Your foes are wheat before the storm.
+Syntax: SHADOW CULL <target> [venom]
+Abfile:
+This powerful attack with your scythe deals high damage but is somewhat
+slow.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

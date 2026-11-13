@@ -1,0 +1,16 @@
+Ability: Feathers (Record #1900)
+Associated skill: Harvesting
+Skillpoints required: 44999
+Blurb: The feathers of various birds.
+Syntax: PLUCK EAGLE
+Abfile:
+This will allow you to pluck feathers from an eagle, for use in your concoctions.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

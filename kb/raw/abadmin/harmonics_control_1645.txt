@@ -1,0 +1,17 @@
+Ability: Control (Record #1645)
+Associated skill: Harmonics
+Skillpoints required: 0
+Blurb: Master the manipulation of your harmonics.
+Syntax: HARMONICS LIST                 - lists harmonics in the current room.
+HARMONICS DISMISS <harmonic>   - terminates a harmonic early.
+Abfile:
+Harmonics Control, one of the fundamental abilities in the Harmonics skill, allows you to review and dismiss your harmonics. HARMONICS DISMISS accepts either an ID or a harmonic type. For example, HARMONICS DISMISS gigue, or HARMONICS DISMISS 12345.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

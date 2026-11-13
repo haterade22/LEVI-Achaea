@@ -1,0 +1,30 @@
+Ability: Polymath (Record #2687)
+Associated skill: Attainment
+Skillpoints required: 59999
+Blurb: Learn another additional class.
+Syntax: ASK CERTIMENE GAIN <class>
+CLASS SWITCH <class name|slot#>
+CLASS LIST
+CLASS STATUS
+CLASS FORGET <class>
+CLASS BUY SLOT
+Abfile:
+Seek out Certimene in Delos to begin learning another class, subject to
+some restrictions.
+
+Once you have learned an additional class, you may switch between
+classes once every 12 Achaean days (12 RL hours), though this time can
+be reduced in various ways.
+
+See HELP MULTICLASS for details.
+
+You will continue to gain additional class slots for every 10 levels
+past 100.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

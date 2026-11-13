@@ -1,0 +1,21 @@
+Ability: Tribunal (Record #3217)
+Associated skill: Woe
+Skillpoints required: 10999
+Blurb: For Justice must be served.
+Syntax: RECITE TRIBUNAL
+Abfile:
+Justice must be served, and this solemn retelling will speak of the
+first justice that was wrought. On completing it, you will see of the
+justice which must be served in the present day(*).
+
+* It will reveal the locations of all of those in the realm who Cyrene
+has a bounty placed upon.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 3.50 seconds of equilibrium

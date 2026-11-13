@@ -1,0 +1,39 @@
+Ability: Configuration (Record #3106)
+Associated skill: Runelore
+Skillpoints required: 55999
+Blurb: Combining runes about a central point.
+Syntax: SKETCH CONFIGURATION <runeblade|LEFT|RIGHT|WIELDED> <rune1> <rune2> [rune3]
+SMUDGE <runeblade> <rune in configuration>
+EMPOWER <rune>
+EMPOWER PRIORITY SET <rune1> <rune2> <rune3>
+EMPOWER PRIORITY CLEAR
+RUNEBLADESLIST
+Abfile:
+You have reached a point in your study of the runic script that you may
+now begin to sketch runic configurations upon your runeblade. Only
+certain runes can be sketched in configuration, and they must always be
+sketched about one of the core runeblade runes: Nairat, Hugalaz, Eihwaz,
+or Pithakhan. Runes sketched in configuration become attuned under
+certain situations, and when in such a state can be empowered(*). The
+runes that can be sketched in configuration and their attunement
+conditions are now listed in the relevant ability file for that rune.
+
+* Empowered runes fire their effects after a successful weaponmastery
+attack resolves: in the case of multiple hit attacks such as doubleslash
+or combination, they resolve after the entire attack has completed.
+** Configuration conditions are only checked on the first hit of these
+multi hit attacks. Runewardens of the dual cutting, sword and shield, or
+dual blunt
+specialisations should wield their configured runeblade in their left
+hand.
+*** You may set an empower priority to automatically attempt to empower
+runes as they become attuned.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

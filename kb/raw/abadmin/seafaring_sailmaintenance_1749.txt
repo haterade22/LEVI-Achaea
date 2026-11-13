@@ -1,0 +1,18 @@
+Ability: Sailmaintenance (Record #1749)
+Associated skill: Seafaring
+Skillpoints required: 40999
+Blurb: Repair and maintain the ship's sails.
+Syntax: MAINTAIN SAIL(S)
+MAINTAIN NONE
+Abfile:
+Actively work to maintain the ship's sails, at a high ongoing endurance
+cost to you. You must be in the rigging or the crow's nest of a ship to
+maintain the sails.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

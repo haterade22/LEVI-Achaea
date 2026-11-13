@@ -1,0 +1,27 @@
+Ability: Extinction (Record #3064)
+Associated skill: Anathema
+Skillpoints required: 57999
+Blurb: Creation's scourge.
+Syntax: CROON EXTINCTION <target> <limb1> <limb2>
+Abfile:
+Croon to your victim of the power of extinction, that which breaks and
+destroys. If they are already fragile to its workings, they shall know
+the power of devastation firsthand(*).
+
+* Any limb that you specify which is broken to the point of needing a
+restoration salve shall take very significant (around 25% per stack)
+further limb damage. This is increased substantially for each stack of
+the horror affliction said target suffers from.
+** There is a 1 minute cooldown on you crooning this ability, and a
+target has a 45 second immunity from it after being hit with it once.
+*** You cannot target this ability against the torso.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 4% karma

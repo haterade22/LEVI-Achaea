@@ -1,0 +1,17 @@
+Ability: Resonance (Record #2326)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Shatter a denizen's shield with your voice.
+Syntax: PLAY RESONANCE AT <target>
+Abfile:
+Use your rage and the pitch of your voice at exactly the right frequency to resonate with a denizen's shield, causing it to shatter.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_bard

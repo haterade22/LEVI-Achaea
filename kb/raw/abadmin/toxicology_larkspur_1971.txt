@@ -1,0 +1,17 @@
+Ability: Larkspur (Record #1971)
+Associated skill: Toxicology
+Skillpoints required: 24999
+Blurb: Causes great dizziness.
+Syntax: None
+Extra info: Ingredients: 2 goldenseal, 1 kelp, 1 blueink or
+2 plumbum, 1 aurum, 1 blueink
+Abfile:
+Cause great dizziness in your target.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

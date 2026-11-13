@@ -1,0 +1,16 @@
+Ability: Block (Record #2945)
+Associated skill: Valour
+Skillpoints required: 1999
+Blurb: Obstructing departure with your body.
+Syntax: BLOCK <direction>
+Abfile:
+This ability will allow you to block a particular direction, preventing
+normal movement in that direction.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

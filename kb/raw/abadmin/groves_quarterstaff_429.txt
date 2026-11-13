@@ -1,0 +1,22 @@
+Ability: Quarterstaff (Record #429)
+Associated skill: Groves
+Skillpoints required: 11999
+Blurb: Summon a powerful quarterstaff from your grove.
+Syntax: GROVE QUARTERSTAFF
+SHARPEN QUARTERSTAFF
+SPIN QUARTERSTAFF
+TAP QUARTERSTAFF
+WHIRL QUARTERSTAFF
+SWING QUARTERSTAFF [target]
+Abfile:
+Using this ability, you will gain a quarterstaff from the heart of a tree in your grove. You may then SHARPEN QUARTERSTAFF to sharpen it. Once sharpened, you may STAB <target>. You may also SPIN QUARTERSTAFF to conjure an aura of protection against physical and magical damage. TAP QUARTERSTAFF will turn your quarterstaff into a source of light. WHIRL QUARTERSTAFF will reveal many hidden or cloaked people that may be in your location. It is rumoured that there are other abilities that may be performed with your quarterstaff, including one to create a slightly more powerful aura of protection.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1000 sunlight

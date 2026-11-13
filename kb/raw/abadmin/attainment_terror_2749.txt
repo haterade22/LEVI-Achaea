@@ -1,0 +1,20 @@
+Ability: Terror (Record #2749)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Fear is their enemy.
+Syntax: PSI TERROR <target>
+Extra info: Gives denizen affliction: Fear
+Abfile:
+With a simple application of psionic might instill a sense of abject
+terror in your foe, giving them the fear affliction.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 38.00 seconds
+Resource: 32 rage
+Skill specialisation: br_psion

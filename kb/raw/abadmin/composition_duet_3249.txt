@@ -1,0 +1,24 @@
+Ability: Duet (Record #3249)
+Associated skill: Composition
+Skillpoints required: 58599
+Blurb: Such harmony profound.
+Syntax: DUET <target>
+Abfile:
+Though your own performances are doubtlessly grand beyond the reckoning
+of all that would behold them, sometimes one may simply wish to raise
+the level of another, perhaps tragically less gifted, musician. By
+performing this ability you will greatly raise an actively building
+crescendo about another(*), so long as someone other than yourself is
+responsible for it(**).
+
+* Sets their crescendo to one stack below the finale threshold.
+** You cannot be the one who gave the crescendo affliction in question.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of equilibrium

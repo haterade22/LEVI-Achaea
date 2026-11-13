@@ -1,0 +1,18 @@
+Ability: Balateth (Record #2445)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: Strike like lightning.
+Syntax: INTONE BALATETH <SCYTHE|DAGGER>
+This ability will be hidden on ablistings.
+Abfile:
+By uttering this word over the respective weapon created via
+Shadowmancy, you may enhance its speed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of word balance

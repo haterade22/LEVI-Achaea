@@ -1,0 +1,24 @@
+Ability: Powderise (Record #2531)
+Associated skill: Sculpting
+Skillpoints required: 15999
+Blurb: Smash their bones to bloody powder.
+Syntax: TERRAN POWDERISE <target> <limb>
+Abfile:
+Target the limbs of your enemies and smash them to bloody powder. The
+more you have shaped your body, the more damage this attack will do
+(both in terms of health damage and limb damage). Additionally,
+powderising limbs has different effects.
+
+Head: gives a stun, which is longer the more you have shaped your form.
+Torso: knocks the target off balance, longer based on how much you have
+shaped your form.
+Either arm: breaks said arm.
+Leg: knocks your target prone if you have sufficiently shaped your form.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Bloodpact (Record #319)
+Associated skill: Apostasy
+Skillpoints required: 46999
+Blurb: An unholy pact with the Inferno.
+Syntax: DEMON BLOODPACT <target> FOR <NIGHTMARE|FIEND|DAEMONITE>
+Abfile:
+This demonic pact allows you to utilise the link between fresh blood
+upon your daegger and its unwilling donator to immediately bring a
+pentagram and demon into being.
+Note that the blood must be fresh; your daegger shall become stained
+with it for a short time after your daegger strikes someone through use
+of the hunt or puncture abilities.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

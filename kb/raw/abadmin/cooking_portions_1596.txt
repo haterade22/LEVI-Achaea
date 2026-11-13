@@ -1,0 +1,15 @@
+Ability: Portions (Record #1596)
+Associated skill: Cooking
+Skillpoints required: 60000
+Blurb: Wasting less means larger portions.
+Syntax: None
+Abfile:
+As a master chef, you now know how to ration the use of your ingredients. At times, you will find that you have enough left over to prepare an extra portion or two of your creation.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

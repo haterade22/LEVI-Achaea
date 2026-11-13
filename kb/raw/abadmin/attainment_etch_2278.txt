@@ -1,0 +1,19 @@
+Ability: Etch (Record #2278)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A fiery rune will strike your opponent.
+Syntax: ETCH RUNE AT <target>
+Extra info: Uses denizen afflictions: Aeon or Stun
+Abfile:
+Draw the outline of a rune in the air with your weapon, sending the rune crashing into your opponent, doing extra damage if the target is unable to dodge the attack because of aeon or stun.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_runewarden

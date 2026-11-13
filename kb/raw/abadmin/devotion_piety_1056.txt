@@ -1,0 +1,19 @@
+Ability: Piety (Record #1056)
+Associated skill: Devotion
+Skillpoints required: 20999
+Blurb: Bind those around you with the force of ultimate piety.
+Syntax: PERFORM RITE OF PIETY
+Abfile:
+This rite will make it difficult for your enemies to leave the room.
+When it successfully prevents them from moving, they will suffer a
+balance penalty.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium
+Resource: 600 devotion

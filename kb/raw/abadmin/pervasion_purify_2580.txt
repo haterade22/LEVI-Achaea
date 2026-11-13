@@ -1,0 +1,22 @@
+Ability: Purify (Record #2580)
+Associated skill: Pervasion
+Skillpoints required: 3999
+Blurb: Replace the old with the new.
+Syntax: PURIFY
+Abfile:
+Cleanse your form of impurities, curing an affliction. If
+you stand within water when enacting this ability, a
+second affliction will be cured after some time(*). This ability may not
+be performed when you labour under the weariness affliction.
+
+* You must be standing in water at the time when the
+second affliction would be cured as well as upon
+initiation.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

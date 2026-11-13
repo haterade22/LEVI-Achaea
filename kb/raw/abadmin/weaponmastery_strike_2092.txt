@@ -1,0 +1,30 @@
+Ability: Strike (Record #2092)
+Associated skill: Weaponmastery
+Skillpoints required: 53000
+Blurb: Unleash your ferocity against your foe.
+Syntax: SHIELDSTRIKE <target> <HIGH|MID|LOW|DEFENCES>
+Abfile:
+Once you have generated sufficient ferocity, you may unleash a
+devastating blow with your shield. This attack does not usually consume
+balance(*) and may be followed with a standard combination attack.
+
+When targeted high, the strike will stun your opponent.
+
+When targeted to the midsection, the strike will deliver sensitivity.
+
+When striking low, you will knock your opponent to the ground.
+
+When striking at the defences, you will shatter a protective barrier
+surrounding your target(**).
+
+* When striking low before an attack, balance is incurred.
+** Rebounding if present, then a magical shield if present.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_snb

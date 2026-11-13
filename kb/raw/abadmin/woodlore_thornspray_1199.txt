@@ -1,0 +1,22 @@
+Ability: Thornspray (Record #1199)
+Associated skill: Woodlore
+Skillpoints required: 46999
+Blurb: Attack your enemies with a flurry of flying thorns.
+Syntax: INVOKE THORNSPRAY
+Abfile:
+While in a forested environment, you may fill the air with deadly flying
+thorns, damaging anyone in the room.
+
+* Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

@@ -1,0 +1,17 @@
+Ability: Paranoia (Record #1351)
+Associated skill: Curses
+Skillpoints required: 11499
+Blurb: They are out to get you, believe me.
+Syntax: CURSE <target> PARANOIA
+Abfile:
+Instil a fear of other people in your victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana

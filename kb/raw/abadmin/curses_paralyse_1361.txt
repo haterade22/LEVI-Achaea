@@ -1,0 +1,18 @@
+Ability: Paralyse (Record #1361)
+Associated skill: Curses
+Skillpoints required: 30999
+Blurb: Freeze the limbs of your enemy.
+Syntax: CURSE <target> PARALYSE
+Abfile:
+Cause your victims body to freeze with paralysis.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 55 mana
+The ability name PARALYSIS is mapped to this ability.

@@ -1,0 +1,15 @@
+Ability: Battle (Record #2690)
+Associated skill: Attainment
+Skillpoints required: 6599
+Blurb: Danger awaits!
+Syntax:
+Abfile:
+You are able to attack adventurers and participate in arena events.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

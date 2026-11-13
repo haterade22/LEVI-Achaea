@@ -1,0 +1,28 @@
+Ability: Detonation (Record #3277)
+Associated skill: Ignition
+Skillpoints required: 40999
+Blurb: A single moment to send them thus.
+Syntax: MANIFEST DETONATION
+Abfile:
+While standing in your crucible, you may cause it to detonate in a
+single moment of explosive force(*), casting all those not of Kkractle's
+legion(**) before it and scattering them to all corners(***). This
+ability has no fixed spark requirement, but does require you have at
+least one level of spark fanned.
+
+* Destroys your crucible on use.
+** Does not work against other fire lords.
+*** Has a chance to throw everyone else in a random direction. The
+higher your spark, the higher the chance each person will be thrown.
+**** A target having the mass defence makes them less likely to be
+thrown, equivalent to you having one less level of spark than you
+actually do when determining whether they will be moved.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

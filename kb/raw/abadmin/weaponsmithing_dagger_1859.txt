@@ -1,0 +1,18 @@
+Ability: Dagger (Record #1859)
+Associated skill: Weaponsmithing
+Skillpoints required: 12999
+Blurb: Obsidian throwing daggers.
+Syntax: FORGE FOR DAGGER
+FORGE (to continue after interruption)
+Extra info: Commodities: 2 obsidian, 1 iron, 1 steel
+Abfile:
+Obsidian throwing daggers.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

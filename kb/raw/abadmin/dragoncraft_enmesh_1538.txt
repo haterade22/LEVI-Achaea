@@ -1,0 +1,4 @@
+Ability: Enmesh (Record #1538)
+Associated skill: Dragoncraft
+Maps to record 1537 (ENMESHMENT).
+Skill specialisation: dragonform

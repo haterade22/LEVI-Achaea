@@ -1,0 +1,20 @@
+Ability: Rattle (Record #2124)
+Associated skill: Skirmishing
+Skillpoints required: 25999
+Blurb: Rattle their brains with a blow to the head.
+Syntax: RATTLE <target>
+Abfile:
+This ability will knock a prone and transfixed target unconscious. The
+more health your victim is missing, the longer they shall remain
+unconscious for. This duration is also increased if a rattle follows
+within ten seconds of a skullbash, their brains being sufficiently
+scrambled already.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

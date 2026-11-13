@@ -1,0 +1,17 @@
+Ability: Radiate (Record #2714)
+Associated skill: Psionics
+Skillpoints required: 15999
+Blurb: Your will is implacable.
+Syntax: PSI RADIATE
+Abfile:
+Radiate a circle of psychic force outwards, knocking all that stand in
+your location off their feet: friend and foe alike.
+Useable on: adventurers
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

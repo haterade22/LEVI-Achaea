@@ -1,0 +1,16 @@
+Ability: Brace (Record #1194)
+Associated skill: Skirmishing
+Skillpoints required: 12999
+Blurb: Impale attackers on a spear or trident.
+Syntax: SET SPEAR/TRIDENT
+Abfile:
+By bracing your spear or trident on the ground, you will attempt to impale anyone initiating an attack in an adjacent room that ends in your room. For instance: barge, jumpkick, etc. The very unlucky victim will take damage until he or she writhes off the spear or trident, but, you will not be able to move as long as the person is impaled on your spear or trident.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,16 @@
+Ability: Who (Record #413)
+Associated skill: Groves
+Skillpoints required: 149
+Blurb: Sense who is in the forest.
+Syntax: GROVE WHO
+Abfile:
+This ability will cause the forest itself to report on the presence of other adventurers that are in it.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Sunlight

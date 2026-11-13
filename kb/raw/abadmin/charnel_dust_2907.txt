@@ -1,0 +1,26 @@
+Ability: Dust (Record #2907)
+Associated skill: Charnel
+Skillpoints required: 58999
+Blurb: to dust.
+Syntax: ACCURSED DUST
+REFORM
+Abfile:
+You may temporarily return your Accursed form to a less vitiating state
+of being, though a transient one. By focusing for a short time you may
+prepare yourself to become dust for a time; a catalyst will cause this
+state to manifest(*), during which time you will be free from many of
+the tribulations of mortal existence, though also from mortal
+agency(**).
+
+* When you take damage after the channel is complete.
+** You will be unable to interact with much of the world, though very
+little will be able to harm you or otherwise inconvenience you directly.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

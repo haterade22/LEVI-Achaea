@@ -1,0 +1,33 @@
+Ability: Avalanche (Record #2534)
+Associated skill: Sculpting
+Skillpoints required: 24999
+Blurb: Under rock and stone.
+Syntax: MANIFEST AVALANCHE <target>
+Extra info: You must have shaped your form at least twice.
+Abfile:
+Call down an avalanche to batter and break your foe. This skill behaves
+differently when used against adventurers or denizens.
+
+If the target is an adventurer, they will be knocked prone and take
+damage. If they are already prone, they will take increased damage, any
+limb that isn't crippled shall be crippled, and any limb that is already
+crippled shall take very significant limb damage.
+
+In addition, an avalanche striking shall immediately escalate head
+damage from a damaged state to a mangled state.
+
+If the target is a denizen, this skill shall deal a large amount of
+blunt damage but requires that you have shaped your Earthen form as much
+as possible(*).
+
+* You must have 4 shaping stacks, and using this skill against a denizen
+will reduce your shaping to 0.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

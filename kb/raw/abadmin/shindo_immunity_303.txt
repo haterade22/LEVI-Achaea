@@ -1,0 +1,16 @@
+Ability: Immunity (Record #303)
+Associated skill: Shindo
+Skillpoints required: 20999
+Blurb: Withstand the foulest of poisons.
+Syntax: IMMUNITY
+Abfile:
+By stirring your circulation, you may prepare yourself to shrug away the next poison that enters your bloodstream. As venoms are so wide in variety, such a state of readiness requires the whole of your focus; performing any action will end your immunity.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

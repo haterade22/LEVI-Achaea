@@ -1,0 +1,18 @@
+Ability: Tradeskills (Record #2684)
+Associated skill: Attainment
+Skillpoints required: 17999
+Blurb: Learn a trade.
+Syntax: ASK AMARISSE GAIN <trade skill>
+Abfile:
+Seek out Amarisse at the Delosian Crafters Union in Delos to begin
+learning a tradeskill.
+
+See HELP TRADESKILLS for more information and a list of tradeskills.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

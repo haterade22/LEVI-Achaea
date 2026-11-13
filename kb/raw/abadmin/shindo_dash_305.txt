@@ -1,0 +1,15 @@
+Ability: Dash (Record #305)
+Associated skill: Shindo
+Skillpoints required: 24999
+Blurb: Fly across the ground.
+Syntax: DASH <direction> [distance] (Between 1 and 11 rooms)
+Abfile:
+Sprinting in a particular direction, you may rapidly cover a great distance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

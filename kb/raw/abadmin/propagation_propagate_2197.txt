@@ -1,0 +1,25 @@
+Ability: Propagate (Record #2197)
+Associated skill: Propagation
+Skillpoints required: 1999
+Blurb: Enhance yourself with nature's bounty.
+Syntax: PROPAGATE <HEAD|BODY|ARMS|LEGS> WITH <plant>
+PROPAGATIONS
+Abfile:
+This is the core of the propagator's strategy. While in Viridian form,
+you are able to propagate one of either your head, body, arms, or legs
+with a plant. As you progress in propagation, you will learn to utilise
+more plants in this way. Each plant conveys a different benefit
+depending on the location you grow it.
+
+Returning to human form will remove all of your propagations.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds
+Resource: 200 mana

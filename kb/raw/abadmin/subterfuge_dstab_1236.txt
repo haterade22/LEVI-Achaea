@@ -1,0 +1,3 @@
+Ability: Dstab (Record #1236)
+Associated skill: Subterfuge
+Maps to record 1235 (DOUBLESTAB).

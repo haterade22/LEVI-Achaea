@@ -1,0 +1,19 @@
+Ability: Sizzle (Record #2303)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Breathe small bolts of lightning around your opponent.
+Syntax: SIZZLE <target>
+Extra info: Gives denizen affliction: Sensitivity
+Abfile:
+Cause sensitivity in your target for a short time as you assault it with many small bolts of lightning.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 27.00 seconds
+Resource: 25 rage
+Skill specialisation: br_silver_dragon

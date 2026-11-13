@@ -1,0 +1,18 @@
+Ability: Dragonblaze (Record #2296)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Turn your opponent into a burning pyre.
+Syntax: DRAGONBLAZE <target>
+Abfile:
+Breathe a long stream of fire onto your target, creating a living pyre of flame.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_red_dragon

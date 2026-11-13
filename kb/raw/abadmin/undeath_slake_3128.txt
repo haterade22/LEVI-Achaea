@@ -1,0 +1,20 @@
+Ability: Slake (Record #3128)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: Feast upon their souls.
+Syntax: SOULBLEED SLAKE
+Abfile:
+The soul provides sustenance that you will gladly take. This dark art
+will drain energy from the living, healing yourself and curing an
+affliction for each that stands in your location.
+
+You may only call upon this hunger every so often.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance

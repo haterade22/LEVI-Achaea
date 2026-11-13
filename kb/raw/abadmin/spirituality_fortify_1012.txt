@@ -1,0 +1,17 @@
+Ability: Fortify (Record #1012)
+Associated skill: Spirituality
+Skillpoints required: 3999
+Blurb: Boost your angel's power with your own health.
+Syntax: ANGEL FORTIFY
+Abfile:
+Using this ability, you may replenish your angel's power at a cost of some of your health.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: Health

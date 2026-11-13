@@ -1,0 +1,19 @@
+Ability: Scrimshaw (Record #2817)
+Associated skill: Shipfitting
+Skillpoints required: 35999
+Blurb: Turn their loss into your gain.
+Syntax: SHIPFIT CARVE KEY
+Abfile:
+The pastime of many a bored mariner, scrimshaw is primarily an artform,
+but those knowledgeable enough can use the fingerbones of a sailor to
+craft a skeleton key. Five fingers will be enough to find a suitable
+specimen. Rumours say that, if done correctly, such a key can unlock any
+treasure of the sea.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

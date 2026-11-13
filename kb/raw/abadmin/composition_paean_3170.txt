@@ -1,0 +1,20 @@
+Ability: Paean (Record #3170)
+Associated skill: Composition
+Skillpoints required: 1999
+Blurb: And off to war they went.
+Syntax: COMPOSE PAEAN
+Abfile:
+This song of war will cause all of your enemies who tremble beneath its
+hearing to know the bloodshed of times gone by(*).
+
+* All enemies bleed. Either for a small amount or twenty percent of
+their current bleeding, whichever is higher.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

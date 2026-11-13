@@ -1,0 +1,18 @@
+Ability: Noogie (Record #2240)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: As painful as it is humiliating.
+Syntax: NOOGIE <target>
+Abfile:
+Wrap your opponent in a headlock and try to start a fire on its scalp with your knuckles.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_jester

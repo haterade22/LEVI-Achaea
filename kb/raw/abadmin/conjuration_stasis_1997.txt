@@ -1,0 +1,31 @@
+Ability: Stasis (Record #1997)
+Associated skill: Conjuration
+Skillpoints required: 52999
+Blurb: Items in the bag of stasis decay more slowly.
+Syntax: BEGIN CREATION OF BAG OF STASIS
+PUT <item> IN BAG
+Abfile:
+ Type:
+   Created item.
+
+Actions:
+2x16, 3, 4, 5, 1, chant "stasis statorium", 4, 2x6, 3x17, 16, 6x13, 2x15
+
+Comms:
+   4 gold, 3 elemental ice, 3 stag's horn, 2 diamond dust, 1 silver
+
+The bag of stasis is a magical item created to slow the decay of things
+inside of it. Any five items will fit inside, and those inside will
+decay at half the normal rate. Items inside something such as a pack
+will decay at the normal rate but the pack itself would decay at half
+the rate when inside the bag of stasis.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name BAGOFSTASIS is mapped to this ability.

@@ -1,0 +1,17 @@
+Ability: Simulacrum (Record #962)
+Associated skill: Occultism
+Skillpoints required: 14999
+Blurb: Create a figurine of yourself that absorbs damage.
+Syntax: SIMULACRUM
+Abfile:
+Using your karma, you can create a simulacrum that stores health. Whenever you take damage, a portion of that damage will be absorbed by the simulacrum until it cracks.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 3% karma

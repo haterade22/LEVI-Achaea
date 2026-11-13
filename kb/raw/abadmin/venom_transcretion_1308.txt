@@ -1,0 +1,15 @@
+Ability: Transcretion (Record #1308)
+Associated skill: Venom
+Skillpoints required: 30999
+Blurb: The ability to instantly secrete a venom.
+Syntax: SECRETE <venom> ON <edged weapon>
+Abfile:
+The ability of Transcretion is automatic and will allow you to secrete and instantly be able to bite without waiting for balance. You will also be able to secrete venoms directly onto edged weapons.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

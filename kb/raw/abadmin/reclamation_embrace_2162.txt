@@ -1,0 +1,21 @@
+Ability: Embrace (Record #2162)
+Associated skill: Reclamation
+Skillpoints required: 56999
+Blurb: Return them to the embrace of nature.
+Syntax: RECLAMATION EMBRACE <target>
+Abfile:
+When standing in a reclaimed location, you may have the vines tear apart
+a suitably vulnerable enemy. For the purposes of this ability, suitably
+vulnerable requires that the target has both arms and both legs at least
+damaged to the point of needing the restoration salve to fix them.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 100 mana

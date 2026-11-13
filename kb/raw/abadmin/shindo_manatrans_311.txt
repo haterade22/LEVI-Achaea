@@ -1,0 +1,16 @@
+Ability: Manatrans (Record #311)
+Associated skill: Shindo
+Skillpoints required: 36999
+Blurb: Fortify your mind with Shin power.
+Syntax: SHIN MANATRANS <amount of Shin>/ALL
+Abfile:
+Allowing Shin energy to focus your thoughts and elucidate your mind, you may instantly replenish your mana reserves. The more energy accumulated, the more you may transmute in this way.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Shin energy

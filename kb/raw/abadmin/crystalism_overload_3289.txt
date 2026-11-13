@@ -1,0 +1,25 @@
+Ability: Overload (Record #3289)
+Associated skill: Crystalism
+Skillpoints required: 60000
+Blurb: Lash out with a destabilising vibration.
+Syntax: VIBE DESTABILISE <vibe> <target> <affliction>
+Abfile:
+Having mastered the art of destabilising crystalline vibrations, you may
+force the unravelling frequency beyond its limits and direct the
+overloaded resonance at a foe standing alongside you. As the vibration
+is destroyed and its unstable effects unleashed upon the location, the
+overloaded frequency lashes out at your chosen target, afflicting them
+with paralysis, asthma, slickness, anorexia or stupidity as you choose.
+
+Overloading a vibration demands the same focus as destabilising one, and
+requires both balance and equilibrium. The equilibrium cost will be that
+of the destabilised vibration or of the overload itself, whichever is
+greater.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

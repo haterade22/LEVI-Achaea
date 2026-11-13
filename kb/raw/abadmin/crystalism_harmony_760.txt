@@ -1,0 +1,22 @@
+Ability: Harmony (Record #760)
+Associated skill: Crystalism
+Skillpoints required: 14999
+Blurb: A soothing, healing vibration.
+Syntax: EMBED HARMONY [HEALING|RESTORATION]
+TUNE HARMONY HEALING|RESTORATION
+Abfile:
+ Shapes required: Egg, Sphere
+
+This vibration will heal either your afflictions or health and mana. If
+you TUNE to HEALING, it shall do the former; if you Tune to RESTORATION,
+it shall do the latter.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

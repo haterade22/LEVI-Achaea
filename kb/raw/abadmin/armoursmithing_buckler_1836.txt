@@ -1,0 +1,19 @@
+Ability: Buckler (Record #1836)
+Associated skill: Armoursmithing
+Skillpoints required: 0
+Blurb: The smallest shield.
+Syntax: FORGE FOR BUCKLER
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+1 Steel
+Abfile:
+The smallest shield.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

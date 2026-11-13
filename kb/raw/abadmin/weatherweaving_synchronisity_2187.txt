@@ -1,0 +1,23 @@
+Ability: Synchronisity (Record #2187)
+Associated skill: Weatherweaving
+Skillpoints required: 17999
+Blurb: Control the flows of two spells at once.
+Syntax: SYNCHRONISE <spell1> <spell2> <target>
+Abfile:
+Your skill has reached such a level that you are able to direct the
+channeled power of two spells practically simultaneously, casting them
+in rapid succession.
+
+The following spells can be cast in this way: windwhip, shear, static,
+thunderclap, flash, bolt, razorwind, cyclone, waterspout, and hailstone.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 50 mana and arcane power

@@ -1,0 +1,17 @@
+Ability: Metawake (Record #1392)
+Associated skill: Survival
+Skillpoints required: 12999
+Blurb: Cause yourself to quickly wake up automatically.
+Syntax: METAWAKE [ON|OFF]
+RELAX METAWAKE
+Abfile:
+Though it will quickly drain your mana, turning metawake on will ensure that you will quickly wake up if put to sleep.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

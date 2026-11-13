@@ -1,0 +1,19 @@
+Ability: Aria (Record #3173)
+Associated skill: Composition
+Skillpoints required: 4999
+Blurb: You'll keep this party going.
+Syntax:
+Abfile:
+This upbeat movement bolsters you and your allies, reducing all
+willpower and endurance use by around ten percent(*).
+
+* Some abilities are unmodified by anything when it comes to this cost.
+As with other enhancements, this movement will not help in these cases.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

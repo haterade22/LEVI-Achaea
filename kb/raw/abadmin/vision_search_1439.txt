@@ -1,0 +1,16 @@
+Ability: Search (Record #1439)
+Associated skill: Vision
+Skillpoints required: 7999
+Blurb: Search your location for hidden beings.
+Syntax: SEARCH
+Abfile:
+Force those in your location to reveal themselves if hidden.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

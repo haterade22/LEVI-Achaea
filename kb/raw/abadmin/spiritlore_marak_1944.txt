@@ -1,0 +1,24 @@
+Ability: Marak (Record #1944)
+Associated skill: Spiritlore
+Skillpoints required: 33999
+Blurb: Marak, The Eviscerator.
+Syntax: CURSE <target> <affliction> INVOKE SOULSCOURGE <ability>
+Extra info: Attune effect: increased constitution.
+Abfile:
+This ability will allow you to destroy a vodun doll to balancelessly
+activate one of the following vodun-based abilities on the target:
+confusion, dizzy, sleep, bind, paralyse, break, throttle, reckless,
+bleed, cripple, mangle, imbibe. The doll must be fashioned to twice the
+extent that the ability used would normally require.
+This ability must be comboed  with curses.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 300 mana
+The ability name INFERNAL is mapped to this ability.

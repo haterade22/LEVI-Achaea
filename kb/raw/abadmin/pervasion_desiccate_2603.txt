@@ -1,0 +1,19 @@
+Ability: Desiccate (Record #2603)
+Associated skill: Pervasion
+Skillpoints required: 57999
+Blurb: Wash the land with their vital fluids.
+Syntax: DESICCATE <target>
+Abfile:
+Once you have latched your foe(*), you may tear every drop of water from
+their body in a display of the might of Sllshya, a warning to all who
+would dare oppose you.
+
+* See AB PERVASION LATCH for details.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

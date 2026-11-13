@@ -1,0 +1,24 @@
+Ability: Seleucar (Record #3218)
+Associated skill: Woe
+Skillpoints required: 13999
+Blurb: Of darkness roused from maddened depths.
+Syntax: RECITE SELEUCAR
+Abfile:
+The might of once great Seleucar was a thing that broke the first Black
+Wave, or at least such was the great design. By speaking this
+foretelling, you and all allies that hear the grand culmination shall be
+suffused with a portion of that might temporarily, gaining a bonus when
+fighting particularly mighty foes(**).
+
+* All allies and Cyrenians in your location.
+** While enhanced in this way your attacks will do more damage against
+denizens who cannot be struck with critical strikes.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.00 seconds of equilibrium

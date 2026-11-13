@@ -1,0 +1,32 @@
+Ability: Tzantza (Record #1375)
+Associated skill: Curses
+Skillpoints required: 60000
+Blurb: Bring a most painful end to your victim.
+Syntax: CURSE <target> TZANTZA
+Abfile:
+This requires at least one of the listed afflictions to pull off. Though
+once you have their mind in your grasp you can use the devastating
+Tzantza curse to shrink their head. Watch the fun as their skin draws
+tighter and their skull implodes upon itself.
+
+The more afflictions your victim suffers over, the faster the process
+will proceed. At six afflictions, death is instantaneous.
+
+Valid afflictions are:
+Agoraphobia        Amnesia
+Claustrophobia     Confusion
+Dementia           Dizziness
+Epilepsy           Impatience
+Masochism          Paranoia
+Recklessness       Stupidity
+Vertigo            Addiction
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 300 mana

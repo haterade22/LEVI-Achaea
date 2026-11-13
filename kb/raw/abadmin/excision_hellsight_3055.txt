@@ -1,0 +1,22 @@
+Ability: Hellsight (Record #3055)
+Associated skill: Excision
+Skillpoints required: 57999
+Blurb: The fate that awaits their deeds.
+Syntax: PERFORM HELLSIGHT <target>
+Abfile:
+Make it known to a heretic the fate that awaits their malign deeds.
+
+The costs are significantly reduced if used on a target you are
+CRUSADING against.
+
+* Gives the hellsight affliction.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 15% Holy Wrath

@@ -1,0 +1,32 @@
+Ability: Resurrection (Record #458)
+Associated skill: Groves
+Skillpoints required: 52999
+Blurb: Restore yourself or a friend to life.
+Syntax: GROVE RESURRECTION <target> [FORCE]
+GROVE RESURRECTION
+Abfile:
+This very costly ability will grant life to the corpse of any adventurer
+you specify, provided the corpse is in your grove. The second form is
+used for yourself.
+
+The forest will resist attempts to resurrect its enemies. If you wish to
+proceed with the resurrection, you will be required to FORCE the attempt
+at a much higher personal cost. Note that forcing your grove to
+resurrect an individual will ALWAYS have a higher cost.
+
+Those grove users who are truly devoted to Nature are also able to
+resurrect the souls of others, so long as they too are adherents to
+Nature's worship and protection. Those who are citizens of Eleusis, or
+members of the Scions of the Ithmia and Heartwood Kin Houses fall into
+this category.
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Resource: 350 sunlight

@@ -1,0 +1,23 @@
+Ability: Accelerate (Record #2411)
+Associated skill: Aeonics
+Skillpoints required: 6999
+Blurb: It all adds up.
+Syntax: CHRONO ACCELERATE [BOOST]
+Abfile:
+With this ability you may massively increase your body's ability to
+purge afflictions, resulting in a random affliction being cured from
+those presently afflicting you. If you boost this ability, two
+afflictions will be cured.
+
+Note that being reckless will make you unable to carry out the
+acceleration process, and being prone will make boosting the process
+impossible.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 340 age

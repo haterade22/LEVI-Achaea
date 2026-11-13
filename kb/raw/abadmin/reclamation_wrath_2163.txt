@@ -1,0 +1,20 @@
+Ability: Wrath (Record #2163)
+Associated skill: Reclamation
+Skillpoints required: 60000
+Blurb: The wrath of nature unleashed.
+Syntax: RECLAMATION WRATH
+Abfile:
+This ability is maybe the greatest and most costly of all. When all else
+is lost, you may sacrifice all land that you have reclaimed, dealing
+significant damage to all those that stand within. A terrible sacrifice
+indeed, but sometimes the advancing foes must be stopped at all costs.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 1000 mana

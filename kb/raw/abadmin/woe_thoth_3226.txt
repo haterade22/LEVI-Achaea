@@ -1,0 +1,27 @@
+Ability: Thoth (Record #3226)
+Associated skill: Woe
+Skillpoints required: 43999
+Blurb: Of Death alive but not.
+Syntax: RECITE THOTH
+Abfile:
+There was a time, long after His demise, when Thoth once more walked and
+fought with those who would see Woe brought low. However, that which has
+gone beyond will soon fade once more, and this tale will make such
+manifest to all(*).
+
+* On the first tick with no necromancer present, gravehands are
+destroyed. On the second tick gravehands are destroyed even if a
+necromancer is present. On the third tick, infestation maggots are
+destroyed.
+** If a necromancer (Oppression users count as necromancers for the
+purposes of this ability) is present, this recital is a channeled
+action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance

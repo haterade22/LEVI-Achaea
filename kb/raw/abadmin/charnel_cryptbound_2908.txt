@@ -1,0 +1,20 @@
+Ability: Cryptbound (Record #2908)
+Associated skill: Charnel
+Skillpoints required: 26999
+Blurb: Wake in darkness.
+Syntax:
+Abfile:
+To be Accursed is to be ever bound to your tomb. If you would resurrect
+outside the cave after embracing death, you will instead resurrect
+within the confines of your sarcophagus(*).
+
+* Note special resurrections override this, such as gravestones from the
+death talisman set or foray insurance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

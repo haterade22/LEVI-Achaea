@@ -1,0 +1,3 @@
+Ability: Dizziness (Record #2349)
+Associated skill: Curses
+Maps to record 1349 (DIZZY).

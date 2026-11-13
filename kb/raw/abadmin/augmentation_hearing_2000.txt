@@ -1,0 +1,28 @@
+Ability: Hearing (Record #2000)
+Associated skill: Augmentation
+Skillpoints required: 699
+Blurb: Hear while otherwise deaf.
+Syntax: BEGIN ENCHANTMENT OF EARRING WITH HEARING
+Abfile:
+This item must be worn.
+
+Type:
+   Enchanted on earrings.
+
+Actions:
+   3, 6, 10, 11, 6, 10, 3, 2x11, 10, 6, 3, 3, 15, 1
+
+Comms:
+   3 silver, 4 stag's horn
+
+While wearing one of these earrings, you will be able to hear while
+deaf.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name EARRINGWITHHEARING is mapped to this ability.

@@ -1,0 +1,21 @@
+Ability: Divinechild (Record #3203)
+Associated skill: Sagas
+Skillpoints required: 15999
+Blurb: To take the power for One's own.
+Syntax: RECITE DIVINECHILD
+Abfile:
+A story of theft and of power, of taking and of subversion, the sagas of
+the Divine Child will bring forth a shifting field of absorption in your
+location. Periodically it will shift, and all damage to your allies of a
+given type will become impossible until it shifts once more.
+
+* The shifting cannot be controlled.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 3.00 seconds of equilibrium

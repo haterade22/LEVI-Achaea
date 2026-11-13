@@ -1,0 +1,25 @@
+Ability: Icewyrm (Record #393)
+Associated skill: Metamorphosis
+Skillpoints required: 35999
+Blurb: A mythical creature of awesome, magical power.
+Syntax: MORPH ICEWYRM
+Extra info: Powers: Alertness
+Icebreath
+Maul
+Might
+Nightsight
+Scent
+Sprint
+Temperance
+Vitality
+Abfile:
+A mythical creature of awesome, magical power.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 80 mana

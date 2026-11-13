@@ -1,0 +1,22 @@
+Ability: Bloodscent (Record #3245)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb: Your prey shall not escape.
+Syntax:
+This ability will be hidden on ablistings.
+Abfile:
+Once you have the scent of your prey's blood in your nose, nothing will
+stop you from tracking them down(*).
+
+* When you strike a tumbling target who is already bleeding with your
+spear, you will gain the bloodscent defence. This permits you to bypass
+most forms of room hinder while it lasts (approximately ten seconds -
+this timer does not refresh).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

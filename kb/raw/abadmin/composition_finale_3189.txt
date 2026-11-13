@@ -1,0 +1,50 @@
+Ability: Finale (Record #3189)
+Associated skill: Composition
+Skillpoints required: 58999
+Blurb: The curtain falls.
+Syntax: FINALE <target>
+Abfile:
+If a crescendo has built sufficiently about a target(*), you may bring
+your ongoing performance to a grand finale. This ends your current
+performance.
+
+* Five stacks of crescendo.
+
+Finales:
+
+Paean: gives the reeling affliction for 20 seconds, which causes all
+bladedance attacks to be performed from the back position until it
+fades.
+
+Bhajan: Strikes the hearer with both stupidity and epilepsy.
+Additionally, if they are suffering from head trauma, they will lose
+focus balance for a significant period of time.
+
+Nomos: mangles an already level two broken leg. Prioritises the left
+over the right.
+
+Gusheh: mangles an already level two broken arm. Prioritises the left
+over the right.
+
+Ode: your foe will be rendered unable to communicate by any means for
+five minutes.
+
+Ghazal: causes your foe to succumb to a love-wrought madness for thirty
+seconds. While succumbed to said madness, they will be unable to
+perceive the state of themselves (similar to recklessness) and all
+physical damage shall become unblockable.
+
+Elegy: any blessing of the stars protecting your target will be removed,
+and any starburst tattoos upon their person will be removed.
+
+Prosodion: transfixes the hearer with the power of the Accentato, making
+earworm incurable for twenty seconds.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium

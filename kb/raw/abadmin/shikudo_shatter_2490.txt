@@ -1,0 +1,17 @@
+Ability: Shatter (Record #2490)
+Associated skill: Shikudo
+Skillpoints required: 1599
+Blurb: Brush aside the shields of your foes.
+Syntax: SHATTER
+Abfile:
+Smash magical shields with a single blow of your staff. This ability is
+unique among all Shikudo techniques in that it can be performed in the
+flow of any one of the forms.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

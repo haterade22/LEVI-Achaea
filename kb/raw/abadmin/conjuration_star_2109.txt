@@ -1,0 +1,31 @@
+Ability: Star (Record #2109)
+Associated skill: Conjuration
+Skillpoints required: 40000
+Blurb: Bane of the surreptitious.
+Syntax: BEGIN CREATION OF STAR SIGIL
+THROW STAR AT GROUND
+Abfile:
+Type:
+   Created item.
+
+Actions:
+   11, 1
+
+
+Comms:
+1 dust, 1 silver
+
+The star sigil, when thrown at the ground, shall coat all in the room in
+a thin layer of reflective dust. This shall allow you to track their
+movements out of the room, even when they may usually not be visible.
+
+The primary case of this is the evade ability in Subterfuge.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name STARSIGIL is mapped to this ability.

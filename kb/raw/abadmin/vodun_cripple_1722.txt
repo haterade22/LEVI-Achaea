@@ -1,0 +1,18 @@
+Ability: Cripple (Record #1722)
+Associated skill: Vodun
+Skillpoints required: 22999
+Blurb: Break all the limbs of a victim.
+Syntax: VODUN CRIPPLE
+Extra info: Required: 25
+Used: 7
+Abfile:
+Break all the limbs of a victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

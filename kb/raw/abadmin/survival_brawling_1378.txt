@@ -1,0 +1,18 @@
+Ability: Brawling (Record #1378)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Enter into basic combat with your fists and feet.
+Syntax: KICK <target>
+PUNCH <target>
+HEADSLAM <target>
+Abfile:
+Enter into basic hand-to-hand combat! These moves are especially recommended for the youths of the realm who have not yet learned any of the more powerful class skills for combat.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

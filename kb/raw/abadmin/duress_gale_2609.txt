@@ -1,0 +1,17 @@
+Ability: Gale (Record #2609)
+Associated skill: Duress
+Skillpoints required: 3999
+Blurb: Diverge them of defences.
+Syntax: MANIFEST GALE <target>
+Abfile:
+Summon forth a powerful gale to blow away magical shields that may be
+protecting your foes. When you successfully do this against another
+adventurer, they will also be afflicted with manaleech.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Envenom (Record #1237)
+Associated skill: Subterfuge
+Skillpoints required: 21999
+Blurb: Dip your arrows in venom.
+Syntax: ENVENOM ARROW <colour> <venom>
+ENVENOM <weapon> with <venom>
+WIPE <weapon>
+Abfile:
+After you have coloured a group of arrows, you may cover the tips with venom if you have the ability to secrete the particular type of venom. You can also envenom normal edged weapons with this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

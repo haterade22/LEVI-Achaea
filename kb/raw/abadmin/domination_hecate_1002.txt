@@ -1,0 +1,22 @@
+Ability: Hecate (Record #1002)
+Associated skill: Domination
+Skillpoints required: 54999
+Blurb: Hecate, Mother of the Crones.
+Syntax: COMMAND CRONE AT <target> <LEFT|RIGHT ARM|LEG>
+Abfile:
+Hecate will send to you a withered crone which can be commanded to
+wither the limbs of your victim.
+
+When primebonded, the crone will act to wither limbs on her own, though
+she will not always pick wisely.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of entity balance
+Resource: 50 mana
+The ability name CRONE is mapped to this ability.

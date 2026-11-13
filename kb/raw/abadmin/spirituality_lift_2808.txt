@@ -1,0 +1,17 @@
+Ability: Lift (Record #2808)
+Associated skill: Spirituality
+Skillpoints required: 31999
+Blurb: Raise up your congregation.
+Syntax: ANGEL LIFT <target>
+Abfile:
+Command your angel to lift an individual into the sky if outdoors, and
+it shall be so.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.90 seconds of equilibrium

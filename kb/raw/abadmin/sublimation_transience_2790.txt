@@ -1,0 +1,26 @@
+Ability: Transience (Record #2790)
+Associated skill: Sublimation
+Skillpoints required: 5999
+Blurb: Deception is the first step.
+Syntax: SUBSTANTIATE TRANSIENCE <BUCKET|SHOVEL|TINDERBOX>
+This ability will be hidden on ablistings.
+Abfile:
+A training exercise typically taught to those who aspire to the school
+of Substantiation, the student focusses upon tricking reality into
+acknowledging the presence of something that is not. Basic necessities
+may be created in this way, though they are simply pale imitations and
+will rapidly fade as reality reasserts itself(*).
+
+Given the basic nature of this exercise, overdrawing serves no purpose.
+
+* These decay very quickly.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 5% Wellspring Energy

@@ -1,0 +1,23 @@
+Ability: Smoulder (Record #2559)
+Associated skill: Ignition
+Skillpoints required: 15999
+Blurb: A painful way to end.
+Syntax: IGNITE SMOULDER <target>
+Extra info: At least minor spark.
+Abfile:
+Set the flesh of your foe to smouldering, beginning their return to ash.
+This attack deals damage and sets a target ablaze. If the target is
+already ablaze, the damage will be significantly increased.
+
+If your spark is at major or higher, this ability will decrease your
+spark by one level, but will also reafflict your target with ablaze a
+short time after you initially assault them and stun them for a short
+while.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

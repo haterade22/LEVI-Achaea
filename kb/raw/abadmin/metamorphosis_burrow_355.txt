@@ -1,0 +1,19 @@
+Ability: Burrow (Record #355)
+Associated skill: Metamorphosis
+Skillpoints required: 8999
+Blurb: Tunnel deep underground.
+Syntax: BURROW <direction>|ABOVE|BELOW
+This ability will be hidden on ablistings.
+Abfile:
+With this ability, you may, in many environments, burrow underground. While underground, you will be unable to do most actions. You will be able to drop, get, score, stat, def, i, burrow, and morph. As a gopher, you will only be able to burrow quite shallowly. However, once the wolverine morph is attained, you may burrow up to nine levels deep. In fact, you will find that you can burrow underneath many things that you can not normally burrow into. For example, though you cannot burrow down through a highway, you can, if you go at least six levels deep, burrow underneath it. Be warned, however, that anything which you cannot burrow into cannot be burrowed out of. Thus, if you decide to try burrowing underneath a large area which provides you no way of reaching the surface, be very careful, lest you become lost, for you will have no way of getting out. Remember, to go up or down levels, use BURROW ABOVE, or BURROW BELOW.
+
+It is rumoured that there are other races living beneath the earth, and if you leave items buried at any depth beyond the first level down, these races may seek out and steal whatever you left deep in the earth.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

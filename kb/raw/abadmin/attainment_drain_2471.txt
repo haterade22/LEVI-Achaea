@@ -1,0 +1,19 @@
+Ability: Drain (Record #2471)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: The shadow grows at the cost of the corporeal.
+Syntax: SHADOW DRAIN <target>
+Abfile:
+Cause a denizen's shadow to begin leeching strength from its host,
+causing periodic damage over time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_depthswalker

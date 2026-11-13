@@ -1,0 +1,23 @@
+Ability: Percussia (Record #1659)
+Associated skill: Harmonics
+Skillpoints required: 18999
+Blurb: Create a sonic explosion.
+Syntax: PLAY PERCUSSIA [delay]
+Abfile:
+Creates a sonic-boom of sorts that stuns those present and may
+knock them off their feet. Can be delayed in execution for 'delay'
+seconds. If 'delay' is omitted, then the Percussia will occur in
+approximately five seconds. Example: PLAY PERCUSSIA 9 - would play the
+Percussia and then wait for nine more seconds before exploding on your
+(hopefully) unsuspecting targets. This is not a true harmonic, in that
+it cannot be called or moved with the Andante or the Battaglia.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 250 mana

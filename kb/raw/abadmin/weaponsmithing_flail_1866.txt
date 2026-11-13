@@ -1,0 +1,20 @@
+Ability: Flail (Record #1866)
+Associated skill: Weaponsmithing
+Skillpoints required: 32999
+Blurb: A wicked-looking variation on a morningstar.
+Syntax: FORGE FOR FLAIL
+FORGE (to continue after interruption)
+Extra info: Commodities: 3 Iron
+3 Steel
+1 Wood
+Abfile:
+A wicked-looking variation on a morningstar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

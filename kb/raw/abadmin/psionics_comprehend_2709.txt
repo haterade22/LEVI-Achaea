@@ -1,0 +1,19 @@
+Ability: Comprehend (Record #2709)
+Associated skill: Psionics
+Skillpoints required: 3999
+Blurb: A simple application of your intellect.
+Syntax: PSI COMPREHEND
+Abfile:
+Direct your considerable intellect towards the process of understanding
+all racial languages(*).
+
+* This has the same restrictions as the necklace of comprehension item.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 2.80 seconds of equilibrium

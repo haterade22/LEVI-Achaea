@@ -1,0 +1,16 @@
+Ability: Gypsum (Record #2027)
+Associated skill: Transmutation
+Skillpoints required: 20999
+Blurb: Gypsum's physiological properties will prevent sleep.
+Syntax: EXTRACT GYPSUM
+TRANSMUTATE <#> <mineral> TO GYPSUM
+Abfile:
+The gypsum mineral will make it difficult to fall asleep.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

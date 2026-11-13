@@ -1,0 +1,22 @@
+Ability: Descent (Record #3204)
+Associated skill: Sagas
+Skillpoints required: 45999
+Blurb: Of renegades and sorrow.
+Syntax: RECITE DESCENT <target>
+Abfile:
+There was fire and fury a plenty on that day when the renegade host
+descended upon the city of Targossas, and so this recounting conveys.
+Upon its conclusion, everyone in the location will be cleansed of a
+random affliction which afflicts them, excluding the one you are
+reciting the story to and yourself. Then, the unfortunate subject of
+your grand recital will be inflicted with damage based on the number of
+afflictions cured from the audience.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium and 25.00 seconds of voice balance

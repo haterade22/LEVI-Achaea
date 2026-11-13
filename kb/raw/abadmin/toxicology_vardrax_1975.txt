@@ -1,0 +1,17 @@
+Ability: Vardrax (Record #1975)
+Associated skill: Toxicology
+Skillpoints required: 36999
+Blurb: Grants an insatiable addiction.
+Syntax: None
+Extra info: Ingredients: 1 skullcap, 1 elm, 1 ginseng, 1 greenink or
+1 malachite, 1 cinnabar, 1 ferrum, 1 greenink
+Abfile:
+This potent venom will instill an addiction in your victim that will not be sated.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Garrote (Record #1209)
+Associated skill: Subterfuge
+Skillpoints required: 999
+Blurb: Choke the life out of a target with your whip.
+Syntax: GARROTE <target>
+Abfile:
+Using a wielded whip, you can try to slip behind a target and choke the life out of him or her. Armour is rendered entirely useless to your victim. Furthermore, while it is difficult to do normally, if your target is fairly helpless (paralysed, tied up, frozen, fallen on the ground, sleeping, unconscious, or some other similar afflictions) then you will always hit with this. The higher your subterfuge, the more damage this ability will do.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+The ability name GAROTTE is mapped to this ability.

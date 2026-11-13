@@ -1,0 +1,25 @@
+Ability: Lagua (Record #1152)
+Associated skill: Runelore
+Skillpoints required: 23999
+Blurb: Further punish your foe.
+Syntax: SKETCH LAGUA ON <weapon>
+Abfile:
+ Inks required: 1 Purple
+Symbol: Large Hammer
+
+When disemboweling with a runeblade possessing this rune, the damage
+will be magnified on those suffering internal trauma to a significant
+degree.
+
+Alternatively, when sketched on an empowered blunt weapon, that weapon
+will occasionally inflict a numbing effect upon your opponent's arm.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

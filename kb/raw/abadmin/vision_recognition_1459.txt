@@ -1,0 +1,15 @@
+Ability: Recognition (Record #1459)
+Associated skill: Vision
+Skillpoints required: 2499
+Blurb: Recognise shouted voices.
+Syntax: None
+Abfile:
+This ability works automatically. It will allow you to perceive the name of the person who is shouting.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

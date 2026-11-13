@@ -1,0 +1,15 @@
+Ability: Pacifism (Record #1319)
+Associated skill: Hypnosis
+Skillpoints required: 12999
+Blurb: Loss of desire to cause anyone harm.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

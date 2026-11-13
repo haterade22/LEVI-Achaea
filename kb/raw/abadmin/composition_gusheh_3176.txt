@@ -1,0 +1,19 @@
+Ability: Gusheh (Record #3176)
+Associated skill: Composition
+Skillpoints required: 13999
+Blurb: Of joy and feasts with friends.
+Syntax: COMPOSE GUSHEH
+Abfile:
+A song of the many joys of life, this grand performance is sure to cloud
+the senses of any enemy who hears it(*).
+
+* Stuns for a short time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

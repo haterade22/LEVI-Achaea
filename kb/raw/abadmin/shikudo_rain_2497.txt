@@ -1,0 +1,24 @@
+Ability: Rain (Record #2497)
+Associated skill: Shikudo
+Skillpoints required: 7999
+Blurb: Countless drops to conquer mountains.
+Syntax: ADOPT RAIN FORM
+Extra info: Transitions: Tykonos, Live Oak
+Attacks: RUKU, KURO, HIRU, FRONTKICK
+Abfile:
+The form of Willows in Rain Storm is an offensive form, but reliant on
+repeated strikes rather than powerful blows. You may perform kata chains
+of twice the normal length when in this form before risking stumbling
+out of form, and as said kata chain grows longer the damage you deal
+shall increase.
+
+Additionally, your equilibrium recovery shall be significantly increased
+when in this form.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

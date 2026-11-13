@@ -1,0 +1,32 @@
+Ability: Brand (Record #2564)
+Associated skill: Ignition
+Skillpoints required: 35999
+Blurb: The mark of Kkractle
+Syntax: IGNITE BRAND UPON <target>
+Extra info: At least moderate spark.
+Decreases spark by one level.
+Abfile:
+Mark your foe with the brand of Kkractle. Once you begin the process
+there will be a short delay before the mark fully manifests, though you
+do not need to focus on the process once initiated and may continue
+performing actions as normal. The forming process is also faster based
+on how low the target's health is(*).
+
+Each time the marked individual sips a health elixir the brand will
+become weaker, until eventually it will fade entirely. However, each
+time you connect with one of: FLAMEWHIP, CHAR, or SMOULDER, the brand
+will flare, becoming stronger.
+
+The stronger a brand is, the weaker a subjects resistance to fire damage
+shall become.
+
+* The brand is faster to form below 75% of the target's max health, and
+even faster at below 50%.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

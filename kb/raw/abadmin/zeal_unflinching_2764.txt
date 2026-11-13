@@ -1,0 +1,24 @@
+Ability: Unflinching (Record #2764)
+Associated skill: Zeal
+Skillpoints required: 13999
+Blurb: You will not back away from what must be done.
+Syntax: RECITE UNFLINCHING <target>
+Abfile:
+This holy verse can drive you to greater levels of fervour, allowing you
+to strike through the next attempt to parry that the foe you recite it
+against attempts.
+
+In addition, reciting this verse while you are not hunting the heretics
+shall convey the heresy defence, though it will be more short-lived
+compared to utilising the spirituality ability.
+
+Recitation of this verse is not affected by weariness.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

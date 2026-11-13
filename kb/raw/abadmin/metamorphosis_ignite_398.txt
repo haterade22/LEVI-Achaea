@@ -1,0 +1,19 @@
+Ability: Ignite (Record #398)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Instantly ignite your inner flame.
+Syntax: IGNITE
+This ability will be hidden on ablistings.
+Abfile:
+This ability will allow the wyvern to instantly increase their inner
+flame by two levels, but has a fairly long recovery period.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 600 mana
+Skill specialisation: meta_druid

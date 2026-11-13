@@ -1,0 +1,3 @@
+Ability: Block (Record #1524)
+Associated skill: Riding
+Maps to record 1523 (BLOCKING).

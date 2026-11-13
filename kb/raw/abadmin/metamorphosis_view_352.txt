@@ -1,0 +1,16 @@
+Ability: View (Record #352)
+Associated skill: Metamorphosis
+Skillpoints required: 7999
+Blurb: Look at the area below you.
+Syntax: VIEW
+This ability will be hidden on ablistings.
+Abfile:
+While you are flying, you may locate all who are nearby and below you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

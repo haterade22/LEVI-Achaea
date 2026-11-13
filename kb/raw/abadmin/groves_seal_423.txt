@@ -1,0 +1,17 @@
+Ability: Seal (Record #423)
+Associated skill: Groves
+Skillpoints required: 5999
+Blurb: Prevent night-time draining sunlight from your grove.
+Syntax: GROVE SEAL
+Abfile:
+For one Achaean month, this ability will seal off your grove from nighttime energy loss.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 60 sunlight

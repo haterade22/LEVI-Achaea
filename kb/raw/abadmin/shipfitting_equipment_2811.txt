@@ -1,0 +1,19 @@
+Ability: Equipment (Record #2811)
+Associated skill: Shipfitting
+Skillpoints required: 699
+Blurb: Construction of ship equipment.
+Syntax: SHIPFIT CONSTRUCT <equipment>
+SHIPFIT UPGRADE <equipment>
+Abfile:
+Ship equipment is the backbone of any naval voyage, and a must-have for
+all captains. Using your prepared commodities, you may construct basic
+equipment for use upon a vessel. See HELP SHIP EQUIPMENT for types and
+uses.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

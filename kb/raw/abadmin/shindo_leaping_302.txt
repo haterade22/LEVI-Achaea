@@ -1,0 +1,3 @@
+Ability: Leaping (Record #302)
+Associated skill: Shindo
+Maps to record 301 (LEAP).

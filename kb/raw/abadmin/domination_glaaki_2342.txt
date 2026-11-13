@@ -1,0 +1,33 @@
+Ability: Glaaki (Record #2342)
+Associated skill: Domination
+Skillpoints required: 60000
+Blurb: Glaaki, the Eldritch Ascendant
+Syntax: SUMMON GLAAKI
+COMMAND ABOMINATION AT <target>
+Abfile:
+Ancient; formidable; greatest of the Chaos Lords. The Eldritch Ascendant
+is all of these and many things best left unspoken. Ruthlessly
+pragmatic, Glaaki tore his rule from the hands of those thought
+untouchable. Any who pact with him beware, for slights can fester a
+thousand years or more.
+
+To those granted his grace, the Ascendant shall bestow the use of one of
+his abominable servants. This avatar, when commanded to violate a victim
+whose aura has been made sufficiently vulnerable to external assault(*),
+shall determine the fundamental nature of the target and grant the
+occultist the greatest weapon of all: knowledge of their subject's true
+name(**).
+
+* An aura can be made sufficiently vulnerable through the cleanseaura
+ability in Occultism.
+** Truenames gained in this way have a much shorter lifespan than
+those gained through standard methods.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Magnetrise (Record #2939)
+Associated skill: Sculpting
+Skillpoints required: 20999
+Blurb: Reorient yourself.
+Syntax: TERRAN MAGNET RISE
+Abfile:
+With your control over the magnetic forces that surround you, reorient
+yourself into an upright position.
+
+* Lets you stand off balance, though still respects broken
+legs/entangled/etc.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 2
+Useable entangled: No
+Useable paralysed: No

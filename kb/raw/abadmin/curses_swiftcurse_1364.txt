@@ -1,0 +1,19 @@
+Ability: Swiftcurse (Record #1364)
+Associated skill: Curses
+Skillpoints required: 35000
+Blurb: The ability to deliver curses much more quickly.
+Syntax: SWIFTCURSE
+SWIFTCURSE <target> <curse>
+Abfile:
+This potent defence will drastically speed up your next ten curses after
+initiation. Breach is excluded.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 300 mana

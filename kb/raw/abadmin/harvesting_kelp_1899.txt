@@ -1,0 +1,16 @@
+Ability: Kelp (Record #1899)
+Associated skill: Harvesting
+Skillpoints required: 41999
+Blurb: The grass of the sea. It has strengthening attributes.
+Syntax: HARVEST KELP
+Abfile:
+Kelp is often called the grass of the sea, and for good reason. Large kelp beds bear an uncanny resemblance to grassy plains. Kelp contains powerful proteins and strengtheners which can restore fitness when eaten.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Keelhaul (Record #1786)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Special treatment for one special persona aboard.
+Syntax: KEELHAUL <unlucky target>
+Abfile:
+ Send the unfortunate soul to a watery doom.
+
+(Your ship will need to be underweigh.)
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: command3

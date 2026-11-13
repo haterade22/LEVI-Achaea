@@ -1,0 +1,17 @@
+Ability: Barkskin (Record #1176)
+Associated skill: Woodlore
+Skillpoints required: 2499
+Blurb: Make your skin tough like bark.
+Syntax: BARKSKIN
+Abfile:
+This ability will cause your skin to become as bark, providing an increased measure of protection vs. attacks doing physical damage.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

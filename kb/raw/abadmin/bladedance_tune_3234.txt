@@ -1,0 +1,17 @@
+Ability: Tune (Record #3234)
+Associated skill: Bladedance
+Skillpoints required: 1299
+Blurb: Just the right pitch.
+Syntax: BLADE TUNE
+Abfile:
+Weave song about your person, warding off all forms of damage to an
+extent.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

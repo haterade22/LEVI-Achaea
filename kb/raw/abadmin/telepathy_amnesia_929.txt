@@ -1,0 +1,17 @@
+Ability: Amnesia (Record #929)
+Associated skill: Telepathy
+Skillpoints required: 32999
+Blurb: Induce temporary forgetfulness into your subject.(*)
+Syntax: MIND AMNESIA [target]
+Abfile:
+A simple-sounding, though extremely effective ability, this allows you to cause short-term amnesia in your locked adventurer. He will simply fail to execute the next action he attempts, as he will forget what he is doing before he manages to do it.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana

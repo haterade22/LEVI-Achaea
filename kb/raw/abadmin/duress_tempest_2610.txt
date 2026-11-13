@@ -1,0 +1,18 @@
+Ability: Tempest (Record #2610)
+Associated skill: Duress
+Skillpoints required: 4999
+Blurb: Safety in the eye of the storm.
+Syntax: MANIFEST TEMPEST
+Abfile:
+Manifest a whirling tempest to surround you, reducing the potency of
+attacks that would seek to do you harm(*).
+
+* Mitigates damage.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

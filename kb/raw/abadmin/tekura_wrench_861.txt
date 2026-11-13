@@ -1,0 +1,26 @@
+Ability: Wrench (Record #861)
+Associated skill: Tekura
+Skillpoints required: 29999
+Blurb: A throw that targets already damaged limbs.
+Syntax: WRT <target> <HEAD|TORSO|LEFT ARM|RIGHT ARM>
+Abfile:
+This specialised throw can only be targeted against a limb that is
+already damaged. Unlike the other throws in tekura, this does not
+require the target to be prone. Depending on the limb targeted, various
+different effects will occur:
+
+Head: after wrenching someone's head, they will periodically suffer from
+epilepsy for a time after the injury.
+Torso: the target's ribs shall become bruised. In addition, this
+delivers prone if both of the target's arms are also broken.
+Either arm: you shall yank the target off balance and throw them to the
+ground.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Tomb (Record #2925)
+Associated skill: Charnel
+Skillpoints required: 17999
+Blurb: Your hallowed hall.
+Syntax: CRYPT RESHAPE TOMB
+Abfile:
+The tomb of your crypt is where your sarcophagus will be kept, and it is
+the most vulnerable to your enemies. All of your efforts should go to
+defending this most hallowed of halls, for the cost of failure is
+terrible indeed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

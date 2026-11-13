@@ -1,0 +1,18 @@
+Ability: Eternity (Record #2914)
+Associated skill: Charnel
+Skillpoints required: 23999
+Blurb: May it cover the land.
+Syntax: ACCURSED ETERNITY [direction|SENSE]
+Abfile:
+Bring the endless eternity into being, covering a location in the
+unforgiving sands of the desert. You may also project your eternity in a
+given direction, if you already stand upon sandy ground.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

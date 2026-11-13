@@ -1,0 +1,22 @@
+Ability: Jinx (Record #2347)
+Associated skill: Curses
+Skillpoints required: 60000
+Blurb: The ultimate shamanic curse.
+Syntax: JINX <curse1> <curse2> <target>
+Abfile:
+This highest of the shamanic arts allows a practitioner to combine two
+curses into one assault, delivering both simultaneously.
+
+However, due to the extreme complexity of such an undertaking, the
+practitioner must prepare themselves to channel the malign energies, by
+utilising the lesser curses to build up a sufficient charge.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance
+Resource: 60 mana

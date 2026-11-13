@@ -1,0 +1,16 @@
+Ability: Compounding (Record #2519)
+Associated skill: Toxicology
+Skillpoints required: 0
+Blurb: Combine minerals and primes into potent venoms.
+Syntax: COMPOUND <# batches> <venom> IN <alembic>
+Abfile:
+With an alembic and the proper minerals in your rift or inventory, you
+may compound potent venoms.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

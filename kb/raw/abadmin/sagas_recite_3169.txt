@@ -1,0 +1,22 @@
+Ability: Recite (Record #3169)
+Associated skill: Sagas
+Skillpoints required: 1
+Blurb: Once upon a time...
+Syntax: RECITE <saga> [target]
+Abfile:
+To tell a tale, to spin a yarn, to bring to life a story of long gone
+days. The teller of great sagas of the past knows the power in such
+things, and so tell them you shall.
+
+Each saga will have multiple stages. All sagas will do something upon
+being completed, and some will do things at other points in the tale as
+well. Consult each saga for specifics upon the nature of your grand
+design.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

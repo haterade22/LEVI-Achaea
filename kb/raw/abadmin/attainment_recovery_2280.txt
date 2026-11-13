@@ -1,0 +1,19 @@
+Ability: Recovery (Record #2280)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: This restoring rite will protect your ally.
+Syntax: PERFORM RECOVERY <target>
+Abfile:
+The next time the target of this blessing takes damage within the next 6
+seconds, all of the target's health will be recovered.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 44.00 seconds
+Resource: 31 rage
+Skill specialisation: br_paladin

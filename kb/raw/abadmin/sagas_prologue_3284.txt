@@ -1,0 +1,24 @@
+Ability: Prologue (Record #3284)
+Associated skill: Sagas
+Skillpoints required: 59999
+Blurb: Delay the conclusion.
+Syntax: RECITE PROLOGUE <saga>
+Abfile:
+Masters of storytelling gain the ability to delay the conclusion of a
+tale for dramatic effect.
+
+Using this ability will recite another tale up to its culmination, at
+which point the completion will be delayed.
+
+The tale may be completed for the next 5 minutes instantly at the cost
+of 3 seconds of balance. This will incur a cooldown of 5 minutes. Not
+all tales can be completed in this way.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance

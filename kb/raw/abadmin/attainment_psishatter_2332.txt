@@ -1,0 +1,17 @@
+Ability: Psishatter (Record #2332)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: A blast of psychic energy that destroys a denizen's shield.
+Syntax: PSISHATTER <target>
+Abfile:
+Channel your battlerage into a blast of psychic energy that slams into your target, consuming its shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_gold_dragon

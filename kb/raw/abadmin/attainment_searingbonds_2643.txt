@@ -1,0 +1,19 @@
+Ability: Searingbonds (Record #2643)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Let them suffer.
+Syntax: MANIFEST BONDS <target>
+Abfile:
+Cast a net of flame about your target, causing them to take periodic
+damage as they attempt to struggle free of the bonds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 42.00 seconds
+Resource: 30 rage
+Skill specialisation: br_fire_lord

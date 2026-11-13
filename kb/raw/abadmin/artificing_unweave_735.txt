@@ -1,0 +1,17 @@
+Ability: Unweave (Record #735)
+Associated skill: Artificing
+Skillpoints required: 47999
+Blurb: A way to unweave Talisman Pieces and gain gold.
+Syntax: WORKSHOP UNWEAVE <piece> <level>
+Abfile:
+Unweave is simply the ability to take a Talisman piece (see HELP
+TALISMANS) and turn it (or them) into gold. This must be performed in an
+Artificing workshop.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,29 @@
+Ability: Viridian (Record #708)
+Associated skill: Propagation
+Skillpoints required: 0
+Blurb: Become a mighty viridian.
+Syntax: ASSUME VIRIDIAN [STAFF]
+Abfile:
+Meaning 'green' in an ancient language, a Viridian is a living, walking
+embodiment of the flora of the land. Upon casting this spell, you will
+quickly transform into one as thorny vines cover your body and burrow
+into your flesh. You will become stronger, able to endure more damage,
+and gain a protective bonus to physical damage done to you however your
+movements will be slightly hampered.
+
+HUMAN will allow you to change back into
+your normal form. Be aware that remaining in this form is a constant
+drain on your willpower.
+
+* STAFF option may be added to allow transformation into the mighty
+Viridian in areas that are not normally conducive to plant growth.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

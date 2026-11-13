@@ -1,0 +1,21 @@
+Ability: Slaver (Record #2312)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Coat your target in your drool.
+Syntax: SLAVER ON <target>
+Extra info: Uses denizen afflictions: Sensitivity or Clumsiness
+Abfile:
+Sidle up to your target and let loose a long stream of poisonous slaver,
+doing immense damage to targets who are particularly sensitive or
+clumsy.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_green_dragon

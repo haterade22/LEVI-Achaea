@@ -1,0 +1,19 @@
+Ability: Redeem (Record #600)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Severely weaken your target.
+Syntax: RECLAMATION REDEEM <target>
+Extra info: Gives denizen affliction: Weakness
+Abfile:
+Steal a target's energy for a short time to feed the natural world around it, giving the weakness affliction for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 31.00 seconds
+Resource: 22 rage
+Skill specialisation: br_druid

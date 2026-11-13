@@ -1,0 +1,22 @@
+Ability: Smother (Record #2156)
+Associated skill: Reclamation
+Skillpoints required: 33999
+Blurb: Rob the flames of oxygen.
+Syntax: RECLAMATION SMOTHER
+Abfile:
+When standing within your reclaimed network, you may cause the vines to
+smother any flames that may have sprung up, extinguishing them all
+immediately across the entire expanse of your reclaimed land. In
+addition, when standing adjacent to your network in a room that is on
+fire, you may utilise this ability to immediately expand your network
+and smother the flames at the same time.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Resource: 250 mana

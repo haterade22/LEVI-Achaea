@@ -1,0 +1,24 @@
+Ability: Phoenix (Record #321)
+Associated skill: Shindo
+Skillpoints required: 60000
+Blurb: Rebirth through cleansing flame.
+Syntax: SHIN PHOENIX
+Abfile:
+Shin Energy Required: 80
+Shin Energy Consumed: All
+
+Kindling Shin energy into purifying flames, you may immolate yourself in
+a display of perfect mastery over both your body and the art of Shindo.
+Purified by fire, your form will be renewed, cleansed almost all
+ailments and afflictions. This feat requires and will consume a full
+reserve of Shin energy.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Shin energy

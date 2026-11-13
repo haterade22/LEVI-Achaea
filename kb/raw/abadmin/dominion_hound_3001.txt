@@ -1,0 +1,51 @@
+Ability: Hound (Record #3001)
+Associated skill: Dominion
+Skillpoints required: 1
+Blurb: Your loyal nightmare.
+Syntax: HOUND
+Abfile:
+The hungering hounds of Lycantha are a gift to each of the Unnamables of
+Ashtan, part of the great pact between Imperator Glaaki and the Seat of
+Chaos.
+
+Your hound comes to you with assorted statistics which have been
+randomly assigned.
+
+If you cause your hound to die, you will be refused another hound.
+
+There is absolutely no excuse for killing or conspiring to kill your
+hound.
+
+Below is a list of commands that may be used once you have gotten your
+hound.
+HOUND ASSESS    : See information about your hound.
+HOUND RECALL : Recall your hound to your side.
+HOUND SANCTUARY : Order your hound to a sanctuary where it will be safe.
+HOUND TRAIN : Order your hound to go train, in order to raise a stat.
+HOUND REPORT : Gain information on where your hound is and who they
+are tracking and attacking.
+HOUND REPORT LOCATION : This will tell you the location of your loyal
+(this will incur an equilibrium cost.)
+HOUND SLAY      : Order your hound to slay someone.
+HOUND HUNT : When your hound is hungry, have it go hunt for its food.
+HOUND FLEE : Set the amount of health remaining when your hound will
+flee battle.
+HOUND SLEEP     : Order your hound to sleep.
+HOUND FEED RAT  : Feed the corpses of rats to your hound.
+
+As your hound gains in
+* Stamina:  its health will increase.
+* Speed: it will attack more quickly as well as move from place to place
+* Strength: it will attack with more power.
+
+You will gain other abilities later on that are related to your hound.
+
+You must visit Lycantha on the Chaos Plane to request your hound.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Imprint (Record #730)
+Associated skill: Hypnosis
+Skillpoints required: 60000
+Blurb: Store the mental state of your subject.
+Syntax: HYPNOTIC IMPRINT <target>
+HYPNOTIC IMPRINT FORGET <person>
+HYPNOTIC IMPRINT FORGET ALL
+HYPNOTIC IMPRINT LIST
+Abfile:
+This greatest of the hypnotic arts allows you to store the mental state
+of a subject, greatly increasing the speed of future hypnosis attempts
+against that person.
+
+Note that you may only hold up to five imprints at any one time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

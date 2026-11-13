@@ -1,0 +1,17 @@
+Ability: Action (Record #1336)
+Associated skill: Hypnosis
+Skillpoints required: 56999
+Blurb: The ability to suggest an action of your choice.
+Syntax: SUGGEST <target> ACTION <command>
+Abfile:
+This potent suggestion will allow you to directly implant a command into
+the mind of your victim, which they will have no choice but to perform
+once their trance is activated.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

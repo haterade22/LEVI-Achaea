@@ -1,0 +1,16 @@
+Ability: Prelude (Record #3171)
+Associated skill: Composition
+Skillpoints required: 2599
+Blurb: Before the beginning.
+Syntax:
+Abfile:
+This movement which prepares the body of you and your allies shall grant
+some resistance to magical damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,30 @@
+Ability: Frenzy (Record #3072)
+Associated skill: Anathema
+Skillpoints required: 51999
+Blurb: Ruin has come.
+Syntax: UNNAMABLE FRENZY
+Abfile:
+Unleash ruin upon Creation, and sweep aside all that would stand before
+you. The wrath of Chaos unleashed is a terrible thing to behold, and
+while consumed by your frenzy you shall strike faster with both body and
+mind the more wounded you become. However, take note: Chaos suffers no
+lesser working when unleashed in this way. No trinkets or potions shall
+reverse the damage inflicted in this state of transcendent might.
+
+* The lower your health is, the faster your balance and equilibrium
+recovery will be. However, you cannot heal your health or mana by any
+means while suffused by the hunger to destroy.
+** This ability may only be called upon every so often, and requires you
+be at a state of 100% manifestation to unleash it (a state which is out
+of reach under normal conditions, though it is said true masters of
+anathema may be able to reach it in particular circumstances).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 8% karma

@@ -1,0 +1,25 @@
+Ability: Step (Record #2392)
+Associated skill: Shadowmancy
+Skillpoints required: 30999
+Blurb: None are beyond your reach.
+Syntax: SHADOW STEP <target>
+Abfile:
+This ability will allow you to cross a great distance to a given target
+in an instant. A monolith sigil on either end of the movement shall
+prevent the attempt.
+
+Note that if you possess a shadow of the target in your phylactery, you
+may cross the distance whether they stand within magical darkness or
+not. If you do not, they must be standing in magical darkness and must
+be within the same area.
+
+Note that each phylactery-empowered step to a non-mutual ally shall have
+a chance to destroy the shadow stored within your phylactery.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

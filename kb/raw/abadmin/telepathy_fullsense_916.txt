@@ -1,0 +1,17 @@
+Ability: Fullsense (Record #916)
+Associated skill: Telepathy
+Skillpoints required: 8999
+Blurb: Seek out all minds within your reach.
+Syntax: FULLSENSE
+Abfile:
+By sending out an invisible telepathic web, you can detect all minds within your local area.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

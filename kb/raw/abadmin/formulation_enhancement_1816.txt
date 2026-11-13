@@ -1,0 +1,26 @@
+Ability: Enhancement (Record #1816)
+Associated skill: Formulation
+Skillpoints required: 57999
+Blurb: A formula to enhance your physiology.
+Syntax: IMBIBE ENHANCEMENT
+Extra info: Reagents: 3 argentum, 2 quicksilver
+Abfile:
+This formula is yet another attempt to achieve a superior state of being
+through the application of science. Although not as potent as some
+previous attempts, the changes tend to persist for a greater period of
+time, as well as providing far less danger to the user.
+
+The changes make the alchemist both more durable, as well as granting
+potential for greater control over their own internal processes. The
+only known drawbacks as of current research is that the subject tends to
+suffer from a state of heightened aggression, and the backlash when the
+changes revert can induce minor discomfort.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

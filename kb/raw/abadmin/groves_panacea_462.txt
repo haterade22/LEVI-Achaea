@@ -1,0 +1,18 @@
+Ability: Panacea (Record #462)
+Associated skill: Groves
+Skillpoints required: 56999
+Blurb: Nature's touch can heal all ills.
+Syntax: EVOKE PANACEA
+Extra info: Imbued sunlight.
+Abfile:
+Through your quarterstaff, you may focus the restorative powers of Nature on yourself. For a time, you will be healed of afflictions at regular intervals.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 sunlight and 150 mana

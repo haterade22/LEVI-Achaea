@@ -1,0 +1,24 @@
+Ability: Grain (Record #1591)
+Associated skill: Cooking
+Skillpoints required: 699
+Blurb: Use grain to prepare new ingredients.
+Syntax: PREPARE <ingredient>
+Abfile:
+Grain is a key component in the creation of other ingredients, which you have the knowledge of making.
+
+Ingredient: Dough
+Recipe: 1 grain, 2 water, 2 flour
+
+Ingredient: Pasta
+Recipe: 1 egg, 1 grain, 1 water, 2 flour
+
+Neither recipe requires cooking.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

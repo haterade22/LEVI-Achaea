@@ -1,0 +1,17 @@
+Ability: Dissolve (Record #2333)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Your breath weapon eats through denizen shields.
+Syntax: DISSOLVE <target>
+Abfile:
+Channel a blast of your breath weapon at a denizen, destroying its shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_black_dragon

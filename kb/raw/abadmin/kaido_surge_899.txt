@@ -1,0 +1,24 @@
+Ability: Surge (Record #899)
+Associated skill: Kaido
+Skillpoints required: 49999
+Blurb: A blast of focussed power.
+Syntax: KAI SURGE <target>
+Abfile:
+By directing a surge of pure kai energy into an enemy, you may set their
+muscles to violently spasming. This will prevent them from being able to
+remount, as well as slightly disrupting tumble attempts(*). This ability
+also prones and causes some damage. The effect will fade over time.
+
+* Each damaged limb currently extends the length of a tumble attempt;
+the kai surge status will increase this penalty. Tumble with no damaged
+limbs is unaltered.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of equilibrium
+Resource: 31 Kai energy

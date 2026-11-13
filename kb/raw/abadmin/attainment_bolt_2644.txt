@@ -1,0 +1,19 @@
+Ability: Bolt (Record #2644)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Like crushing a bug.
+Syntax: MANIFEST BOLT <target>
+Abfile:
+Call down a lightning bolt to strike your target, causing them to suffer
+damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_air_lord

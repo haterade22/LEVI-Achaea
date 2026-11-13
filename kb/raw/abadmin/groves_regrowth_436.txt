@@ -1,0 +1,17 @@
+Ability: Regrowth (Record #436)
+Associated skill: Groves
+Skillpoints required: 19500
+Blurb: Reform a sharpened quarterstaff.
+Syntax: REGROW QUARTERSTAFF
+Extra info: Imbued sunlight.
+Abfile:
+Through the power of imbued sunlight, you may return a sharpened quarterstaff to its full length.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10 sunlight

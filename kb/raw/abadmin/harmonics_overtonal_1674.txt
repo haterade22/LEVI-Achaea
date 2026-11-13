@@ -1,0 +1,15 @@
+Ability: Overtonal (Record #1674)
+Associated skill: Harmonics
+Skillpoints required: 60000
+Blurb: Your mastery is such that unlimited harmonics are yours.
+Syntax: None
+Abfile:
+Overtonal is a passive ability. Those with Overtonal abilities are able to sustain unlimited harmonics in the same location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

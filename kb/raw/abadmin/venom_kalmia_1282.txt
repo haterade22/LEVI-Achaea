@@ -1,0 +1,16 @@
+Ability: Kalmia (Record #1282)
+Associated skill: Venom
+Skillpoints required: 2999
+Blurb: Inhibits the respiratory system.
+Syntax: SECRETE KALMIA
+BITE <target>
+Abfile:
+Afflict your victim with severe asthma.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

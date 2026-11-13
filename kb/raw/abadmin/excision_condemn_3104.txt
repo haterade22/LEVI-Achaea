@@ -1,0 +1,26 @@
+Ability: Condemn (Record #3104)
+Associated skill: Excision
+Skillpoints required: 55999
+Blurb: You are the judge, and you find them wanting.
+Syntax: PERFORM CONDEMN <target>
+Abfile:
+Condemn an enemy of Creation to burn.
+
+* A condemned target may not cure ablaze below one stack, but a paladin
+may also no longer raise the burning level.
+** Condemnation can take the place of the pyre requirement where the
+Fervour ability is concerned in regards to its healing aspect. The bonus
+to darkshade will not function under condemnation (see AB EXCISION
+FERVOUR).
+*** You may not hunt a heretic who is condemned (see AB EXCISION HUNT
+for details).
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of wrath balance
+Resource: 25% Holy Wrath

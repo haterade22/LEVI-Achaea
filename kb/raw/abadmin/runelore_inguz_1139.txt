@@ -1,0 +1,21 @@
+Ability: Inguz (Record #1139)
+Associated skill: Runelore
+Skillpoints required: 3999
+Blurb: A rune with the ability to paralyse.
+Syntax: SKETCH INGUZ ON GROUND/<totem>
+Abfile:
+ Inks required: 1 Red
+Symbol: Stickman
+
+Paralyses an enemy who enters and sees it. Disappears after one use
+unless it is on a totem.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

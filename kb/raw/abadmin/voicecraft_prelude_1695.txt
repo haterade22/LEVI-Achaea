@@ -1,0 +1,17 @@
+Ability: Prelude (Record #1695)
+Associated skill: Voicecraft
+Skillpoints required: 39999
+Blurb: Fashion an illusion from song.
+Syntax: SING PRELUDE [LETHAL] <illusion text>
+Abfile:
+Create an illusion in song that the room will see. You may embed a single newline in the illusion by inserting \n at the appropriate spot.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 30 willpower

@@ -1,0 +1,20 @@
+Ability: Flash (Record #2186)
+Associated skill: Weatherweaving
+Skillpoints required: 14999
+Blurb: A brilliant flash of light.
+Syntax: CAST FLASH AT <target>
+Extra info: Channels: Air, earth
+Abfile:
+This spell permits you to conjure forth a brilliant flash of light at an
+enemy. The light will restore their vision if they are blind, or
+transfix them if they are not.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium
+Resource: 38 mana and 18 arcane power

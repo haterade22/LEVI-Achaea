@@ -1,0 +1,19 @@
+Ability: Nutritional (Record #1802)
+Associated skill: Formulation
+Skillpoints required: 5000
+Blurb: A potent nutritional supplement.
+Syntax: IMBIBE NUTRITIONAL
+ADMINISTER NUTRITIONAL <target>
+Extra info: Reagents: 1 ferrum, 1 potash
+Abfile:
+This compound is a potent nutritional supplement. It is rumoured that
+many alchemists have found themselves able to sustain their bodies off
+of this almost indefinitely.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

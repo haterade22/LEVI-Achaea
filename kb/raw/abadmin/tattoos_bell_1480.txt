@@ -1,0 +1,22 @@
+Ability: Bell (Record #1480)
+Associated skill: Tattoos
+Skillpoints required: 7999
+Blurb: Be warned when there are those spying on you.
+Syntax: TOUCH BELL
+Extra info: Inks: 3 Blue inks
+2 Red inks
+Abfile:
+Upon touching this tattoo, you will gain an acute awareness of attempts
+to appraise your possession. This effect may not trigger if you are
+mesmerised.
+
+In addition, having this defence active will alert you to some forms of
+spying, most notably that accomplished via use of whisperstones.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

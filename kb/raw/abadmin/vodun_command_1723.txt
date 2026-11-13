@@ -1,0 +1,19 @@
+Ability: Command (Record #1723)
+Associated skill: Vodun
+Skillpoints required: 24999
+Blurb: Your wish is their command.
+Syntax: VODUN COMMAND <command>
+Extra info: Fashions:
+Required: 25
+Used    : 1
+Abfile:
+Command your victim to perform a specific action.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of balance

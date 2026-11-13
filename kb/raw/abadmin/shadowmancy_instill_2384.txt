@@ -1,0 +1,31 @@
+Ability: Instill (Record #2384)
+Associated skill: Shadowmancy
+Skillpoints required: 11999
+Blurb: The might of the Overlords directed through your weapon.
+Syntax: SHADOW INSTILL <weapon> WITH <power>
+SHADOW INSTILL <weapon> WITH NOTHING
+Abfile:
+It is said in ancient times the Tsol'teth Overlords were capable of
+directing the greatest of the shadow abilities with no more than a
+gesture. Alas, such total mastery has been long since lost. Now a medium
+is required to channel such powers, and weapons manifested from shadow
+are more than satisfactory for such a purpose.
+
+When you instill a weapon with one of the powers, striking an individual
+with that weapon shall cause the power to effect them alongside the
+blow. See the relevant ability files for each instill for details of
+what shall befall the unfortunate victim.
+
+Note: the curare venom and depression/madness instillations cannot exist
+upon the same weapon at once.
+
+You may also SHADOW INSTILL <weapon> WITH NOTHING to remove all
+previously-instilled powers.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

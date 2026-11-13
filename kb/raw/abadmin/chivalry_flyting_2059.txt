@@ -1,0 +1,17 @@
+Ability: Flyting (Record #2059)
+Associated skill: Chivalry
+Skillpoints required: 49999
+Blurb: Honour always has its say.
+Syntax: passive
+Abfile:
+A knight should always have his say, and so you will. Chivalrous as you
+are, you will find yourself able to shout at greater length than those
+of lesser honour before fainting from the effort.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

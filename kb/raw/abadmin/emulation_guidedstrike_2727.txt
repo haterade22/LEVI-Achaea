@@ -1,0 +1,22 @@
+Ability: Guidedstrike (Record #2727)
+Associated skill: Emulation
+Skillpoints required: 999
+Blurb: Luck is a power all its own.
+Syntax: ENACT GUIDEDSTRIKE
+Abfile:
+The study of luck was one that bore many benefits, but the most wildly
+acclaimed one was that which granted the ability to deal even more
+devastating critical blows. While protected by this beneficial defence
+you will be able to potentially deal up to plane-razing critical
+strikes(*).
+
+* Does not stack with the artefact paragon that grants a similar effect.
+Useable on: self
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,22 @@
+Ability: Stormfront (Record #2630)
+Associated skill: Duress
+Skillpoints required: 57999
+Blurb: There will be no interruptions.
+Syntax: MANIFEST STORMFRONT
+Abfile:
+Summon forth towering walls of wind to enclose your location, preventing
+any long distance travel into your location(*). This effect lasts for
+only a single minute due to the tremendous amount of concentration
+required, and a lord may only summon forth a stormfront once every five
+minutes.
+
+* No travel into a location that isn't from an adjacent location will
+work while this effect is active.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Cripple (Record #2937)
+Associated skill: Oppression
+Skillpoints required: 40999
+Blurb: Break the body, forge the spirit.
+Syntax: CRIPPLE <target> <limb1> <limb2>
+Abfile:
+Sometimes a whelp will require you to get a little more hands on when it
+comes to discipline. Take them up by two of their limbs and show them
+how generous you were previously to allow them the use of said limbs.
+
+* Breaks both limbs and deals some minor damage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of balance

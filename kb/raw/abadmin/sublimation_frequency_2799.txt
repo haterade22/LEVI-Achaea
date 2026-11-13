@@ -1,0 +1,20 @@
+Ability: Frequency (Record #2799)
+Associated skill: Sublimation
+Skillpoints required: 19999
+Blurb: Just the right pitch.
+Syntax: ALIGN FREQUENCY
+This ability will be hidden on ablistings.
+Abfile:
+Align sound in a location just so to cause a crystal vibration to
+shatter.
+Overdraw effect: hit a vibration in an adjacent location.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of balance
+Resource: 4.50% Wellspring Energy

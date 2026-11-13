@@ -1,0 +1,19 @@
+Ability: Rampart (Record #2637)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: You shall not be moved.
+Syntax: TERRAN RAMPART <target>
+Abfile:
+Move to stand before an ally, protecting them from half of all incoming
+damage for the next eight seconds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 40.00 seconds
+Resource: 30 rage
+Skill specialisation: br_earth_lord

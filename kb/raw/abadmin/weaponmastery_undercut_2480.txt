@@ -1,0 +1,24 @@
+Ability: Undercut (Record #2480)
+Associated skill: Weaponmastery
+Skillpoints required: 35999
+Blurb: Take them down to the ground.
+Syntax: UNDERCUT <target> <LEFT|RIGHT LEG>
+Abfile:
+Swing at a leg of your target with a battleaxe. If the leg breaks,
+you'll take the opportunity to drive your target to the ground. If it
+does not break the limb, the balance on this attack is significantly
+increased.
+
+This will always break the limb when it is above 90% damaged, so long as
+you are proficient with the Battleaxe.
+
+Note that this attack does not deliver a venom.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualcutting

@@ -1,0 +1,16 @@
+Ability: Eggs (Record #1580)
+Associated skill: Gathering
+Skillpoints required: 7999
+Blurb: Boil 'em, fry 'em, put 'em in a souffle.
+Syntax: GATHER FROM FARM
+Abfile:
+Eggs may be gathered from agrarian environments in the wilderness. When gathering, you will receive either eggs or milk.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

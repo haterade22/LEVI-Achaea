@@ -1,0 +1,17 @@
+Ability: Lastharvest (Record #476)
+Associated skill: Groves
+Skillpoints required: 7999
+Blurb: The ability to see who last harvested in a room.
+Syntax: LASTHARVEST
+This ability will be hidden on ablistings.
+Abfile:
+Whenever a plant is harvested, or, indeed, anything that is alive is changed, traces are left in the fabric of life-energy that sustains all living beings. The lastharvest ability allows you to tap into those energies for a short time to see who last harvested from each plant in your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

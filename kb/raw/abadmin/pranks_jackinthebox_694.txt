@@ -1,0 +1,21 @@
+Ability: Jackinthebox (Record #694)
+Associated skill: Pranks
+Skillpoints required: 52999
+Blurb: An innocent musical toy with a vicious bite!
+Syntax: CONSTRUCT JACK-IN-THE-BOX
+WIND JACK-IN-THE-BOX FOR <target>
+Extra info: Commodities: 1 iron, 1 wood
+Construct cooldown: 4.00 seconds of balance
+Wind cooldown: 2.00 seconds of balance
+Abfile:
+With this ability, you may construct a jack-in-the-box that, when wound and targetted for a specific person (see syntax above), will kill that person when the puppet pops out, assuming the target is still in the room. You may not do anything else while you wind the jack-in-the-box.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance
+The ability name JACK-IN-THE-BOX is mapped to this ability.

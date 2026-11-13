@@ -1,0 +1,20 @@
+Ability: Rigging (Record #1741)
+Associated skill: Seafaring
+Skillpoints required: 1999
+Blurb: Climb up into the rigging above.
+Syntax: CLIMB RIGGING
+CLIMB DOWN RIGGING
+CLEAR RIGGING
+Abfile:
+Climb up the ropes to a place on the rigging above the deck, from any
+deck location. (You can use SWING UP and SWING DOWN as well.)
+In addition, you may use clear rigging to attempt to disentangle the
+rigging from unwanted obstructions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

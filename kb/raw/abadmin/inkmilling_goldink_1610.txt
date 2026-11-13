@@ -1,0 +1,17 @@
+Ability: Goldink (Record #1610)
+Associated skill: InkMilling
+Skillpoints required: 35999
+Blurb: Create a gold ink.
+Syntax: MILL FOR GOLD
+Extra info: Reagents: 1 x gold, 2 x common, 2 x uncommon, 2 x scarce, 1 x rare
+Abfile:
+AB INKMILLING REAGENTS lists the different types of reagents.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

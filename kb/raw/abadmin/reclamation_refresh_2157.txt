@@ -1,0 +1,21 @@
+Ability: Refresh (Record #2157)
+Associated skill: Reclamation
+Skillpoints required: 36999
+Blurb: The most benign of spores.
+Syntax: RECLAMATION REFRESH
+RECLAMATION TERMINATE REFRESH/ALL
+Abfile:
+The most benign of the spores your network can produce, these will heal
+the physical body of those that inhale them.
+
+Poison, sleep, refresh spores and pollen are all mutually exclusive.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

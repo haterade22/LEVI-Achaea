@@ -1,0 +1,20 @@
+Ability: Command (Record #1785)
+Associated skill: Seafaring
+Skillpoints required: 3999
+Blurb: Basic command ability. Crew works better/faster!
+Syntax: SHIP ASSUME COMMAND
+SHIP APPOINT <person> CAPTAIN
+Abfile:
+Assume command of a ship which you are permitted to captain.
+
+Appoint another approved captain (or yourself) to the captain's
+position.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

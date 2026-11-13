@@ -1,0 +1,23 @@
+Ability: Throw (Record #908)
+Associated skill: Telepathy
+Skillpoints required: 1499
+Blurb: Mentally push a subject in any direction.
+Syntax: MIND THROW <direction>
+Abfile:
+As you learn to better control the mind of a locked adventurer, you gain
+some control over their actions. This is the first of them. You are able
+to make the adventurer's mind try to move its body in the direction of
+your choice.
+
+Due to the strain of this ability on the user, any held mindlocks are
+immediately broken.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 150 mana

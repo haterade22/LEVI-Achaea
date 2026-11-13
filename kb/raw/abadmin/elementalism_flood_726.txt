@@ -1,0 +1,17 @@
+Ability: Flood (Record #726)
+Associated skill: Elementalism
+Skillpoints required: 35999
+Blurb: Drown a location in water.
+Syntax: CAST FLOOD
+Abfile:
+Channel the power of elemental water to flood the room you stand in.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

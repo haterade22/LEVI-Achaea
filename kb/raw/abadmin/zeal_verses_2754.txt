@@ -1,0 +1,16 @@
+Ability: Verses (Record #2754)
+Associated skill: Zeal
+Skillpoints required: 0
+Blurb: Knowledge of the holy verses.
+Syntax: VERSES [ALL]
+Abfile:
+You may view the holy verses that you have learned, and the various
+limitations imposed on the use of each in prayer.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Joints (Record #3066)
+Associated skill: Anathema
+Skillpoints required: 15999
+Blurb: A greater range of motion.
+Syntax: MUTATE JOINTS
+Abfile:
+By mutating your joints, you will enable yourself a greater range of
+flexibility, allowing you to writhe out of various entanglements
+faster(*).
+
+* Having the bound affliction disables this bonus.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of anathema balance
+Resource: 1% karma

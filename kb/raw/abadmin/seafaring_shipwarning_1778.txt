@@ -1,0 +1,16 @@
+Ability: Shipwarning (Record #1778)
+Associated skill: Seafaring
+Skillpoints required: 33999
+Blurb: Notice movement nearby, at cost.
+Syntax: SHIPWARNING [ON|OFF]
+Abfile:
+At a cost to both your endurance and willpower, you will be aware of the
+movement of any ships near your ship, including cloaked ships.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

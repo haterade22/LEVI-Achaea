@@ -1,0 +1,18 @@
+Ability: Salvation (Record #2774)
+Associated skill: Zeal
+Skillpoints required: 49999
+Blurb: The verse of salvation.
+Syntax: RECITE SALVATION [PREPARE]
+Abfile:
+A prayer for salvation, not for yourself but for others, this powerful
+verse of prayer shall create a prismatic barrier for all blessed
+comrades in your location.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of prayer balance

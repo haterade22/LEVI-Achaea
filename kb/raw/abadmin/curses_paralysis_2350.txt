@@ -1,0 +1,3 @@
+Ability: Paralysis (Record #2350)
+Associated skill: Curses
+Maps to record 1361 (PARALYSE).

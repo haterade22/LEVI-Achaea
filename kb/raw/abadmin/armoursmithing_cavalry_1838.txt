@@ -1,0 +1,19 @@
+Ability: Cavalry (Record #1838)
+Associated skill: Armoursmithing
+Skillpoints required: 4999
+Blurb: A small shield, but more effective than the buckler.
+Syntax: FORGE FOR CAVALRY
+FORGE (to continue after interruption)
+Extra info: Commodities: 2 Leather
+1 Steel
+Abfile:
+A small shield, but more effective than the buckler.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

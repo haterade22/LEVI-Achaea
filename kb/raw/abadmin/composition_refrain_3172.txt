@@ -1,0 +1,29 @@
+Ability: Refrain (Record #3172)
+Associated skill: Composition
+Skillpoints required: 3999
+Blurb: The blade sings.
+Syntax: BLADE <attack> <song to refrain>
+Abfile:
+Melding song and steel in a perfection that only a true composer could
+appreciate, you may now strike with a song alongside a bladedance
+technique as well(*).
+
+* The refrain hits before the bladedance attack.
+
+Song effects when used as the refrain:
+Paean: Paralysis
+Bhajan: Dizziness
+Nomos: Breaks shield and lyre if either are present. If neither, breaks
+rebounding
+Gusheh: Addiction
+Ode: Asthma
+Ghazal: Slickness
+Elegy: Lethargy
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

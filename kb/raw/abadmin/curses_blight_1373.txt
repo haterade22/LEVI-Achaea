@@ -1,0 +1,18 @@
+Ability: Blight (Record #1373)
+Associated skill: Curses
+Skillpoints required: 57999
+Blurb: The most feared of the Curse abilities.
+Syntax: BLIGHT <target> <curse>
+Extra info: Curse mana costs are increased by +120
+Abfile:
+A blight is a magical construction, sourced in the netherworld, wrapped around a traditional curse which will mask the effects of your attacks. Note that the use of the blight is more mentally draining than a traditional curse.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: Mana

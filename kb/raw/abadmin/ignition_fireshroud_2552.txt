@@ -1,0 +1,18 @@
+Ability: Fireshroud (Record #2552)
+Associated skill: Ignition
+Skillpoints required: 1999
+Blurb: Wreathe yourself in Kkractle's grace.
+Syntax: IGNITE SHROUD
+Abfile:
+Wreathe yourself in Kkractle's fiery grace, granting yourself increased
+resistance. In addition, your fires shall leap out at any that raise
+their hand against you and damage them, though this will naturally be
+ineffective against fellow servants of the Primal Fire.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

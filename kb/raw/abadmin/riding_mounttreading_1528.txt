@@ -1,0 +1,15 @@
+Ability: Mounttreading (Record #1528)
+Associated skill: Riding
+Skillpoints required: 48999
+Blurb: Your mount is able to travel through water with ease.
+Syntax: Passive
+Abfile:
+Your skill in handling mounts allows you to train your beasts to move fluidly through water, as though you were affected by a waterwalk enchantment.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,36 @@
+Ability: Kata (Record #2493)
+Associated skill: Shikudo
+Skillpoints required: 3599
+Blurb: The true art of Shikudo.
+Syntax: TRANSITION TO <form> FORM
+Abfile:
+A kata is a series of strikes that chain together to form a greater
+whole. Each time you perform a strike or kick it becomes part of your
+kata. The primary benefit of kata chains is that once you have built a
+kata chain of sufficient length(*) you may TRANSITION TO THE <form>
+FORM, to immediately transition into that form(**). Transitioning will
+reset your kata chain.
+
+However, if you maintain a kata chain for too long (i.e. by staying in
+the same form overly long) you increase your chance of stumbling and
+failing your kata. This is catastrophic for the Shikudo practitioner, as
+it not only resets your kata chain but also puts you completely out of
+your current form and back into the basic Shikudo form (Tykonos). This
+can be the moment when fights are lost. The Tykonos form is exempt from
+this, as the technique is specifically designed to be able to maintain a
+kata chain indefinitely. Naturally, it is a far more limited form in
+terms of viable strikes or kicks due to this fact.
+
+* A kata chain of sufficient length is a chain consisting of at least 5
+actions.
+** Note that you can only transition in this way to forms listed as
+valid transitions for that form (see AB <form> for valid options). You
+must of course also have studied that form in Shikudo.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

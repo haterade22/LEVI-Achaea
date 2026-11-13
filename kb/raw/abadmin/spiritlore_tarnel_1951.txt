@@ -1,0 +1,26 @@
+Ability: Tarnel (Record #1951)
+Associated skill: Spiritlore
+Skillpoints required: 50000
+Blurb: Tarnel, The Walker.
+Syntax: INVOKE SNARE <target>
+Extra info: Attune affect: you may move more rooms at once.
+Abfile:
+The walkers of the forest know the value in snaring an unsuspecting
+victim. The prey that doesn't see the trap coming has its throat cut
+first.
+
+At the chance of breaking your bond with Tarnel, The Walker, you may
+bind an enemy.
+This invocation is very fast.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 10 mana
+The ability name SENTINEL is mapped to this ability.

@@ -1,0 +1,21 @@
+Ability: Stoneskin (Record #707)
+Associated skill: Elementalism
+Skillpoints required: 2499
+Blurb: Create a protective but supple layer of stone around you.
+Syntax: CAST STONESKIN
+Abfile:
+Similar to the manner in which stonefist coats your fists in stone,
+stoneskin coats much of your body in stone, providing some protection
+against physical attacks (more from blunt than from cutting damage). As
+your skill in elementalism increases, so will the protection this
+ability affords you.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 75 mana

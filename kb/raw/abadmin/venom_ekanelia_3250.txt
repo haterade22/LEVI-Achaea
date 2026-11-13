@@ -1,0 +1,42 @@
+Ability: Ekanelia (Record #3250)
+Associated skill: Venom
+Skillpoints required: 60000
+Blurb: A lethality profound.
+Syntax: EKANELIA
+EKANELIA STUDY <reaction>
+Abfile:
+Your grasp of venom has reached such a profound transcendence that you
+are now able to turn the very immune system of your victim's against
+them. Certain venoms, when delivered in just the right quantities, can
+promote violent immune responses which in turn lead to cascading
+failures and further afflictions manifesting throughout the subject's
+body.
+
+Each reaction has:
+A trigger: the venom which sets off the cascading failure (this is what
+you bite with).
+Conditionals: the afflictions which the subject must already labour
+under.
+A result: the result of the reaction taking place.
+
+Some reactions have:
+A bonus conditional: a bonus conditional which can be met.
+A bonus result: the bonus which is achieved if the bonus conditional is
+met.
+
+Naturally, with the exact dose and balance requirements of this high art
+of venom, only the fangs of the serpent are sufficient for this
+purpose(*).
+
+* You may see what reactions you are aware of with the EKANELIA command,
+and study one at further length with the EKANELIA STUDY <reaction>
+command.
+** Reactions fire on the bite command.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

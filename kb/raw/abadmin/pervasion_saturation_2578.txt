@@ -1,0 +1,15 @@
+Ability: Saturation (Record #2578)
+Associated skill: Pervasion
+Skillpoints required: 1999
+Blurb: From water to water.
+Syntax: MANIFEST SATURATION
+Abfile:
+Summon forth the waters to flood your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

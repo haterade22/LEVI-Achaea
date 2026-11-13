@@ -1,0 +1,15 @@
+Ability: Defence (Record #1506)
+Associated skill: Riding
+Skillpoints required: 9999
+Blurb: Your mount affords you some defence in combat.
+Syntax: None
+Abfile:
+While upon your steed, you will have a greater chance of avoiding physical blows. The greater your skill in riding and the stronger your mount, the more defence will be afforded you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

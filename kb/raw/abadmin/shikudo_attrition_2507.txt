@@ -1,0 +1,24 @@
+Ability: Attrition (Record #2507)
+Associated skill: Shikudo
+Skillpoints required: 37999
+Blurb: The death of a thousand strikes.
+Syntax:
+Abfile:
+The Sentaari masters of old could strike someone with minimal force but
+with major results. Indeed, many enemies that these grandmasters would
+encounter would find themselves incapacitated without a single bone
+broken or drop of blood spilled.
+
+By appending LIGHT after a staff strike in a combination, that attack
+shall not deal any limb damage, but the health damage and affliction
+shall still be delivered (if applicable). Note that this only applies to
+staff attacks, you may not deliver light kicks. An example: THRUST LIGHT
+HEAD, NERVESTRIKE LIGHT, etc.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

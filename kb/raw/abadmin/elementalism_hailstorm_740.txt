@@ -1,0 +1,18 @@
+Ability: Hailstorm (Record #740)
+Associated skill: Elementalism
+Skillpoints required: 53999
+Blurb: Call down a hailstorm to pummel everyone else in the room.
+Syntax: CAST HAILSTORM
+Abfile:
+With this spell, you may rain hailstones down upon all your enemies in
+your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 500 mana

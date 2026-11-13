@@ -1,0 +1,28 @@
+Ability: Painshift (Record #2742)
+Associated skill: Emulation
+Skillpoints required: 55999
+Blurb: Your pain, your gain.
+Syntax: ENACT PAINSHIFT <target>
+Abfile:
+The redirection of lethal injuries was a universally studied field, as
+many among the Aldar had no love for the arts of war. Unfortunately, the
+greatest knowledge remaining of that era is not one to enhance those of
+a pacifistic nature: indeed, quite the opposite.
+
+By focussing on a target for a short while during while you may perform
+no other actions, you may create a sympathetic bond with them for a
+short time(*). While this bond is active any damage you take from almost
+all sources shall be redirected to this person, providing they remain in
+the same location as you.
+
+Note that performing any action will cause the sympathetic bond to snap,
+and this will not protect you from blows that will slay you outright.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

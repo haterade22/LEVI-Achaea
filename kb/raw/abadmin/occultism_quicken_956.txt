@@ -1,0 +1,17 @@
+Ability: Quicken (Record #956)
+Associated skill: Occultism
+Skillpoints required: 8999
+Blurb: A small time warp around your enemy makes them hungry.
+Syntax: QUICKEN <target>
+Abfile:
+Your power over reality and time is such that you can create a small warp in the time field around an individual, who will not notice any time pass, though his or her body will suddenly feel the effects.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 75 mana

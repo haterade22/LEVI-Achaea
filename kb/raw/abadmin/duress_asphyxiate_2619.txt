@@ -1,0 +1,18 @@
+Ability: Asphyxiate (Record #2619)
+Associated skill: Duress
+Skillpoints required: 27999
+Blurb: Make every breath an agony.
+Syntax: AERO ASPHYXIATE <target>
+Abfile:
+Take hold of the air in the very lungs of your foe, lacerating the
+delicate membranes that permit them to draw breath. This will cause them
+to hack and cough on any smoke that they inhale, revealing the type of
+it to you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

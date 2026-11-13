@@ -1,0 +1,16 @@
+Ability: Consciousness (Record #890)
+Associated skill: Kaido
+Skillpoints required: 28999
+Blurb: The ability to stay conscious at all times.
+Syntax: CONSCIOUSNESS [ON|OFF]
+RELAX CONSCIOUSNESS
+Abfile:
+Your power of concentration is such that you will be able to maintain a grasp on consciousness where you might normally lose it.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

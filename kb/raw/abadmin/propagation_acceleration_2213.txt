@@ -1,0 +1,16 @@
+Ability: Acceleration (Record #2213)
+Associated skill: Propagation
+Skillpoints required: 60000
+Blurb: Complete mastery of the viridian form.
+Syntax:
+Abfile:
+You have reached a point where you are able to have all four possible
+locations propagated simultaneously.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

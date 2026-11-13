@@ -1,0 +1,26 @@
+Ability: Impale (Record #528)
+Associated skill: Weaponmastery
+Skillpoints required: 11999
+Blurb: Sink your blade into an opponent.
+Syntax: IMPALE <target>
+WITHDRAW BLADE
+Abfile:
+This wicked ability may be used when your hapless victim has fallen to
+the ground and lies there, helpless. With it, you will drive your sword
+into his body, causing regular damage as long as he is on the sword.
+Further, while impaled, he will find himself unable to move, though you
+too will be unable to move.
+
+If your victim suffers from two damaged legs it will greatly extend the
+length of time it takes them to escape your blade.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Skill specialisation: knight_dualcutting

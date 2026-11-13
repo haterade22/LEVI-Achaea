@@ -1,0 +1,16 @@
+Ability: Acciaccatura (Record #1630)
+Associated skill: Swashbuckling
+Skillpoints required: 21999
+Blurb: Tunesmith your songblessed rapier against a specific limb.
+Syntax: TUNESMITH <your songblessed rapier> ACCIACCATURA
+Abfile:
+Concentrate the powers of song on your rapier to strike a damaging blow at one of your opponent's limbs on your next limb-targetted jab. This requires the Targeting ability in Weaponry.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana

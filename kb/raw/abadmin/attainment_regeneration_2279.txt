@@ -1,0 +1,18 @@
+Ability: Regeneration (Record #2279)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Your faith will heal you when you most need it.
+Syntax: PERFORM RITE OF REGENERATION
+Abfile:
+Every time you take damage for the next 8 seconds, you will regenerate a substantial portion of your health.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 53.00 seconds
+Resource: 33 rage
+Skill specialisation: br_paladin

@@ -1,0 +1,22 @@
+Ability: Entropy (Record #3092)
+Associated skill: Attainment
+Skillpoints required: 59999
+Blurb: The march of time.
+Syntax: CROON ENTROPY <target>
+Abfile:
+Croon to your victim of entropy, and he shall understand at least in
+part(*).
+
+* Gives the aeon affliction.
+** You must have mutated your mouths to croon this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 38.00 seconds
+Resource: 32 rage
+Skill specialisation: br_unnamable

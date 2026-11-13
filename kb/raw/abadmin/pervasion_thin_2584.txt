@@ -1,0 +1,20 @@
+Ability: Thin (Record #2584)
+Associated skill: Pervasion
+Skillpoints required: 11999
+Blurb: Their blood shall turn the waters red.
+Syntax: MANIFEST THIN <target>
+Abfile:
+Thin your enemy's blood, making it flow more freely(*). If their blood
+is already thinned, blood shall begin to flow from their pores
+instead(**).
+
+* Gives haemophilia.
+** Gives 200 bleeding.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

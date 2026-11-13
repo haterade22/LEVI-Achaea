@@ -1,0 +1,17 @@
+Ability: Xentio (Record #1874)
+Associated skill: Toxicology
+Skillpoints required: 899
+Blurb: Loss of coordination.
+Syntax: None
+Extra info: Ingredients: 2 kelp, 1 bloodroot, 1 blueink or
+2 aurum, 1 magnesium, 1 blueink
+Abfile:
+Cause a loss of coordination in your target.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

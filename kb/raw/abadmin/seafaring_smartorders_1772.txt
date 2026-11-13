@@ -1,0 +1,20 @@
+Ability: Smartorders (Record #1772)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Get the most out of your crew.
+Syntax: SHIP SMARTORDERS
+Abfile:
+By galvanising your crew, you can increase your ships rate of turning by
+up to 20%. However, they'll be unable to maintain such a pace for long,
+and this ability can only be performed every 10 minutes.(*)
+
+* Lasts 2 minutes.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm3

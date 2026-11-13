@@ -1,0 +1,37 @@
+Ability: Commune (Record #1921)
+Associated skill: Spiritlore
+Skillpoints required: 0
+Blurb: Commune with the spirits.
+Syntax: COMMUNE
+SPIRIT BIND <spirit>
+SPIRIT ATTUNE <spirit>
+SPIRIT UNBIND <spirit>|ALL
+SPIRIT UNATTUNE <spirit>
+SPIRIT BINDINGS
+Extra info: Bind: 200 mana
+Attune: 4.00 seconds of balance
+Unattune: 2.00 seconds of balance
+Unbind: 2.00 seconds of balance
+Unbind all: 2.20 seconds of balance
+Abfile:
+By communing with a spirit, you may bind it to yourself. This will grant
+you some of the powers that that particular spirit possessed during its
+life. You may bind up to five spirits at once.
+
+You may also attune yourself completely to a spirit. This will grant
+additional benefits, although you may only attune two spirits at a
+time. Once you have mastered the spiritual arts in their entirety,
+you may attune three spirits at a time.
+
+Communing requires a ritual drum, which can be purchased from most
+general stores around Sapience.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance
+Resource: Mana

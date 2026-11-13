@@ -1,0 +1,19 @@
+Ability: Symphony (Record #2929)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: One of many voices.
+Syntax: SWARM SYMPHONY <target>
+Abfile:
+Join your voice with that of the myriad minds that surround you; your
+foe will know fear at the sound of death united.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 24 rage
+Skill specialisation: br_pariah

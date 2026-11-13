@@ -1,0 +1,29 @@
+Ability: Expose (Record #2858)
+Associated skill: Memorium
+Skillpoints required: 3999
+Blurb: Strike when they are vulnerable.
+Syntax:
+Abfile:
+The process of chaining together logographs comes with many benefits,
+but there is always a residual amount of arcane energy wasted when
+performing this process. You are now at a point in your studies when you
+can turn this to your advantage.
+
+When chaining together logographs, you can direct said excess energy
+through the blood upon your ritual blade. Whomever said blood belongs to
+will find themselves weakened for a short time and vulnerable to your
+sorcery(*). The blood does not necessarily need to be that of the person
+you are tracing against.
+
+* Exposing someone to your sorcery means you can perform abilities that
+fall under higher sorcery against them at no equilibrium cost.
+Performing an ability in this way will remove said exposure.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

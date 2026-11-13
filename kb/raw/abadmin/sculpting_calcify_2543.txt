@@ -1,0 +1,31 @@
+Ability: Calcify (Record #2543)
+Associated skill: Sculpting
+Skillpoints required: 57999
+Blurb: From dust to dust.
+Syntax: TERRAN CALCIFY <target> HEAD|TORSO
+Abfile:
+The dreaded power of calcification is one limited to the servants of
+Garash. By laying hands upon the head or torso of your enemy, you may
+begin the transmutation of the calcium in their bones into true stone.
+This will cause their head or torso to be damaged after a short time.
+For instance, someone with no internal damage would receive mild trauma
+upon calcification of the torso completing, and someone with mild trauma
+when it completed would receive serious internal trauma.
+
+However, if the limb is at the maximum damage possible (mangled head or
+serious internal trauma), alternative effects occur.
+
+If calcification completes against someone with a mangled head, their
+skull shall completely transmute to stone, killing them instantly.
+
+Note that if you have shaped your form as much as possible, the balance
+on this ability is completely removed, though it will reduce your
+shaping by two levels on use.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

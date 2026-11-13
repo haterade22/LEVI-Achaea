@@ -1,0 +1,24 @@
+Ability: Aelkesh (Record #1936)
+Associated skill: Spiritlore
+Skillpoints required: 15999
+Blurb: Aelkesh, The Faceless.
+Syntax: INVOKE PROJECTION
+Extra info: Attune effect: a chance for swiftcurse charges not to be consumed when hunting denizens. It shall also reduce the willpower cost of the bleed curse against denizens.
+Abfile:
+Aelkesh was an Occultist who lived during the period of heightened
+strife with the Church. He developed an ability to allow him to travel
+great distances to facilitate his escape in the event of danger, and
+while binding his spirit will not grant such mastery, it will allow you
+to fling yourself out of potentially fatal situations. Be warned,
+however it is far from accurate.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Resource: 1000 mana
+The ability name OCCULTIST is mapped to this ability.

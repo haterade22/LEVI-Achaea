@@ -1,0 +1,17 @@
+Ability: Blind (Record #1352)
+Associated skill: Curses
+Skillpoints required: 12999
+Blurb: Curse an opponent with blindness.
+Syntax: CURSE <target> BLIND
+Abfile:
+Remove your poor victim's eyesight.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 45 mana

@@ -1,0 +1,22 @@
+Ability: Arcanor (Record #1940)
+Associated skill: Spiritlore
+Skillpoints required: 25999
+Blurb: Arcanor, The Sorcerer.
+Syntax: INVOKE ICEFORT
+Extra info: Attune effect: increased elemental damage resistance.
+Abfile:
+To fight on your terms as a mage is the first step toward victory. By
+binding the spirit of Arcanor, you will be able to invoke his power to
+summon great walls of ice to block the escape of all those who would
+flee from your wrath.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 400 mana
+The ability name MAGI is mapped to this ability.

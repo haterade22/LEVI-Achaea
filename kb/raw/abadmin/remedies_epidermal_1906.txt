@@ -1,0 +1,17 @@
+Ability: Epidermal (Record #1906)
+Associated skill: Remedies
+Skillpoints required: 7999
+Blurb: A salve to cure certain exterior afflictions.
+Syntax: None
+Extra info: Ingredients: 2 kuzu, 1 hawthorn, 1 bloodroot, 1 ginseng or
+2 arsenic, 1 magnesium, 1 calamine, 1 ferrum
+Abfile:
+The epidermal salve is used to cure afflictions on the exterior of your body, such as deafness and blindness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

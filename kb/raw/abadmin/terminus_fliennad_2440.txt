@@ -1,0 +1,20 @@
+Ability: Fliennad (Record #2440)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: Twice is better than once.
+Syntax: INTONE FLIENNAD
+This ability will be hidden on ablistings.
+Abfile:
+This ability will reset all of your tattoos, causing them to come off
+cooldown(*). This also restores up to 300 years of age.
+
+*It may only be used once every 8 minutes.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of word balance

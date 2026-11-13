@@ -1,0 +1,19 @@
+Ability: Combo (Record #2486)
+Associated skill: Shikudo
+Skillpoints required: 0
+Blurb: Combine attacks to devastate your foes.
+Syntax: COMBO <target> <attack1> [limb] [attack2] [limb] [attack3] [limb] [TRANSITION <form>]
+Abfile:
+By combining attacks together you can perform devastating combinations
+against your foes. Shikudo combinations may consist of no more than
+three attacks, only one of which may be a kick. For instance, you could
+COMBO GATTAN'BAHAR DART HEAD LIVESTRIKE FLASHHEEL LEFT (we do not
+recommend doing this to Gattan'bahar).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

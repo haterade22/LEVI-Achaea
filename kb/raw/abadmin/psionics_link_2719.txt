@@ -1,0 +1,22 @@
+Ability: Link (Record #2719)
+Associated skill: Psionics
+Skillpoints required: 33999
+Blurb: Your mind is far superior.
+Syntax: PSI LINK <target>
+PSI UNLINK
+Abfile:
+Link your mind to another and you will take attacks against their mind
+upon yourself. Be warned, if your mana falls below half of your maximum
+you will die outright and if not resurrected by a starburst tattoo or
+similar shall find your soul lacking significantly in substance(*).
+
+* You will die and be left on low mana as a soul.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

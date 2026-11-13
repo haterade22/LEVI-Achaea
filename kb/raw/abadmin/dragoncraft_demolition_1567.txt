@@ -1,0 +1,17 @@
+Ability: Demolition (Record #1567)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Bring down walls with a massive blow.
+Syntax: DEMOLISH WALL|STONEWALL|ICEWALL <dir>
+Abfile:
+With a great sweep of your tail demolish those annoying walls of stone and ice that get in your way.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Skill specialisation: dragonform

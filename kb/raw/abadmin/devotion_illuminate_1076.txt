@@ -1,0 +1,24 @@
+Ability: Illuminate (Record #1076)
+Associated skill: Devotion
+Skillpoints required: 54999
+Blurb: Illuminate your path.
+Syntax: PERFORM ILLUMINATE <direction>
+PERFORM EXTINGUISH
+Extra info: Illuminate cooldown: 3.50 seconds of equilibrium, 1000 mana, and 1500 devotion.
+Extinguish cooldown: 4.00 seconds of equilibrium, 1000 mana, and 500 devotion.
+Abfile:
+When you perform this ability, you will create an orb of light which will move off in the direction specified. The orb is unpredictable and will move erratically. Each time it moves, the orb will illuminate the room, giving a chance to strip the blackwind or astralform defences from adventurers in the room.
+
+In addition, you may extinguish the orb at any time to travel directly to the room the orb is currently in.
+
+It should be noted that the orb will only have enough energy to move a limited number of times, and it will fade if not extinguished a short while after it ceases moving.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 1000 mana and devotion

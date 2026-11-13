@@ -1,0 +1,21 @@
+Ability: Snowstears (Record #3196)
+Associated skill: Sagas
+Skillpoints required: 7999
+Blurb: The freezing waters came.
+Syntax: RECITE SNOWSTEARS
+Abfile:
+Though the coming of the freezing waters which ravaged Cyrene was a
+thing of horror and liberation both, it was the dreadful silence left in
+the aftermath which will forever weigh upon those that were there to
+witness that darkest day in the history of the Heart of the Vashnars.
+
+* Conveys a short lived silence effect upon the room.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds of voice balance and 2.80 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Intone (Record #2378)
+Associated skill: Shadowmancy
+Skillpoints required: 999
+Blurb: The shadows are your voice and more.
+Syntax: SHADOW INTONE [anonymous] <message>
+Abfile:
+When standing in a location cloaked in magical darkness, you may project
+your voice so that all those who also stand in said darkness may hear
+you, regardless of distance or boundaries.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Owl (Record #345)
+Associated skill: Metamorphosis
+Skillpoints required: 3999
+Blurb: The wise bird of prey.
+Syntax: MORPH OWL
+Extra info: Powers: Fly
+Land
+Nightsight
+Spy
+Swoop
+Abfile:
+The wise bird of prey.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 40 mana

@@ -1,0 +1,21 @@
+Ability: Shipcloak (Record #1776)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: A seaspell to conceal your ship for a time.
+Syntax: INVOKE CLOAK[ING]
+DISSOLVE CLOAK[ING]
+Extra info: Power cost: 200
+This ability will be hidden on ablistings.
+Abfile:
+A seaspell to surround your ship in a cloak of darkness from other
+ships. Flares shot within a certain distance of your ship will bring
+your ship to light, however. Shooting a flare from your own ship while
+cloaked will also dissolve your cloaking.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

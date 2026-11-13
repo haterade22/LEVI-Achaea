@@ -1,0 +1,17 @@
+Ability: Dodging (Record #1637)
+Associated skill: Swashbuckling
+Skillpoints required: 39999
+Blurb: Avoiding attacks from the sky.
+Syntax: DODGING [ON|OFF]
+RELAX DODGING
+Abfile:
+At the cost of a constant mana drain, this ability will allow you to dodge any attempts to hoist you off the ground.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

@@ -1,0 +1,21 @@
+Ability: Constrict (Record #2152)
+Associated skill: Reclamation
+Skillpoints required: 19999
+Blurb: Restrain those that trespass.
+Syntax: RECLAMATION CONSTRICT <target>
+Abfile:
+You may command the vines to constrict about a target for a time,
+disabling all methods that would boost their escape from traditional
+bonds(*).
+
+* Does not impact the transfixed affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of balance
+Resource: 200 mana

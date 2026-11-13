@@ -1,0 +1,17 @@
+Ability: Torch (Record #2657)
+Associated skill: Ignition
+Skillpoints required: 21999
+Blurb: Burn ever brighter.
+Syntax: MANIFEST TORCH
+Abfile:
+Flare your flames, burning ever brighter(*).
+
+* Gives yourself the ablaze affliction.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

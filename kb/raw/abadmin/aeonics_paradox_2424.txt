@@ -1,0 +1,27 @@
+Ability: Paradox (Record #2424)
+Associated skill: Aeonics
+Skillpoints required: 47999
+Blurb: They shall conform.
+Syntax: CHRONO PARADOX <target> <plant> [BOOST]
+Abfile:
+You may instill a future possibility into the timeline, dictating that
+your target shall not eat a given herb(*). If they violate that
+directive and eat that herb, a paradox will be created and they shall
+suffer non-trivial mana damage.
+
+If this ability is boosted, it consumes no equilibrium and lasts for ten
+herb eats. If not boosted, it lasts for five.
+
+* Valid herbs are kelp, goldenseal, lobelia, ash and bellwort. They will
+work for their transmutation counterparts.
+** Note that paradox will only fire if the target has something else
+they could be eating, given the nature of the ability.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 300 age

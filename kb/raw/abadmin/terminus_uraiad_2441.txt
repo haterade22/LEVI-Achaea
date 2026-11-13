@@ -1,0 +1,24 @@
+Ability: Uraiad (Record #2441)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: Why settle for worse?
+Syntax: INTONE URAIAD <target>
+This ability will be hidden on ablistings.
+Abfile:
+A truly potent ability, speak this word targeted at one who considers
+you a mutual ally. For the next thirty minutes you shall possess the
+same constitution and strength as your chosen target.
+
+* Note that this carries a one hour cooldown.
+** Additionally note that this is a direct link. If your linked target's
+stats change while you are linked with them, your stats shall also
+change to mirror them.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of word balance

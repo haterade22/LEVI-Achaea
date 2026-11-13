@@ -1,0 +1,21 @@
+Ability: Prowess (Record #3099)
+Associated skill: Chivalry
+Skillpoints required: 25000
+Blurb: Every knight needs a steed.
+Syntax:
+Abfile:
+The aspiring knight has a greater understanding of the needs and finer
+points of steeds of all kinds. As a result, he or she shall find that
+mounts that others might dismiss out of hand will serve them just as
+well as the more traditionally embraced(*).
+
+* All steeds loyal to the practicer of Chivalry are utilised at a higher
+level. The maximum possible cap on level remains in place.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

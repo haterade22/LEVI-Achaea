@@ -1,0 +1,23 @@
+Ability: Tiamenjiara (Record #3222)
+Associated skill: Woe
+Skillpoints required: 27999
+Blurb: Of lies and deeds most dire.
+Syntax: RECITE TIAMENJIARA
+Abfile:
+When the elemental balance was cast into disarray and long bound Taug
+was unleashed from a prison ancient in the making, it was a time of
+great strife. Listen now and hear of how it transpired, and, at the
+culmination, witness the elements once more be broken at least in
+part(*).
+
+* A random elemental lord in the location will be forced out of their
+form.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance and 2.50 seconds of equilibrium

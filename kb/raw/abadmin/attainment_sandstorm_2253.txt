@@ -1,0 +1,19 @@
+Ability: Sandstorm (Record #2253)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: An irritating storm of wind and sand.
+Syntax: CAST SANDSTORM AT <target>
+Extra info: Gives denizen affliction: Fear
+Abfile:
+Using the powers of wind and earth, summon a small sandstorm around your victim's head. Your victim will flee in terror to try and escape it.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 34.00 seconds
+Resource: 29 rage
+Skill specialisation: br_sylvan

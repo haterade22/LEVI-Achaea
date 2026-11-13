@@ -1,0 +1,25 @@
+Ability: Hypnotise (Record #1309)
+Associated skill: Hypnosis
+Skillpoints required: 0
+Blurb: Their minds are yours.
+Syntax: HYPNOTISE <target>
+SUGGEST <target> <suggestion>
+SEAL <target> <delay in seconds>
+SNAP <target>
+Abfile:
+This ability is the basis for all hypnotic manipulation. First you must
+hypnotise a victim, to seize control of his or her mind. This can take
+several seconds.
+
+Once a trance is secured, you may begin implanting hypnotic suggestions,
+and finally seal the victim's trance. Once this is complete, you may
+snap your victim to trigger their trance, and the hypnotic suggestions
+shall begin to fire in rapid succession.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Deepfreeze (Record #723)
+Associated skill: Elementalism
+Skillpoints required: 30999
+Blurb: Cast a spell of extreme cold at your enemies.
+Syntax: CAST DEEPFREEZE
+Abfile:
+ Channels required: Air, Water
+
+This spell is a magnified version of the freeze spell, except that it is
+not targetable. It will attack all those in the room who are your enemy.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana

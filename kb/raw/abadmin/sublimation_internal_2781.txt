@@ -1,0 +1,27 @@
+Ability: Internal (Record #2781)
+Associated skill: Sublimation
+Skillpoints required: 1999
+Blurb: To manipulate energy is dangerous work.
+Syntax: MANIPULATE INTERNAL
+This ability will be hidden on ablistings.
+Abfile:
+The school of Manipulation is dangerous, and its training exercise
+reflects this. Prospective students are expected to raise their own
+internal temperature to gain a grasp of the process of bending energy to
+their will. Raising one's temperature can be utilised to cure frozen and
+similar effects(*).
+
+Due to the relative simplicity of this exercise, overdrawing upon the
+Wellspring serves no use.
+
+* This can only be done once every ten seconds.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Resource: 2% Wellspring Energy

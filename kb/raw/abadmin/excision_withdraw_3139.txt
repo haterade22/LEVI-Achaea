@@ -1,0 +1,18 @@
+Ability: Withdraw (Record #3139)
+Associated skill: Excision
+Skillpoints required: 59999
+Blurb: The time to act is now.
+Syntax: PERFORM WITHDRAW <target>
+Abfile:
+There is a time for condemnation, and there is a time for action. You
+may withdraw your condemnation of an enemy of Creation if you deem that
+they must know the true meaning of purification by flame.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of wrath balance

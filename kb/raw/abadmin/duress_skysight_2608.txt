@@ -1,0 +1,17 @@
+Ability: Skysight (Record #2608)
+Associated skill: Duress
+Skillpoints required: 2999
+Blurb: Know all that transpires in Whiirh's domain.
+Syntax: MANIFEST SKYSIGHT
+RELAX SKYSIGHT
+Abfile:
+Focus upon the skies, granting yourself the ability to know whenever
+someone flies into or out of your immediate location or area.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

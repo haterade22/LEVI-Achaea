@@ -1,0 +1,16 @@
+Ability: Realgar (Record #2025)
+Associated skill: Transmutation
+Skillpoints required: 15999
+Blurb: A smokable sulphurous mineral.
+Syntax: EXTRACT REALGAR
+TRANSMUTATE <#> <mineral> TO REALGAR
+Abfile:
+When smoked, the realgar mineral will cure afflictions such as slickness and disloyalty.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

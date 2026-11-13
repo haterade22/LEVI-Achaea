@@ -1,0 +1,29 @@
+Ability: Bisect (Record #3107)
+Associated skill: Runelore
+Skillpoints required: 60000
+Blurb: As relentless as the storm.
+Syntax: BISECT <target> [venom]
+Abfile:
+While wielding an edged runeblade of some form with the hugalaz rune
+sketched upon the blade, you may attempt to bisect your foe with a
+single empowered strike(*).
+
+* This is a multi damage typed ability that deals first lightning damage
+then cutting damage.
+
+** If your target is an adventurer and at 20% of their health or lower
+when the cutting damage would be applied, they will be slain outright
+instead.
+
+*** Notably, this attack bypasses auras of rebounding and reflections
+but leaves them intact.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

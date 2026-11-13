@@ -1,0 +1,15 @@
+Ability: Blind (Record #880)
+Associated skill: Kaido
+Skillpoints required: 9999
+Blurb: Blinding yourself to prevent optical damage.
+Syntax: BLIND
+Abfile:
+A few seconds after using this ability, you will blind yourself.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

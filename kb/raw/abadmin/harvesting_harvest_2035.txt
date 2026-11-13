@@ -1,0 +1,21 @@
+Ability: Harvest (Record #2035)
+Associated skill: Harvesting
+Skillpoints required: 0
+Blurb: The ability to harvest plants for Remedies.
+Syntax: HARVEST <plant>
+Abfile:
+The ability to harvest is one that is prized amongst the forestals of
+Sapience. With this ability you can harvest the precious plantlife used
+for curing the ailments of the worlds and in brewing the various elixirs
+and salves. Your skill in harvesting will determine what plants you have
+gained the ability to harvest.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

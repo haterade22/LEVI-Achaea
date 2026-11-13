@@ -1,0 +1,18 @@
+Ability: Furor (Record #3094)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Tear at your prey's limbs.
+Syntax: HYDRA FUROR [venom] <limb>
+Abfile:
+Tear at one of your prey's limbs with two of your serpentine heads,
+afflicting them with whatever venom you have secreted.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: meta_druid

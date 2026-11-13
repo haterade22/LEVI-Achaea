@@ -1,0 +1,19 @@
+Ability: Windwhip (Record #2178)
+Associated skill: Weatherweaving
+Skillpoints required: 499
+Blurb: Lash them with a whip of air.
+Syntax: CAST WINDWHIP AT <target>
+Abfile:
+You may conjure forth a whip formed of condensed air to lash your
+enemies with. This spell is slightly faster when targeting denizens.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.90 seconds of equilibrium
+Resource: 15 mana

@@ -1,0 +1,16 @@
+Ability: Backflip (Record #3157)
+Associated skill: Bladedance
+Skillpoints required: 2999
+Blurb: You make it look so easy.
+Syntax: BACKFLIP <direction>
+Abfile:
+With the casual grace that only you possess you can flip over
+obstructions such as adventurers blocking you or icewalls.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

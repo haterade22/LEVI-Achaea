@@ -1,0 +1,19 @@
+Ability: Bite (Record #1275)
+Associated skill: Venom
+Skillpoints required: 0
+Blurb: Sinking your fangs into an unfortunate victim.
+Syntax: BITE <target> [<venom>*]
+Abfile:
+ Sinking your fangs into an unfortunate victim.
+
+* The addition of a venom only functions when biting adventurers.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance

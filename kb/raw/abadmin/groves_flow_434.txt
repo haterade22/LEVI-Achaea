@@ -1,0 +1,17 @@
+Ability: Flow (Record #434)
+Associated skill: Groves
+Skillpoints required: 18999
+Blurb: Slip instantly from your grove to anyone in the forest.
+Syntax: GROVE FLOW <target>
+Abfile:
+With this ability, you may instantly travel from your grove to anyone in forest or jungle.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 150 sunlight

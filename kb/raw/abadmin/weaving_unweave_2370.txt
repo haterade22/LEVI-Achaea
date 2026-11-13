@@ -1,0 +1,24 @@
+Ability: Unweave (Record #2370)
+Associated skill: Weaving
+Skillpoints required: 25999
+Blurb: From dust to dust.
+Syntax: WEAVE UNWEAVE <target> <BODY|MIND|SPIRIT>
+Abfile:
+Begin the process of unweaving part of an individual's fundamental
+essence. Each type of unweaving has separate effects and the longer the
+unweaving process persists, the more deadly these effects become:
+
+Body: health loss whenever the unweaving proceeds.
+Mind: mana loss whenever the weaving proceeds.
+Spirit: each time the unweaving proceeds, an additional cure is required
+to cure the spirit unweave. This is unique to the spirit unweave.
+
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

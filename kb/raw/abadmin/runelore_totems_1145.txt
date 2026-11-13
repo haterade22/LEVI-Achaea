@@ -1,0 +1,33 @@
+Ability: Totems (Record #1145)
+Associated skill: Runelore
+Skillpoints required: 12999
+Blurb: The symbol of the master of Runelore.
+Syntax: CARVE TOTEM
+SKETCH <rune> ON <totem> ON SLOT <1-6>
+STAND TOTEM
+SMUDGE <totem> [SLOT 1-6]
+Extra info: Carve cooldown: 2.00 seconds of balance
+Stand cooldown: 4.00 seconds of balance
+Smudge cooldown: 4.00 seconds of balance upon initiation and completion
+Abfile:
+Totems are a very powerful runelore skill. After you've carved a totem, you may sketch runes on one of 6 slots on a totem. You may then STAND TOTEM, to prop the totem up, and all enemies who enter the room will be affected by -each- rune on the totem, going from rune #1 to rune #6.
+
+In order to carve a totem, you will require 20 wood commodities, 10 leather commodities, and 2 silver commodities.
+
+In order to remove a rune from a totem, simply SMUDGE <totem> [SLOT 1-6] (the slot 1-6 is optional). You may also smudge runes on the ground, with SMUDGE GROUND.
+
+You may only smudge runes that were sketched by someone with equal or lesser skill in Runelore.
+
+Runes that you may sketch on totems:
+
+Kena       Fehu     Pithakhan  Inguz     Nairat   Tiwaz
+Wunjo      Sowulu   Mannaz     Sleizak   Loshre
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

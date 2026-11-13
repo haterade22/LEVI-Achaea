@@ -1,0 +1,16 @@
+Ability: Lipread (Record #1230)
+Associated skill: Subterfuge
+Skillpoints required: 15999
+Blurb: The ability to understand what is said while deaf.
+Syntax: LIPREAD
+Abfile:
+This will allow you to understand speech normally, even when you are deaf, and understand speech that has been disturbed by wind.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

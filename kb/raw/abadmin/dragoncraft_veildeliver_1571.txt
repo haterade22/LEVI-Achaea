@@ -1,0 +1,19 @@
+Ability: Veildeliver (Record #1571)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Pass items instantly over great distances.
+Syntax: VEILDELIVER <item> TO <target>
+VEILDELIVER GROUP <item> TO <target>
+Abfile:
+Reach through the Veil to deliver an item or a group of items to another adventurer over great distances.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana
+Skill specialisation: dragonform

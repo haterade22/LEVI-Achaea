@@ -1,0 +1,17 @@
+Ability: Melt (Record #2334)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Burn away a denizen's shield.
+Syntax: MELT <target>
+Abfile:
+Use your rage and breathe concentrated flame at a denizen's shield, causing it to melt away.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_red_dragon

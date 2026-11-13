@@ -1,0 +1,20 @@
+Ability: Sunder (Record #3090)
+Associated skill: Attainment
+Skillpoints required: 32339
+Blurb: The ordered constructs lie broken.
+Syntax: UNNAMABLE SUNDER <target>
+Abfile:
+Those that will bring orderly barriers before you shall find them
+swiftly shattered(*).
+
+* Breaks magical shields.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_unnamable

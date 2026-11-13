@@ -1,0 +1,23 @@
+Ability: Guardian (Record #459)
+Associated skill: Groves
+Skillpoints required: 53999
+Blurb: Summon an earth golem to guard your grove.
+Syntax: GROVE GUARDIAN
+Extra info: Grove sunlight.
+Abfile:
+So strong is your bond with your grove that you are able to reach down
+into the roots of the earth and call forth one of the fabled earth golem
+Guardians to stand guard over your grove. It will protect your grove,
+attacking anyone who you order it to, or who attempts to harm your
+grove, and will stay until dead. Note, however, that there is a very
+high grove energy cost.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1000 sunlight

@@ -1,0 +1,19 @@
+Ability: Dalem (Record #2443)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: A superior model.
+Syntax: INTONE DALEM
+This ability will be hidden on ablistings.
+Abfile:
+While holding a phylactery created via Shadowmancy, you may utter this
+word to enhance said phylactery, making it able to hold an additional
+five shadows.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of word balance

@@ -1,0 +1,24 @@
+Ability: Thurisaz (Record #1151)
+Associated skill: Runelore
+Skillpoints required: 21999
+Blurb: Call forth a spout of molten lava from the earth.
+Syntax: SKETCH THURISAZ ON GROUND FOR <target>
+Abfile:
+ Inks required: 1 Blue, 1 Red
+Symbol: Volcano
+
+When sketched upon the ground, this rune calls forth a spout of molten
+lava to injure a target. It fades shortly after use.
+
+It will also prevent rooms that it is sketched in from being flooded for
+a time.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

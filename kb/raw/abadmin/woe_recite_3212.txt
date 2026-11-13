@@ -1,0 +1,22 @@
+Ability: Recite (Record #3212)
+Associated skill: Woe
+Skillpoints required: 1
+Blurb: Listen now of the Prince most dread.
+Syntax: RECITE <saga of woe> [arguments]
+Abfile:
+It is said that the weight of a life's sin is commensurate with their
+evil. If such is the case, then Black Pazuzu's evil is a burden to be
+borne by a City and its Peoples from now unto distant futures unknown.
+
+And so when you recite the tales of Black Pazuzu, Prince of Woe and
+self-proclaimed New God, it is the weight of Remembrance that you will
+bear: both ancient transference and sacred charge. This is his story,
+but you are not afeared.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

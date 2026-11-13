@@ -1,0 +1,24 @@
+Ability: Rally (Record #2702)
+Associated skill: Weaving
+Skillpoints required: 45999
+Blurb: Let them know your fervour.
+Syntax: WEAVE RALLY [INDOMITABLE]
+Abfile:
+Weave power into your very voice, enabling you to shout a rallying
+cry(*), healing yourself for a large amount of health(**). You can only
+do this every so often, as it is somewhat taxing.
+
+* This uses your warcry if you have one set.
+** This can push your health above your maximum.
+*** If you have mastered Emulation, you may also invoke your
+indomitability as an optional addition to your rallying cry.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

@@ -1,0 +1,20 @@
+Ability: Gaze (Record #359)
+Associated skill: Metamorphosis
+Skillpoints required: 12999
+Blurb: The paralyzing glance.
+Syntax: GAZE <target> [PARALYSIS/CONFUSION]
+This ability will be hidden on ablistings.
+Abfile:
+The gaze of the basilisk is a powerful and fearful one indeed. With it,
+you may paralyse or confuse an adventurer or deal psychic damage to a
+denizen.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 150 mana

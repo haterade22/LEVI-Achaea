@@ -1,0 +1,17 @@
+Ability: Darkshade (Record #1961)
+Associated skill: Toxicology
+Skillpoints required: 4999
+Blurb: Makes the victim allergic to sunlight.
+Syntax: None
+Extra info: Ingredients: 1 bloodroot, 1 ginseng, 1 kelp, 1 redink or
+1 magnesium, 1 ferrum, 1 aurum, 1 redink
+Abfile:
+Give your target an allergy to sunlight.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

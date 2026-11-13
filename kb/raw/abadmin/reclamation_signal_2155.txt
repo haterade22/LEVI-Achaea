@@ -1,0 +1,17 @@
+Ability: Signal (Record #2155)
+Associated skill: Reclamation
+Skillpoints required: 29999
+Blurb: Let no transgression go unpunished.
+Syntax: None
+Abfile:
+Your mastery has reached such a point that you will be made aware
+whenever anyone is attacking one of your reclaimed locations with
+abilities such as necromancy exterminate.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Drag (Record #2129)
+Associated skill: Skirmishing
+Skillpoints required: 42999
+Blurb: Drag away your prey.
+Syntax: DRAG <direction>
+Abfile:
+ You may drag someone you have impaled away.
+(This will remove your spear or trident from your victim's gut.)
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of balance

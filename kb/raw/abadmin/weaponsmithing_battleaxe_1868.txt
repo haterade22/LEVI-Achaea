@@ -1,0 +1,20 @@
+Ability: Battleaxe (Record #1868)
+Associated skill: Weaponsmithing
+Skillpoints required: 39999
+Blurb: Favoured weapon of the mountain dwarves.
+Syntax: FORGE FOR BATTLEAXE
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+7 Steel
+1 Wood
+Abfile:
+Favoured weapon of the mountain dwarves.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

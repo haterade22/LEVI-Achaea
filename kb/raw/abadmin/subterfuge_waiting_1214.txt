@@ -1,0 +1,17 @@
+Ability: Waiting (Record #1214)
+Associated skill: Subterfuge
+Skillpoints required: 2999
+Blurb: Awaiting a target to be shadowed.
+Syntax: AWAIT <target>
+Abfile:
+Once activated, this ability will allow you to stand still and wait for another adventurer unnoticed. When the adventurer enters the location, you will begin to follow.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name AWAIT is mapped to this ability.

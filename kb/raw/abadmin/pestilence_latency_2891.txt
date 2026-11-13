@@ -1,0 +1,26 @@
+Ability: Latency (Record #2891)
+Associated skill: Pestilence
+Skillpoints required: 50999
+Blurb: A bleak future awaits.
+Syntax: SWARM LATENCY <swarm>
+Abfile:
+Your myriad minions are undoubtedly deadly when used overtly, but there
+are more subtle workings you may also employ. Once the defences of your
+foe have been breached(*), and they are sufficiently vulnerable(**), you
+may utilise your minions as a vector through which to ravage your foe
+internally with your sorcery(***).
+
+* A target who possesses three of: pyramides, flushings, rebbies,
+mycalium, and sandfever.
+** You must have a swarm burrowed into your target.
+*** Their body will be unable to process immunity elixirs for thirteen
+seconds after your arcane strike.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,23 @@
+Ability: Onslaught (Record #3091)
+Associated skill: Attainment
+Skillpoints required: 46199
+Blurb: They are not worthy of your power.
+Syntax: UNNAMABLE ONSLAUGHT <target>
+Abfile:
+Dispense with the arcane, and simply bring forth your tentacles to
+batter the unworthy into submission(*).
+
+* This attack does more damage against either charmed or sensitive
+targets.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_unnamable

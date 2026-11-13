@@ -1,0 +1,23 @@
+Ability: Energise (Record #769)
+Associated skill: Crystalism
+Skillpoints required: 33999
+Blurb: Suck health from your enemies and use it.
+Syntax: EMBED ENERGISE
+ABSORB ENERGY
+Abfile:
+ Shapes required: Polyhedron
+
+This ability will drain the health of your enemies, and store a portion
+of it. When you wish to use that health, you must do ABSORB ENERGY. This
+will, however, destroy the vibration.
+
+Useable on: room and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

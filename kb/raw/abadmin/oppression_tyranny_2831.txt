@@ -1,0 +1,21 @@
+Ability: Tyranny (Record #2831)
+Associated skill: Oppression
+Skillpoints required: 45999
+Blurb: They shall bend the knee.
+Syntax: TYRANNY
+Abfile:
+Channel great amounts of necromantic energy through your profane weapon,
+and call forth the hands of the grave to claw at the living(*).
+
+* This calls gravehands and also prones all non-Mhaldorians in the
+location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 3% life essence

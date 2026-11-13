@@ -1,0 +1,16 @@
+Ability: Cohosh (Record #1893)
+Associated skill: Harvesting
+Skillpoints required: 27999
+Blurb: The curiously white plant that induces insomnia.
+Syntax: HARVEST COHOSH
+Abfile:
+Black cohosh, which is actually a white plant, may be eaten to induce insomnia. You will find it growing primarily in swampy regions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

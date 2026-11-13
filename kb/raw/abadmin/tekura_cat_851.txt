@@ -1,0 +1,20 @@
+Ability: Cat (Record #851)
+Associated skill: Tekura
+Skillpoints required: 7999
+Blurb: An agile, defensive stance.
+Syntax: CTS
+Abfile:
+The primary purpose of the cat stance is for facing those with
+formidable offensive capabilities. It grants superior defence, allowing
+one to block far more often than in other stances. However, you will
+find that it is more difficult to attack, and your attacks will be
+slower.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,20 @@
+Ability: Cooking (Record #1746)
+Associated skill: Seafaring
+Skillpoints required: 35999
+Blurb: Improve crew morale and performance culinarily.
+Syntax: COOK <fish>
+Abfile:
+Prepare any caught or killed fish and store them in the ship's larder.
+Doing this will increase both your ship's food supply and the crew's
+morale.
+
+Note those with at least rank 3 in the deckhand specialisation shall
+cook good food instead of merely common.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

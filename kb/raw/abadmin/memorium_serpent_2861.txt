@@ -1,0 +1,22 @@
+Ability: Serpent (Record #2861)
+Associated skill: Memorium
+Skillpoints required: 999
+Blurb: Of deadly fangs and poison.
+Syntax: TRACE SERPENT <target>
+Abfile:
+The striking serpent shall sink its ethereal fangs into the neck of a
+foe when traced, paralysing them with its power. In addition, this
+logograph is unique in the fact that when traced in an epitaph following
+the logograph of the scorpion, your enemy will also find that the voyria
+plague has been introduced into their bloodstream(*).
+
+* See AB MEMORIUM EPITAPH for details.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

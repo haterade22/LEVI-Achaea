@@ -1,0 +1,21 @@
+Ability: Plague (Record #775)
+Associated skill: Crystalism
+Skillpoints required: 49999
+Blurb: Afflict your enemies with debilitating effects.
+Syntax: EMBED PLAGUE
+Abfile:
+Shapes required: Cube, Pyramid, Spiral
+
+A powerful vibration, it will slowly kill your enemies who stand within
+it, giving a variety of afflictions before death.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

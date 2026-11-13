@@ -1,0 +1,25 @@
+Ability: Lifebond (Record #2741)
+Associated skill: Emulation
+Skillpoints required: 52999
+Blurb: The martyr's calling.
+Syntax: ENACT LIFEBOND <target>
+Abfile:
+You may bond yourself to a comrade(*), and in the eventuality that said
+comrade should tragically fall in battle, you will give up your very
+life in their stead. Be warned, not even the vilest of necromantic
+magics or chaotic manipulations will spare you from this death, and
+neither shall the stars shine upon your soul. Falling in this manner
+shall instantly hurl you into the Halls of the Finality.
+
+* You may only place one of these bonds so often, and there is a
+cooldown on the target (that is placed once they are resurrected via
+this bond) as well.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

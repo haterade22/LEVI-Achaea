@@ -1,0 +1,18 @@
+Ability: Elusiveness (Record #346)
+Associated skill: Metamorphosis
+Skillpoints required: 5999
+Blurb: Move about without being followed.
+Syntax: ELUSIVENESS [ON|OFF]
+RELAX ELUSIVENESS
+This ability will be hidden on ablistings.
+Abfile:
+With this ability, you cannot be easily followed, allowing you to roam about the land in more safety.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

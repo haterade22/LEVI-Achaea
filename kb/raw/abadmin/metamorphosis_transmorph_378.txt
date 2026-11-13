@@ -1,0 +1,15 @@
+Ability: Transmorph (Record #378)
+Associated skill: Metamorphosis
+Skillpoints required: 26999
+Blurb: The ability to morph from form to form.
+Syntax: MORPH <form>
+Abfile:
+The power you wield allows you to morph directly from one animal to another, without changing back to regular form first.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

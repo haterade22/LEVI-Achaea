@@ -1,0 +1,16 @@
+Ability: Quartz (Record #2033)
+Associated skill: Transmutation
+Skillpoints required: 53999
+Blurb: Special quartz crystals provide energy.
+Syntax: EXTRACT QUARTZ
+TRANSMUTATE <#> <mineral> TO QUARTZ
+Abfile:
+The quartz mineral will provide an abundance of energy, making it easy to wake up.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

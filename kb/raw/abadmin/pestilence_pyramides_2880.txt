@@ -1,0 +1,22 @@
+Ability: Pyramides (Record #2880)
+Associated skill: Pestilence
+Skillpoints required: 999
+Blurb: The body rejects that which sustains.
+Syntax:
+Abfile:
+Its origins shrouded in mystery, this insidious plague takes its name
+from the legendary swordsman. Any wound that bleeds becomes potentially
+deadly when labouring beneath this disease, the body turning against
+itself and being unmade from within(*).
+
+* All bleeding is increased by 10% when suffering under this plague.
+** Note: this affliction will always be cured after paralysis when
+attempting to cure it via bloodroot or magnesium.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

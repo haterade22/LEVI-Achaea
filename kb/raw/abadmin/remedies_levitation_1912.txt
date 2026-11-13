@@ -1,0 +1,17 @@
+Ability: Levitation (Record #1912)
+Associated skill: Remedies
+Skillpoints required: 35999
+Blurb: A mixture that allows you to hover.
+Syntax: None
+Extra info: Ingredients: 2 kelp, 1 pear, 1 feather or
+2 aurum, 2 calcite
+Abfile:
+The levitation elixir when sipped will cause you to float a couple inches off the ground. This cushion of air will help protect you from great falls and several ground based attacks.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Shipreturn (Record #1744)
+Associated skill: Seafaring
+Skillpoints required: 58999
+Blurb: Return to your ship from afar (captains/owners only).
+Syntax: SHIPRETURN CLEAR       - clears where you will shipreturn to.
+SHIPRETURN GO          - shipreturn now, from same plane.
+SHIPRETURN HERE        - designates where you will shipreturn to.
+SHIPRETURN WHERE       - reminds you where you'll shipreturn to.
+Abfile:
+Return to your ship from afar. (Captains and owners only.)
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

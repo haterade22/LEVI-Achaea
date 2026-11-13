@@ -1,0 +1,17 @@
+Ability: Economy (Record #2521)
+Associated skill: Toxicology
+Skillpoints required: 60000
+Blurb: Efficient production.
+Syntax: None
+Abfile:
+With efficient use of your ingredients, you are able to produce larger
+batches of your venoms. Each batch you produce will contain more
+applications.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Thrash (Record #2111)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Use your whip to open painful, bloody wounds.
+Syntax: THRASH <target>
+Abfile:
+Expend your rage to whip the target bloody, causing intense damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_serpent

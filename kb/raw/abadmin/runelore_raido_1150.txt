@@ -1,0 +1,31 @@
+Ability: Raido (Record #1150)
+Associated skill: Runelore
+Skillpoints required: 20999
+Blurb: Summon a spiritual steed to bear you home.
+Syntax: SKETCH RAIDO ON GROUND
+SAY RIDE HOME
+RAIDO LOCATE
+RAIDO SEVER
+Abfile:
+ Inks required: 1 Green
+Symbol: Horse
+
+After sketching the rune upon the ground, say 'ride home' from anywhere
+on the continent, and be taken back to the rune, which will be
+destroyed.
+
+RAIDO LOCATE will show the location of your existing raido rune, if any.
+RAIDO SEVER will remotely smudge your existing raido rune, if any.
+
+Note: The northern areas only accessible through the wilderness are
+treated as a separate continent.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of balance

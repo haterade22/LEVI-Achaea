@@ -1,0 +1,21 @@
+Ability: Skyhammer (Record #2628)
+Associated skill: Duress
+Skillpoints required: 50999
+Blurb: The hand of Whiirh.
+Syntax: MANIFEST SKYHAMMER
+Abfile:
+Call down the very wrath of Whiirh, smiting those that fly above you
+with cataclysmic damage and casting them down to lie broken before your
+feet(*). There is a windup period while invoking this terrible power
+during which you may do nothing, and there is a one minute cooldown on a
+room after each use.
+
+* Deals -extreme- damage.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

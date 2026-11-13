@@ -1,0 +1,23 @@
+Ability: Axe (Record #862)
+Associated skill: Tekura
+Skillpoints required: 33999
+Blurb: A slow but powerful kick.
+Syntax: AXK <target>
+Abfile:
+This powerful kick is highly inaccurate and can only be landed against a
+prone opponent. However, it does extremely high damage to the target's
+head.
+
+This kick will briefly deliver the scrambled brains affliction. If used
+against a target who suffers from a mangled head, it shall
+deliver a severe blackout.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.50 seconds of balance

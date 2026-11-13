@@ -1,0 +1,19 @@
+Ability: Bind (Record #648)
+Associated skill: Puppetry
+Skillpoints required: 33999
+Blurb: Tie up your hapless opponent.
+Syntax: PUPPET BIND
+Extra info: Fashions:
+Required: 15
+Used    : 4
+Abfile:
+Tie up a victim through your puppet.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

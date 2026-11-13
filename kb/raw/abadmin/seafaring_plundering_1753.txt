@@ -1,0 +1,21 @@
+Ability: Plundering (Record #1753)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Command your Swashbucklers to board a grappled ship to pilfer their goods.
+Syntax: SHIP PLUNDER <full name/short name>
+SHIP PLUNDER
+Abfile:
+This will send your crew of Swashbucklers to board an enemy ship
+provided both vessels are adjacent, and one ship is grappling the other.
+Be wary, as subsequent plunder attempts will put the defending
+Swashbucklers on high alert, resulting in lower success rates and
+increased danger to your invading crew.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: deckhand4

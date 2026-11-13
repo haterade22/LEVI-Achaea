@@ -1,0 +1,17 @@
+Ability: Track (Record #431)
+Associated skill: Groves
+Skillpoints required: 14999
+Blurb: Constantly track the movement of anyone in the forest.
+Syntax: GROVE TRACK <target>
+GROVE TRACK OFF
+Abfile:
+Using this ability, you may track an adventurer's movement through the forest. GROVE TRACK OFF will cease this tracking.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 20 sunlight

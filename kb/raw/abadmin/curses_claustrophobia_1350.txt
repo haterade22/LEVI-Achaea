@@ -1,0 +1,17 @@
+Ability: Claustrophobia (Record #1350)
+Associated skill: Curses
+Skillpoints required: 9999
+Blurb: Fear of being under cover.
+Syntax: CURSE <target> CLAUSTROPHOBIA
+Abfile:
+Afflict your target with a great fear of enclosed spaces.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana

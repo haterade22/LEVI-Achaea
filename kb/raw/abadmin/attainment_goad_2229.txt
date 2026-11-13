@@ -1,0 +1,19 @@
+Ability: Goad (Record #2229)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Taunt your target into reckless attacks.
+Syntax: GOAD <target>
+Extra info: Gives denizen affliction: Recklessness
+Abfile:
+Pretend to be weak, goading your target into attacking you recklessly for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds
+Resource: 18 rage
+Skill specialisation: br_sentinel

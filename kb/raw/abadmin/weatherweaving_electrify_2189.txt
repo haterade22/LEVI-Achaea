@@ -1,0 +1,19 @@
+Ability: Electrify (Record #2189)
+Associated skill: Weatherweaving
+Skillpoints required: 21999
+Blurb: Sometimes, lightning does strike twice.
+Syntax: CAST ELECTRIFY AT <target>
+Abfile:
+This extremely potent spell allows you to summon forth a lightning
+strike against a foe. However, the spell is two fold; after the initial
+strike, a less potent one shall follow some seconds later.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 50 mana and 44 arcane power

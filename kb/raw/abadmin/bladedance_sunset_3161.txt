@@ -1,0 +1,26 @@
+Ability: Sunset (Record #3161)
+Associated skill: Bladedance
+Skillpoints required: 46999
+Blurb: Light on falling steel.
+Syntax: BLADE SUNSET <target> <LEFT|RIGHT>
+Abfile:
+As the sun descends at the close of day, so too shall your rapier fall
+upon your adversary. Delivered not as a traditional lateral or vertical
+slash but as a diagonal blow down upon either the left or right
+shoulder, this strike can be utterly devastating. If the head and arm
+adjacent to the shoulder you are aiming at are sufficiently damaged(*),
+both will be broken as a result of this strike, and tonal trauma takes
+place upon both limbs(**).
+
+* Both limbs must be damaged enough that the next bladedance attack
+would break them.
+** See AB BLADEDANCE TONAL.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

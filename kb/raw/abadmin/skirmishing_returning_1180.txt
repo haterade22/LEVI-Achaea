@@ -1,0 +1,20 @@
+Ability: Returning (Record #1180)
+Associated skill: Skirmishing
+Skillpoints required: 999
+Blurb: The ability to throw an axe such that it will return.
+Syntax: THROW HANDAXE AT <target>
+THROW HANDAXE <direction> AT <target>
+Abfile:
+This ability will allow your axe to return to your hand when thrown. It
+can target adventurers and denizens in room, but only adventurers in
+line of sight.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

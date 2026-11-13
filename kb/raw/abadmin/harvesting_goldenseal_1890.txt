@@ -1,0 +1,16 @@
+Ability: Goldenseal (Record #1890)
+Associated skill: Harvesting
+Skillpoints required: 20999
+Blurb: This Savannah-dwelling plant restores harmony when eaten.
+Syntax: HARVEST GOLDENSEAL
+Abfile:
+The goldenseal plant of the grasslands has the ability, when eaten, to restore harmony to your mind and body, healing afflictions such as stupidity, epilepsy, impatience, and dizziness, among others.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Leech (Record #654)
+Associated skill: Puppetry
+Skillpoints required: 55999
+Blurb: Leech the experience from your victim.
+Syntax: PUPPET LEECH
+Extra info: Fashions:
+Required: 35
+Used    : 5
+Abfile:
+This interesting and useful ability will allow a Puppetmaster to leech experience from a victim who is in a hunting party. What it essentially does is give experience to the Puppetmaster as if he or she was a part of the hunting party that the victim is in.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

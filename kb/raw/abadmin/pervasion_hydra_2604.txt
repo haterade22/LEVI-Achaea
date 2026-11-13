@@ -1,0 +1,32 @@
+Ability: Hydra (Record #2604)
+Associated skill: Pervasion
+Skillpoints required: 60000
+Blurb: The beast of Sllshya.
+Syntax: MANIFEST HYDRA
+Abfile:
+For when the situation is truly dire, you may be granted one of the
+beasts of Sllshya temporarily. These formidable beasts of legend are
+entirely uncontrollable even for one such as you, only giving their
+loyalty to he who rules over water. Once summoned, the hydra shall
+rampage, performing various room wide attacks periodically and wandering
+between bodies of water. Be warned, though the hydra will acknowledge
+you are also one of Sllshya's chosen and will not target you, your
+allies will be granted no such consideration(*).
+
+Finally, take note: the act of manifesting the hydra is terribly taxing,
+and you will be left on the brink of death upon calling one forth. You
+will also only be able to summon a hydra once every 30 minutes(**), and
+the hydra shall naturally depart from the prime plane after a time.
+
+* Unless they are also water lords, as the hydra will not target these.
+** Can only be called forth in a room that is underwater, or has had its
+water level raised. The cooldown is not applied if you enact this
+ability upon the Elemental Plane of Water.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

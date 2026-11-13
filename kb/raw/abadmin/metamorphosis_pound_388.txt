@@ -1,0 +1,17 @@
+Ability: Pound (Record #388)
+Associated skill: Metamorphosis
+Skillpoints required: 41999
+Blurb: Crash your powerful fists into a prone opponent.
+Syntax: POUND <target>
+This ability will be hidden on ablistings.
+Abfile:
+Pound your opponent's body with an enormously powerful blow that is even more devastating if the poor victim is frozen.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.75 seconds of balance

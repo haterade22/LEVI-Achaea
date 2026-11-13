@@ -1,0 +1,18 @@
+Ability: Convulsions (Record #2245)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Make your target's muscles contract uncontrollably.
+Syntax: STARE <target> CONVULSIONS
+Abfile:
+Use the evileye to cause your victim's limbs to contract and cause great pain. The convulsions will last for a short time, continually doing damage to the target.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_apostate

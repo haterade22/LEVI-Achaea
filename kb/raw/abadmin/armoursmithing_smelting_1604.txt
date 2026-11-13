@@ -1,0 +1,18 @@
+Ability: Smelting (Record #1604)
+Associated skill: Armoursmithing
+Skillpoints required: 60000
+Blurb: Smelt a piece of armour back to some useful commodities.
+Syntax: SMELT <weapon/armour>
+Abfile:
+This will smelt an armour or weapon down into around 10% of the
+component materials, providing it is large enough for some material to
+be salvaged.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

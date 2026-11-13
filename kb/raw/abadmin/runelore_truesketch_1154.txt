@@ -1,0 +1,17 @@
+Ability: Truesketch (Record #1154)
+Associated skill: Runelore
+Skillpoints required: 27999
+Blurb: Sketch more than one rune on the ground.
+Syntax: N/A
+Abfile:
+You have mastered the ability to coordinate three separate earth magics
+within the same space.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

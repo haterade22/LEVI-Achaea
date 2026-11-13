@@ -1,0 +1,17 @@
+Ability: Epilepsy (Record #1357)
+Associated skill: Curses
+Skillpoints required: 22999
+Blurb: Disrupt the nervous system of your victim.
+Syntax: CURSE <target> EPILEPSY
+Abfile:
+Cause your victim to go into seizures.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 70 mana

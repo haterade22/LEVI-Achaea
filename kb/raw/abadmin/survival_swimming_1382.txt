@@ -1,0 +1,15 @@
+Ability: Swimming (Record #1382)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Swim in the beautiful oceans, rivers, and lakes of Achaea.
+Syntax: SWIM <direction>
+Abfile:
+Using this ability, you can swim in lakes, rivers, and the ocean, albeit slowly.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

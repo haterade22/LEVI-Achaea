@@ -1,0 +1,21 @@
+Ability: Crux (Record #2854)
+Associated skill: Memorium
+Skillpoints required: 1
+Blurb: From which your will shall spring.
+Syntax: CRUX DRAW
+CRUX CLEANSE
+Abfile:
+The ritual blade of the practitioner of Memorium is key to almost all
+higher works of the art. Walk forth to the endless sands(*) and forge
+your focus for the trials to come.
+
+* Any desert room, under the light of the sun.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

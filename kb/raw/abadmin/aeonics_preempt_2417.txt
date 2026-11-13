@@ -1,0 +1,29 @@
+Ability: Preempt (Record #2417)
+Associated skill: Aeonics
+Skillpoints required: 20999
+Blurb: There is no escape.
+Syntax: CHRONO PREEMPT <target> [BOOST]
+CHRONO UNPREEMPT
+Abfile:
+By predicting where a person will be, whenever they try to move to an
+adjacent location from your current one you shall preempt them, moving
+to that location first.
+
+This ability requires you be unhindered(*). The effect lasts 15 seconds
+if unboosted. If boosted, it lasts for twice that. Additionally, if
+boosted the ability will not incur an equilibrium cost.
+
+* This requires you not be prone, have paralysis, or writhe-based
+afflictions; it does not include having balance or equilibrium.
+
+Note that after preempt expires against a target, that target is immune
+to -any- Depthswalker using preempt on them for a short time afterwards.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 250 age

@@ -1,0 +1,18 @@
+Ability: Pester (Record #2225)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Annoy your target to death.
+Syntax: PESTER <target>
+Abfile:
+Summon a minor denizen of the wilds to pester your target, constantly attacking and doing damage to your target for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_sentinel

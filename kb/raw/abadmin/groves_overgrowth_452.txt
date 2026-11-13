@@ -1,0 +1,23 @@
+Ability: Overgrowth (Record #452)
+Associated skill: Groves
+Skillpoints required: 41999
+Blurb: Return a totem to the embrace of Nature.
+Syntax: EVOKE OVERGROWTH
+Extra info: Imbued sunlight.
+Abfile:
+This ability must be performed in a location where a totem is implanted.
+By ensconcing the totem with an overgrowth of dense greenery, you may
+conceal its runes from view, rendering it powerless. A well-placed lash
+of fire may destroy the obscuring plantlife, returning the totem to full
+function.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 sunlight and 150 mana

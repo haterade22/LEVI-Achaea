@@ -1,0 +1,17 @@
+Ability: Heartstone (Record #961)
+Associated skill: Occultism
+Skillpoints required: 13999
+Blurb: Create a figurine of your heart to help give you mana.
+Syntax: HEARTSTONE
+Abfile:
+Using your karma, you can create a heartstone, which stores mana that will be drawn upon until the heartstone cracks.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1.50% karma

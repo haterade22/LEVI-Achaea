@@ -1,0 +1,34 @@
+Ability: Radiation (Record #2795)
+Associated skill: Sublimation
+Skillpoints required: 48999
+Blurb: Annihilation unleashed.
+Syntax: SUBSTANTIATE RADIATION
+This ability will be hidden on ablistings.
+Abfile:
+The coming of the Morning Star was an event so catastrophic that few
+incidents since have come close to displaying such pure destructive
+power. Though a full replication would be both impossible and the height
+of stupidity, masters of the school of Substantiation have learned to
+bring but a sliver of that which was back into reality. Upon initiation,
+you may do nothing, and after a short delay significant damage shall be
+inflicted upon all in your location. A short while after that, more
+damage will be inflicted, and if your channeling is permitted to reach
+its culmination a third time. Each strike is significantly more powerful
+from the last and indiscriminate(*). If your working reaches its final
+phase, all in the area will be totally blinded by the flash for a time.
+This working may only be enacted by an individual every so often, and
+also may not be repeatedly called forth in the same location.
+
+Overdraw effect: the ticks happen closer together.
+
+* The first two ticks do not hit the caster. The last one does.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 25% Wellspring Energy

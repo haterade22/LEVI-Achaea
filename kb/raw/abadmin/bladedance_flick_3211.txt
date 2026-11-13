@@ -1,0 +1,37 @@
+Ability: Flick (Record #3211)
+Associated skill: Bladedance
+Skillpoints required: 20999
+Blurb: Sometimes steel, sometimes song.
+Syntax: BLADE FLICK <target>
+Abfile:
+This flick with the blade focuses more on song than steel, permitting
+the bard to channel the nature of their songblessed weapon to greater
+effect. If successful your foe will be struck down with certain deadly
+conditions:
+
+From the front: crescendo, an enthralling condition which will only grow
+more dire the longer they dance to your tune(*).
+
+From the side: earworm, a condition that is sure to grow worse over
+time(**).
+
+From the back: both crescendo and earworm.
+
+* Each time someone afflicted with crescendo eats an herb that is not
+ash (which cures crescendo), the crescendo will build. At a certain
+point, this makes other abilities available (see AB COMPOSITION FINALE).
+** All bladedance attacks that deal damage deal additional damage
+against a target afflicted with earworm. This damage increases the
+longer the earworm remains uncured.
+*** When used against denizens, this ability deals psychic damage to
+your foe.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of balance

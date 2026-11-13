@@ -1,0 +1,21 @@
+Ability: Burn (Record #2770)
+Associated skill: Zeal
+Skillpoints required: 27999
+Blurb: Let the fire speak for you.
+Syntax: RECITE BURN <target>
+Abfile:
+Perhaps the most straight forward of all holy verses, but no less
+powerful for that. Send fire to scourge the flesh of your profane foe,
+leaving them tender and pained to such an extent that any attempt to
+apply a salve shall cause them to suffer in mind(*).
+
+* Drains mana on applying salves.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

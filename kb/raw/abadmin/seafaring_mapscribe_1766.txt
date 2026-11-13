@@ -1,0 +1,17 @@
+Ability: Mapscribe (Record #1766)
+Associated skill: Seafaring
+Skillpoints required: 50999
+Blurb: Create a map to where you are.
+Syntax: SCRIBE MAP
+Abfile:
+While at a known seamark location (most harbours are seamarks!), with a
+blank nautical map in hand, you may inscribe maps to assist in your
+later return.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

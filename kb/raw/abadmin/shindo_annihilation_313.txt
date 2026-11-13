@@ -1,0 +1,17 @@
+Ability: Annihilation (Record #313)
+Associated skill: Shindo
+Skillpoints required: 40999
+Blurb: Fury given fiery form.
+Syntax: SHIN ANNIHILATION
+Abfile:
+Sparked into flame by inner fury, you may release the unbridled might of your accumulated Shin energy in a flood of flames that will scorch all within reach. So forceful is this burst of heat that others may be flung from the location. Focus and control are essential in performing this advanced technique, lest you yourself succumb to the fire.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 40 Shin energy and 10 mana

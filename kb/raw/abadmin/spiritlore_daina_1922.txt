@@ -1,0 +1,23 @@
+Ability: Daina (Record #1922)
+Associated skill: Spiritlore
+Skillpoints required: 0
+Blurb: Daina, The Viridian.
+Syntax: INVOKE PURIFICATION
+Extra info: Attune effect: increased willpower regeneration.
+Abfile:
+By channeling the power of nature, you are able to drive diseases from
+your body with greatly increased efficiency.
+
+* Having the selarnia affliction prevents this ability.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 200 mana
+The ability name SYLVAN is mapped to this ability.

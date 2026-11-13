@@ -1,0 +1,31 @@
+Ability: Runeblades (Record #1166)
+Associated skill: Runelore
+Skillpoints required: 52999
+Blurb: Runewardens may empower a weapon as a legendary runeblade.
+Syntax: EMPOWER <weapon>
+SKETCH PITHAKHAN ON <weapon>
+SKETCH NAIRAT ON <weapon>
+SKETCH EIHWAZ ON <weapon>
+SKETCH HUGALAZ ON <weapon>
+Abfile:
+ With your expert training in Runelore, you can craft any knight's
+weapon into a powerful Runeblade.
+
+First sketch Lagul, Lagua, and Laguz upon the blade.
+Then stand firm upon the earth and EMPOWER the blade.
+
+Empowerment of a weapon lasts for 100 Achaean months, during which time
+the Lagul, Lagua, and Laguz runes will not fade. In addition, a
+Runeblade may have one other rune (Pithakhan, Nairat, Eihwaz, or Hugalaz
+only) sketched upon it, enhancing its powers even further.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Resource: 2000 mana

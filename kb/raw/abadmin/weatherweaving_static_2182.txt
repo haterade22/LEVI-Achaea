@@ -1,0 +1,21 @@
+Ability: Static (Record #2182)
+Associated skill: Weatherweaving
+Skillpoints required: 8999
+Blurb: Conjure forth a burst of static.
+Syntax: CAST STATIC AT <target>
+Abfile:
+This spell causes a burst of static, which will paralyse any adventurer
+it is focused upon.
+
+Against denizens, this spell will deal electrical damage.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.35 seconds of equilibrium
+Resource: 38 mana

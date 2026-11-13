@@ -1,0 +1,25 @@
+Ability: Eihwaz (Record #1162)
+Associated skill: Runelore
+Skillpoints required: 46999
+Blurb: A powerful vibration-dampening rune.
+Syntax: SKETCH EIHWAZ ON GROUND/<weapon>
+Abfile:
+ Inks required: 1 Blue, 1 Yellow
+Symbols: Yew
+
+When sketched upon the ground, this rune will dampen non-protected
+crystalline vibrations.
+
+When sketched upon a weapon, this rune will randomly mask the effects of
+venoms delivered by the weapon. To sketch it upon a weapon requires the
+weapon to be a RUNEBLADE.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

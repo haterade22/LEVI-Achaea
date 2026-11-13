@@ -1,0 +1,17 @@
+Ability: Stoneback (Record #2054)
+Associated skill: Artificing
+Skillpoints required: 30999
+Blurb: A hulking guardian of Earth.
+Syntax: ELEMENTAL BULWARK <ME|target>
+Abfile:
+The formidable servant of Garash that is the stoneback will permit the
+raising of a magical shield for yourself or for another.
+Useable on: adventurers and self
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium

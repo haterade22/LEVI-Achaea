@@ -1,0 +1,18 @@
+Ability: Awaken (Record #2915)
+Associated skill: Charnel
+Skillpoints required: 47999
+Blurb: The desert's wrath.
+Syntax: ACCURSED AWAKEN
+Abfile:
+Awaken the wrath of the desert in a sandy location, kicking up a
+terrible sandstorm to obscure the vision of those who would seek to
+divine specifics about the immediate surroundings.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium

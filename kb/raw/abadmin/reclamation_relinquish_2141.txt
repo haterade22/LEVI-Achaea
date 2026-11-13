@@ -1,0 +1,19 @@
+Ability: Relinquish (Record #2141)
+Associated skill: Reclamation
+Skillpoints required: 999
+Blurb: Sometimes one must retreat to advance.
+Syntax: RECLAMATION RELINQUISH
+Abfile:
+Sometimes, one must retreat if they wish to claim a greater prize at a
+later date. This ability will allow you to release your claim on any
+locations that you may have reclaimed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Resource: 100 mana

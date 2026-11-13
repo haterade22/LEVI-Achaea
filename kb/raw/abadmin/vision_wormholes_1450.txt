@@ -1,0 +1,16 @@
+Ability: Wormholes (Record #1450)
+Associated skill: Vision
+Skillpoints required: 35999
+Blurb: The ability to sense wormholes in your location.
+Syntax: WORMHOLES
+Abfile:
+This ability will tell you if there is a wormhole in your location and where it leads to.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

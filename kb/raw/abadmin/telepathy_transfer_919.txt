@@ -1,0 +1,17 @@
+Ability: Transfer (Record #919)
+Associated skill: Telepathy
+Skillpoints required: 14499
+Blurb: Transfer a telepathic lock to a fellow telepath.
+Syntax: MIND TRANSFER <telepath>
+Abfile:
+Using this ability will allow you to transfer a mind lock to another telepath. The target telepath must be in the same area as you, for this is a delicate operation.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 100 mana and 400 willpower

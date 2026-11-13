@@ -1,0 +1,21 @@
+Ability: Uruz (Record #1135)
+Associated skill: Runelore
+Skillpoints required: 299
+Blurb: Heal your allies with earth magic.
+Syntax: SKETCH URUZ ON GROUND
+Abfile:
+ Inks required: 1 Blue, 1 Yellow
+Symbol: Lightning Bolt
+
+Heals you and your allies.
+
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Rewind (Record #2406)
+Associated skill: Aeonics
+Skillpoints required: 999
+Blurb: The past becomes the present.
+Syntax: CHRONO REWIND [BOOST]
+Abfile:
+This ability will allow you to rewind time to a point when you were
+healthier, restoring some health.
+
+When boosted, this ability rewinds further, restoring more health.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 20 age

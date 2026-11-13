@@ -1,0 +1,21 @@
+Ability: Drunkensailor (Record #1632)
+Associated skill: Swashbuckling
+Skillpoints required: 26999
+Blurb: A stance designed to make your movements unpredictable.
+Syntax: DRUNKENSAILOR
+UNSTANCE/STANCE NONE
+Abfile:
+Enter the stance of the drunken sailor. Makes you much harder to hit with
+normal attacks from physical weaponry. There is a mana drain associated with
+this stance. To end the stance, either switch to another stance, or select
+STANCE NONE or UNSTANCE.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Drain: Mana

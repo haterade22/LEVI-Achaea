@@ -1,0 +1,23 @@
+Ability: Troubadour (Record #3239)
+Associated skill: Sagas
+Skillpoints required: 60000
+Blurb: Where ever the story takes you.
+Syntax: passive
+Abfile:
+A good storyteller must go where ever the tale may take them, though
+equally it is true that some legends just don't hit as hard when
+constantly on the move.
+
+You may now move while performing many of your sagas for an audience,
+them no longer being interrupted if your location changes between recite
+stages(*).
+
+* Channeled sagas are excluded.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

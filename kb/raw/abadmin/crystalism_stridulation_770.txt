@@ -1,0 +1,25 @@
+Ability: Stridulation (Record #770)
+Associated skill: Crystalism
+Skillpoints required: 36999
+Blurb: Destroy the equilibrium of your enemies.
+Syntax: EMBED STRIDULATION
+Abfile:
+ Shapes required: Cylinder, Polyhedron
+
+Stridulation vibrations afflict your enemies with stridulating
+periodically. This affliction shall cause your hostile vibrations to
+periodically coalesce upon their frequency so long as it remains upon
+their person.
+
+* Note that the retardation and silence vibrations are excluded from the
+hostile vibrations which will do so.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

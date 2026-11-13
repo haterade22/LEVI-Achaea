@@ -1,0 +1,19 @@
+Ability: Whirlwind (Record #865)
+Associated skill: Tekura
+Skillpoints required: 44999
+Blurb: The most powerful kick.
+Syntax: WWK <target>
+Abfile:
+The most impressive of all kicks, this one is essentially two spinning
+crescent kicks aimed at the head of an unlucky opponent.
+
+This kick will briefly deliver the scrambled brains affliction.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of leg balance

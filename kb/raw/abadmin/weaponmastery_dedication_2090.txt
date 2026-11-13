@@ -1,0 +1,20 @@
+Ability: Dedication (Record #2090)
+Associated skill: Weaponmastery
+Skillpoints required: 48000
+Blurb: Your dedication to victory can overcome all barriers.
+Syntax: DEDICATION
+Abfile:
+Your dedication to victory is so great that at the cost of your own
+health, you may fight through the effects of paralysis.
+
+Dedication requires max ferocity, and your ferocity is halved upon use.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 mana
+Skill specialisation: knight_snb

@@ -1,0 +1,16 @@
+Ability: Azurite (Record #2023)
+Associated skill: Transmutation
+Skillpoints required: 11749
+Blurb: Link with the realm of the Deathgod.
+Syntax: EXTRACT AZURITE
+TRANSMUTATE <#> <mineral> TO AZURITE
+Abfile:
+The azurite mineral will grant the ability to sense the deaths of others.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

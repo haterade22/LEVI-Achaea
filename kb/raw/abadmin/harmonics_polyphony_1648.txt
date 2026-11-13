@@ -1,0 +1,15 @@
+Ability: Polyphony (Record #1648)
+Associated skill: Harmonics
+Skillpoints required: 1499
+Blurb: The ability to maintain two harmonics simultaneously.
+Syntax: None
+Abfile:
+Polyphony is a passive ability. Those with polyphony are able to sustain two simultaneous harmonics in the same location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

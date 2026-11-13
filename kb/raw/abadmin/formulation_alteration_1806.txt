@@ -1,0 +1,28 @@
+Ability: Alteration (Record #1806)
+Associated skill: Formulation
+Skillpoints required: 16000
+Blurb: Modify various properties of your compounds.
+Syntax: ENHANCE POTENCY|STABILITY|VOLATILITY OF <compound>
+DILUTE POTENCY|STABILITY|VOLATILITY OF <compound>
+AMALGAMATE <compound> <type> <amount> <type> <amount>...
+Abfile:
+You have reached a point in your training where you are able to more
+directly alter the compounds that you create.
+
+Your mastery is such that you will be able to alter the potency,
+stability, or volatility. Although the true alchemist shall find
+experimentation to be the best guide, as a general rule volatility shall
+cause a faster reaction, stability shall allow the compound to react for
+a longer period of time, and potency shall cause a more concentrated
+effect.
+
+You may also specify the potency, stability and/or volatility of a
+compound at the time you AMALGAMATE it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

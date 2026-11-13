@@ -1,0 +1,21 @@
+Ability: Ruinate (Record #2828)
+Associated skill: Tarot
+Skillpoints required: 55999
+Blurb: Two sides of the same coin.
+Syntax: RUINATE <card> at <target>
+Abfile:
+So few truly understand the duality inherent in the nature of Chaos.
+With a minor application of your recondite knowledge, twist one of the
+major arcana just so to display its opposite face.
+
+Currently, the lovers, justice, creator, and wheel cards may be
+ruinated. See their ability files for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: occultist_tarot

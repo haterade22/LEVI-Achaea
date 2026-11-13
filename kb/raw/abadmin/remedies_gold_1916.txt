@@ -1,0 +1,16 @@
+Ability: Gold (Record #1916)
+Associated skill: Remedies
+Skillpoints required: 60000
+Blurb: Liquid gold.
+Syntax: None
+Abfile:
+When using gold sovereigns as an ingredient in your remedies, each part
+will require 20 gold sovereigns.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

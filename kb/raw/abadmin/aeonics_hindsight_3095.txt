@@ -1,0 +1,22 @@
+Ability: Hindsight (Record #3095)
+Associated skill: Aeonics
+Skillpoints required: 48999
+Blurb: Mistakes shall not be replicated.
+Syntax:
+Abfile:
+When you miss a blow with a manifested scythe against a target due to
+the clumsiness affliction, you will seize upon that individual's
+temporal flow, ensuring that if you miss due to the same reason again in
+the immediate future(*), you will mitigate the error(**).
+
+* Six seconds.
+** The damage of your attack is cut by 80%, but you will still land the
+venoms.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

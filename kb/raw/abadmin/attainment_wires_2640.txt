@@ -1,0 +1,18 @@
+Ability: Wires (Record #2640)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Thin filaments to shred defensive barriers.
+Syntax: MANIFEST WIRES <target>
+Abfile:
+Create thin filaments of flame to rip through any magical shields that
+would surround your foe.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_fire_lord

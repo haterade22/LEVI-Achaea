@@ -1,0 +1,30 @@
+Ability: Cube (Record #1995)
+Associated skill: Conjuration
+Skillpoints required: 46999
+Blurb: The vibration-dampening cube sigil.
+Syntax: BEGIN CREATION OF CUBE SIGIL
+Abfile:
+ Put it on the ground to interrupt vibrations.
+Throw at the ground to prepare for the suppression of the protective
+reverberation vibration.
+
+Type:
+   Created item.
+
+Actions:
+   3xchant "Dara acti me prishna eni not", 1
+
+Comms:
+   2 silver
+
+The cube sigil will, when placed on the ground, try to destroy
+vibrations in the room. The presence of a reverberation
+vibration will prevent this.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

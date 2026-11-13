@@ -1,0 +1,20 @@
+Ability: Aerial (Record #2170)
+Associated skill: Weatherweaving
+Skillpoints required: 34999
+Blurb: Summon an air elemental to carry you to the skies.
+Syntax: CAST AERIAL [OVERCHARGE]
+Abfile:
+This powerful spell allows you to lift yourself on the aircurrents,
+granting flight.
+
+Overcharging will allow you to bypass room hindering effects.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 15 arcane power

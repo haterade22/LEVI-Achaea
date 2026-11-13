@@ -1,0 +1,15 @@
+Ability: Fording (Record #1507)
+Associated skill: Riding
+Skillpoints required: 12999
+Blurb: Ford through rivers on your mount without taking damage.
+Syntax: FORD <direction>
+Abfile:
+You can ford across rivers and other watery areas upon your steed. As long as you remain on your steed, you will not be endangered of drowning.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

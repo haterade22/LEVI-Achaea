@@ -1,0 +1,17 @@
+Ability: Eurypteria (Record #1958)
+Associated skill: Toxicology
+Skillpoints required: 1499
+Blurb: Gives the victim delusions of invulnerability.
+Syntax: None
+Extra info: Ingredients: 1 lobelia, 1 goldenseal, 1 redink or
+1 argentum, 1 plumbum, 1 redink
+Abfile:
+Afflict your victim with recklessness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

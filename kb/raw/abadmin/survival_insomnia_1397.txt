@@ -1,0 +1,17 @@
+Ability: Insomnia (Record #1397)
+Associated skill: Survival
+Skillpoints required: 29999
+Blurb: Cause yourself to be unable to fall asleep.
+Syntax: INSOMNIA
+RELAX INSOMNIA
+Abfile:
+This ability will allow you to give yourself insomnia - a useful defence against being put to sleep involuntarily.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

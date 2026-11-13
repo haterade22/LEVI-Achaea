@@ -1,0 +1,23 @@
+Ability: Lobelia (Record #2204)
+Associated skill: Propagation
+Skillpoints required: 13999
+Blurb: A brightly coloured plant used to cure phobias.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH LOBELIA
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: You are less likely to fall prey to the muddling effects of the
+stupidity affliction.
+Body: You will be immune to fear effects from phobia afflictions.
+Arms: Your thornrend attacks will additionally deliver the vertigo
+affliction.
+
+Legs: Move faster through forests.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

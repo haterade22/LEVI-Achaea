@@ -1,0 +1,86 @@
+Ability: Transmogrify (Record #982)
+Associated skill: Occultism
+Skillpoints required: 60000
+Blurb: Reincarnate as a Chaos Lord.
+Syntax: TRANSMOGRIFY ACTIVATE
+TRANSMOGRIFY DEACTIVATE
+TRANSMOGRIFY STATUS
+MUTATIONS
+Extra info: Activate cooldown: 12.00 seconds of equilibrium, 30% karma
+Deactivate cooldown: 5.00 seconds of equilibrium, 2% karma
+Abfile:
+Congratulations! Your studies have now reached the plateau wherein your
+mastery of the occult is so great that you can now prepare your body and
+aura for true transformation. Instead of dying, you will transmogrify
+into a being of pure chaos--you will become a Chaos Lord. You will
+receive one change of the body, skin, and a very odd miscellaneous
+change
+which correspond to the effects listed below. MUTATIONS will show you
+exactly what the functions of the mutations you have are. It will not
+show useless mutations (see below).
+
+By raising a barrier between yourself and the Chaos Lord's spirit, you
+may prevent your transformation from occurring upon death. This barrier
+can be lowered in the future at a much smaller cost.
+
+TRANSMOGRIFY STATUS will show the state of the Chaos Lord within your
+soul, if any.
+
+You may only use this ability once every 3-9 (random) Achaean days.
+
+* Note: The chance for positive changes outweighs the chance for
+negative changes by nearly a 2-1 margin. It is also possible to get a
+useless mutation. For instance, bulging muscles that give no strength
+advantage, or blotchy skin that does not subject you to greater magical
+damage.
+
+One Body Change             Description
++1 to +3 STR                bulging muscles
++1 to +3 INT                an expanded skull
++1 to +3 DEX                double joints
++1 to +3 CON                a gorilla-like body
+-1 to -3 STR                stringy muscles
+-1 to -3 INT                a caved forehead
+-1 to -3 DEX                stiff joints
+-1 to -3 CON                an anorexic body
+
+One Skin Change             Description
+Level 1 to 3 Cold           blue fur
+Level 1 to 3 Fire           red scales
+Level 1 to 3 Magic          purple fur
+Level 1 to 3 Elect.         white scales
+Level 1 to 3 Poison         black scales
+Level 1 to 3 Blunt          hardened skin
+Level 1 to 3 Cutting        bumpy skin
+Level 1 to 3 Asphyxiation   porous skin
+Level 1 to 3 Psychic        porcupine needles
+Level -1 to -3 Cold         papery skin
+Level -1 to -3 Fire         fluffy feathers
+Level -1 to -3 Magic        blotchy skin
+Level -1 to -3 Elect.       silvery skin
+Level -1 to -3 Poison       mottled skin
+Level -1 to -3 Blunt        bruised skin
+Level -1 to -3 Cutting      thin skin
+Level -1 to -3 Asphyxiation waxy skin
+Level -1 to -3 Psychic      pocked skin
+
+One Misc. Change            Description
+Level 1 to 2 Health Regen   a chicken-like head
+Level 1 to 2 Mana Regen     frog feet
+Level 1 to 2 Will Regen     bulging eyes
+Level 1 to 2 End. Regen     elephantine legs
+Level 1 slow bal            a bloated belly
+Level 1 slow eq             a protruding brow
+Level 1 to 2 slow wake      droopy eyes
+Level 1 slow heal           a sunken chest
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Karma

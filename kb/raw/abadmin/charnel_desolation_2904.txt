@@ -1,0 +1,24 @@
+Ability: Desolation (Record #2904)
+Associated skill: Charnel
+Skillpoints required: 40999
+Blurb: and devastation.
+Syntax: ACCURSED PERFORM THE RITUAL OF DESOLATION <area>
+Abfile:
+Call down the ritual of Desolation upon an area, and all that lies under
+open sky shall return to the endless Eternity(*). This ritual can only
+be called down on an area every so often(**).
+
+* All outdoors area count as natural sand while this ritual as active
+(lasts 30 minutes).
+** Areas have a 2 hour grace period after Desolation fades before they
+may be impacted by this ritual again.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Skill specialisation: charnel_rituals

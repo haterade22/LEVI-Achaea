@@ -1,0 +1,20 @@
+Ability: Flare (Record #3050)
+Associated skill: Excision
+Skillpoints required: 37999
+Blurb: Her radiance finds all.
+Syntax: PERFORM FLARE <target>
+Abfile:
+Direct the light to shine upon an enemy of Creation; no doubt they shall
+be found wanting.
+
+* Gives the darkshade affliction.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of wrath balance
+Resource: 5% Holy Wrath

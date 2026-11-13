@@ -1,0 +1,17 @@
+Ability: Splinter (Record #2335)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Your lightning breath shatters denizen shields.
+Syntax: SPLINTER <target>
+Abfile:
+Blast your target with a breath attack of rage-infused lightning, splintering a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_silver_dragon

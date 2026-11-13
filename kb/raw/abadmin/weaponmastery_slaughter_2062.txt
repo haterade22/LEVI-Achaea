@@ -1,0 +1,17 @@
+Ability: Slaughter (Record #2062)
+Associated skill: Weaponmastery
+Skillpoints required: 4500
+Blurb: Dispense with your opposition.
+Syntax: SLAUGHTER <target> [venom]
+Abfile:
+Deliver a single, powerful blow to shatter bone and rend flesh.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

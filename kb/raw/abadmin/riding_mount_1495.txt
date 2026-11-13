@@ -1,0 +1,17 @@
+Ability: Mount (Record #1495)
+Associated skill: Riding
+Skillpoints required: 0
+Blurb: You can mount a steed.
+Syntax: MOUNT <steed>
+DISMOUNT
+Abfile:
+If you have the riding skill to ride a specific steed (or a steed of a similar level), you can mount and dismount it, assuming it is loyal to you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

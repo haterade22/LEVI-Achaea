@@ -1,0 +1,17 @@
+Ability: Highleap (Record #1636)
+Associated skill: Swashbuckling
+Skillpoints required: 38999
+Blurb: The sky is within your reach.
+Syntax: LEAP HIGH
+LAND
+Abfile:
+So powerful are your legs that you may leap high into the sky, briefly eluding gravity's grip. Beware that you lack the control to move about while up in the air.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.25 seconds of balance

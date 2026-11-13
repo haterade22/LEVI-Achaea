@@ -1,0 +1,31 @@
+Ability: Pyradius (Record #988)
+Associated skill: Domination
+Skillpoints required: 3999
+Blurb: Pyradius, the firelord.
+Syntax: COMMAND FIRELORD AT <target> <affliction>
+Abfile:
+Pyradius will send his firelords to assist you. These Chaotic minions
+have the power to convert the afflictions your enemies labour into other
+conditions:
+
+- Whisperingmadness becomes recklessness.
+
+- Manaleech becomes anorexia.
+
+- Healthleech becomes psychic damage (this does not cure the
+healthleech).
+
+When primebonded, the firelords will strike down those in your location
+and adjacent ones with Pyradius' fire, burning them and setting them
+ablaze.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of entity balance
+Resource: 50 mana
+The ability name FIRELORD is mapped to this ability.

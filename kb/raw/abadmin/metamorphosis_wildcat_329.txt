@@ -1,0 +1,19 @@
+Ability: Wildcat (Record #329)
+Associated skill: Metamorphosis
+Skillpoints required: 299
+Blurb: A small untamed feline. Alert and perceptive.
+Syntax: MORPH WILDCAT
+Extra info: Powers: Alertness
+Nightsight
+Scratch
+Abfile:
+A small untamed feline. Alert and perceptive.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 20 mana

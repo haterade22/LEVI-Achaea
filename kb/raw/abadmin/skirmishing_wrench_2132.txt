@@ -1,0 +1,17 @@
+Ability: Wrench (Record #2132)
+Associated skill: Skirmishing
+Skillpoints required: 50999
+Blurb: Gut them like a fish.
+Syntax: WRENCH [venom]
+Abfile:
+You may wrench your weapon if an opponent is impaled upon it, causing
+terrible internal damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

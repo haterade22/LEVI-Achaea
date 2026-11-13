@@ -1,0 +1,16 @@
+Ability: Myrrh (Record #1880)
+Associated skill: Harvesting
+Skillpoints required: 2499
+Blurb: A sticky bush that, when eaten, increases scholasticism.
+Syntax: HARVEST MYRRH
+Abfile:
+The gum of the myrrh bush may be eaten to increase your learning potential.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

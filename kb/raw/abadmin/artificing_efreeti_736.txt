@@ -1,0 +1,17 @@
+Ability: Efreeti (Record #736)
+Associated skill: Artificing
+Skillpoints required: 19999
+Blurb: A lesser flame of Kkractle.
+Syntax: None
+Abfile:
+This lesser flame of Kkractle, when summoned, will begin to spin wildly,
+setting any enemies in your location ablaze periodically.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Mana

@@ -1,0 +1,17 @@
+Ability: Resurgence (Record #2599)
+Associated skill: Pervasion
+Skillpoints required: 50999
+Blurb: Your power is absolute.
+Syntax: MANIFEST RESURGENCE
+Abfile:
+Destroy the profane bonds that would seek to part your waters,
+resubmerging your current and any adjacent rooms that labour under this
+outrage.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

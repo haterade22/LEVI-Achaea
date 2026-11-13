@@ -1,0 +1,23 @@
+Ability: Flamewhip (Record #2548)
+Associated skill: Ignition
+Skillpoints required: 399
+Blurb: Scourge their flesh with a lash of flame.
+Syntax: IGNITE FLAMEWHIP <target>
+Abfile:
+Summon forth a whip of flame with which to scourge the flesh of your foe
+and deal damage.
+
+If the target is an adventurer, they will be set on fire; if they have
+less than 75% of their maximum health, they will be afflicted with
+sensitivity. If they have less than 50% of their maximum health or lack
+the temperance defence, they will be afflicted with both paralysis and
+sensitivity.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

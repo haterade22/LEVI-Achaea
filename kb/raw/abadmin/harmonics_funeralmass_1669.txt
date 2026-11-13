@@ -1,0 +1,17 @@
+Ability: Funeralmass (Record #1669)
+Associated skill: Harmonics
+Skillpoints required: 42999
+Blurb: The dark, mournful mass with the power to slay.
+Syntax: PLAY FUNERALMASS AT <target>
+Abfile:
+The funeral mass is a song of deep sorrow and sadness. Its melancholy tune, if played without interruption, has such power that any it is directed to will be so overwhelmed with emotion that he or she will simply pass on from this life.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 175 mana

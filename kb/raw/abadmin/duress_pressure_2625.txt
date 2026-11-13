@@ -1,0 +1,24 @@
+Ability: Pressure (Record #2625)
+Associated skill: Duress
+Skillpoints required: 42999
+Blurb: To oppose Whiirh weighs heavily.
+Syntax: AERO PRESSURE <target>
+Abfile:
+Increase the pressure around your target. The more weakened your target
+is, the more pressure you will be able to build at any one time(*).
+Additionally, while the air pressure is raised around a target, their
+attempts to move will be delayed somewhat(**).
+
+* For the purposes of this ability, the more of manaleech, disloyalty
+and deadening a target suffers from. A max of two can boost this effect
+at any single point in time.
+** When pressure has been raised at least twice, the target will also be
+unable to perform many leaping-style abilities.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,23 @@
+Ability: Carve (Record #2064)
+Associated skill: Weaponmastery
+Skillpoints required: 9000
+Blurb: Carve through your victim's defences.
+Syntax: CARVE <target>
+Abfile:
+This ability allows the user to carve through defences that would keep
+them from their opponent. If both the rebounding aura and shield defence
+are present, both are stripped, if only one is present, a follow-up
+damaging slash will be dealt.
+
+This can only be done using a bladed weapon.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

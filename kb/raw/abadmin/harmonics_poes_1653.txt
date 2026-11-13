@@ -1,0 +1,22 @@
+Ability: Poes (Record #1653)
+Associated skill: Harmonics
+Skillpoints required: 9999
+Blurb: Draw on the Place of Eternal Song for emergency needs.
+Syntax: PLAY POES <harmonic>             (Use a harmonic from the POES)
+PLAY AETERNAM                    (What harmonics are in the POES)
+PLAY AETERNAM <harmonic>         (Attempt to add a harmonic)
+Extra info: List in POES: 350 mana
+Add to POES: 8.00 seconds of equilibrium and 350 mana
+Use from POES: 3.60 seconds of equilibrium, 150 mana + mana cost of the chosen harmonic
+Abfile:
+Harmonics stored via the Aeternam into the Place of Eternal Song may be drawn out via the POES. The bard may draw a harmonic from the POES even if not wielding the proper bardic instrument, or webbed, paralysed, transfixed, tied up in ropes, or entrapped by the hanged man. If the bard is not discomfited in any of these ways, then a harmonic drawn from the POES still gives some advantage: the performance is less disturbing of the bard's equilibrium.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Mana

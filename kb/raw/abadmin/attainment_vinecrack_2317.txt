@@ -1,0 +1,17 @@
+Ability: Vinecrack (Record #2317)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Crack a denizen's shield like a tough nut.
+Syntax: VINECRACK <target>
+Abfile:
+Wrap your target in vines which constrict around it, shattering a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_druid

@@ -1,0 +1,25 @@
+Ability: Pantheon (Record #3231)
+Associated skill: Woe
+Skillpoints required: 57999
+Blurb: Divine wrath unleashed.
+Syntax: RECITE PANTHEON
+Abfile:
+In all the long histories of the world have the Pantheon rarely marched
+to war united, and the resolve must be great indeed for such a dire
+event to transpire. Speak this tale of battle met and all who share a
+cause with you(*) will share in a fragment of that resolve, becoming
+numb to the ravages of war(**). This tale is a difficult one to tell,
+and you may only do so infrequently(***).
+
+* All Cyrenians in your location.
+** All affected will gain the numbness defence for twenty five seconds.
+*** This tale can only be recited once every half hour.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds of voice balance and 3.00 seconds of equilibrium

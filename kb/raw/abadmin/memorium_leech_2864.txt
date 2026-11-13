@@ -1,0 +1,21 @@
+Ability: Leech (Record #2864)
+Associated skill: Memorium
+Skillpoints required: 20999
+Blurb: To draw out the poison.
+Syntax: TRACE LEECH <ME|target>
+Abfile:
+One of the lesser logographs, the leech cannot be worked into an
+epitaph, though it is useful all the same. When traced for yourself or
+another this logograph shall periodically draw out the afflictions which
+plague you(*).
+
+* Roughly every ten seconds, and lasting for five minutes.
+Useable on: adventurers and self
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance

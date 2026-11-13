@@ -1,0 +1,19 @@
+Ability: Duel (Record #3103)
+Associated skill: Chivalry
+Skillpoints required: 60000
+Blurb: Let it be settled on the field of combat.
+Syntax: HONOUR CHALLENGE <target>
+Abfile:
+Sometimes things can only be settled one way: with honour and steel and
+blood to pay the price. While standing before the battlehorn in the
+Guild's Keep, you may issue a challenge for all the world to know
+against an individual: let their cowardice be on full display if they
+decline to take up arms in defence of their beliefs.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

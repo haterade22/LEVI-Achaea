@@ -1,0 +1,20 @@
+Ability: Wavesurge (Record #2728)
+Associated skill: Emulation
+Skillpoints required: 2999
+Blurb: The might of the raging waters.
+Syntax: ENACT WAVESURGE
+Abfile:
+Call upon the might of the waves to carry you away. This shall throw you
+between 1 and three rooms in a random direction.
+
+There is a delay before you may call upon this after doing so
+previously.
+Useable on: self
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

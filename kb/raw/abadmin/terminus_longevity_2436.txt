@@ -1,0 +1,24 @@
+Ability: Longevity (Record #2436)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: Who doesn't want to live forever?
+Syntax:
+Abfile:
+You have now unlocked the longevity research tree. This has a focus on
+abilities to make you heal yourself more efficiently, or to push the
+boundaries of what is possible in that capacity.
+
+Research available in this tree:
+Ukhia               Your blood is not for them to spill.
+Qamad               A deeper trance.
+Thi                 No wound can stop you.
+Fliennad            Twice is better than once.
+Uraiad              Why settle for worse?
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

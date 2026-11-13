@@ -1,0 +1,16 @@
+Ability: Saltwater (Record #1576)
+Associated skill: Gathering
+Skillpoints required: 299
+Blurb: Pure essence of the ocean.
+Syntax: GATHER SALTWATER [INTO <vial>]
+Abfile:
+While in an ocean environment you can gather a small amount of pure seawater to refine into salt. Be sure to have a container capable of holding liquids (such as a vial) in your inventory.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

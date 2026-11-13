@@ -1,0 +1,18 @@
+Ability: Safeguard (Record #2284)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: A protective rune that absorbs damage.
+Syntax: SAFEGUARD <target>
+Abfile:
+Protects a target with a shimmering rune that absorbs 40% of the target's health in damage. Fades in 10 seconds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 57.00 seconds
+Resource: 35 rage
+Skill specialisation: br_runewarden

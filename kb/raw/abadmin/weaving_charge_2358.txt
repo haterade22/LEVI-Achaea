@@ -1,0 +1,17 @@
+Ability: Charge (Record #2358)
+Associated skill: Weaving
+Skillpoints required: 999
+Blurb: A simple but deadly rush.
+Syntax: WEAVE CHARGE <target>
+Abfile:
+Charge at your target, and drive a spear into them, causing damage and
+some minor bleeding.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

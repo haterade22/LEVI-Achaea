@@ -1,0 +1,20 @@
+Ability: Cleansing (Record #1068)
+Associated skill: Devotion
+Skillpoints required: 41999
+Blurb: Rid your enemies of their unclean aspects.
+Syntax: PERFORM RITE OF CLEANSING
+Abfile:
+This relatively short-lived rite will begin slowly stripping the
+defences of any enemies in the room. It shall always strip the blackwind
+or astralform defences first.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 300 devotion

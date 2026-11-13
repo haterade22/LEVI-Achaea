@@ -1,0 +1,15 @@
+Ability: Soulfulvoice (Record #1704)
+Associated skill: Voicecraft
+Skillpoints required: 60000
+Blurb: Sing through vibrational barriers to reach your audience.
+Syntax: None
+Abfile:
+Exercising such control over your voice that you are able to penetrate vibrational barriers to reach your audience.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

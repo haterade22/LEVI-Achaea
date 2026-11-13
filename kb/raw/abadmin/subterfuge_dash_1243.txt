@@ -1,0 +1,15 @@
+Ability: Dash (Record #1243)
+Associated skill: Subterfuge
+Skillpoints required: 25999
+Blurb: Sprint in a particular direction.
+Syntax: DASH <direction> [distance] (Between 1 and 11 rooms)
+Abfile:
+Sprint quickly in a particular direction.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

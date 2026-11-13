@@ -1,0 +1,11 @@
+Ability: Lists (Record #1412)
+Associated skill: Vision
+Maps to record 1411 (LIST).
+The ability name PHIALLIST is mapped to this ability.
+The ability name DECAYLIST is mapped to this ability.
+The ability name DOLLLIST is mapped to this ability.
+The ability name ELIXSUM is mapped to this ability.
+The ability name ENCHANTLIST is mapped to this ability.
+The ability name FISHLIST is mapped to this ability.
+The ability name PUPPETLIST is mapped to this ability.
+The ability name VENOMSUM is mapped to this ability.

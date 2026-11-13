@@ -1,0 +1,17 @@
+Ability: Manipulate (Record #2717)
+Associated skill: Psionics
+Skillpoints required: 26999
+Blurb: Controlling the self is of paramount concern.
+Syntax: PSI MANIPULATE <cmd>
+Abfile:
+Drive your body into action even when paralysed through sheer force of
+will.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 3.30 seconds of equilibrium

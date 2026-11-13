@@ -1,0 +1,23 @@
+Ability: Unbowed (Record #3042)
+Associated skill: Excision
+Skillpoints required: 12999
+Blurb: For Creation, you stand.
+Syntax: PERFORM UNBOWED
+Abfile:
+This defence will grant you a great surge of health when you enter a
+drastically wounded state, similar to a monk's vitality. Notably
+however, your faith is so strong that unlike a monk, this ability will
+even save you from blows that would otherwise slay you(*).
+
+* Excluding if the damage was unblockable.
+*** There is a cooldown after this fires before you may raise the
+defence again.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

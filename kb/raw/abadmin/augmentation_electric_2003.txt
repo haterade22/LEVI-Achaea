@@ -1,0 +1,31 @@
+Ability: Electric (Record #2003)
+Associated skill: Augmentation
+Skillpoints required: 5999
+Blurb: Enchant rings with electric resistance.
+Syntax: BEGIN ENCHANTMENT OF <ring> WITH ELECTRIC
+ACTIVATE ELECTRIC RESISTANCE
+Abfile:
+ To use:
+   Can be activated once it is worn.
+
+Type:
+   Enchanted on rings.
+
+Actions:
+   2x5, 2x9, 2x12, 2x9, 2x7, 2x10, 2x15, 2x10, 4x7
+
+Comms:
+   5 gold bars
+
+A ring of electric resistance will grant a defence reducing the effects
+of electric damage.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name ELECTRICALRESISTANCE is mapped to this ability.

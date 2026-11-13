@@ -1,0 +1,28 @@
+Ability: Quivers (Record #545)
+Associated skill: Discipline
+Skillpoints required: 15000
+Blurb: Take full advantage of your quiver.
+Syntax: ENVENOM ARROW[S] [number of arrows] <colour> <venom>
+INSPECT QUIVER
+DYE <number of arrows> ARROW[S] <colour>
+SWITCH <colour>
+Abfile:
+Your mastery of quivers allows you to dye and envenom arrows from vials in your possession to be stored in your quiver.
+
+When envenoming arrows, if a number of arrows is provided, you will dye and envenom that number of undyed arrows the colour and venom selected. Otherwise, you will coat all your arrows of the selected colour with the venom of your choice.
+
+Inspecting your quiver will show you how many of each colour arrow you possess and what venoms they have been covered with.
+
+Further, you may dye any number of undyed arrows the colour of your choice. However, you will find yourself unable to do so if you have arrows of that colour envenomed within your quiver.
+
+Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver.
+
+To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

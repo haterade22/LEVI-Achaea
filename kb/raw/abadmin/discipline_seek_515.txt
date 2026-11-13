@@ -1,0 +1,15 @@
+Ability: Seek (Record #515)
+Associated skill: Discipline
+Skillpoints required: 1499
+Blurb: Order your bird to seek out an adventurer.
+Syntax: FALCON SEEK <target>
+Abfile:
+Using this ability, you may order your falcon to seek out another adventurer. Your falcon must be either on the ground or on your wrist to use this ability.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,34 @@
+Ability: Elementals (Record #2052)
+Associated skill: Artificing
+Skillpoints required: 4999
+Blurb: From word to will.
+Syntax: ELEMENTAL SUMMON <elemental>
+ELEMENTAL CALL [PASSIVE]
+ELEMENTAL POWERS
+ELEMENTAL DISMISS <elemental>
+Abfile:
+Once you have established treaties with the denizens of the Elemental
+Planes, now comes the time to call them forth into your service.
+
+ELEMENTAL SUMMON <elemental>: summon an elemental you have formed a
+treaty with. Initially this will need to be performed within your
+workshop, though there will come a time when you will go beyond such
+constraints upon your power.
+ELEMENTAL CALL: call all elementals you have summoned back to your side.
+This does not incur equilibrium, though it can only be done every so
+often.
+ELEMENTAL POWERS: see what powers your currently summoned elementals
+possess.
+ELEMENTAL DISMISS <elemental>: send an elemental back to its home.
+
+You may only have up to two elementals called forth at a time, and only
+one from each Elemental Plane. For example, you can have a waterweird
+and an efreeti, but not an efreeti and an ashbeast.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

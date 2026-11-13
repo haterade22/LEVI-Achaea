@@ -1,0 +1,17 @@
+Ability: Shatter (Record #2328)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Shin energy shatters a denizen's shield.
+Syntax: SHIN SHATTER <target>
+Abfile:
+Use your rage and channel it as a blast of Shin energy at a denizen that can shatter shields.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_blademaster

@@ -1,0 +1,25 @@
+Ability: Shipaura (Record #1762)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Cloak your ship in notic auras.
+Syntax: AURA STATUS
+AURA ACTIVATE <aura>
+AURA DEACTIVATE <aura>
+AURA SWITCH <aura>
+Abfile:
+Passive aura effects by specialisation:
+WATCH - Balance cost reduction on CLIMB MAST and SWING UP.
+WEAPONS - An increased efficiency at aiming ship weaponry.
+COMMAND - A cost reduction for seaspells.
+HELM - Ship crew receives a bonus to experience and morale gain.
+DECKHAND - Ship repair ticks have a chance at increased efficiency.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

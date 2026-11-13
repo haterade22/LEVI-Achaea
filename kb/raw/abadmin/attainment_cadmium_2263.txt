@@ -1,0 +1,19 @@
+Ability: Cadmium (Record #2263)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Weaken your enemy with cadmium.
+Syntax: EDUCE CADMIUM <TARGET>
+Extra info: Gives denizen affliction: Weakness
+Abfile:
+Educing the symbol of cadmium will weaken your target for a short time, decreasing the damage it can do. The symbol of cadmium is a bisected triangle.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 31.00 seconds
+Resource: 22 rage
+Skill specialisation: br_alchemist

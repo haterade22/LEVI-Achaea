@@ -1,0 +1,17 @@
+Ability: Vertigo (Record #1344)
+Associated skill: Curses
+Skillpoints required: 1499
+Blurb: A devastating fear of heights.
+Syntax: CURSE <target> VERTIGO
+Abfile:
+Afflict your target with a great fear of heights.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana

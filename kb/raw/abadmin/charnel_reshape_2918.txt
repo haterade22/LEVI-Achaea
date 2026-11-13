@@ -1,0 +1,21 @@
+Ability: Reshape (Record #2918)
+Associated skill: Charnel
+Skillpoints required: 2599
+Blurb: In your own image.
+Syntax: CRYPT RESHAPE <to new type of room>
+Abfile:
+Your command over your domain has grown to the point where you can now
+reshape the chambers of your domain to fit your needs. There are various
+types of chambers that your domain can possess, and you can reshape any
+chamber within your domain excluding the initial chamber(*).
+
+* This is the one you arrive in when crypt entering.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

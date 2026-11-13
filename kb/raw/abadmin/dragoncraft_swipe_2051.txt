@@ -1,0 +1,22 @@
+Ability: Swipe (Record #2051)
+Associated skill: Dragoncraft
+Skillpoints required: 44999
+Blurb: Maul your prey with your talons.
+Syntax: SWIPE <target> <limb> <HEAD|TORSO> [venom]
+Abfile:
+Swipe at the upper body of your prey with your deadly talons, carving
+into a limb followed swiftly by a followup strike at either the head or
+torso. This does the equivalent damage of rending with your claws, but
+equally split across both limbs(*).
+
+* Note that both limbs are still vulnerable to being parried.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Skill specialisation: dragonform

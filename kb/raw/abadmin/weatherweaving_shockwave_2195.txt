@@ -1,0 +1,28 @@
+Ability: Shockwave (Record #2195)
+Associated skill: Weatherweaving
+Skillpoints required: 47999
+Blurb: Your power shall not be denied.
+Syntax: CAST SHOCKWAVE AT <target>
+Extra info: At least 40 arcane power.
+Abfile:
+This spell is one of the greatest in the weatherweaver's arsenal. It
+allows you to discharge all of your stored arcane power at once,
+focusing it into an onslaught that will cause extreme damage to the one
+who has crossed you. The more power used past the minimum, the greater
+the harm will be.
+
+The damage of shockwave is also increased if someone is suitably
+vulnerable, which for the purposes of this spell requires them to have
+one or more of the following afflictions: healthleech, impatience,
+dizziness, or epilepsy.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of equilibrium
+Resource: 50 mana and arcane power

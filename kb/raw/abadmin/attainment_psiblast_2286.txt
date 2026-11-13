@@ -1,0 +1,18 @@
+Ability: Psiblast (Record #2286)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Punish your opponent with a psychic blast.
+Syntax: PSIBLAST <target>
+Abfile:
+Focus your massive intellect on your target's brain, searing the mind with your psychic prowess.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_gold_dragon

@@ -1,0 +1,17 @@
+Ability: Void (Record #2759)
+Associated skill: Zeal
+Skillpoints required: 2499
+Blurb: A verse to stave off the outer cold.
+Syntax: RECITE VOID <target|ME>
+Abfile:
+This holy verse is both warning and protection. It grants improved
+resistance to cold damage to either yourself or an ally.
+Useable on: adventurers and self
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

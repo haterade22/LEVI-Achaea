@@ -1,0 +1,17 @@
+Ability: Temperance (Record #392)
+Associated skill: Metamorphosis
+Skillpoints required: 46999
+Blurb: Bestow limited fire-resistance upon yourself.
+Syntax: TEMPERANCE
+This ability will be hidden on ablistings.
+Abfile:
+Bestow fire resistance on yourself.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

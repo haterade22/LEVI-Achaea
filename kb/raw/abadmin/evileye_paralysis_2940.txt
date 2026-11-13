@@ -1,0 +1,18 @@
+Ability: Paralysis (Record #2940)
+Associated skill: Evileye
+Skillpoints required: 9999
+Blurb: Your victim's body shall betray them.
+Syntax: STARE <target> PARALYSIS
+Abfile:
+A curse that shall prevent your victim from performing most actions
+while it lasts.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 70 mana

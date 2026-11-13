@@ -1,0 +1,18 @@
+Ability: Simultaneity (Record #2177)
+Associated skill: Weatherweaving
+Skillpoints required: 42999
+Blurb: Parallel channelling.
+Syntax: SIMULTANEITY
+Abfile:
+This powerful ability allows you to open channels to the air, water, and
+earth realms all at once.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1000 mana

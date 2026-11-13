@@ -1,0 +1,16 @@
+Ability: Moonkick (Record #857)
+Associated skill: Tekura
+Skillpoints required: 18999
+Blurb: A powerful, curving kick.
+Syntax: MNK <target> left/right
+Abfile:
+This kick, so-called because the foot travels in the arc of a crescent moon, attacks the arms of your opponent.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

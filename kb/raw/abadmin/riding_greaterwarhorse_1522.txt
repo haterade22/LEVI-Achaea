@@ -1,0 +1,15 @@
+Ability: Greaterwarhorse (Record #1522)
+Associated skill: Riding
+Skillpoints required: 36999
+Blurb: Marshal your forces on a greater war horse.
+Syntax: None
+Abfile:
+You can ride upon a greater war horse (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Startle (Record #2962)
+Associated skill: Valour
+Skillpoints required: 34999
+Blurb: The steed is often an easier target.
+Syntax: EAGLE STARTLE <target>
+Abfile:
+This ability will allow your eagle to startle an opponent's steed,
+tossing the poor rider off. Note that this works regardless of whether
+your opponent is on the ground, in the trees, or flying. You simply need
+be in the same room, and the eagle will fly to the correct elevation to
+startle your target's mount.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

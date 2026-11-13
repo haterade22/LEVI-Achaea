@@ -1,0 +1,17 @@
+Ability: Absolve (Record #1039)
+Associated skill: Spirituality
+Skillpoints required: 60000
+Blurb: Command your angel to tear the soul from your enemy.
+Syntax: ANGEL ABSOLVE <target>
+Abfile:
+Using this most powerful of Angelic abilities, your Angel will rip the very soul from your enemy. Be warned though, your enemy must be on less than half of his maximum mana.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.40 seconds of equilibrium
+Resource: 50 Angel power

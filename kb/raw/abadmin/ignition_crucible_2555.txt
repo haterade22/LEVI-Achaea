@@ -1,0 +1,24 @@
+Ability: Crucible (Record #2555)
+Associated skill: Ignition
+Skillpoints required: 8999
+Blurb: Where only the strong survive.
+Syntax: IGNITE CRUCIBLE
+Abfile:
+Providing another lord has not done so already, you may claim a location
+as your crucible. Though this state of affairs is only temporary, it
+offers several advantages the able servant of Kkractle may take
+advantage of. All those that do not walk with the gift of Elemental Fire
+will have their fire resistance reduced, and any that are afflicted with
+ablaze will immediately be seared by the flames, no matter how swiftly
+they may act to douse the fire.
+
+You may only have one crucible at a time, and igniting a new crucible
+shall immediately destroy your old one.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,3 @@
+Ability: Rattlesnake (Record #1269)
+Associated skill: Subterfuge
+Maps to record 1265 (SNAKE).

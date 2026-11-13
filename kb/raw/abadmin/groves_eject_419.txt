@@ -1,0 +1,17 @@
+Ability: Eject (Record #419)
+Associated skill: Groves
+Skillpoints required: 1499
+Blurb: Toss all but yourself out of your grove.
+Syntax: GROVE EJECT
+Abfile:
+With this ability, you may cause the wilderness in your grove to throw out all in it, save for yourself and your allies.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 15 sunlight

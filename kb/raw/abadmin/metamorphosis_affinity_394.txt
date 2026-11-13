@@ -1,0 +1,17 @@
+Ability: Affinity (Record #394)
+Associated skill: Metamorphosis
+Skillpoints required: 50999
+Blurb: Obtaining a greater affinity with an animal spirit.
+Syntax: EMBRACE SPIRIT
+Abfile:
+The gift of spiritual affinity indicates a level of proficiency at which metamorphosis is so second-nature that it takes a lesser toll on you. The endurance loss rate for all spirit forms is greatly decreased from the time that this ability is activated.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana

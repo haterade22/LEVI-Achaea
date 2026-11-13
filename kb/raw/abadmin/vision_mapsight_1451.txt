@@ -1,0 +1,17 @@
+Ability: Mapsight (Record #1451)
+Associated skill: Vision
+Skillpoints required: 37999
+Blurb: Discern the coordinates of another within a subdivision.
+Syntax: MAPSEE <target>
+Abfile:
+Use this ability to locate the map coordinates of other adventurers who are in the same subdivision as you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 20 mana

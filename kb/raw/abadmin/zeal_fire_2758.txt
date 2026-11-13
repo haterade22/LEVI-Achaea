@@ -1,0 +1,17 @@
+Ability: Fire (Record #2758)
+Associated skill: Zeal
+Skillpoints required: 1999
+Blurb: The verse of the righteous.
+Syntax: RECITE FIRE <target|ME>
+Abfile:
+Recite the verse of fire, granting you or an ally protection against the
+ravages of flame.
+Useable on: adventurers and self
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

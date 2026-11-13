@@ -1,0 +1,16 @@
+Ability: Sever (Record #411)
+Associated skill: Groves
+Skillpoints required: 0
+Blurb: Erase your imprint permanently from your grove.
+Syntax: GROVE SEVER
+Extra info: Energy: NONE
+Abfile:
+This ability will permanently sever the link with your grove. All sunlight energy in your grove will be lost.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

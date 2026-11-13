@@ -1,0 +1,23 @@
+Ability: Condemned (Record #3278)
+Associated skill: Woe
+Skillpoints required: 47999
+Blurb: That coldest dish so served.
+Syntax: RECITE CONDEMNED
+Abfile:
+The tale of the Condemneds vengeance is one long in the making and more
+tragic still for the fact that he may yet have stayed his hand if not
+for a single dismissive word. Yet there is no doubt that come the time
+of choice Han-Silnar slew the Wanderer in defiance of those that hold
+his chains: in this, he would not be commanded otherwise.
+
+* Cyrenians that hear this tale shall be granted the steelmind defence,
+making the next forced action against them fail.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 15.00 seconds of voice balance and 3.00 seconds of equilibrium

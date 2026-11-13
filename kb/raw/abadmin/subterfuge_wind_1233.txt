@@ -1,0 +1,15 @@
+Ability: Wind (Record #1233)
+Associated skill: Subterfuge
+Skillpoints required: 18999
+Blurb: Further increase your accuracy through wind compensation.
+Syntax: None
+Abfile:
+Once you have this ability, your accuracy with bowmanship will be increased.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

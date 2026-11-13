@@ -1,0 +1,16 @@
+Ability: Ascend (Record #2380)
+Associated skill: Shadowmancy
+Skillpoints required: 3999
+Blurb: Take to the sky upon a surge of shadows.
+Syntax: SHADOW ASCEND
+Abfile:
+Your power over the shadows has reached a point that you may manifest
+wings, allowing you to take to the sky.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,25 @@
+Ability: Dictate (Record #2402)
+Associated skill: Shadowmancy
+Skillpoints required: 60000
+Blurb: Death is but a word away.
+Syntax: SHADOW DICTATE <target>
+Abfile:
+The ultimate expression of your power, this ability allows you to
+command a person's shadow to execute your sentence. If a target is below
+40% of their maximum mana, you may carry out this ability, having their
+shadow act as their own executioner.
+
+The threshold raises for 5% for each of depression, madness,
+retribution, and parasite that are present on the target.
+
+Note that successfully slaying your foe with this ability will also
+claim their shadow, providing that you possess a phylactery with
+sufficient room remaining.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

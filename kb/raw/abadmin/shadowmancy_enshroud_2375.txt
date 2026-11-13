@@ -1,0 +1,15 @@
+Ability: Enshroud (Record #2375)
+Associated skill: Shadowmancy
+Skillpoints required: 0
+Blurb: Cloak your location in blackest night.
+Syntax: SHADOW ENSHROUD
+Abfile:
+Create a magical darkness to completely enshroud your location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

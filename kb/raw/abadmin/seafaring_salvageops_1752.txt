@@ -1,0 +1,22 @@
+Ability: Salvageops (Record #1752)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Recover sunken ships.
+Syntax: SHIP SALVAGE SCAN
+SHIP SALVAGE <ship id>
+SHIP SALVAGE STOP
+Abfile:
+Recover a sunken vessel from the murky deeps. You will need to locate
+the vessel using the SCAN ability, and when you are directly above the
+wreck you can begin the salvage operation. This takes a considerably
+long time to do, and will keep your crew off-balance for the entire
+time. You can abort the operation and recover crew balance at any time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: deckhand2

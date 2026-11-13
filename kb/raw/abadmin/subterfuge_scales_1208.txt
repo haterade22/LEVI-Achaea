@@ -1,0 +1,17 @@
+Ability: Scales (Record #1208)
+Associated skill: Subterfuge
+Skillpoints required: 699
+Blurb: Coat yourself in protective, serpentine scales.
+Syntax: SCALES
+SCALES SHED
+Abfile:
+So snake-like are you that you may cover yourself with mildly protective scales at will.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

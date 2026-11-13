@@ -1,0 +1,25 @@
+Ability: Mortals (Record #3229)
+Associated skill: Woe
+Skillpoints required: 53999
+Blurb: United at the last.
+Syntax: RECITE MORTALS
+Abfile:
+So now we speak of the closing days of the Age of Blackest Woe, and when
+mortals at last united as one to bring down the forces of the Infernal
+Prince. When reciting this tale, all Cyrenians in rooms adjacent to you
+that share allyship with you(*) or who are in your current party will be
+summoned to your side(**).
+
+* Mutual allies.
+** Rooms with a monolith when the recital begins are excluded. A
+monolith at recital culmination will have no influence, however.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance and 3.00 seconds of equilibrium

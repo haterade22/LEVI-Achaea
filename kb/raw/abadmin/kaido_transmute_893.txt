@@ -1,0 +1,16 @@
+Ability: Transmute (Record #893)
+Associated skill: Kaido
+Skillpoints required: 34999
+Blurb: Instantly convert mana into health.
+Syntax: TRANSMUTE <amount>
+Extra info: balance
+Abfile:
+This will instantly turn the specified amount of mana into health, minus a bit that is lost in the transfer.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,34 @@
+Ability: Indomitability (Record #2743)
+Associated skill: Emulation
+Skillpoints required: 60000
+Blurb: The shadow of the Battlemaster.
+Syntax: ENACT INDOMITABILITY
+Abfile:
+The war veil. When empowered, an ultimate defence that could not be
+penetrated. In an age where conflict was on the rise and death had
+suddenly become a real concern for the Aldar, this was the relic that
+they most vigorously wished to emulate the powers of. It was also the
+one where they failed almost entirely.
+
+Though much research was done into a way to replicate the ultimate
+defence, it was never achieved. Yet something else emerged from those
+experiments: a way to allow one's miriad images to instinctively react
+to
+throw themselves in harm's way. Though it was a bitter defeat in the
+eyes
+of those that had striven so hard, certain infamous Aldar made this into
+a truly terrible thing to behold.
+
+Each miriad image can take only so many(*) hits before it will shatter,
+and they will not always react.
+
+* Three strikes per image.
+Useable on: self
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

@@ -1,0 +1,18 @@
+Ability: Scanarea (Record #350)
+Associated skill: Metamorphosis
+Skillpoints required: 7999
+Blurb: A careful look from above.
+Syntax: SCAN AREA
+This ability will be hidden on ablistings.
+Abfile:
+While you are flying, you will detect everyone in your local area who is visible and not indoors (suitable for TRAVERSE-ing to). This will not show specific locations, just names.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 150 mana

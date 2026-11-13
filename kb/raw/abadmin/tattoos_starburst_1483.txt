@@ -1,0 +1,28 @@
+Ability: Starburst (Record #1483)
+Associated skill: Tattoos
+Skillpoints required: 15999
+Blurb: The power of the stars provides immediate resurrection.
+Syntax: TOUCH STARBURST
+RELAX STARBURST
+Extra info: Inks: 1 Blue ink
+1 Gold ink
+1 Green ink
+1 Purple ink
+1 Red ink
+1 Yellow ink
+Abfile:
+This tattoo will work automatically upon your death, once you have
+touched it. It will resurrect you immediately, and cause you to lose
+only half the normal amount of experience that you would lose from a
+death. RELAX STARBURST will remove the defence once activated.
+
+* Certain abilities will prevent the resurrection effect of the
+starburst, but will not dispel the active starburst you currently have.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

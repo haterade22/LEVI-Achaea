@@ -1,0 +1,16 @@
+Ability: Sense (Record #903)
+Associated skill: Telepathy
+Skillpoints required: 0
+Blurb: Use your telepathic powers to seek out others.
+Syntax: MIND SENSE <target1> [target2] [...target5]
+Abfile:
+With this ability, you are able to seek out the mind of another adventurer, gaining knowledge of his physical location.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 10 mana

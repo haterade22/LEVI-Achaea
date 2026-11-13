@@ -1,0 +1,16 @@
+Ability: Compounding (Record #1904)
+Associated skill: Remedies
+Skillpoints required: 0
+Blurb: Combine minerals into curative substances.
+Syntax: COMPOUND <# batches> <remedy> IN <alembic>
+Abfile:
+With an alembic and the proper minerals in your rift or inventory, you
+may compound curative substances.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

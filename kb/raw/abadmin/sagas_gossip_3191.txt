@@ -1,0 +1,26 @@
+Ability: Gossip (Record #3191)
+Associated skill: Sagas
+Skillpoints required: 52999
+Blurb: You'll never believe what I heard...
+Syntax: GOSSIP SPREAD <gossip>
+GOSSIP LISTEN
+Abfile:
+The art of storytelling is one step removed from the art of
+conversation, and as a master of both, sometimes you just need to get
+your message out there in a less obvious way.
+
+By seeking out various establishments(*), you can, around once an
+Achaean day, spread some gossip. Similarly in said locations, you may
+also listen for gossip every so often, and in such a way gossip is bound
+to spread.
+
+* Inns and similar, generally.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

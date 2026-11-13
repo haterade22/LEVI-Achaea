@@ -1,0 +1,29 @@
+Ability: Focus (Record #2072)
+Associated skill: Weaponmastery
+Skillpoints required: 30000
+Blurb: Alter your technique.
+Syntax: BATTLEFURY FOCUS <SPEED|PRECISION>
+Abfile:
+This ability allows a trained knight to adjust their stance to influence
+their next attack.
+
+Focusing on speed increases the speed of your next attack.
+
+Focusing on precision alters your next attack for greater accuracy and
+effect(*). Against adventurers, this reduces the damage dealt but
+doubles the number of limb-based afflictions inflicted. Against
+denizens, it increases the damage dealt.
+
+* Your attack will also bypass any Shield of Absorption effect your
+foe possesses.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of battlefury balance
+Skill specialisation: knight_twohanded

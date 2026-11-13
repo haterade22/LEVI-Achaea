@@ -1,0 +1,20 @@
+Ability: Intuition (Record #2105)
+Associated skill: Vodun
+Skillpoints required: 38999
+Blurb: You know them more than they know themselves.
+Syntax:
+Abfile:
+As you refine your doll, your knowledge of your victim shall grow to the
+point that even while clumsy your efforts to bring down curses upon them
+shall succeed more often than not(*).
+
+* The doll must be wielded and this ability has no impact until you have
+at least ten fashions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

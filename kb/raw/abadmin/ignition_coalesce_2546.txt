@@ -1,0 +1,22 @@
+Ability: Coalesce (Record #2546)
+Associated skill: Ignition
+Skillpoints required: 0
+Blurb: Upon the Elemental Plane of Fire.
+Syntax: COALESCE
+Abfile:
+You may cross great distances, traversing the very planes themselves to
+materialise upon the Elemental Plane of Fire.
+
+Should you already be present upon the Elemental Plane of Fire, this act
+will return you to the Prime instead.
+
+Such an act takes great focus, requiring that you do nothing for several
+seconds while focussing on the process.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

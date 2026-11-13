@@ -1,0 +1,17 @@
+Ability: Sniff (Record #354)
+Associated skill: Metamorphosis
+Skillpoints required: 8999
+Blurb: Sniff out those on the surface from your burrow.
+Syntax: SNIFF
+This ability will be hidden on ablistings.
+Abfile:
+While burrowed down to the first level, sniff will tell you who is above you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

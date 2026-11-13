@@ -1,0 +1,17 @@
+Ability: Daze (Record #936)
+Associated skill: Telepathy
+Skillpoints required: 44999
+Blurb: Render your subject extremely vulnerable to hypnosis.
+Syntax: MIND DAZE
+Abfile:
+Only useful in conjunction with an adventurer skilled in Hypnosis, this will wipe out an adventurer's ability to resist an attempt at hypnosis.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

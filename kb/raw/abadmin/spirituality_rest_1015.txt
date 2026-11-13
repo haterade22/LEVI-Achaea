@@ -1,0 +1,16 @@
+Ability: Rest (Record #1015)
+Associated skill: Spirituality
+Skillpoints required: 6999
+Blurb: Causes your angel to conserve her power.
+Syntax: ANGEL REST
+Abfile:
+Many abilities that you may use with your Angel will cause a regular drain on her power. This ability will cause your Angel to cease doing these things and rest.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium

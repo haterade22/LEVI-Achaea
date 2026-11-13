@@ -1,0 +1,15 @@
+Ability: Warhawk (Record #555)
+Associated skill: Discipline
+Skillpoints required: 55999
+Blurb: Equip your falcon with talons of steel.
+Syntax: FALCON WARHAWK
+Abfile:
+If you have a set of steel talons, you may equip your falcon with them, allowing it to attack with more strength.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

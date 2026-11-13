@@ -1,0 +1,18 @@
+Ability: Balancing (Record #674)
+Associated skill: Pranks
+Skillpoints required: 12999
+Blurb: Maintain superior balance.
+Syntax: BALANCING [ON|OFF]
+RELAX BALANCING
+Abfile:
+With this ability, you will have superior balance, making it much more difficult to knock you off your feet. There is a mana drain associated with it, however.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.50 seconds of balance
+Drain: Mana

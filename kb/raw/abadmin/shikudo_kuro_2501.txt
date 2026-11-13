@@ -1,0 +1,18 @@
+Ability: Kuro (Record #2501)
+Associated skill: Shikudo
+Skillpoints required: 17999
+Blurb: A lower strike to numb the legs.
+Syntax: KURO <LEFT|RIGHT>
+Abfile:
+By targeting the muscles in your foe's legs, you may weaken them
+severely, afflicting said target with weariness. Should your foe already
+suffer from the weariness affliction, the blow will render them
+lethargic.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

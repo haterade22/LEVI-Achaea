@@ -1,0 +1,19 @@
+Ability: Dodging (Record #1739)
+Associated skill: Seafaring
+Skillpoints required: 399
+Blurb: Avoid anti-personnel ship ammo.
+Syntax: Passive
+Abfile:
+Your dexterity aboard a ship has increased to the point that you are
+sometimes able to dodge anti-personnel ammunition fired at your ship
+from other ships. Your likelihood to dodge increases as your skillrank
+in Seafaring grows. This is a passive ability; you do not need to enable
+nor disable it for it to work.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

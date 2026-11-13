@@ -1,0 +1,17 @@
+Ability: Yodel (Record #1684)
+Associated skill: Voicecraft
+Skillpoints required: 11499
+Blurb: Shatter a crystal forest with an irritating yodel.
+Syntax: SING YODEL
+Abfile:
+Shatter a crystal forest with your song.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 75 mana and 20 willpower

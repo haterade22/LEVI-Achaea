@@ -1,0 +1,19 @@
+Ability: Banded (Record #1840)
+Associated skill: Armoursmithing
+Skillpoints required: 14999
+Blurb: A shield of reasonable effectiveness.
+Syntax: FORGE FOR BANDED
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+2 Steel
+Abfile:
+A shield of reasonable effectiveness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

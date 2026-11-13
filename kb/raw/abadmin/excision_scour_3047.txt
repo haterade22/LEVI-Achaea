@@ -1,0 +1,19 @@
+Ability: Scour (Record #3047)
+Associated skill: Excision
+Skillpoints required: 22999
+Blurb: Cleansed in holy fire.
+Syntax: PERFORM SCOUR <target>
+Abfile:
+Beckon forth the cleansing fire to scour away an enemy of Creation(*).
+
+* Gives the tenderskin affliction.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of wrath balance
+Resource: 5% Holy Wrath

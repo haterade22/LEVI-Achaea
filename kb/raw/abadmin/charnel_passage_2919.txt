@@ -1,0 +1,18 @@
+Ability: Passage (Record #2919)
+Associated skill: Charnel
+Skillpoints required: 2599
+Blurb: The simplest of reshapings.
+Syntax: CRYPT RESHAPE PASSAGE
+Abfile:
+The most basic of reshapings, you can shape a room to be a simple
+passageway. These have no particularly useful properties, but may be
+used to mislead or trap intruders.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

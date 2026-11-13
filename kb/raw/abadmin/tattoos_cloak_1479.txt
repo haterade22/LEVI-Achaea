@@ -1,0 +1,17 @@
+Ability: Cloak (Record #1479)
+Associated skill: Tattoos
+Skillpoints required: 5999
+Blurb: Protect yourself from summonings.
+Syntax: TOUCH CLOAK
+Extra info: Inks: 3 Blue inks
+Abfile:
+Touching the cloak tattoo will conjure up a mystical cloak that will serve to protect you from being summoned.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

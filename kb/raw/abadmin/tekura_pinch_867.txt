@@ -1,0 +1,19 @@
+Ability: Pinch (Record #867)
+Associated skill: Tekura
+Skillpoints required: 50999
+Blurb: A special and powerful block.
+Syntax: PNB
+UNBLOCK PNB
+Abfile:
+A very special block which is capable of stunning your opponent if he or she is already weakened sufficiently.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Resource: 50 mana
+Drain: Mana

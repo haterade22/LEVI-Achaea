@@ -1,0 +1,23 @@
+Ability: Sap (Record #1030)
+Associated skill: Spirituality
+Skillpoints required: 36999
+Blurb: Order your angel to sap the mental strength of an enemy.
+Syntax: ANGEL SAP <target>
+Abfile:
+Order your angel to sap the mental strength of your target. The more
+afflictions your target suffers from, the more this will drain(*).
+
+* The drain scales to the number of afflictions they are suffering from.
+Guilt, ablaze, spiritburn, and tenderskin increase the value by more
+than other afflictions, followed by mental and limb based afflictions.
+Inquisition increases more than anything else.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of equilibrium
+Resource: 5 Angel power

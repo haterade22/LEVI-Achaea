@@ -1,0 +1,16 @@
+Ability: Forestwatch (Record #422)
+Associated skill: Groves
+Skillpoints required: 4999
+Blurb: Know all entry and exit from the forest.
+Syntax: GROVE FORESTWATCH ON/OFF
+Abfile:
+This ability will inform everyone in your grove every time an adventurer enters or exits the forest.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 25 sunlight

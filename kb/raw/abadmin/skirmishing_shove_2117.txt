@@ -1,0 +1,16 @@
+Ability: Shove (Record #2117)
+Associated skill: Skirmishing
+Skillpoints required: 3999
+Blurb: Sending a hapless victim crashing to the forest floor.
+Syntax: SHOVE <target>
+Abfile:
+While in the trees, you may shove an adventurer to the ground, possibly breaking his legs.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

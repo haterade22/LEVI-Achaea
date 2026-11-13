@@ -1,0 +1,20 @@
+Ability: Visions (Record #1053)
+Associated skill: Devotion
+Skillpoints required: 14999
+Blurb: Condemn your foe with horrific visions.
+Syntax: PERFORM VISIONS <target>
+Abfile:
+Condemn your foe as an enemy of creation, striking them down to never
+know peace. First, they will suffer the dementia affliction, while
+subsequent visions will confer shyness if the target is already
+demented.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 100 devotion and 50 mana

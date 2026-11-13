@@ -1,0 +1,21 @@
+Ability: Fool (Record #606)
+Associated skill: Tarot
+Skillpoints required: 3999
+Blurb: Shrug off afflictions with blind courage.
+Syntax: FLING FOOL AT <target>
+Abfile:
+The Fool is pictured as being immune to fear and full of courage. With
+this Tarot you may throw off three afflictions by denying their
+existence. You must wait a time(*) before the Fool will attend you
+again.
+
+* 35 second cooldown.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

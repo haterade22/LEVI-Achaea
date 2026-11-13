@@ -1,0 +1,20 @@
+Ability: Sweep (Record #2495)
+Associated skill: Shikudo
+Skillpoints required: 4999
+Blurb: A prone opponent is at their most vulnerable.
+Syntax: SWEEP
+Abfile:
+Using your staff, you may sweep someone off their feet. Note that this
+consumes both of your arm balances, so may not be combined with other
+strike attacks (though it may be combined with a kick).
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

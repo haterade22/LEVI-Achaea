@@ -1,0 +1,15 @@
+Ability: Truecurse (Record #1355)
+Associated skill: Curses
+Skillpoints required: 18999
+Blurb: The ability to drive your curses through magic shields.
+Syntax: None
+Abfile:
+With the ability of truecurse, adventurer's magical shields will no longer get in the way of your dreaded curses.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

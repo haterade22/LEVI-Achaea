@@ -1,0 +1,18 @@
+Ability: Razeslash (Record #534)
+Associated skill: Weaponmastery
+Skillpoints required: 22999
+Blurb: First penetrate his defences, then give him the sharp end.
+Syntax: RAZESLASH|RSL <target> [limb] [venom]
+Abfile:
+You have now gained the ability to simultaneously raze and slash an opponent. Many knights have found it to be a very effective tactic in taking down another adventurer's magical shield and attacking at the same time.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.70 seconds of balance
+Skill specialisation: knight_dualcutting
+The ability name RSL is mapped to this ability.

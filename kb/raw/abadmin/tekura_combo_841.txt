@@ -1,0 +1,23 @@
+Ability: Combo (Record #841)
+Associated skill: Tekura
+Skillpoints required: 0
+Blurb: Combo attacks together.
+Syntax: COMBO <target> <kick|stance> [limb] <punch1> [limb] <punch2> [limb] [JPK]
+Abfile:
+This ability allows you to perform tekura combos. You may choose to omit
+or include any of the limb targets, but must always specify a full combo
+(one kick, two punches). The combo can only be executed if you possess
+balance on both arms and legs.
+
+* If you append JPK to a combo, you'll attempt to jumpkick before the
+rest of the combo is executed assuming that combo does not already
+include a jumpkick attempt.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

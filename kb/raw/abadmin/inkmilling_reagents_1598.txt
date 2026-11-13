@@ -1,0 +1,51 @@
+Ability: Reagents (Record #1598)
+Associated skill: InkMilling
+Skillpoints required: 0
+Blurb: Knowledge of the common ingredients.
+Syntax: None
+Abfile:
+Inkmilling reagents are broken up into eight different types as follows:
+
+Red Reagents
+------------
+a lump of red clay
+a sliver of red scorpion chitin
+
+Blue Reagents
+-------------
+an ink bladder
+a patch of lumic moss
+
+Yellow Reagents
+---------------
+a sliver of yellow scorpion chitin
+
+Gold Reagents
+-------------
+some flakes of gold
+
+Common Reagents
+---------------
+some fish scales
+
+Uncommon Reagents
+-----------------
+a piece of buffalo horn
+
+Scarce Reagents
+---------------
+a shark tooth
+
+Rare Reagents
+-------------
+a wyrm tongue
+
+For categories that have more than one reagent listed, you may use either of the items in your milling.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

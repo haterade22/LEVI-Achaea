@@ -1,0 +1,26 @@
+Ability: Extraction (Record #2012)
+Associated skill: Transmutation
+Skillpoints required: 0
+Blurb: Draw minerals from the earth.
+Syntax: EXTRACT <mineral>
+MINERALS
+Abfile:
+The alchemical minerals are present throughout the land, and may be
+found with sufficient purity to be drawn from the ground in certain
+environments and areas. Mountains, the underground, and magma caves all
+have the potential to contain extractable minerals, and different cave
+systems and mountain ranges may yield different minerals. The amount of
+minerals is limited, however, and you will only be capable of extracting
+each mineral once per room each day.
+
+Your skill in Transmutation will determine which minerals you have
+learned to extract.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

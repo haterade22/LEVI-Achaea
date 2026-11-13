@@ -1,0 +1,23 @@
+Ability: Hamstring (Record #2363)
+Associated skill: Weaving
+Skillpoints required: 6599
+Blurb: They won't be walking that off.
+Syntax: WEAVE HAMSTRING <target> [LEFT|RIGHT]
+Abfile:
+Using a dagger, you will slice at the hamstring in a target's leg. This
+will cause the leg to be broken if it's in a good condition(*), and
+cause the target to fall prone if it is not(**).
+
+* Will deliver broken left or right leg if the targeted leg is not
+damaged to the point of requiring a restoration salve.
+** Will knock them prone if the leg is damaged to the point of requiring
+a restoration salve.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

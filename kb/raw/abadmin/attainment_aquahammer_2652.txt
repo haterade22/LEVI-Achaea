@@ -1,0 +1,18 @@
+Ability: Aquahammer (Record #2652)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Sometimes a less subtle approach is required.
+Syntax: MANIFEST AQUAHAMMER <target>
+Abfile:
+Form a giant hammer from water, then bring it down upon translucent
+shields to utterly destroy them.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_water_lord

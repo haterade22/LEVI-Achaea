@@ -1,0 +1,18 @@
+Ability: Feather (Record #1475)
+Associated skill: Tattoos
+Skillpoints required: 699
+Blurb: Attain the lightness of a feather and levitate.
+Syntax: TOUCH FEATHER
+Extra info: Inks: 2 Blue inks
+1 Red ink
+Abfile:
+Upon touching this tattoo, you will begin levitating, and thus be immune from falling damage.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

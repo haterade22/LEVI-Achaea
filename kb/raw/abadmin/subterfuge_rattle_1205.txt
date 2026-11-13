@@ -1,0 +1,16 @@
+Ability: Rattle (Record #1205)
+Associated skill: Subterfuge
+Skillpoints required: 0
+Blurb: Knowledge of the coded Serpent Lord tongue.
+Syntax: RATTLE <text>
+RATTLE TO <person> <text>
+Abfile:
+With this ability, you may communicate with others who have it with no fear of being overheard by other mortals.
+Useable on: adventurers, denizens, room, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

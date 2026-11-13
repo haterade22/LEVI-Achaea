@@ -1,0 +1,23 @@
+Ability: Bloodlust (Record #2841)
+Associated skill: Oppression
+Skillpoints required: 31999
+Blurb: Until the last breath.
+Syntax: HELLFORGE CHANNEL BLOODLUST
+Abfile:
+His chosen warriors do not fear to die in His name, no price is too high
+and no life is greater than the cause. When suffused with bloodlust you
+will be unable to determine the value of your health or mana, but for
+each heathen(*) that falls in your location you will be empowered(**).
+
+* Non-mhaldorian.
+** You will have a surge of healing to both health and mana and an
+affliction will be cured from your person.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

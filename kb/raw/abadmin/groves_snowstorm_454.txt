@@ -1,0 +1,18 @@
+Ability: Snowstorm (Record #454)
+Associated skill: Groves
+Skillpoints required: 43999
+Blurb: Spread the white cloak of winter across the land.
+Syntax: EVOKE SNOWSTORM
+Extra info: Imbued sunlight.
+Abfile:
+This technique will conjure up a blizzard to temporarily blanket the area, every bit as fierce and cold as a naturally occurring snowstorm. The effects of the heat vibration may interfere with this evocation.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 sunlight and 150 mana

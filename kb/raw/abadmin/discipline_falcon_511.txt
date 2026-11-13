@@ -1,0 +1,74 @@
+Ability: Falcon (Record #511)
+Associated skill: Discipline
+Skillpoints required: 299
+Blurb: Use the basic skills to interact with your falcon.
+Syntax: FALCON
+Abfile:
+The art of Falconry is a noble one indeed. It is a sport reserved solely
+for those of chivalrous breeding, for a bird as noble as the falcon
+would never respond to commands given by one without honour.
+
+When you initially gain Falconry, the first thing you must do is find a
+hatchery. At the hatchery, FALCON REQUEST.
+
+Hatcheries are located in:
+* the Mhojave desert near the Ruins of el'Jazira
+- the Ashtan resource hub
+- the Cyrene resource hub
+- the Eleusian resource hub
+- the Hashan resource hub
+- the Mhaldor resource hub
+- the Targossas resource hub
+- the manor of the Grand Merchant Collective, in Delos
+
+(*) this is the only public hatchery.
+
+Each hatchery gives out a different breed of falcon. The breeds vary in
+appearance only: capabilities are identical.
+
+Your falcon comes to you with assorted statistics which have been
+randomly assigned.
+
+If you cause your falcon to die, you will be refused another falcon.
+There is absolutely no excuse for killing or conspiring to kill your
+falcon.
+
+Below is a list of commands that may be used once you have gotten your
+falcon.
+
+FALCON ASSESS    : See information about your falcon.
+FALCON RECALL : Recall your falcon to your wrist. Requires a falconry
+glove.
+FALCON SANCTUARY : Order your falcon to a sanctuary where it will be
+safe.
+FALCON LAND      : Order your falcon to land on the ground.
+FALCON CIRCLE    : Order your falcon to fly up into the skies.
+FALCON TRAIN : Order your falcon to go train, in order to raise a stat.
+FALCON REPORT : Gain information on where your falcon is and who they
+are tracking and attacking.
+FALCON REPORT LOCATION : This will tell you the location of your loyal
+(this will incur an equilibrium cost.)
+FALCON SLAY      : Order your falcon to slay someone.
+FALCON HUNT : When your falcon is hungry, have it go hunt for its food.
+FALCON FLEE : Set the amount of health remaining when your falcon will
+flee battle.
+FALCON SLEEP     : Order your falcon to sleep.
+FALCON FEED RAT  : Feed the corpses of rats to your falcon.
+
+As your falcon gains in
+* Stamina:  its health will increase.
+* Speed: it will attack more quickly as well as fly from place to place
+more quickly.
+* Strength: it will attack with more power as well as be able to carry
+larger items.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name FALCONS is mapped to this ability.
+The ability name FALCONRY is mapped to this ability.

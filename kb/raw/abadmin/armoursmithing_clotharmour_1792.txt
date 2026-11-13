@@ -1,0 +1,19 @@
+Ability: Clotharmour (Record #1792)
+Associated skill: Armoursmithing
+Skillpoints required: 15999
+Blurb: The most basic of armours.
+Syntax: FORGE FOR CLOTHARMOUR
+FORGE
+Extra info: Commodities: 12 cloth
+Abfile:
+A suit of cloth armour. Mostly it'll just keep you warm; it won't stop
+any kind of blade.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

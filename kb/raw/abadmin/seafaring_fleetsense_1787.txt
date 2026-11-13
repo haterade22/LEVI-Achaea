@@ -1,0 +1,16 @@
+Ability: Fleetsense (Record #1787)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Details on ships of the same ownership or fleet.
+Syntax: FLEETSENSE
+Abfile:
+Get information on the ships upon which you may act as captain.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: command2

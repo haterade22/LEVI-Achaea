@@ -1,0 +1,19 @@
+Ability: Fertility (Record #443)
+Associated skill: Groves
+Skillpoints required: 26999
+Blurb: Perform the rites of fertility.
+Syntax: EVOKE FERTILITY
+Extra info: Imbued sunlight.
+Abfile:
+The rites of fertility will temporarily bolster plant growth wherever
+they are performed.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 sunlight and 200 mana

@@ -1,0 +1,28 @@
+Ability: Tonal (Record #3167)
+Associated skill: Bladedance
+Skillpoints required: 15999
+Blurb: First the edge, next the sound.
+Syntax: passive
+Abfile:
+When you deal particularly powerful blows, the tonal resonance of your
+songblessed rapier shall cause terrible trauma to the impact site beyond
+even the norm:
+
+The head: afflicts with impatience.
+Torso: afflicts with asthma.
+Either arm: afflicts with slickness.
+Either leg: afflicts with prone.
+
+The tonal affliction delivered to the torso will be delivered upon a
+break or when hitting an adventurer who already has mild trauma.
+
+* This will be noted in relevant ability files.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

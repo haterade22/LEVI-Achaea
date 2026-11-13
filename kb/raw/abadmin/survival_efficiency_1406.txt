@@ -1,0 +1,17 @@
+Ability: Efficiency (Record #1406)
+Associated skill: Survival
+Skillpoints required: 60000
+Blurb: Manage your resources with greater precision.
+Syntax: None
+Abfile:
+Due to your mastery of various survival techniques, you are now able to manage your resources to a higher degree, reducing the mana necessary to focus your mind and clot your wounds.
+
+In addition, you will now recover far more swiftly from activating the tree tattoo or focusing your mind.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,26 @@
+Ability: Titan (Record #2545)
+Associated skill: Sculpting
+Skillpoints required: 60000
+Blurb: Primordial fury.
+Syntax: TERRAN TITAN
+Abfile:
+The ultimate gift imparted to the servants of Garash: the ability to tap
+into the earth and transform into a form even greater than your own. In
+this form you will be utterly impervious to damage, will be able to
+perform the paste ability while upon the ground, the juggernaut ability
+will have no preparation period, squeeze damage will be increased, and
+your stats will be significantly increased. Note, however, the gift is
+fleeting; it will only last a short time before dissipating and leaving
+you stunned.
+
+Note that to become a titan you must have shaped your form to the
+maximum extent possible. This ability carries a significant cooldown
+when performed outside of the Elemental Plane of Earth.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

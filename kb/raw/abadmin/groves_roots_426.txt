@@ -1,0 +1,17 @@
+Ability: Roots (Record #426)
+Associated skill: Groves
+Skillpoints required: 9999
+Blurb: Secure yourself to the ground with tree roots.
+Syntax: GROVE ROOTS
+Abfile:
+While using this ability, you will be secured to the ground and none of the various abilities that attempt to lift a target will succeed on you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 40 sunlight

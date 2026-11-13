@@ -1,0 +1,17 @@
+Ability: Reel (Record #1672)
+Associated skill: Harmonics
+Skillpoints required: 52999
+Blurb: Disrupt the balance of enemies with this complex melody.
+Syntax: PLAY REEL
+Abfile:
+Causes all of the bard's enemies in the same location as this harmonic to lose balance or equilibrium from time to time.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 175 mana

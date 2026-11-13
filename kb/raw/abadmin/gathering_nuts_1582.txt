@@ -1,0 +1,16 @@
+Ability: Nuts (Record #1582)
+Associated skill: Gathering
+Skillpoints required: 12999
+Blurb: Crunchy garnishes for your meals.
+Syntax: GATHER NUTS
+Abfile:
+Nuts may be gathered in the forest; while collecting these, you also have a chance to obtain seeds.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

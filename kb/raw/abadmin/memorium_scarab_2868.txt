@@ -1,0 +1,19 @@
+Ability: Scarab (Record #2868)
+Associated skill: Memorium
+Skillpoints required: 24999
+Blurb: Insatiable. Without mercy.
+Syntax: TRACE SCARAB <target>
+Abfile:
+The ravenous guardians of the Charnel tombs are insatiable. When traced
+against your foe, so too will they share in the endless hunger(*).
+
+* Gives addiction.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

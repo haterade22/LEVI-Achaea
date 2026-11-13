@@ -1,0 +1,40 @@
+Ability: Garon (Record #1948)
+Associated skill: Spiritlore
+Skillpoints required: 44999
+Blurb: Garon, The Knight.
+Syntax: CARVE totem
+IMPLANT <totem>
+UPROOT <totem>
+DRAW CIRCLE of <PAIN|BINDING>
+SMUDGE TOTEM
+SMUDGE TOTEM SLOT <1-6>
+SMUDGE CIRCLE SURROUNDING <totem>
+EMPOWER TOTEM
+TUNE <totem> ENEMIES/NONALLIES  (personal totems)
+TUNE <totem> ENEMIES/NONMEMBERS (organisational totems)
+Extra info: Carve cooldown: 2.00 seconds of balance
+Smudge cooldown: 4.00 seconds of balance upon initiation and completion
+Attune effect: increased physical damage resistance
+Abfile:
+While this spirit gives you sufficient knowledge to craft magical
+totems, you lack the knowledge required to etch them with runes of
+power. To this end, a different medium is required.
+
+To carve a totem, you will require 20 wood, 10 leather, and 2 silver
+commodities. Once you have obtained and implanted one into the ground,
+you may draw either a circle of binding or pain about its base. When an
+unfortunate enemy looks upon the totem empowered by such a circle, he
+shall find himself either bound in place or struck down by great pain,
+dependent on which circle has been drawn.
+
+Drawing a circle requires two black inks.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name RUNEWARDEN is mapped to this ability.

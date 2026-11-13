@@ -1,0 +1,18 @@
+Ability: Parting (Record #1042)
+Associated skill: Devotion
+Skillpoints required: 699
+Blurb: Water will pull apart to make way for your blessed self.
+Syntax: PERFORM PARTING <direction>
+Extra info: Devotion cost: 100
+Abfile:
+In true religious tradition, you will now be able to part the water in a location, allowing safe and dry passage.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 100 devotion

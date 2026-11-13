@@ -1,0 +1,17 @@
+Ability: Predator (Record #2839)
+Associated skill: Oppression
+Skillpoints required: 4999
+Blurb: To hide is futile.
+Syntax: PREY UPON <target>
+Abfile:
+Seek out a heathen with your oppressive gaze, detecting them where ever
+they may be on your current plane.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: continent-wide
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.20 seconds of equilibrium

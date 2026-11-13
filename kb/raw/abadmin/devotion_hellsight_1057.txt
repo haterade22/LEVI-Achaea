@@ -1,0 +1,21 @@
+Ability: Hellsight (Record #1057)
+Associated skill: Devotion
+Skillpoints required: 22999
+Blurb: Give an adventurer a glimpse of Hell.
+Syntax: PERFORM HELLSIGHT <target>
+Abfile:
+Using this ability, you will give your poor victim a vision of Hell
+itself. This will cause him much psychic stress as he witnesses the
+tormented souls and experiences part of their pain.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 300 devotion
+Skill specialisation: devo_paladin

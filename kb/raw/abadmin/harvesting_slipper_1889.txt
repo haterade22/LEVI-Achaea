@@ -1,0 +1,16 @@
+Ability: Slipper (Record #1889)
+Associated skill: Harvesting
+Skillpoints required: 18999
+Blurb: The lady's slipper plant is found in the Savannah.
+Syntax: HARVEST SLIPPER
+Abfile:
+This grasslands-dwelling plant is used in various concoctions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

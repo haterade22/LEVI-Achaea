@@ -1,0 +1,20 @@
+Ability: Fervour (Record #3052)
+Associated skill: Excision
+Skillpoints required: 55999
+Blurb: Victory is at hand.
+Syntax: PERFORM FERVOUR
+Abfile:
+When driven by divine fervour, any time someone in your room burns via
+the ablaze affliction while also being afflicted with the pyre
+affliction, you will be passively healed of an affliction. Additionally,
+any time someone suffers from tenderskin that you have afflicted them
+with, the damage they will suffer from shall be more significant.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium

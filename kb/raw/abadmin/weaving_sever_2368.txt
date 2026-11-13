@@ -1,0 +1,20 @@
+Ability: Sever (Record #2368)
+Associated skill: Weaving
+Skillpoints required: 19999
+Blurb: A precise and deadly strike.
+Syntax: WEAVE SEVER <target> [LEFT|RIGHT]
+Abfile:
+Using a sword, you will sever the muscles in one of your target's
+arms(*). If you do not specify an arm, this attack will always target
+the left by default.
+
+* Delivers the clumsiness affliction.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Reflection (Record #2168)
+Associated skill: Weatherweaving
+Skillpoints required: 1499
+Blurb: Create a distracting illusion of yourself.
+Syntax: CAST REFLECTION AT ME/<target>
+Abfile:
+By weaving together the powers of air and water, you may create a
+distracting reflection of yourself to absorb one hostile attack upon
+your person.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 50 mana

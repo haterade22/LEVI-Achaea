@@ -1,0 +1,20 @@
+Ability: Magmaburst (Record #2636)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Strike them down with a column of magma.
+Syntax: MANIFEST MAGMABURST <target>
+Extra info: Uses denizen afflictions: recklessness or clumsiness.
+Abfile:
+Summon a column of magma to strike down a foe that is either clumsy or
+reckless, dealing massive damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_earth_lord

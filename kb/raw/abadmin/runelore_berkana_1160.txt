@@ -1,0 +1,20 @@
+Ability: Berkana (Record #1160)
+Associated skill: Runelore
+Skillpoints required: 39999
+Blurb: Provides health regeneration to the bearer.
+Syntax: SKETCH BERKANA ON ME/<target>
+Abfile:
+ Inks required: 3 Yellow
+Symbol: Lion
+
+Gives health regeneration to the bearer of the rune.
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

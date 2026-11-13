@@ -1,0 +1,16 @@
+Ability: Euphorbia (Record #1289)
+Associated skill: Venom
+Skillpoints required: 12999
+Blurb: Induces spasmodic vomiting.
+Syntax: SECRETE EUPHORBIA
+BITE <target>
+Abfile:
+Induces spasmodic vomiting.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

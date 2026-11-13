@@ -1,0 +1,18 @@
+Ability: Horripilation (Record #2040)
+Associated skill: Artificing
+Skillpoints required: 21999
+Blurb: A crystal to channel frost.
+Syntax: WORKSHOP REFINE HORRIPILATION CRYSTAL
+Abfile:
+When set into your Elemental Staff, this crystal will permit the casting
+of a freezing HORRIPILATION spell through it.
+
+* STAFF CAST HORRIPILATION AT <target>, for instance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

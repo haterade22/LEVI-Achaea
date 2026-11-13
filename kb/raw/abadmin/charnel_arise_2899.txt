@@ -1,0 +1,21 @@
+Ability: Arise (Record #2899)
+Associated skill: Charnel
+Skillpoints required: 45999
+Blurb: That which lies beneath the endless sands.
+Syntax: ACCURSED ARISE <target>
+Abfile:
+Your black domain and the endless sands bend to accommodate you. If you
+and another are within your crypt, you may transport yourself directly
+to them; likewise, if in sufficiently sandy terrain(*) you may teleport
+to another in your local area who is also within similar terrain.
+
+* Desert terrain, or a room brought under the sway of an accursed.
+Useable on: none
+Pre checks:
+Ability range: continent-wide
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

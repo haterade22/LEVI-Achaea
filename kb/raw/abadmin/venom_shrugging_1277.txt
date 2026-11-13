@@ -1,0 +1,16 @@
+Ability: Shrugging (Record #1277)
+Associated skill: Venom
+Skillpoints required: 0
+Blurb: Resist the detrimental effects of venoms.
+Syntax: SHRUGGING
+Abfile:
+With your mastery over your own body, you are able to cure yourself of an affliction. Due to the taxing nature of this ability, you will need to recover a short time after using it before you may use it again.
+Useable on: self
+Pre checks: equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: Yes
+Cooldown: 1.60 seconds of equilibrium

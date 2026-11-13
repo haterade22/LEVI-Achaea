@@ -1,0 +1,16 @@
+Ability: Silence (Record #2623)
+Associated skill: Duress
+Skillpoints required: 36999
+Blurb: Speech is a luxury they do not deserve.
+Syntax: AERO SILENCE <target>
+Abfile:
+Create a bubble of silence around the head of your target, making them
+unable to hear or be heard through conventional methods.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

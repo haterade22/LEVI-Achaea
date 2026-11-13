@@ -1,0 +1,19 @@
+Ability: Concussionbomb (Record #667)
+Associated skill: Pranks
+Skillpoints required: 6999
+Blurb: Momentarily stun everyone in the room.
+Syntax: CONSTRUCT CONCUSSION BOMB
+THROW BOMB <direction>/AT GROUND
+Extra info: Requires: 1 iron
+Abfile:
+This bomb, when it explodes, will create a wave of force that will stun everyone in the room momentarily. You can make two bombs out of a single commodity.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name CONCUSSION BOMB is mapped to this ability.

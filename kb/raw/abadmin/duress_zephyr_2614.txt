@@ -1,0 +1,35 @@
+Ability: Zephyr (Record #2614)
+Associated skill: Duress
+Skillpoints required: 13999
+Blurb: A freezing rush to leech away strength.
+Syntax: MANIFEST ZEPHYR <target>
+Abfile:
+Call upon Whiirh to grant you a frigid zephyr, which will then be cast
+toward your foe.
+
+Against adventurers, this will freeze your target to such a point that
+they will be unable to retain their mental fortitude(*). After a
+time(**) the zephyr will come again, either re-afflicting your foe if
+manaleech isn't present, or giving deadening if their mental faculties
+are already failing. If your foe has both deadening and manaleech when
+the zephyr comes again, your target shall receive a short mental
+blackout.
+
+Note that this periodic tick will continue to occur until a tick occurs
+where manaleech is reapplied.
+
+Against denizens, these winds shall deal cold damage and then relapse,
+causing additional damage after two seconds.
+
+* Gives manaleech and damage.
+** This time is shorter the more pressure you have built up around your
+target. See AB DURESS PRESSURE for details.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

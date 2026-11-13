@@ -1,0 +1,20 @@
+Ability: Torrent (Record #2598)
+Associated skill: Pervasion
+Skillpoints required: 44999
+Blurb: A bone-crushing stream.
+Syntax: MANIFEST TORRENT <target>
+Abfile:
+Send a concentrated torrent of water at a supine target(*), freezing
+them to the bone. If your target is also too weak to defend against the
+attack(**), this attack will also break both of their arms.
+
+* Requires the target be prone.
+** If the target has weariness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

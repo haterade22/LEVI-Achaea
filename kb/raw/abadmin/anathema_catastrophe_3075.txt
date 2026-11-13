@@ -1,0 +1,23 @@
+Ability: Catastrophe (Record #3075)
+Associated skill: Anathema
+Skillpoints required: 60000
+Blurb: Destruction given flesh.
+Syntax: UNNAMABLE CATASTROPHE <target>
+Abfile:
+Having mastered your craft, you may now assume a brief state of total
+manifestation; this terrifying form shall be more than enough to unleash
+total destruction upon an appropriate victim(*).
+
+* They must have at least two fully mangled limbs. One must be an arm,
+and the other must not be.
+** This will slay your target outright.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 5% karma

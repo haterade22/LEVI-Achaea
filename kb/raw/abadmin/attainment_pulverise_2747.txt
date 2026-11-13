@@ -1,0 +1,18 @@
+Ability: Pulverise (Record #2747)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Respite shall not be granted.
+Syntax: WEAVE PULVERISE <target>
+Abfile:
+Weave a warhammer into being and shatter any magical shield your foe may
+cower behind.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_psion

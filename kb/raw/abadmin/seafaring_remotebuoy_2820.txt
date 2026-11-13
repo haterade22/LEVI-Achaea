@@ -1,0 +1,27 @@
+Ability: Remotebuoy (Record #2820)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Activate a buoy remotely
+Syntax: SHIP BUOY ACTIVATE <buoy>
+SHIP CARGOBOX TRANSFER <box>
+SHIP CARGOBOX DUMP <box>
+Abfile:
+For those who command enough sway over their ship, one may activate a
+buoy from a ship other than the original owner of the buoy. This
+requires captain permissions on the owning ship, and that the collecting
+ship be adjacent. The cargo will be loaded on board into a crate, to be
+transferred to the owning ship at a later date.
+
+A ship may only carry one box of cargo at a time. If a ship's captain
+finds themself in possession of a cargo box they no longer wish to
+carry, they may dump it overboard, though this will be known to the
+original owners of the cargo.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: command5

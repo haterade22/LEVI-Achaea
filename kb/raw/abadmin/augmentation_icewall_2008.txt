@@ -1,0 +1,27 @@
+Ability: Icewall (Record #2008)
+Associated skill: Augmentation
+Skillpoints required: 22999
+Blurb: Create a blocking wall of ice.
+Syntax: BEGIN ENCHANTMENT OF <item> WITH ICEWALL
+POINT <item> <direction>
+Abfile:
+ Type:
+   Enchanted on wands, rings, gloves, or gauntlets.
+
+Actions:
+   Chant "incula cela ecta" 3x10, 2x3, 17, 8, 4, 7
+
+Comms:
+   1 elemental ice, 1 diamond dust
+
+This spell will create a wall of elemental ice, blocking the passage of
+those who would seek to pass by.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

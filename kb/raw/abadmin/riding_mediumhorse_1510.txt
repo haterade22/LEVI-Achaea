@@ -1,0 +1,15 @@
+Ability: Mediumhorse (Record #1510)
+Associated skill: Riding
+Skillpoints required: 16999
+Blurb: Explore the lands upon a medium horse.
+Syntax: none
+Abfile:
+You can ride upon a medium horse (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,27 @@
+Ability: Miriad (Record #2706)
+Associated skill: Weaving
+Skillpoints required: 60000
+Blurb: We are legion.
+Syntax: WEAVE MIRIAD
+WEAVE MIRIAD DISPERSE
+MIRIADS
+Abfile:
+The ultimate expression of weaving: weaving copies of your own person
+into being. These copies shall attach themselves to random targets in
+your location, and whenever you hit an individual those copies shall
+copy you on their relevant targets. You do not get to choose the targets
+and the miriads will only work when they can see both you and their
+target(*). Miriads do the same limb damage and afflictions as you, but
+their health damage is significantly reduced(**).
+
+* You must be in the same room as the target of the miriad.
+** 50% of base values.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

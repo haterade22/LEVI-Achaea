@@ -1,0 +1,22 @@
+Ability: Causality (Record #2410)
+Associated skill: Aeonics
+Skillpoints required: 5999
+Blurb: The future is yours.
+Syntax: CHRONO CAUSALITY [BOOST]
+Abfile:
+By tapping into the threads of causality, you can determine when and
+where an enemy shall strike. This will allow you to dodge any physical
+attack with absolute certainty, though no more than once. You may only
+do this sparingly.
+
+If you boost this ability, you may tap into the threads of causality
+without incurring an equilibrium cost.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 270 age

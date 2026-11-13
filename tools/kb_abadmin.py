@@ -52,9 +52,10 @@ WIKI = os.path.join(ROOT, "kb", "classes", "abilities.json")
 OUT_JSON = os.path.join(ROOT, "kb", "classes", "abadmin.json")
 OUT_MD = os.path.join(ROOT, "kb", "classes", "abadmin-vs-wiki.md")
 
-HEAD = re.compile(r"^Ability: (.+) \(Record #(\d+)\)\s*$")
+# An empty slot ("Ability:  (Record #3293)") has no name and no skill: it is kept, not compared.
+HEAD = re.compile(r"^Ability: (.*?) ?\(Record #(\d+)\)\s*$")
 MAPS = re.compile(r"^Maps to record (\d+) \((.+)\)\.?\s*$")
-ALIAS = re.compile(r"^The ability name (\S+) is mapped to this ability\.?\s*$")
+ALIAS = re.compile(r"^The ability name (.+?) is mapped to this ability\.?\s*$")  # "CONCUSSION BOMB" too
 # The game's label -> the JSON key.
 FIELDS = {
     "Associated skill": "skill", "Skillpoints required": "skillpoints", "Blurb": "blurb",
@@ -71,19 +72,22 @@ LISTS = {"syntax", "extra", "prechecks"}  # a line with no label continues these
 AFTER_TEXT = {"target", "prechecks", "range", "aggression", "arms", "legs", "entangled", "paralysed",
               "cooldown", "resource", "drain", "specialisation"}
 INTS = {"skillpoints", "arms", "legs"}
-# One word, or a word and "balance" ("humour balance"): a wiki cost can run on into other text
-# ("4.00 seconds of equilibrium symbol=Two isosceles triangles").
-SECONDS = re.compile(r"(\d+(?:\.\d+)?)\s*seconds?(?:\s+of\s+([A-Za-z]+(?:\s+balance)?))?", re.I)
+# Up to two words and "balance" ("humour balance", "hydra head balance"), else one word: a wiki cost
+# can run on into other text ("4.00 seconds of equilibrium symbol=Two isosceles triangles").
+SECONDS = re.compile(r"(\d+(?:\.\d+)?)\s*seconds?(?:\s+of\s+((?:[A-Za-z]+\s+){0,2}balance\b|[A-Za-z]+))?", re.I)
 
 
 def clock(text):
     """'1.00 seconds of equilibrium' -> (1.0, 'equilibrium'); '41.00 seconds' -> (41.0, 'cooldown');
     'Equilibrium' -> (None, 'equilibrium'); '' -> (None, None)."""
-    text = (text or "").strip()
-    m = SECONDS.search(text)
-    if m:
-        return float(m.group(1)), (m.group(2) or "cooldown").strip().lower()
-    return None, (text.lower() or None)
+    return (clocks(text) or [(None, ((text or "").strip().lower() or None))])[0]
+
+
+def clocks(text):
+    """Every (seconds, clock) in a cost text: a wiki cost can name one per sub-command
+    ("TRACK: 4.50 seconds of equilibrium PURSUE: 1.00 seconds of equilibrium")."""
+    return [(float(m.group(1)), (m.group(2) or "cooldown").strip().lower())
+            for m in SECONDS.finditer((text or "").strip())]
 
 
 def parse_record(text):
@@ -154,19 +158,43 @@ def wiki_index(path=WIKI):
 
 
 def norm_target(t):
-    """The game writes "none" where the wiki leaves the target empty: both are no target."""
-    t = re.sub(r"\s+", " ", (t or "").strip().lower()).rstrip(".")
+    """The game writes "none" where the wiki leaves the target empty: both are no target. The wiki's
+    template residue goes ("Self unique=Yes")."""
+    t = re.sub(r"\s*\bunique=\S*", "", (t or "").lower())
+    t = re.sub(r"\s+", " ", t.strip()).rstrip(".")
     return "" if t == "none" else t
+
+
+BARE_CLOCK = re.compile(r"(?:[a-z]+ ){0,2}balance|equilibrium")
+
+
+def bare_clock(text):
+    """The clock of a cost with no number: 'Equilibrium' -> 'equilibrium'. Other text (a mana cost,
+    "Balance cost varies based on weapon speed") names no clock -> None."""
+    t = re.sub(r"\s+", " ", (text or "").strip().lower())
+    return t if BARE_CLOCK.fullmatch(t) else None
+
+
+def cost_differs(game, wiki):
+    """True only when both sides state a cost and a cost of the game's is not among the wiki's (the game
+    can name two: "2.50 seconds of equilibrium and 20.00 seconds of voice balance"). A side that states
+    only a clock ("Equilibrium") differs only in the clock."""
+    gall, wall = clocks(game), clocks(wiki)
+    if gall and wall:
+        return any(c not in wall for c in gall)
+    gk = gall[0][1] if gall else bare_clock(game)
+    wk = wall[0][1] if wall else bare_clock(wiki)
+    return bool(gk and wk and gk != wk)
 
 
 def compare(recs, wiki):
     """(diffs, unlisted, uncovered): rows where the game and the wiki differ, records of a wiki skill
     that the wiki does not list, and {skill: [ids]} for the skills the wiki does not cover.
-    A pointer record is skipped: the record it maps to is compared."""
+    A pointer record is skipped: the record it maps to is compared. So is an empty slot (no name)."""
     wiki_skills = {s for s, _ in wiki}
     diffs, unlisted, uncovered = [], [], {}
     for r in recs:
-        if "maps_to" in r:
+        if "maps_to" in r or not r["ability"]:
             continue
         skill = r.get("skill", "")
         if skill.lower() not in wiki_skills:
@@ -176,11 +204,16 @@ def compare(recs, wiki):
         if w is None:
             unlisted.append(r)
             continue
+        # A side that states nothing is a gap, not a difference: only values both sides state are compared.
         notes = []
-        ws, wk = clock(w.get("cooldown"))
-        if (r["seconds"] is not None or ws is not None) and (r["seconds"], r["clock"]) != (ws, wk):
-            notes.append("cost")
-        if norm_target(r.get("target")) != norm_target(w.get("target")):
+        if cost_differs(r.get("cooldown"), w.get("cooldown")):
+            # The record can contradict itself: FREEZE's Cooldown line says 2.20 s, its Extra info
+            # "Targetted cooldown: 3.00 seconds of equilibrium", which is the wiki's.
+            extra = clocks(" ".join(r.get("extra", [])))
+            notes.append("cost, but its Extra info gives the wiki's"
+                         if any(c in extra for c in clocks(w.get("cooldown"))) else "cost")
+        gt, wt = norm_target(r.get("target")), norm_target(w.get("target"))
+        if gt and wt and gt != wt:
             notes.append("target")
         if notes:
             diffs.append((r, w, notes))
@@ -193,6 +226,7 @@ def cell(s):
 
 def render_md(recs, diffs, unlisted, uncovered):
     pointers = sum(1 for r in recs if "maps_to" in r)
+    empty = [r["id"] for r in recs if not r["ability"]]
     out = [
         "# ABADMIN SHOW records against the wiki",
         "",
@@ -203,7 +237,15 @@ def render_md(recs, diffs, unlisted, uncovered):
         "equilibrium is that base times `ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`: the Aldar",
         "Diadem, x0.85, and Rain), as `kb/mechanics/balance-and-queueing.md` (\"Our speed factors\") says.",
         "",
-        f"Records: {len(recs)} ({pointers} of them pointers to another record). Differ from the wiki: "
+        "Only a value that both sides state is compared. An empty wiki cell, or a game cost with no number",
+        "(\"Equilibrium\"), is a gap, not a difference; such a cost differs only when its clock does. A wiki cost",
+        "that names one cost per sub-command agrees when one of them is the game's. A record's Extra info can",
+        "name a cost per mode that its Cooldown line does not (FREEZE: Cooldown 2.20 s, \"Targetted cooldown:",
+        "3.00 seconds\"); where that is the wiki's cost, the row says so, and which one the game spends is open.",
+        "",
+        f"Records: {len(recs)} ({pointers} of them pointers to another record"
+        + (f"; {len(empty)} empty slots with no name or skill, ids {', '.join(map(str, empty))}" if empty else "")
+        + "). Differ from the wiki: "
         f"{len(diffs)}. Not listed on the wiki page of their skill: {len(unlisted)}. "
         f"Skills the wiki pages do not cover: {len(uncovered)}.",
         "",

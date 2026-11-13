@@ -1,0 +1,18 @@
+Ability: Mask (Record #952)
+Associated skill: Occultism
+Skillpoints required: 4999
+Blurb: Conceal the movement of your chaos entities.
+Syntax: MASK
+UNMASK
+Abfile:
+This ability will cause all the chaos entities in your entourage to become cloaked. While cloaked, their movement in and out of rooms will not be seen. To remove the cloak, use UNMASK.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 500 mana

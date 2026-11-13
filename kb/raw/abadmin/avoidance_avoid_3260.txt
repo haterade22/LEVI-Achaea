@@ -1,0 +1,22 @@
+Ability: Avoid (Record #3260)
+Associated skill: Avoidance
+Skillpoints required: 1
+Blurb: The fundamentals of defensive posture.
+Syntax: AVOID <PHYSICAL|ARCANE|MENTAL|AOE>
+Abfile:
+Learning to strike a foe is but half the battle, for they too will seek
+to end your life. Studying this ability will allow you to focus on a
+type of incoming attack and mitigate the damage you suffer from said
+attack if you successfully avoid it. This ability does improve
+considerably as you rise through the ranks in avoidance.
+
+Note that some abilities are beyond your ability to avoid, and you may
+only change what you are avoiding once every thirty seconds.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

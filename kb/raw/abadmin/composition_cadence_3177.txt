@@ -1,0 +1,20 @@
+Ability: Cadence (Record #3177)
+Associated skill: Composition
+Skillpoints required: 15999
+Blurb: As the music plays on.
+Syntax: PERFORMANCE SUSPEND|RESUME
+Abfile:
+You have advanced in your mastery to a point where you may now suspend a
+performance and resume it at will(*).
+
+* A suspended performance will not decrease in time remaining while
+you're online, and a suspended performance will not hit any enemies.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

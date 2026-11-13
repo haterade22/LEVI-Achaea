@@ -1,0 +1,23 @@
+Ability: Hound (Record #3163)
+Associated skill: Bladedance
+Skillpoints required: 12999
+Blurb: The dance isn't over.
+Syntax: BLADE HOUND <target>
+Abfile:
+Sometimes when you get behind a partner they're just going to try to
+make a run for it. With this technique you'll hound their steps, and, so
+long as you have their back or side(*), you'll be able to charge back
+into the dance inflicting quite the damage while stunning them.
+
+* If someone is in an adjacent room and you have back or side positions,
+this ability will move you into their room and damage them as well as
+conveying a moderate stun.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same location or adjacent at same elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 2
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

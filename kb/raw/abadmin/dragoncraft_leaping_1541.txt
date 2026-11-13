@@ -1,0 +1,17 @@
+Ability: Leaping (Record #1541)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Bound over any obstructions in your path.
+Syntax: LEAP <direction>
+Abfile:
+This ability will allow you to leap over various obstacles in your way.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Skill specialisation: dragonform

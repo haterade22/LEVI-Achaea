@@ -1,0 +1,27 @@
+Ability: Ironwill (Record #2713)
+Associated skill: Psionics
+Skillpoints required: 12999
+Blurb: Your mind against theirs.
+Syntax: PSI IRONWILL [TARGET]
+Abfile:
+By focusing all of your attention on the process(*), you may drive out
+foreign influence upon your mind or the mind of a friendly target(**),
+breaking any mindlocks if one is present.
+
+* This is a channelled action: you may perform no other actions while
+focusing on severing the mindlock.
+
+** In the case where you target it at the person you have lifebonded it
+will be the same delay as when targeting it at yourself: in all other
+cases the channel is twice as long.
+
+
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

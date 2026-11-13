@@ -1,0 +1,27 @@
+Ability: Vertani (Record #3198)
+Associated skill: Sagas
+Skillpoints required: 25999
+Blurb: Empire's wrath unleashed.
+Syntax: RECITE VERTANI <target>
+Abfile:
+A tale of peaceful approach turned to brutal war, the retelling of the
+Vertan Empire's coming can end only one way. You may recite this Saga
+while focused upon someone nearby and outdoors(*), and at its
+culmination meteors shall descend to shatter the magical shields of said
+individual and all who stand alongside them. Note that once the
+retelling begins, even if the target flees, so long as they remain
+outdoors the meteors shall still fall upon them, no matter how far they
+might flee(**).
+
+* Nearby for this purpose is within the same local area.
+** Within reason. Crossing planar boundaries or similar may prove too
+much, even for the glory of Vertan's Empire retold.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same area at any elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance and 3.00 seconds of equilibrium

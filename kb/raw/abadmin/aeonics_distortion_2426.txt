@@ -1,0 +1,30 @@
+Ability: Distortion (Record #2426)
+Associated skill: Aeonics
+Skillpoints required: 53999
+Blurb: Those that forget the past...
+Syntax: CHRONO DISTORTION [BOOST]
+CHRONO DISTORTION NORMALISE
+Abfile:
+This powerful act of time manipulation allows you to distort the
+timestream in a location, causing all of your personal enemies to have a
+chance to be moved slightly back in time each time they attempt to
+leave. This will result in them failing to escape your location.
+
+Note that boosting this ability removes the eq cost. However, the older
+you are, the less able you are to maintain this spell, resulting in it
+becoming progressively less potent the older you grow.
+
+You may also normalise the temporal flow in a location, removing any
+distortions. This is instant if the only distortion present was created
+by you or if there are no other Aeonics practitioners present: otherwise
+it has a channel.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 300 age
+The ability name DISTORT is mapped to this ability.

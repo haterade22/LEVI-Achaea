@@ -1,0 +1,31 @@
+Ability: Cold (Record #2001)
+Associated skill: Augmentation
+Skillpoints required: 2499
+Blurb: Enchant rings with the power to resist cold.
+Syntax: BEGIN ENCHANTMENT OF <ring> WITH COLD RESISTANCE
+ACTIVATE COLD RESISTANCE
+Abfile:
+ To use:
+   Can be activated once it is worn.
+
+Type:
+   Enchanted on rings.
+
+Actions:
+   2x3, 2x7, 2x12, 2x7, 2x5, 2x8, 2x13, 2x8, 2x5, 2x7
+
+Comms:
+   2 gold, 2 stag's horn, 2 diamond dust
+
+A ring of cold resistance will grant a defence reducing the effects of
+cold damage.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name COLDRESISTANCE is mapped to this ability.

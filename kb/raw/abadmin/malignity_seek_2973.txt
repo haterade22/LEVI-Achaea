@@ -1,0 +1,16 @@
+Ability: Seek (Record #2973)
+Associated skill: Malignity
+Skillpoints required: 999
+Blurb: Order your hyena to seek its prey.
+Syntax: HYENA SEEK <adventurer>
+Abfile:
+Using this ability, you may order your hyena to seek out another
+adventurer. Your hyena must be by your side for you to use this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Scene (Record #3237)
+Associated skill: Woe
+Skillpoints required: 34999
+Blurb: Bring the tales of Woe to life.
+Syntax: SCENE [LETHAL] <illusion>
+Abfile:
+Craft a scene for all in your location to witness(*).
+
+* Creates an illusion. You may embed up to one newline with \n.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 100 mana

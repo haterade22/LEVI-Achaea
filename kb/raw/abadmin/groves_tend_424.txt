@@ -1,0 +1,18 @@
+Ability: Tend (Record #424)
+Associated skill: Groves
+Skillpoints required: 6999
+Blurb: Lovingly caring for your grove.
+Syntax: GROVE TEND
+Abfile:
+Though this is only useable once per Achaean year, it will add a
+significant amount of sunlight energy to your grove.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 30 sunlight

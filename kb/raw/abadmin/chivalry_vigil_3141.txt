@@ -1,0 +1,27 @@
+Ability: Vigil (Record #3141)
+Associated skill: Chivalry
+Skillpoints required: 50999
+Blurb: Ever watchful.
+Syntax: STAND VIGIL
+Abfile:
+Before even the Ur'Vampires there existed an honour guard, unliving
+custodians born to protect Finality's child. Through mortal emulation of
+their duty without end was Chivalry first enkindled, echoing the ancient
+vigil of the Death Knights.
+
+When standing vigil, you will keep the keenest of eyes on your immediate
+surroundings(*), though this will take much of your focus(**).
+
+
+* You will gain the equivalent of skywatch, treewatch, groundwatch, and
+the lifevision defences for most purposes.
+** This is a channeled action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

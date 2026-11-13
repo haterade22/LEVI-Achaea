@@ -1,0 +1,17 @@
+Ability: Lay (Record #1676)
+Associated skill: Voicecraft
+Skillpoints required: 299
+Blurb: Create a field of distortion to protect against fashioning.
+Syntax: SING LAY
+Abfile:
+Creates a defense against puppet/doll fashioning of you. While active, truefashion will have a reduced chance to fire.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 75 mana and 20 willpower

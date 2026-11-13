@@ -1,0 +1,25 @@
+Ability: Petrify (Record #2135)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb:
+Syntax: PETRIFY <target>
+This ability will be hidden on ablistings.
+Abfile:
+The gaze of the basilisk is truly terrible to behold. If your victim
+lacks the blindness defence, and suffers from five of hallucinations,
+dizziness, recklessness, confusion, paranoia, epilepsy, and impatience,
+you may turn them into little more than a living statue. They will be
+unable to do anything in this time, although the petrification is
+temporary.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 300 mana
+Skill specialisation: meta_sentinel

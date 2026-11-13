@@ -1,0 +1,18 @@
+Ability: Armclamp (Record #402)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Clamp down on your opponent's arm.
+Syntax: HYDRA ARMCLAMP <target> LEFT/RIGHT
+This ability will be hidden on ablistings.
+Abfile:
+Using your many hydra heads, you can clamp down on the arm of an adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of hydra head balance
+Skill specialisation: meta_druid

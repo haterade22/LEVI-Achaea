@@ -1,0 +1,29 @@
+Ability: Strike (Record #2382)
+Associated skill: Shadowmancy
+Skillpoints required: 7999
+Blurb: You shall not suffer obstructions.
+Syntax: SHADOW STRIKE <target> [KNEEL]
+Abfile:
+Command your shadow to rend asunder any magical shields that your
+opponent may have raised as protection.
+
+If they lack a shield and you append KNEEL to this command, their own
+shadow shall turn against them, knocking them to the ground at your
+feet. (This is faster if the target is afflicted with timeloop.)
+
+You must be wielding a manifested dagger to carry out this ability.
+
+In addition, this ability will drive your target closer to the next
+affliction from an attuned shadow.
+
+* Note that if your target is knocked prone this ability incurs a longer
+balance recovery.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,25 @@
+Ability: Negate (Record #363)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Strip the defences from your target.
+Syntax: NEGATE <target>
+HYDRA NEGATE <target>*
+This ability will be hidden on ablistings.
+Abfile:
+ Attempt to strip away the defences of your target.
+
+This attack will always strip the caloric salve defence first if it is
+present.*
+
+* Hydra morph only.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana

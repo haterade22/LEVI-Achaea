@@ -1,0 +1,23 @@
+Ability: Burrow (Record #2886)
+Associated skill: Pestilence
+Skillpoints required: 13999
+Blurb: Into the warm and dark.
+Syntax: SWARM BURROW <swarm> <target>
+Abfile:
+Send your swarm to burrow into the flesh of your foe, lingering within
+their body. This utilisation of your swarms does not do more than cause
+bodily discomfort(*), but there are many opportunities available to one
+who can invade the corpus once this has been achieved(**).
+
+* Does damage.
+** There are further abilities which can be utilised via a burrowed
+swarm.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

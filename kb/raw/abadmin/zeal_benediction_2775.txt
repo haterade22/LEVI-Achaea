@@ -1,0 +1,19 @@
+Ability: Benediction (Record #2775)
+Associated skill: Zeal
+Skillpoints required: 52999
+Blurb: A holy blessing to protect the righteous.
+Syntax: RECITE BENEDICTION <target>
+Abfile:
+This holy benediction shall grant all of the blessings gained from
+reciting the verses of fire, void, protection, will and endurance to an
+individual in your location. Due to the nature of this supplication, it
+is not considered a holy verse and does not compose any aspect of a
+prayer.
+Useable on: adventurers and self
+Pre checks:
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

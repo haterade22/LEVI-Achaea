@@ -1,0 +1,15 @@
+Ability: Scan (Record #1623)
+Associated skill: Swashbuckling
+Skillpoints required: 7999
+Blurb: Scanning the forest floor from the treetops.
+Syntax: SCAN
+Abfile:
+While in the treetops, you can scan the ground for passersby.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

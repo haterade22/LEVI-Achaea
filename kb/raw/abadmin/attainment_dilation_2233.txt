@@ -1,0 +1,23 @@
+Ability: Dilation (Record #2233)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Freeze time around your opponent.
+Syntax: CAST DILATION AT <target>
+Extra info: Gives denizen affliction: Aeon
+Abfile:
+Summon the forces of wind and ice in a polar vortex surrounding your
+target. The cold becomes so intense that the very fabric of time itself
+is cracked in a small pocket around the target, causing it to move much
+slower in relation to the rest of reality and afflicting it with the
+aeon effect for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 35 rage
+Skill specialisation: br_magi

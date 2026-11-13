@@ -1,0 +1,16 @@
+Ability: Blocking (Record #2523)
+Associated skill: Sculpting
+Skillpoints required: 399
+Blurb: Bar an exit with your stone-forged form.
+Syntax: BLOCK <direction>
+Abfile:
+Block an exit with your stone-forged form, making it impossible for
+anyone to walk in that direction.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Tremorsense (Record #2530)
+Associated skill: Sculpting
+Skillpoints required: 13999
+Blurb: Know all that walk upon the earth.
+Syntax: TERRAN TREMORSENSE [OFF]
+Abfile:
+While you have this ability activated, you will know of any that enter
+your local area, providing they walk upon the ground when doing so.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

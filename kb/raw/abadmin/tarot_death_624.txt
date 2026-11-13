@@ -1,0 +1,35 @@
+Ability: Death (Record #624)
+Associated skill: Tarot
+Skillpoints required: 60000
+Blurb: Call down Death itself to claim the soul of your enemy.
+Syntax: RUB DEATH ON <target>
+SNIFF DEATH
+FLING DEATH AT <target>
+Extra info: Rub: 3.20 seconds of equilibrium.
+Abfile:
+To attune Death, you must first rub it on your enemy seven times.
+
+Sniffing the card will tell you how many times you have rubbed it on
+your foul oppressor, while flinging it will begin the process of calling
+Death himself to gather the soul of your enemy to him. Be warned though
+that this process takes concentration and you may not do anything else
+while Death is on his way.
+
+When rubbing Death, normally your card will only gain one charge towards
+attunement. However, the number of charges generated for each rub will
+be increased for each of a set of conditions that are true(*).
+
+Finally, rubbing death on your target will attempt to freeze that
+adventurer, though can only ever make them shiver at worst.
+
+* Death rubs are increased for each of: stun, aeon, entangled,
+shivering, or paralysed.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

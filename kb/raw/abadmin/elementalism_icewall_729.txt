@@ -1,0 +1,18 @@
+Ability: Icewall (Record #729)
+Associated skill: Elementalism
+Skillpoints required: 39999
+Blurb: Conjure up an obstructing icewall.
+Syntax: CAST ICEWALL <direction>
+Abfile:
+This spell will create a wall of elemental ice, blocking the passage of
+those who would seek to pass by.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

@@ -1,0 +1,21 @@
+Ability: Fissure (Record #2863)
+Associated skill: Memorium
+Skillpoints required: 3999
+Blurb: That which sunders.
+Syntax: TRACE FISSURE <target>
+Abfile:
+One of the crudest of logographs, the fissure possesses two properties
+of interest. The former is its ability to sunder the magical shields
+protecting your enemies; the second is that it does not chain from or to
+anything. Notably however, it also does not interrupt the chaining of
+other logographs, for reasons the ancient sorcerers were never able to
+uncover.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of balance

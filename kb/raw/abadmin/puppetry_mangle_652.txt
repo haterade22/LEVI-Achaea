@@ -1,0 +1,19 @@
+Ability: Mangle (Record #652)
+Associated skill: Puppetry
+Skillpoints required: 46999
+Blurb: Viciously mangle one of your victim's limbs.
+Syntax: PUPPET MANGLE <left/right> <arm/leg>
+Extra info: Fashions:
+Requires: 25
+Used: 4
+Abfile:
+Though breaking someone's limb is certainly painful, mangling it is far worse.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

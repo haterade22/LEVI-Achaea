@@ -1,0 +1,18 @@
+Ability: Leatherarmour (Record #1837)
+Associated skill: Armoursmithing
+Skillpoints required: 2499
+Blurb: A suit of leather armour.
+Syntax: FORGE FOR LEATHERARMOUR
+FORGE (to continue after interruption)
+Extra info: Commodities: 10 Leather
+Abfile:
+A suit of leather armour.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

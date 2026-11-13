@@ -1,0 +1,16 @@
+Ability: Larkspur (Record #1295)
+Associated skill: Venom
+Skillpoints required: 24999
+Blurb: Causes great dizziness.
+Syntax: SECRETE LARKSPUR
+BITE <target>
+Abfile:
+Cause great dizziness in your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

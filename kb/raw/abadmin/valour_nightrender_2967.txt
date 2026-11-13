@@ -1,0 +1,18 @@
+Ability: Nightrender (Record #2967)
+Associated skill: Valour
+Skillpoints required: 51999
+Blurb: To tear the Dark asunder.
+Syntax: EAGLE NIGHTRENDER
+Abfile:
+Equip your eagle with steel talons, and set it loose upon the enemies of
+Creation(*).
+
+* Significantly increases your eagle's offensive capabilities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

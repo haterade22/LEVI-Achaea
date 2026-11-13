@@ -1,0 +1,26 @@
+Ability: Unnamable (Record #969)
+Associated skill: Occultism
+Skillpoints required: 26999
+Blurb: Hear what cannot be named, or see what cannot be imagined.
+Syntax: UNNAMABLE SPEAK
+UNNAMABLE VISION
+Abfile:
+From your studies of occult lore, you can use karma to actually speak
+the Unnamable's name or cause a vision of the Unnamable to appear to
+everyone in a location. For any who are not trained in occult studies,
+those hearing the name or seeing the vision will be afflicted with
+various insanities.
+
+The insanities bestowed by this will not duplicate with existing
+maladies upon the unfortunate witness or listener.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of equilibrium
+Resource: 1% karma

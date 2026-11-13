@@ -1,0 +1,27 @@
+Ability: Seal (Record #3252)
+Associated skill: Hypnosis
+Skillpoints required: 1
+Blurb: Poised to strike.
+Syntax: SEAL <target> <delay in seconds>
+Abfile:
+The act of sealing a hypnotic trance primes it for use. You may seal
+your trance at any time for three seconds and upwards, and suggestions
+tick periodically every four seconds there after.
+
+However, if you seal your trance while your victim suffers from a
+deadened mind, the trance will sink more deeply into their psyche, tying
+itself more intrinsically and becoming vastly more potent when
+triggered(*).
+
+* The delay can be set as low as one second, and the suggestions trigger
+every three seconds there after.
+Useable on: none
+Pre checks: equilibrium and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 200 mana

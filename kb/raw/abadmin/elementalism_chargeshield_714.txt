@@ -1,0 +1,21 @@
+Ability: Chargeshield (Record #714)
+Associated skill: Elementalism
+Skillpoints required: 9999
+Blurb: Create a magical shield to resist electric damage.
+Syntax: CAST CHARGESHIELD AT ME/<target>
+Abfile:
+The chargeshield is a defensive spell which will provide you with some
+protection from electric attacks.
+
+In addition, possessing this defence will reduce the equilibrium penalty
+caused by the confusion affliction.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

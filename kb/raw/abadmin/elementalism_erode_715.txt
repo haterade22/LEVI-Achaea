@@ -1,0 +1,27 @@
+Ability: Erode (Record #715)
+Associated skill: Elementalism
+Skillpoints required: 13999
+Blurb: Destroy the defences of your opponent.
+Syntax: CAST ERODE AT <target> [defence] [MAINTAIN]
+Abfile:
+With the destructive fury of all the elements at your command, you may
+destroy a defence on an opponent. This spell will strip the first
+defence it finds from the below list, and if none are present
+strip any random defence. You may also specify one of the listed
+defences and target that one in particular:
+Shield, chargeshield, insulation, and temperance.
+
+* Note that this spell is special in that while instead of increasing
+resonance, when you successfully strip a defence all resonance you
+possess is decreased by one level unless you specify the MAINTAIN
+argument.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 75 mana

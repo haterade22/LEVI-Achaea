@@ -1,0 +1,29 @@
+Ability: Haskor (Record #1074)
+Associated skill: Sagas
+Skillpoints required: 47999
+Blurb: The Hero made divine.
+Syntax: RECITE HASKOR
+Abfile:
+The Saga of Haskor is one of many battlefields, but through it all runs
+a single golden thread: Heroism.
+
+Speak the saga of Haskor, and all mutual allies that hear your tale will
+fall under the mantle of your heroism, defended against death so long as
+you stand. Beware, though. If you fall... the day is dark indeed.
+
+* For around half a minute after this saga takes effect, your allies
+protected by said saga will never know death by the hands of other
+adventurers so long as they stand with you. However, if you perish, all
+who heard it shall fall with you as well...
+** There is a cooldown of five minutes on using this ability, and it is
+apparent to all when it is activated.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance and 3.00 seconds of equilibrium

@@ -1,0 +1,15 @@
+Ability: Warhorse (Record #1520)
+Associated skill: Riding
+Skillpoints required: 30999
+Blurb: Boldly ride a war horse.
+Syntax: None
+Abfile:
+You can ride upon a war horse (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

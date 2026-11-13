@@ -1,0 +1,3 @@
+Ability: Channeling (Record #700)
+Associated skill: Elementalism
+Maps to record 699 (CHANNEL).

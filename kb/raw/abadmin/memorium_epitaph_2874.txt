@@ -1,0 +1,32 @@
+Ability: Epitaph (Record #2874)
+Associated skill: Memorium
+Skillpoints required: 11999
+Blurb: To go beyond the singular.
+Syntax: EPITAPH
+EPITAPH FOCUS <logograph1> <logograph2> [logograph...n]
+EPITAPH ADVANCE <target>
+Abfile:
+The truly gifted wielder of Memorium does not deal in the singular
+logographs that compose the basic workings. As the wielder learns the
+script, they realise over time that the logographs flow together; one
+logograph can flow into one or more other logographs, speeding up the
+process of tracing. When tracing an epitaph in this way, it is said that
+the knife of a master can become little more than a blur.
+
+In addition, you may fix a set of logographs in your mind, your hand so
+practiced at tracing that you may advance to the earliest in your
+epitaph that will maintain an unbroken chain(**).
+
+* Use the EPITAPH command to see what logographs flow into which. The
+balance bonus is cumulative so long as you continue to chain logographs,
+but it does have a limit.
+** EPITAPH FOCUS and EPITAPH ADVANCE are purely for convenience; you may
+trace epitaphs individually if you prefer.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

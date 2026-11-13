@@ -1,0 +1,17 @@
+Ability: Shiver (Record #2330)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Attack a denizen's shield with your weapon.
+Syntax: SHIVER <target>
+Abfile:
+Use your rage and the necromantic power at your disposal to strike at a denizen's shield, causing it to crumble
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_infernal

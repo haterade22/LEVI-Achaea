@@ -1,0 +1,16 @@
+Ability: Sweep (Record #854)
+Associated skill: Tekura
+Skillpoints required: 12999
+Blurb: Attempting to sweep your opponent off his feet.
+Syntax: SWK <target>
+Abfile:
+A specialized kick that attempts to sweep the legs out from under your opponent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of leg balance

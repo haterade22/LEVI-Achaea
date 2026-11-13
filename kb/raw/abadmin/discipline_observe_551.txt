@@ -1,0 +1,15 @@
+Ability: Observe (Record #551)
+Associated skill: Discipline
+Skillpoints required: 45999
+Blurb: Your falcon can now report on the state of individuals.
+Syntax: FALCON OBSERVE
+Abfile:
+If your falcon is flying, it will report back to you the health levels of everyone who is in the local area and outdoors.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

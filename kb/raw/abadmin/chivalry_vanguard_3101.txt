@@ -1,0 +1,20 @@
+Ability: Vanguard (Record #3101)
+Associated skill: Chivalry
+Skillpoints required: 44000
+Blurb: To inspire and to lead.
+Syntax: CALL TO ARMS
+Abfile:
+A Knight of the Realm must both be able to inspire and to lead the
+charge. By mustering a call to arms, all who consider you a mutual ally
+(and any member of the Guild of Knighthood) present shall join your
+group in preparation for a charge.
+
+* This requires you have set a warcry.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

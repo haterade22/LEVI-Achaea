@@ -1,0 +1,24 @@
+Ability: Illusion (Record #2179)
+Associated skill: Weatherweaving
+Skillpoints required: 36999
+Blurb: Cast an illusion of your choosing.
+Syntax: CAST ILLUSION [LETHAL] <illusion>
+CAST <target> ILLUSION [LETHAL] <illusion>
+Abfile:
+With this spell, you can create an illusion of your choosing in the room
+about you. You may embed a single newline in your illusion by including
+the character sequence \n at the appropriate spot. You may optionally
+specify a target for your illusion by adding the name of your intended
+victim after the word 'cast'. For limitations and restrictions, please
+refer to HELP ILLUSIONS.
+
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 25 mana

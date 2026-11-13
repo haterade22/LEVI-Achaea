@@ -1,0 +1,19 @@
+Ability: Moss (Record #1474)
+Associated skill: Tattoos
+Skillpoints required: 299
+Blurb: Automatically reduce your bleeding.
+Syntax: TOUCH MOSS
+Extra info: Inks: 1 Blue ink
+1 Red ink
+1 Yellow ink
+Abfile:
+Touching this tattoo will activate it. As long as it remains active, it will begin clotting your bleeding automatically.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

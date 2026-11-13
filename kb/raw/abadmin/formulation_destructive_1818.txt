@@ -1,0 +1,3 @@
+Ability: Destructive (Record #1818)
+Associated skill: Formulation
+Maps to record 1815 (MAYOLOGY).

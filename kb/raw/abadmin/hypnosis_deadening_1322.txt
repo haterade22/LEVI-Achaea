@@ -1,0 +1,15 @@
+Ability: Deadening (Record #1322)
+Associated skill: Hypnosis
+Skillpoints required: 18999
+Blurb: Weakening of the mind.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

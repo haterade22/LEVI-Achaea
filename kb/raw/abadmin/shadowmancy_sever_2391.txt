@@ -1,0 +1,22 @@
+Ability: Sever (Record #2391)
+Associated skill: Shadowmancy
+Skillpoints required: 27999
+Blurb: A minor mercy.
+Syntax: SHADOW SEVER <target>
+Abfile:
+Sometimes, you may wish to prove a point without necessarily killing
+your foe. In the event of such an eventuality, you may sever their
+shadow, leaving them grievously injured but alive. This shall add their
+shadow to your phylactery, but unlike other methods they shall survive
+the ordeal.
+
+Note that this ability takes some time to complete during which you may
+not be interrupted, and requires the use of a shadow dagger.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Knowledge (Record #2148)
+Associated skill: Reclamation
+Skillpoints required: 7999
+Blurb: Nothing can be hidden from you.
+Syntax: RECLAMATION KNOWLEDGE
+Abfile:
+You have reached a point where you are able to immediately determine the
+locations of any that walk upon your reclaimed land.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Resource: 500 mana

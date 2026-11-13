@@ -1,0 +1,17 @@
+Ability: Rest (Record #357)
+Associated skill: Metamorphosis
+Skillpoints required: 10999
+Blurb: Restore your endurance at an increased rate.
+Syntax: REST
+This ability will be hidden on ablistings.
+Abfile:
+Use this ability to regain endurance at a vastly increased rate.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

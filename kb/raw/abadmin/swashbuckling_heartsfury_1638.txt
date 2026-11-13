@@ -1,0 +1,26 @@
+Ability: Heartsfury (Record #1638)
+Associated skill: Swashbuckling
+Skillpoints required: 42999
+Blurb: An aggressive stance that gives a chance of counterattack.
+Syntax: HEARTSFURY
+UNSTANCE/STANCE NONE
+Abfile:
+Enter the stance of heart's fury, focussing on your assault no matter
+that which would attempt to stop you(*).
+
+There is a mana drain associated with this stance. To end the stance,
+either switch to another stance, or select STANCE NONE or UNSTANCE.
+
+* Your tune defence will provide more resistence against the blows of
+denizens while in this stance, and you have an increased chance to
+bypass movement hinder abilities such as gravehands or tentacles.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Drain: Mana

@@ -1,0 +1,18 @@
+Ability: Qamad (Record #2438)
+Associated skill: Terminus
+Skillpoints required: 3999
+Blurb: A deeper trance.
+Syntax: INTONE QAMAD
+This ability will be hidden on ablistings.
+Abfile:
+This word of power allows you to, while meditating, sink into a deeper
+trance and increase your rate of regeneration.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.50 seconds of word balance

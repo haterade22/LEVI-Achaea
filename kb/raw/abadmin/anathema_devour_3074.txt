@@ -1,0 +1,26 @@
+Ability: Devour (Record #3074)
+Associated skill: Anathema
+Skillpoints required: 45999
+Blurb: Until the last.
+Syntax: UNNAMABLE DEVOUR
+Abfile:
+As you grow closer to the transcendent being, so too does your hunger
+grow. Once you are sufficiently mutated and focused on devouring all
+you are able, anytime someone dies in your location you will consume
+their corpse for a burst of health, if another does not get there
+first...
+
+* You require tentacles and mouths mutated as well as this defence
+active to do this.
+** This can push you above your maximum health to a point.
+*** This is indiscriminate. You will eat allies too if they die.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 4% karma

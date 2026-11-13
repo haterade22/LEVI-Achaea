@@ -1,0 +1,19 @@
+Ability: Trace (Record #1029)
+Associated skill: Spirituality
+Skillpoints required: 33999
+Blurb: Have your angel report on someone's movement.
+Syntax: ANGEL TRACE <target>
+ANGEL TRACE OFF
+Abfile:
+With trace, your angel will report on each movement of an adventurer,
+within the same continent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 25 Angel power

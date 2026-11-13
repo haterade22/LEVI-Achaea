@@ -1,0 +1,23 @@
+Ability: Lightning (Record #461)
+Associated skill: Groves
+Skillpoints required: 54999
+Blurb: Strike your foes with nature's fury.
+Syntax: EVOKE LIGHTNING <target> <direction>
+Extra info: Imbued sunlight.
+Abfile:
+Harnessing the wrath of the sky, you may direct a powerful bolt of
+lightning to strike a foe. Your target must be a sufficient distance
+away from you, and within your line of sight. Lightning is a mercurial
+force, and may occasionally leave your target plagued with ailments, or
+fizzle out harmlessly.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 150 mana and 10 sunlight

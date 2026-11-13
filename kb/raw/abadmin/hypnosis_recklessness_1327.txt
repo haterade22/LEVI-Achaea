@@ -1,0 +1,15 @@
+Ability: Recklessness (Record #1327)
+Associated skill: Hypnosis
+Skillpoints required: 29999
+Blurb: Ignorance of health and disregard for well-being.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

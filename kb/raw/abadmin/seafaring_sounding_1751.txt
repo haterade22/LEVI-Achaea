@@ -1,0 +1,16 @@
+Ability: Sounding (Record #1751)
+Associated skill: Seafaring
+Skillpoints required: 2299
+Blurb: Using the leadline to see if deep sea diving is feasible.
+Syntax: SHIP TAKE SOUNDING
+Abfile:
+With a leadline in hand, take a sounding to see if the surrounding
+waters are suitable for deep-sea diving.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

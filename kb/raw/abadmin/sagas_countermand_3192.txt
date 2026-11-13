@@ -1,0 +1,26 @@
+Ability: Countermand (Record #3192)
+Associated skill: Sagas
+Skillpoints required: 55999
+Blurb: No, this is how it went.
+Syntax: COUNTERMAND <target>
+Abfile:
+Every storyteller knows there is just that one person who has to be the
+centre of attention even when they've just got nothing worthwhile to
+say. Clearly, anything you have to say is far more fascinating than such
+lesser tellers of tales, and now you will prove it!
+
+You may countermand any saga that you know being told by another, having
+a chance to completely interrupt their flow and aborting it before it
+can reach a grand culmination(*).
+
+* You are not guaranteed to succeed. You can increase your chances
+through various means, but never to a hundred percent.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium and 8.00 seconds of voice balance

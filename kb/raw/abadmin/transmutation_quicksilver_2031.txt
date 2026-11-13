@@ -1,0 +1,16 @@
+Ability: Quicksilver (Record #2031)
+Associated skill: Transmutation
+Skillpoints required: 29249
+Blurb: Coat yourself in a thin layer of quicksilver.
+Syntax: EXTRACT QUICKSILVER
+TRANSMUTATE <#> <mineral> TO QUICKSILVER
+Abfile:
+The quicksilver mineral, when applied, will create a coat through which a serpent's fangs cannot penetrate.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Shroud (Record #949)
+Associated skill: Occultism
+Skillpoints required: 2499
+Blurb: Perform many actions in secret.
+Syntax: SHROUD
+UNSHROUD
+Abfile:
+This will draw a shroud of concealment over your actions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 75 mana

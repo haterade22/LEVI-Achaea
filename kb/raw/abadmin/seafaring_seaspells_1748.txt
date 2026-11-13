@@ -1,0 +1,81 @@
+Ability: Seaspells (Record #1748)
+Associated skill: Seafaring
+Skillpoints required: 18999
+Blurb: Invest a ship's consecrated figurehead with powerful Seaspells.
+Syntax: SEASPELLS LIST
+SEASPELLS INVEST <spell>
+SEASPELLS UNINVEST <spell>
+SEASPELLS INVESTED
+INVOKE <spell>
+Abfile:
+SEASPELLS LIST will allow you to peruse the Seaspells available while on
+a voyage. If you are the captain of a vessel with a consecrated
+figurehead mounted, while you are in port at a harbour you may SEASPELL
+INVEST up to four Seaspells for use in your travels. Note that only one
+of Shipcloak and Wavecall may be invested, and only one of Shield or
+Rainstorm may be invested. You may also use SEASPELLS UNINVEST to remove
+a Seaspells to make room for others. Once at sea you may INVOKE the
+invested Seaspells. Finally at any time you may show the SEASPELLS
+INVESTED to see which Seaspells are available in your figurehead. You
+may TOUCH FIGUREHEAD to identify any active Seaspells while at sea.
+
+Shipcloak: INVOKE CLOAK, DISSOLVE CLOAK
+Power Cost: 250
+A seaspell to surround your ship in a cloak of darkness from other
+ships. Flares shot within a certain distance of your ship will bring
+your ship to light, however. Shooting a flare from your own ship while
+cloaked will also dissolve your cloaking.
+
+Wavecall:  INVOKE WAVECALL <direction> <distance between 1-8>
+Power Cost: Varies depending on speed.
+A seaspell to summon a wave to propel your ship a great distance,
+instantaneously, at a great cost in personal endurance, hull damage, as
+well as figurehead power. All costs increase with greater distance.
+Personnel on other ships nearby with SHIPWARNING active will be informed
+of the direction in which a ship wavecalls away.
+
+Shield: INVOKE SHIELD
+Power Cost: 200
+A seaspell to weave a shield around your ship to protect it from damage
+attacks. Can be shattered by a wavescythe seaspell.
+
+Rainstorm:  INVOKE RAINSTORM
+Power Cost: 50
+While shipmelded, you can invoke this seaspell to douse all deck and
+sails fires at once.
+
+Barrier:  INVOKE BARRIER
+DISSOLVE BARRIER
+Power Cost: 300
+A seaspell to invoke prismatic barriers around all those upon your ship.
+Be careful: each and every barrier raised once this seaspell is active
+drains power from the figurehead, until you DISSOLVE BARRIER.
+
+Windboost:  INVOKE WINDBOOST
+Power Cost: 150
+A seaspell to temporarily boost your ship's speed.
+
+Whirlpool:  INVOKE WHIRLPOOL <dir>
+Power Cost: 200
+You may call upon this Seaspell to summon temporary whirlpools around
+your ship, which make it difficult for vessels to enter or leave that
+spot of the ocean.
+
+Wavescythe:  INVOKE WAVESCYTHE <target ship>
+Power Cost: 200
+A seaspell to shatter the magical shield of a ship within a small
+radius.
+
+Hunger: INVOKE HUNGER <target seamonster>
+Power Cost: 300
+A seaspell that will cast a spectral net upon a target seamonster. If
+the seamonster dies before the net disappears, the casting figurehead
+will be replenished a significant amount of power.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

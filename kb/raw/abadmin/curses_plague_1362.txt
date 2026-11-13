@@ -1,0 +1,17 @@
+Ability: Plague (Record #1362)
+Associated skill: Curses
+Skillpoints required: 32999
+Blurb: Curse someone with the voyria affliction.
+Syntax: CURSE <target> PLAGUE
+Abfile:
+Afflict your victim with the deadly voyria.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 70 mana

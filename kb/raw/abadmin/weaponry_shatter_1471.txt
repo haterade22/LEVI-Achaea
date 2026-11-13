@@ -1,0 +1,22 @@
+Ability: Shatter (Record #1471)
+Associated skill: Weaponry
+Skillpoints required: 46999
+Blurb: Deliver a limb-crushing blow.
+Syntax: SHATTER <left/right> <arm/leg> <adventurer>
+Abfile:
+While wielding a blunt weapon, this ability will allow you to deal out
+an extraordinary amount of limb damage to the chosen limb, as well as
+some health damage. It is used as a normal weapon, so the better quality
+the weapon, the more effective this ability is.
+
+A weapon proficiency is required for your chosen shattering weapon.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.93 seconds of balance

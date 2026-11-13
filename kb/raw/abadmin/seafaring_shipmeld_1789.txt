@@ -1,0 +1,21 @@
+Ability: Shipmeld (Record #1789)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Summon the ship's sea spirit and share in its powers.
+Syntax: INVOKE SEA SPIRIT
+RELEASE SEA SPIRIT
+TOUCH FIGUREHEAD
+Abfile:
+You have gained the power to meld your psyche with that of the ship
+itself via the ship's figurehead, invoking a sea spirit to summon
+seaspells for your ship. Touch the figurehead while shipmelded to find
+out how much power it currently stores, and what seaspells are currently
+active. RELEASE SEA SPIRIT will undo this melding.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

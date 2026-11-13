@@ -1,0 +1,16 @@
+Ability: Scent (Record #3025)
+Associated skill: Dominion
+Skillpoints required: 41999
+Blurb: Sniff out the victims.
+Syntax: HOUND SCENT
+Abfile:
+Your hound can sniff out all in the local area, informing you of their
+location and current health.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,35 @@
+Ability: Implant (Record #1168)
+Associated skill: Runelore
+Skillpoints required: 60000
+Blurb: Create a bond between your totem and the earth.
+Syntax: IMPLANT TOTEM
+UPROOT TOTEM
+TUNE <totem> ENEMIES/NONALLIES  (personal totems)
+TUNE <totem> ENEMIES/NONMEMBERS (organisational totems)
+Abfile:
+With this ability, you may take a totem, and make it into a
+semi-permanent fixture, mainly for defensive purposes. Once you begin
+the implanting process, it will take quite a bit of time, during which
+you may not do anything else. Once it IS implanted, however, no one will
+be able to pick it up, unless he has the ability to uproot a totem,
+which will take even longer than implanting it.
+
+Totems are automatically against the enemies of whatever entity owns
+them. When implanted, it will be tuned against your enemies. When
+designated, it will be tuned against the enemies of whatever the new
+owner happens to be (see AB RUNELORE DESIGNATE). Once claimed,
+organisationally-owned totems can be tuned against either the
+organisation's enemies or all but the organisation's members, and
+personally-owned totems can be tuned against either the owner's enemies
+or all but the owner's allies.
+
+This is the only way to clear the ownership on a totem.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Imbue (Record #435)
+Associated skill: Groves
+Skillpoints required: 19250
+Blurb: Infuse your quarterstaff with the power of sunlight.
+Syntax: GROVE IMBUE
+EVOKE SUNLIGHT
+EVOKE STATUS
+Extra info: Energy: 3500 (GROVE IMBUE)
+Abfile:
+Imbue your quarterstaff with the light of the sun. You must be standing in a sunlit place to EVOKE SUNLIGHT. Be aware that empowering a quarterstaff in this way may cause some personal damage. The capacity of your quarterstaff to store light will grow with your skill in Groves. EVOKE STATUS will inform you of its current charge and capacity.
+
+When in your grove, you may GROVE IMBUE to charge your quarterstaff rapidly, be it day or night, at a severe drain to your grove.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 3500 sunlight and mana

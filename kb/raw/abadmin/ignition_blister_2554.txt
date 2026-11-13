@@ -1,0 +1,22 @@
+Ability: Blister (Record #2554)
+Associated skill: Ignition
+Skillpoints required: 4999
+Blurb: They shall burn beneath your touch.
+Syntax: IGNITE SKIN OF <target>
+Abfile:
+Sear the skin of your enemy to such an extent that horrific blisters
+form. These blisters shall make every movement agony, delaying your
+foe's movement between rooms and causing them pain on each successful
+time they escape you(*).
+
+* There is a cooldown on a person taking damage from successfully moving
+with blistered, though there is no cooldown on them being delayed on
+each movement.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

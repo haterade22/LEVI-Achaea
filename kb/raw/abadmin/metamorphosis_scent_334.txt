@@ -1,0 +1,17 @@
+Ability: Scent (Record #334)
+Associated skill: Metamorphosis
+Skillpoints required: 699
+Blurb: Discern the whereabouts of people by their odour.
+Syntax: SCENT <target>
+This ability will be hidden on ablistings.
+Abfile:
+Attempt to discern the location of an adventurer by his scent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

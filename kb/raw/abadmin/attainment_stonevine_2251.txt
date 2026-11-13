@@ -1,0 +1,18 @@
+Ability: Stonevine (Record #2251)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Crush your opponent's limbs.
+Syntax: STONEVINE <target>
+Abfile:
+Use your power over nature to cause a vine to grow up around your target, then channel earth to cause the vine to constrict around your target and cause great pain.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_sylvan

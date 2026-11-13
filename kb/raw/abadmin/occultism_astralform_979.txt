@@ -1,0 +1,26 @@
+Ability: Astralform (Record #979)
+Associated skill: Occultism
+Skillpoints required: 50999
+Blurb: Turn yourself into a being of pure energy.
+Syntax: ASTRALFORM
+HUMAN
+ASTRALISE <direction>
+Extra info: Human cooldown: 4.00 seconds of equilibrium
+Abfile:
+Having mastered all facets of your aura, you can now become pure spirit,
+though you will moderately lose willpower as you strain to hold your
+nebulous form together. HUMAN is the command to return to your normal
+form.
+In addition, you may ASTRALISE in a direction to bypass closed doors,
+though this is a channeled action and will not bypass doors that are
+locked.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana and 200 karma

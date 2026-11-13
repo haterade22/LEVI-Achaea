@@ -1,0 +1,32 @@
+Ability: Virulence (Record #2883)
+Associated skill: Pestilence
+Skillpoints required: 55999
+Blurb: Interaction heralds doom.
+Syntax: VIRULENCE <target>
+Abfile:
+The arcane plagues are dangerous in the singular, but it is when they
+interact that they truly become deadly. Various plagues react to one
+another when coaxed to do so via higher sorcery, and the interactions
+are listed below:
+
+Pyramides + Flushings = Healthleech.
+Pyramides + Rebbies = Slickness.
+Flushings + Rebbies = Darkshade.
+Flushings + Sandfever = Anorexia.
+Mycalium + Sandfever = Dizziness if not present, then stupidity if not
+present, or blackout if both are present.
+Mycalium + Sandfever + Rebbies = Peace.
+
+These conditionals do stack with one another, and you may only invoke
+this act of higher sorcery a subsequent time after some delay. This
+working of higher sorcery can be wielded against anyone in the local
+area.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same area at any elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

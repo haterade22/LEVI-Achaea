@@ -1,0 +1,18 @@
+Ability: Squint (Record #1428)
+Associated skill: Vision
+Skillpoints required: 299
+Blurb: See extended distances in your line of sight.
+Syntax: SQ[UINT] <direction> [#]
+Abfile:
+Squinting will allow you to look as far as the eye can see in a single
+direction, or you can specify the maximum distance in which you wish to
+squint. While on aggression, this will then incur a brief cooldown.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name SQUINTING is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Timers (Record #696)
+Associated skill: Pranks
+Skillpoints required: 55999
+Blurb: Give your bombs a delayed effect.
+Syntax: TIMER <bomb> <3-60 seconds>
+Abfile:
+By setting a timer on a bomb, you are able to delay its effect. Be warned though, that once a timer has been set, a bomb cannot be picked up again.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.50 seconds of balance

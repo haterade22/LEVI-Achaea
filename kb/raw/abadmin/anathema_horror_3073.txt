@@ -1,0 +1,27 @@
+Ability: Horror (Record #3073)
+Associated skill: Anathema
+Skillpoints required: 999
+Blurb: The primordial dread.
+Syntax: UNNAMABLE HORROR <target>
+Abfile:
+Reveal one of the mysteries of the outer spheres to a victim, instilling
+a horror in them that shall only grow(*).
+
+* Gives an affliction that prevents the curing of the fear affliction.
+Additionally, each time someone would otherwise panic from fear instead
+of moving this affliction shall gain another stack. This affliction
+cures faster when out of the giver's presence.
+** This affliction decreases all wrath gain for members of the Paladin
+class by 20% while they are suffering from it.
+*** If you use this ability against someone with a broken head, the fear
+affliction will be delivered alongside it.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of anathema balance
+Resource: 1% karma

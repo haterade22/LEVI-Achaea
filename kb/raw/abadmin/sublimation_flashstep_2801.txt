@@ -1,0 +1,28 @@
+Ability: Flashstep (Record #2801)
+Associated skill: Sublimation
+Skillpoints required: 49999
+Blurb: One with energy.
+Syntax: ALIGN FLASHSTEP <direction>
+This ability will be hidden on ablistings.
+Abfile:
+Only a master of the school of Alignment would be so bold as to risk
+configuring their own nature. The flashstep allows you to align yourself
+so utterly with the energy of the world that for the briefest instant,
+you are one and the same. Transverse to any adjacent location after a
+short delay: only being prone after initiation will prevent your egress.
+
+Overdraw effect: the windup takes a second longer to complete but will
+not be stopped by being prone.
+
+A short balance loss will be incurred when flashstep resolves
+successfully.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 1
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 5% Wellspring Energy

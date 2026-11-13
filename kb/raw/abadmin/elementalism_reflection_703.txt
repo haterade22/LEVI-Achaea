@@ -1,0 +1,19 @@
+Ability: Reflection (Record #703)
+Associated skill: Elementalism
+Skillpoints required: 299
+Blurb: Create a distracting illusion of yourself.
+Syntax: CAST REFLECTION AT ME/<target>
+Abfile:
+By focusing the light of fire through a prism of elemental air, you can
+create a magical reflection of yourself, which will absorb one attack
+before being destroyed. You may only have one reflection at a time.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 50 mana

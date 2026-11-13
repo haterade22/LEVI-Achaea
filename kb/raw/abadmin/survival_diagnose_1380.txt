@@ -1,0 +1,16 @@
+Ability: Diagnose (Record #1380)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Check up on your physical and mental health.
+Syntax: DIAGNOSE/DIAG [ME]
+Abfile:
+With this ability, you may check and see a list of what ails you.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Endurance (Record #2756)
+Associated skill: Zeal
+Skillpoints required: 999
+Blurb: May the protectors of Creation never falter.
+Syntax: RECITE ENDURANCE <target|ME>
+Abfile:
+This holy verse shall grant improved endurance regeneration to yourself
+or an ally.
+Useable on: adventurers and self
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

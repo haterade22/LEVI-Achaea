@@ -1,0 +1,15 @@
+Ability: Sewers (Record #1389)
+Associated skill: Survival
+Skillpoints required: 7999
+Blurb: Gaining entry to the dark underbelly of the cities.
+Syntax: ENTER GRATE
+Abfile:
+Dotted around the streets of cities are sewer grates, leading to the sewer system of that city. This ability will allow you access to that foul area, but be warned that many unsavoury characters reside there.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

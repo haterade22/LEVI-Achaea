@@ -1,0 +1,16 @@
+Ability: Vardrax (Record #1300)
+Associated skill: Venom
+Skillpoints required: 36999
+Blurb: Grants an insatiable addiction.
+Syntax: SECRETE VARDRAX
+BITE <target>
+Abfile:
+This potent venom will instill an addiction in your victim that will not be sated.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

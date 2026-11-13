@@ -1,0 +1,23 @@
+Ability: Darts (Record #1204)
+Associated skill: Woodlore
+Skillpoints required: 60000
+Blurb: A trap to quickly overload an enemy with poisons.
+Syntax: ASSEMBLE DARTS TRAP
+LAY DARTS <direction>
+ENVENOM DARTS <direction> WITH <venom>
+Abfile:
+  Commodities: 3 Wood, 3 Rope makes 3 darts traps
+
+The darts trap, when sprung, will begin shooting darts (hopefully
+holds 5 darts and will be destroyed when the last dart is shot.
+
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

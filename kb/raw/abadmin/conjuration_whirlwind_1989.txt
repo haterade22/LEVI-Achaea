@@ -1,0 +1,36 @@
+Ability: Whirlwind (Record #1989)
+Associated skill: Conjuration
+Skillpoints required: 26999
+Blurb: The roaring whirlwind of Vastar.
+Syntax: BEGIN CREATION OF WHIRLWIND OF VASTAR
+THROW WHIRLWIND [AT <target>]
+Abfile:
+This item is destroyed on use.
+
+Type:
+   Created item.
+
+Actions:
+   4x4, 16, 9, 4x4
+
+Comms:
+   1 silver, 1 diamond dust, 1 stag's horn
+
+Throwing this whirlwind skywards will knock all in the air to the
+ground.
+
+Alternatively, throwing it at a specified target will cause the
+whirlwind to pick you up and attempt to carry you after that person, if
+they recently fled the area you are in via magical wings of any kind.
+The window of opportunity is around five seconds, and people will not be
+able to follow you through the process of being flung up by the
+whirlwind.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name WHIRLWINDOFVASTAR is mapped to this ability.

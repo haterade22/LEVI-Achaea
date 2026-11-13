@@ -1,0 +1,16 @@
+Ability: Thrustkick (Record #860)
+Associated skill: Tekura
+Skillpoints required: 26999
+Blurb: A kick designed to push your target away.
+Syntax: THK <target> <direction>
+Abfile:
+Using your great leg power, you will attempt to kick your opponent away in the specified direction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

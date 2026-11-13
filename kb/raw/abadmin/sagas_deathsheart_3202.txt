@@ -1,0 +1,28 @@
+Ability: Deathsheart (Record #3202)
+Associated skill: Sagas
+Skillpoints required: 55999
+Blurb: To give everything and more.
+Syntax: RECITE DEATHSHEART <target>
+Abfile:
+This solemn tale is one of greatest sacrifice, and giving up of one's
+self so that others may survive. If you speak this tale over where
+another fallen adventurer did make their final stand(*), upon its
+completion they will be resurrected, but you will be cast into the Halls
+of the Finality immediately(**). This tale can only be told so often,
+and takes all of your focus(***).
+
+* You must recite this saga in the room where an adventurer fell. Their
+corpse is not required, but they must currently be dead.
+** You will immediately embrace death and you will leave no corpse
+behind.
+*** This carries a thirty minute cooldown upon success and is a
+channeled action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 30.00 seconds of voice balance

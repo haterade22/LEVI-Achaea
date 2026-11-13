@@ -1,0 +1,25 @@
+Ability: Wreck (Record #2595)
+Associated skill: Pervasion
+Skillpoints required: 40999
+Blurb: They shall break upon the rocks.
+Syntax: MANIFEST WRECK <target>
+Abfile:
+Summon forth a vortex of water to dash a foe against the
+ground. They must be prone or paralysed for this to be
+possible, otherwise they shall evade the water's
+clutches.
+
+A target that is struck with this ability shall receive
+stupidity and recklessness. If they have either affliction
+prior to this, they shall also take damage(*).
+
+* the damage is significantly reduced if the target is
+not both prone and paralysed.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

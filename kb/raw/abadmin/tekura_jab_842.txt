@@ -1,0 +1,18 @@
+Ability: Jab (Record #842)
+Associated skill: Tekura
+Skillpoints required: 699
+Blurb: A straight-forward punch.
+Syntax: JBP <target> <HEAD|ARMS>
+Abfile:
+A quick strike with the fingers. When targeting the head, this will
+restore someone's hearing. When targeting the arms, it will disable the
+target's ability to parry for a very short time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of arm balance

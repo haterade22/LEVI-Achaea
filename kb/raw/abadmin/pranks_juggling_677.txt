@@ -1,0 +1,26 @@
+Ability: Juggling (Record #677)
+Associated skill: Pranks
+Skillpoints required: 16999
+Blurb: The ancient art of juggling.
+Syntax: JUGGLE <item1> [item2] [item3]
+JUGGLED
+JUGGLE STOP
+Abfile:
+You may juggle up to two items at once, or three if you have reached
+Transcendent pranks. Once you are juggling, you may throw the items
+you're juggling at a greatly decreased cost in balance. JUGGLED will
+show you what, if anything, you are juggling. Be aware that juggling
+comes with an endurance drain and, no matter how nimble your fingers,
+you are not adept enough to juggle bombs.
+
+NOTE: the more items you attempt to juggle at once, the greater the cost
+in balance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

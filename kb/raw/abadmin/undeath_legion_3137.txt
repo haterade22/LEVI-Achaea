@@ -1,0 +1,25 @@
+Ability: Legion (Record #3137)
+Associated skill: Undeath
+Skillpoints required: 50999
+Blurb: Rise and dine.
+Syntax: SOULBLEED LEGION
+Abfile:
+You have risen so far in the Legion of the Underworld, and so many
+wretches and drudges now lie below you. Command them from the depths and
+they will hearken to your call(*), but understand that this grave act
+comes with a dire cost(**).
+
+* This skill will summon a legion of 3-5 high-level undead in your
+location. These denizens will be loyal to you and can be ordered to
+follow or attack. (Be aware, some attacks from these mobs hit the entire
+room, including you.)
+** Using this skill will consume one of your remaining lives.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 2
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

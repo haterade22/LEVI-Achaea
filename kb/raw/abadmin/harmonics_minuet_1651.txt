@@ -1,0 +1,18 @@
+Ability: Minuet (Record #1651)
+Associated skill: Harmonics
+Skillpoints required: 5999
+Blurb: Induce a state of extreme gullibility in an opponent.
+Syntax: PLAY MINUET AT <target>
+Abfile:
+Induces a state of gullibility in the target.
+You will regularly, at intervals, receive the power to ORDER the target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 150 mana

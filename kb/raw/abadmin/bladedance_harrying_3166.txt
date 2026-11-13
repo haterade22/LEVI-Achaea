@@ -1,0 +1,23 @@
+Ability: Harrying (Record #3166)
+Associated skill: Bladedance
+Skillpoints required: 55999
+Blurb: The show is not over.
+Syntax: DANCE HARRYING
+Abfile:
+The dance of the harrying is one focussed on swift blows of the rapier
+to keep your enemy pinned within your deadly encirclement. Though these
+blows typically do no real harm, the threat of your blades point will
+make it difficult for even the fleetest foe to escape your lethal
+performance.
+
+*You may switch from harrying to another dance without consuming
+balance.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

@@ -1,0 +1,22 @@
+Ability: Deliverance (Record #3054)
+Associated skill: Excision
+Skillpoints required: 39999
+Blurb: Deliver one of the faithful to your side.
+Syntax: PERFORM DELIVERANCE <target>
+Abfile:
+This will allow you to summon an adventurer from any distance should
+they have been blessed with the PREACHING ability by a priest. It should
+be noted that a monolith sigil placed in the room of the summonee or
+summoner will prevent this from working.
+
+Be aware that delivering another adventurer out of combat may open you
+up for repercussion.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: continent-wide
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

@@ -1,0 +1,24 @@
+Ability: Wave (Record #2900)
+Associated skill: Charnel
+Skillpoints required: 53999
+Blurb: A deluge of a drier kind.
+Syntax: ACCURSED WAVE <target> <direction>
+Abfile:
+When you stand upon sandy ground, you may command it to rise up and
+drive a foe from your sight. Obstructions will prevent the movement(*),
+and if the sand was brought forth by your Accursed work, it shall be
+consumed(**).
+
+* Blocking, walls, etc.
+** Eternity is cleared if it is the basis for the environmental check in
+this case. This ability could be used freely in desert areas or sandy
+locations created through more obscure means.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium

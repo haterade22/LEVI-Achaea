@@ -1,0 +1,43 @@
+Ability: Companion (Record #2731)
+Associated skill: Emulation
+Skillpoints required: 10999
+Blurb: Before the fall.
+Syntax: ENACT COMPANION <servitor type>
+SERVITOR ACT
+SERVITOR STATION
+SERVITOR RETURN
+ENACT COMPANION DISMANTLE
+Abfile:
+The Servitors that wander the city of Nur were once the hands of the
+Aldar in everyday life. Not truly of the living, these constructs
+handled everything from crafting to maintaining the wildlife.
+
+Alas, no more true servitors shall be created, for the Finality upon his
+throne is unlikely to return to such a pastime in the modern age. Yet
+for all that some scraps of knowledge remain, and you may bring forth
+one of these servitors at a time:
+
+Aklan: causing this servitor to act shall have it inform you of everyone
+in its local area.
+
+Kindler: causing this servitor to act shall cause it to flood its room.
+
+Varthiis: causing this servitor to act will cause it to strike all in
+the room with its blades, inflicting a very small amount of damage.
+
+You may cause a servitor to act when it stands with you, or remotely
+if you have stationed it. Causing it to act remotely will make it return
+to your side.
+
+Note that imperfect as these servitors are, they shall not fight on your
+behalf: all they come into being with is their directive to perform
+their core function.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

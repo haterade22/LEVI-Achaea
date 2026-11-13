@@ -1,0 +1,18 @@
+Ability: Scout (Record #2119)
+Associated skill: Skirmishing
+Skillpoints required: 9999
+Blurb: A good woodsman checks his path.
+Syntax: SCOUT
+Abfile:
+This ability will grant a defence which shall allow you to see past
+obstructions with abilities such as GLANCE or SQUINT from the vision
+skill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

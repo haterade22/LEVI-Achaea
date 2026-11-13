@@ -1,0 +1,20 @@
+Ability: Lightsteal (Record #2366)
+Associated skill: Weaving
+Skillpoints required: 13999
+Blurb: Darkness falls.
+Syntax: WEAVE LIGHTSTEAL <target>
+Abfile:
+Using a dagger, slash your target across the eyes, blinding them(*). The
+length of this blindness is increased if they're upon the ground, and
+they will also suffer a short blackout in this instance.
+
+* Delivers the true blind affliction.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance

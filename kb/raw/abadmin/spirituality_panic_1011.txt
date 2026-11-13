@@ -1,0 +1,16 @@
+Ability: Panic (Record #1011)
+Associated skill: Spirituality
+Skillpoints required: 2499
+Blurb: Ask your angel to cause terror in a chosen victim.
+Syntax: ANGEL PANIC <target>
+Abfile:
+With this ability, you may command your angel to strike fear into the heart of another adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

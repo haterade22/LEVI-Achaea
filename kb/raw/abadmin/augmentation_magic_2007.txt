@@ -1,0 +1,32 @@
+Ability: Magic (Record #2007)
+Associated skill: Augmentation
+Skillpoints required: 16999
+Blurb: Enchant rings with magic resistance.
+Syntax: BEGIN ENCHANTMENT OF <ring> WITH MAGICAL RESISTANCE
+ACTIVATE MAGIC RESISTANCE
+Abfile:
+  To use:
+   Can be activated once it is worn.
+
+Type:
+   Enchanted on rings.
+
+Actions:
+   2x7, 2x11, 2x16, 2x11, 2x9, 2x12, 2x17, 2x12, 2x9, 2x11
+
+Comms:
+   5 stag's horn, 1 gold, 2 silver
+
+A ring of magic resistance will grant a defence reducing the effects of
+magic damage.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name MAGICALRESISTANCE is mapped to this ability.
+The ability name MAGICRESISTANCE is mapped to this ability.

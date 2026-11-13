@@ -1,0 +1,16 @@
+Ability: Battlecry (Record #529)
+Associated skill: Discipline
+Skillpoints required: 12999
+Blurb: Stun a target with the power of your voice.
+Syntax: BATTLECRY <target>
+Abfile:
+Your battle cry is so powerful that when directed against another, it will blast him to the ground and stun him, provided he isn't deaf.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

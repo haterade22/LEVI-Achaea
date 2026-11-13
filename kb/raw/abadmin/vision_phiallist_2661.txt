@@ -1,0 +1,3 @@
+Ability: Phiallist (Record #2661)
+Associated skill: Vision
+Maps to record 1412 (LISTS).

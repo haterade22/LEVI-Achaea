@@ -1,0 +1,19 @@
+Ability: Geyser (Record #711)
+Associated skill: Elementalism
+Skillpoints required: 4999
+Blurb: Knock someone out of the trees or the sky.
+Syntax: CAST GEYSER AT <target>
+Abfile:
+Using this ability, you may knock a flying or treed adventurer out of
+the sky or trees. If you have major resonance with the Elemental Plane
+of Water, your target will also be disrupted.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

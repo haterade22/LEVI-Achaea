@@ -1,0 +1,17 @@
+Ability: Look (Record #415)
+Associated skill: Groves
+Skillpoints required: 499
+Blurb: See through the eyes of a forest into a distant location.
+Syntax: GROVE LOOK <target>
+Abfile:
+Use this ability to view a wooded location that another adventurer is
+located in.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 1 sunlight

@@ -1,0 +1,19 @@
+Ability: Interment (Record #2920)
+Associated skill: Charnel
+Skillpoints required: 5999
+Blurb: The beginning of the end.
+Syntax: CRYPT RESHAPE INTERMENT
+Abfile:
+The interment chamber is perhaps one of the most important chambers in
+your entire crypt, though also one of the least vulnerable to tampering.
+By necessity it must be constructed directly adjacent to the entrance of
+your crypt, and you would do well to ensure it is protected.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

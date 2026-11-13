@@ -1,0 +1,26 @@
+Ability: Rend (Record #1557)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Rip into your prey's limbs with a mighty swipe.
+Syntax: REND <target> [limb] [venom]
+CLAWVENOMS
+ENVENOM CLAWS WITH <venom>
+Abfile:
+Attack your opponent by rending them with your razor claws. This has the
+added benefit of being able to target your opponent's limbs directly to
+render them useless.
+
+If you use this ability without targeting a limb or against a denizen,
+it is significantly faster.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+Skill specialisation: dragonform
+The ability name CLAWREND is mapped to this ability.

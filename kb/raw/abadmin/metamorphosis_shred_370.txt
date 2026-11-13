@@ -1,0 +1,17 @@
+Ability: Shred (Record #370)
+Associated skill: Metamorphosis
+Skillpoints required: 15999
+Blurb: Rake your claws across your foe to cause bleeding damage.
+Syntax: SHRED <target>
+This ability will be hidden on ablistings.
+Abfile:
+Using your formidable claws, you're able to shred the flesh of your opponent, causing more than normal bleeding damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

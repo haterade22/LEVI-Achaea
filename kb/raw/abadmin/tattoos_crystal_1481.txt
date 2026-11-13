@@ -1,0 +1,19 @@
+Ability: Crystal (Record #1481)
+Associated skill: Tattoos
+Skillpoints required: 9999
+Blurb: Heal yourself of all your wounds.
+Syntax: TOUCH CRYSTAL
+Extra info: Inks: 1 Green ink
+1 Purple ink
+1 Yellow ink
+Abfile:
+This powerful tattoo will heal your health completely, but it may be used only once per Achaean day.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium

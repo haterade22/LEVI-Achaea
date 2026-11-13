@@ -1,0 +1,16 @@
+Ability: Knuckleslap (Record #1624)
+Associated skill: Swashbuckling
+Skillpoints required: 9999
+Blurb: Numb an opponent's hand temporarily.
+Syntax: KNUCKLESLAP|KS <target> LEFT|RIGHT
+Abfile:
+Numb your opponent's hand, either left or right, for a few seconds, making it unusable. There is currently no cure or way to avoid a knuckleslap. Attempts to use a numbed hand will have unpleasant results.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

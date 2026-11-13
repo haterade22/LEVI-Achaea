@@ -1,0 +1,18 @@
+Ability: Argentum (Record #2028)
+Associated skill: Transmutation
+Skillpoints required: 22999
+Blurb: A silver mineral to relieve mental ailments.
+Syntax: EXTRACT ARGENTUM
+TRANSMUTATE <#> <mineral> TO ARGENTUM
+Abfile:
+The argentum mineral will heal several mental afflictions, such as
+claustrophobia or recklessness.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

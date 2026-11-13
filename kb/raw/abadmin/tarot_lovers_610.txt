@@ -1,0 +1,16 @@
+Ability: Lovers (Record #610)
+Associated skill: Tarot
+Skillpoints required: 12999
+Blurb: Create a strong love for you in your target.
+Syntax: FLING LOVERS AT <target>
+Abfile:
+The Lovers tarot will inspire your target to fall deeply in love with you. While in love with you, he or she will be generally unwilling to cause you harm.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

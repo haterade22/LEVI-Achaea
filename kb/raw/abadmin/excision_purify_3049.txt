@@ -1,0 +1,24 @@
+Ability: Purify (Record #3049)
+Associated skill: Excision
+Skillpoints required: 40999
+Blurb: Corruption shall be burned away.
+Syntax: PERFORM PURIFY
+Abfile:
+You may burn away necromantic corruption, ridding a location of any
+hands of the grave that may have been called forth by a servant of evil.
+Priests are somewhat more adept at this particular holy working, so you
+will find that while still capable, you will complete this working
+somewhat slower under all conditions(*).
+
+* This ability takes significantly longer to perform if a necromancer is
+within the location, and it is an interruptable action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of wrath balance
+Resource: 10% Holy Wrath

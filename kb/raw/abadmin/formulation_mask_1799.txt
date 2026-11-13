@@ -1,0 +1,20 @@
+Ability: Mask (Record #1799)
+Associated skill: Formulation
+Skillpoints required: 0
+Blurb: Craft yourself a protective mask.
+Syntax: CRAFT MASK
+SECURE MASK
+Extra info: Commodities: 5 cloth
+Abfile:
+possibly the most important of all, this vital item of clothing, when
+secured, will filter the air that passes through to you and allow you to
+avoid many hazards when working with dangerous substances.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

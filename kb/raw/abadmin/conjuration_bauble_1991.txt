@@ -1,0 +1,27 @@
+Ability: Bauble (Record #1991)
+Associated skill: Conjuration
+Skillpoints required: 33999
+Blurb: A magically scented bauble to attract falcons.
+Syntax: BEGIN CREATION OF BAUBLE
+THROW BAUBLE <direction>
+Abfile:
+ Type:
+   Created item.
+
+Actions:
+   15, 7, 6, 17, chant "disei stalla rapwah cosoth tu"
+
+Comms:
+   1 diamond dust
+
+The scented bauble is irresistible to falcons. Throw it and they will
+follow.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

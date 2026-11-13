@@ -1,0 +1,18 @@
+Ability: Expunge (Record #2707)
+Associated skill: Psionics
+Skillpoints required: 999
+Blurb: Your mind must never be corrupted.
+Syntax: PSI EXPUNGE
+Abfile:
+Purge your mind of a single mental affliction. If you have impatience,
+this will always be cured first. If you are confused, you will be unable
+to focus enough to carry out this psionic act.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 3.00 seconds of equilibrium

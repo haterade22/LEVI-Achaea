@@ -1,0 +1,19 @@
+Ability: Oak (Record #2502)
+Associated skill: Shikudo
+Skillpoints required: 21999
+Blurb: Unbent, unbroken.
+Syntax: ADOPT OAK FORM
+Extra info: Transitions: Willows Shaken by the Wind, Gaital
+Attacks: LIVESTRIKE, NERVESTRIKE, RUKU, RISINGKICK, KURO
+Abfile:
+The form of the Live Oak is based around dealing powerful blows. All
+Shikudo strikes and kicks performed during this form shall do increased
+damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

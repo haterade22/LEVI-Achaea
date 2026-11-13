@@ -1,0 +1,29 @@
+Ability: Accelerate (Record #2873)
+Associated skill: Memorium
+Skillpoints required: 60000
+Blurb: Ever closer to the end.
+Syntax: BLOOD ACCELERATE <target>
+Abfile:
+Blood in the veins of your enemy is far more difficult to manipulate,
+though difficult does not mean impossible. Some minor applications of
+sorcery are available to you even then, and acceleration is one such
+working.
+
+By making the heart of your foe beat ever faster, you will cause your
+logographs that are tied to said beating to manifest more swiftly(*),
+and in addition cause some particularly deadly diseases of the blood to
+manifest more rapidly(**).
+
+* Logographs delayed with the heartbeat ability will have their timers
+reduced when using this ability.
+** If your target suffers from the voyria affliction when you use this
+ability, said affliction will immediately advance to a very late stage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

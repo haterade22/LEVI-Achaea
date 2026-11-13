@@ -1,0 +1,17 @@
+Ability: Impatience (Record #920)
+Associated skill: Telepathy
+Skillpoints required: 16999
+Blurb: Inability to concentrate on focused tasks.(*)
+Syntax: MIND IMPATIENCE [target]
+Abfile:
+Causes your locked target to not be able to concentrate on focused tasks.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium
+Resource: 200 mana

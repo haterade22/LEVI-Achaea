@@ -1,0 +1,17 @@
+Ability: Kalmia (Record #1959)
+Associated skill: Toxicology
+Skillpoints required: 2999
+Blurb: Inhibits the respiratory system.
+Syntax: None
+Extra info: Ingredients: 1 bloodroot, 1 ginseng, 1 irid, 1 redink, 1 blueink or
+1 magnesium, 1 ferrum, 1 potash, 1 redink, 1 blueink
+Abfile:
+Afflict your victim with severe asthma.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

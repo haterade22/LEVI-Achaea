@@ -1,0 +1,19 @@
+Ability: Fieldplate (Record #1846)
+Associated skill: Armoursmithing
+Skillpoints required: 54999
+Blurb: The most common, but still very good, form of platemail.
+Syntax: FORGE FOR FIELDPLATE
+FORGE (to continue after interruption)
+Extra info: Commodities: 8 Cloth
+34 Steel
+Abfile:
+The most common, but still very good, form of platemail.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

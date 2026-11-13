@@ -1,0 +1,15 @@
+Ability: Deliver (Record #536)
+Associated skill: Discipline
+Skillpoints required: 24999
+Blurb: Order your falcon to deliver an object to someone.
+Syntax: FALCON DELIVER [GROUP] <item> TO <lucky recipient>
+Abfile:
+With this ability, you may order your falcon to deliver a small item or group of items from your inventory into the inventory of another adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Addiction (Record #1363)
+Associated skill: Curses
+Skillpoints required: 34999
+Blurb: Creates a terrible addiction.
+Syntax: CURSE <target> ADDICTION
+Abfile:
+Cause your target to become addicted.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 65 mana

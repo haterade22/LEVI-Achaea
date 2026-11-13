@@ -1,0 +1,19 @@
+Ability: Stonefist (Record #706)
+Associated skill: Elementalism
+Skillpoints required: 2299
+Blurb: Coat your fists with rock to keep better grip on your staff.
+Syntax: CAST STONEFIST
+RELAX STONEFIST
+Abfile:
+By coating your fists in elemental earth, you'll find yourself better
+able to grip your staff against attempts to pull it from your grasp.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 60 mana

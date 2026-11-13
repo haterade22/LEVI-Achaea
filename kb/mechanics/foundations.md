@@ -122,7 +122,7 @@ the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=2
 | Shield tattoo (equilibrium) | none listed | 4.00, 3.40, 2.89 | 1 (Claes), 0.85 (Elmer, Nikita, an Earth Lord; ours: the Aldar Diadem), 0.72 (Rain, ours) |
 | Homunculus attack | 3.00 | 2.55 | 0.85 |
 | Pommelstrike, 1 s stamps | 1.50 | 1.1 | about 0.73 |
-| Engage (Claes) | 2.50 | 2.00, 29 of 29 | 0.80, **not his k** (CONFLICTS #55) |
+| Engage (Claes) | 2.50 (the game's record too, ABADMIN 556) | 2.00, 29 of 29 | 0.80, **not his k** (CONFLICTS #55) |
 
 So **a cost = stated x k**, where k depends on the character (its artefacts and traits; for us an equilibrium k of 0.85 is the Aldar Diadem, for another logger the cause is not known), the channel and sometimes the form. Rain form adds
 x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change a reap's cost. MEASURED. **Engage is an exception:** Claes prints
@@ -132,11 +132,11 @@ is a small part of the printed costs: [clocks.md](clocks.md) says how much it co
 | Opponent's ability | Stated | Gap to next attack, median | n |
 |---|---|---|---|
 | Serpent DSTAB | 2.80 | 1.83 (Thato 1.81, Archaeon 1.82, Seurimas 1.83, Kalys 1.85) | 141 |
-| Serpent BITE | 4.00 | 1.70 | 18 |
+| Serpent BITE | 1.90 (the game's record, ABADMIN 1275; the wiki and clocks.md: 4.00) | 1.70 | 18 |
 | Serpent FLAY | 2.00 | 1.64-1.70 | 65 |
 | Apostate STARE | 1.90 | 2.04 | 129 |
 
-The cause of the Serpent gap is not visible from our seat. A speed effect or a stale wiki value could both explain it.
+The game's records (`kb/raw/abadmin/`, 2026-11-13) settle part of this. BITE's base is 1.90 s, so its 4.00 was a stale wiki value. DSTAB (2.80), FLAY (2.00) and STARE (1.90) are the game's own figures, so the short DSTAB and FLAY gaps are a speed effect that our seat cannot see. `clocks.md` still states the wiki's figures, because `kb_timing.py` reads `abilities.json`, not the game's records.
 [clocks.md](clocks.md) regenerates this table with one written rule for what a gap is, so its n differ from these. It adds p10 and min. **p10 is
 not a floor:** about 10% of gaps come sooner. DSTAB reads p10 1.73 and min 1.54, and that min is a real gap: the prompts on both sides of az:315 and
 az:350 put it at 1.539-1.557 s.

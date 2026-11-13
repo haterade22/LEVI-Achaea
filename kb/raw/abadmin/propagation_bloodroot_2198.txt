@@ -1,0 +1,25 @@
+Ability: Bloodroot (Record #2198)
+Associated skill: Propagation
+Skillpoints required: 2999
+Blurb: One of the most widely used herbs.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH BLOODROOT
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: You will regenerate endurance faster.
+Body: You will regenerate health faster.
+Arms: Your thornrend attack will deal increased damage to paralysed
+adventurers or hindered denizens(*).
+Legs: Move more quickly through caves and other such locations.
+
+* Valid denizens battlerage afflictions are: clumsiness, amnesia, charm,
+and stun.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

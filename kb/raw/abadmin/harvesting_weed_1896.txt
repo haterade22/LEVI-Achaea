@@ -1,0 +1,16 @@
+Ability: Weed (Record #1896)
+Associated skill: Harvesting
+Skillpoints required: 34999
+Blurb: The mind-altering cactus weed.
+Syntax: HARVEST WEED
+Abfile:
+Discovered long ago by Viper, the cactus weed, when smoked, produces mind-altering effects.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,27 @@
+Ability: Exterminate (Record #2832)
+Associated skill: Oppression
+Skillpoints required: 39999
+Blurb: The Lord's dominion shall expand.
+Syntax: EXTERMINATE
+Abfile:
+Using your command of the energies of death, you are able to wipe a
+forest area clean of plant life, replenishing some of your essence. Be
+warned though, there is an essence cost to this ability, and unless
+there is a sufficient amount of plant life in the room, you may lose
+essence using it. It should also be noted that an exterminated room is
+no longer considered a forest room, so many Druidic abilities will not
+work in such a room.
+
+Take note: prolonged use of extermination will take a toll on your
+essence reserves, and you will find that each subsequent attempt incurs
+a greater cost in essence than the last to perform.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 5% life essence

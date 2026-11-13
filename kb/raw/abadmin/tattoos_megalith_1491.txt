@@ -1,0 +1,17 @@
+Ability: Megalith (Record #1491)
+Associated skill: Tattoos
+Skillpoints required: 46999
+Blurb: Partake of the determination of the megalith.
+Syntax: TOUCH MEGALITH
+Extra info: Inks: 2 Gold inks
+Abfile:
+This is a tattoo that will work automatically after activation. When you have it inscribed upon you, it will automatically restore your willpower anytime you have less than full. Each time it works, there is a small chance of the tattoo fading. Activating this tattoo will take balance.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

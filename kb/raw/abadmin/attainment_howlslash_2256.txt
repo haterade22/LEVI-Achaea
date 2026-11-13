@@ -1,0 +1,18 @@
+Ability: Howlslash (Record #2256)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Voice and blade, working as one.
+Syntax: HOWLSLASH <target>
+Abfile:
+Use the power of your voice to distract your target before attacking with a vicious strike.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_bard

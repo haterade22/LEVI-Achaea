@@ -1,0 +1,16 @@
+Ability: Retrieve (Record #3021)
+Associated skill: Dominion
+Skillpoints required: 27999
+Blurb: A snap of the jaws can vex all kinds of plans.
+Syntax: HOUND RETRIEVE <item>
+Abfile:
+Using this ability will cause your hound to try and pick up an object in
+the room that it is in, and deliver it back to you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

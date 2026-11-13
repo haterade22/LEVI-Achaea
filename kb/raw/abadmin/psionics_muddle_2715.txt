@@ -1,0 +1,20 @@
+Ability: Muddle (Record #2715)
+Associated skill: Psionics
+Skillpoints required: 19999
+Blurb: A gentle touch to confound and mislead.
+Syntax: PSI MUDDLE <target>
+Abfile:
+This subversive psionic art will not harm your enemy directly, but will
+cause mental maladies to affect them more significantly(*).
+
+* They shall have a greater chance of failing actions due to stupidity,
+and are more likely to suffer the adverse effects of dizziness.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

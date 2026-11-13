@@ -1,0 +1,19 @@
+Ability: Golgotha (Record #1003)
+Associated skill: Domination
+Skillpoints required: 5000
+Blurb: Golgotha, the Ascendant's Thrall
+Syntax: SUMMON GOLGOTHA
+Abfile:
+Though a mere shadow of his former glory, Golgotha will pact with
+occultists. He will grant a protection from attempts to magically banish
+your chaotic servants back to the Chaos Plane, though it will only aid
+you when you are in the same location as the targeted entities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

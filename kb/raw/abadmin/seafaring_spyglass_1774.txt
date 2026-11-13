@@ -1,0 +1,24 @@
+Ability: Spyglass (Record #1774)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Gain greater detail on your surroundings.
+Syntax: SPYGLASS LOOK
+SPYGLASS INFO <seamonster>
+Extra info: A spyglass in your inventory.
+Abfile:
+ Gain greater information about your surroundings with a spyglass!
+
+Look will display any seamonsters or ships in a small radius around your
+ship.
+Info <seamonster> will show you specific information about a nearby
+seamonster.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: watch2

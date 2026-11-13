@@ -1,0 +1,17 @@
+Ability: Whistle (Record #1508)
+Associated skill: Riding
+Skillpoints required: 14999
+Blurb: Whistle one loyal steed to your side.
+Syntax: WHISTLE MOUNT|WHISTLE MOUNT <mount type>|<mount#>
+Abfile:
+Upon issuing a high-pitched whistle, you can call one of your loyal mounts to you, so long as it is on the same continent as you. Note that this ability may only be used to call -one- mount to you. If you have multiple mounts, you will only be able to call one of them to you at a time. You can whistle for a specific mount with WHISTLE MOUNT <mount type> or WHISTLE MOUNT mount# (if you have more than one of the same type).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+The ability name WHISTLING is mapped to this ability.

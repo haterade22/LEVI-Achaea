@@ -1,0 +1,25 @@
+Ability: Mycalium (Record #2884)
+Associated skill: Pestilence
+Skillpoints required: 15999
+Blurb: A blight upon this land.
+Syntax:
+Abfile:
+Named for perhaps the most loathed monarch in the history of the
+Seleucarian Empire, this disease is extremely insidious. One infected
+with the unnatural plague may not even realise they have it; they will
+only know that all that gaze upon them are provoked to irrational and
+indiscriminate violence(*), though in its more rampant manifestations
+they will find that they will suffer from uncontrollable shaking(**).
+
+* Those afflicted with this disease will be considered a personal enemy
+by everyone.
+** Periodic balance loss, similar to the epilepsy affliction if to a
+reduced frequency.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

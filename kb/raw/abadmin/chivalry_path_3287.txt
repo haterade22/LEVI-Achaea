@@ -1,0 +1,27 @@
+Ability: Path (Record #3287)
+Associated skill: Chivalry
+Skillpoints required: 50000
+Blurb: To walk Honour's path.
+Syntax: WALK SIGIL
+Abfile:
+"Though we walk many paths, we journey upon the same road."
+
+Through an Oath taken up by twelve knights of an earlier time, passage
+into ancient catacombs beneath Aster Keep is available to those of the
+Guild who are members of a Knightly Order.
+
+A knight of the Guild may WALK a path upon Chivalry's sigil in the
+Coenobium, tracing the steps that reveal their honour. They will then be
+able to traverse starlight's veil and enter halls set aside for Orders
+alone.
+
+NOTE: Errants cannot complete this path, for they are without a Knightly
+Order.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

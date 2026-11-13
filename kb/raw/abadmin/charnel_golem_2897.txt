@@ -1,0 +1,20 @@
+Ability: Golem (Record #2897)
+Associated skill: Charnel
+Skillpoints required: 999
+Blurb: To protect what is yours.
+Syntax: CRYPT GUARDIAN RAISE GOLEM
+CRYPT GUARDIAN BANISH GOLEM
+Abfile:
+The most basic guardians that can protect your crypt, golems are sturdy
+constructs that shall batter your enemies with their fists as well as
+smashing any magical shields that they may raise. Only one golem can be
+brought forth in a location at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

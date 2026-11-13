@@ -1,0 +1,3 @@
+Ability: Starsigil (Record #2110)
+Associated skill: Conjuration
+Maps to record 2109 (STAR).

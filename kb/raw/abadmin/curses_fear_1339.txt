@@ -1,0 +1,17 @@
+Ability: Fear (Record #1339)
+Associated skill: Curses
+Skillpoints required: 0
+Blurb: Instill great fear in your target.
+Syntax: CURSE <target> FEAR
+Abfile:
+This ability works to instil fear in your victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 45 mana

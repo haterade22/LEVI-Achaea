@@ -1,0 +1,18 @@
+Ability: Revitalisation (Record #1065)
+Associated skill: Devotion
+Skillpoints required: 36999
+Blurb: A rite to heal health and mana.
+Syntax: PERFORM RITE OF REVITALISATION
+Abfile:
+This rite will heal a percentage of one's maximum health and maximum mana. It will affect everyone in the room who is not an enemy of the Devotionist who performed it.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 360 devotion
+The ability name REVITALIZATION is mapped to this ability.

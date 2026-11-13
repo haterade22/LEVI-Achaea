@@ -1,0 +1,22 @@
+Ability: Wrath (Record #3031)
+Associated skill: Excision
+Skillpoints required: 1
+Blurb: A sword against the wicked.
+Syntax: WRATH
+WRATH MUSTER
+Abfile:
+Your righteous wrath is a thing to behold. Wielded as both sword and
+shield against the enemies of Creation, it fuels much of your abilities
+in Excision. These abilities can be performed independent of balance and
+equilibrium, though your wrath will be diminished by each used in such a
+way (and there is a recovery time before you may use another one)(*).
+
+* You will regenerate wrath over time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

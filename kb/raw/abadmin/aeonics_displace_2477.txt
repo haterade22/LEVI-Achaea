@@ -1,0 +1,3 @@
+Ability: Displace (Record #2477)
+Associated skill: Aeonics
+Maps to record 2416 (DISPLACEMENT).

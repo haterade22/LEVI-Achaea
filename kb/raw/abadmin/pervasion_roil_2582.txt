@@ -1,0 +1,21 @@
+Ability: Roil (Record #2582)
+Associated skill: Pervasion
+Skillpoints required: 7999
+Blurb: Such simple creatures are the unblessed.
+Syntax: MANIFEST ROIL <target>
+Extra info: Flux effect: If asthma and weariness are present, gives anorexia.
+Abfile:
+Violently roil the fluid within the stomach of your enemy, making them
+nauseous. If they are already nauseous, continued use of this ability
+shall cause them to be unable to focus(*).
+
+* Knocks off focus balance. If the target is already off of focus
+balance, said balance is extended.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

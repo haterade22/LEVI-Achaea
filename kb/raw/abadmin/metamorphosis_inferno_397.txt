@@ -1,0 +1,22 @@
+Ability: Inferno (Record #397)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Scorch the surrounding adventurers with an inferno.
+Syntax: SUMMON FIRE
+INFERNO
+This ability will be hidden on ablistings.
+Abfile:
+Once you have summoned forth blue fire, you may let loose with an
+armageddon of flame, searing all of those in your location. This is no
+simple fire, however; even if extinguished, it shall reignite upon the
+unfortunate individual after a short time.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 150 mana

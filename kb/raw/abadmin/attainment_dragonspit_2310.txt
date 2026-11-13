@@ -1,0 +1,18 @@
+Ability: Dragonspit (Record #2310)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Acidic venom causes recurring damage.
+Syntax: DRAGONSPIT <target>
+Abfile:
+Spit acidic venom at your target, the cloying substance sticking to the skin and causing damage for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_green_dragon

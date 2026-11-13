@@ -1,0 +1,17 @@
+Ability: Deteriorate (Record #2337)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Your venom eats through a denizen's shield.
+Syntax: DETERIORATE <target>
+Abfile:
+Cover your opponent's shield in your toxic wyrmvenom, eating through the shield and leaving your opponent defenseless.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_green_dragon

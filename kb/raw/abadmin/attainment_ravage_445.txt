@@ -1,0 +1,18 @@
+Ability: Ravage (Record #445)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Unleash your animalistic rage.
+Syntax: RAVAGE <target>
+Abfile:
+Spring upon your target and savagely attack it with your fangs and claws. (Requires Wildcat, Cheetah, Hyena, Bear, Wolverine, Icewyrm, Gorilla, Wyvern, or Hydra)
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_druid

@@ -1,0 +1,21 @@
+Ability: Deathfromabove (Record #1641)
+Associated skill: Swashbuckling
+Skillpoints required: 52999
+Blurb: The name says it all. Death, from above!
+Syntax: DEATHFROMABOVE <target>
+Abfile:
+Leap down upon your unsuspecting enemy who is knocked to the ground and
+caused to black out momentarily by your brilliant attack. You must be in
+the trees, a ship's rigging or leaping into the air to begin with, and
+your target must be on the ground below.
+
+If your target is already prone this will deal increased damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

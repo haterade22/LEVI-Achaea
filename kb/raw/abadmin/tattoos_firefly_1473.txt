@@ -1,0 +1,17 @@
+Ability: Firefly (Record #1473)
+Associated skill: Tattoos
+Skillpoints required: 0
+Blurb: Light up your surroundings.
+Syntax: TOUCH FIREFLY
+Extra info: Inks: 1 Yellow ink
+Abfile:
+This is a simple tattoo. Touching it will cause it to give off light for a time.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

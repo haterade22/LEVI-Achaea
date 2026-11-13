@@ -1,0 +1,23 @@
+Ability: Prayer (Record #1071)
+Associated skill: Devotion
+Skillpoints required: 43999
+Blurb: Pray for the salvation of your congregation.
+Syntax: PERFORM RITE OF PRAYER
+Extra info: 500 devotion is gained for each valid person present as the rite ends.
+Abfile:
+To perform this rite, there must be at least six people together in a
+room. Apprentices do not count and you may be the only person with
+Devotion there. All of the adventurers must KNEEL before the rite can
+begin and no adventurer may participate in this rite more than once
+every Achaean month. You will gain a certain amount of devotion for
+every adventurer present, and the members of the assembled congregation
+will gain experience also.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

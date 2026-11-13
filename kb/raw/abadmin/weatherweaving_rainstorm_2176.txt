@@ -1,0 +1,19 @@
+Ability: Rainstorm (Record #2176)
+Associated skill: Weatherweaving
+Skillpoints required: 53999
+Blurb: Open the skies and deluge the earth.
+Syntax: CAST RAINSTORM
+Abfile:
+By calling up a temporary rainstorm, you can put out any fires that may
+burn on the ground or on those around you.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

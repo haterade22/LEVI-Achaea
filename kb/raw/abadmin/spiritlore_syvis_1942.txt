@@ -1,0 +1,26 @@
+Ability: Syvis (Record #1942)
+Associated skill: Spiritlore
+Skillpoints required: 29999
+Blurb: Syvis, The Venomous.
+Syntax: CURSE <target> <affliction> INVOKE RELAPSE <affliction>
+Extra info: Attune effect: resistance to poison damage.
+Abfile:
+The masters of venom have long been feared for their deception and
+cunning when it comes to the elimination of those that would cross them.
+By binding the spirit of this ancient assassin, you will be capable of
+causing diseases that your victim believes they have cured to relapse
+shortly there after. Be warned, you are no true master of the art. You
+may only perform this ability every so often.
+
+This ability must be combined with curses.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 20 mana
+The ability name SERPENT is mapped to this ability.

@@ -1,0 +1,20 @@
+Ability: Tame (Record #2228)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Charm even the most savage beasts.
+Syntax: TAME <target>
+Extra info: Gives denizen affliction: Charm
+Abfile:
+Use your mastery over the wildlands to charm your target for a few
+seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 43.00 seconds
+Resource: 32 rage
+Skill specialisation: br_sentinel

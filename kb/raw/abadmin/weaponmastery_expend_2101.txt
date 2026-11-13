@@ -1,0 +1,65 @@
+Ability: Expend (Record #2101)
+Associated skill: Weaponmastery
+Skillpoints required: 35000
+Blurb: Expend your momentum for crippling effects.
+Syntax: DOUBLEWHIRL <target> <limb1> [EXPEND] <limb2> [EXPEND]
+Abfile:
+You may now expend your momentum upon a limb while striking at the limbs
+of your target to produce various effects. This will require momentum
+and reset the momentum decay timer. The results are different depending
+on if you are using a flail or a morningstar.
+
+Morningstars:
+
+When expending in a strike to the head, your opponent will be stunned
+and have their vision restored. If they are already unblind and are also
+prone, they will receive a skull fracture.
+
+When expending in a strike to the torso, you will drive the air from
+your target's lungs, cancelling any aura of rebounding that they may
+have begun establishing about their person, and numbing them into
+paralysis. If they are already paralysed, you will crack their ribs.
+
+When expending in a strike to the left arm, you will make them unable to
+parry effectively for a short time and afflict your opponent with
+clumsiness. If they are already clumsy, you will fracture their wrist.
+
+When expending in a strike to the right arm, they will find themselves
+unable to utilise tattoos effectively for a time and will be afflicted
+with weariness. If they were already weary, you will crack their wrist.
+
+Finally, when expending in a strike to either leg, your target will be
+knocked to the ground and become lethargic.
+
+Flails:
+
+When expending in a strike to the head, your target will be afflicted
+with healthleech. If they already have healthleech and are prone, you
+will fracture their skull.
+
+When expending to the torso, you will drive the breath from their lungs
+and afflict them with asthma. If they are already asthmatic, you will
+crack their ribs.
+
+When expending to either arm, you will brutally smash at the limb,
+afflicting them with paralysis. If they are already suffering from this
+affliction, you will fracture their wrist.
+
+When expending to either leg, you will cause them to become clumsy. If
+they are already clumsy, they will be knocked off balance for a short
+time.
+
+* All expends cost 1 momentum, except expend legs with a morningstar
+which costs 3 momentum.
+** All non-fracture based afflictions from flail expends relapse a short
+while after they are first given, striking for a second time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_dualblunt

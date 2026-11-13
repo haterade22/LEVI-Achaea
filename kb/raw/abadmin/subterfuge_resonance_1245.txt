@@ -1,0 +1,16 @@
+Ability: Resonance (Record #1245)
+Associated skill: Subterfuge
+Skillpoints required: 28999
+Blurb: Allow sounds to resonate through a distant wormhole.
+Syntax: WORM RESONANCE ON/OFF
+Abfile:
+Allow sounds to resonate to you through a wormhole.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

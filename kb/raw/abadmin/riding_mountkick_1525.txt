@@ -1,0 +1,18 @@
+Ability: Mountkick (Record #1525)
+Associated skill: Riding
+Skillpoints required: 42999
+Blurb: Use your mount to kick an unmounted opponent.
+Syntax: MOUNTKICK/MK <adventurer> <direction>
+Abfile:
+Allows you to buck someone into an adjacent room, assuming they are not
+mounted, prone or have defences that prevent you from moving them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+The ability name BUCKING is mapped to this ability.

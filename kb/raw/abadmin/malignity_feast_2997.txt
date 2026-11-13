@@ -1,0 +1,18 @@
+Ability: Feast (Record #2997)
+Associated skill: Malignity
+Skillpoints required: 45999
+Blurb: Take of the Lord into your beast.
+Syntax: HYENA FEAST
+Abfile:
+Feed the corpse of a Baalzadeen to your beast, and she will know the
+Lord's touch(*).
+
+* This makes your hyena much more offensively capable.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

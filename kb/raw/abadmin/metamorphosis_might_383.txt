@@ -1,0 +1,18 @@
+Ability: Might (Record #383)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb: Allows you to cure an affliction.
+Syntax: MIGHT
+This ability will be hidden on ablistings.
+Abfile:
+Using the power of your naturally strong body, you can heal certain afflictions.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 10 mana

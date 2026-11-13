@@ -1,0 +1,18 @@
+Ability: Tropostheria (Record #2622)
+Associated skill: Duress
+Skillpoints required: 33999
+Blurb: The sky is no refuge from your wrath.
+Syntax:
+Abfile:
+Your power over air is now so great that you may utilise all of your
+attacks against targets that are in the sky, even if you stand upon the
+ground. Additionally, holding one's breath is no longer a viable defence
+against your mastery over the element of air.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

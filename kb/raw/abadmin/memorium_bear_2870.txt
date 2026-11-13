@@ -1,0 +1,20 @@
+Ability: Bear (Record #2870)
+Associated skill: Memorium
+Skillpoints required: 35999
+Blurb: The claws that rend and tear.
+Syntax: TRACE BEAR <target>
+Abfile:
+The mighty bear shall rend and tear your foe when traced, spilling blood
+and ensuring that it shall ever flow out with their life.
+
+* Gives haemophilia and bleeding. The bleeding is increased in the case
+where they already have haemophilia when you trace this logograph.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

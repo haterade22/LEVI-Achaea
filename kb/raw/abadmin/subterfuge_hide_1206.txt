@@ -1,0 +1,19 @@
+Ability: Hide (Record #1206)
+Associated skill: Subterfuge
+Skillpoints required: 299
+Blurb: Conceal yourself from view.
+Syntax: HIDE
+EMERGE
+Extra info: Emerge cooldown: 1.00 seconds of balance.
+Abfile:
+Conceal yourself from view and then type EMERGE to cease concealing.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name EMERGE is mapped to this ability.

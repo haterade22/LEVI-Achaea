@@ -1,0 +1,25 @@
+Ability: Backbreaker (Record #868)
+Associated skill: Tekura
+Skillpoints required: 53999
+Blurb: The ultimate throw.
+Syntax: BBT <target>
+Abfile:
+The ultimate throw, this attack will deliver significant damage. The
+damage is increased the more that an opponent's torso is damaged. This
+attack only works against prone opponents.
+
+If you are able to perform four(*) backbreakers in quick succession, a
+subject shall find that their spine shall give way, and they shall
+perish instantly.
+
+(*) If the target suffers from the bruised ribs affliction, this number
+is reduced to three.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

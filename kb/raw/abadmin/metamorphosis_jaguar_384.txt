@@ -1,0 +1,31 @@
+Ability: Jaguar (Record #384)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb: A powerful, quick, and stealthy beast.
+Syntax: MORPH JAGUAR
+Extra info: Alertness
+Ambush
+Dismember
+Elusiveness
+Fitness
+Leap
+Maul
+Might
+Nightsight
+Resistance
+Scent
+Sprint
+Stealth
+Vitality
+Abfile:
+A powerful, quick, and stealthy beast.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 90 mana
+Skill specialisation: meta_sentinel

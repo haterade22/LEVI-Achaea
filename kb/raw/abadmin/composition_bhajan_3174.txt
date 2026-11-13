@@ -1,0 +1,19 @@
+Ability: Bhajan (Record #3174)
+Associated skill: Composition
+Skillpoints required: 5999
+Blurb: That dread which stokes the fear.
+Syntax: COMPOSE BHAJAN
+Abfile:
+This dark song will stoke the fears of all of your enemies that hear
+it(*).
+
+* Gives the fear affliction.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

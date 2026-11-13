@@ -1,0 +1,20 @@
+Ability: Scour (Record #2313)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Inhibit your opponent's ability to heal.
+Syntax: SCOUR <target>
+Extra info: Gives denizen affliction: Inhibit
+Abfile:
+Spit a thick gob of poisonous slime at your victim, causing an inability to heal effectively for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 25.00 seconds
+Resource: 18 rage
+Skill specialisation: br_green_dragon
+The ability name DRAGONSCOUR is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Distance (Record #1381)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Sense the distance to a specific LANDMARK.
+Syntax: DISTANCE TO <landmark>/<adventurer>
+Abfile:
+Using this ability, you can sense the distance to a given landmark (see HELP LANDMARKS).
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.20 seconds of balance

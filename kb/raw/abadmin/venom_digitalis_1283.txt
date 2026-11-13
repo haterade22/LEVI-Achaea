@@ -1,0 +1,16 @@
+Ability: Digitalis (Record #1283)
+Associated skill: Venom
+Skillpoints required: 3999
+Blurb: Causes unbearable shyness.
+Syntax: SECRETE DIGITALIS
+BITE <target>
+Abfile:
+Cause unbearable shyness in your victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

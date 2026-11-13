@@ -1,0 +1,24 @@
+Ability: Devour (Record #3271)
+Associated skill: Pestilence
+Skillpoints required: 39999
+Blurb: Leave no scraps.
+Syntax: SWARM DEVOUR <swarm> <target>
+Abfile:
+Command a ravenous swarm of burrowing insects to surge towards a
+denizen, where they will rip and tear flesh, dealing cutting damage.
+This ability can only be performed every so often(*), unless the swarm
+fully devours its target(**).
+
+* Every 40 seconds.
+** If this attack lands the killing blow, the cooldown is immediately
+refunded.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 40.00 seconds

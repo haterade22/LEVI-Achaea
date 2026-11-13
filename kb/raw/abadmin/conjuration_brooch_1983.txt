@@ -1,0 +1,27 @@
+Ability: Brooch (Record #1983)
+Associated skill: Conjuration
+Skillpoints required: 7999
+Blurb: Create a brooch of Thoth.
+Syntax: BEGIN CREATION OF BROOCH OF THOTH
+Abfile:
+This item must be worn.
+
+   Type:
+   Created item.
+
+Actions:
+   chant "mortis troy tenkla", chant "mortis troy tenklu", chant "mortis troy tenkli", 3x6
+
+Comms:
+   1 elemental ice, 2 diamond dust, 1 stag's horn, 2 silver
+
+When worn, this item will give you death sight.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name BROOCHOFTHOTH is mapped to this ability.

@@ -1,0 +1,22 @@
+Ability: Noose (Record #1184)
+Associated skill: Woodlore
+Skillpoints required: 14999
+Blurb: A trap to strangle your enemies.
+Syntax: ASSEMBLE NOOSE TRAP
+LAY NOOSE <direction>
+Abfile:
+ Commodities: 3 Rope
+
+This is the snare trap's more powerful cousin. It snares someone, but it
+proceeds to strangle that person until he or she writhes out of the
+trap.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

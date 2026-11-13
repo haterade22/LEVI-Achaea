@@ -1,0 +1,17 @@
+Ability: Terror (Record #910)
+Associated skill: Telepathy
+Skillpoints required: 2999
+Blurb: Strike utter terror into the mind of your subject.
+Syntax: MIND TERROR
+Abfile:
+You are able to throw your target into a state of pure terror - far greater than simple fear. Your target will drop whatever he is holding and run screaming in terror.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

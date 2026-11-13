@@ -1,0 +1,16 @@
+Ability: Impart (Record #967)
+Associated skill: Occultism
+Skillpoints required: 21999
+Blurb: Impart your karmic knowledge to others with Occultism.
+Syntax: IMPART <target>
+Abfile:
+This ability will allow you to transfer some of your own karma to another Occultist. It should be noted that this is not an even exchange - more karma is lost by you than is gained by the recipient of the transfer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 9.00 seconds of equilibrium

@@ -1,0 +1,21 @@
+Ability: Snare (Record #1178)
+Associated skill: Woodlore
+Skillpoints required: 5999
+Blurb: Trap your enemies like the stupid beasts they are.
+Syntax: ASSEMBLE SNARE TRAP
+LAY SNARE <direction>
+Abfile:
+ Commodities: 3 Rope
+
+This trap will snare an opponent like a hare heading for the cooking
+pot, reducing their celerity to 1 for 20 seconds.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

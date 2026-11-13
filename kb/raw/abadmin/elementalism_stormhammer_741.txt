@@ -1,0 +1,18 @@
+Ability: Stormhammer (Record #741)
+Associated skill: Elementalism
+Skillpoints required: 56999
+Blurb: Call down the wrath of the storm upon multiple enemies.
+Syntax: CAST STORMHAMMER AT <target> [AND <target> [AND <target>]]
+Abfile:
+This powerful attack can cast a lightning bolt at one, two, or three
+adventurers or denizens.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1200 mana

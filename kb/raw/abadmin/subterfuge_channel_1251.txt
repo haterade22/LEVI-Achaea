@@ -1,0 +1,16 @@
+Ability: Channel (Record #1251)
+Associated skill: Subterfuge
+Skillpoints required: 35999
+Blurb: Hurl an object through a dimensional wormhole.
+Syntax: WORM CHANNEL <object>
+Abfile:
+Use this ability to throw an object through a dimensional wormhole.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

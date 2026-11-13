@@ -1,0 +1,29 @@
+Ability: Primebond (Record #2827)
+Associated skill: Domination
+Skillpoints required: 15999
+Blurb: Agency upon the Prime.
+Syntax: PRIMEBOND
+PRIMEBOND FORM <chaos lord>
+PRIMEBOND SEVER <chaos lord>
+Abfile:
+The minions the Chaos Court will send to you are limited in their agency
+given the constraints they labour under. No matter. A skilled user of
+Domination will find they are able to forge bonds with the various Chaos
+Lords upon the Chaos Plane, and by doing so grant the minions those
+Lords will send greater freedom when summoned(*).
+
+You may only support up to four bonds at a time, so choose wisely. Bonds
+may only be forged in the presence of the Lord you seek to bond with;
+they may be severed from anywhere.
+
+* Entities benefitting from a prime bond will act passively in addition
+to retaining their active effects. See the ability files for relevant
+details for each entity.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

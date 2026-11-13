@@ -1,0 +1,29 @@
+Ability: Fulcrum (Record #2468)
+Associated skill: Terminus
+Skillpoints required: 47999
+Blurb: The centre of your power.
+Syntax: INTONE MORUDAI
+FULCRUM STATUS
+GO FULCRUM
+Abfile:
+Your fulcrum is both a haven and staging point. By speaking this word of
+power you may mark a location; then you may return to it from anywhere.
+It is said the true Tsol'teth can cross both planar and continental
+boundaries. You are not so knowledgeable to accomplish such a task, so
+are confined to only being able to return to your fulcrum from the same
+continent and plane.
+
+Note that all fulcrums are purged at dawn, without exception. Not even
+the Tsol'teth were able to overcome this limitation, though the weakness
+was religiously guarded. Additionally, a fulcrum once placed cannot be
+changed until the next dawn, and you may only have one fulcrum in
+existence at a time. Choose wisely!
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 8.00 seconds of word balance

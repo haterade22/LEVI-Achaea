@@ -1,0 +1,27 @@
+Ability: Foresight (Record #2726)
+Associated skill: Psionics
+Skillpoints required: 60000
+Blurb: The pinnacle of mental might.
+Syntax: PSI FORESIGHT <target> <TREE|SHIELD>
+Abfile:
+In ancient times the Aldar Caymus drove his mind's potential beyond all
+others, able to pierce the very fabric of time and gaze upon events not
+yet transpired. While no other has achieved the mastery he claimed
+since, a lesser form of such foresight is available to you. By fixating
+on a possible eventuality in the future, if such an eventuality comes to
+pass you will be able to act with unnatural speed to disrupt it. While
+this will not foil the action entirely, it will cause it to have
+undesirable consequences. If your foresight fails however, and the
+action is not performed, you will be stunned.
+
+Tree: foreseeing a tree touch will extend the recovery period.
+Shield: foreseeing a shield tattoo shall extend the equilibrium recovery
+period.
+Useable on: none
+Pre checks: equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

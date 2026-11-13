@@ -1,0 +1,20 @@
+Ability: Goldenseal (Record #2210)
+Associated skill: Propagation
+Skillpoints required: 40999
+Blurb: A plant that affects the mind.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH GOLDENSEAL
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Increased willpower regeneration.
+Body: Increased mana regeneration.
+Arms: Your thornrend attacks will additionally deliver epilepsy.
+Legs: Move faster through grasslands.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

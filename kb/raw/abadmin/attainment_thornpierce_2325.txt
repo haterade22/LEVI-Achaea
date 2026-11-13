@@ -1,0 +1,17 @@
+Ability: Thornpierce (Record #2325)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Pierce a denizen's shield with your vines.
+Syntax: THORNPIERCE <target>
+Abfile:
+This ability requires the viridian form, allowing you to expend your rage through a thorny vine that will pierce through a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_sylvan

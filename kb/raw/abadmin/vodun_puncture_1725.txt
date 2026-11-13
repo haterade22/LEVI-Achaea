@@ -1,0 +1,19 @@
+Ability: Puncture (Record #1725)
+Associated skill: Vodun
+Skillpoints required: 26999
+Blurb: Destroy your target's internal organs.
+Syntax: VODUN PUNCTURE
+Extra info: Fashions:
+Required: 20
+Used    : 4
+Abfile:
+Push your fingers sadistically into the gut of your victim, damaging their torso in the process. Sometimes this damage is enough to cause them to no longer be able to eat.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

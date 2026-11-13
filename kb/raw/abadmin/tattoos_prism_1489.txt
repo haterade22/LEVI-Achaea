@@ -1,0 +1,20 @@
+Ability: Prism (Record #1489)
+Associated skill: Tattoos
+Skillpoints required: 38999
+Blurb: Walk on prismatic shards of light.
+Syntax: TOUCH PRISM <target>
+Extra info: Inks: 1 Blue ink
+1 Green ink
+1 Purple ink
+1 Red ink
+1 Yellow ink
+Abfile:
+The prism tattoo may be used to transport yourself across long distances though within the same area. After touching it, a plane of prismatic light will shoot out and, a handful of seconds later, put you into the room with your target. If the target moves in the meantime, or if you do anything, the spell will be ruined. If there is a monolith sigil in the room, the movement delay will be slightly longer than normal.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

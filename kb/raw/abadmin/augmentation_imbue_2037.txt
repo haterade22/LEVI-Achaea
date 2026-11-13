@@ -1,0 +1,27 @@
+Ability: Imbue (Record #2037)
+Associated skill: Augmentation
+Skillpoints required: 60000
+Blurb: Imbue scrolls with transferrable enchantments.
+Syntax: RECITE <scroll> [ON] <item>
+Abfile:
+Your mastery in the field of augmenting items has progressed to such a
+degree that you are now able to imbue scrolls with enchantments rather
+than standard items. This is done in the normal way, simply by
+substituting one of the enchantable scrolls for the target item.
+
+Once you have enchanted a scroll, anyone may recite the scroll on an
+item, transferring the stored enchantment to that item. This will
+destroy the scroll, and normal limitations apply (such as only being
+able to recite the scroll on footwear if it is storing the walk on water
+enchantment).
+
+You may purchase scrolls from most general stores around Sapience.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

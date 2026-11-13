@@ -1,0 +1,17 @@
+Ability: Tumours (Record #3084)
+Associated skill: Anathema
+Skillpoints required: 28999
+Blurb: Bile and blood shall burn as flame.
+Syntax:
+Abfile:
+This manifestation causes vile tumours to form across the Unnamable's
+body. When struck with sufficient force, these shall rupture, showering
+your attacker with burning blood and bile.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

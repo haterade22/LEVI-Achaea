@@ -1,0 +1,17 @@
+Ability: Resurrection (Record #1073)
+Associated skill: Devotion
+Skillpoints required: 49999
+Blurb: Grant life anew to a slain believer.
+Syntax: PERFORM RESURRECTION <target>
+Abfile:
+One of the holiest of abilities, this will grant life anew to the target adventurer. For this ability to work, the adventurer must have been preached to and accepted the blessing over their life or be under level 30.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 2000 devotion

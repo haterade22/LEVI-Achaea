@@ -1,0 +1,17 @@
+Ability: Blocking (Record #1523)
+Associated skill: Riding
+Skillpoints required: 39999
+Blurb: Your steed can block exits.
+Syntax: BLOCK <direction>
+UNBLOCK
+Abfile:
+You can use the mass of your steed to block exits.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name BLOCK is mapped to this ability.

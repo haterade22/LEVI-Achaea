@@ -1,0 +1,16 @@
+Ability: Maqam (Record #3178)
+Associated skill: Composition
+Skillpoints required: 17999
+Blurb: To lend keenness to blades unsheathed.
+Syntax:
+Abfile:
+This movement will lend the blows of you and your allies with greater
+precision, granting a small bonus to critical hits.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

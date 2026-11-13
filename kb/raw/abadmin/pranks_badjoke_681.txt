@@ -1,0 +1,21 @@
+Ability: Badjoke (Record #681)
+Associated skill: Pranks
+Skillpoints required: 22999
+Blurb: Strip defences with your terrible jokes alone.
+Syntax: BADJOKE
+Abfile:
+This ability will induce the desire to slap you in those who hear your
+jokes, causing them to lose the rebounding aura and shield defences.
+
+Note that other jesters are already so familiar with terrible jokes that
+this ability will not work on them.
+Useable on: adventurers, denizens, and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

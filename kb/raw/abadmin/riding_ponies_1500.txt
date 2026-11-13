@@ -1,0 +1,16 @@
+Ability: Ponies (Record #1500)
+Associated skill: Riding
+Skillpoints required: 2499
+Blurb: Prance about on a pony.
+Syntax: None
+Abfile:
+You can ride upon a pony (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name PONY is mapped to this ability.

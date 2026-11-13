@@ -1,0 +1,19 @@
+Ability: Stormbolt (Record #2234)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Sensitise your target with a bolt of lightning.
+Syntax: CAST STORMBOLT AT <target>
+Extra info: Gives denizen affliction: Sensitivity
+Abfile:
+Cast a bolt of electricity at a target, jangling its nerves and causing them to become hypersensitive for a few seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 27.00 seconds
+Resource: 25 rage
+Skill specialisation: br_magi

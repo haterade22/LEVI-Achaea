@@ -1,0 +1,21 @@
+Ability: Focus (Record #767)
+Associated skill: Crystalism
+Skillpoints required: 26999
+Blurb: Draw your vibrations back to you.
+Syntax: VIBES FOCUS
+Abfile:
+By producing a specific resonance, you may call one of each vibration
+you actively possess to your current location(*), though all others will
+be destroyed in the process.
+
+* Does not call the reverberation vibration.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 100 mana

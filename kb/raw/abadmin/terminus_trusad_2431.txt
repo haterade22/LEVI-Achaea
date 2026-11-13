@@ -1,0 +1,18 @@
+Ability: Trusad (Record #2431)
+Associated skill: Terminus
+Skillpoints required: 999
+Blurb: Your precision is without compare.
+Syntax: INTONE TRUSAD
+This ability will be hidden on ablistings.
+Abfile:
+This word of power enhances your precision against denizens, raising
+your critical hits chance.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of word balance

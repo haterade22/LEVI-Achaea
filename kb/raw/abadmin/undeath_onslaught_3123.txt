@@ -1,0 +1,25 @@
+Ability: Onslaught (Record #3123)
+Associated skill: Undeath
+Skillpoints required: 5999
+Blurb: Relentless is death.
+Syntax: SOULBLEED ONSLAUGHT <target> <limb>
+Abfile:
+Unleash a flurry of two blows at one of the limbs of your victims. Your
+wrath is so great that you may not be parried, and will infect them with
+two diseases; if you cannot inflict two diseases (because they already
+have too many of the options for the given limb), you'll add a stack of
+fracture to that limb instead.
+
+Head: slickness, anorexia, confusion.
+Either arm: paralysis, nausea, darkshade.
+Torso: paralysis, asthma, healthleech.
+Either leg: Paralysis, weariness, clumsiness.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

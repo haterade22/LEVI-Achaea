@@ -1,0 +1,18 @@
+Ability: Hunger (Record #1756)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Cast a spectral net around a seamonster.
+Syntax: INVOKE HUNGER <seamonster>
+Abfile:
+Power Cost: 300
+A seaspell that will cast a spectral net upon a target seamonster. If
+the seamonster dies before the net disappears, the casting figurehead
+will be replenished a significant amount of power.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

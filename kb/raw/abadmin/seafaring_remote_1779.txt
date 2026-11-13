@@ -1,0 +1,21 @@
+Ability: Remote (Record #1779)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Sometimes, the captain's needed on deck.
+Syntax:
+Abfile:
+Your mastery of command is so great that you may now invoke seaspells
+when not melded with the figurehead.
+
+However, they shall cost half again as much power as normal.
+
+Note: wavecall is excluded from this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: command5

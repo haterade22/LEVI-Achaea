@@ -1,0 +1,17 @@
+Ability: Secondsight (Record #1264)
+Associated skill: Subterfuge
+Skillpoints required: 54999
+Blurb: See wormholes with greater clarity.
+Syntax: SECONDSIGHT
+Abfile:
+Once activated, this ability will allow you to see wormholes as if they were regular exits.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

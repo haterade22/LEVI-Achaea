@@ -1,0 +1,22 @@
+Ability: Skullcrush (Record #2074)
+Associated skill: Weaponmastery
+Skillpoints required: 38000
+Blurb: Crush their skulls.
+Syntax: SKULLCRUSH <target>
+Extra info: Requires a blunt weapon of some form.
+Abfile:
+If you are wielding a blunt weapon in your hand, you may try to crush
+someone's skull. Your opponent does not have to be in the room with you
+when you begin your attempt, but by the time you get the second
+attack-related message, he must be in the room, or the skullcrush will
+be stopped.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Skill specialisation: knight_twohanded

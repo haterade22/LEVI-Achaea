@@ -1,0 +1,17 @@
+Ability: Excoriate (Record #2318)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Use your rage to flay a denizen's shield.
+Syntax: EXCORIATE <target>
+Abfile:
+Expend your rage in a savage attack, using your whip to remove a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_serpent

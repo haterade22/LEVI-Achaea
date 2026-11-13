@@ -1,0 +1,19 @@
+Ability: Chainmail (Record #1843)
+Associated skill: Armoursmithing
+Skillpoints required: 34999
+Blurb: Armour made of interlocking rings of metal.
+Syntax: FORGE FOR CHAINMAIL
+FORGE (to continue after interruption)
+Extra info: Commodities: 6 Cloth
+12 Steel
+Abfile:
+Armour made of interlocking rings of metal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

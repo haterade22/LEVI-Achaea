@@ -1,0 +1,19 @@
+Ability: Concussion (Record #1733)
+Associated skill: Vodun
+Skillpoints required: 50999
+Blurb: Bruise the very brain of your doll's model.
+Syntax: VODUN CONCUSSION
+Extra info: Fashions:
+Required: 40
+Used: 25
+Abfile:
+An extremely potent affliction, the concussion gives one afflicted with it amnesia every second.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

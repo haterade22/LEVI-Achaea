@@ -1,0 +1,43 @@
+Ability: Hellforge (Record #2829)
+Associated skill: Oppression
+Skillpoints required: 1
+Blurb: Rise in His service.
+Syntax: HELLFORGE STATUS
+HELLFORGE CALL <WEAPON|ARMOUR>
+HELLFORGE CHANNEL <effect>
+HELLFORGE INVEST <effect>
+HELLFORGE PROFANE <armour|weapon>
+HELLFORGE STRIP <armour|weapon>
+Abfile:
+The Infernal knights are blessed by the Lord of Evil with the arms
+profaned by His dark will. Visit the forge within his temple upon the
+western isle, and forge yourself anew.
+
+Profaned arms are tied so closely to the Lord of Evil that acts of
+Necromancy channeled directly through them can be performed without
+feeding upon the life essence of the wielder(*). There are two types of
+abilities that may be utilised in this way:
+
+Armour-based abilities are channeled and you may only have two active at
+a given time.
+
+Weapon-based abilities are invested and typically take the place of a
+venom when they strike a target, though there are exceptions (see
+relevant ability files for details).
+
+* Hellforge-based Oppression abilities cost no life essence due to this,
+though the scope is far narrower than the traditional art of necromancy.
+As a price for this, an Infernal knight will struggle with traditional
+Necromancy, and techniques from said school of the black art will be far
+more draining on their life essence than for a true practitioner. In
+addition, they regain life essence at a much reduced rate naturally than
+true Necromancy practitioners.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

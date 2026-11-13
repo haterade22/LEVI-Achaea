@@ -1,0 +1,17 @@
+Ability: Bearings2 (Record #1771)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb:
+Syntax:
+This ability will be hidden on ablistings.
+Abfile:
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm5

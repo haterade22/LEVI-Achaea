@@ -1,0 +1,19 @@
+Ability: Secondskin (Record #2359)
+Associated skill: Weaving
+Skillpoints required: 1999
+Blurb: Armour is an unnecessary inconvenience.
+Syntax: WEAVE SECONDSKIN
+Abfile:
+Weave a second skin over the top of your existing one, with
+significantly stronger composition(*).
+
+* Grants resistance to all forms of damage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

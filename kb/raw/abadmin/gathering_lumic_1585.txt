@@ -1,0 +1,16 @@
+Ability: Lumic (Record #1585)
+Associated skill: Gathering
+Skillpoints required: 35999
+Blurb: Blue moss growing underground.
+Syntax: GATHER LUMIC
+Abfile:
+Sharing the same underground habitat of irid moss, this particular variety is used in inkmilling.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

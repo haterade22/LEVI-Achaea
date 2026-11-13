@@ -1,0 +1,26 @@
+Ability: Plunder (Record #2912)
+Associated skill: Charnel
+Skillpoints required: 51999
+Blurb: By will and by force.
+Syntax: PLUNDER CRYPT <crypt ID|crypt owner name>
+PLUNDER KNOWLEDGE [ritual name]
+Abfile:
+Other Pariah's will ever hoard their knowledge within the Arcane Record
+of their black sanctum. If they shall not yield it by will then you will
+take it by force. You may plunder a crypt's doors every so often; this
+channelled action will inform the Pariah who you are attempting to
+strike against and it takes some time. Once the defences are breached,
+then the true test begins: invading the dark interior and braving the
+traps and guardians to reach their Arcane Record. Once this is achieved,
+you may plunder any tablets they have stored within.
+
+If you survive that long.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 9.00 seconds of balance

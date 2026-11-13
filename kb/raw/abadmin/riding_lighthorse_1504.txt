@@ -1,0 +1,16 @@
+Ability: Lighthorse (Record #1504)
+Associated skill: Riding
+Skillpoints required: 7999
+Blurb: Gaily ride a light horse.
+Syntax: None
+Abfile:
+You can ride upon a light horse (or a steed of a similar level).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name LIGHTWARHORSE is mapped to this ability.

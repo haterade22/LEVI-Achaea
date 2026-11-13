@@ -1,0 +1,18 @@
+Ability: Traverse (Record #351)
+Associated skill: Metamorphosis
+Skillpoints required: 7999
+Blurb: Fly to an adventurer's location.
+Syntax: TRAVERSE <target>
+This ability will be hidden on ablistings.
+Abfile:
+From within the heavens, you may move instantly to the skies above an adventurer that is nearby.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

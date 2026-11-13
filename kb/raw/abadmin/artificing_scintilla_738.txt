@@ -1,0 +1,18 @@
+Ability: Scintilla (Record #738)
+Associated skill: Artificing
+Skillpoints required: 11999
+Blurb: A crystal to channel fire.
+Syntax: WORKSHOP REFINE SCINTILLA CRYSTAL
+Abfile:
+When set into your staff, this crystal will permit you to channel a
+burning scintilla through your foci, a potent fire spell.
+
+* STAFF CAST SCINTILLA AT <target>, for instance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

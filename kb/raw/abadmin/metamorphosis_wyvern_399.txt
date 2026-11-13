@@ -1,0 +1,43 @@
+Ability: Wyvern (Record #399)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: The cousin of dragons themselves.
+Syntax: MORPH WYVERN
+Extra info: Blaze
+Fitness
+Flame
+Fly
+Frenzy
+Hoist
+Incinerate
+Ignite
+Inferno
+Land
+Leap
+Maul
+Might
+Nightsight
+ScanArea
+Scent
+Shred
+Spy
+Sting
+Swoop
+Temperance
+Track
+Traverse
+View
+Vitality
+Wreathe
+Abfile:
+The cousin of dragons themselves.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 160 mana
+Skill specialisation: meta_druid

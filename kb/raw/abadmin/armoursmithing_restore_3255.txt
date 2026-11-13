@@ -1,0 +1,22 @@
+Ability: Restore (Record #3255)
+Associated skill: Armoursmithing
+Skillpoints required: 55999
+Blurb: Repairing damaged gear.
+Syntax: GEAR RESTORE <gear>
+Abfile:
+At a cost of arcane ephemera, you may restore a piece of gear to an
+undamaged state, clearing any decay that has taken place over time. You
+may do this for gear you personally own or for others by using the GEAR
+TRADE interface.
+
+* A restore costs one alteration, and a given piece of gear may only be
+altered up to three times.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

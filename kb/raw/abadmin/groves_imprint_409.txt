@@ -1,0 +1,17 @@
+Ability: Imprint (Record #409)
+Associated skill: Groves
+Skillpoints required: 0
+Blurb: Choose a forest location as your grove.
+Syntax: IMPRINT
+Extra info: Energy: NONE
+Abfile:
+Once you have discovered a vacant forest or jungle location, this ability may be used to claim it as your own. Be warned: this bond is nearly permanent, and nobody but you may undo it.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

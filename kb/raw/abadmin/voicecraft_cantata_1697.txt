@@ -1,0 +1,17 @@
+Ability: Cantata (Record #1697)
+Associated skill: Voicecraft
+Skillpoints required: 46999
+Blurb: Sing down someone's shield.
+Syntax: SING CANTATA AT <target>
+Abfile:
+Bring down your target's shield and aura of rebounding.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 175 mana and 30 willpower

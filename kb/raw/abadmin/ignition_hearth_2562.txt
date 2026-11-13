@@ -1,0 +1,23 @@
+Ability: Hearth (Record #2562)
+Associated skill: Ignition
+Skillpoints required: 23999
+Blurb: Forged from your crucible.
+Syntax: IGNITE HEARTH
+Abfile:
+If you have created a crucible, you may return to it providing you are
+on the same plane of existence and close enough(*). A monolith on the
+initiation end will stop the travel, though a monolith in your crucible
+will not. Additionally, all that stand within your crucible that are not
+blessed by the Primal Fire(**) shall take minor damage upon your
+entrance.
+
+* Must be on the same continent.
+** Fire Elemental Lords.
+Useable on: adventurers, room, and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

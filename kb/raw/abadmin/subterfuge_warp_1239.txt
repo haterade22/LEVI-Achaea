@@ -1,0 +1,16 @@
+Ability: Warp (Record #1239)
+Associated skill: Subterfuge
+Skillpoints required: 22999
+Blurb: Open and enter a dimensional wormhole.
+Syntax: WORM WARP
+Abfile:
+When in the presence of a worm hole, this will allow you to enter it.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

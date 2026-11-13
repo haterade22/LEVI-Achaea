@@ -1,0 +1,31 @@
+Ability: Targeting (Record #2344)
+Associated skill: Propagation
+Skillpoints required: 1499
+Blurb: Aiming your blows at specific body parts.
+Syntax: TARGET <body part>
+
+Extra info: Body Parts: HEAD
+TORSO
+RIGHT/LEFT ARM
+RIGHT/LEFT LEG
+NOTHING
+Abfile:
+With this ability, you will be able to target specific body parts on
+your opponent. Because this requires more precise timing on your part,
+the sheer damage you can do is reduced. However, by lacerating these
+body parts with your lethal vines, you can cause damage to them that is
+more difficult to cure than simple broken bones. For instance, a limb
+may be able to be beaten into uselessness, which requires a restoration
+salve to fix (and which does not get fixed immediately). Attacks to the
+torso will produce internal bleeding, while attacks to the head will
+produce a concussion. TARGET NOTHING will turn targeting off.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

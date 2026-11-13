@@ -1,0 +1,22 @@
+Ability: Skein (Record #2867)
+Associated skill: Memorium
+Skillpoints required: 17999
+Blurb: The unravelling thread of life.
+Syntax: TRACE SKEIN <target>
+Abfile:
+The thread of life ever unwinds, and all that lives comes to its
+eventual end. This logograph signifies such, though with a well placed
+cut in its tracing the practitioner can instill a realisation of your
+foe's own mortality and the ephemeral nature of the time remaining to
+them(*).
+
+* Gives impatience.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

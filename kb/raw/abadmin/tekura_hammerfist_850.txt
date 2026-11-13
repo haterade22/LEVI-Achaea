@@ -1,0 +1,16 @@
+Ability: Hammerfist (Record #850)
+Associated skill: Tekura
+Skillpoints required: 6999
+Blurb: A strike with your fists to the legs.
+Syntax: HFP <target> left/right
+Abfile:
+The hammerfist attack brings your fist down on an opponents leg.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of arm balance

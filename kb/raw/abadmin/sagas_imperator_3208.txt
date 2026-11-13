@@ -1,0 +1,22 @@
+Ability: Imperator (Record #3208)
+Associated skill: Sagas
+Skillpoints required: 51999
+Blurb: From beyond the flow of time.
+Syntax: RECITE IMPERATOR
+Abfile:
+There are many tales of the enigmatic Imperator who sits the Infernal
+Throne and the dread power at his command. By speaking this story into
+the world, that first great foe overcome by the Imperator shall be
+broken, and all timewells in your location and adjacent shall be
+shattered.
+
+* This is a channeled action.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance

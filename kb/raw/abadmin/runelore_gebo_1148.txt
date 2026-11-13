@@ -1,0 +1,20 @@
+Ability: Gebo (Record #1148)
+Associated skill: Runelore
+Skillpoints required: 16999
+Blurb: A rune to increase the cutting protection of armour.
+Syntax: SKETCH GEBO ON <armour>
+Abfile:
+ Inks required: 1 Gold
+Symbol: Chain
+
+Increases the cutting protection of armour.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

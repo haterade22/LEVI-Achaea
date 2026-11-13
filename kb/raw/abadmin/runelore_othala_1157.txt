@@ -1,0 +1,22 @@
+Ability: Othala (Record #1157)
+Associated skill: Runelore
+Skillpoints required: 33999
+Blurb: Besiege your enemies with multiple spouts of molten lava.
+Syntax: SKETCH OTHALA ON GROUND
+Extra info: Inks: 5 red
+Abfile:
+Symbol: mountain range
+
+When sketched on the ground, this rune shall erupt three times in quick
+succession. Each eruption shall destroy prismatic barriers, then magical
+shields, or do damage if neither is present to all of your enemies in
+your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

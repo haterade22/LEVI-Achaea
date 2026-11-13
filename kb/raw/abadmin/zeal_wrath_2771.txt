@@ -1,0 +1,24 @@
+Ability: Wrath (Record #2771)
+Associated skill: Zeal
+Skillpoints required: 35999
+Blurb: Righteous fury is a thing to behold.
+Syntax: RECITE WRATH <target>
+Abfile:
+The verse of wrath shall ravage your foe with holy flame, burning their
+mind(*). If they are also alight with regular flame(**) and prone, they
+shall suffer in body as well.
+
+* The mana damage scales to the number of afflictions they are suffering
+from. Guilt, ablaze, spiritburn, and tenderskin increase the value by
+more than other afflictions, followed by mental and limb based
+afflictions. Inquisition increases more than anything else.
+** If they have the ablaze affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

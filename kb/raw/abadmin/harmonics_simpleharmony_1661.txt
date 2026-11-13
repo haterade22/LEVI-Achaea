@@ -1,0 +1,15 @@
+Ability: Simpleharmony (Record #1661)
+Associated skill: Harmonics
+Skillpoints required: 24999
+Blurb: The ability to place four harmonics in a room.
+Syntax: None
+Abfile:
+Simple Harmony is a passive ability. Those with Simple Harmony are able to sustain four simultaneous harmonics in the same location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

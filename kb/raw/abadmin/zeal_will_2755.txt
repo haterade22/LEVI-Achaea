@@ -1,0 +1,17 @@
+Ability: Will (Record #2755)
+Associated skill: Zeal
+Skillpoints required: 499
+Blurb: A verse to bolster the mind.
+Syntax: RECITE WILL <target|ME>
+Abfile:
+This holy verse shall bolster the mind of yourself or an ally, improving
+their willpower regeneration.
+Useable on: adventurers and self
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

@@ -1,0 +1,19 @@
+Ability: Decree (Record #3040)
+Associated skill: Excision
+Skillpoints required: 29999
+Blurb: By their mandate.
+Syntax: PERFORM DECREE <target> <decree>
+Abfile:
+Speak your holy decree, and an enemy of Creation shall struggle not to
+obey.
+
+* This will force a target to perform the action you specify.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium

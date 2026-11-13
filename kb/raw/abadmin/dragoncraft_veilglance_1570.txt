@@ -1,0 +1,18 @@
+Ability: Veilglance (Record #1570)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Fold the Veil and look into far-away places.
+Syntax: VEILGLANCE <target>
+Abfile:
+Fold back the veil to catch a glimpse of the surroundings of another, assuming that a shimmering orb is not in the room.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 500 mana
+Skill specialisation: dragonform

@@ -1,0 +1,18 @@
+Ability: Hellfumes (Record #724)
+Associated skill: Elementalism
+Skillpoints required: 32999
+Blurb: Create choking fumes in your surroundings.
+Syntax: CAST HELLFUMES
+Abfile:
+This spell will create a noxious cloud in your location, choking those
+around you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

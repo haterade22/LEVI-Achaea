@@ -1,0 +1,17 @@
+Ability: Rend (Record #2079)
+Associated skill: Weaponmastery
+Skillpoints required: 3000
+Blurb: Rend the flesh of your foes.
+Syntax: REND <target> [limb] [venom]
+Abfile:
+Deliver a slow, yet powerful blow with your sword.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

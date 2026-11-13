@@ -1,0 +1,22 @@
+Ability: Kelp (Record #2199)
+Associated skill: Propagation
+Skillpoints required: 3999
+Blurb: The grass of the sea.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH KELP
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Increased asphyxiation resistance.
+Body: Allows for breathing underwater.
+Arms: Your thornrends will additionally deliver the healthleech
+affliction.
+Legs: Assuming you can already walk on water, move more quickly through
+watery environments.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

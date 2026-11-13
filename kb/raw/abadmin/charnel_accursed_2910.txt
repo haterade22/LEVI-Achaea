@@ -1,0 +1,21 @@
+Ability: Accursed (Record #2910)
+Associated skill: Charnel
+Skillpoints required: 20999
+Blurb: At too high a price.
+Syntax: ACCURSED PERFORM THE RITUAL OF INTERMENT
+Abfile:
+The first and last step. That which can not be taken back. In the
+interment chamber of your crypt you may perform this ritual, and unlock
+the true secrets of Charnel.
+
+May the Logos have mercy upon you.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Skill specialisation: charnel_rituals

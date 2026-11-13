@@ -1,0 +1,16 @@
+Ability: Voyria (Record #1297)
+Associated skill: Venom
+Skillpoints required: 28999
+Blurb: The deadliest venom known to mankind.
+Syntax: SECRETE VOYRIA
+BITE <target>
+Abfile:
+This deadly venom will induce a quick death for its victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

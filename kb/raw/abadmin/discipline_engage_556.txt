@@ -1,0 +1,25 @@
+Ability: Engage (Record #556)
+Associated skill: Discipline
+Skillpoints required: 57999
+Blurb: Damage a cowardly opponent.
+Syntax: ENGAGE <target>
+DISENGAGE [<target>]
+Abfile:
+There is nothing more despicable and dishonourable than a coward, and
+this ability will allow you to punish cowards, as is their due. Once you
+have engaged an adventurer, if he is otherwise unhindered and tries to
+leave the room, you will get in an extra strike, whether you have
+equilibrium and balance or not.
+
+This ability may be initiated if off balance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 50 mana
+Drain: Mana

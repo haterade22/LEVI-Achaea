@@ -1,0 +1,16 @@
+Ability: Cancel (Record #1263)
+Associated skill: Subterfuge
+Skillpoints required: 53999
+Blurb: Destroy a wormhole.
+Syntax: WORM CANCEL
+Abfile:
+Destroy a wormhole if there is one in your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

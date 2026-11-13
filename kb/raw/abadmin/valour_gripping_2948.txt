@@ -1,0 +1,17 @@
+Ability: Gripping (Record #2948)
+Associated skill: Valour
+Skillpoints required: 3999
+Blurb: Grip your wielded items in a deathlock.
+Syntax: GRIP
+RELAX GRIP
+Abfile:
+While using this ability, you will prevent items from being knocked out
+of your hands.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Boar (Record #1484)
+Associated skill: Tattoos
+Skillpoints required: 18999
+Blurb: Feel the noble blood of the Black Boar beat in your veins.
+Syntax: TOUCH BOAR
+Extra info: Inks: 1 Purple ink
+2 Red inks
+Abfile:
+The Black Boar, along with the Snow Owl, is one of the two symbols of
+the Logos Himself. A noble, proud, and strong creature, the boar tattoo
+will automatically heal your health when you are hurt. Each time it
+works, there is a slight chance of it fading. Using this tattoo will
+take balance, but once touched, it will work automatically from then on.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

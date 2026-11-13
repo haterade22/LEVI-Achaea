@@ -1,0 +1,15 @@
+Ability: Fluidswim (Record #1391)
+Associated skill: Survival
+Skillpoints required: 0
+Blurb: Swimming with not a care in the world.
+Syntax: None
+Abfile:
+Once you have gained this ability, you will be able to swim constantly without fear of health loss due to drowning.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

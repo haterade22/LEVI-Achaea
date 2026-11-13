@@ -1,0 +1,24 @@
+Ability: Hocuspocus (Record #665)
+Associated skill: Pranks
+Skillpoints required: 4999
+Blurb: Cast coloured illusions to dazzle those about you.
+Syntax: HOCUSPOCUS <delay in seconds> COLOUR <color> <illusion message>
+HOCUSPOCUS <delay in seconds> [LETHAL] <illusion message>
+Abfile:
+This ability lets you set off coloured, delayed illusions. The colours
+available to you can be seen at the bottom of CONFIG COLOUR, with the
+exception of 15, which you may not use. The cost in mana is one mana for
+each character in the illusion. You may embed a single newline in an
+illusion by inserting the character sequence \n at the appropriate spot.
+For restrictions and limitations, please refer to HELP ILLUSIONS.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: Mana

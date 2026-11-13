@@ -1,0 +1,20 @@
+Ability: Gaital (Record #2506)
+Associated skill: Shikudo
+Skillpoints required: 35999
+Blurb: The deceptive form of legend.
+Syntax: ADOPT GAITAL FORM
+Extra info: Transitions: Willows in Rain Storm, Unrelenting Storm
+Attacks: NEEDLE, SPINKICK, SWEEP, RUKU, FLASHHEEL, KURO, JINZUKU, DAWNKICK
+Abfile:
+While in this deceptive form your instinct will guide you to such a
+degree that your foe will have no hope of predicting your attacks.
+Indeed, your skill will be so great that your attacks shall simply slide
+through attempts to parry them.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,32 @@
+Ability: Strangle (Record #2618)
+Associated skill: Duress
+Skillpoints required: 23999
+Blurb: Crush the life from them with bands of air.
+Syntax: AERO STRANGLE <target>
+Abfile:
+Wrap bands of air about your foe, crushing the life from them.
+
+Against adventurers, this will deprive them of oxygen and make them
+light-headed and mentally slowed(*). A time after strangling your foe,
+if they are still deadened in mind they shall become disrupted(**). If
+they are not, the bands shall remanifest, giving them deadening once
+again.
+
+Note that this periodic tick will continue to occur until a tick occurs
+where deadening is reapplied.
+
+Against denizens, this will deal asphyxiation damage and then relapse,
+causing additional damage after two seconds.
+
+* Gives deadening and damage.
+** This time is shorter the more pressure you have built up around your
+target. See AB DURESS PRESSURE for details.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

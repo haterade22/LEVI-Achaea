@@ -1,0 +1,22 @@
+Ability: Relentless (Record #2830)
+Associated skill: Oppression
+Skillpoints required: 399
+Blurb: His legion will not falter.
+Syntax: HELLFORGE CHANNEL RELENTLESS
+Abfile:
+Empower your hellforged armour with the relentless endurance of the
+Master, and you will be unswayed by those effects which would attempt to
+inspire fear in you(*). You will also be less impacted by the negative
+effects of the stupidity affliction.
+
+* You still receive the afflictions, but you will not be affected by
+them.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

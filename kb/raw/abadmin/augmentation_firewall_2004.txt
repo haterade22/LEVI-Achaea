@@ -1,0 +1,27 @@
+Ability: Firewall (Record #2004)
+Associated skill: Augmentation
+Skillpoints required: 6999
+Blurb: Create a wall of fire.
+Syntax: BEGIN ENCHANTMENT OF <item> WITH FIREWALL
+POINT <item> <direction>
+Abfile:
+ Type:
+   Enchanted on wands, ring, gloves, or gauntlets.
+
+Actions:
+   Chant "firth ilith rhedo een", 7, 4, 8, 17, 2x3, 3x10
+
+Comms:
+   3 stag's horn, 1 diamond dust, 3 silver
+
+Channeling the power of elemental fire, you will create walls of burning
+flame.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

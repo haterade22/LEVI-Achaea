@@ -1,0 +1,18 @@
+Ability: Stealth (Record #349)
+Associated skill: Metamorphosis
+Skillpoints required: 5999
+Blurb: Silent movement about the land.
+Syntax: STEALTH [ON|OFF]
+RELAX STEALTH
+This ability will be hidden on ablistings.
+Abfile:
+This will allow you to sneak about the land in a very stealthy manner.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

@@ -1,0 +1,19 @@
+Ability: Snare (Record #2113)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Trap your target in a tight grip.
+Syntax: SNARE <target>
+Extra info: Uses denizen afflictions: Recklessness or Inhibit
+Abfile:
+Trip unsuspecting victims into your whip and strangle them, doing significantly increased damage to targets that are reckless or are not able to easily heal.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_serpent

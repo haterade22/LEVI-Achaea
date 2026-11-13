@@ -1,0 +1,17 @@
+Ability: Faithrend (Record #2329)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Shatter a denizen's shield with your faith.
+Syntax: FAITHREND <target>
+Abfile:
+Channel your rage and your faith through your weapon as you strike at a denizen, breaking its shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_paladin

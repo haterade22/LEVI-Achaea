@@ -1,0 +1,22 @@
+Ability: Mirror (Record #3063)
+Associated skill: Anathema
+Skillpoints required: 35999
+Blurb: The duality of all things.
+Syntax: CROON MIRROR <target>
+Abfile:
+Croon to a subject of the duality of Chaos, of the two faces of the coin
+that spins. They shall stand as Creation, and you as its greater
+twin(*).
+
+* By linking yourself to someone in this way, each time they are
+passively healed of an affliction, so shall you be.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 1% karma

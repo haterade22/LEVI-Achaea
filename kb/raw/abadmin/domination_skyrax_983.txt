@@ -1,0 +1,21 @@
+Ability: Skyrax (Record #983)
+Associated skill: Domination
+Skillpoints required: 0
+Blurb: Skyrax, the Skyscourge.
+Syntax: COMMAND DERVISH AT <target>
+Abfile:
+When you call upon the aid of Skyrax, he will send you a whirling
+dervish, which, when you command it will knock your target from the
+skies or trees.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of entity balance
+Resource: 50 mana
+The ability name DERVISH is mapped to this ability.

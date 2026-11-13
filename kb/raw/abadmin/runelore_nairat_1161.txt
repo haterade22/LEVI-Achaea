@@ -1,0 +1,26 @@
+Ability: Nairat (Record #1161)
+Associated skill: Runelore
+Skillpoints required: 42999
+Blurb: A rune to entangle.
+Syntax: SKETCH NAIRAT ON GROUND/<totem>/<weapon>
+Abfile:
+ Inks required: 1 Yellow
+Symbol: Butterfly
+
+When sketched upon the ground or on a totem, an enemy will be entangled
+upon seeing this rune. It will disappear after one use unless it is on a
+totem.
+
+When sketched upon a weapon, this rune causes the weapon to FREEZE its
+target at random. To sketch it upon a weapon requires the weapon to be a
+RUNEBLADE.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

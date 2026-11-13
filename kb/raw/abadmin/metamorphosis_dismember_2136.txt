@@ -1,0 +1,20 @@
+Ability: Dismember (Record #2136)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb:
+Syntax: DISMEMBER
+This ability will be hidden on ablistings.
+Abfile:
+The savage spirit of the jaguar is ferocious indeed. Once you have bound
+and impaled an opponent, you can fall upon your helpless prey, ending
+their life in a bloody frenzy.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of balance
+Skill specialisation: meta_sentinel

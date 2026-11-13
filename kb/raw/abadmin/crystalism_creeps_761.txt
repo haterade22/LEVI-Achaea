@@ -1,0 +1,20 @@
+Ability: Creeps (Record #761)
+Associated skill: Crystalism
+Skillpoints required: 16999
+Blurb: Cause fear in your enemies.
+Syntax: EMBED CREEPS
+Abfile:
+ Shapes required: Torus
+
+This unnerving vibration will cause shyness in your enemies.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

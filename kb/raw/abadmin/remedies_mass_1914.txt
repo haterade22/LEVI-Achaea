@@ -1,0 +1,17 @@
+Ability: Mass (Record #1914)
+Associated skill: Remedies
+Skillpoints required: 46999
+Blurb: A salve that will greatly increase your weight.
+Syntax: None
+Extra info: Ingredients: 1 irid, 1 bloodroot, 1 kuzu, 1 diamond dust or
+2 potash, 2 magnesium
+Abfile:
+The salve of mass will cause your body to become extremely heavy making it more difficult for others to attempt to move you. The extra weight can also have adverse effects if you try running too fast.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Evade (Record #853)
+Associated skill: Tekura
+Skillpoints required: 11999
+Blurb: A block that attempts to completely avoid attacks.
+Syntax: EVB
+UNBLOCK EVB
+Abfile:
+At the cost of a regular mana and willpower drain, this will increase
+your effective avoidance skill.
+
+This block will convey a greater benefit when in the eagle stance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Resource: 50 mana
+Drain: Mana

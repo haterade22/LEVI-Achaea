@@ -1,0 +1,19 @@
+Ability: Bowmanship (Record #530)
+Associated skill: Discipline
+Skillpoints required: 14999
+Blurb: Use of the valued projectile weapon.
+Syntax: SHOOT <target> [<direction>] [<venom>]
+Abfile:
+Use one of the various bows to shoot an adventurer in a line-of-sight
+location from you.
+
+NOTE: If you envenom inline it will cost 1 sip per arrow.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

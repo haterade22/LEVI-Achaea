@@ -1,0 +1,17 @@
+Ability: Seek (Record #2943)
+Associated skill: Valour
+Skillpoints required: 999
+Blurb: Order your eagle to seek out an adventurer.
+Syntax: EAGLE SEEK <adventurer>
+Abfile:
+Using this ability, you may order your eagle to seek out another
+adventurer. Your eagle must be either on the ground or on your shoulder
+to use this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

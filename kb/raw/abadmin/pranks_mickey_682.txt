@@ -1,0 +1,16 @@
+Ability: Mickey (Record #682)
+Associated skill: Pranks
+Skillpoints required: 24999
+Blurb: Slip someone a mickey.
+Syntax: SLIP <target> MICKEY
+Abfile:
+After obtaining a mickey from the Props ability, you can slyly slip the mickey to someone, which will cause that person to eat the mickey instead of the next herb he intends to eat, making him sick.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,23 @@
+Ability: Armour (Record #1535)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Call upon the blessing of Ashaxei.
+Syntax: DRAGONARMOUR [ON|OFF]
+RELAX DRAGONARMOUR
+Abfile:
+Drawing on the power of the ancient Dragons, you may surround yourself
+with a magical armour.
+
+Maintaining this armour incurs a constant cost of willpower and
+endurance.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 500 mana
+Skill specialisation: dragonform

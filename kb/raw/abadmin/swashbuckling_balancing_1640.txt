@@ -1,0 +1,18 @@
+Ability: Balancing (Record #1640)
+Associated skill: Swashbuckling
+Skillpoints required: 49999
+Blurb: You're like a cat, you are.
+Syntax: BALANCING [ON|OFF]
+RELAX BALANCING
+Abfile:
+With this ability, you will have superior balance, making it much more difficult to knock you off your feet with abilities such as sweepkick, or the earthquake vibration. There is a mana drain associated with it, however.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana
+Drain: Mana

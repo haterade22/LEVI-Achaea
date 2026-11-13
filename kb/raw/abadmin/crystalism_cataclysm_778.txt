@@ -1,0 +1,32 @@
+Ability: Cataclysm (Record #778)
+Associated skill: Crystalism
+Skillpoints required: 60000
+Blurb: Unleash the fury of a team of magi.
+Syntax: EMBED CATACLYSM
+IMBUE
+Abfile:
+Shapes required: Cylinder, Cube, Diamond, Disc, Egg, Pentagon,
+Polyhedron, Pyramid, Spiral, Sphere, Torus
+(2 of each total, 1 of each spun per Magi)
+
+This is the most powerful of the vibrations. Two magi must each spin all
+eleven of the crystals before one can EMBED the CATACLYSM vibration.
+
+Once the vibration has been embedded, the second magi (who must also
+have transcendent Crystalism) must IMBUE the vibration with his power to
+complete the cataclysm. This vibration will only function outdoors.
+
+Once this has been done, anyone with STAFFCAST, FREEZE, or TRANSFIX in
+Elementalism will be able to cast them through the cataclysm vibration
+at anyone outdoors within a five room radius or line of sight.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

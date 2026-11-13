@@ -1,0 +1,26 @@
+Ability: Spiritwalk (Record #1955)
+Associated skill: Spiritlore
+Skillpoints required: 58999
+Blurb: Walk free of the confines of mortal flesh.
+Syntax: SPIRITWALK
+RETURN
+Extra info: Return cooldown: 5.00 seconds of equilibrium
+Abfile:
+This greatest of the spiritual arts allows you to leave your body and
+walk as a spirit about the land. The further from your body you stray,
+the faster your willpower shall drain. If you run out of willpower, your
+spiritual form shall fade and your body will die.
+
+Be further warned. Leaving your body alone is a terribly dangerous
+affair. If an enemy were to stumble upon it, they would be able to
+destroy it, and any hope you have of returning to a physical form.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 1000 mana

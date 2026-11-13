@@ -1,0 +1,19 @@
+Ability: Tarotlink (Record #1001)
+Associated skill: Domination
+Skillpoints required: 50999
+Blurb: Command your doppleganger to throw tarot cards.
+Syntax: ORDER DOPPLEGANGER CHANNEL FLING <tarot card> [target]
+Abfile:
+Willing your doppleganger to use a card in your possession, you'll be
+able to order it to fling it remotely! Note that not all of the tarots
+can be used by the doppleganger. For instance: Death and Hermit, among
+others.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

@@ -1,0 +1,18 @@
+Ability: Sealegs (Record #1736)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Walk with confidence aboard a ship.
+Syntax: Passive
+Abfile:
+You have gained your sealegs and are less troubled by the heaving of the
+ocean while upon a ship. Your sealegs ability is improved with higher
+skillrank in Seafaring. This is a passive ability; you do not need to
+enable nor disable it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

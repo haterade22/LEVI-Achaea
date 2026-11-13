@@ -1,0 +1,26 @@
+Ability: Savant (Record #3220)
+Associated skill: Woe
+Skillpoints required: 20999
+Blurb: Of vengeance in the making.
+Syntax: RECITE SAVANT
+Abfile:
+The tale of the traitor Danaeus begins with a mortal life and ends with
+the ascension of a Chaos Lord. Through fell magics, the once-companion
+of the wizard Hycanthus despaired of a finite existence and chose the
+path of blood and betrayal, turning on one master, then another, and
+then another. All that hear this tale will know a vengeance yet
+unfilled, and long in the making.
+
+* Gives the vengeance defence to all in the location.
+
+Vengeance can be relaxed with RELAX SAVANT or RELAX VENGEANCE, and will
+eventually fade over time.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance and 3.00 seconds of equilibrium

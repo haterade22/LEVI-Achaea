@@ -1,0 +1,25 @@
+Ability: Dominion (Record #2462)
+Associated skill: Terminus
+Skillpoints required: 40999
+Blurb: Control, control, control.
+Syntax:
+Abfile:
+You have now unlocked the dominion research tree. Possibly one of the
+things that made the Tsol'teth so infamous was their ability to bend
+others to their will. This research tree was what permitted them to do
+so.
+
+Research available in this tree:
+Elad                They have no choice in the matter.
+Gaiartha            Your mind is your own.
+Steelmind           Your grace is limitless.
+Kharan              They shall do your bidding.
+Litany              A power out of legend.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

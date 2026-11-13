@@ -1,0 +1,16 @@
+Ability: Fire (Record #1835)
+Associated skill: Armoursmithing
+Skillpoints required: 0
+Blurb: How to set forges to burning.
+Syntax: FIRE FORGE
+Extra info: Commodities: 1 coal
+Abfile:
+The first step in any smith's learning is how to light forges for use.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

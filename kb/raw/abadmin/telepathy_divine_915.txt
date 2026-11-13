@@ -1,0 +1,17 @@
+Ability: Divine (Record #915)
+Associated skill: Telepathy
+Skillpoints required: 7999
+Blurb: Determine the health and mana levels of your subject.(*)
+Syntax: MIND DIVINE [target]
+Abfile:
+Having gained a certain level of competence in the art of Telepathy, you can now gain exact knowledge of the physical and mental state of an adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

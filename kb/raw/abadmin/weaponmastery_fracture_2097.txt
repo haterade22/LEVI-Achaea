@@ -1,0 +1,22 @@
+Ability: Fracture (Record #2097)
+Associated skill: Weaponmastery
+Skillpoints required: 4500
+Blurb: Fracture the defences that would protect your opponent.
+Syntax: FRACTURE <target> [REBOUNDING|SHIELD]
+Extra info: A flail or morningstar.
+Abfile:
+This attack will allow you to shatter the aura of rebounding or magical
+shield that may protect an opponent.
+
+Due to the nature of this attack, a failed fracture attempt against an
+unprotected target shall result in a loss of momentum.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_dualblunt

@@ -1,0 +1,18 @@
+Ability: Trace (Record #2860)
+Associated skill: Memorium
+Skillpoints required: 399
+Blurb: Blood as ink and air as canvas.
+Syntax: TRACE <logograph> <target>
+Abfile:
+The ancient script of the desert people has little power on its own, but
+such cannot be said for the blood of adventurers. When traced in the
+blood of an adventurer by a talented sorcerer, all manner of curses can
+be brought down upon an enemy.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

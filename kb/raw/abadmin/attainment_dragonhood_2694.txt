@@ -1,0 +1,18 @@
+Ability: Dragonhood (Record #2694)
+Associated skill: Attainment
+Skillpoints required: 59399
+Blurb: The soul of the Greater Dragon.
+Syntax: DRAGONFORM
+Abfile:
+Seek out the crater in the centre of the Mhojave desert and LIGHT the
+beacon for your desired Dragon colour.
+
+See HELP DRAGONS for more.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

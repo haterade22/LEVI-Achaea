@@ -1,0 +1,23 @@
+Ability: Potentiate (Record #3270)
+Associated skill: Sublimation
+Skillpoints required: 39999
+Blurb: Driven beyond.
+Syntax: POTENTIATE WELLSPRING
+Abfile:
+Utilising the raw potential of the Wellspring, you can drive your body
+to its pinnacle(*), though at great risk to your well-being(**).
+
+* While benefitting from the potentiate defence, your physiological
+abilities against denizens will be performed 33% faster, though they
+will deal reduced damage as a consequence.
+** Using this skill will deal damage to you.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

@@ -1,0 +1,18 @@
+Ability: Alertness (Record #1442)
+Associated skill: Vision
+Skillpoints required: 14999
+Blurb: Heightened awareness of your surroundings.
+Syntax: ALERTNESS [ON|OFF]
+RELAX ALERTNESS
+Abfile:
+Your sense of hearing is heightened enough to allow you to detect movement in adjacent locations.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Drain: Mana

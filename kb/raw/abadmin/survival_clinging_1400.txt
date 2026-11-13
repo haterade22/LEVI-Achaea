@@ -1,0 +1,16 @@
+Ability: Clinging (Record #1400)
+Associated skill: Survival
+Skillpoints required: 40999
+Blurb: Clinging tightly onto a tree.
+Syntax: CLING
+Abfile:
+Such is your knowledge of the outdoors and so comfortable are you in the trees, that you are able to cling tightly onto them, maintaining your balance when in them, even if the branches should be greatly disturbed by sinister persons.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

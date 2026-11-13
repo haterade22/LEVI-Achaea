@@ -1,0 +1,21 @@
+Ability: Ash (Record #2765)
+Associated skill: Zeal
+Skillpoints required: 17999
+Blurb: Consign them to their fate.
+Syntax: RECITE ASH <target>
+Abfile:
+This verse brings forth latent fires that sear at the soul, lying in
+wait to be ignited by true fire(*).
+
+* Delivers spiritburn. When a target takes damage from ticks of being on
+fire, they will also suffer mana damage. They shall also take mana
+damage if they successfully move while onfire.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

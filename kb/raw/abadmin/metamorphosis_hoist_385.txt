@@ -1,0 +1,20 @@
+Ability: Hoist (Record #385)
+Associated skill: Metamorphosis
+Skillpoints required: 36999
+Blurb: Grab your victim and lift him into the firmament.
+Syntax: HOIST <target>
+RELEASE <target>
+DEPOSIT [<target>]
+Extra info: DEPOSIT/RELEASE cooldown: 4.00 seconds of balance.
+This ability will be hidden on ablistings.
+Abfile:
+From within the skies, you may swoop down on an opponent and HOIST them off the ground. Once you have them clasped within your mighty talons, you can move about with them and either RELEASE them, causing them great damage if they are unfortunate enough not to be able to fly, or DEPOSIT them on the ground somewhere.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance

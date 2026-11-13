@@ -1,0 +1,16 @@
+Ability: Slike (Record #1296)
+Associated skill: Venom
+Skillpoints required: 26999
+Blurb: Give the curse of anorexia to your victim.
+Syntax: SECRETE SLIKE
+BITE <target>
+Abfile:
+Causes your victim to fall prey to anorexia.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Ravage (Record #2833)
+Associated skill: Oppression
+Skillpoints required: 5999
+Blurb: Mercy is a disease.
+Syntax:
+Abfile:
+When disemboweling a heathen with your blade, if they have the impudence
+to survive you will twist your blade as it comes free, causing internal
+trauma (or serious internal trauma if they already have a damaged
+torso).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

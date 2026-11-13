@@ -1,0 +1,18 @@
+Ability: Block (Record #367)
+Associated skill: Metamorphosis
+Skillpoints required: 15999
+Blurb: Obstructing departure with your body.
+Syntax: BLOCK <direction>
+UNBLOCK
+This ability will be hidden on ablistings.
+Abfile:
+This will allow you to block much movement in a particular direction.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name BLOCKING is mapped to this ability.

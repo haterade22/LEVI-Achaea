@@ -1,0 +1,18 @@
+Ability: Skewer (Record #2226)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Drive your weapon all the way through your opponent.
+Syntax: SKEWER <target>
+Abfile:
+Leap high into the air with a spear or trident and drive the weapon deep into your opponent's flesh.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_sentinel

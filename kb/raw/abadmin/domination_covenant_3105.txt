@@ -1,0 +1,26 @@
+Ability: Covenant (Record #3105)
+Associated skill: Domination
+Skillpoints required: 55999
+Blurb: You are known to the court.
+Syntax: COVENANTS
+COVENANT ESTABLISH
+COVENANT DISBAND <covenant>
+COVENANT MANIFEST <covenant>
+Abfile:
+Having established yourself as a practitioner of the art, you are now
+able to make pacts on a greater scale than previously. While you have
+formed prime bonds with a cadre of the Chaos Lords, you may establish a
+covenant. You may have up to two covenants at once, and swap between
+them by manifesting the desired of the two.
+
+* This swaps your set of prime bonds.
+** This comes with a long equilibrium.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium

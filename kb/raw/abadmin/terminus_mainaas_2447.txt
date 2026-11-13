@@ -1,0 +1,19 @@
+Ability: Mainaas (Record #2447)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: The greatest feat of augmentation.
+Syntax: INTONE MAINAAS
+This ability will be hidden on ablistings.
+Abfile:
+The greatest feat of augmentation is using your own body as your canvas.
+By augmenting your own skin, you shall become more resistant to both
+cutting and blunt attacks.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.50 seconds of word balance

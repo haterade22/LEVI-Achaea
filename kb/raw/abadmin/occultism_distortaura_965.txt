@@ -1,0 +1,25 @@
+Ability: Distortaura (Record #965)
+Associated skill: Occultism
+Skillpoints required: 18999
+Blurb: Distorting your aura will protect you from physical harm.
+Syntax: DISTORTAURA
+NORMALAURA
+Abfile:
+Tapping into your karma, you can distort your own aura, causing a
+portion of physical damage dealt to you to be fed back on the attacker.
+Your mana reserves will be constantly drained as long as your aura is
+distorted. NORMALAURA will return your aura to its natural state.
+
+A distorted aura additionally mitigates some damage from denizens,
+though not from players.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 0.50% karma
+Drain: Mana

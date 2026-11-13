@@ -1,0 +1,31 @@
+Ability: Lycantha (Record #1000)
+Associated skill: Domination
+Skillpoints required: 45999
+Blurb: Lycantha, Keeper of the Hounds.
+Syntax: COMMAND HOUND AT <target>
+Abfile:
+The Keeper of the Chaos Hounds shall send one of his charges to serve
+you when called upon.
+
+When commanded to strike an adventurer, the hound shall inspire
+weariness in them.
+
+Against denizens, the hound will rend their flesh, dealing damage(*).
+
+When primebonded, the hound shall periodically break magical shields on
+adventurers when such are present. In addition, when commanded to attack
+denizens, it shall tear apart their magical shield with its assault.
+
+* Commanding your hound against denizens requires and uses equilibrium,
+rather than entity balance.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of entity balance
+Resource: 50 mana
+The ability name HOUND is mapped to this ability.

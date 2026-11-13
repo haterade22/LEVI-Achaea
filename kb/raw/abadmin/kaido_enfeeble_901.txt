@@ -1,0 +1,20 @@
+Ability: Enfeeble (Record #901)
+Associated skill: Kaido
+Skillpoints required: 56999
+Blurb: Unleash a massive blast of kai energy at your opponent.
+Syntax: KAI ENFEEBLE <target>
+Abfile:
+This ability will throw a massive shockwave of kai energy at your
+opponent, cutting his current health and mana in half. If your opponent
+does not lie prone before you, this will be reduced to a 25% reduction
+in health and mana.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 61 Kai energy

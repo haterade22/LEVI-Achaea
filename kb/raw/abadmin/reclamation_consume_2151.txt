@@ -1,0 +1,20 @@
+Ability: Consume (Record #2151)
+Associated skill: Reclamation
+Skillpoints required: 16999
+Blurb: The flesh of the fallen shall nourish nature.
+Syntax: RECLAMATION CONSUME
+RECLAMATION TERMINATE CONSUME/ALL
+Abfile:
+Your network is now able to consume the corpses of any that fall within
+its bounds, expanding outwards from the location that they fell if it is
+able.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

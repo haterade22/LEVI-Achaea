@@ -1,0 +1,19 @@
+Ability: Headstrike (Record #2267)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Slip through their defences and strike.
+Syntax: STRIKE <target> HEAD
+Extra info: Uses denizen afflictions: Recklessness or Fear
+Abfile:
+Deliver a precise strike to the head of a flailing denizen, doing increased damage to those who are reckless or fleeing in terror.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_blademaster

@@ -1,0 +1,24 @@
+Ability: Preparation (Record #2810)
+Associated skill: Shipfitting
+Skillpoints required: 0
+Blurb: Prepare commodities for maritime use.
+Syntax: PREPARE [1-5] <commodity>
+Abfile:
+As a shipfitter, commodities that were suitable on land are no longer of
+use to you. You will need to prepare your materials to withstand year
+after year of exposure to the harsh conditions of a vessel at sea.
+Material costs are as follows.
+
+Shipwood:  50 wood and 10 iron
+Shipiron:  50 iron and 10 steel
+Shipcloth: 50 cloth
+Shiplines: 50 rope and 10 iron
+Pitch:     50 wood and 10 animal fat
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

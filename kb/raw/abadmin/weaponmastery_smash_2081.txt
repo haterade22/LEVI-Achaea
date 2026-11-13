@@ -1,0 +1,30 @@
+Ability: Smash (Record #2081)
+Associated skill: Weaponmastery
+Skillpoints required: 6000
+Blurb: Deliver a crushing blow with your shield.
+Syntax: SMASH <target> [HIGH|MID|LOW]
+Abfile:
+This powerful strike with your shield will have various effects
+depending where you strike your foe.
+
+Targeting high shall deliver a mental affliction(*), as well as
+delivering
+the scrambled brains affliction.
+Targeting mid shall cause their muscles to lock in paralysis.
+Targeting low shall cause them to stumble and become hopelessly clumsy.
+
+If no target is specified for this attack, the damage dealt is more
+significant.
+
+* It will first deliver dizziness if not present, then recklessness,
+stupidity, confusion, and finally epilepsy.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

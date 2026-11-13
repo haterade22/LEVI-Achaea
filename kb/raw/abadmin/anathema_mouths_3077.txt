@@ -1,0 +1,21 @@
+Ability: Mouths (Record #3077)
+Associated skill: Anathema
+Skillpoints required: 399
+Blurb: Whispers from beyond the boundary.
+Syntax: MUTATE MOUTHS
+Abfile:
+You may now mutate myriad mouths, which shall croon and feast and more
+besides upon your behalf(*).
+
+* This basic mutation is required to be formed to wield many other
+Anathema abilities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.50% karma

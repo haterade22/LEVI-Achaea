@@ -1,0 +1,17 @@
+Ability: Balloonhandoff (Record #671)
+Associated skill: Pranks
+Skillpoints required: 9999
+Blurb: Launch your foes to the clouds with a balloon.
+Syntax: INFLATE BALLOON AND GIVE TO <target>
+Abfile:
+With this ability you may inflate a balloon and immediately hand it to someone else, causing them to be carried into the air. Those protected by the mass defence are too heavy to be moved.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name BALLOONGIVE is mapped to this ability.

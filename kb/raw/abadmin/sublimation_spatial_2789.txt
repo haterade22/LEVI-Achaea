@@ -1,0 +1,32 @@
+Ability: Spatial (Record #2789)
+Associated skill: Sublimation
+Skillpoints required: 50999
+Blurb: The ultimate form of Manipulation.
+Syntax: MANIPULATE SPATIAL
+This ability will be hidden on ablistings.
+Abfile:
+To attempt to manipulate the fundamental laws of space and time is a
+formidable task indeed. Those of the school of Manipulation know well
+the dangers of the latter, and have mastered the former. You may twist
+space in a location just so, that any attempting to leave rooms adjacent
+to the distorted location via magical means of travel will have the
+potential to fail said attempts.
+
+A unique aspect of this ability is its capacity to enhance the
+Displacement ability of Alchemy. An alchemist's attempt will bypass the
+protective measures of a monolith sigil placed at the target's location.
+However, the attempt may still fail due to the major spatial effect,
+unless the alchemist is in a room directly adjacent to the target.
+
+Overdraw effect: the duration of the effect is increased, and the
+caster's room is included in the effect.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 10% Wellspring Energy

@@ -1,0 +1,15 @@
+Ability: Paranoia (Record #1314)
+Associated skill: Hypnosis
+Skillpoints required: 2999
+Blurb: They are out to get you, believe me.
+Syntax:
+Abfile:
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

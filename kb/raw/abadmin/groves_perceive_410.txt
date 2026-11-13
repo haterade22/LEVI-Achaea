@@ -1,0 +1,16 @@
+Ability: Perceive (Record #410)
+Associated skill: Groves
+Skillpoints required: 0
+Blurb: Determine if a forest area has been claimed as a grove.
+Syntax: PERCEIVE
+Extra info: Energy: NONE
+Abfile:
+Use this ability to discover if a forest location has been claimed as a grove or not.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Feedback (Record #2184)
+Associated skill: Weatherweaving
+Skillpoints required: 11999
+Blurb: Bleed off your residual power.
+Syntax: CAST FEEDBACK AT <target>
+Extra info: Requires: disturbed weather
+Abfile:
+This small spell allows you to create a conduit between an individual
+and the residual power left in the clouds created by disturbing the
+natural weather patterns. Each time you cast a spell upon the person who
+the conduit has been formed with, the residual power of the spell is
+bled off and used to power your arcane disturbance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 mana

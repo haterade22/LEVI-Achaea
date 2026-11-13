@@ -1,0 +1,16 @@
+Ability: Healthtrans (Record #310)
+Associated skill: Shindo
+Skillpoints required: 34999
+Blurb: Heal your wounds with Shin power.
+Syntax: SHIN HEALTHTRANS <amount of Shin>/ALL
+Abfile:
+Releasing Shin energy inwardly, you may instantly mend wounds and restore your body. The more energy accumulated, the more you may transmute in this feat of regeneration.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Shin energy

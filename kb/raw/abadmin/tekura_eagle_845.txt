@@ -1,0 +1,21 @@
+Ability: Eagle (Record #845)
+Associated skill: Tekura
+Skillpoints required: 1499
+Blurb: Stance of the soaring eagle.
+Syntax: EGS
+HGK <target>
+Abfile:
+The stance of the eagle is geared towards flexibility and speed. Your
+kicks and punches will be faster when performed from this stance.
+Furthermore, you are able to perform the highkick ability from this
+stance, bringing down someone who may be above you in the trees or the
+skies. This ability will prone the unfortunate individual.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

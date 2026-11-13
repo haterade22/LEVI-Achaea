@@ -1,0 +1,18 @@
+Ability: Tongues (Record #3083)
+Associated skill: Anathema
+Skillpoints required: 36999
+Blurb: Tendrils to grasp and rend.
+Syntax:
+Abfile:
+This manifestation will cause each of your myriad mouths to grow
+tongues. These will lash out at attempts to parry your blows, having a
+50% chance to negate the parry attempt.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance

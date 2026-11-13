@@ -1,0 +1,25 @@
+Ability: Explosion (Record #2566)
+Associated skill: Ignition
+Skillpoints required: 40999
+Blurb: Contained devastation.
+Syntax: IGNITE EXPLOSION <target>
+Abfile:
+If your foe is marked with the brand of Kkractle you may cause it to
+violently explode, causing them to take damage based on how many times
+said brand has flared. Additionally, the more times the brand has
+flared, the more additional effects shall strike them down:
+
+Once: Afflicts with ablaze.
+Twice: Afflicts the target with blackout.
+Thrice: Stuns the target.
+
+These are cumulative, so a brand that has flared three times will strike
+with all of the three effects.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

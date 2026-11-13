@@ -1,0 +1,26 @@
+Ability: Heresy (Record #1017)
+Associated skill: Spirituality
+Skillpoints required: 8999
+Blurb: Summon rage at the heretics and hunt them with fervour.
+Syntax: HUNT HERESY
+Abfile:
+Engulf your mace in righteous flame for a time, empowering it to burn
+through your foe's defences.
+
+When smiting adventurers with your mace, you will burn away the aura of
+rebounding from your foes.
+
+When smiting denizens, the strike will burn through their magical
+shield. In such cases, your smite deals half its normal damage, and its
+damage type becomes fire.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 400 mana

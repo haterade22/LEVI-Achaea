@@ -1,0 +1,3 @@
+Ability: Observing (Record #1433)
+Associated skill: Vision
+Maps to record 1432 (OBSERVE).

@@ -1,0 +1,54 @@
+Ability: Primalwill (Record #2567)
+Associated skill: Ignition
+Skillpoints required: 43999
+Blurb: From ash did you come.
+Syntax: IGNITE <ability> [<target>] INVOKE
+Abfile:
+While your spark is fanned to the maximum extent possible, you are able
+to invoke the will of Kkractle when performing certain abilities(*).
+Doing so will alter said abilities in the following ways:
+
+Flamewhip: consumes two levels of your primal spark, but will cause any
+brand of Kkractle upon your target to flare twice instead of once. When
+using flamewhip in this way it will not deal any afflictions: however,
+if no brand is present, both paralysis and sensitivity will be
+delivered. *If the target is a denizen, this attack will deal bonus
+damage.*
+
+Smoulder: consumes one level of spark (plus the initial cost) and
+increases the damage. This stacks with the bonus from the target being
+ablaze.
+
+Char: consumes two levels of spark and does increased damage.
+
+Conflagrantweave: consumes two levels of spark (plus the standard cost),
+and massively speeds up the cast time along with delivering ablaze on
+cast time as well as when the target writhes free.
+
+Slough: consumes two levels of spark and removes the balance cost.
+
+Blister: consumes three levels of spark and knocks the target off
+balance in addition to the normal effect. Additionally, will cause their
+blisters to split open when they try to use non standard methods of
+health healing, causing those methods to become ineffective for the
+duration of the affliction.
+
+Comet: consumes one level of spark and gives a short stun in addition to
+comet's normal effects.
+
+Pyroflare: consumes two levels of spark and transfixes your target if
+you are successful in your attempt.
+
+Lasso: consumes one level of spark and knocks your target off balance
+once they have been pulled back to the ground.
+
+* Append the word INVOKE to your attack to do this.
+For instance: IGNITE FLAMEWHIP INVOKE
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Cohesion (Record #2576)
+Associated skill: Pervasion
+Skillpoints required: 399
+Blurb: A basic manipulation of the self.
+Syntax: MANIFEST COHESION
+Abfile:
+Alter the cohesion of your form, making yourself more resistant to
+attacks that your foes would dare make against your personage.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

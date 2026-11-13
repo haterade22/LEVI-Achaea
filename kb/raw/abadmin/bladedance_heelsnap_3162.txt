@@ -1,0 +1,26 @@
+Ability: Heelsnap (Record #3162)
+Associated skill: Bladedance
+Skillpoints required: 31999
+Blurb: Two legs are for amateurs.
+Syntax: BLADE HEELSNAP <target> <LEFT|RIGHT>
+Abfile:
+This low lateral slash with the rapier is aimed at one of the legs of
+your partner. As with other techniques with the rapier, it has various
+effects based upon your position in relation to your partner:
+
+From the front: breaks the leg in question.
+
+From the side: if aimed at the left leg, afflicts with healthleech. If
+aimed at the right leg, afflicts with sensitivity.
+
+From the back: afflicts with hamstrung and dismounts your partner if
+they are mounted.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

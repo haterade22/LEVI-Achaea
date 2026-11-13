@@ -1,0 +1,23 @@
+Ability: Freeze (Record #401)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Send an icy blast towards your enemies.
+Syntax: HYDRA FREEZE <target>
+This ability will be hidden on ablistings.
+Abfile:
+Release a bone-chilling blast towards your foe, freezing them to the
+core.
+
+* Against denizens this deals cold damage.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.75 seconds of balance
+Resource: 150 mana
+Skill specialisation: meta_druid

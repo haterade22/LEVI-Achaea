@@ -1,0 +1,16 @@
+Ability: Vegetables (Record #1579)
+Associated skill: Gathering
+Skillpoints required: 3999
+Blurb: Healthy food to help you grow big and strong.
+Syntax: GATHER VEGETABLES
+Abfile:
+A staple of any balanced diet, vegetables grow in gardens. When you gather them, you also have a chance to obtain some seeds which can be used in cooking.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

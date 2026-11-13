@@ -1,0 +1,25 @@
+Ability: Immolation (Record #2569)
+Associated skill: Ignition
+Skillpoints required: 48999
+Blurb: All-consuming flame
+Syntax: IGNITE IMMOLATION <target>
+Abfile:
+Your mastery of the brand of Kkractle is now so great that you may flood
+it with power, causing it to become impossible to remove for a time(*).
+However, doing so will lock that brand in whatever state it was in at
+the time of immolation(**).
+
+A brand may only be immolated once.
+
+* Lasts 30 seconds, and is still removed by brand attacks such as
+explosion.
+** The brand will not be decreased by sipping health, but neither will
+it be flared when attacking.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

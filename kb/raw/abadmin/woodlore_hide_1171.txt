@@ -1,0 +1,17 @@
+Ability: Hide (Record #1171)
+Associated skill: Woodlore
+Skillpoints required: 0
+Blurb: Conceal yourself in the shadows.
+Syntax: HIDE
+EMERGE
+Abfile:
+Conceal yourself from view.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

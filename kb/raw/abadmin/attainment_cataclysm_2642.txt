@@ -1,0 +1,21 @@
+Ability: Cataclysm (Record #2642)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Eradicate them with pure destructive fury.
+Syntax: MANIFEST CATACLYSM <target>
+Extra info: Uses denizen afflictions: recklessness or stunned.
+Abfile:
+Bring forth a cataclysm to destroy your foes, dealing massive damage
+providing they are either stunned or reckless enough to not flee your
+wrath.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_fire_lord

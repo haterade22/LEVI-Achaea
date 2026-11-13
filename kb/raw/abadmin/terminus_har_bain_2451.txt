@@ -1,0 +1,18 @@
+Ability: Har'bain (Record #2451)
+Associated skill: Terminus
+Skillpoints required: 15999
+Blurb: Let the ground swallow you up.
+Syntax: INTONE HAR'BAIN
+BURROW ABOVE
+This ability will be hidden on ablistings.
+Abfile:
+Speak this word and let the ground swallow you up.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 7.00 seconds of word balance

@@ -1,0 +1,21 @@
+Ability: Fragility (Record #2761)
+Associated skill: Zeal
+Skillpoints required: 5999
+Blurb: The profane are weak in body as with mind.
+Syntax: RECITE FRAGILITY <target>
+Abfile:
+Direct this holy verse at a profane enemy of Creation and the next blow
+you deal with your mace shall deal greatly increased damage to the
+chosen limb(*).
+
+* This increases the next mace attack's limb damage you deal by
+approximately 30%.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

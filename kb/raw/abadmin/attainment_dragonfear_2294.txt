@@ -1,0 +1,19 @@
+Ability: Dragonfear (Record #2294)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Terrify your target with an earth-shattering roar.
+Syntax: DRAGONFEAR <target>
+Extra info: Gives denizen affliction: Fear
+Abfile:
+Open your enormous maw and let loose with a mighty roar, causing fear in even the most hearty targets.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 34.00 seconds
+Resource: 29 rage
+Skill specialisation: br_black_dragon

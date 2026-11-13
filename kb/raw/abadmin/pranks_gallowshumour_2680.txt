@@ -1,0 +1,37 @@
+Ability: Gallowshumour (Record #2680)
+Associated skill: Pranks
+Skillpoints required: 55999
+Blurb: A tough crowd, this one.
+Syntax: GALLOWSHUMOUR <target>
+Abfile:
+Sometimes the infamous greyfaces need a bit of a different approach to
+coax out a smile. If wielding a puppet of one such poor soul, you may
+enlighten him or her with some good old gallows humour, adding some real
+character to his face in the process(*). Even then, you might need to
+soften them up a bit first(**).
+
+If used against a denizen, this skill does not require a puppet and
+behaves differently. With your morbid humour, you will inflict psychic
+damage upon the target using the better of your intellect or
+strength(***). The closer they are to death, the sharper your wit
+cuts(****).
+
+* This will improve the fashioned state of your puppet.
+** The more afflictions the target has, the more fashions you will
+receive. They will require at least two and several things are excluded:
+broken limbs, writhe afflictions, and anything with a nonstandard cure
+such as time.
+*** This skill deals damage based on whichever stat is higher between
+your intelligence or strength.
+**** You will deal increased damage to denizens under 50% health. This
+bonus increases further on denizens below 25% health.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of balance

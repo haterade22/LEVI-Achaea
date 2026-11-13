@@ -1,0 +1,20 @@
+Ability: Clamp (Record #939)
+Associated skill: Telepathy
+Skillpoints required: 50999
+Blurb: Set a telepathic mind clamp about your subject.
+Syntax: MIND CLAMP
+MIND UNCLAMP
+Extra info: MIND UNCLAMP cooldown: 2.50 seconds of equilibrium.
+Abfile:
+This allows you to reach out with your mind and clamp down on the locked adventurer's mind, reducing his maximum health and mana levels by twenty percent. MIND UNCLAMP will allow you to release this hold on your opponent's mind, returning their health and mana levels to normal.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana
+Drain: Mana

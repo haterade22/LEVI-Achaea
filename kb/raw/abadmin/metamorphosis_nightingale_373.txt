@@ -1,0 +1,19 @@
+Ability: Nightingale (Record #373)
+Associated skill: Metamorphosis
+Skillpoints required: 20999
+Blurb: A delicate, beautiful bird with an exquisite song.
+Syntax: MORPH NIGHTINGALE
+Extra info: Powers: Fly
+Land
+Melody
+Abfile:
+A delicate, beautiful bird with an exquisite song.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 60 mana

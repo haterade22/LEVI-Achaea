@@ -1,0 +1,26 @@
+Ability: Battlerage (Record #2701)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: The rage of battle.
+Syntax:
+Abfile:
+As you fight denizens, you will build up Battlerage. Your Rage will
+increase as you do damage to denizens, and will slowly decrease if you
+stop attacking. Certain abilities only useful against denizens require
+you to build up and expend Rage.
+
+Each class has access to six Battlerage abilities, which will be earned
+as you increase in level from 6 to 65.
+
+By default, you will be notified every time you gain Rage and you can
+also do BATTLERAGE (or simply BR) to see your current rage.
+
+For configuration options, details, and more, see HELP BATTLERAGE.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

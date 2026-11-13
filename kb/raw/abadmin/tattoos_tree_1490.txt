@@ -1,0 +1,16 @@
+Ability: Tree (Record #1490)
+Associated skill: Tattoos
+Skillpoints required: 42999
+Blurb: Heal yourself with the tree of life.
+Syntax: TOUCH TREE
+Extra info: Inks: 5 Green inks
+Abfile:
+The Tree of Life is a powerful tattoo, capable of healing nearly any affliction. It will, however, leave you too weak to use it again for a bit.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

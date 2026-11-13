@@ -1,0 +1,19 @@
+Ability: Displacement (Record #2416)
+Associated skill: Aeonics
+Skillpoints required: 17999
+Blurb: A minor adjustment.
+Syntax: CHRONO DISPLACE <dir> [BOOST]
+Abfile:
+With a minor application of your power, shift yourself to an adjacent
+location. If boosted, this ability's equilibrium cost is reduced
+noticeably.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 age
+The ability name DISPLACE is mapped to this ability.

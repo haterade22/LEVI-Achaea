@@ -1,0 +1,22 @@
+Ability: Revelation (Record #3062)
+Associated skill: Anathema
+Skillpoints required: 5999
+Blurb: They shall see and be found wanting.
+Syntax: CROON REVELATION <target>
+Abfile:
+Reveal one of the truths of Chaos to the uninitiated. Those of weak
+stomachs and inferior drive shall not be up to the challenge(*).
+
+* Gives nausea.
+** Your target must be incapacitated in some form for this to land:
+paralysis, prone, stunned, etc.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.10% karma

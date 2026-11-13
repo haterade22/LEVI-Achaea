@@ -1,0 +1,16 @@
+Ability: Elm (Record #1903)
+Associated skill: Harvesting
+Skillpoints required: 60000
+Blurb: Slippery elm from the red elm tree.
+Syntax: HARVEST ELM
+Abfile:
+Slippery elm, from the red elm tree, may be smoked to cure various strange afflictions, like the aeon and hellsight afflictions.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

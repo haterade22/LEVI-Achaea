@@ -1,0 +1,17 @@
+Ability: Epic (Record #1693)
+Associated skill: Voicecraft
+Skillpoints required: 32999
+Blurb: Paralyse a target with an epic tale of heroism.
+Syntax: RECITE EPIC AT <target>
+Abfile:
+Afflict your target with paralysis.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 30 willpower

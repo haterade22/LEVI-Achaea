@@ -1,0 +1,21 @@
+Ability: Pulp (Record #2103)
+Associated skill: Weaponmastery
+Skillpoints required: 60000
+Blurb: End their life in a single strike.
+Syntax: PULP <target>
+Abfile:
+You may pulp the brains of a suitably vulnerable victim, ending their
+life in a single terrible strike.
+
+For the purposes of this ability, suitably vulnerable requires they be
+prone with either a mangled head -or- five or more skull fractures.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.10 seconds of balance
+Skill specialisation: knight_dualblunt

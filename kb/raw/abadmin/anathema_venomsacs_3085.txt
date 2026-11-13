@@ -1,0 +1,25 @@
+Ability: Venomsacs (Record #3085)
+Associated skill: Anathema
+Skillpoints required: 52999
+Blurb: Payback never tasted so vile.
+Syntax:
+Abfile:
+Once you develop venomsacs in your mouth, they will draw small amounts
+of venom from your bloodstream when you are hit with them. While this is
+not enough to reduce the effect of the venom upon your person, when your
+venomsacs become full you will spit the delightful concoction directly
+into your attacker's face, and give them a taste of their own medicine.
+
+* Every five venoms, you will spit one of said venoms back at the last
+person to deliver you one. The venom delivered from the list is random
+and resolves after your attacker's attack is fully complete (providing
+you are still alive).
+** You have a 66% chance to absorb part of the venom on the hit.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

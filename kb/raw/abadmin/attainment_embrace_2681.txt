@@ -1,0 +1,15 @@
+Ability: Embrace (Record #2681)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Full membership in your class.
+Syntax: EMBRACE CLASS
+Abfile:
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

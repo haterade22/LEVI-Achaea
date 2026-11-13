@@ -1,0 +1,17 @@
+Ability: Forage (Record #324)
+Associated skill: Metamorphosis
+Skillpoints required: 0
+Blurb: Collect food from the forest.
+Syntax: FORAGE
+This ability will be hidden on ablistings.
+Abfile:
+Attempt to scamper about forestal locations, searching for food.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

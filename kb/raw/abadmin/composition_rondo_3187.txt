@@ -1,0 +1,19 @@
+Ability: Rondo (Record #3187)
+Associated skill: Composition
+Skillpoints required: 52999
+Blurb: Onwards we march.
+Syntax:
+Abfile:
+The rondo movement bolsters you and your allies for the march ahead,
+halving the time it takes to cross rough terrain and similar(*).
+
+* Rubble, for example. This does not apply to moving through Charnel
+crypts, however.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

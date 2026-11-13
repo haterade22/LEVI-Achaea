@@ -1,0 +1,21 @@
+Ability: Raven (Record #1186)
+Associated skill: Woodlore
+Skillpoints required: 16999
+Blurb: Call a raven to aid you in combat.
+Syntax: SUMMON RAVEN
+Abfile:
+The raven will dart in and out of an opponent's line of sight,
+instilling paranoia in them.
+
+* Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

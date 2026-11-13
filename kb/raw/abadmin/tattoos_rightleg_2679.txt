@@ -1,0 +1,16 @@
+Ability: Rightleg (Record #2679)
+Associated skill: Tattoos
+Skillpoints required: 46999
+Blurb: Wear two tattoos on your right leg.
+Syntax:
+Abfile:
+Your understanding of inks permits you to wear two mystical tattoos on
+your right leg.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

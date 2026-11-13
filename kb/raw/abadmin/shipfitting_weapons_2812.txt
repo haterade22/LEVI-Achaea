@@ -1,0 +1,19 @@
+Ability: Weapons (Record #2812)
+Associated skill: Shipfitting
+Skillpoints required: 3999
+Blurb: Construction of ship weapons.
+Syntax: SHIPFIT CONSTRUCT <weapons>
+Abfile:
+With seamonsters, pirates, and the many other dangers of the open sea,
+ship weapons are a necessity to protect your cargo. Using your prepared
+commodities, you may construct ship weapons for the defence of a vessel,
+or the hunting of others at sea. See HELP SHIP WEAPONS for types and
+uses.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Repress (Record #3267)
+Associated skill: Alchemy
+Skillpoints required: 35000
+Blurb: Repress the empowerment of the forestal formicaries.
+Syntax: REPRESS FORMICARY
+Abfile:
+By creating layered circles of alchemical salt and copper around a
+formicary you can repress Nature's empowerment and put the formicary
+into a dormant state.
+
+This will require concentration, and any disturbance will cause the
+attempt to fail.
+Useable on: room
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

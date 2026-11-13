@@ -1,0 +1,19 @@
+Ability: Dread (Record #3089)
+Associated skill: Attainment
+Skillpoints required: 18479
+Blurb: The inspiring terror.
+Syntax: CROON DREAD <target>
+Abfile:
+* Gives fear.
+** Requires that you have mutated your mouths.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 24 rage
+Skill specialisation: br_unnamable

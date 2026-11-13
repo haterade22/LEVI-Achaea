@@ -1,0 +1,19 @@
+Ability: Etch (Record #1796)
+Associated skill: Seafaring
+Skillpoints required: 54999
+Blurb: Etch a Token of Charybdis for emergency mainland returns.
+Syntax: ETCH TOKEN
+SHIP RESCUE ME
+Abfile:
+By obtaining a Token of Charybdis and etching upon it, you can call upon
+the Spirit of Charybdis, the Whirlpool, to help your passage back to
+safe shore should you find yourself in dire straits. See HELP SHIPRESCUE
+for more information.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

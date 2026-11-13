@@ -1,0 +1,18 @@
+Ability: Smudge (Record #428)
+Associated skill: Groves
+Skillpoints required: 11499
+Blurb: Remove ground-based runes from your grove.
+Syntax: GROVE SMUDGE
+Abfile:
+With this ability, you may command your grove to remove a rune from
+itself.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 sunlight

@@ -1,0 +1,19 @@
+Ability: Prosodion (Record #3186)
+Associated skill: Composition
+Skillpoints required: 47999
+Blurb: Of grandeur most Divine.
+Syntax: COMPOSE PROSODION
+Abfile:
+The Prosodion is a song about the Gods, and all your enemies that hear
+it shall be struck down with a sliver of that grandeur.
+
+* Deals some damage passively to all enemies.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

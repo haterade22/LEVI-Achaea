@@ -1,0 +1,18 @@
+Ability: Cure (Record #437)
+Associated skill: Groves
+Skillpoints required: 19999
+Blurb: Cure someone of an affliction.
+Syntax: GROVE CURE
+GROVE CURE <target>
+Abfile:
+Cure will allow you to cure yourself or an adventurer of a random affliction.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 10 sunlight

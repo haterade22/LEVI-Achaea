@@ -1,0 +1,17 @@
+Ability: Forsake (Record #2697)
+Associated skill: Sculpting
+Skillpoints required: 0
+Blurb: Return to your mundane form.
+Syntax: FORSAKE EARTH
+Abfile:
+Cast off your elemental form, returning to your prior state of being.
+Forsaking your element in this way shall not be gentle where your flesh
+and blood body is concerned, and you may suffer broken bones.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

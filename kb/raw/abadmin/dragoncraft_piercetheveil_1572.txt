@@ -1,0 +1,18 @@
+Ability: Piercetheveil (Record #1572)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Pass through the Veil Extant.
+Syntax: PIERCE THE VEIL
+Abfile:
+With the gifts of Ashaxei you may pass through the Veil Extant to the fabled land of the ancient Dragons.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 500 mana
+Skill specialisation: dragonform

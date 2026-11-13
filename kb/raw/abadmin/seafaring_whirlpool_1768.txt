@@ -1,0 +1,19 @@
+Ability: Whirlpool (Record #1768)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: A seaspell to create a watery inconvenience.
+Syntax: INVOKE WHIRLPOOL <dir>
+Extra info: Power cost: 350
+This ability will be hidden on ablistings.
+Abfile:
+While shipmelded, you may call upon the ship's figurehead to summon
+temporary whirlpools around your ship, which make it difficult for
+vessels to enter or leave that spot of the ocean.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

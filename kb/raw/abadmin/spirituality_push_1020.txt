@@ -1,0 +1,20 @@
+Ability: Push (Record #1020)
+Associated skill: Spirituality
+Skillpoints required: 13999
+Blurb: Make the unbelievers kneel.
+Syntax: ANGEL PUSH <target>
+Abfile:
+Have your angel throw a heretic to the ground.
+
+* Requires they have inquisition if combined with
+smite and no requirement if performed standalone.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: 50 Angel power and 15 mana

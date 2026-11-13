@@ -1,0 +1,17 @@
+Ability: Chaosrays (Record #974)
+Associated skill: Occultism
+Skillpoints required: 38999
+Blurb: Pure chaos will strike all in a location.
+Syntax: CHAOSRAYS
+Abfile:
+Transmuting your karma into pure chaos, you can summon forth the Seven Rays to blast a location, hitting everyone in the room except yourself with random rays of chaos.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 2% karma

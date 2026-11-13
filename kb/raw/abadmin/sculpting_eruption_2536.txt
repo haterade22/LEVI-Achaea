@@ -1,0 +1,19 @@
+Ability: Eruption (Record #2536)
+Associated skill: Sculpting
+Skillpoints required: 31999
+Blurb: Drive out impurities.
+Syntax: TERRAN ERUPTION
+Abfile:
+Send your magma outward in a cleansing eruption, purging you of
+impurities(*).
+
+* Cures a random affliction, cannot be performed if afflicted with
+weariness.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

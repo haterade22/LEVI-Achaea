@@ -1,0 +1,22 @@
+Ability: Market (Record #2689)
+Associated skill: Attainment
+Skillpoints required: 6599
+Blurb: Sell, sell, sell!
+Syntax: MARKETON
+MARKETOFF
+MARKET <text>
+Abfile:
+The market channel is a venue for sellers to quickly find buyers and
+vice versa. If you have something to sell or need to buy something in a
+hurry, this is the channel to use!
+
+Market use is subject to stricter rules relative to most other channels.
+Please see HELP MARKET for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Eyes (Record #421)
+Associated skill: Groves
+Skillpoints required: 3999
+Blurb: Locate everyone in the forest.
+Syntax: GROVE EYES
+Abfile:
+Grove eyes will, like GROVE WHO, tell you who is in the forest, with the added advantage of telling you where in the forest they are.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 20 sunlight

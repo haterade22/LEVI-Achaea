@@ -1,0 +1,19 @@
+Ability: Stoke (Record #3140)
+Associated skill: Excision
+Skillpoints required: 30999
+Blurb: To ever greater heights.
+Syntax: PERFORM STOKE
+Abfile:
+By entering a meditative trance, you may stoke your fervour to greater
+heights, rapidly restoring your holy wrath(*).
+
+* This is a channel.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of equilibrium

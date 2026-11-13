@@ -1,0 +1,18 @@
+Ability: Truss (Record #2125)
+Associated skill: Skirmishing
+Skillpoints required: 28999
+Blurb: Truss them up for slaughter.
+Syntax: TRUSS <target>
+Extra info: Commodities: 1 rope
+Abfile:
+You can truss up an unconscious opponent. These bindings take much
+longer to escape than standard bonds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance

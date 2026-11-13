@@ -1,0 +1,27 @@
+Ability: Nin'kharsag (Record #991)
+Associated skill: Domination
+Skillpoints required: 9999
+Blurb: Nin'Kharsag, the Slime Master.
+Syntax: COMMAND SLIME AT <target>
+Abfile:
+Summoning the Slime Lord will cause a chaos slime to be sent to you.
+
+When COMMANDed, it will envelop your victim and cause their next tree
+tattoo attempt to take longer to recover from. If they have asthma, they
+will also be paralysed; inhaling the Slime Lord's
+spawn is never good for one's health.
+
+When primebonded, the slime shall periodically damage your target; the
+amount of damage inflicted is increased if they are suffering from
+healthleech.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of entity balance
+Resource: 50 mana
+The ability name SLIME is mapped to this ability.

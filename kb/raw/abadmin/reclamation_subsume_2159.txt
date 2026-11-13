@@ -1,0 +1,24 @@
+Ability: Subsume (Record #2159)
+Associated skill: Reclamation
+Skillpoints required: 43999
+Blurb: All will become one.
+Syntax: RECLAMATION SUBSUME
+Abfile:
+This powerful ability is situationally one of the greatest in the
+reclaimer's arsenal. If your reclaimed land meets another's (two rooms
+become adjacent to one another) and the reclaimer of the other land is a
+mutual ally, you may subsume his or her land and make it part of your
+own network.
+
+To do this, you must stand on the room that is adjacent to your network
+that they have reclaimed and perform the ability.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 7.00 seconds of balance
+Resource: 1000 mana

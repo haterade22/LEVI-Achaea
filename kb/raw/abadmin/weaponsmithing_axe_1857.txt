@@ -1,0 +1,19 @@
+Ability: Axe (Record #1857)
+Associated skill: Weaponsmithing
+Skillpoints required: 10999
+Blurb: The handaxe; made for throwing.
+Syntax: FORGE FOR AXE
+FORGE (to continue after interruption)
+Extra info: Commodities: 3 Iron
+3 Wood
+Abfile:
+The handaxe; made for throwing.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

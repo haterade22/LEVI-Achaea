@@ -1,0 +1,21 @@
+Ability: Sleizak (Record #1158)
+Associated skill: Runelore
+Skillpoints required: 36999
+Blurb: Afflict a foe with the horrible voyria poison.
+Syntax: SKETCH SLEIZAK ON GROUND/<totem>
+Abfile:
+ Inks required: 1 Blue
+Symbol: Viper
+
+Will infect someone with voyria if he or she sees it upon entering a
+room. Disappears after one use unless it is on a totem.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

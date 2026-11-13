@@ -1,0 +1,15 @@
+Ability: Runaway (Record #666)
+Associated skill: Pranks
+Skillpoints required: 5999
+Blurb: Make a swift retreat.
+Syntax: RUNAWAY <direction> [distance] (between 1 and 11 rooms)
+Abfile:
+While you are riding your inflatable giraffe, you may beat a hasty retreat, going up to 10 rooms in a straight line.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

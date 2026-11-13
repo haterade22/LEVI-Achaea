@@ -1,0 +1,16 @@
+Ability: Pulverise (Record #2524)
+Associated skill: Sculpting
+Skillpoints required: 999
+Blurb: You shall break them.
+Syntax: TERRAN PULVERISE <target>
+Abfile:
+Using nothing but the power of Garash and your stone fists, beat your
+foe to a bloody pulp.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

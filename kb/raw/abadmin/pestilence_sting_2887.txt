@@ -1,0 +1,22 @@
+Ability: Sting (Record #2887)
+Associated skill: Pestilence
+Skillpoints required: 3999
+Blurb: Pain that comes on countless wings.
+Syntax: SWARM STING <swarm> <target>
+Abfile:
+Send a swarm composed of stinging and flying insects to descend upon
+your enemy. Beyond simply suffering the pain of the ordeal, if your
+victim is an adventurer they shall also be infected by whatever plague
+your swarm is infected with.
+
+Weariness will affect this ability.
+
+Useable on: adventurers and denizens
+Pre checks: equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

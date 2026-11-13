@@ -1,0 +1,23 @@
+Ability: Fox (Record #1175)
+Associated skill: Woodlore
+Skillpoints required: 1499
+Blurb: Summon a lithe vixen to attack your enemies.
+Syntax: SUMMON FOX
+Abfile:
+With this ability you may call a sly and cunning vixen to attack your
+enemies. When she attacks your victim, if they are suffering from the
+haemophilia affliction, the amount of bleeding she can inflict will be
+higher.
+
+* HELP MOBILES will show you what commands you can use with it.
+** Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

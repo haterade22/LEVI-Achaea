@@ -1,0 +1,37 @@
+Ability: Schools (Record #2768)
+Associated skill: Sublimation
+Skillpoints required: 0
+Blurb: Knowledge is the path to greatness.
+Syntax: SCHOOL SHOW
+SCHOOL SELECT <school> <APPRENTICE|JOURNEYMAN|MASTER>
+SCHOOL RESIGN
+Abfile:
+The three schools of research surrounding the application of the
+Wellspring are Manipulation, Substantiation, and Alignment.
+
+Manipulation focuses upon the manipulation of fundamental and abstract
+forces. While the lower feats of this school of study tend to be rather
+overt, the higher abstract abilities are as subtle as they are deadly.
+
+Substantiation focuses upon imposing one's will upon reality, and using
+sufficient energy to simply make that will manifest. Though often looked
+down on as a rather brute force approach, the results cannot be argued
+with. Typically, the lower feats of this school focus upon highly
+defensive measures, though Masters are whispered to have learned of
+truely destructive applications.
+
+Meanwhile, the school of Alignment aims to minimise wastefulness by
+focusing upon shifting what is already present into causing results.
+Extremely overt, this school of study is well equipped for causing
+devastation.
+
+You may only be a master, journeyman, or apprentice of one school.
+Choose wisely, as this will dictate which abilities you have available.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

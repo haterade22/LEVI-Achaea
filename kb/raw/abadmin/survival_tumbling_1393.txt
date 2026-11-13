@@ -1,0 +1,22 @@
+Ability: Tumbling (Record #1393)
+Associated skill: Survival
+Skillpoints required: 14999
+Blurb: Tumble past obstructions.
+Syntax: TUMBLE <direction>
+Abfile:
+Your body is agile enough that you are able to escape nearly any
+predicament by tumbling out of the room. Be warned though that tumbling
+is not the swiftest method of moving and that furthermore, you will lose
+your entourage and perhaps some defences while doing this.
+
+Note that if you attempt to move while tumbling, the tumble attempt will
+be aborted.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

@@ -1,0 +1,21 @@
+Ability: Sleepspores (Record #2146)
+Associated skill: Reclamation
+Skillpoints required: 4999
+Blurb: Send them into slumber.
+Syntax: RECLAMATION SLEEPSPORES
+RECLAMATION TERMINATE SLEEPSPORES/ALL
+Abfile:
+Your network is now capable of producing spores that when inhaled, shall
+cause the unfortunate individual to become very tired.
+
+Poison, sleep, refresh spores and pollen are all mutually exclusive.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

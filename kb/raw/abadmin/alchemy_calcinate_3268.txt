@@ -1,0 +1,22 @@
+Ability: Calcinate (Record #3268)
+Associated skill: Alchemy
+Skillpoints required: 35000
+Blurb: Burn formicaries to the ground.
+Syntax: CALCINATE FORMICARY
+Abfile:
+By creating layered circles of alchemical gold and iron around a
+formicary you can burn the formicary to ashes, completely destroying it.
+Those who are able to create formicaries may be notified of your attempt
+to destroy one.
+
+This will require concentration, and any disturbance will cause the
+attempt to fail.
+Useable on: room
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

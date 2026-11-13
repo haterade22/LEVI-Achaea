@@ -1,0 +1,16 @@
+Ability: Sturdiness (Record #873)
+Associated skill: Kaido
+Skillpoints required: 699
+Blurb: Standing firm against attempts to move you.
+Syntax: STAND FIRM
+Abfile:
+By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

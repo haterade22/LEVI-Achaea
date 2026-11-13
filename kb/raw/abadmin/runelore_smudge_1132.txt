@@ -1,0 +1,22 @@
+Ability: Smudge (Record #1132)
+Associated skill: Runelore
+Skillpoints required: 0
+Blurb: Ability to destroy runes.
+Syntax: SMUDGE <totem>
+SMUDGE <totem> SLOT <1-6>
+SMUDGE GROUND [rune]
+SMUDGE <rune> OFF ME
+SMUDGE <weapon> <rune>
+SMUDGE LEFT/RIGHT <rune>
+SMUDGE CIRCLE SURROUNDING TOTEM
+Abfile:
+With this ability you may remove (smudge) a rune from yourself, the ground or from a totem, assuming that your skill in Runelore equals or exceeds that of the one who originally sketched the rune. Smudging a totem or slot on a totem for any totem not owned by you will take longer, and may potentially notify the totem owner or owning organisation of the attempt.
+Useable on: room and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

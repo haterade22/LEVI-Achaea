@@ -1,0 +1,21 @@
+Ability: Shift (Record #2418)
+Associated skill: Aeonics
+Skillpoints required: 25999
+Blurb: A slip sideways through time.
+Syntax: CHRONO SHIFT [BOOST]
+Abfile:
+This powerful manipulation of the timestream shall cause your health and
+mana to switch their current values. Note that this ability is potent
+enough that even when not boosted, it shall incur an age cost (half the
+standard boost cost).
+
+If boosted, the equilibrium cost is significantly reduced.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 600 age

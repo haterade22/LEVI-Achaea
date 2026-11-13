@@ -1,0 +1,17 @@
+Ability: Leap (Record #301)
+Associated skill: Shindo
+Skillpoints required: 18999
+Blurb: Vault over obstacles.
+Syntax: LEAP <direction>
+Abfile:
+Walls, rubble, and other impediments are no longer a problem to one with your training. What you cannot get around, you may go over.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+The ability name LEAPING is mapped to this ability.

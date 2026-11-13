@@ -1,0 +1,3 @@
+Ability: Petlist (Record #1425)
+Associated skill: Vision
+Maps to record 1411 (LIST).

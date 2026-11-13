@@ -1,0 +1,17 @@
+Ability: Blackout (Record #940)
+Associated skill: Telepathy
+Skillpoints required: 52999
+Blurb: Cause a short-lived, total blackout to your subject.
+Syntax: MIND BLACKOUT
+Abfile:
+By sending out a blast of rawest telepathic power, you are able to, for a short period of time, knock out all senses of your locked target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 800 mana

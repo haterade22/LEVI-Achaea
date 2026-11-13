@@ -1,0 +1,18 @@
+Ability: Rainstorm (Record #1794)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Seaspell to extinguish shipboard conflagrations.
+Syntax: INVOKE RAINSTORM
+Extra info: Power cost: 50
+This ability will be hidden on ablistings.
+Abfile:
+While shipmelded, you can invoke this seaspell to douse all deck and
+sails fires at once.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Trapdoor (Record #2898)
+Associated skill: Charnel
+Skillpoints required: 25999
+Blurb: A step into the abyss.
+Syntax: CRYPT TRAP BUILD TRAPDOOR
+CRYPT TRAP DISMANTLE TRAPDOOR
+Abfile:
+Many things lie in wait for those that will trespass in your domain, but
+may they dread each step and breath. You may create a trapdoor in a
+location with an exit to the down; this will conceal said exit.
+Furthermore, when your unsuspecting foes step onto the trapdoor they
+shall plunge down into the blackness beneath.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

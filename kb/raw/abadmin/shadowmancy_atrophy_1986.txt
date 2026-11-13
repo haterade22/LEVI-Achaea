@@ -1,0 +1,23 @@
+Ability: Atrophy (Record #1986)
+Associated skill: Shadowmancy
+Skillpoints required: 11999
+Blurb: The strength just slips away.
+Syntax: SHADOW INSTILL <weapon> WITH ATROPHY
+Abfile:
+The atrophy instillation was derived from the degeneration instillation
+and has very similar properties, even if the arcane vector is slightly
+different. In practice however, it strikes with weariness, then
+clumsiness, and then paralysis, and if all three are present it will
+deal nontrivial damage(*).
+
+* The damage is significantly less if you do not have the target
+attuned, and halved if you do not possess the target's shadow within
+your phylactery.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

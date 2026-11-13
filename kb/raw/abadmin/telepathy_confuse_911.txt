@@ -1,0 +1,17 @@
+Ability: Confuse (Record #911)
+Associated skill: Telepathy
+Skillpoints required: 3999
+Blurb: Disrupt and confuse your subject.(*)
+Syntax: MIND CONFUSE [target]
+Abfile:
+By directing a powerful pulse of telepathic energy into the mind of a locked adventurer, you are able to short-circuit his mental processes, causing confusion in his mind.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 200 mana

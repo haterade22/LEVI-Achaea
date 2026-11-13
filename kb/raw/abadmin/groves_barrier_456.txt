@@ -1,0 +1,23 @@
+Ability: Barrier (Record #456)
+Associated skill: Groves
+Skillpoints required: 47999
+Blurb: Form an impenetrable barrier of light itself.
+Syntax: EVOKE BARRIER
+EVOKE BARRIER <target>
+Extra info: Imbued sunlight.
+Abfile:
+By forming a wall of solid light around yourself, or another adventurer,
+you may create a powerful defensive barrier able to withstand most
+attacks. While largely impenetrable, the barrier will dissolve should
+whomever it protects perform an action (with some exceptions).
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 350 sunlight and 150 mana

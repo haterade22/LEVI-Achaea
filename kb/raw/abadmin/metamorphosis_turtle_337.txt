@@ -1,0 +1,18 @@
+Ability: Turtle (Record #337)
+Associated skill: Metamorphosis
+Skillpoints required: 999
+Blurb: The aquatic turtle.
+Syntax: MORPH TURTLE
+Extra info: Powers: Fluidswim
+Snap
+Abfile:
+The aquatic turtle.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 20 mana

@@ -1,0 +1,23 @@
+Ability: Portability (Record #463)
+Associated skill: Groves
+Skillpoints required: 60000
+Blurb: The ultimate expression of the bond with your grove.
+Syntax: PLANT QUARTERSTAFF
+GROVE UNIFY
+Abfile:
+This, the most powerful of all grove abilities, allows you to temporarily move your grove to any forest or jungle location where there is not already a grove or temporary grove. Planting a quarterstaff in such a location will move your grove there, though only temporarily. With time, your grove will return to its home. If you wish to prematurely move your grove back to its original location, simply GROVE UNIFY.
+
+It should be noted that a few abilities will not work in a temporary grove.
+
+These are:
+   Channel      Sever     Guardian      Sharing
+   Hive         Forestbinding
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

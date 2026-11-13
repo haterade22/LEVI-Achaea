@@ -1,0 +1,17 @@
+Ability: Swoop (Record #343)
+Associated skill: Metamorphosis
+Skillpoints required: 3999
+Blurb: Dive down from the skies on an unwary person.
+Syntax: SWOOP <target>
+This ability will be hidden on ablistings.
+Abfile:
+While you are flying, you may swoop down on an adventurer on the ground, causing him damage with your claws.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance

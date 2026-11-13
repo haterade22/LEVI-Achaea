@@ -1,0 +1,20 @@
+Ability: Incendiary (Record #1805)
+Associated skill: Formulation
+Skillpoints required: 13999
+Blurb: Sear flesh from bone with this lethal compound.
+Syntax: WIELD INCENDIARY
+THROW INCENDIARY <AT GROUND|DIRECTION>
+Extra info: Reagents: 2 magnesium, 1 potash
+Abfile:
+This deadly compound clings to the skin of those that it comes into
+contact with, burning until either all fuel is exhausted or the victim
+manages to scrub away the reactant.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

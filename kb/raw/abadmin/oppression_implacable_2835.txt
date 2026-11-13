@@ -1,0 +1,19 @@
+Ability: Implacable (Record #2835)
+Associated skill: Oppression
+Skillpoints required: 1399
+Blurb: Then serve in death.
+Syntax: DRAW HEART
+CONSUME HEART
+Abfile:
+If they will not serve in life than they shall in Death. By drawing the
+hearts of the fallen, you may consume them to restore your reserves of
+life essence.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

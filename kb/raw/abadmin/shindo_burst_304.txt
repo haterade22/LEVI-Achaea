@@ -1,0 +1,26 @@
+Ability: Burst (Record #304)
+Associated skill: Shindo
+Skillpoints required: 22999
+Blurb: A crude release of force.
+Syntax: BURST <target>
+Abfile:
+Shin energy is a source of power both pliant and potent. You may unleash
+a measure of this energy upon a target in a crude but damaging burst of
+raw force.
+
+This attack will bypass, but not destroy, magical shields and prismatic
+barriers, and does more damage against both prone opponents and those
+suffering a damaged head(*).
+
+* These bonuses both stack with one another, but with diminishing
+returns.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 70 mana

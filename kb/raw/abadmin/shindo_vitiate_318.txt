@@ -1,0 +1,22 @@
+Ability: Vitiate (Record #318)
+Associated skill: Shindo
+Skillpoints required: 52999
+Blurb: Your strength becomes another's frailty.
+Syntax: VITIATE <target>
+Abfile:
+The potent forces of Shin energy can prove crippling to the uninitiated.
+By directing them upon an opponent, you may weaken your foe for a time,
+sapping their strength and dexterity. This also has a chance to
+interfere with their physical and mental regeneration until they shrug
+off the vitiating power.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 40 Shin energy

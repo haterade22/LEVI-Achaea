@@ -1,0 +1,26 @@
+Ability: Dreamcatcher (Record #1993)
+Associated skill: Conjuration
+Skillpoints required: 39999
+Blurb: Increase regeneration while sleeping.
+Syntax: BEGIN CREATION OF DREAMCATCHER
+Abfile:
+Just have it in your inventory.
+
+Type:
+   Created item.
+
+Actions:
+   14, 9, 17, 5, 3x11, 3x1, 2x8, 3x11
+
+Comms:
+   2 gold, 2 silver, 1 stag's horn
+
+The Dreamcatcher will increase health and endurance regeneration while the bearer is sleeping.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

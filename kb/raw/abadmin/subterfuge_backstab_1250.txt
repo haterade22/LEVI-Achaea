@@ -1,0 +1,17 @@
+Ability: Backstab (Record #1250)
+Associated skill: Subterfuge
+Skillpoints required: 34999
+Blurb: Attack from the shadows.
+Syntax: BACKSTAB <target> [<venom>]
+Extra info: Initiation cooldown: 2.00 seconds.
+Abfile:
+Only useable while hidden in the shadows, backstab is a delayed ability. After initiating it, you will spend a few seconds circling around to get directly behind your opponent, and then you will leap from the shadows to plant a dirk or dagger in his back.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

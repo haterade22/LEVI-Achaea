@@ -1,0 +1,17 @@
+Ability: Frost (Record #1910)
+Associated skill: Remedies
+Skillpoints required: 26999
+Blurb: A mixture to increase your resistance to fire.
+Syntax: None
+Extra info: Ingredients: 1 kelp, 1 pear, 1 ginseng or
+1 aurum, 1 ferrum, 1 calcite
+Abfile:
+This powerful elixir will help keep the body temperature down protecting you from fire.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

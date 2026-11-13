@@ -1,0 +1,18 @@
+Ability: Blur (Record #2407)
+Associated skill: Aeonics
+Skillpoints required: 2999
+Blurb: Move with supernatural speed.
+Syntax: CHRONO BLUR [BOOST]
+Abfile:
+This ability allows you to move more rooms at a time.
+
+When boosted, it will last longer.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 180 age

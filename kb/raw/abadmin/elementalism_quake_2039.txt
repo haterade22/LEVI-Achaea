@@ -1,0 +1,18 @@
+Ability: Quake (Record #2039)
+Associated skill: Elementalism
+Skillpoints required: 38999
+Blurb: Open cracks in the ground to drain away water.
+Syntax: CAST QUAKE
+Abfile:
+By summoning forth a minor earthquake, you are able to drain away any
+water that may be flooding your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of equilibrium
+Resource: 250 mana

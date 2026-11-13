@@ -1,0 +1,15 @@
+Ability: Complexharmony (Record #1666)
+Associated skill: Harmonics
+Skillpoints required: 34999
+Blurb: With this, you may set up five harmonics in a room.
+Syntax: None
+Abfile:
+Complex Harmony is a passive ability. Those with Complex Harmony are able to sustain five simultaneous harmonics in the same location.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

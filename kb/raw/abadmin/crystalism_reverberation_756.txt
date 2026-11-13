@@ -1,0 +1,22 @@
+Ability: Reverberation (Record #756)
+Associated skill: Crystalism
+Skillpoints required: 5999
+Blurb: Protect your vibrations against some attacks.
+Syntax: EMBED REVERBERATION
+Abfile:
+ Shapes required: Disc, Pentagon
+
+This vibration will protect your other vibrations in the room against
+most things which might destroy them, except the Dampen ability and the
+Retardation vibration.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

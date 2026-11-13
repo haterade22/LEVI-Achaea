@@ -1,0 +1,23 @@
+Ability: Maul (Record #3266)
+Associated skill: Dominion
+Skillpoints required: 34999
+Blurb: Rip and tear until it is done.
+Syntax: HOUND MAUL <target>
+Abfile:
+Command your chaos hound to savage a denizen in a frenzy, dealing
+damage(*) to them. Note that you can only command your loyal in this
+fashion every so often(**).
+
+* This damage is based on your hound's trained strength and whether it
+has improved its form (see AB DOMINION EVOLUTION).
+** Every 30 seconds.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 30.00 seconds

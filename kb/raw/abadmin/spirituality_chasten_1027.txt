@@ -1,0 +1,32 @@
+Ability: Chasten (Record #1027)
+Associated skill: Spirituality
+Skillpoints required: 26999
+Blurb: Deal a mind-numbing blow to an enemy.
+Syntax: CHASTEN <target> [BODY|MIND|<affliction>]
+Abfile:
+The successful believer requires many methods to discourage the chaotic
+natures of many of Achaea's inhabitants. Chasten will allow you to
+disrupt an adventurer's mental processes, while focusing it upon the
+body will disrupt their physical processes.
+
+This ability can be performed off balance if following a smite attack.
+
+Available body afflictions: paralysis, healthleech, clumsiness, nausea,
+and asthma.
+
+Available mind afflictions: epilepsy, dizziness, confusion, and
+recklessness.
+
+Should your target have all of the afflictions from one pool, they will
+receive either addiction (for body) or impatience (for mind).
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium
+Resource: 100 mana

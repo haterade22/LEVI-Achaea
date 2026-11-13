@@ -1,0 +1,37 @@
+Ability: Fashion (Record #1705)
+Associated skill: Vodun
+Skillpoints required: 0
+Blurb: Fashion vodun dolls from rope and cloth.
+Syntax: FASHION DOLL OF <target>
+VODUN UNRAVEL <target>
+Extra info: Fashion cooldown: 2.00 seconds of balance, 50 mana
+Unravel cooldown: 10.00 seconds of balance, 750 mana
+Abfile:
+ Requires: 1 Rope, 1 Cloth
+
+After the first fashioning to create the doll, you will have a crude
+humanoid vodun doll. Wield the doll and FASHION DOLL OF <target>.
+
+As you fashion your doll further, you'll notice that it gets closer to
+being a semi-living state. Further, the more fashions you have with your
+doll, the more Vodun powers you'll be able to channel through the doll.
+
+Additionally, your doll will decay at a rate of 50% every 6 minutes
+after the last fashion. This effect does not occur for dolls of allied
+adventurers.
+
+If you find yourself in need of destroying a doll that is no longer in
+your possession, you may unravel it from afar. Note that this is a
+difficult feat, and will result in being thrown off balance for a long
+period of time.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance
+Resource: Mana

@@ -1,0 +1,18 @@
+Ability: Lacerate (Record #2122)
+Associated skill: Skirmishing
+Skillpoints required: 20999
+Blurb: Let them bleed for their foolishness.
+Syntax: LACERATE <target> [limb] [venom]
+Abfile:
+This slicing attack with your chosen weapon aims to inflict maximum
+bleeding, as well as delivering a venom and the haemophilia affliction
+if your target is an adventurer.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

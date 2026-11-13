@@ -1,0 +1,16 @@
+Ability: Numbness (Record #894)
+Associated skill: Kaido
+Skillpoints required: 35999
+Blurb: Delaying the effects of damage.
+Syntax: NUMB
+Abfile:
+With a very clever method of concentration, you are now able to numb yourself to damage received, at least temporarily. When the numbness wears off, all the damage you would have taken, minus 40%, will be received in one blow.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

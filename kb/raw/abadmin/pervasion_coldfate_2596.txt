@@ -1,0 +1,19 @@
+Ability: Coldfate (Record #2596)
+Associated skill: Pervasion
+Skillpoints required: 42999
+Blurb: Breath is fleeting.
+Syntax: MANIFEST COLDFATE <target>
+Abfile:
+Curse your foe with a cold fate, denying them the gift of breathing
+while underwater. Not even the natural ability of a grook or the power
+of your fellow Lords shall allow them to avoid this punishment.
+
+This fate will last a time before fading naturally.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

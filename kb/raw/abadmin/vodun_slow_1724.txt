@@ -1,0 +1,20 @@
+Ability: Slow (Record #1724)
+Associated skill: Vodun
+Skillpoints required: 26999
+Blurb: Make a victim move through time more slowly.
+Syntax: VODUN SLOW
+Extra info: Fashions:
+Required: 20
+Used    : 10
+1 (If the speed defense is stripped)
+Abfile:
+Slow the movement of your victim through time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

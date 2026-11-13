@@ -1,0 +1,16 @@
+Ability: Fitness (Record #520)
+Associated skill: Discipline
+Skillpoints required: 5999
+Blurb: Controlling your breathing.
+Syntax: FITNESS
+Abfile:
+With your mastery of your own body, you are able to purge yourself of the asthma affliction.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

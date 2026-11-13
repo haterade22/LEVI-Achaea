@@ -1,0 +1,24 @@
+Ability: Cremation (Record #2570)
+Associated skill: Ignition
+Skillpoints required: 50999
+Blurb: A fire to sear the soul itself.
+Syntax: IGNITE SOUL OF <target>
+Abfile:
+Burning the physical is simple; with this ability, you may lash at the
+soul of your target, harrying it to such a degree that upon it leaving
+its prison of flesh upon true death, it shall immediately be forced to
+flee to the halls of Ugrach.
+
+On a successful cremation(*) you will not be able to use this ability
+again for ten minutes.
+
+* A successful cremation specifically is if your victim dies and auto
+embraces death.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

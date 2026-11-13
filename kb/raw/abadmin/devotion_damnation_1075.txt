@@ -1,0 +1,18 @@
+Ability: Damnation (Record #1075)
+Associated skill: Devotion
+Skillpoints required: 53999
+Blurb: Curse the eternal soul of your victim.
+Syntax: PERFORM DAMNATION <target>
+Abfile:
+Bearing the burden of judgement of the unrighteous, you are able to curse the unfaithful with everlasting damnation. Calling upon the holy fires, you may sacrifice those heretics who see the glimpse of their Hellish future and suffer from a damaged head, burning them to death where they stand.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 250 devotion and 500 mana
+Skill specialisation: devo_paladin

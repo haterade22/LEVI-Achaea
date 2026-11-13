@@ -1,0 +1,16 @@
+Ability: Bury (Record #2538)
+Associated skill: Sculpting
+Skillpoints required: 40999
+Blurb: So that none may find their corpse.
+Syntax: TERRAN BURY
+Abfile:
+By sending violent tremors throughout the earth, you may damage all that
+are foolish enough to burrow through the ground in your presence.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

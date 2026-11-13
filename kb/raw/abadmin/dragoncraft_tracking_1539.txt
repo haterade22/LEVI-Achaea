@@ -1,0 +1,19 @@
+Ability: Tracking (Record #1539)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Travel quickly across great distances.
+Syntax: VIEW
+TRACK <target>
+Abfile:
+While flying, you will be able to discern who is outdoors with VIEW, then be able to travel very quickly to your prey as long as they remain outdoors.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 50 mana
+Skill specialisation: dragonform

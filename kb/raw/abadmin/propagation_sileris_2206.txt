@@ -1,0 +1,21 @@
+Ability: Sileris (Record #2206)
+Associated skill: Propagation
+Skillpoints required: 22999
+Blurb: A berry that grows in various valleys.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH SILERIS
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: You will recover more quickly from sipping the immunity elixir.
+Body: Increased resistance to poison damage.
+Arms: Your thornrend attack will deal cutting damage against adventurers
+and denizens, instead of magical.
+Legs: You are less likely to slip on icy ground.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Hierophant (Record #611)
+Associated skill: Tarot
+Skillpoints required: 15999
+Blurb: Compel your victim to do your bidding.
+Syntax: FLING HIEROPHANT AT <target>
+ORDER <target> <command>
+Abfile:
+This tarot card will allow you to order your opponent to do one thing. Fling the card, and then, when you have recovered balance, you may ORDER him to do whatever you wish.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Skill specialisation: jester_tarot

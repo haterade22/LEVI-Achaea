@@ -1,0 +1,16 @@
+Ability: Disrupt (Record #1332)
+Associated skill: Hypnosis
+Skillpoints required: 43999
+Blurb: Destroy your opponent's mental equilibrium.
+Syntax:
+Abfile:
+This potent suggestion will knock the target off equilibrium briefly, or
+fully disrupt them if confusion is also present at the time it triggers.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

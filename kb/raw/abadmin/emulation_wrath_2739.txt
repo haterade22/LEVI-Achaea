@@ -1,0 +1,27 @@
+Ability: Wrath (Record #2739)
+Associated skill: Emulation
+Skillpoints required: 45999
+Blurb: Unleash your fury.
+Syntax: ENACT WRATH
+Abfile:
+The rageblade was a weapon so terrible in its potential that no wielder
+has ever truly mastered it. It is of no surprise that there was
+relentless study into discovering its secrets, and yet such discoveries
+were rare and strangely divergent in their effects.
+
+When sufficiently weakened(*), you may unleash your fury, bolstering
+your health and granting you both the clarity and rupture defences. This
+is extremely taxing, and you may only do it every so often(**).
+
+* You must be below half of your maximum health.
+** Every three minutes.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.30 seconds of equilibrium
+The ability name ROTH is mapped to this ability.

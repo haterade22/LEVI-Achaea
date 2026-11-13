@@ -1,0 +1,22 @@
+Ability: Fury (Record #3030)
+Associated skill: Dominion
+Skillpoints required: 60000
+Blurb: Temporarily raise your strength.
+Syntax: FURY ON|OFF
+RELAX FURY
+Abfile:
+This will allow you to temporarily raise your strength with 2 points,
+for no more than a total of 1/4th of each Achaean day. It can be used
+once a day without cost, but if you turn it off and turn it back on
+within the same Achaean day, you will incur a cost of 500 willpower each
+time you turn it back on. Your endurance losses will be significantly
+higher while Fury is active.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium

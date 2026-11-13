@@ -1,0 +1,17 @@
+Ability: Frostrive (Record #2336)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Crack a denizen's shield with your frozen breath.
+Syntax: FROSTRIVE <target>
+Abfile:
+Breathe cold air at a denizen, freezing the shield around it until the shield cracks, leaving the denizen defenseless.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_blue_dragon

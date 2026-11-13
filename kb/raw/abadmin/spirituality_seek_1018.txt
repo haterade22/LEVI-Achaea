@@ -1,0 +1,17 @@
+Ability: Seek (Record #1018)
+Associated skill: Spirituality
+Skillpoints required: 10999
+Blurb: Have your angel report on another person.
+Syntax: ANGEL SEEK <target>
+Abfile:
+This ability will cause your angel to report on the whereabouts of the selected adventurer, his or her health and mana levels, and who is with him or her.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium
+Resource: 5 Angel power

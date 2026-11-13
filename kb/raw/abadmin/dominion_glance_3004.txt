@@ -1,0 +1,18 @@
+Ability: Glance (Record #3004)
+Associated skill: Dominion
+Skillpoints required: 1599
+Blurb: The sense of sight through a certain lens.
+Syntax: HOUND GLANCE
+Abfile:
+Look through the eyes of your hound, seeing its immediate
+surroundings(*).
+
+* Does not work if it is in someone's inventory or similar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

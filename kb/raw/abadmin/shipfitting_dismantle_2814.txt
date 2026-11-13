@@ -1,0 +1,19 @@
+Ability: Dismantle (Record #2814)
+Associated skill: Shipfitting
+Skillpoints required: 18999
+Blurb: Break down ship weapons and equipment.
+Syntax: SHIPFIT DISMANTLE <equipment>
+Abfile:
+For those who find themselves without need of a piece of equipment or
+weaponry, you may disassemble the offending article, returning some of
+the commodities used in its construction in the process.
+
+Note: Dismantling a float will not return any commodities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Bodyblock (Record #848)
+Associated skill: Tekura
+Skillpoints required: 4999
+Blurb: Using your body to block blows.
+Syntax: BDB
+UNBLOCK BDB
+UNBLOCK ALL
+Abfile:
+At the cost of a constant mana drain, this block attempts to stop or reduce physical damage aimed at your body.
+
+With any block, you may UNBLOCK <block> to lower it. Alternatively, you may UNBLOCK ALL to lower all of your blocks.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Resource: 50 mana
+Drain: Mana

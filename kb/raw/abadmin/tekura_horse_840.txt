@@ -1,0 +1,28 @@
+Ability: Horse (Record #840)
+Associated skill: Tekura
+Skillpoints required: 0
+Blurb: The most basic stance.
+Syntax: HRS
+LEAP <direction>
+Abfile:
+The first stance any practitioner of tekura becomes proficient in, the
+horse stance is ideal for striking. This is demonstrated in the fact
+that in this stance alone, you are able to perform standard strikes in
+conjunction with the slam and wrench throws.
+
+Additionally, due to the firm grounding of your feet in this stance, you
+are able to leap over obstructions in a given direction.
+
+Note that usually entering a tekura stance consumes and requires
+balance. However, those skilled in tekura are able to transition into a
+new stance immediately following a tekura kick or punch, although this
+will make your recovery period slightly slower.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

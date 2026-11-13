@@ -1,0 +1,39 @@
+Ability: Embracehouse (Record #2682)
+Associated skill: Attainment
+Skillpoints required: 17999
+Blurb:
+Syntax:
+This ability will be hidden on ablistings.
+Abfile:
+The Good News: if you EMBRACE CLASS, then:
+- you become a full member in the class.
+- you are no longer a journeyman/journeywoman.
+- you may train in all class skills without limitation.
+
+The Not-So-Good News: if you EMBRACE CLASS, then:
+- you may not UNEMBRACE class. Ever.
+- if you decide to leave your class, then you will only receive HALF of
+the lessons back that you invested in class skills.
+
+Prior to embracing class, if you leave your class, you'll receive a
+refund of about 98% of your lessons invested in class skills. After,
+you'll receive about 50%. Think carefully about embracing class!
+
+This is a very serious decision. Do not make it lightly!
+
+A Bit More Bad News:
+Once you are offered the opportunity to embrace, whether you do or not,
+you may never return to any newbie area such as Minia or Lodi, not even
+if you somehow fall to level 20 or lower again.
+
+NOTE: If you have not yet reached House Rank 2 or you quit your house
+and do not join another, you will not be able to EMBRACE CLASS until
+level 50.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

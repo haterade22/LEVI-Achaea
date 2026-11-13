@@ -1,0 +1,22 @@
+Ability: Crush (Record #935)
+Associated skill: Telepathy
+Skillpoints required: 43999
+Blurb: Attack your subject with a crushing psychic attack.(*)
+Syntax: MIND CRUSH [target]
+Abfile:
+Mind crush sends a crushing wave of mental energy at the target,
+inflicting both physical and mental damage. This ability can be cast on
+any target in the same room as you without the need for a mind lock.
+
+When used at a distance, the target must be no more than five rooms away
+or within line of sight.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.40 seconds of equilibrium
+Resource: 150 mana

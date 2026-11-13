@@ -1,0 +1,24 @@
+Ability: Spark (Record #2547)
+Associated skill: Ignition
+Skillpoints required: 0
+Blurb: The smallest ember can burn the world.
+Syntax:
+Abfile:
+Every lord of Kkractle's domain possesses a primal spark at the core of
+their being. This spark is quiescent much of the time; but these lords
+tend to be swift to anger and swifter to dispense their own brand of
+justice. When driven to battle the spark shall rage, and as it burns
+brighter so to shall the elemental lord, and so shall the lord's power
+grow.
+
+As you carry out hostile attacks against your enemies the spark shall be
+fanned brighter, though if you go without performing a hostile act for a
+short while it shall slowly decay.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

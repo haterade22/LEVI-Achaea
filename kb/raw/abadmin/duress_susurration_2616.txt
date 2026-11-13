@@ -1,0 +1,20 @@
+Ability: Susurration (Record #2616)
+Associated skill: Duress
+Skillpoints required: 17999
+Blurb: A gentle cleansing breeze.
+Syntax: MANIFEST SUSURRATION
+Abfile:
+This gentle cleansing breeze will surround you, passively healing you of
+afflictions every so often. If you are in Whiirh's domain(*), this will
+cure two afflictions at once, though when you next return to the ground
+it will prove less efficient for a time after doing so.
+
+* When flying.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

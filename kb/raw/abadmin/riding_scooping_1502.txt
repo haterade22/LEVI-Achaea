@@ -1,0 +1,15 @@
+Ability: Scooping (Record #1502)
+Associated skill: Riding
+Skillpoints required: 3999
+Blurb: Scoop objects off the ground.
+Syntax: GET <item>
+Abfile:
+Your ease of being upon your steed is so great that you can easily scoop up items that lay on the ground while still mounted.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Risingkick (Record #2504)
+Associated skill: Shikudo
+Skillpoints required: 3999
+Blurb: A high kick targeting the head or torso.
+Syntax: RISINGKICK <HEAD|TORSO>
+Abfile:
+This high kick can be aimed at the head or torso. If aimed at the head
+of a prone opponent, it shall stun them for a short time. Likewise, if
+aimed at the torso of someone suffering internal trauma, it shall also
+stun them.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

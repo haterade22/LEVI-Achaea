@@ -1,0 +1,21 @@
+Ability: Parrying (Record #1465)
+Associated skill: Weaponry
+Skillpoints required: 7999
+Blurb: The ability to parry attacks.
+Syntax: PARRY <body part>
+
+Extra info: Body Parts: HEAD
+TORSO
+RIGHT/LEFT ARM
+RIGHT/LEFT LEG
+NOTHING
+Abfile:
+To use this ability, you must have a weapon capable of parrying wielded. It allows you to automatically stop any physical attack directed specifically at that body part.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

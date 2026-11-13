@@ -1,0 +1,21 @@
+Ability: Pinchaura (Record #966)
+Associated skill: Occultism
+Skillpoints required: 20999
+Blurb: Surgically alter your patient's aura.
+Syntax: PINCHAURA <target> <defence>
+Abfile:
+You have become exceptionally expert in the study of auras. Indeed, now
+you can surgically alter an individual's aura, removing one of the
+following defences: cloak, speed, caloric, frost, levitation, insomnia,
+kola.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 0.50% karma

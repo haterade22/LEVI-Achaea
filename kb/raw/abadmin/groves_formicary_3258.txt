@@ -1,0 +1,41 @@
+Ability: Formicary (Record #3258)
+Associated skill: Groves
+Skillpoints required: 35000
+Blurb: Summon the swarm to defend a natural location.
+Syntax: EVOKE FORMICARY CREATE
+EVOKE FORMICARY RECLAIM
+EVOKE FORMICARY EMPOWER
+EVOKE FORMICARY TUNE ELEUSIS|FOREST
+EVOKE FORMICARY INFECT MURRAIN|FETTER
+Abfile:
+Formicaries are used to spread the influence of the swarm throughout
+Eleusis and beyond. Each formicary holds a small portion of the swarm,
+empowered by the raw energy of Nature itself, to defend the land from
+the enemies of Nature. Almost all formicary skills will consume a
+portion of the swarm, and all empowered formicaries will consume a small
+portion of the swarm each month.
+
+CREATE - At a cost of 20 fibre, 10 wood, and 2 bone commodities, create
+a new formicary to house the swarm.
+
+RECLAIM - Destroy a formicary.
+
+EMPOWER - Call upon the raw power of Nature to empower a formicary. The
+empowerment will fade over time, and most of the formicary's powers will
+not function until it has been re-empowered.
+
+TUNE - Tune a formicary to react against the enemies of either Eleusis
+or Forest enemies.
+
+INFECT - Infect the swarm housed in a formicary with either murrain or
+fetter. Murrain will cause the swarm to infect enemies with painful
+afflictions. Fetter will cause the swarm to hinder enemy movement.
+Useable on: adventurers
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: forestal_org

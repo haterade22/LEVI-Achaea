@@ -1,0 +1,24 @@
+Ability: Danaeus (Record #998)
+Associated skill: Domination
+Skillpoints required: 35999
+Blurb: Danaeus, the dark savant.
+Syntax: COMMAND STORM AT <target>
+Abfile:
+Danaeus will send to you a Chaos Storm. You may command the storm to
+inflict your target with clumsiness.
+
+When primebonded, the storm shall periodically notify you of where its
+target is located, providing they remain in the local area and are not
+protected from forms of scrying.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of entity balance
+Resource: 50 mana
+The ability name STORM is mapped to this ability.
+The ability name STORM is mapped to this ability.

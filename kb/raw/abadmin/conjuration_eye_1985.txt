@@ -1,0 +1,30 @@
+Ability: Eye (Record #1985)
+Associated skill: Conjuration
+Skillpoints required: 11499
+Blurb: A sigil dealing with souls and other dimensions.
+Syntax: BEGIN CREATION OF EYE SIGIL
+THROW EYE AT GROUND
+Abfile:
+ Or, just lay it on the ground.
+
+Type:
+   Created item.
+
+Actions:
+   17, 1
+
+Comms:
+   1 obsidian
+
+The eye sigil will, when placed on the ground, stop souls from entering
+the room. When thrown at the ground it will be consumed and will bring
+phased people out of phase.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

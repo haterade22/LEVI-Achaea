@@ -1,0 +1,19 @@
+Ability: Flagellate (Record #2114)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Sensitize your target's nerves.
+Syntax: FLAGELLATE <target>
+Extra info: Gives denizen affliction: Sensitivity
+Abfile:
+Sting your target's nerves with a series of light whip cracks, causing the target to suffer from sensitivity for a few seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 27.00 seconds
+Resource: 25 rage
+Skill specialisation: br_serpent

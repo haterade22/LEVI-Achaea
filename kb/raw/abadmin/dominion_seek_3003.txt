@@ -1,0 +1,16 @@
+Ability: Seek (Record #3003)
+Associated skill: Dominion
+Skillpoints required: 999
+Blurb: Order your hound to find its prey.
+Syntax: HOUND SEEK <adventurer>
+Abfile:
+Using this ability, you may order your hound to seek out another
+adventurer. Your hound must be by your side for you to use this ability.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,24 @@
+Ability: Blizzard (Record #315)
+Associated skill: Shindo
+Skillpoints required: 46999
+Blurb: Quench your foes with a storm of ice.
+Syntax: SHIN BLIZZARD
+Abfile:
+Through a secret Shindo technique familiar only to masters of the art,
+you may draw the heat from the air around you into yourself.
+Manipulating the resultant freezing atmosphere into a shearing blizzard,
+you may scourge all nearby with lashes of ice, freezing them and
+destroying any heat vibration that might be present at your location. In
+addition, once your power leaves your control, it shall settle in the
+location, forming a temporary obscuring snowstorm.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 30 Shin energy

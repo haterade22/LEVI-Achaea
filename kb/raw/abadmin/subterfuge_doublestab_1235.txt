@@ -1,0 +1,17 @@
+Ability: Doublestab (Record #1235)
+Associated skill: Subterfuge
+Skillpoints required: 20999
+Blurb: Quickly administer two venoms to a target with your dirk.
+Syntax: DOUBLESTAB/DSTAB <target> [venom1 venom2]
+Abfile:
+If you are wielding a dirk that has been envenomed with more than one venom, you may use this ability to quickly deliver two venoms simultaneously to your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance
+The ability name DSTAB is mapped to this ability.

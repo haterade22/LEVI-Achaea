@@ -1,0 +1,17 @@
+Ability: Nocturne (Record #3190)
+Associated skill: Composition
+Skillpoints required: 60000
+Blurb: For silent you will be not.
+Syntax:
+Abfile:
+This greatest movement may be added to any performance, and then not
+even a silence vibration or similar shall stop all from hearing your
+masterful song.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

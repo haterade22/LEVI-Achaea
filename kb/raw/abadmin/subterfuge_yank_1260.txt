@@ -1,0 +1,16 @@
+Ability: Yank (Record #1260)
+Associated skill: Subterfuge
+Skillpoints required: 46999
+Blurb: Use a whip to pull an opponent into your room.
+Syntax: YANK <target>
+Abfile:
+Using this ability, you may try to yank an adventurer from an adjacent room into yours with your whip. You must be wielding a whip to use this ability.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

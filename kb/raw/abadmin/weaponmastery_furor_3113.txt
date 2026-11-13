@@ -1,0 +1,21 @@
+Ability: Furor (Record #3113)
+Associated skill: Weaponmastery
+Skillpoints required: 45999
+Blurb: You have the high ground.
+Syntax:
+Abfile:
+When wielding flails, your furor is so great that your blows which would
+otherwise expend momentum against a prone or paralysed target no longer
+do.
+
+* You will not gain momentum on attacks in this case, but you will not
+lose it either
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualblunt

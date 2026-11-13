@@ -1,0 +1,19 @@
+Ability: Maul (Record #382)
+Associated skill: Metamorphosis
+Skillpoints required: 33999
+Blurb: Savagely attack an opponent with claws and teeth.
+Syntax: MAUL <target> [body part(*)]
+This ability will be hidden on ablistings.
+Abfile:
+Rend your victim with your claws and teeth.
+
+* In order to target a specific body part, you must have the targeting ability.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

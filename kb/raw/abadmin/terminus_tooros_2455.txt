@@ -1,0 +1,18 @@
+Ability: Tooros (Record #2455)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: Cause pain with but a word.
+Syntax: INTONE TOOROS
+This ability will be hidden on ablistings.
+Abfile:
+Speak a word and cause damage to all that stand in your location.
+Beware: this word is indiscriminate and will strike at you as well.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of word balance

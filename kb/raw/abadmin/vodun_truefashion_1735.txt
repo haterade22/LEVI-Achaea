@@ -1,0 +1,15 @@
+Ability: Truefashion (Record #1735)
+Associated skill: Vodun
+Skillpoints required: 60000
+Blurb: The hallmark of a master of Vodun.
+Syntax: None
+Abfile:
+With TRUEFASHION, you have achieved a level of skill whereby sometimes you can get two fashions in the time it normally takes to get one.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

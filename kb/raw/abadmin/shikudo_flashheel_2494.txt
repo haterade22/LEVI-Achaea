@@ -1,0 +1,20 @@
+Ability: Flashheel (Record #2494)
+Associated skill: Shikudo
+Skillpoints required: 3999
+Blurb: A swift kick to damage joints.
+Syntax: FLASHHEEL <LEFT|RIGHT>
+Abfile:
+The joints are the most vulnerable part of a limb. By targeting the
+knees with this kick, you will be able to break said limb with a single
+blow, crippling your foe.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

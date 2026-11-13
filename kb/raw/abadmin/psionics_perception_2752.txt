@@ -1,0 +1,17 @@
+Ability: Perception (Record #2752)
+Associated skill: Psionics
+Skillpoints required: 38999
+Blurb: The insidious becomes apparent.
+Syntax: PSI PERCEPTION
+Abfile:
+Reach out with your psionic senses, detecting how many telepaths are
+holding mindlocks in your local area.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 3.00 seconds of equilibrium

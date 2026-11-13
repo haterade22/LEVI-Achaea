@@ -1,0 +1,21 @@
+Ability: Bellwort (Record #2200)
+Associated skill: Propagation
+Skillpoints required: 4999
+Blurb: A flower with mysterious properties.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH BELLWORT
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Access to the rage ability, which cures various afflictions.
+Body: Immunity to the peace affliction.
+Arms: Your thornrend attacks will additionally deliver the weariness
+affliction.
+Legs: The ability to walk on water.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

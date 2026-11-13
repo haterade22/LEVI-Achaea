@@ -1,0 +1,17 @@
+Ability: Scratch (Record #328)
+Associated skill: Metamorphosis
+Skillpoints required: 299
+Blurb: A minor attack with your claws.
+Syntax: SCRATCH <target>
+This ability will be hidden on ablistings.
+Abfile:
+Scratch your opponent with your small claws.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

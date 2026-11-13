@@ -1,0 +1,18 @@
+Ability: Weaponaiming (Record #1758)
+Associated skill: Seafaring
+Skillpoints required: 12999
+Blurb: Greater accuracy when firing.
+Syntax: Passive
+Abfile:
+Greater accuracy when firing a shipboard weapon.
+This passive ability decreases the amount of time it will take you to
+fire a ship weapon at another ship. The time reduction will be increased
+as your rank in the Weapons Specialisation in Seafaring increases.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

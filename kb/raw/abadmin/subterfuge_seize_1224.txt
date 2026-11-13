@@ -1,0 +1,16 @@
+Ability: Seize (Record #1224)
+Associated skill: Subterfuge
+Skillpoints required: 9999
+Blurb: Grabbing unwary victims from the forest floor.
+Syntax: SEIZE <target>
+Abfile:
+While in the trees, you may seize an adventurer and bring him up to your level.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance

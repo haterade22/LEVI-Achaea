@@ -1,0 +1,21 @@
+Ability: Tension (Record #2627)
+Associated skill: Duress
+Skillpoints required: 47999
+Blurb: Turn the air against them.
+Syntax: AERO TENSION <target>
+Abfile:
+Increase the tension around a target(*), as well as slightly increasing
+the pressure of the air surrounding them(**).
+
+* It is not possible to land if in flight, though external sources may
+still pull you back to the ground.
+** Increases pressure by one if present, otherwise gives the pressure
+affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

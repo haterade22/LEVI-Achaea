@@ -1,0 +1,17 @@
+Ability: Trinity (Record #2160)
+Associated skill: Reclamation
+Skillpoints required: 47999
+Blurb: Perfect control is yours.
+Syntax: None
+Abfile:
+You have reached a point in your training where you are able to support
+three active effects on your network at once. This ability does not
+permit you to have two spore type abilities active at the same time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

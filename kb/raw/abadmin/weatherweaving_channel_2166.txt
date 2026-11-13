@@ -1,0 +1,24 @@
+Ability: Channel (Record #2166)
+Associated skill: Weatherweaving
+Skillpoints required: 0
+Blurb: Open conduits to the Elemental Realms.
+Syntax: CHANNEL <AIR|WATER|EARTH>
+CHANNELS
+SEVER ALL|<channel>
+Abfile:
+Using this ability, you may open a channel to one of the three elemental
+realms that you have access to. Keeping these channels open has a cost
+in willpower. SEVER AIR/WATER/EARTH will close that channel. CHANNELS
+will list what channels you have open.
+
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium
+Resource: 200 mana

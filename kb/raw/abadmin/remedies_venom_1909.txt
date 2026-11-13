@@ -1,0 +1,17 @@
+Ability: Venom (Record #1909)
+Associated skill: Remedies
+Skillpoints required: 22999
+Blurb: A brew to increase your resistance to poison damage.
+Syntax: None
+Extra info: Ingredients: 1 sac, 1 cohosh, 1 skullcap, 1 kelp or
+2 aurum, 1 malachite, 1 calamine
+Abfile:
+The venom elixir has the power to increase your resistance to damage from poison.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

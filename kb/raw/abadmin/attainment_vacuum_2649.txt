@@ -1,0 +1,21 @@
+Ability: Vacuum (Record #2649)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Not even a single breath.
+Syntax: MANIFEST VACUUM <target>
+Abfile:
+Create a vacuum around a target for a short time. The inability to draw
+in air will make healing health very difficult for a while(*).
+
+* Gives the inhibit affliction.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 25.00 seconds
+Resource: 18 rage
+Skill specialisation: br_air_lord

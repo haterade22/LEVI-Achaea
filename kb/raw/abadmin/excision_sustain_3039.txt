@@ -1,0 +1,22 @@
+Ability: Sustain (Record #3039)
+Associated skill: Excision
+Skillpoints required: 7999
+Blurb: You will give your life for the cause.
+Syntax: PERFORM SUSTAIN <target>
+Abfile:
+By giving up your own health, you may heal another.
+
+When used for your bloodsworn's benefit, the amount given up is far
+reduced and the amount they are restored by is increased. When healing
+an adventurer, you will restore both health and mana, though the amount
+of mana restored is lesser.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

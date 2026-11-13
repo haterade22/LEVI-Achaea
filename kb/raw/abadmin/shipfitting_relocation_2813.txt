@@ -1,0 +1,19 @@
+Ability: Relocation (Record #2813)
+Associated skill: Shipfitting
+Skillpoints required: 12999
+Blurb: Movement of equipment and weapons.
+Syntax: SHIPFIT RELOCATE <equipment>
+Abfile:
+For the foolish, the forgetful, or the indecisive, you may have a ship's
+crew assist you in the relocation of a weapon or piece of equipment that
+has already been constructed. Uprooting equipment or weapons in such a
+manner will cause minor damage to the ship, which will take one shipwood
+and one shipiron to repair.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

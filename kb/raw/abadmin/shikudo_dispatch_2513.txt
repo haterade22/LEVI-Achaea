@@ -1,0 +1,26 @@
+Ability: Dispatch (Record #2513)
+Associated skill: Shikudo
+Skillpoints required: 60000
+Blurb: Beware an angered Shikudo practitioner.
+Syntax: DISPATCH|INCAPACITATE <target> [form]
+Abfile:
+Though much of the Shikudo style is based upon not delivering fatal
+blows, sometimes there are few other options. If your foe is prone with
+a damaged head and windpipe, you may dispatch them with a single blow of
+your staff, ending their life instantly. In the event that you believe
+that death is not necessary, you may instead INCAPACITATE your foe,
+stunning them for a great length of time rather than ending their life.
+
+Note that this ability is unique among the Shikudo strikes: it is
+performed outside of a combination and may be used regardless of your
+form. You may also specify a form when carrying out the act, which you
+will immediately flow into if your dispatch is successful, regardless of
+any other limitations.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Tailwind (Record #2656)
+Associated skill: Duress
+Skillpoints required: 37999
+Blurb: Where they flee you shall follow.
+Syntax: MANIFEST TAILWIND <target>
+Abfile:
+You may manifest a tailwind, preparing to pursue your target when they
+shall attempt to flee from you. You may only pursue them on the first
+movement they successfully perform, after which the tailwind shall fade.
+The tailwind additionally will fade on its own after 30 seconds,
+regardless of if activated or not.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

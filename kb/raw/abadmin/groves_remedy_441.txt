@@ -1,0 +1,18 @@
+Ability: Remedy (Record #441)
+Associated skill: Groves
+Skillpoints required: 24999
+Blurb: Heal another of maladies and ailments.
+Syntax: EVOKE REMEDY <target>
+Extra info: Imbued sunlight.
+Abfile:
+This technique can heal another adventurer of a single affliction at a time. It may not be used on one's self. Not all afflictions may be remedied.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 50 sunlight and 150 mana

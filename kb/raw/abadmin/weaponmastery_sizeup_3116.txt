@@ -1,0 +1,17 @@
+Ability: Sizeup (Record #3116)
+Associated skill: Weaponmastery
+Skillpoints required: 14999
+Blurb: With the trained eye of a warrior.
+Syntax: SIZEUP <target>
+Abfile:
+With the gifted eye of a warrior, observe your adversary and determine
+the number of fractures their limbs suffer from.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualblunt

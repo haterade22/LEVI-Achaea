@@ -1,0 +1,24 @@
+Ability: Monoxide (Record #1813)
+Associated skill: Formulation
+Skillpoints required: 42000
+Blurb: A gas to disorientate your subjects.
+Syntax: WIELD MONOXIDE
+THROW MONOXIDE <AT GROUND|direction>
+Extra info: Reagents: 1 ferrum, 1 realgar, 1 plumbum
+Abfile:
+This potent gas causes those who inhale it to become extremely
+disorientated.
+
+If flung from an adjacent room, any who breathe the gas in shall find
+themselves periodically falling to the ground. If flung at the ground,
+those that inhale it shall also suffer an immediate balance loss.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

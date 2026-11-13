@@ -1,0 +1,21 @@
+Ability: Wolf (Record #333)
+Associated skill: Metamorphosis
+Skillpoints required: 699
+Blurb: The wary white wolf.
+Syntax: MORPH WOLF
+Extra info: Powers: Bite
+Fitness
+Howl
+Nightsight
+Scent
+Abfile:
+The form of the wary white wolf.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 30 mana

@@ -1,0 +1,17 @@
+Ability: Darkbows (Record #2996)
+Associated skill: Malignity
+Skillpoints required: 43999
+Blurb: Using the infamous darkbows of Hashan.
+Syntax: SHOOT <target> <direction>
+Abfile:
+The famed darkbows of Hashan are both expensive and powerful. Only
+slightly less powerful than a crossbow, they are far more accurate.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance

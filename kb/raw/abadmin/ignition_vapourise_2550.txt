@@ -1,0 +1,18 @@
+Ability: Vapourise (Record #2550)
+Associated skill: Ignition
+Skillpoints required: 999
+Blurb: A minor application of heat.
+Syntax: MANIFEST SUPERHEAT <target>
+Abfile:
+By superheating the air surrounding a target who is protected by a
+magical shield, you may use said protection as an amplifier for your
+power, both destroying the shield and afflicting the target with ablaze
+in the process.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

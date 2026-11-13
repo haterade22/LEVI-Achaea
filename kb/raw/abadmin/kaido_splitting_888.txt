@@ -1,0 +1,17 @@
+Ability: Splitting (Record #888)
+Associated skill: Kaido
+Skillpoints required: 24999
+Blurb: Constant meditation by splitting your consciousness.
+Syntax: SPLIT MIND
+JOIN MIND
+Abfile:
+By splitting your consciousness into dual parts, you will lose part of your maximum mana level, but will effectively meditate constantly in your second mind, gaining you mana constantly and speeding up meditation.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

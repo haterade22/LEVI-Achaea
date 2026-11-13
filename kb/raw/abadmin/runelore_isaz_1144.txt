@@ -1,0 +1,33 @@
+Ability: Isaz (Record #1144)
+Associated skill: Runelore
+Skillpoints required: 10999
+Blurb: A rune to call shockwaves to take your enemies off balance.
+Syntax: SKETCH ISAZ ON GROUND
+Abfile:
+ Inks required: 1 Blue, 1 Red
+
+Symbol: Flurry of Lightning Bolts
+
+When sketched upon the ground, this rune calls forth a rumbling from the
+earth to unbalance your enemies. This requires they either be not
+levitating or afflicted with either the lethargy or weariness
+afflictions. If they are levitating and not afflicted, the levitation
+defence will be stripped instead of the disruption to their balance.
+
+Additionally, you will be able to enhance your abilities with an
+empowered weapon, allowing you to prevent enemies from fleeing your
+grasp. This must be used in conjunction with the engage ability in
+Discipline, and requires an Isaz rune be sketched upon the ground(*).
+
+* This requirement is removed if you possess an Isaz rune in
+configuration upon your runeblade.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

@@ -1,0 +1,24 @@
+Ability: Kaitrance (Record #895)
+Associated skill: Kaido
+Skillpoints required: 37999
+Blurb: Entering the mystical Kai Trance.
+Syntax: KAI TRANCE
+BREAK TRANCE
+Abfile:
+This is the basis for the most powerful Kaido abilities. It is the
+ability which allows you to gather Kai energy to use in later abilities.
+Everytime a person on your enemies list does something offensive in your
+location, you will gain Kai energy from it. How much you gain depends on
+how much energy the ability generates. While you are in a Kai Trance,
+you will lose Kai energy relatively quickly, as well as losing some
+mental energy. When you BREAK TRANCE, you will lose all your accumulated
+Kai Energy.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

@@ -1,0 +1,22 @@
+Ability: Forestwalk (Record #2144)
+Associated skill: Reclamation
+Skillpoints required: 2999
+Blurb: You are everywhere at once.
+Syntax: RECLAMATION FORESTWALK <target>
+Abfile:
+You may cross the distance between yourself and someone standing in one
+of your reclaimed locations in a single step, providing you are also
+standing upon ground you have claimed.
+
+This ability will be blocked by the presence of a monolith sigil or
+similar.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 200 mana

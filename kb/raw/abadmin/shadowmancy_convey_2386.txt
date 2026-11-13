@@ -1,0 +1,19 @@
+Ability: Convey (Record #2386)
+Associated skill: Shadowmancy
+Skillpoints required: 13999
+Blurb: Good help is hard to find.
+Syntax: SHADOW CONVEY <item> TO <person>
+Abfile:
+You may now separate yourself from your shadow for a brief time, and
+have it convey items to other adventurers. Your shadow can reach anyone
+on the same continent as you, or anyone standing within magical
+darkness. This latter case even functions across planes of existence, so
+is formidable indeed.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Rivestrike (Record #2120)
+Associated skill: Skirmishing
+Skillpoints required: 15999
+Blurb: There is no defence against your onslaught.
+Syntax: RIVESTRIKE <target> [limb] [venom]
+Abfile:
+This ability will allow you to rive through protective defences, then
+deliver a followup blow. If both the shield and rebounding defences are
+present, the second blow shall target the second of these defences
+rather than dealing damage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

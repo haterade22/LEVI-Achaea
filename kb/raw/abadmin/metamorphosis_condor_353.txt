@@ -1,0 +1,24 @@
+Ability: Condor (Record #353)
+Associated skill: Metamorphosis
+Skillpoints required: 7999
+Blurb: The swift and mighty bird of prey.
+Syntax: MORPH CONDOR
+Extra info: Powers: Fly
+Land
+Nightsight
+ScanArea
+Spy
+Swoop
+Traverse
+View
+Abfile:
+The swift and mighty bird of prey.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 70 mana

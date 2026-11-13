@@ -1,0 +1,17 @@
+Ability: Cardpacks (Record #602)
+Associated skill: Tarot
+Skillpoints required: 299
+Blurb: Use the handy cardpacks for easier storage.
+Syntax: IND [number|ALL] <card>
+OUTD [ALL|number] <card>
+DECKLIST
+Abfile:
+Cardpacks is the ability to store and retrieve tarot cards using a tarot deck. You may store up to 5000 of each card type. This ability requires that you have a tarot deck in your inventory.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

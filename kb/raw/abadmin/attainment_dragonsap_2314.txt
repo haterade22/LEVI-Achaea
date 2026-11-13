@@ -1,0 +1,19 @@
+Ability: Dragonsap (Record #2314)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Inject a toxin that weakens your victim.
+Syntax: DRAGONSAP <target>
+Extra info: Gives denizen affliction: Weakness
+Abfile:
+Bite your opponent with your toxic fangs, causing weakness for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 31.00 seconds
+Resource: 22 rage
+Skill specialisation: br_green_dragon

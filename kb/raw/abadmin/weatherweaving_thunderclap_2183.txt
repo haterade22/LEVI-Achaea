@@ -1,0 +1,21 @@
+Ability: Thunderclap (Record #2183)
+Associated skill: Weatherweaving
+Skillpoints required: 9999
+Blurb: A burst of sound to rupture the ears.
+Syntax: CAST THUNDERCLAP AT <target>
+Abfile:
+This spell will generate a shockingly loud clap of thunder. Against
+adventurers it shall restore the target's hearing if they are deaf, or
+instill the sensitivity affliction in them if they are not.
+
+When used against a denizen, this spell will deal blunt damage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.35 seconds of equilibrium
+Resource: 38 mana

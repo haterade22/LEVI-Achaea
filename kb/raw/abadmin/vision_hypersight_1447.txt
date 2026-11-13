@@ -1,0 +1,18 @@
+Ability: Hypersight (Record #1447)
+Associated skill: Vision
+Skillpoints required: 26999
+Blurb: See the actions of magically cloaked adventurers.
+Syntax: HYPERSIGHT [ON|OFF]
+RELAX HYPERSIGHT
+Abfile:
+This will, at the cost of a regular drain of mana, permit you to see actions normally concealed by certain abilities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Drain: Mana

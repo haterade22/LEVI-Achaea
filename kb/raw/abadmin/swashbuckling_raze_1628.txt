@@ -1,0 +1,16 @@
+Ability: Raze (Record #1628)
+Associated skill: Swashbuckling
+Skillpoints required: 18999
+Blurb: Attack the defences that would keep your weapons out.
+Syntax: RAZE <target>
+Abfile:
+With raze, your sword will become a weapon of destruction, attacking the defences of your enemies that serve to keep your weapons out.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

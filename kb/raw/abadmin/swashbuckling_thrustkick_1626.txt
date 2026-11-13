@@ -1,0 +1,16 @@
+Ability: Thrustkick (Record #1626)
+Associated skill: Swashbuckling
+Skillpoints required: 14999
+Blurb: Kick your opponent out of the way.
+Syntax: THK <target> <direction>
+Abfile:
+Using your great leg power, you will attempt to kick your opponent away in the specified direction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

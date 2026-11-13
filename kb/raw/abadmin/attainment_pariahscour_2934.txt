@@ -1,0 +1,4 @@
+Ability: Pariahscour (Record #2934)
+Associated skill: Attainment
+Maps to record 2930 (SCOUR).
+Skill specialisation: br_pariah

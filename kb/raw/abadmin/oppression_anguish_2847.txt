@@ -1,0 +1,24 @@
+Ability: Anguish (Record #2847)
+Associated skill: Oppression
+Skillpoints required: 36999
+Blurb: Pain is nothing before your will.
+Syntax: HELLFORGE CHANNEL ANGUISH
+Abfile:
+Draw upon the fires of the Inferno, weaving them into your armour.
+Though the searing heat will periodically cause you to suffer, if the
+unthinkable happens and you fall in service to the Lord you will return
+through the Halls of the Finality with greater swiftness, so as to
+rejoin in His work with all haste.
+
+Additionally, if you are revived by a starburst tattoo or similar, most
+of your defences will be retained so that you may continue the battle
+with all due haste.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

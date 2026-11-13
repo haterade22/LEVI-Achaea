@@ -1,0 +1,20 @@
+Ability: Distract (Record #2071)
+Associated skill: Weaponmastery
+Skillpoints required: 29999
+Blurb: Distract them with a deafening shout.
+Syntax: BATTLEFURY DISTRACT <target>
+Abfile:
+With this ability, you are able to distract your enemy from acts that
+take intense focus. For instance, the behead or shatter abilities from
+weaponry.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of battlefury balance
+Skill specialisation: knight_twohanded

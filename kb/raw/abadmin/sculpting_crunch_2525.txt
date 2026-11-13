@@ -1,0 +1,15 @@
+Ability: Crunch (Record #2525)
+Associated skill: Sculpting
+Skillpoints required: 3999
+Blurb: Shatter shields with your mighty fists.
+Syntax: TERRAN CRUNCH <target>
+Abfile:
+Shatter translucent shields that your enemies would raise against you.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

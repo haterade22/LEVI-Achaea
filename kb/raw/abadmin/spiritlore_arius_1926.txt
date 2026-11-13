@@ -1,0 +1,24 @@
+Ability: Arius (Record #1926)
+Associated skill: Spiritlore
+Skillpoints required: 1999
+Blurb: Arius, The Druid.
+Syntax: INVOKE ROAR <target>
+Extra info: Attune effect: increased mana regeneration.
+Abfile:
+Once you have bound the spirit of Arius, The Druid, you will be able to
+channel the mighty power of the hydra to unleash a terrible roar at your
+opponent, disrupting their mental equilibrium.
+
+When targeted against denizens, it will do damage and cost equilibrium
+rather than balance.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana
+The ability name DRUID is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Listen (Record #1228)
+Associated skill: Subterfuge
+Skillpoints required: 13999
+Blurb: Detect action and conversations nearby.
+Syntax: LISTEN <direction>
+Abfile:
+Use your auditory acuity to listen in on conversations in an adjacent room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

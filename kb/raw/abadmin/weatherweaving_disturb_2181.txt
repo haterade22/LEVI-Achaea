@@ -1,0 +1,18 @@
+Ability: Disturb (Record #2181)
+Associated skill: Weatherweaving
+Skillpoints required: 7999
+Blurb: Disturb the natural weather patterns.
+Syntax: CAST DISTURB
+Abfile:
+This ability allows you to disturb the natural weather patterns, causing
+them to drastically worsen in your immediate location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of equilibrium
+Resource: 100 mana

@@ -1,0 +1,19 @@
+Ability: Breathing (Record #889)
+Associated skill: Kaido
+Skillpoints required: 26999
+Blurb: Holding your breath.
+Syntax: HOLD BREATH
+RELEASE
+Abfile:
+This ability will grant a short-term immunity from anything doing
+asphyxiation damage. However, any offensive activity or consumption of
+balance or equilibrium will cause you to begin breathing once again.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

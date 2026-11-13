@@ -1,0 +1,18 @@
+Ability: Bop (Record #661)
+Associated skill: Pranks
+Skillpoints required: 999
+Blurb: Deliver a vicious blow with a blackjack.
+Syntax: BOP <target>
+Abfile:
+This ability requires that you have a blackjack wielded. With it, you may bop someone, either adventurer or denizen. It may be used in conjunction with the targeting ability in weaponry.
+
+Additionally, when used against adventurers, it will deliver either amnesia, stupidity, or epilepsy.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

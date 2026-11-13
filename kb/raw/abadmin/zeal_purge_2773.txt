@@ -1,0 +1,16 @@
+Ability: Purge (Record #2773)
+Associated skill: Zeal
+Skillpoints required: 39999
+Blurb: Let the disease be burned away.
+Syntax: RECITE PURGE <target>
+Abfile:
+Recite the holy verse of purging to damage your foe and set them ablaze.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

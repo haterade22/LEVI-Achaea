@@ -1,0 +1,22 @@
+Ability: Care (Record #1031)
+Associated skill: Spirituality
+Skillpoints required: 39999
+Blurb: Have your angel care for your physical well-being.
+Syntax: ANGEL CARE [ON|OFF]
+Abfile:
+This ability will cause your Angel to regularly heal your afflictions at
+a significant cost of power to her.
+
+Note that this ability is mutually exclusive with devotion rite of
+HEALING; only one of these two effects may take effect at any one time
+even when both are active.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of equilibrium
+Resource: 50 Angel power

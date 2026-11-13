@@ -1,0 +1,18 @@
+Ability: Ferocity (Record #2091)
+Associated skill: Weaponmastery
+Skillpoints required: 53000
+Blurb: Channel the ferocity of battle.
+Syntax:
+Abfile:
+Your dedication to victory is so great that at the cost of your own
+health, you may fight through the effects of paralysis. This requires
+you be at maximum ferocity and will reduce it by said ferocity by half.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_snb

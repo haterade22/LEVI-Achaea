@@ -1,0 +1,18 @@
+Ability: Barrier (Record #930)
+Associated skill: Telepathy
+Skillpoints required: 34999
+Blurb: Throw up a telepathic barrier around your subject.
+Syntax: MIND BARRIER
+MIND UNBARRIER
+Abfile:
+You are now able to protect a locked adventurer against other telepathic attempts at control by wrapping your mind around his. MIND UNBARRIER will lower this protective shield. Note that while maintaining a mind barrier, your ability to perform other telepathic feats will be limited due to the concentration required.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Drain: Mana

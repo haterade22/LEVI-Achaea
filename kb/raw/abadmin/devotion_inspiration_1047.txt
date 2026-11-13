@@ -1,0 +1,17 @@
+Ability: Inspiration (Record #1047)
+Associated skill: Devotion
+Skillpoints required: 4999
+Blurb: Gain an infusion of divinely-inspired strength.
+Syntax: PERFORM INSPIRATION
+Abfile:
+This ability will cause you to pray for divinely-inspired strength, effectively raising your strength +2 for a short time.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 800 devotion

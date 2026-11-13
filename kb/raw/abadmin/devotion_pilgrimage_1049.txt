@@ -1,0 +1,24 @@
+Ability: Pilgrimage (Record #1049)
+Associated skill: Devotion
+Skillpoints required: 7999
+Blurb: Travel to someone in a Rite of Pilgrimage.
+Syntax: PERFORM RITE OF PILGRIMAGE
+PERFORM PILGRIMAGE <target>
+Extra info: Rite cooldown: 5.00 seconds of equilibrium and 300 devotion.
+Travel cooldown: 3.50 seconds of equilibrium and 450 devotion.
+Abfile:
+By performing the rite of pilgrimage, you are able to then pilgrimage to
+anyone standing in that rite.
+
+You may also perform a pilgrimage to any mutual ally who bears the
+preach blessing, stripping their blessing in the process.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: Devotion

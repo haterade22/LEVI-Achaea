@@ -1,0 +1,34 @@
+Ability: Scour (Record #2612)
+Associated skill: Duress
+Skillpoints required: 7999
+Blurb: A slashing wind to tear flesh from bone.
+Syntax: AERO SCOUR <target>
+Abfile:
+Summon forth a slashing wind to scour your foe with Whiirh's relentless
+fury.
+
+Against adventurers, this flesh-tearing gale shall render them so
+hideous that even their most loyal allies will turn against them(*). A
+time after you use this ability(**) either the wind shall come again if
+your foe has cured disloyalty, or if they still labour under the
+affliction they shall be stunned and knocked off balance for a short
+time.
+
+Note that this periodic tick will continue to occur until a tick occurs
+where disloyalty is reapplied.
+
+Against denizens, these winds shall deal cutting damage and then
+relapse, causing additional damage after two seconds.
+
+* Gives disloyalty and damage.
+** This time is shorter the more pressure you have built up around your
+target. See AB DURESS PRESSURE for details.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

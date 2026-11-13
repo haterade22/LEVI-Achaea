@@ -1,0 +1,16 @@
+Ability: Prefarar (Record #1287)
+Associated skill: Venom
+Skillpoints required: 8999
+Blurb: Increase the recipient's sensitivity.
+Syntax: SECRETE PREFARAR
+BITE <target>
+Abfile:
+Increase your victim's sensitivity to pain.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

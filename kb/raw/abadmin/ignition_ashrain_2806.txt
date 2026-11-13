@@ -1,0 +1,20 @@
+Ability: Ashrain (Record #2806)
+Associated skill: Ignition
+Skillpoints required: 60000
+Blurb: To blot out the sky.
+Syntax: MANIFEST ASHRAIN
+ASHSTEP <target>
+Abfile:
+You may bring forth an apocalyptic rain of ash, covering an entire area
+in your power. In such a location touched by Kkractle you may
+immediately step to anyone who also stands within said fall of ash who
+is outdoors. This bypasses monolith sigils, though none may follow you
+through your ash-forged path.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

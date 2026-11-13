@@ -1,0 +1,19 @@
+Ability: Dustbomb (Record #692)
+Associated skill: Pranks
+Skillpoints required: 49999
+Blurb: Numb the sense of your victims with a bomb.
+Syntax: CONSTRUCT DUST BOMB
+THROW BOMB <direction>/AT GROUND
+Extra info: Requires: 1 diamond dust
+Abfile:
+This ability will cause a cloud of dust to go up, cutting off much sensory input for a time. You can make two bombs out of a single commodity.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name DUST BOMB is mapped to this ability.

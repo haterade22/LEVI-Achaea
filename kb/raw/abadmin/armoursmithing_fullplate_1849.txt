@@ -1,0 +1,22 @@
+Ability: Fullplate (Record #1849)
+Associated skill: Armoursmithing
+Skillpoints required: 58999
+Blurb: The most magnificent armour.
+Syntax: FORGE FOR FULLPLATE
+FORGE (to continue after interruption)
+Extra info: Commodities:  10 Cloth
+10 Gold
+10 Leather
+100 Steel
+Abfile:
+Fullplate is the most protective of all the armour it is possible to
+forge, wearable only by the greatest of knights.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

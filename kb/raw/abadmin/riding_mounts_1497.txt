@@ -1,0 +1,16 @@
+Ability: Mounts (Record #1497)
+Associated skill: Riding
+Skillpoints required: 699
+Blurb: Locate all your loyal mounts.
+Syntax: MOUNTS
+Abfile:
+List all your loyal steeds. If a steed is on the same continent as you, it will list the exact location of where it is.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

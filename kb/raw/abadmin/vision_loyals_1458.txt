@@ -1,0 +1,16 @@
+Ability: Loyals (Record #1458)
+Associated skill: Vision
+Skillpoints required: 56555
+Blurb: Know where all your companions are.
+Syntax: LOYALS
+Abfile:
+With this ability, locate all of those denizens that are both alive and
+loyal to you.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Bagatelle (Record #1660)
+Associated skill: Harmonics
+Skillpoints required: 21999
+Blurb: Deliver periodic magical damage against your enemies.
+Syntax: PLAY BAGATELLE
+Abfile:
+This harmonic periodically deals magic damage to all enemies who can hear it, and strips deafness from those who cannot.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.96 seconds of equilibrium
+Resource: 150 mana

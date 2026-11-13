@@ -1,0 +1,15 @@
+Ability: Tattoos (Record #1449)
+Associated skill: Vision
+Skillpoints required: 32999
+Blurb: Discover what tattoos are on another adventurer.
+Syntax: TATTOOS <target>
+Abfile:
+This will allow you to gain certain information about the tattoos on another adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

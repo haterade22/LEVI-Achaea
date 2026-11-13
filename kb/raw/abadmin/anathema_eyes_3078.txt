@@ -1,0 +1,20 @@
+Ability: Eyes (Record #3078)
+Associated skill: Anathema
+Skillpoints required: 4999
+Blurb: Watching... watching.
+Syntax: MUTATE EYES
+Abfile:
+With many eyes, your farsee ability will be much more formidable(*).
+
+* Your farsee ability will be able to identify the room an individual is
+in even when you are not in their area.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.50% karma

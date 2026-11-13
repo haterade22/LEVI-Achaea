@@ -1,0 +1,17 @@
+Ability: Hallucinate (Record #909)
+Associated skill: Telepathy
+Skillpoints required: 1999
+Blurb: Project an illusion into the mind of your subject.(*)
+Syntax: MIND HALLUCINATE <target> [LETHAL] <illusion>
+Abfile:
+The adventurer experiences the hallucination directly in his mind. A mind lock is required if the victim is not in the same room. Note that the name of your adventurer target is not optional. You may embed a single new line by including the two characters "\n" as you desire. For limitations and exclusions, please also refer to HELP ILLUSIONS.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana

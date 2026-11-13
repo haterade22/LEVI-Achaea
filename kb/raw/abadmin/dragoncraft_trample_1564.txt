@@ -1,0 +1,17 @@
+Ability: Trample (Record #1564)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Crush the fallen under your massive bulk.
+Syntax: TRAMPLE
+Abfile:
+Use your incredible bulk to crush those weaklings around you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of balance
+Skill specialisation: dragonform

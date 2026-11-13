@@ -1,0 +1,26 @@
+Ability: Placement (Record #2782)
+Associated skill: Sublimation
+Skillpoints required: 4599
+Blurb: Every step an artform.
+Syntax: ALIGN PLACEMENT
+This ability will be hidden on ablistings.
+Abfile:
+This lowest of the alignment abilities is a relatively simple task in
+theory, but rather difficult in practice. Considered ideal for novices
+to the school, one who masters this process shall be able to place their
+feet just so, and will not trigger the next trap that they would step
+into upon movement.
+
+Due to the function of this as a training ability, overdrawing power
+from the Wellspring serves no purpose.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 1% Wellspring Energy

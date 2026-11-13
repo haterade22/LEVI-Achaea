@@ -1,0 +1,17 @@
+Ability: Power (Record #1035)
+Associated skill: Spirituality
+Skillpoints required: 54999
+Blurb: Increase your angel's power through use of mana.
+Syntax: ANGEL POWER
+Abfile:
+Using the mental bond between you and your angel, you can devote some of your own mental energy to restore your spiritual companion's strength.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of equilibrium
+Resource: Mana

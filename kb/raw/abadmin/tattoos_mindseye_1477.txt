@@ -1,0 +1,18 @@
+Ability: Mindseye (Record #1477)
+Associated skill: Tattoos
+Skillpoints required: 2499
+Blurb: See while blind, hear while deaf.
+Syntax: TOUCH MINDSEYE
+Extra info: Inks: 2 Blue inks
+1 Green ink
+Abfile:
+This will allow you to see and hear most things while deaf and blind.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

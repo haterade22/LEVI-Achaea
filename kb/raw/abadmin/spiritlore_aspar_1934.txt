@@ -1,0 +1,30 @@
+Ability: Aspar (Record #1934)
+Associated skill: Spiritlore
+Skillpoints required: 10999
+Blurb: Aspar, The Iron Handed.
+Syntax: INVOKE COAGULATION <target> <affliction>
+CURSE <target> <affliction> INVOKE COAGULATION <affliction>
+Extra info: Curse mana cost: Invoke mana cost + curse mana cost.
+ Attune effect: increased resistance to asphyxiation damage.
+Abfile:
+Alchemists know more about how to turn a body against itself than
+perhaps anyone else in Sapience. In life, Aspar was most feared for his
+ability to manipulate the sanguine humours of his enemies.
+
+By binding his spirit, you will be able to infect open wounds with
+disease, forcing the blood to clot but doing far more harm than good.
+Diseases which may be inflicted in this way are impatience, paralysis,
+asthma, slickness, anorexia, weariness, lethargy, and clumsiness.
+
+This ability is combinable with curses.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 20 mana
+The ability name ALCHEMIST is mapped to this ability.

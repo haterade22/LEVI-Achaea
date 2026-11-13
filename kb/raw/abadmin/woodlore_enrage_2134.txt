@@ -1,0 +1,34 @@
+Ability: Enrage (Record #2134)
+Associated skill: Woodlore
+Skillpoints required: 55999
+Blurb: Drive one of your companions into a rage.
+Syntax: ENRAGE <animal> <target>
+Abfile:
+Through your link with your companions, you are able to drive one into a
+rage, causing them to do a more dangerous attack than they normally
+would. This does not consume balance or equilibrium, and the animal does
+not need to be actively summoned for you to call it forth for a single
+attack.
+
+Badger: will deliver bleeding and addiction. If the target already has
+addiction, will deliver nausea.
+
+Fox: will deliver healthleech.
+
+Wolf: will give hallucinations.
+
+Lemming: will strip shield or rebounding; if neither are present, it
+will strip a random defence. Shield is always stripped before
+rebounding.
+
+Raven: will deliver sensitivity.
+
+Butterfly: will unblind its target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

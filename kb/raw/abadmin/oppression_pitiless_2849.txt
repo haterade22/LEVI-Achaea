@@ -1,0 +1,22 @@
+Ability: Pitiless (Record #2849)
+Associated skill: Oppression
+Skillpoints required: 17999
+Blurb: Death is no barrier to His triumph.
+Syntax: HELLFORGE CHANNEL PITILESS
+Abfile:
+When channeling the pitiless focus of the Lord through your hellforged
+armour you shall strike out at all in your location with His vengeance
+when you fall. This is similar to the necromantic method of doing so,
+though with a single difference: any who are truly slain by your
+vengeful blow shall immediately plunge into the Halls of the Finality.
+
+This is an ongoing hellforge armour effect.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

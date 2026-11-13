@@ -1,0 +1,25 @@
+Ability: Congregation (Record #716)
+Associated skill: Charnel
+Skillpoints required: 55999
+Blurb: For they will attend your feast.
+Syntax: ACCURSED CONGREGATION
+Abfile:
+When standing upon sand, you may impose your will to force a
+congregation to attend you. This is a channeled action at the conclusion
+of which, all that stand in adjacent rooms upon sand who possess the
+mass defence will be drawn down and deposited before you. Those that do
+not possess the mass defence shall suffer a brief period of being
+stunned instead.
+
+* Sand must be present in a room at all three phases (channel start,
+middle, and resolution) for it to be checked at the conclusion of the
+congregation.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

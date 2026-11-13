@@ -1,0 +1,4 @@
+Ability: Roar (Record #1555)
+Associated skill: Dragoncraft
+Maps to record 1554 (ROARING).
+Skill specialisation: dragonform

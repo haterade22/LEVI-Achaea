@@ -1,0 +1,20 @@
+Ability: Rapidity (Record #2048)
+Associated skill: Artificing
+Skillpoints required: 58999
+Blurb: From force to finesse.
+Syntax: WORKSHOP REFINE RAPIDITY CRYSTAL
+Abfile:
+This rare crystal can transform your Elemental Staff from a weapon of
+directed force into one of finesse. All spells cast through your staff
+will be cast twice as fast, but the potency of them will also be
+halved(*).
+
+* Around twice as fast, but at half damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

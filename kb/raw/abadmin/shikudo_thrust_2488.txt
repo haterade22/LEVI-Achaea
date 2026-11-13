@@ -1,0 +1,18 @@
+Ability: Thrust (Record #2488)
+Associated skill: Shikudo
+Skillpoints required: 999
+Blurb: The most basic of strikes.
+Syntax: THRUST <limb>
+Abfile:
+The most basic of strikes, deliver a thrust to a limb with your staff.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

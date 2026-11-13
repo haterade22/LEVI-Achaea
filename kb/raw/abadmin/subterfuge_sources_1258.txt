@@ -1,0 +1,17 @@
+Ability: Sources (Record #1258)
+Associated skill: Subterfuge
+Skillpoints required: 41999
+Blurb: Sense out all dimensional wormholes.
+Syntax: WORM SOURCES [FULL]
+Abfile:
+Sense all wormholes in the local area.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 50 mana

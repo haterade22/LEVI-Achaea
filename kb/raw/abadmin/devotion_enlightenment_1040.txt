@@ -1,0 +1,16 @@
+Ability: Enlightenment (Record #1040)
+Associated skill: Devotion
+Skillpoints required: 0
+Blurb: Look into the soul of someone.
+Syntax: PERFORM ENLIGHTENMENT [target]
+Abfile:
+When performed upon yourself, this will reveal your current devotion levels. When performed on an adventurer, this will reveal their devotion levels if they have access to the Light. It will also reveal if they have accepted the true path of Good and have received a Preaching blessing.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium

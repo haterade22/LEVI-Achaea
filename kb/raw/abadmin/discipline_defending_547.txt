@@ -1,0 +1,3 @@
+Ability: Defending (Record #547)
+Associated skill: Discipline
+Maps to record 546 (DEFEND).

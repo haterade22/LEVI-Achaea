@@ -1,0 +1,16 @@
+Ability: Plumbum (Record #2024)
+Associated skill: Transmutation
+Skillpoints required: 14449
+Blurb: A leaden mineral to restore mental health.
+Syntax: EXTRACT PLUMBUM
+TRANSMUTATE <#> <mineral> TO PLUMBUM
+Abfile:
+The plumbum mineral will heal a number of mental ailments, such as stupidity and impatience.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

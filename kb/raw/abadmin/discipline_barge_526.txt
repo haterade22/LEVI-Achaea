@@ -1,0 +1,16 @@
+Ability: Barge (Record #526)
+Associated skill: Discipline
+Skillpoints required: 9999
+Blurb: Barging your opponents.
+Syntax: BARGE <target> <direction>
+Abfile:
+This ability will barge an adventurer to the direction you choose. To start the ability, you must be in a room adjacent to the room where the target adventurer resides, and you must choose to barge him in a direction that wouldn't take him into the room you are in. So, for instance, say that Isildur is in a room to the north of me, and that this room has another exit to the ne. I would do BARGE ISILDUR NE.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

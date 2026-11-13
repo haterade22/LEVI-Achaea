@@ -1,0 +1,18 @@
+Ability: Corruption (Record #2235)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Cause extreme pain by corrupting your opponent's flesh.
+Syntax: CURSE <target> CORRUPTION
+Abfile:
+Curse your target with a deadly affliction powered by your rage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_shaman

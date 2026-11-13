@@ -1,0 +1,21 @@
+Ability: Ghazal (Record #3183)
+Associated skill: Composition
+Skillpoints required: 39999
+Blurb: So sweet the love sublime.
+Syntax: COMPOSE GHAZAL
+Abfile:
+A song of heartache and love, when your enemies hear this song they will
+become lovestruck. While not as potent as the true lovers curse, this
+will make the afflicted potentially forget someone is an enemy in any
+given moment(*).
+
+* All enemy checks have a chance to fail outright.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

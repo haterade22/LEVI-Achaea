@@ -1,0 +1,17 @@
+Ability: Shake (Record #416)
+Associated skill: Groves
+Skillpoints required: 699
+Blurb: Send a tremor throughout your grove.
+Syntax: GROVE SHAKE
+Abfile:
+Send a tremor through ground and trees alike in and near your grove. Nearby mounted adventurers will find themselves on the ground, while those in the trees may experience rapid loss of altitude combined with injury.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 100 sunlight

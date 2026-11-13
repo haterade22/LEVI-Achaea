@@ -1,0 +1,22 @@
+Ability: Cyclone (Record #2192)
+Associated skill: Weatherweaving
+Skillpoints required: 31999
+Blurb: The greatest of the wind spells.
+Syntax: CAST CYCLONE AT <target>
+Abfile:
+This powerful wind spell will cause dizziness when used against an
+adventurer. If the subject is already dizzy, it will give impatience and
+cause them to suffer damage.
+
+Against denizens, this spell will deal blunt damage.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 40 mana

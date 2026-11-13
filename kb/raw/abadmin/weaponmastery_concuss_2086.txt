@@ -1,0 +1,19 @@
+Ability: Concuss (Record #2086)
+Associated skill: Weaponmastery
+Skillpoints required: 27000
+Blurb: Rattle their brain with a mighty blow.
+Syntax: CONCUSS <target>
+Abfile:
+When your victim lies helpless at your feet, you may deliver a mighty
+blow to their head with your shield, making them see stars and
+afflicting them with the blackout affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

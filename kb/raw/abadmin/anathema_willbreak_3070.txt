@@ -1,0 +1,22 @@
+Ability: Willbreak (Record #3070)
+Associated skill: Anathema
+Skillpoints required: 31999
+Blurb: The psyche is such a fragile thing.
+Syntax: UNNAMABLE WILLBREAK <target>
+Abfile:
+Whisper one of the great mysteries into the ear of your unfortunate
+subject. Though his mind will be too fragile to comprehend the greatness
+you have gifted, no doubt other results shall serve(*).
+
+* Knocks focus balance for a short time. If they are afflicted with
+horror, they shall also attempt to flee in fear.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.50% karma

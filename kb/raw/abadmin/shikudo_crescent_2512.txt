@@ -1,0 +1,22 @@
+Ability: Crescent (Record #2512)
+Associated skill: Shikudo
+Skillpoints required: 55999
+Blurb: The deadly Kai-enhanced kick.
+Syntax: CRESCENT
+Abfile:
+This kick may only be performed against a foe who lies prone. If that
+foe has half their health or less, your Kai-enhanced kick shall slay
+them instantly; if they do not, they will manage to dodge this kick, in
+which event your recovery time shall be greatly increased.
+
+Upon launching this kick you shall immediately flow into the Tykonos
+form, so it is wise to be certain of your target's demise before
+committing.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

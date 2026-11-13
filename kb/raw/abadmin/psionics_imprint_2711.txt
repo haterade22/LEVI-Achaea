@@ -1,0 +1,19 @@
+Ability: Imprint (Record #2711)
+Associated skill: Psionics
+Skillpoints required: 7999
+Blurb: Communication is key.
+Syntax: PSI IMPRINT <LIST|RETRIEVE|message>
+Abfile:
+You may imprint a psionic message upon a location, after which any other
+also practiced in psionics may retrieve said message. There may only be
+one psionic message per location and the act of retrieving the message
+will damage said message. If damaged too much, the message will fade.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

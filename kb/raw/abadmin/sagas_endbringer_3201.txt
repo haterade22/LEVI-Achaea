@@ -1,0 +1,26 @@
+Ability: Endbringer (Record #3201)
+Associated skill: Sagas
+Skillpoints required: 50999
+Blurb: The day when Death did die.
+Syntax: RECITE ENDBRINGER <target>
+Abfile:
+A tale of tragedy and long held grudges, the Endbringer's Demise is a
+story with only one inevitable and indefatigable conclusion. Reciting
+this solemn recounting to a listener will take all of your focus, and
+yet upon its final word they shall be cast from this life and into those
+Halls that Thoth once did rule.
+
+* Bypasses all forms of special resurrection such as starburst. The
+target immediately embraces death upon being slain.
+** This is a channeled action which resolves faster the more stacks of
+the crescendo affliction are present on the target when you begin the
+recital.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 25.00 seconds of voice balance

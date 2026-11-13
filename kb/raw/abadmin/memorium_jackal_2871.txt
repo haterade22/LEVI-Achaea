@@ -1,0 +1,21 @@
+Ability: Jackal (Record #2871)
+Associated skill: Memorium
+Skillpoints required: 40999
+Blurb: The jaws which snuff the vital.
+Syntax: TRACE JACKAL <target>
+Abfile:
+The jackal's bite is not something to be underestimated, and such is
+reflected in the logograph which depicts it. Tracing this logograph
+against your foe shall let them experience that moment before the fangs
+definitively close upon them.
+
+* Gives asthma.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

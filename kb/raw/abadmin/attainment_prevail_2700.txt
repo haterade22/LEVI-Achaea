@@ -1,0 +1,21 @@
+Ability: Prevail (Record #2700)
+Associated skill: Attainment
+Skillpoints required: 0
+Blurb: Assume your primal form.
+Syntax: PREVAIL
+This ability will be hidden on ablistings.
+Abfile:
+Become a living manifestation of primordial power.
+
+Your new form grants you many enhancements and new abilities and is
+especially powerful on the associated elemental plane.
+
+See HELP ELEMENTAL LORDS for more.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

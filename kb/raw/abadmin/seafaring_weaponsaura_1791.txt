@@ -1,0 +1,17 @@
+Ability: Weaponsaura (Record #1791)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Summon an aura of hostility.
+Syntax:
+Abfile:
+This ability grants access to the weapons ship aura. See AB SEAFARING
+SHIPAURA for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: weapons1

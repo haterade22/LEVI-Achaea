@@ -1,0 +1,16 @@
+Ability: Call (Record #1009)
+Associated skill: Spirituality
+Skillpoints required: 699
+Blurb: Call your mace to you when you have lost it.
+Syntax: CALL MACE
+Abfile:
+Through sheer willpower, you will be able to summon your mace to you if you have lost it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

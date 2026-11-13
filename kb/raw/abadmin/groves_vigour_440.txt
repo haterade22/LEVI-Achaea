@@ -1,0 +1,18 @@
+Ability: Vigour (Record #440)
+Associated skill: Groves
+Skillpoints required: 22999
+Blurb: Call on the invigorating warmth of sunlight.
+Syntax: EVOKE VIGOUR [target]
+Extra info: Imbued sunlight.
+Abfile:
+By showering yourself or another with sunlight, you may encourage regeneration of health for a brief period. The benefit experienced by another will not be as significant as that felt when this ability is used on one's self.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 300 sunlight and 150 mana

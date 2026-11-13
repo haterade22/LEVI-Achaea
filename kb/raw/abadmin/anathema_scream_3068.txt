@@ -1,0 +1,25 @@
+Ability: Scream (Record #3068)
+Associated skill: Anathema
+Skillpoints required: 41999
+Blurb: Let the cry of desolation sound once more.
+Syntax: UNNAMABLE SCREAM <target>
+Abfile:
+Unleash a psychic scream against your victim, one no barrier shall avail
+them against(*).
+
+* This deals damage that bypasses magical shields and prismatic
+barriers.
+
+Additionally this skill consumes no karma when targeted against
+denizens.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 0.50% karma

@@ -1,0 +1,36 @@
+Ability: Prepare (Record #2365)
+Associated skill: Weaving
+Skillpoints required: 9999
+Blurb: Modify your creations.
+Syntax: WEAVE PREPARE <DISRUPTION/LACERATION/DAZZLE/RATTLE/VAPOURS/INCISIVE/INSUBSTANTIAL/NONE>
+Abfile:
+You may now prepare a modification to future weaves. Preparing a
+modification lasts indefinitely: you do not need to re-prepare every
+time you seek to attack. Preparing a new modification will remove the
+previous one, and you may stop preparing any modifications at all by
+specifying to prepare NONE or NOTHING.
+
+Disruption: this preparation will cause your attacks to give paralysis.
+
+Laceration: this preparation will cause your attacks to give
+haemophilia.
+
+Dazzle: This preparation will cause your attacks to give clumsiness.
+
+Rattle: this preparation will cause your attacks to give epilepsy.
+
+Vapours: this preparation will cause your attacks to deliver asthma.
+
+Incisive: you will deliver no affliction, but your strike will possess
+such clarity as to not miss due to being excessively clumsy.
+
+Insubstantial: your attacks bypass auras of rebounding and reflections
+(but do not strip them).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

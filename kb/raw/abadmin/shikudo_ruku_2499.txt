@@ -1,0 +1,20 @@
+Ability: Ruku (Record #2499)
+Associated skill: Shikudo
+Skillpoints required: 13999
+Blurb: Numb the ribs or arms with a swift blow from your staff.
+Syntax: RUKU <TORSO|LEFT|RIGHT>
+Abfile:
+Aiming blows at the arms or torso of a foe can have various effects. If
+you target the arms they will become numbed, ruining motor control and
+afflicting the target with clumsiness (or healthleech if the target
+already has clumsiness). If you strike the ribs of your foe, you'll
+inflict enough pain that they will begin to sweat profusely, afflicting
+them with slickness.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Breakthrough (Record #2718)
+Associated skill: Psionics
+Skillpoints required: 29999
+Blurb: Pain is a warning.
+Syntax: PSI BREAKTHROUGH
+Abfile:
+By pushing your mind beyond its safe limits, you will temporarily speed
+your focus balance.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

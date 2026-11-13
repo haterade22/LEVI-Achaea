@@ -1,0 +1,19 @@
+Ability: Yield (Record #2527)
+Associated skill: Sculpting
+Skillpoints required: 6999
+Blurb: By your decree.
+Syntax: YIELD
+Abfile:
+Command the earth to yield its secrets(*).
+
+* an extremely fast dig command that does not require a shovel. Note
+that this ability will unearth adventurers no matter how deeply they
+have burrowed beneath the ground.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

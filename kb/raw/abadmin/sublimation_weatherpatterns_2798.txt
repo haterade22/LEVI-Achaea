@@ -1,0 +1,21 @@
+Ability: Weatherpatterns (Record #2798)
+Associated skill: Sublimation
+Skillpoints required: 12999
+Blurb: So many options.
+Syntax: ALIGN WEATHERPATTERNS
+This ability will be hidden on ablistings.
+Abfile:
+Align the weather just so that a freak snowstorm occurs.
+
+Overdraw effect: cause the sun to blaze down upon adjacent locations,
+boiling away unnatural waters.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 4% Wellspring Energy

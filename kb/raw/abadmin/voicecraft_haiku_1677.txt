@@ -1,0 +1,17 @@
+Ability: Haiku (Record #1677)
+Associated skill: Voicecraft
+Skillpoints required: 699
+Blurb: Alright, seriously now...what did that mean?
+Syntax: RECITE HAIKU AT <target>
+Abfile:
+Afflicts your target with confusion.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 25 willpower

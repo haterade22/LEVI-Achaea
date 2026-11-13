@@ -1,0 +1,17 @@
+Ability: Dwinnu (Record #1698)
+Associated skill: Voicecraft
+Skillpoints required: 49999
+Blurb: A chant that will disintegrate that which binds you.
+Syntax: CHANT DWINNU
+Abfile:
+Rapidly disintegrates certain things that entangle you, foremost among them being webs.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 25 willpower

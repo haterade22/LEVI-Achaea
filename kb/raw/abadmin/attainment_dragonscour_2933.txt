@@ -1,0 +1,4 @@
+Ability: Dragonscour (Record #2933)
+Associated skill: Attainment
+Maps to record 2313 (SCOUR).
+Skill specialisation: br_green_dragon

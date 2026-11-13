@@ -1,0 +1,18 @@
+Ability: Dragonform (Record #1532)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Transform into your draconic form.
+Syntax: DRAGONFORM
+LESSERFORM
+Abfile:
+Through your deeds and the gift of Ashaxei you can now transform into a Greater Dragon. Use LESSERFORM to change back to your weak body.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Skill specialisation: dragonform

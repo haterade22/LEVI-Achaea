@@ -1,0 +1,15 @@
+Ability: Toughness (Record #874)
+Associated skill: Kaido
+Skillpoints required: 1499
+Blurb: Increased resistance to physical attacks.
+Syntax: TOUGHNESS
+Abfile:
+By increasing the density of your skin, you are able to decrease the amount of damage you will take from physical cutting attacks.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

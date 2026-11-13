@@ -1,0 +1,19 @@
+Ability: Burn (Record #1719)
+Associated skill: Vodun
+Skillpoints required: 16999
+Blurb: Set your victim alight.
+Syntax: VODUN BURN
+Extra info: Fashions:
+Required: 10
+Used    : 1
+Abfile:
+Set your victim alight!
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

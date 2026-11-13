@@ -1,0 +1,21 @@
+Ability: Sun (Record #2869)
+Associated skill: Memorium
+Skillpoints required: 30999
+Blurb: Protector. Destroyer.
+Syntax: TRACE SUN <target>
+Abfile:
+The Sun which both nourishes and destroys. All are equal beneath its
+brilliant glare, though not all can withstand that which it reveals.
+When traced against a foe, their minds will be pushed to breaking
+beneath its power, their thoughts thrown into disarray(*).
+
+* Gives epilepsy.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

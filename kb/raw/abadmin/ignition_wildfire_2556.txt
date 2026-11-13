@@ -1,0 +1,17 @@
+Ability: Wildfire (Record #2556)
+Associated skill: Ignition
+Skillpoints required: 10999
+Blurb: Control is subjective, after all.
+Syntax: IGNITE WILDFIRE
+Abfile:
+Summon up a wildfire to consume the location, raising walls of fire
+across every one of the exits. The recovery time on this ability is
+longer the more walls that are created.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

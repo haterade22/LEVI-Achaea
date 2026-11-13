@@ -1,0 +1,17 @@
+Ability: Hallelujah (Record #1673)
+Associated skill: Harmonics
+Skillpoints required: 56999
+Blurb: Carry an audience to ineffable joy.
+Syntax: PLAY HALLELUJAH
+Abfile:
+This harmonic continually acts to remove afflictions from the bard and his allies.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 300 mana

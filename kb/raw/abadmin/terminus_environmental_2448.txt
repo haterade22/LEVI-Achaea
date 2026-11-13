@@ -1,0 +1,24 @@
+Ability: Environmental (Record #2448)
+Associated skill: Terminus
+Skillpoints required: 15999
+Blurb: The world is your weapon.
+Syntax:
+Abfile:
+You have now unlocked the environmental research tree. This tree
+focusses upon manipulation of the surrounding environments, both for
+offensive and defensive purposes.
+
+Research available in this tree:
+Saihan              Let the water be no more.
+Tasha               Snuff the flames with a single word.
+Har'bain            Let the ground swallow you up.
+Heila               None stand above you.
+Bahar               A final strike.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

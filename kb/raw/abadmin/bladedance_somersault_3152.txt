@@ -1,0 +1,19 @@
+Ability: Somersault (Record #3152)
+Associated skill: Bladedance
+Skillpoints required: 35999
+Blurb: Keep it moving.
+Syntax: SOMERSAULT <direction>
+Abfile:
+An advanced form of tumbling, you may quickly somersault past barriers
+or similar, even when bound(*).
+
+* This functionally acts as a survival tumble which completes faster.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

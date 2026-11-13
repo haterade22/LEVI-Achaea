@@ -1,0 +1,28 @@
+Ability: Negation (Record #1994)
+Associated skill: Conjuration
+Skillpoints required: 42999
+Blurb: The powerful gem of negation.
+Syntax: BEGIN CREATION OF GEM OF NEGATION
+TOUCH GEM
+Abfile:
+This item is destroyed upon use.
+
+Type:
+   Created item.
+
+Actions:
+   3x1, 5, 15, 7, 8, chant "zool ekilthia requi oben"
+
+Comms:
+   1 gold
+
+Touching this gem will cure nearly every affliction you have, but it will also negate nearly every defence you have.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name GEMOFNEGATION is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Ginseng (Record #1875)
+Associated skill: Harvesting
+Skillpoints required: 150
+Blurb: An herb that may purify the blood when eaten.
+Syntax: HARVEST GINSENG
+Abfile:
+Ginseng, a forest-growing herb, may be eaten to purify the blood, curing certain ailments such as haemophilia.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

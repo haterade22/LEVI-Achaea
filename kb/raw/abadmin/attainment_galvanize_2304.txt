@@ -1,0 +1,19 @@
+Ability: Galvanize (Record #2304)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Taunt your target with stings of lightning.
+Syntax: GALVANIZE <target>
+Extra info: Gives denizen affliction: Recklessness
+Abfile:
+Afflict your opponent with recklessness with repeated stings of lightning.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds
+Resource: 18 rage
+Skill specialisation: br_silver_dragon

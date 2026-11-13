@@ -1,0 +1,17 @@
+Ability: Rockslide (Record #2532)
+Associated skill: Sculpting
+Skillpoints required: 17999
+Blurb: Your will shall not be denied.
+Syntax: MANIFEST ROCKSLIDE
+Abfile:
+By manifesting a rockslide, you can call one down to block many of the
+exits in your location with rubble, making it much harder for your foes
+to escape your wrath.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

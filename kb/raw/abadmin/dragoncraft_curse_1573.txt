@@ -1,0 +1,33 @@
+Ability: Curse (Record #1573)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Lay down a terrible curse to cripple your foe.
+Syntax: DRAGONCURSE <target>
+DRAGONCURSE <target> <affliction(*)> <delay in seconds(**)>
+Abfile:
+With no affliction and delay specified, your victim will be cursed with
+a number of random masked afflictions.
+
+With an affliction specified, the curse will strike the target after the
+specified delay. It should be noted that the curse will not consume
+equilibrium when employed in this way, but may only be invoked
+periodically. Your target may only have a single delayed curse at a time
+- attempting to lay a delayed curse upon one already awaiting their doom
+shall fail.
+
+(*) Affliction must be one of: paralysis, impatience, sensitivity,
+asthma, stupidity, weariness, or recklessness.
+
+(**) Delay must be between one and ten seconds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana
+Skill specialisation: dragonform
+The ability name DRAGONCURSE is mapped to this ability.

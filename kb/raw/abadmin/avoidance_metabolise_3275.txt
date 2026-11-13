@@ -1,0 +1,29 @@
+Ability: Metabolise (Record #3275)
+Associated skill: Avoidance
+Skillpoints required: 55999
+Blurb: Drive out the impurities.
+Syntax: METABOLISE <affliction>
+Abfile:
+You may now focus upon a specific affliction(*) and train your
+metabolism to drive off rapid multiple origin delivery(**) of that
+affliction. For example, you may now METABOLISE IMPATIENCE, and if
+Makarios gives you impatience you shall be afflicted as normal, but if
+Ictinus then tries to give you impatience again in a short window there
+after you shall resist it. However, if Makarios gives you impatience
+then rapidly reapplies it, both will still afflict you.
+
+* Only certain afflictions can be metabolised. Generally speaking: if
+the tree tattoo cannot cure it and it is not cured by eating or smoking,
+it cannot be metabolised.
+** The window for this ability to consider delivery rapid is around two
+seconds.
+*** This ability only works against players as of this time.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

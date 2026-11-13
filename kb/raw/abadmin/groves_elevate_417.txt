@@ -1,0 +1,18 @@
+Ability: Elevate (Record #417)
+Associated skill: Groves
+Skillpoints required: 999
+Blurb: Ascend into the treetops.
+Syntax: GROVE ELEVATE
+GROVE ELEVATE <target>
+Abfile:
+Using this ability, you may rise into the trees. Once there, you may travel normally, using DOWN to leave the trees.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 100 sunlight

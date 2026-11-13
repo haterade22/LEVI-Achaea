@@ -1,0 +1,17 @@
+Ability: Colocasia (Record #1967)
+Associated skill: Toxicology
+Skillpoints required: 14999
+Blurb: Gives blindness and deafness.
+Syntax: None
+Extra info: Ingredients: 1 bayberry, 1 hawthorn, 1 blueink or
+1 arsenic, 1 calamine, 1 blueink
+Abfile:
+Cause both blindness and deafness in your victim.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

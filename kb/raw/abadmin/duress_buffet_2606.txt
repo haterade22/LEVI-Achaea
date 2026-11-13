@@ -1,0 +1,24 @@
+Ability: Buffet (Record #2606)
+Associated skill: Duress
+Skillpoints required: 399
+Blurb: A crude but effective technique.
+Syntax: MANIFEST BUFFET <target>
+Abfile:
+Hammer at a target with solidified air, beating them into
+unconsciousness and death(*).
+
+If used in succession against the same target, this ability will
+relapse, causing additional damage after two seconds.
+* Deals damage based on how much pressure you have built around a target
+as well as for each affliction from: disloyalty, tension, manaleech, and
+deadening present.
+
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

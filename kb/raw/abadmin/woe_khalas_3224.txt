@@ -1,0 +1,22 @@
+Ability: Khalas (Record #3224)
+Associated skill: Woe
+Skillpoints required: 36999
+Blurb: For nothing of remorse was known.
+Syntax: RECITE KHALAS
+Abfile:
+The unleashing of Khalas from His imprisonment is a tale which came to
+herald much, but in and of itself, it is a tale of freedom. All that
+hear this tale, for a short time(*), will be immune to all forms of room
+hinder(**).
+
+* Five-ten seconds.
+** Such as rites of piety, gravehands, tentacles and similar.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance and 4.00 seconds of equilibrium

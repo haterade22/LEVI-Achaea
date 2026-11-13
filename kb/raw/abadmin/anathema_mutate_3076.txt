@@ -1,0 +1,18 @@
+Ability: Mutate (Record #3076)
+Associated skill: Anathema
+Skillpoints required: 1
+Blurb: The process of transformation.
+Syntax: MUTATE <basic mutation>
+Abfile:
+Due to the rituals you have undergone, you may now exert some basic
+influence over your body, developing minor mutations to bring you closer
+to the state of transcendent being: that of the Unnamable itself. See
+the relevant ability files for each mutation for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

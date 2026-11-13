@@ -1,0 +1,17 @@
+Ability: Selfishness (Record #1384)
+Associated skill: Survival
+Skillpoints required: 1249
+Blurb: Become too selfish to throw or give anything away.
+Syntax: SELFISHNESS
+GENEROSITY
+Abfile:
+With this ability, you may cause yourself to become so selfish that you can't give away a thing. Exceptions to this are sigils and boomerangs.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.50 seconds of equilibrium

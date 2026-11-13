@@ -1,0 +1,19 @@
+Ability: Barbedblade (Record #2744)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Imperfection for a purpose.
+Syntax: WEAVE BARBEDBLADE <target>
+Abfile:
+Weave a viciously barbed blade into being, and open bleeding wounds on
+your target. They shall suffer periodic damage until the wounds heal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_psion

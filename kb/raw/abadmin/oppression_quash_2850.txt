@@ -1,0 +1,22 @@
+Ability: Quash (Record #2850)
+Associated skill: Oppression
+Skillpoints required: 27999
+Blurb: Put them back in their place.
+Syntax: QUASH <target>
+Abfile:
+Sometimes a whelp will think to rise above their station. They are
+simply
+educated with a blow of the hand; no need to bloody the whip when your
+own body will suffice.
+
+* This deals damage, and will strip any magical shield your target may
+possess.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Ambush (Record #379)
+Associated skill: Metamorphosis
+Skillpoints required: 29999
+Blurb: Make a vicious, surprise attack upon your enemy.
+Syntax: AMBUSH <target>
+This ability will be hidden on ablistings.
+Abfile:
+When performed towards a target in an adjacent location, you spring out, knock them to the ground, stunning them briefly, and cause damage as well. This ability cannot be used from the trees or when flying, for either the ambusher or the target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

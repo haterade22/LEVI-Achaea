@@ -1,0 +1,29 @@
+Ability: Retribution (Record #2390)
+Associated skill: Shadowmancy
+Skillpoints required: 25999
+Blurb: There shall be no salvation.
+Syntax: SHADOW INSTILL <weapon> WITH RETRIBUTION
+Abfile:
+The instillation of retribution is a powerful one indeed. First, it
+shall strike down your enemy with justice. Then, it shall deliver the
+curse of retribution. If both are present, it shall burn away some of
+the victim's mana reserves. For each of depression, retribution,
+madness, and parasite that are present, the amount of mana drained is
+increased.
+
+Retribution was a curse created in the early days of Tsol'teth
+experimentation as a method by which they could overcome those foes with
+far greater capabilities than their own. It fell out of use after the
+individual might of the Tsol'teth reached such a point as to be
+unrivalled. Whenever one afflicted with the retribution curse drinks a
+mana elixir, they shall find that their physical body suffers for half
+as much mana was restored.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

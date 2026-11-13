@@ -1,0 +1,17 @@
+Ability: Clarity (Record #2737)
+Associated skill: Emulation
+Skillpoints required: 36999
+Blurb: Mind over all.
+Syntax: ENACT CLARITY
+Abfile:
+To enhance thought is to enhance all. By bolstering your mental clarity,
+you will greatly speed your equilibrium recovery for a short time.
+Useable on: self
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

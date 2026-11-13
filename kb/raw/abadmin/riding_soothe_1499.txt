@@ -1,0 +1,3 @@
+Ability: Soothe (Record #1499)
+Associated skill: Riding
+Maps to record 1498 (CALMING).

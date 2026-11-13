@@ -1,0 +1,17 @@
+Ability: Satiation (Record #1390)
+Associated skill: Survival
+Skillpoints required: 9999
+Blurb: Enhance the value of what you eat.
+Syntax: SATIATION
+Abfile:
+By using this ability, you will begin to concentrate on processing your food more efficiently. After activating it, you'll have a short period during which to eat some food.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 100 mana

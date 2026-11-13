@@ -1,0 +1,21 @@
+Ability: Runicarmour (Record #1165)
+Associated skill: Runelore
+Skillpoints required: 52999
+Blurb: Empower armour with the strength of the earth.
+Syntax: EMPOWER <armour>
+Abfile:
+Calling upon the powers of the earth, you are able to empower any suit
+of armour upon which the runes gebo and gebu have been sketched.
+Empowering armour will render it usable only by he who empowered it, but
+it will bear the defensive powers of the runes of protection for one
+hundred months.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Resource: 2000 mana

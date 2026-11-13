@@ -1,0 +1,18 @@
+Ability: Contemplation (Record #1452)
+Associated skill: Vision
+Skillpoints required: 40999
+Blurb: Perceive the state of another's mental strength.
+Syntax: CONTEMPLATE <target>
+Abfile:
+With this ability, you may see how much mana an adventurer has.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 50 mana
+The ability name CONTEMPLATE is mapped to this ability.

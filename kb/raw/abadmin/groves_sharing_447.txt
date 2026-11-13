@@ -1,0 +1,21 @@
+Ability: Sharing (Record #447)
+Associated skill: Groves
+Skillpoints required: 36999
+Blurb: Granting the use of your grove to your allies.
+Syntax: GROVE SHARE
+GROVE WITHDRAW
+Abfile:
+Grove sharing will allow any grove user on your allies list to use your
+grove as if it were his own. GROVE WITHDRAW will disable grove sharing.
+
+The abilities hive, flow, portal, summon, gate, concealment, and
+guardian cannot be used in a shared grove.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 sunlight

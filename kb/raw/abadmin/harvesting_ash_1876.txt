@@ -1,0 +1,16 @@
+Ability: Ash (Record #1876)
+Associated skill: Harvesting
+Skillpoints required: 299
+Blurb: A swamp-dwelling tree with bark that restores sanity.
+Syntax: HARVEST ASH
+Abfile:
+Prickly ash is a small, squat tree that grows in the swamps. Its bark may be consumed to restore many sanity-imperiling afflictions, like dementia and confusion.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

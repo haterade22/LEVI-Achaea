@@ -1,0 +1,19 @@
+Ability: Scarabs (Record #2901)
+Associated skill: Charnel
+Skillpoints required: 30999
+Blurb: The chittering guardians of the accursed.
+Syntax: CRYPT GUARDIAN RAISE SCARABS
+CRYPT GUARDIAN BANISH SCARABS
+Abfile:
+A far more formidable guardian to call forth than the simple golem, the
+swarms of scarabs are less hardy but far more vicious in their
+aggression.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

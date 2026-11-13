@@ -1,0 +1,20 @@
+Ability: Gust (Record #2167)
+Associated skill: Weatherweaving
+Skillpoints required: 999
+Blurb: Blow someone in a direction with a gust of wind.
+Syntax: CAST GUST
+CAST GUST AT <target> <direction>
+Abfile:
+By channelling the element of air, you can either blow a fog or cloud
+out of the room, or blow an adventurer in a particular direction.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 40 mana

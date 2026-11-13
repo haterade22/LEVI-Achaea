@@ -1,0 +1,3 @@
+Ability: Druid (Record #1927)
+Associated skill: Spiritlore
+Maps to record 1926 (ARIUS).

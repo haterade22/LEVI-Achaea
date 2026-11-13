@@ -1,0 +1,18 @@
+Ability: Guardbreak (Record #2093)
+Associated skill: Weaponmastery
+Skillpoints required: 58000
+Blurb: Exploit holes in their guard.
+Syntax: GUARDBREAK <target> [venom]
+Abfile:
+This attack is not as fast or powerful as other sword based slashes, but
+it generates twice as much ferocity when successful.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

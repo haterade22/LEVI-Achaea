@@ -1,0 +1,31 @@
+Ability: Butchering (Record #1589)
+Associated skill: Gathering
+Skillpoints required: 60000
+Blurb: Select the choicest cuts of meat from your prey.
+Syntax: BUTCHER <corpse>
+BUTCHER <animal> FOR SKINS
+BUTCHER <fish> FOR REAGENT
+BUTCHER <fish> FOR MEAT
+
+Abfile:
+While wielding a butchering cleaver, you can turn many animals into cuts
+of meat, fish, or poultry suitable for use in cooking recipes. Certain
+animals may yield rare reagents (below) instead of meat.
+
+Reagent           Gathered from
+-----------------------------------------
+scorpion chitin   scorpion (red or yellow)
+ink bladder       squid
+fish scales       fish
+shark tooth       shark
+buffalo horn      buffalo
+wyrm tongue       wyrm
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

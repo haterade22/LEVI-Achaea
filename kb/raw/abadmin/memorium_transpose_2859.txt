@@ -1,0 +1,25 @@
+Ability: Transpose (Record #2859)
+Associated skill: Memorium
+Skillpoints required: 15999
+Blurb: Blood calls to blood.
+Syntax: CRUX TRANSPOSE <venom>
+Abfile:
+Once you have gathered blood upon your ritual blade, the unfortunate
+donator shall find that its medium can conduct rather a great deal back
+to the host. If you possess a vial of most venoms(*), you may transpose
+it through said medium, delivering it to your victim no matter where
+they may be. Unfortunately, this does ruin the blood for future
+purposes, and you will need to collect it once again.
+
+* Certain venoms cannot be transposed: typically if it can't be
+envenomed, it cannot be transposed.
+** Transpose clears any epitaph you have currently formed.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,26 @@
+Ability: Basilisk (Record #365)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: The silent, magical beast of lore.
+Syntax: MORPH BASILISK
+Extra info: Powers: Elusiveness
+bite
+flame
+glare
+negate
+gaze
+resistance
+stealth
+petrify
+Abfile:
+The silent, magical beast of lore.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 80 mana
+Skill specialisation: meta_sentinel

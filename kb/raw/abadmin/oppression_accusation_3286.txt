@@ -1,0 +1,17 @@
+Ability: Accusation (Record #3286)
+Associated skill: Oppression
+Skillpoints required: 7999
+Blurb: Brand the heretic.
+Syntax: ACCUSATION
+Abfile:
+When standing within a location that has been vivified, you may uncover
+the lingering trace of the heretic who dared defile His Isle.
+Useable on: self
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

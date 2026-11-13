@@ -1,0 +1,28 @@
+Ability: Flame (Record #1982)
+Associated skill: Conjuration
+Skillpoints required: 4999
+Blurb: The flame sigil.
+Syntax: BEGIN CREATION OF FLAME SIGIL
+ATTACH <flame sigil> TO <item>
+Abfile:
+ Type:
+   Created item.
+
+Actions:
+   3xchant "flet lhar abe minlo eec", 1
+
+Comms:
+   1 silver
+
+The flame sigil will, when attached to an item, prevent anyone from
+picking it up.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name FLAMESIGIL is mapped to this ability.

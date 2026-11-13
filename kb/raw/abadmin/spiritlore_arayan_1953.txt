@@ -1,0 +1,25 @@
+Ability: Arayan (Record #1953)
+Associated skill: Spiritlore
+Skillpoints required: 55999
+Blurb: Arayan, The Healer.
+Syntax: INVOKE RESURRECTION <target>
+Extra info: Attune bonus: curses shall restore a small amount of health and mana
+Abfile:
+The power of priests to heal their fortunate allies is legendary.
+
+Though you shall require a focus in the form of a vodun doll fashioned
+to at least 50 times, you will be able to channel this power. By
+destroying the doll in its entirety, you may drag your comrade back from
+the very state of death itself, restoring him or her to a physical body.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 1000 mana
+The ability name PRIEST is mapped to this ability.

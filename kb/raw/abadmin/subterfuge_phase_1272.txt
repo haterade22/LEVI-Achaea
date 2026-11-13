@@ -1,0 +1,21 @@
+Ability: Phase (Record #1272)
+Associated skill: Subterfuge
+Skillpoints required: 60000
+Blurb: Alter your status in space-time itself.
+Syntax: PHASE
+UNPHASE
+Abfile:
+This is probably the most effective concealment ability there is. While phased, you will be hidden from all mortal adventurers, aside from other phased ones. You will, further, be unable to interact with items, denizens, or unphased adventurers. The caveat here is that you may try to attack an unphased adventurer, which will automatically unphase you. Thus, phase can be used as an effective aid to assassinations.
+
+Be warned that you will lose endurance rather quickly while phased.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 100 mana
+The ability name UNPHASE is mapped to this ability.

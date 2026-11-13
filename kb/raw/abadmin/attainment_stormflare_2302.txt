@@ -1,0 +1,21 @@
+Ability: Stormflare (Record #2302)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Electrify your target with a lattice of lightning.
+Syntax: STORMFLARE <target>
+Extra info: Uses denizen afflictions: Amnesia or Fear
+Abfile:
+Summon a deadly lattice of lightning strikes to surround and greatly
+wound your target.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_silver_dragon

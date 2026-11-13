@@ -1,0 +1,17 @@
+Ability: Chaoscalm (Record #1052)
+Associated skill: Devotion
+Skillpoints required: 12999
+Blurb: Attack the chaotic nature of a chaos entity, pacifying it.
+Syntax: PERFORM CHAOSCALM <doppleganger>
+Abfile:
+Chaos entities are the stuff of disorder, and your ordered, calm behavior is striking enough to drive them into submission for a short period of time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 devotion

@@ -1,0 +1,20 @@
+Ability: Endure (Record #3111)
+Associated skill: Survival
+Skillpoints required: 60000
+Blurb: You'll fight until the end.
+Syntax: ENDURE [STOP]
+Abfile:
+Your survival training has reached such a point that through a constant
+state of heightened meditation you may optimise your metabolism for
+driving out paralysis. You may cease doing so with ENDURE STOP.
+
+* When enduring, the bloodroot herb or magnesium mineral will always
+cure paralysis before other afflictions.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes

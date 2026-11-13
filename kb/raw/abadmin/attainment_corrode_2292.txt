@@ -1,0 +1,19 @@
+Ability: Corrode (Record #2292)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Annihiliate your opponent's skin with an acidic blast.
+Syntax: CORRODE <target>
+Extra info: Uses denizen afflictions: Clumsy or Aeon
+Abfile:
+Coat your opponent with virulent acid, doing extra damage to those who are clumsy or suffer from the aeon affliction.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_black_dragon

@@ -1,0 +1,17 @@
+Ability: Observe (Record #1432)
+Associated skill: Vision
+Skillpoints required: 1499
+Blurb: Gain information about your extended surroundings.
+Syntax: OBSERVE
+Abfile:
+This will perform a glance on each location adjacent to yours, in quick succession. An excellent way to ensure your surroundings are safe.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium
+The ability name OBSERVING is mapped to this ability.

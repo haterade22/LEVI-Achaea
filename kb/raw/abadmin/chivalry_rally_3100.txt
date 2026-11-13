@@ -1,0 +1,16 @@
+Ability: Rally (Record #3100)
+Associated skill: Chivalry
+Skillpoints required: 30000
+Blurb: Be swift, duty calls.
+Syntax: GUILD RALLY
+Abfile:
+From either Sapience or Meropis, embark on a swift journey home to the
+Keep where Chivalry yet lives.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

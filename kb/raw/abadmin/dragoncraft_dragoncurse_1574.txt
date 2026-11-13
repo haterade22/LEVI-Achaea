@@ -1,0 +1,4 @@
+Ability: Dragoncurse (Record #1574)
+Associated skill: Dragoncraft
+Maps to record 1573 (CURSE).
+Skill specialisation: dragonform

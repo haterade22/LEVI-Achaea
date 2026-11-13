@@ -1,0 +1,27 @@
+Ability: Skullbash (Record #2126)
+Associated skill: Skirmishing
+Skillpoints required: 30999
+Blurb: Split their skull with a mighty blow.
+Syntax: SKULLBASH <target>
+Abfile:
+Deliver a powerful blow to the head of an opponent.
+
+Against adventurers, this requires that your target be prone and the
+damage of this attack will be increased based on how damaged the
+target's head already is.
+
+When targeted against a denizen, this attack will deal damage, assuming
+they lack the vitality to properly dodge your strike(*).
+
+* This attack deals vastly reduced damage against denizens unless they
+are below 33% health.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.30 seconds of balance

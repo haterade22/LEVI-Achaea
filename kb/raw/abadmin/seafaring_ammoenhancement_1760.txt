@@ -1,0 +1,22 @@
+Ability: Ammoenhancement (Record #1760)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Improvements to ship ammunition.
+Syntax: LOAD <weapon> WITH <ammo> [DIPPED]
+Abfile:
+Your mastery of ship munitions is such that you can now enhance certain
+types of ammunition.
+Star-shot, chain-shot, and shafts may be coated in a special liquid,
+causing them to set aflame either the adventurers aboard the target
+ship, the target ship's sails, or the target ship's deck, respectively.
+Vats containing this rare liquid, called "dragon's tears", may be
+obtained from an apothecary upon a certain isle.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: weapons2

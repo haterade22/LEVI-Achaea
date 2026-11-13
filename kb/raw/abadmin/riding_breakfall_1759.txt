@@ -1,0 +1,17 @@
+Ability: Breakfall (Record #1759)
+Associated skill: Riding
+Skillpoints required: 40000
+Blurb: Fall like a feather.
+Syntax:
+Abfile:
+This ability allows one to roll from the back of a faithful steed, to
+prepare for use of the tumble ability in survival. This ability works
+automatically.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

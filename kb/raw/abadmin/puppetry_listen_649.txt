@@ -1,0 +1,20 @@
+Ability: Listen (Record #649)
+Associated skill: Puppetry
+Skillpoints required: 36999
+Blurb: Hear talking through your target's ears.
+Syntax: PUPPET LISTEN
+PUPPET LISTEN END
+Extra info: Fashions:
+Required: 40
+Used    : 5
+Abfile:
+With this ability, you'll be able to hear anything anyone who is in the room with your victim says.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

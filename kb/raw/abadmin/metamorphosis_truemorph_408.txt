@@ -1,0 +1,15 @@
+Ability: Truemorph (Record #408)
+Associated skill: Metamorphosis
+Skillpoints required: 60000
+Blurb: Instantaneous metamorphosis.
+Syntax: None
+Abfile:
+So attuned are you to the animal spirits, that you are able to morph instantaneously.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

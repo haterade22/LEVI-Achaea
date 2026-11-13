@@ -1,0 +1,15 @@
+Ability: Reap (Record #2387)
+Associated skill: Shadowmancy
+Skillpoints required: 15999
+Blurb: Your onslaught shall claim them all.
+Syntax: SHADOW REAP <target> [venom]
+Abfile:
+A reaping blow with the scythe, that forsakes damage for superior speed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

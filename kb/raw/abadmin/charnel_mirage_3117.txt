@@ -1,0 +1,28 @@
+Ability: Mirage (Record #3117)
+Associated skill: Charnel
+Skillpoints required: 55999
+Blurb: Trust not your eyes or flesh.
+Syntax: ACCURSED MIRAGE
+Abfile:
+This high art of the Accursed allows you to breathe forth your poisonous
+nature upon the location, for a short time(*) bending the rules which
+govern the wounds wrought upon the mortal man. In practice, this means
+that if someone strikes another adventurer, for a brief moment after
+said attacker will find they cannot inflict any lasting harm upon anyone
+else.
+
+* This lasts thirty seconds and has a five minute cooldown.
+** For two seconds after you strike someone directly or otherwise (and
+for damage that isn't trivial), you will find that you can inflict no
+damage to anyone but that target while the mirage is active.
+*** Other Accursed are immune to the implications of the mirage, and
+unblockable damage bypasses its unholy nature entirely.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium

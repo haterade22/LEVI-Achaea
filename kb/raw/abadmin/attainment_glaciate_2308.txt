@@ -1,0 +1,19 @@
+Ability: Glaciate (Record #2308)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Stun your target with frigid air.
+Syntax: GLACIATE <target>
+Extra info: Gives denizen affliction: Stun
+Abfile:
+Target your opponent's head with a blast of frozen air, stunning it for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 33.00 seconds
+Resource: 26 rage
+Skill specialisation: br_blue_dragon

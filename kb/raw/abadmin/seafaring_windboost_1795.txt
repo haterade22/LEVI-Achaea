@@ -1,0 +1,18 @@
+Ability: Windboost (Record #1795)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Seaspell to direct nearby winds.
+Syntax: INVOKE WINDBOOST
+Extra info: Power cost: 150
+This ability will be hidden on ablistings.
+Abfile:
+A seaspell to temporarily boost your ship's speed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 200 mana

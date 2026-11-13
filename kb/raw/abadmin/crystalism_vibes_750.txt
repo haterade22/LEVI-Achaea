@@ -1,0 +1,16 @@
+Ability: Vibes (Record #750)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: See what vibrations are in a room.
+Syntax: VIBES or VIBRATIONS
+Abfile:
+This ability will show you what vibrations are in a room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

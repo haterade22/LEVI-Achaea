@@ -1,0 +1,26 @@
+Ability: Maelstrom (Record #2510)
+Associated skill: Shikudo
+Skillpoints required: 49999
+Blurb: A form of death.
+Syntax: ADOPT MAELSTROM FORM
+Extra info: Transitions: Live Oak
+Attacks: RUKU, RISINGKICK, SWEEP, CRESCENT, LIVESTRIKE, JINZUKU
+Abfile:
+The form of the Unrelenting Storm is the most rarely taught of the
+Shikudo Forms, as it is both exceptionally difficult to master and
+intended for primarily one purpose: to deal with those who can only be
+dissuaded by death. All Shikudo strikes and kicks that successfully deal
+damage(*) shall generate Kai energy when in this form, providing you are
+within the meditative state granted by a Kai Trance. Additionally, the
+more kai that you possess, the higher your resistance to damage will be.
+
+* Attacks that are parried or otherwise blocked will not generate Kai
+energy.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

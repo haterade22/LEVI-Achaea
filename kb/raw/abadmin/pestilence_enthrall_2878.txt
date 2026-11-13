@@ -1,0 +1,41 @@
+Ability: Enthrall (Record #2878)
+Associated skill: Pestilence
+Skillpoints required: 399
+Blurb: You are the nightmare that crawls and flies.
+Syntax: SWARM ENTHRALL [type of insect]
+SWARM BUILD <number of insect> <type of insect> [<number of insect> <type of insect> ...]
+SWARM NAME <swarm> <new name>
+SWARM SHOW <swarm>
+SWARM DISPERSE <swarm>
+SWARM DISMISS [RESERVES] <insect type>
+SWARM DISBAND <swarm>
+SWARM RESERVES
+SWARMS
+Abfile:
+While in a location that you have detected sufficient insectoid life,
+you may bend your arcane art to the task of bringing your soon-to-be
+minions under your sway.
+
+SWARM ENTHRALL: bring insects under your control. If there are multiple
+types of insects in the location, you will need to specify which ones
+you wish to enthrall.
+SWARM BUILD: break your enthralled insects up into swarms.
+SWARM NAME: give a personalised name to a swarm, for easy reference.
+SWARM SHOW: see details about one of your swarms.
+SWARM DISPERSE: disperse one of your swarms back into your reserves of
+insects.
+SWARM RESERVES: see your insects outside of swarms.
+SWARM DISMISS: Get rid of unwanted insect types, even from your
+reserves.
+SWARM DISBAND: wipe one of your swarms.
+SWARMS: see all of your swarms.
+
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,16 @@
+Ability: Dyeing (Record #1602)
+Associated skill: InkMilling
+Skillpoints required: 1499
+Blurb: Ability to dye white letters with inks.
+Syntax: DYE <LETTER> WITH <COLOUR>
+Abfile:
+You can change the colour of the elegant white letters available at Post Offices around Sapience with an ink of the required colour. This will not work on letters that have already been customised.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

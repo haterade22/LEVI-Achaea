@@ -1,0 +1,28 @@
+Ability: Fist (Record #1981)
+Associated skill: Conjuration
+Skillpoints required: 1499
+Blurb: The fist sigil.
+Syntax: BEGIN CREATION OF FIST SIGIL
+ATTACH <fist sigil> TO <item>
+Abfile:
+This sigil may not be removed from most items once attached.
+
+Type:
+   Created item.
+
+Actions:
+   3xchant "fartak ishla spooz tran", 1
+
+Comms:
+   1 silver, 2 stag's horn
+
+When attached to an item, the fist sigil makes it so you will not
+unwittingly drop or unwield items that are being wielded.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

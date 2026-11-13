@@ -1,0 +1,39 @@
+Ability: Jars (Record #2889)
+Associated skill: Memorium
+Skillpoints required: 25999
+Blurb: A little goes a long way.
+Syntax: JAR STORE <jar|person>
+JAR RETRIEVE <jar|PERSON>
+JARS CARRIED
+JARS STORED
+JAR FILL
+CRUX BLOODY <person>
+JAR CLEANSE <person name|jar ID>
+Abfile:
+With blood such an important medium, it is always worth having some on
+hand. The practiced Pariah will store the blood of their most dangerous
+foes on their person for rapid use; the truly great will also keep an
+extra reserve within the depths of their crypt.
+
+JAR FILL: wipe the blood from your ritual blade into a jar.
+CRUX BLOODY <person>: immediately bloody your ritual blade with the
+blood from a jar on your person.
+JARS CARRIED: see what jars you are carrying, and how many applications
+you will be able to derive from their sanguine contents.
+JARS STORED: in your reliquary, see what jars you have stored.
+JAR STORE <jar ID|person name>: store a jar in your reliquary.
+JAR RETRIEVE <jar ID|person name>: retrieve a jar from your reliquary.
+JAR CLEANSE <person name|jar ID>: cleanse a jar you are holding of
+blood.
+
+You may carry five jars on your person at a given time, and your
+reliquary may hold up to ten in addition.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

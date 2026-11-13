@@ -1,0 +1,24 @@
+Ability: Nemesis (Record #994)
+Associated skill: Domination
+Skillpoints required: 18999
+Blurb: Nemesis.
+Syntax: COMMAND HUMBUG AT <target>
+Abfile:
+When you call upon Lord Nemesis he shall send to you a humbug, which
+when commanded to strike your enemy shall inspire an insatiable
+addiction in them.
+
+When primebonded, the humbug shall drain some health; if they are
+suffering from said insatiable addiction, it shall also drain some mana
+as well as additional health.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of entity balance
+Resource: 50 mana
+The ability name HUMBUG is mapped to this ability.

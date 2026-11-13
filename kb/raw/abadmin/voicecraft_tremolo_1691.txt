@@ -1,0 +1,18 @@
+Ability: Tremolo (Record #1691)
+Associated skill: Voicecraft
+Skillpoints required: 26999
+Blurb: Crush a target's legs with a sonic pounding.
+Syntax: SING TREMOLO AT <target> LEFT/RIGHT
+Abfile:
+Breaks a leg of your target. If that leg is already broken, causes that leg to take severe damage.
+This secondary function operates on an independent balance and has a reasonably high cooldown.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 25 willpower

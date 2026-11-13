@@ -1,0 +1,17 @@
+Ability: Portal (Record #432)
+Associated skill: Groves
+Skillpoints required: 15999
+Blurb: Open a portal to your grove for anyone in the forest.
+Syntax: GROVE PORTAL <target>
+Abfile:
+With this ability, you can create a portal to any adventurer in the same area, who may then come to you through the portal. The portal is one-way: it may not be used to go to the adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 75 sunlight

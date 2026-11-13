@@ -1,0 +1,17 @@
+Ability: Bleed (Record #1341)
+Associated skill: Curses
+Skillpoints required: 299
+Blurb: Curse your opponent with uncontrollable bleeding.
+Syntax: CURSE <target> BLEED
+Abfile:
+Induce bleeding in your target. This ability will work on Denizens as well as adventurers.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 30 mana

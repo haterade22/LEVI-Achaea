@@ -1,0 +1,17 @@
+Ability: Fragment (Record #2331)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: A rune that shatters a denizen's shield.
+Syntax: FRAGMENT <target>
+Abfile:
+Carve a rune in a denizen's shield, shattering it into fragments.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_runewarden

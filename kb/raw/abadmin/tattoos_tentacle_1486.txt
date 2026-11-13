@@ -1,0 +1,18 @@
+Ability: Tentacle (Record #1486)
+Associated skill: Tattoos
+Skillpoints required: 26999
+Blurb: Call the tentacles of Shimite to rip someone from the sky.
+Syntax: TOUCH TENTACLE <target>
+Extra info: Inks: 2 Green inks
+1 Purple ink
+Abfile:
+This fearsome tattoo will call the tentacles of the feared Shimite from the bowels of the earth to drag your foe from the sky or from the trees.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium

@@ -1,0 +1,21 @@
+Ability: Lineage (Record #3098)
+Associated skill: Chivalry
+Skillpoints required: 5000
+Blurb: Know the past.
+Syntax: LINEAGE [member of the guild]
+Abfile:
+Every aspiring or current knight should know of the lineage of which
+they may be becoming a part of. Taking on a patron knight should not be
+done lightly by any aspiring squire, and knights would do well to keep
+their lineage untarnished, lest all the guild know of the mark.
+
+* If you do not specify a target you will see your own lineage, starting
+with you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

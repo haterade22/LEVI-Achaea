@@ -1,0 +1,15 @@
+Ability: Spin (Record #748)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: Set crystals to spinning.
+Syntax: SPIN <crystal>
+Abfile:
+Set a crystal to spinning.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

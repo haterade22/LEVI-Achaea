@@ -1,0 +1,16 @@
+Ability: Rites (Record #1443)
+Associated skill: Vision
+Skillpoints required: 16999
+Blurb: List what rites are active.
+Syntax: RITES
+Abfile:
+This will allow you to view what holy rites are active in your location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

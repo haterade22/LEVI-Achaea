@@ -1,0 +1,23 @@
+Ability: Overhand (Record #2063)
+Associated skill: Weaponmastery
+Skillpoints required: 5000
+Blurb: Split their skulls with a mighty blow.
+Syntax: OVERHAND <target>
+Abfile:
+This powerful blow aimed at the head shall deliver skull fractures. The
+more skull fractures your victim suffers from, the longer it shall take
+them to recover from sipping a healing elixir or tonic.
+
+Additionally, while afflicted with skull fractures, the target shall
+periodically receive nausea. This periodic afflicting becomes faster
+based on how many fractures are present.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_twohanded

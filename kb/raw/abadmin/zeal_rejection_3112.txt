@@ -1,0 +1,21 @@
+Ability: Rejection (Record #3112)
+Associated skill: Zeal
+Skillpoints required: 46999
+Blurb: You will not stand for such corruption.
+Syntax: RECITE REJECTION <target> <direction>
+Abfile:
+The verse of rejection is a manifestation of your defiance in the face
+of the enemies of Creation. Recite this verse, and even from a far you
+shall strike down your foes.
+
+* Does damage to a target in line of sight. Notably, this bypasses
+magical shields and prismatic barriers.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: line of sight
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of prayer balance

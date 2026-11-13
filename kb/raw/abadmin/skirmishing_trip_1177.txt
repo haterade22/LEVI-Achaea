@@ -1,0 +1,16 @@
+Ability: Trip (Record #1177)
+Associated skill: Skirmishing
+Skillpoints required: 1999
+Blurb: Knock an unruly foe to the ground.
+Syntax: TRIP <target> <LEFT|RIGHT> [venom]
+Abfile:
+While wielding a spear or trident, you may knock an opponent's legs out from under him. A swift follow-up strike with the point of the weapon will ensure he won't want to stand up any time soon.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of balance

@@ -1,0 +1,18 @@
+Ability: Shield (Record #1476)
+Associated skill: Tattoos
+Skillpoints required: 1499
+Blurb: Protect yourself from most attacks.
+Syntax: TOUCH SHIELD
+Extra info: Inks: 1 Green ink
+2 Red inks
+Abfile:
+Possibly the single most useful tattoo, using the shield will cause you to be immune from many attacks. Committing any aggressive act, or moving, will cause your shield to be dispelled.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

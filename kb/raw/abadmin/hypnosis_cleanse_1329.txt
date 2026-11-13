@@ -1,0 +1,19 @@
+Ability: Cleanse (Record #1329)
+Associated skill: Hypnosis
+Skillpoints required: 36999
+Blurb: Clean yourself or another of suggestions.
+Syntax: CLEANSE <adventurer/ME> <suggestion>
+Abfile:
+This ability allows you to cleanse hypnotic suggestions from an
+individual.
+
+You may also cleanse yourself, but in this instance you can only remove
+suggestions that would force you to carry out a physical action.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

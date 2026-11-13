@@ -1,0 +1,22 @@
+Ability: Bellow (Record #2659)
+Associated skill: Sculpting
+Skillpoints required: 29999
+Blurb: Their opinions are irrelevant.
+Syntax: TERRAN BELLOW
+Abfile:
+Let all know your displeasure by giving out an unending roar,
+overwhelming all other sound in your location. This requires your
+concentration to persist, but will prevent anyone else from speaking in
+your location while the roar persists(*).
+
+* This includes calling for guards.
+Useable on: room
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: Yes
+Cooldown: 2.00 seconds of balance
+Resource: 50 endurance

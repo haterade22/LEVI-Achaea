@@ -1,0 +1,3 @@
+Ability: Sentinel (Record #1952)
+Associated skill: Spiritlore
+Maps to record 1951 (TARNEL).

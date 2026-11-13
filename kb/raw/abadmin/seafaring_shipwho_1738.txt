@@ -1,0 +1,15 @@
+Ability: Shipwho (Record #1738)
+Associated skill: Seafaring
+Skillpoints required: 4999
+Blurb: Sense who is aboard the ship.
+Syntax: SHIPWHO
+Abfile:
+Sense who is aboard the same ship as you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,18 @@
+Ability: Fly (Record #338)
+Associated skill: Metamorphosis
+Skillpoints required: 1499
+Blurb: Soar to the skies.
+Syntax: FLY
+LAND
+This ability will be hidden on ablistings.
+Abfile:
+Soar up into the heavens and fly above the land. LAND to come back to the earth once again.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

@@ -1,0 +1,21 @@
+Ability: Frontkick (Record #2500)
+Associated skill: Shikudo
+Skillpoints required: 15999
+Blurb: Bring them down to the ground.
+Syntax: FRONTKICK <LEFT|RIGHT>
+Abfile:
+This straight kick may be targeted at either arm, arming to strike the
+vulnerable nerve clusters just below the shoulder. The blow is powerful
+enough that it will throw the target off their feet if it connects,
+proning them.
+
+Note that this ability along with all other Shikudo strikes and kicks
+must be performed in a combination. See AB SHIKUDO COMBO for details.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

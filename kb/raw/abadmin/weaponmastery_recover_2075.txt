@@ -1,0 +1,19 @@
+Ability: Recover (Record #2075)
+Associated skill: Weaponmastery
+Skillpoints required: 45000
+Blurb: A true warrior will die on his feet.
+Syntax: RECOVER FOOTING
+Abfile:
+Having learned to roll with the momentum of your blows, you will be able
+to come back to your feet if knocked down. This ability does not require
+balance, if following a weaponmastery attack.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_twohanded

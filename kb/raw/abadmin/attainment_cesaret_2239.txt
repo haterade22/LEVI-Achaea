@@ -1,0 +1,19 @@
+Ability: Cesaret (Record #2239)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Bind the spirit of Cesaret, the Foolhardy.
+Syntax: INVOKE CESARET <target>
+Extra info: Gives denizen affliction: Recklessness
+Abfile:
+The spirit of the foolhardy will fill your target with such bravery that it will continue to attack with little regard for its own safety for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds
+Resource: 18 rage
+Skill specialisation: br_shaman

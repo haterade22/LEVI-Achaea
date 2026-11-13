@@ -1,0 +1,32 @@
+Ability: Rebuke (Record #2777)
+Associated skill: Zeal
+Skillpoints required: 25999
+Blurb: Punish their transgressions.
+Syntax: RECITE <verse> <target> REBUKE <sin>
+Abfile:
+Your mastery of the holy verses now grants you the ability to conclude
+your prayer with a punishment of one of a heretic's sins. Certain
+punishments require a prayer of longer length than others. The
+punishment is given alongside the standard verse effect:
+
+Chaos: requires a prayer of at least three verses, gives hallucinations.
+
+Darkness: requires a prayer of at least two verses, gives paranoia.
+
+Evil: requires a prayer of at least three verses, gives masochism.
+
+Heresy: requires a prayer of at least four verses. Gives the inquisition
+affliction to a target suffering from both the guilt and spiritburn
+afflictions.
+
+Note that you may only couple rebuke with a verse that also targets a
+specific enemy.
+
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

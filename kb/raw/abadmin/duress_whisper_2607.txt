@@ -1,0 +1,18 @@
+Ability: Whisper (Record #2607)
+Associated skill: Duress
+Skillpoints required: 999
+Blurb: The winds shall be your guide.
+Syntax: AERO WHISPER <target>
+Abfile:
+You speak to the winds, and they speak to you. Request the location of
+an individual and if they can be found, they will be(*).
+
+* Tells you the area and room the target is in.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

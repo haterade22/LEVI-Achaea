@@ -1,0 +1,18 @@
+Ability: Vomiting (Record #1368)
+Associated skill: Curses
+Skillpoints required: 49999
+Blurb: Upset the stomach of your enemy.
+Syntax: CURSE <target> VOMITING
+Abfile:
+Induce severe vomiting in your hapless victim.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 70 mana
+The ability name NAUSEA is mapped to this ability.

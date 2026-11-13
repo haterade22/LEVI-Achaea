@@ -1,0 +1,16 @@
+Ability: Sacrifice (Record #1038)
+Associated skill: Spirituality
+Skillpoints required: 56999
+Blurb: Full restoration of self at great cost to your angel.
+Syntax: ANGEL SACRIFICE
+Abfile:
+Though it will cost her greatly, your Angel will make the massive sacrifice required to restore you fully in both mind and body.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

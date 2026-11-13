@@ -1,0 +1,19 @@
+Ability: Disembowel (Record #559)
+Associated skill: Weaponmastery
+Skillpoints required: 60000
+Blurb: Tear the entrails from a target.
+Syntax: DISEMBOWEL <target>
+Abfile:
+Once you have impaled someone, you may disembowel them, ripping open their bloated bellies, and causing immense damage.
+
+Those suffering from internal bleeding will take more damage from this attack.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Skill specialisation: knight_dualcutting

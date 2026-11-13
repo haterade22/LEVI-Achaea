@@ -1,0 +1,15 @@
+Ability: Deaf (Record #875)
+Associated skill: Kaido
+Skillpoints required: 2499
+Blurb: Blocking out sound by force of will.
+Syntax: DEAF
+Abfile:
+This simply allows you to enter a short trance and deafen yourself.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

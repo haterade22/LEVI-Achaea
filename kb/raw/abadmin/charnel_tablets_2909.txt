@@ -1,0 +1,22 @@
+Ability: Tablets (Record #2909)
+Associated skill: Charnel
+Skillpoints required: 16999
+Blurb: The words are scribed on unyielding stone.
+Syntax: TABLET STORE <tablet>
+TABLET RETRIEVE <tablet>
+TABLET LIST
+Abfile:
+The ancient rituals of Charnel are scribed in tablets of stone. These
+can be acquired in various ways, but one thing is universal: they may be
+used but once and they will decay very rapidly when held outside your
+crypt's Arcane Record. When you gain a tablet, you will gain access to
+the ability associated to that ritual, and may learn how to utilise said
+ritual.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

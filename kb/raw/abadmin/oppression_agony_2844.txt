@@ -1,0 +1,27 @@
+Ability: Agony (Record #2844)
+Associated skill: Oppression
+Skillpoints required: 49999
+Blurb: They shall bleed for the Lord.
+Syntax: none
+Abfile:
+Your hellforged weapon will now feed upon the blood of your target. When
+it strikes a heathen bleeding 100 or more you will be healed in body,
+and if it strikes a heathen bleeding 200 or more you will additionally
+be cured of an affliction. Additionally, any heathen that suffers from
+the healthleech affliction delivered by you will cause you to be cured
+of an affliction when their strength is drained(*).
+
+This is passive and always active so long as you are wielding your
+hellforged weapon.
+
+* This effect has a twelve second cooldown. It does not lockout the
+bleed
+requirement, but it also does not stack with it.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

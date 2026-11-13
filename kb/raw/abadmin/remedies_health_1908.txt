@@ -1,0 +1,17 @@
+Ability: Health (Record #1908)
+Associated skill: Remedies
+Skillpoints required: 18999
+Blurb: A brew that will heal your wounds.
+Syntax: None
+Extra info: Ingredients: 1 valerian, 1 goldenseal, 1 myrrh, 1 ginseng or
+1 realgar, 1 plumbum, 1 ferrum, 1 bisemutum
+Abfile:
+The health elixir is a powerful and useful one that will replenish some of your health.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

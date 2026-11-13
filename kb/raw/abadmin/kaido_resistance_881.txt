@@ -1,0 +1,15 @@
+Ability: Resistance (Record #881)
+Associated skill: Kaido
+Skillpoints required: 11999
+Blurb: Reduce the damage taken from magical attacks.
+Syntax: RESISTANCE
+Abfile:
+Due to your increased bodily control, you are able to reduce the damage from magical attacks.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

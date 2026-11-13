@@ -1,0 +1,31 @@
+Ability: Regression (Record #2404)
+Associated skill: Aeonics
+Skillpoints required: 299
+Blurb: Time bends to accommodate.
+Syntax:
+Abfile:
+This is both the most basic and core of the Aeonics abilities. Though
+Aeonic-based abilities are powerful on their own, many of them can be
+boosted to even greater heights of potency. However, this will use your
+very life force as fuel, ageing you rapidly beyond anything a normal
+adventurer was meant to sustain.
+
+However, due to your mastery, you will slowly regress back to your
+original age over time. The novice practitioner may be liberal with
+their life force, wasting it away in the first moments of any
+engagement. The skilled one, however, shall be far more calculating.
+
+Note that a very few abilities may drain your life force even when not
+boosted, if to a lesser degree. These abilities will be noted in the
+relevant ability files.
+
+This ability is passive and cannot be deactivated. The age costs in
+ability files refer specifically to the cost of the ability if boosted.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Harbourinfo (Record #1740)
+Associated skill: Seafaring
+Skillpoints required: 1499
+Blurb: Discern information about a harbour from aboard your ship.
+Syntax: HARBOUR INFO [SEAMARK]
+Abfile:
+Your seafaring skills have been honed to the point that you can discern
+information about a harbour from aboard your ship via use of a spyglass
+to analyse a seamark denoting a harbour. A harbour's seamark can be
+found using HARBOUR INFO in the harbour proper, or while docked in the
+harbour. Not all harbours may bear a specific seamark, however.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

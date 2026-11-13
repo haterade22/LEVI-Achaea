@@ -1,0 +1,19 @@
+Ability: Firefall (Record #2232)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A mighty blow of earth and flame from the heavens.
+Syntax: CAST FIREFALL AT <target>
+Extra info: Uses denizen afflictions: Clumsiness or Recklessness
+Abfile:
+Summon a mighty flaming rock high in the air and watch as it hurtles towards your target. Those who are too clumsy or reckless to dodge the attack will bear the full brunt of its might.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_magi

@@ -1,0 +1,18 @@
+Ability: Limitedportals (Record #2692)
+Associated skill: Attainment
+Skillpoints required: 6599
+Blurb: Growing independence.
+Syntax: PORTALS
+Abfile:
+You may only access the Ring of Portals 20 more times.
+
+Time to start learning your way around! See HELP LANDMARKS for help
+getting around without PORTALS.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

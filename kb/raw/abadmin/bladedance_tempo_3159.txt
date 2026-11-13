@@ -1,0 +1,31 @@
+Ability: Tempo (Record #3159)
+Associated skill: Bladedance
+Skillpoints required: 10999
+Blurb: Timing is everything.
+Syntax: TEMPO <ADAGIO|MODERATO|ALLEGRO>
+Abfile:
+The tempo of your footwork is of prime importance for any dancer of the
+blade. The three styles will dictate how rapidly you may transition
+between positions, and all have their place:
+
+Adagio: 4, 4, 3.
+
+Moderato: 3, 2, 2.
+
+Allegro: 2, 1, 1.
+
+Vivace: 1, 6, 3.
+
+No tempo: 5, 2, 1.
+
+* Numbers relate to number of bladedance attacks performed in front,
+side, and back respectively.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

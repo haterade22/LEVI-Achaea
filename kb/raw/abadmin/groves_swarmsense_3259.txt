@@ -1,0 +1,17 @@
+Ability: Swarmsense (Record #3259)
+Associated skill: Groves
+Skillpoints required: 35000
+Blurb: Sense the size of the swarm.
+Syntax: EVOKE SWARMSENSE
+Abfile:
+Using this skill will allow you to sense the number of insects that have
+infested the foetid pool in Eleusis.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: forestal_org

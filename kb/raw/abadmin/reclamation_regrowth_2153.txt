@@ -1,0 +1,21 @@
+Ability: Regrowth (Record #2153)
+Associated skill: Reclamation
+Skillpoints required: 23999
+Blurb: Nature will always recover.
+Syntax: RECLAMATION REGROWTH
+Abfile:
+Those locations that have been exterminated by the foul necromancers are
+truly a blight upon nature. If you discover such a location adjacent to
+your network, you may regrow it, healing the damage and claiming the
+land in a single stroke. Alternatively, if you lack any network at all,
+you may do this to begin claiming one.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 2500 mana

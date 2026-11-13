@@ -1,0 +1,17 @@
+Ability: Preaching (Record #1043)
+Associated skill: Devotion
+Skillpoints required: 1499
+Blurb: Show an adventurer the beauty of belief.
+Syntax: PERFORM PREACHING <target>
+Abfile:
+This ability will allow you the opportunity to preach to an adventurer. Should they accept the enlightened truth you offer, they will receive a blessing over their life that allows them to be targeted with the DELIVERANCE and RESURRECTION abilities.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 250 devotion

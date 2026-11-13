@@ -1,0 +1,24 @@
+Ability: Blaze (Record #2165)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Engulf yourself in flame.
+Syntax: BLAZE
+This ability will be hidden on ablistings.
+Abfile:
+This formidable power of the wyvern allows you to coat yourself in fire,
+at the cost of some of your inner flame. While empowered, your mauls
+will drive any they strike to the ground.
+
+Additionally, while you are ablaze in this manner, your prey will find
+it impossible to parry your mauls or frenzies so long as they are also
+afflicted with the darkshade affliction.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: meta_druid

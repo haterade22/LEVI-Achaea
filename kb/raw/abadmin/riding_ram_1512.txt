@@ -1,0 +1,17 @@
+Ability: Ram (Record #1512)
+Associated skill: Riding
+Skillpoints required: 20999
+Blurb: You can ram other riders, knocking them off their steeds.
+Syntax: RAM <adventurer>
+Abfile:
+Attempt to ram a mounted opponent and knock him off his steed. Be warned, however, that depending on your skill in riding and the level of your mount versus your opponent's skill in riding and level of his mount, there is a chance that you will be the one knocked off your steed. Also, if your opponent has the jousting skill and is wielding the correct weapon, he will automatically lower it and attempt to skewer you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+The ability name RAMMING is mapped to this ability.

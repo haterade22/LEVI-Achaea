@@ -1,0 +1,41 @@
+Ability: Subversion (Record #3097)
+Associated skill: Memorium
+Skillpoints required: 60000
+Blurb: Until the well runs dry.
+Syntax: ACCURSED PERFORM THE RITUAL OF SUBVERSION <target>
+Abfile:
+The ritual of Subversion is both the pinnacle of Memorium and the
+ultimate expression of the depths that the art can be twisted to by one
+of the Accursed. With mastery of the Logographs and the unhallowed will
+of the Accursed combined, blood and sorcery may be combined in a ritual
+better left lost.
+
+After you have laid claim to the blood of your victim within one of your
+stone jars, you may take up knife to craft the manner of their doom in
+the Ritual Chamber of your crypt. Only freshly obtained blood will
+suffice: stored blood may be sufficient for lesser works, but this is no
+such working. You will require a full jar, for the work is long and
+complex.
+
+The ritual of subversion will take an ability of your victim and make it
+yours as well, for a time.
+
+* Each class has an ability or abilities associated for subversion. If
+there are multiple choices, it is random which you will receive, though
+there is a subtle suggestion during the ritual that this might be the
+case.
+** The class of the target at the time blood was taken is the one
+targeted by the ritual. You may find some classes do not have abilities
+to subvert, most obviously other Pariahs.
+*** There is a cooldown on this ability, and it is a channel to
+activate.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 15.00 seconds of equilibrium
+Resource: 4000 mana

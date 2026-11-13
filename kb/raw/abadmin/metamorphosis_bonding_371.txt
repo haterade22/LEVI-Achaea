@@ -1,0 +1,17 @@
+Ability: Bonding (Record #371)
+Associated skill: Metamorphosis
+Skillpoints required: 18999
+Blurb: Increased rapport with the animal spirits.
+Syntax: BOND SPIRIT
+BOND SPIRIT OFF
+Abfile:
+When you bond with the spirit that you have metamorphosised into, your chance of being forced back to your mortal form is greatly decreased. The downside of this is that you will lose endurance more quickly from the increased strain.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium

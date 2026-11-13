@@ -1,0 +1,17 @@
+Ability: Pastorale (Record #3185)
+Associated skill: Composition
+Skillpoints required: 45999
+Blurb: To soothe the mind and soul.
+Syntax:
+Abfile:
+A tranquil movement to bring peace to you and your allies, all that are
+affected by the pastorale will have a small chance to resist being
+forced to act against their will.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Martellato (Record #1635)
+Associated skill: Swashbuckling
+Skillpoints required: 38999
+Blurb: Knock your opponent to the floor with this tunesmithing.
+Syntax: TUNESMITH <your songblessed rapier> MARTELLATO
+Abfile:
+The power of your songblessed rapier will knock your opponent to the
+floor on your next jab.
+
+It will also pierce the rebounding defence if your target is already
+prone. If this occurs, you will need to re-apply Martellato to your
+rapier.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana

@@ -1,0 +1,21 @@
+Ability: Horrify (Record #2248)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Cause your target to frantically flee.
+Syntax: STARE <target> HORRIFY
+Extra info: Gives denizen affliction: Fear
+Abfile:
+Use the evileye to summon visions of hell that terrify your opponents
+and send them fleeing for several seconds.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 34.00 seconds
+Resource: 29 rage
+Skill specialisation: br_apostate

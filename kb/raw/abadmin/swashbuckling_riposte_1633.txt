@@ -1,0 +1,15 @@
+Ability: Riposte (Record #1633)
+Associated skill: Swashbuckling
+Skillpoints required: 2999
+Blurb: Unleash a strike of vengeance.
+Syntax: None
+Abfile:
+Riposte is a passive ability. After a successful parry or trueparry, riposte will sometimes permit a free and automatic counterattack. Yes, this means that you must have either the parry or trueparry ability in order to accomplish this.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

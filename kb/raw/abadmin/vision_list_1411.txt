@@ -1,0 +1,59 @@
+Ability: List (Record #1411)
+Associated skill: Vision
+Skillpoints required: 0
+Blurb: Browse detailed information about items in your inventory.
+Syntax: <x>LIST
+Abfile:
+ARMOURLIST     Easily list and view the stats on your armour.
+BOOKLIST       All about your journals and books.
+CLOTHESLIST    Easily list and view info on clothing you are wearing.
+DECAYLIST*     All your decaying items.
+DOLLLIST       All about any vodun dolls you possess.
+ELIXLIST       All about your curative liquids.
+ELIXSUM        A summary of all elixirs in vials.
+ENCHANTLIST    View all your enchantments.
+FISHLIST       All about any fish you have caught.
+JEWELLERYLIST  View everything about jewellery you possess.
+KEYLIST        See a list of your keys and what they open.
+LETTERLIST     List the letters in your inventory.
+PACKLIST       List all containers in your inventory.
+PETLIST        List the locations of your living pets.
+PHIALLIST      List your formulation phials.
+PIPELIST       List all of your pipes and what's in them.
+PUPPETLIST     All about any puppets you possess.
+RUNELIST       Identify the runes in a room.
+RUNELIST <ME>  All about the runes inked or on your person.
+SHARDLIST      View details about the iconic shards you hold.
+VENOMLIST      All about your venoms.
+VENOMSUM       A summary of all venoms in vials.
+WEAPONLIST     Easily list and view the stats on your weapons.
+
+A series of abilities to quickly examine items in your inventory.
+
+* DECAYLIST <item> will allow you to refine the search for description
+or number.
+
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name LISTS is mapped to this ability.
+The ability name WEAPONLIST is mapped to this ability.
+The ability name ARMOURLIST is mapped to this ability.
+The ability name LETTERLIST is mapped to this ability.
+The ability name VENOMLIST is mapped to this ability.
+The ability name SHARDLIST is mapped to this ability.
+The ability name RUNELIST is mapped to this ability.
+The ability name PIPELIST is mapped to this ability.
+The ability name KEYLIST is mapped to this ability.
+The ability name JEWELLERYLIST is mapped to this ability.
+The ability name ELIXLIST is mapped to this ability.
+The ability name CLOTHESLIST is mapped to this ability.
+The ability name BOOKLIST is mapped to this ability.
+The ability name PETLIST is mapped to this ability.
+The ability name PACKLIST is mapped to this ability.

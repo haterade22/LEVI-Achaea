@@ -1,0 +1,24 @@
+Ability: Tah'maal (Record #2446)
+Associated skill: Terminus
+Skillpoints required: 9999
+Blurb: Yet closer to the elusive legend.
+Syntax: INTONE TAH'MAAL
+This ability will be hidden on ablistings.
+Abfile:
+Though the true cloak of the Tsol'teth overlords is far out of your
+reach, this word when uttered over a Shadowmancy cloak brings you yet
+one step closer. It shall improve the cloak so that, when worn, it shall
+grant you increased resistance to the destructive force of fire. In
+addition, one wearing an augmented cloak who performs the rebirth
+ability from Aeonics shall return with more health and mana than one
+without. The recovery time of the rebirth ability shall also be
+significantly reduced.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of word balance

@@ -1,0 +1,16 @@
+Ability: Supplies (Record #2821)
+Associated skill: InkMilling
+Skillpoints required: 14999
+Blurb: Supplies for the Artists amongst us.
+Syntax: MIX <red|blue|yellow> <chalk|pastel|oilpaint|watercolour|ink>
+Abfile:
+Using an artistry kit and red, yellow or blue pigments, you can create
+the various supplies an artist requires to prime their works.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

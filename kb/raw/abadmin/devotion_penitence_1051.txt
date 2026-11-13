@@ -1,0 +1,34 @@
+Ability: Penitence (Record #1051)
+Associated skill: Devotion
+Skillpoints required: 11999
+Blurb: Condemn the unfaithful to eternal penance.
+Syntax: PERFORM PENITENCE <target>
+Abfile:
+Through your piety to the Bloodsworn, you are able to force an
+individual to perform penance for their crimes against Creation.
+
+When used against an adventurer, this will brand them and upon granting
+redemption to this person through death, your righteous work will be
+rewarded with an increase in your Devotional energies.
+
+Against denizens, this will scour your foe in righteous fire, forcing
+them to take ten percent more damage from your mace(*) and the
+weaponmastery attacks of your fellow Paladins(**). In this case, the
+devotion cost of this holy art will be reduced but its equilibrium cost
+will be slightly increased.
+
+* SPIRITUALITY SMITE.
+** All weapon-based attacks in the WEAPONMASTERY skill when performed by
+a Paladin.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 300 devotion and 100 mana
+Skill specialisation: devo_priest

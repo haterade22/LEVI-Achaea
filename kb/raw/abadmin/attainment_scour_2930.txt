@@ -1,0 +1,19 @@
+Ability: Scour (Record #2930)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Grain by grain.
+Syntax: ACCURSED SCOUR <target>
+Abfile:
+Call upon your mastery of the eternal sands, beckoning them forth to
+scour away the magical shield surrounding your foe.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_pariah
+The ability name PARIAHSCOUR is mapped to this ability.

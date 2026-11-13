@@ -1,0 +1,20 @@
+Ability: Diamondskin (Record #734)
+Associated skill: Elementalism
+Skillpoints required: 46999
+Blurb: Give your skin diamond-like hardening.
+Syntax: CAST DIAMONDSKIN
+Abfile:
+Greatly increase your resistance to cutting damage, and modestly
+increase your resistance to blunt damage, by adding diamond-like
+hardness to your skin. The protection afforded increases with your skill
+in elementalism.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 175 mana

@@ -1,0 +1,32 @@
+Ability: Recipes (Record #1592)
+Associated skill: Cooking
+Skillpoints required: 3999
+Blurb: Create your own new recipes.
+Syntax: None
+Abfile:
+Your days of preparing other people's creations are behind you! The Culinary Institute will now accept recipes of your own design. Here's what to do:
+
+1. Make your way to the Culinary Institute of Delos and purchase a blank recipe sketch.
+
+2. You will also need to purchase a basic recipe upon which to base your new masterpiece! For example, if you want to make a plate of eggs and bacon, you should purchase "a recipe for a plate of cooked food."
+
+3. Copy the basic recipe onto your new sketch.
+     DESIGN <sketch> COPY <recipe>
+
+4. Customise your new sketch with the commands listed in HELP COOKING DESIGN.
+
+5. Proofread your creation. Make sure all the descriptions, ingredients, etc. are completely filled out. Omitting any of the fields will result in your sketch being rejected.
+
+6. Submit your sketch for approval by the Crafting Council. You must be in the Culinary Institute of Delos. If it is not approved it will be sent back to you along with a brief reason why. If it is approved you will receive a letter by mail with the reference number of the recipe and how much it will cost you to collect.
+     DESIGN <recipe> SUBMIT
+
+7. If your recipe is approved, you may collect it at the Culinary Institute of Delos.
+     DESIGN REQUEST <recipe>
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

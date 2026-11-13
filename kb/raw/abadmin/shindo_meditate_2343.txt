@@ -1,0 +1,24 @@
+Ability: Meditate (Record #2343)
+Associated skill: Shindo
+Skillpoints required: 54999
+Blurb: Your focus is without compare.
+Syntax: SHIN MEDITATE
+EVADE <dir>
+Abfile:
+This state of mind allows you to sink into a trance-like state, granting
+you abilities normally beyond your capabilities. Even the greatest
+modern day practitioners of shindo can only maintain this state for a
+short time, and there is a significant recovery period before it is safe
+to once again enter the trance.
+
+While meditating, you will gain access to the ability to evade past
+walls and other barriers, as well as being immune to the power of runic
+totems that may have been bound to the earth.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

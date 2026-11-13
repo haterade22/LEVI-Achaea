@@ -1,0 +1,16 @@
+Ability: Calamine (Record #2021)
+Associated skill: Transmutation
+Skillpoints required: 7999
+Blurb: Block out sounds with the calamine mineral.
+Syntax: EXTRACT CALAMINE
+TRANSMUTATE <#> <mineral> TO CALAMINE
+Abfile:
+The calamine mineral will grant deafness to whoever eats it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

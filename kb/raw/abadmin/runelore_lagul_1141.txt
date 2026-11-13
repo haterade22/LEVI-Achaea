@@ -1,0 +1,21 @@
+Ability: Lagul (Record #1141)
+Associated skill: Runelore
+Skillpoints required: 5999
+Blurb: Add an element of bleeding to your strategem.
+Syntax: SKETCH LAGUL ON <weapon>
+Abfile:
+ Inks required: 1 Purple
+Symbol: Dirk
+
+A runeblade possessing this rune will inflict more bleeding when
+striking an enemy.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

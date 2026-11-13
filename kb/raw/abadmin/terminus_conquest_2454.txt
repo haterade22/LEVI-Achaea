@@ -1,0 +1,24 @@
+Ability: Conquest (Record #2454)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: The might of the warlords.
+Syntax:
+Abfile:
+You have now unlocked the conquest research tree. This tree focusses
+upon ways to optimise confrontations between armies, and was a favoured
+branch by the Tsol'teth of old.
+
+Research available in this tree:
+Tooros              Cause pain with but a word.
+Trointeth           Heresy is not even the beginning.
+Booreth             It's not paranoia if...
+Tuad                Deny their salvation.
+Lament              And thus, they fell.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

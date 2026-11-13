@@ -1,0 +1,19 @@
+Ability: Ring (Record #718)
+Associated skill: Crystalism
+Skillpoints required: 19999
+Blurb: Extend the life of a crystalline vibration.
+Syntax: VIBES RING
+Abfile:
+This spell melds your knowledge of the elements with crystalism,
+allowing you to extend the life of the vibrations you have in a given
+room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 300 mana

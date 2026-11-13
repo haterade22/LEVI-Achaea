@@ -1,0 +1,18 @@
+Ability: Eldritchmists (Record #951)
+Associated skill: Occultism
+Skillpoints required: 3999
+Blurb: The Hymn to Glaaki will raise strange mists.
+Syntax: ELDRITCHMISTS
+Abfile:
+By singing the Hymn to Glaaki, you may call up eldritch mists out of the
+ground itself, harming all adventurers present except yourself.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

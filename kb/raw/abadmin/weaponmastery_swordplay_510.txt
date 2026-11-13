@@ -1,0 +1,18 @@
+Ability: Swordplay (Record #510)
+Associated skill: Weaponmastery
+Skillpoints required: 0
+Blurb: Increased mastery of the shortsword.
+Syntax: None
+Abfile:
+Passive Ability
+
+This ability works to automatically increase your damage and accuracy with a shortsword.
+Be warned that it will only work when you're wielding a shortsword.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

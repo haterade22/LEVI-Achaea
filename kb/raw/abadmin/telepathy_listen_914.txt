@@ -1,0 +1,19 @@
+Ability: Listen (Record #914)
+Associated skill: Telepathy
+Skillpoints required: 6999
+Blurb: Listen to all that your subject hears.
+Syntax: MIND LISTEN
+MIND UNLISTEN
+Abfile:
+You are now able to direct audio sensory input to the mindlocked adventurer over the telepathic link to you. MIND UNLISTEN will stop this ability. Note that due to the ongoing effort required to maintain this ability, there is a constant loss of mental strength.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 400 mana
+Drain: Mana

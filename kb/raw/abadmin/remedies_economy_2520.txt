@@ -1,0 +1,16 @@
+Ability: Economy (Record #2520)
+Associated skill: Remedies
+Skillpoints required: 60000
+Blurb: Efficient production.
+Syntax: None
+Abfile:
+With efficient use of your ingredients, you are able to produce larger
+batches of your remedies. Each batch you produce will contain more sips.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

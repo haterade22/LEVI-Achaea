@@ -1,0 +1,17 @@
+Ability: Delphinium (Record #1974)
+Associated skill: Toxicology
+Skillpoints required: 30999
+Blurb: Put your victim to sleep.
+Syntax: None
+Extra info: Ingredients: 2 bellwort, 1 goldenseal, 1 blueink or
+2 cuprum, 1 plumbum, 1 blueink
+Abfile:
+Put your victim to sleep.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

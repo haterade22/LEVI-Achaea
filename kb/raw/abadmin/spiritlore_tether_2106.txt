@@ -1,0 +1,27 @@
+Ability: Tether (Record #2106)
+Associated skill: Spiritlore
+Skillpoints required: 57999
+Blurb: Desperate times lead to temporary measures.
+Syntax: SPIRIT TETHER <spirit>
+SPIRIT UNTETHER [SPIRIT]
+SPIRIT TETHER SOLIDIFY
+Abfile:
+For those times when a traditional communion may not be possible, the
+able practitioner will find himself able to form a makeshift bond with
+one of the spirits.
+
+Tethering is inferior to binding; it will not permit attunement of said
+spirit and it will break after a single use of the related spirit's
+power, but it may be performed outside of any trance.
+
+You may also solidify a tether, transforming it into a full binding;
+though the mental equilibrium cost of doing so is substantial.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

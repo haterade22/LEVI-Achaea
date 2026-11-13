@@ -1,0 +1,20 @@
+Ability: Tasha (Record #2450)
+Associated skill: Terminus
+Skillpoints required: 15999
+Blurb: Snuff the flames with a single word.
+Syntax: INTONE TASHA
+This ability will be hidden on ablistings.
+Abfile:
+Speak this word and snuff a firewall in your location.
+
+Note that you may not choose which to destroy; this word of power is
+unpredictable.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of word balance

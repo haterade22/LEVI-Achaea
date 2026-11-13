@@ -1,0 +1,21 @@
+Ability: Dampen (Record #460)
+Associated skill: Groves
+Skillpoints required: 54450
+Blurb: Put an end to aural interferences.
+Syntax: EVOKE DAMPENING
+Extra info: Imbued sunlight.
+Abfile:
+With a swirling rush of leaves, you may dampen the complex tonal
+structures that bind vibrations together, immediately
+putting one to an end.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 200 sunlight and 150 mana

@@ -1,0 +1,18 @@
+Ability: Rapier (Record #1864)
+Associated skill: Weaponsmithing
+Skillpoints required: 26999
+Blurb: The weapon of the cultured urbanite.
+Syntax: FORGE FOR RAPIER
+FORGE (to continue after interruption)
+Extra info: Commodities: 5 Steel
+Abfile:
+The weapon of the cultured urbanite.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

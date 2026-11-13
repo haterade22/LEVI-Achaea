@@ -1,0 +1,16 @@
+Ability: Calcite (Record #2029)
+Associated skill: Transmutation
+Skillpoints required: 24999
+Blurb: When reacted with water, calcite will surround you with an air bubble.
+Syntax: EXTRACT CALCITE
+TRANSMUTATE <#> <mineral> TO CALCITE
+Abfile:
+The calcite mineral will create a bubble of air if eaten underwater.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

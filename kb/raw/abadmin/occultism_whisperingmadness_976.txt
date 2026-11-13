@@ -1,0 +1,22 @@
+Ability: Whisperingmadness (Record #976)
+Associated skill: Occultism
+Skillpoints required: 41999
+Blurb: A curse of madness not soon forgotten.
+Syntax: WHISPERINGMADNESS <target>
+Abfile:
+Having one of the following insanities: dementia, stupidity, confusion,
+hypersomnia, paranoia, hallucinations, impatience, addiction,
+agoraphobia, lovers, loneliness, recklessness, and masochism, weakens
+the mind enough to afflict that person with the dreaded curse of
+whispering madness. Once afflicted, your victim will find that attempts
+to focus their mind take far longer to recover from.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium
+Resource: 200 mana

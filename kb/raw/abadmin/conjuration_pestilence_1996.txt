@@ -1,0 +1,28 @@
+Ability: Pestilence (Record #1996)
+Associated skill: Conjuration
+Skillpoints required: 49999
+Blurb: Create a ring of pestilence.
+Syntax: BEGIN CREATION OF RING OF PESTILENCE
+POINT RING AT <target>
+Abfile:
+ Type:
+   Created item.
+
+Actions:
+   11, 12, 3, 14, 17, 16, 9, 8, 3x7, 3x10, 3x1, 3, 17, 11
+
+Comms:
+   2 silver, 1 stag's horn, 1 gold
+
+The ring of pestilence will give a random affliction to the target when
+pointed.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name RINGOFPESTILENCE is mapped to this ability.

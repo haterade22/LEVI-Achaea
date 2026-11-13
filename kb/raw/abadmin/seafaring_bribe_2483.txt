@@ -1,0 +1,30 @@
+Ability: Bribe (Record #2483)
+Associated skill: Seafaring
+Skillpoints required: 60000
+Blurb: Money makes the docks your oyster.
+Syntax: BRIBE DOCKWORKERS <target>
+Abfile:
+Getting someone off their ship can be a tough prospect indeed.
+Fortunately, where a frontal assault might fail there is always greed to
+fall back upon. While a ship is docked at harbour(*), you may bribe
+dockworkers to influence their friends among said ship's crew to throw
+your target overboard(**).
+
+If thrown overboard, your target will be stunned for a short time and be
+dropped off by your hired hands in a location close by to the harbour
+they were docked at.
+
+* Bribing dockworkers in a target's home harbour is significantly more
+expensive, particularly if said home has high morale.
+** This takes some time and if your target is not on board when your
+bribe comes to fruition they will naturally escape their fate.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 9.00 seconds of balance
+Skill specialisation: deckhand5

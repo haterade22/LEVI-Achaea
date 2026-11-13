@@ -1,0 +1,17 @@
+Ability: Ruin (Record #2315)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Disintegrate a denizen's shield.
+Syntax: RUIN <target>
+Abfile:
+Use your mastery of the powers of chaos to warp a denizen's shield, rendering it useless.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_occultist

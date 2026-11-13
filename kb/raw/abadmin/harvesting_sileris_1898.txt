@@ -1,0 +1,16 @@
+Ability: Sileris (Record #1898)
+Associated skill: Harvesting
+Skillpoints required: 38999
+Blurb: A lush, berry-bearing plant which grows in valleys.
+Syntax: HARVEST SILERIS
+Abfile:
+The valley-dwelling sileris berry may be applied (APPLY SILERIS) to yourself in order to create a thin, waxy coating which will prevent serpents from biting you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

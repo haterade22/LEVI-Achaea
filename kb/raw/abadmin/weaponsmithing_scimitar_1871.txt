@@ -1,0 +1,19 @@
+Ability: Scimitar (Record #1871)
+Associated skill: Weaponsmithing
+Skillpoints required: 50999
+Blurb: A very effective curved sword favoured in the south.
+Syntax: FORGE FOR SCIMITAR
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+8 Steel
+Abfile:
+A very effective curved sword favoured in the south.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

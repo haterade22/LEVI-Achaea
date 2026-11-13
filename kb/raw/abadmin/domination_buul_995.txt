@@ -1,0 +1,29 @@
+Ability: Buul (Record #995)
+Associated skill: Domination
+Skillpoints required: 22999
+Blurb: Buul, the Chaos Chirurgeon.
+Syntax: COMMAND CHIMERA AT <target>
+MOUNT CHIMERA
+SPUR CHIMERA SKYWARD
+Abfile:
+When you call upon Buul he shall send to you a chimera, which you may
+ride, and when commanded at a foe will deliver a most terrifying roar.
+If your target is not deaf, they shall suffer an affliction of the mind.
+
+When primebonded, the chimera shall periodically strike out with one of
+its heads at a target, causing one of the following effects:
+- A roar which will cure a target's deafness if such is present, or
+knock them prone with a stun if it is not.
+- A headbutt which will knock your foe prone.
+- An insidious blast of breath which shall inspire sleep in your enemy.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of entity balance
+Resource: 50 mana
+The ability name CHIMERA is mapped to this ability.

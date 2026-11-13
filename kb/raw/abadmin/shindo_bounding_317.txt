@@ -1,0 +1,16 @@
+Ability: Bounding (Record #317)
+Associated skill: Shindo
+Skillpoints required: 49999
+Blurb: Leap great distances in but one soaring step.
+Syntax: BOUND <direction>
+Abfile:
+Launching yourself skywards, you may briefly soar through the air in a particular direction, bypassing the adjacent location, and any obstacles within, and landing in the location beyond.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of balance

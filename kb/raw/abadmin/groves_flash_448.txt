@@ -1,0 +1,20 @@
+Ability: Flash (Record #448)
+Associated skill: Groves
+Skillpoints required: 37999
+Blurb: Illuminate the surroundings with a revealing flash of light.
+Syntax: EVOKE FLASH
+Extra info: Imbued sunlight.
+Abfile:
+By channeling your sunlight reserves, Flash has the chance to reveal the
+presence of all hidden adventurers in the room, save for the Divinities.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 300 sunlight and 150 mana

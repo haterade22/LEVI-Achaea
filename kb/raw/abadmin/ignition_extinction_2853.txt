@@ -1,0 +1,30 @@
+Ability: Extinction (Record #2853)
+Associated skill: Ignition
+Skillpoints required: 58999
+Blurb: Burn to bone and blackened husk.
+Syntax: IGNITE EXTINCTION <direction>
+IGNITE EXTINCTION
+Abfile:
+If they come against you in numbers, let them perish in numbers. This
+ability takes two forms:
+
+The first can be directed at a single firewall, causing a small amount
+of damage and setting ablaze all that are not of the primal fire. This
+requires and consumes moderate spark.
+
+The second utilises all firewalls in a location, causing more damage the
+more walls you have to work with(*), and a great deal of concentration
+during which you may perform no other actions. This requires and
+consumes all of your primal spark.
+
+* This caps at five firewalls.
+Useable on: adventurers and room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 1000 willpower

@@ -1,0 +1,35 @@
+Ability: Summon (Record #1543)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Summon your breath weapon.
+Syntax: SUMMON <breath weapon type>
+Abfile:
+Summon your breath weapon. Each type of Dragon has a different breath weapon
+
+   Black:  Acid
+      - Acid breath. Unblockable damage.
+
+   Blue:   Ice
+      - Cold damage. Chance of becoming frozen.
+
+   Gold:   Psi
+      - Psychic damage instead of breath weapon. Chance of eq loss.
+
+   Green:  Venom
+      - Poison damage. Chance of a random venom affliction.
+
+   Red:    Dragonfire
+      - Fire damage. Sets the target on fire also.
+
+   Silver: Lightning
+      - Electric damage. High chance of epilepsy.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 300 mana
+Skill specialisation: dragonform

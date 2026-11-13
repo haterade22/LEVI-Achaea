@@ -1,0 +1,18 @@
+Ability: Digging (Record #323)
+Associated skill: Metamorphosis
+Skillpoints required: 0
+Blurb: Dig up and bury things.
+Syntax: DIG
+BURY <item>
+This ability will be hidden on ablistings.
+Abfile:
+With this ability, you may use your little claws to dig up buried things, and to bury things.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

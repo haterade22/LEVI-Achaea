@@ -1,0 +1,29 @@
+Ability: Latency (Record #2565)
+Associated skill: Ignition
+Skillpoints required: 37999
+Blurb: The insidious embers that lay beneath the skin.
+Syntax: IGNITE LATENCY <target>
+Abfile:
+By manipulating the brand of Kkractle just so, you can cause it to send
+its searing heat throughout the skin of your unfortunate victim. The
+fires shall lay dormant in key locations, punishing your enemy when they
+seek to escape their doom. The brand shall strike them in more ways the
+more times it has flared, and shall be consumed upon use:
+
+Once: your target shall lose the frost elixir and be unable to reapply
+it for ten seconds.
+Twice: your target's next attempt to sip a health elixir shall be
+somewhat reduced, and it shall not reduce the fires of a brand of
+Kkractle, if one marks their brow.
+Thrice: the remnants of the brand within your foe's brow shall
+immediately reignite, causing a brand of Kkractle to spontaneously
+reform. This brand will be treated as newly formed, and will need to be
+flared again if you wish to make use of it.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

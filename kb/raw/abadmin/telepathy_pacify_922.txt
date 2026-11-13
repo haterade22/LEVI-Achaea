@@ -1,0 +1,17 @@
+Ability: Pacify (Record #922)
+Associated skill: Telepathy
+Skillpoints required: 18999
+Blurb: Soothe all violent thoughts from your subject's mind.
+Syntax: MIND PACIFY
+Abfile:
+By drawing a soft cloak of telepathic power over the mind of a locked adventurer, you are able to make offensive actions abhorrent to him. This will last for a short, random amount of time, or until an offensive act is directed at him.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 200 mana

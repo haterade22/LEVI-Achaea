@@ -1,0 +1,20 @@
+Ability: Bolt (Record #2188)
+Associated skill: Weatherweaving
+Skillpoints required: 19999
+Blurb: A searing bolt of lightning.
+Syntax: CAST BOLT AT <target>
+Extra info: Channels: Air, earth
+Abfile:
+This spell will summon forth a searing bolt of lightning to strike down
+an enemy. If the target is under 75% of their maximum health, it shall
+also cause them to black out.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of equilibrium
+Resource: 45 mana and 16 arcane power

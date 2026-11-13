@@ -1,0 +1,20 @@
+Ability: Jhulian (Record #1924)
+Associated skill: Spiritlore
+Skillpoints required: 999
+Blurb: Jhulian, The Nomad.
+Syntax: INVOKE WAYFARE <target>
+Extra info: Attune effect: an increased capability to dodge attacks.
+Abfile:
+The spirit of Jhulian, The Nomad will allow you to travel to a mutual
+ally, given a short delay.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance
+Resource: 500 mana
+The ability name BARD is mapped to this ability.

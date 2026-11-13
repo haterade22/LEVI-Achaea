@@ -1,0 +1,3 @@
+Ability: Bard (Record #1925)
+Associated skill: Spiritlore
+Maps to record 1924 (JHULIAN).

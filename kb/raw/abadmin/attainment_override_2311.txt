@@ -1,0 +1,18 @@
+Ability: Override (Record #2311)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Trample your opponent with your massive girth.
+Syntax: OVERRIDE <target>
+Abfile:
+Knock your opponent to the ground and ride over the prone form, doing massive damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_green_dragon

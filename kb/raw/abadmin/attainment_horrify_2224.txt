@@ -1,0 +1,19 @@
+Ability: Horrify (Record #2224)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: A rite of dire visions that cause your opponent to flee.
+Syntax: PERFORM RITE OF HORRIFY ON <target>
+Extra info: Gives denizen affliction: Fear
+Abfile:
+Summon a rite of terrible visions that causes your target to flee uncontrollably for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 34.00 seconds
+Resource: 29 rage
+Skill specialisation: br_priest

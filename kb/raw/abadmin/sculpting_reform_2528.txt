@@ -1,0 +1,16 @@
+Ability: Reform (Record #2528)
+Associated skill: Sculpting
+Skillpoints required: 7999
+Blurb: Injury is fleeting.
+Syntax: TERRAN REFORM
+Abfile:
+You may draw up resources from the earth while you stand upon the
+ground, reforming your form if damaged and healing your health.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

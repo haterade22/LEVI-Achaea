@@ -1,0 +1,26 @@
+Ability: Attend (Record #953)
+Associated skill: Occultism
+Skillpoints required: 5999
+Blurb: Force your students to pay attention.
+Syntax: ATTEND <target>
+Abfile:
+Using the power of your will, you can exert your aura and force your
+students to attend to their studies, curing them of deafness and
+blindness.
+
+Alternatively, when used against a denizen, you can lash their minds
+with karmic energy, dealing psychic damage to any who have enough
+vitality to pay attention(*).
+
+* This skill only deals damage to denizens at 100% health or higher.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: 125 mana and 20 willpower

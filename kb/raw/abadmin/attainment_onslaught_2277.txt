@@ -1,0 +1,18 @@
+Ability: Onslaught (Record #2277)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: It's just like tenderising meat.
+Syntax: ONSLAUGHT <target>
+Abfile:
+Repeatedly pound your target with your weapon.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_runewarden

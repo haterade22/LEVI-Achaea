@@ -1,0 +1,16 @@
+Ability: Skullcap (Record #1888)
+Associated skill: Harvesting
+Skillpoints required: 16999
+Blurb: This downy plant has an interesting effect when smoked.
+Syntax: HARVEST SKULLCAP
+Abfile:
+This downy, jungle-dwelling plant can produce an aura of weapons-rebounding when smoked. Also will give you the ability to see death when eaten.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

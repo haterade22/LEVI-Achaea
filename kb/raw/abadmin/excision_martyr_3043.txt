@@ -1,0 +1,21 @@
+Ability: Martyr (Record #3043)
+Associated skill: Excision
+Skillpoints required: 50999
+Blurb: With the last breath, and after.
+Syntax: MARTYR YOURSELF FOR <target>
+Abfile:
+Even after you fall in battle, you will fight on for the cause. With the
+final vestiges of your strength you may suffuse one of the yet living
+faithful with strength, restoring them greatly. However, your soul shall
+be immediately sent tumbling into the Finality's grasp when doing so.
+
+* Must be done very shortly after dying.
+** You will forcefully embrace death when you perform this ability.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

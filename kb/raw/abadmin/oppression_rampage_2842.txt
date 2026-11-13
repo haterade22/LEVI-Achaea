@@ -1,0 +1,21 @@
+Ability: Rampage (Record #2842)
+Associated skill: Oppression
+Skillpoints required: 23999
+Blurb: Crush their hope.
+Syntax: RAMPAGE AGAINST <target>
+Abfile:
+It is expected that the weak shall seek to flee your wrath. You may
+rampage against these feckless cowards. If there are hands of the grave
+in your location and in the target's location, your rampage shall
+resolve immediately. If there are not, you shall rampage more swiftly
+against one in an adjacent location, though anyone in your local area
+cannot escape your reach.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: continent-wide
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 1
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.10 seconds of balance

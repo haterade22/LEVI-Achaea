@@ -1,0 +1,20 @@
+Ability: Dragon (Record #870)
+Associated skill: Tekura
+Skillpoints required: 60000
+Blurb: The superior state of mind.
+Syntax: DRS
+Abfile:
+More of a state of mind than a stance, this is the ultimate expression
+of tekura. While in this stance, the true master shall recover from
+utilising mental equilibrium far more swiftly, as well as being able to
+turn aside many blows with their blocks.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,22 @@
+Ability: Hawthorn (Record #2212)
+Associated skill: Propagation
+Skillpoints required: 54999
+Blurb: A plant that grows in hilly locations.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH HAWTHORN
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: You can shout longer messages without passing out from the strain.
+Body: When eating the hawthorn plant, you will gain the deafness defence
+faster than usual.
+Arms: Your thornrend attack will deliver the sensitivity affliction if
+deafness is not present; otherwise it shall strip the deafness defence.
+Legs: Move faster through hilly locations.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,17 @@
+Ability: Oculus (Record #1968)
+Associated skill: Toxicology
+Skillpoints required: 16999
+Blurb: Forces the recipient's eyelids open.
+Syntax: None
+Extra info: Ingredients: 1 bayberry, 1 goldenseal, 1 redink or
+1 arsenic, 1 plumbum, 1 redink
+Abfile:
+Forces your victim's eyelids open clearing his eyes of blindness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

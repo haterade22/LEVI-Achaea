@@ -1,0 +1,21 @@
+Ability: Tonguetie (Record #2824)
+Associated skill: Puppetry
+Skillpoints required: 21999
+Blurb: Sorry, say that again?
+Syntax: PUPPET TONGUETIE
+Extra info: Fashions:
+Requires: 20
+Used: 4
+Abfile:
+Twist and contort the tongue of your puppet, making them utterly
+tongue-tied! For as long as they remain tongue tied, they will be unable
+to cure the stuttering affliction by any means.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance

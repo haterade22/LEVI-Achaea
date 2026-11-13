@@ -1,0 +1,25 @@
+Ability: Flay (Record #1213)
+Associated skill: Subterfuge
+Skillpoints required: 2499
+Blurb: Flay the anti-venom sileris coatings from your enemies.
+Syntax: FLAY <target>
+FLAY <target> REBOUNDING [<venom>]
+FLAY <target> SHIELD [<venom>]
+Abfile:
+Using a whip, you will be able to flay the waxy coating of the sileris
+berry from your opponent, enabling you to sink your fangs into his flesh
+once more; or to flay a rebounding aura or magical shield to attack with
+weapons once more. You can also use FLAY <denizen> SHIELD to flay the
+shield defence from denizens.
+
+If your flay leaves your target without a rebounding aura and magical
+shield, it will apply a venom from your whip.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,30 @@
+Ability: Kaichoke (Record #896)
+Associated skill: Kaido
+Skillpoints required: 40999
+Blurb: Crush a victim's windpipe remotely.
+Syntax: KAI CHOKE <target>
+Abfile:
+By manipulating the Kai energy that flows around us all, you are able to
+choke the life out of any adventurer in your line of sight, dealing
+increased damage to those suffering under certain afflictions(*).
+
+If instead you turn your focus onto a denizen, this skill becomes much
+simpler to perform but can only be used on those foes in the same
+location as you(**).
+
+* This deals increased damage to targets that have one of: a
+damaged/mangled head, a damaged/mangled torso, or are mind clamped.
+** This skill requires and consumes no kai energy when used against a
+denizen but requires the target to be in the same location as the monk
+in these cases.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 10 Kai energy and 50 mana

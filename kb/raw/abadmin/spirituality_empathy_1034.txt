@@ -1,0 +1,17 @@
+Ability: Empathy (Record #1034)
+Associated skill: Spirituality
+Skillpoints required: 51999
+Blurb: Have your angel heal you regularly.
+Syntax: ANGEL EMPATHY
+ANGEL EMPATHY OFF
+Abfile:
+With this ability, your Angel will regularly heal you if you are damaged.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

@@ -1,0 +1,17 @@
+Ability: Screen (Record #425)
+Associated skill: Groves
+Skillpoints required: 8999
+Blurb: Raise a screen against telepathy within your grove.
+Syntax: GROVE SCREEN
+Abfile:
+While this ability is active, your grove will be safe from those attempting to gain a telepathic lock on anyone within.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 80 sunlight

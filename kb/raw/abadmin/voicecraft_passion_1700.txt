@@ -1,0 +1,17 @@
+Ability: Passion (Record #1700)
+Associated skill: Voicecraft
+Skillpoints required: 55999
+Blurb: Instill stupidity with a glorious passion of Imithia.
+Syntax: SING PASSION AT <target>
+Abfile:
+Dull your target's mind with the soaringly beautiful Passion of Imithia.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 30 willpower

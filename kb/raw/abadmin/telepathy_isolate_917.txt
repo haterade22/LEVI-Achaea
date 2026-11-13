@@ -1,0 +1,20 @@
+Ability: Isolate (Record #917)
+Associated skill: Telepathy
+Skillpoints required: 9999
+Blurb: Cut remote communication off from your subject.
+Syntax: MIND ISOLATE
+MIND UNISOLATE
+Extra info: MIND UNISOLATE cooldown: 4.00 seconds of equilibrium.
+Abfile:
+This will isolate a mind locked adventurer from all communication coming to him from outside his location.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana
+Drain: Mana

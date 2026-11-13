@@ -1,0 +1,17 @@
+Ability: Splinterkick (Record #2316)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Shatter a denizen's shield with a powerful kick.
+Syntax: SPK <target>
+Abfile:
+Channel all of your rage into a single powerful strike with your foot, shattering a denizen's shield.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_monk

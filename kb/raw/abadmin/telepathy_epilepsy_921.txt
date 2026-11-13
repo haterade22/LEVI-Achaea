@@ -1,0 +1,17 @@
+Ability: Epilepsy (Record #921)
+Associated skill: Telepathy
+Skillpoints required: 17999
+Blurb: Throw your victim's nervous system into disarray.(*)
+Syntax: MIND EPILEPSY [target]
+Abfile:
+By short-circuiting some of the nervous system of your locked adventurer, you are able to cause periodic spasms in him, causing him to be unable to do many things while spasming.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium
+Resource: 200 mana

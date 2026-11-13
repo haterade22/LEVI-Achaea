@@ -1,0 +1,25 @@
+Ability: Detune (Record #3282)
+Associated skill: Crystalism
+Skillpoints required: 48999
+Blurb: By your design, or none at all.
+Syntax: DETUNE <target>
+Abfile:
+Sometimes a magi may find that another seeks to set the tone of an
+engagement, creating vibrations to block the use of one's own.
+
+This unacceptable state of affairs is no true barrier to the
+accomplished sorcerer. You may DETUNE another magi, and all vibrations
+span by them in your location will become detuned.
+
+* Detuned vibrations hit the owner as well as their enemies.
+* Detuned vibrations inform all magi in the current location when they
+influence someone.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

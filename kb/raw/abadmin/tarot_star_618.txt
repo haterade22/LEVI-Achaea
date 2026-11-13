@@ -1,0 +1,18 @@
+Ability: Star (Record #618)
+Associated skill: Tarot
+Skillpoints required: 35999
+Blurb: Strike down a foe with a flaming meteor.
+Syntax: FLING STAR AT <target>
+Abfile:
+The Star tarot will bring down a flaming meteor upon your unlucky foe's
+head. Your foe must be within three rooms of your line of sight and both
+you and he must be outdoors.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

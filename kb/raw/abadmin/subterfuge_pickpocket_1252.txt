@@ -1,0 +1,22 @@
+Ability: Pickpocket (Record #1252)
+Associated skill: Subterfuge
+Skillpoints required: 36999
+Blurb: Deftly pilfer from unsuspecting targets.
+Syntax: PICKPOCKET <target> [item]
+Abfile:
+The ultimate test of stealth and dexterity, allowing daring thieves to
+liberate gold or objects from the possession of an unsuspecting target.
+
+You may also attempt to liberate a specific item from your target, but
+this is exceedingly difficult.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance
+Resource: 150 mana

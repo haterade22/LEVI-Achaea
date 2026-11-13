@@ -1,0 +1,16 @@
+Ability: Emergencies (Record #1769)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Manoeuvres to get you out of the worst situations.
+Syntax: SHIP MANOEUVRE EMERGENCIES
+Abfile:
+Initiate emergency manoeuvres in difficult circumstances.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: helm2

@@ -1,0 +1,19 @@
+Ability: Traps (Record #1173)
+Associated skill: Woodlore
+Skillpoints required: 699
+Blurb: The ability to search for traps in your location.
+Syntax: TRAPS
+TRAPS LIST
+Extra info: Traps cooldown: 3.00 seconds of balance
+Traps List cooldown: 5.00 seconds of balance
+Abfile:
+The TRAPS ability will search for traps in the room, giving you information about them. You will not be able to find traps laid by someone with higher skill than you. TRAPS LIST will show you all your traps around the world.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance

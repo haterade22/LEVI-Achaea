@@ -1,0 +1,24 @@
+Ability: Dawnkick (Record #2046)
+Associated skill: Shikudo
+Skillpoints required: 48999
+Blurb: As inexorable as the rising Sun.
+Syntax: DAWNKICK
+Abfile:
+This powerful kick targets the head, and can be performed against both a
+prone foe and a standing one. When it lands, it will cause their brain
+to be rattled and for them to see stars for a time(*). If they are
+prone, this effect lasts longer and the damage is higher(**).
+
+* Shortly after this kick lands, the target will be afflicted with
+epilepsy.
+** If they are prone, they will be afflicted again a short time after
+the first time they receive epilepsy.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

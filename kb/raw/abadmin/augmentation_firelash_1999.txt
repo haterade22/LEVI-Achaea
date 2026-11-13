@@ -1,0 +1,25 @@
+Ability: Firelash (Record #1999)
+Associated skill: Augmentation
+Skillpoints required: 299
+Blurb: A lash of burning fire.
+Syntax: BEGIN ENCHANTMENT OF <item> WITH FIRELASH
+POINT <item> AT <adventurer/denizen/icewall>
+Extra info: Enchanted onto wands, rings, gloves, gauntlets.
+Abfile:
+Actions:
+3, 6, 9, 8, 5, chant "fo icti re eschle lok ast suh hrat", 1, 4, 7, 3x13
+
+Comms:
+   1 gold, 1 silver, 2 diamond dust
+
+By lashing out with fire, you may damage a denizen or an adventurer, or
+melt an icewall. Note that you can hit adventurers with this from an
+adjacent room.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

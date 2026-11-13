@@ -1,0 +1,19 @@
+Ability: Mangle (Record #1732)
+Associated skill: Vodun
+Skillpoints required: 46999
+Blurb: A pain beyond that of mere breaking.
+Syntax: VODUN MANGLE LEFT/RIGHT ARM/LEG
+Extra info: Fashions:
+Required: 25
+Used: 7
+Abfile:
+Though breaking someone's limb is certainly painful, mangling it is far worse.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

@@ -1,0 +1,16 @@
+Ability: Flyers (Record #1430)
+Associated skill: Vision
+Skillpoints required: 699
+Blurb: Take notice of those in the skies.
+Syntax: FLYERS
+Abfile:
+If you use this ability while outdoors, you will gain information on those in the skies above you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.25 seconds of equilibrium

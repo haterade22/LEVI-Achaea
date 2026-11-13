@@ -1,0 +1,19 @@
+Ability: Trip (Record #2087)
+Associated skill: Weaponmastery
+Skillpoints required: 31000
+Blurb: Send them sprawling.
+Syntax: TRIP <target>
+Abfile:
+With this ability, you may knock the legs out from under a hapless
+victim.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_snb

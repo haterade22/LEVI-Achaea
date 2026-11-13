@@ -1,0 +1,42 @@
+Ability: Snake (Record #1265)
+Associated skill: Subterfuge
+Skillpoints required: 56999
+Blurb: A pet snake to assist you in combat.
+Syntax: SUMMON <snake>
+SUMMON <snake> INVENTORY|INV
+Abfile:
+The first time you summon a snake, you may have to try many times before
+you're successful. Eventually though, the snakes of the wild won't be
+able to resist your serpentine charms, and one will come slithering to
+serve. Once you have your snake, you may summon it back at any time
+should you lose it (simply SUMMON <snake> [INVENTORY|INV] again).
+Your snake may be ordered to perform the actions listed in HELP
+DENIZENS.
+
+Note: City/House membership influences what precisely is summoned.
+      Ashtan summon kraits.
+      CIJ summon puffadders.
+      Eleusis summon treesnakes.
+      Hashan summon vipers.
+      Mhaldor summon adders.
+      Targossas summon moccasins.
+      Cyrene summon lanceheads.
+      All others summon rattlesnakes.
+
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 100 mana
+The ability name ADDER is mapped to this ability.
+The ability name COBRA is mapped to this ability.
+The ability name SUMMON is mapped to this ability.
+The ability name RATTLESNAKE is mapped to this ability.
+The ability name VIPER is mapped to this ability.
+The ability name ASP is mapped to this ability.

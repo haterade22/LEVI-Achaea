@@ -1,0 +1,46 @@
+Ability: Crypt (Record #2895)
+Associated skill: Charnel
+Skillpoints required: 1
+Blurb: Your black domain.
+Syntax: CRYPT RAISE
+CRYPT ENTER [crypt]
+CRYPT EXPAND <direction>
+CRYPT COLLAPSE <direction>
+CRYPT SEAL
+CRYPTS
+CRYPT RELOCATE
+Abfile:
+The domain of the accursed is both fortress and sanctum; sheltered from
+those that would scorn them for their vitiating state of being. All of
+the higher workings of Charnel require your crypt be raised and
+expanded; a Pariah without a crypt is no Pariah at all.
+
+CRYPT RAISE: create your crypt. It will start out with one room.
+CRYPT EXPAND <direction>: expand your crypt in a given direction. This
+creates a new room. Initially, these rooms will be simple passageways.
+Your crypt can only expand so much before it can support no further
+rooms, so choose your layout wisely.
+CRYPT COLLAPSE <direction>: collapse rooms in your crypt to change the
+layout. You must work inwards from dead ends.
+CRYPT ENTER: enter your crypt. This has a delay during which you may do
+nothing.
+CRYPT SEAL: if would-be raiders break the seal on your crypt, this
+channelled action will allow you to repair the doors from just outside
+your crypt.
+CRYPT RELOCATE: those over level 50 may relocate their crypt to a new
+location. The crypt must be sealed for this to be done, it is a long
+channelled action, and the same restrictions as raising a crypt in the
+first place apply. Moving your crypt the first time is free: subsequent
+moves cost 50 bound credits.
+CRYPTS: see what other crypts are in a location.
+
+* Note that the talon tattoo can pull anyone from a crypt.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

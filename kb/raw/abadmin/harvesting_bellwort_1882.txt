@@ -1,0 +1,16 @@
+Ability: Bellwort (Record #1882)
+Associated skill: Harvesting
+Skillpoints required: 3999
+Blurb: A wildflower that counters the effects of altruism.
+Syntax: HARVEST BELLWORT
+Abfile:
+The bellwort flower grows in the swamps and, when eaten, will counter the effects of many altruistic-based afflictions, such as generosity and peace.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

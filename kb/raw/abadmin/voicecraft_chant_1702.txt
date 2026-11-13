@@ -1,0 +1,17 @@
+Ability: Chant (Record #1702)
+Associated skill: Voicecraft
+Skillpoints required: 58699
+Blurb: Strip defences with a sonorous chant.
+Syntax: SING CHANT AT <target>
+Abfile:
+Strips a randomly-selected defence from your target.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 30 willpower

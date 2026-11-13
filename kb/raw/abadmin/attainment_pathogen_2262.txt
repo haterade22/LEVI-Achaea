@@ -1,0 +1,19 @@
+Ability: Pathogen (Record #2262)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A chemical that tears your victims apart from within.
+Syntax: THROW PATHOGEN AT <target>
+Extra info: Uses denizen afflictions: Inhibit or Fear
+Abfile:
+The pathogen is a virulent chemical that wreaks havoc on the internal organs of your victim, doing increased damage against those who are unable to heal or are uncontrollably fearful.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_alchemist

@@ -1,0 +1,3 @@
+Ability: Vaulting (Record #1517)
+Associated skill: Riding
+Maps to record 1516 (VAULT).

@@ -1,0 +1,19 @@
+Ability: Rap (Record #2244)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: They'll never see it coming.
+Syntax: RAP <target>
+Extra info: Gives denizen affliction: Stun
+Abfile:
+Hit an opponent in the back of the head with a blackjack, stunning it briefly.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 33.00 seconds
+Resource: 26 rage
+Skill specialisation: br_jester

@@ -1,0 +1,24 @@
+Ability: Dart (Record #1174)
+Associated skill: Woodlore
+Skillpoints required: 699
+Blurb: A trap that shoots out a poisoned dart at its victim.
+Syntax: ASSEMBLE DART TRAP
+LAY DART <direction>
+ENVENOM DART <direction> WITH <venom>
+Abfile:
+ Commodities: 3 wood
+
+The dart trap shoots out a dart when sprung. It does no damage, but may
+be envenomed from vials with venom in them, in which case the dart will
+poison the victim with whatever venom was applied to the trap. Like all
+traps, it has a bit of magic in it and will only affect your enemies.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

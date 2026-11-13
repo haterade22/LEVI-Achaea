@@ -1,0 +1,16 @@
+Ability: Bloodroot (Record #1885)
+Associated skill: Harvesting
+Skillpoints required: 9999
+Blurb: An underground root that can cure paralysis, among others.
+Syntax: HARVEST BLOODROOT
+Abfile:
+A root that grows underground, the bloodroot has reactive properties that allow you to break out of paralysis, as well as cure the slickness affliction.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

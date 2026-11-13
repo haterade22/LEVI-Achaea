@@ -1,0 +1,17 @@
+Ability: Manaleech (Record #1358)
+Associated skill: Curses
+Skillpoints required: 24999
+Blurb: Cause the victim's mana to bleed away.
+Syntax: CURSE <target> MANALEECH
+Abfile:
+Sap away mana from your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 70 mana

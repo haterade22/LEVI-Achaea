@@ -1,0 +1,20 @@
+Ability: Softfocus (Record #1461)
+Associated skill: Vision
+Skillpoints required: 60000
+Blurb: Allows you to see less detail.
+Syntax: SOFTFOCUS [ON|OFF]
+RELAX SOFTFOCUS
+Abfile:
+At a cost of a constant mana drain, you can cause your eyes to lose
+focus, which will result in seeing less detail. In particular, this
+will allow you to have a 66% chance of seeing runes on implanted
+totems.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

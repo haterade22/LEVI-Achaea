@@ -1,0 +1,20 @@
+Ability: Harmonise (Record #1444)
+Associated skill: Bladedance
+Skillpoints required: 0
+Blurb: The first step of the dance.
+Syntax: BATHE RAPIER IN SONG
+Abfile:
+The aspiring bladedancer will require no simple blade of unfeeling steel
+for their performance. Once you have acquired an appropriate rapier,
+head to the grotto of song and BATHE RAPIER IN SONG to prepare for the
+battles to come.
+
+* Bladedance will require a songblessed rapier.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

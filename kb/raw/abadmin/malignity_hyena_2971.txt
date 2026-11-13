@@ -1,0 +1,53 @@
+Ability: Hyena (Record #2971)
+Associated skill: Malignity
+Skillpoints required: 1
+Blurb: A vicious agent of the Inferno.
+Syntax: HYENA
+Abfile:
+The vicious demonic Hyenas of the Inferno are bound to one of Lord
+Sartan's infernal warriors. These vicious predators know not the
+frailties of mercy or kindness, and only their dark masters may ever be
+safe from the rending of their jaws.
+
+Your hyena comes to you with assorted statistics which have been
+randomly assigned.
+
+If you cause your hyena to die, you will be refused another hyena.
+
+There is absolutely no excuse for killing or conspiring to kill your
+hyena.
+
+Below is a list of commands that may be used once you have gotten your
+hyena.
+HYENA ASSESS    : See information about your hyena.
+HYENA RECALL : Recall your hyena to your side.
+HYENA SANCTUARY : Order your hyena to a sanctuary where it will be safe.
+HYENA TRAIN : Order your hyena to go train, in order to raise a stat.
+HYENA REPORT : Gain information on where your hyena is and who they
+are tracking and attacking.
+HYENA REPORT LOCATION : This will tell you the location of your loyal
+(this will incur an equilibrium cost.)
+HYENA SLAY      : Order your hyena to slay someone.
+HYENA HUNT : When your hyena is hungry, have it go hunt for its food.
+HYENA FLEE : Set the amount of health remaining when your hyena will
+flee battle.
+HYENA SLEEP     : Order your hyena to sleep.
+HYENA FEED RAT  : Feed the corpses of rats to your hyena.
+
+As your hyena gains in
+* Stamina:  its health will increase.
+* Speed: it will attack more quickly as well as move from place to place
+* Strength: it will attack with more power.
+
+You will gain other abilities later on that are related to your hyena.
+
+You must visit the summoning chamber within the Mhaldor cathedral to
+request your hyena.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

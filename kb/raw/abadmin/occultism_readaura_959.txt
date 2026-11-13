@@ -1,0 +1,21 @@
+Ability: Readaura (Record #959)
+Associated skill: Occultism
+Skillpoints required: 11999
+Blurb: Reading another's aura will reveal their secrets.
+Syntax: READAURA <target>
+Abfile:
+Your knowledge of auras is such that you may read the auras of others,
+seeing any anomalies and enchantments attached to the auras, or sense
+any presence that protects or affects the aura.
+
+This ability requires equilibrium, but not balance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.50 seconds of equilibrium
+Resource: 50 mana

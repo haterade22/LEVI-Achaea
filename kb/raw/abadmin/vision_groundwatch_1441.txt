@@ -1,0 +1,17 @@
+Ability: Groundwatch (Record #1441)
+Associated skill: Vision
+Skillpoints required: 9999
+Blurb: Watch the ground for movement.
+Syntax: GROUNDWATCH [ON|OFF]
+RELAX GROUNDWATCH
+Abfile:
+The counterpart to Treewatch and Skywatch, this will alert you to movement on the ground below.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

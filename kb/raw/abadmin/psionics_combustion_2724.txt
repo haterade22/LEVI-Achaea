@@ -1,0 +1,30 @@
+Ability: Combustion (Record #2724)
+Associated skill: Psionics
+Skillpoints required: 53999
+Blurb: Just like heating water.
+Syntax: PSI COMBUSTION <target>
+Abfile:
+One of the basic exercises for budding psion students was to heat a cup
+of water with their will alone. Unfortunately, during the War of
+Humanity where death was the business of the Aldar, one particularly
+malicious student under Han-Silnir's command determined that at its
+heart blood is simply liquid too, and equally available for
+manipulation.
+
+Though boiling the blood inside a person's veins is fortunately beyond
+modern psionics users, blood that is open to the air is an easy
+target(*). While the blood forged flames burn upon someone's skin, they
+will find it impossible to apply salves(**).
+
+* If someone is bleeding sufficiently, you may set their blood aflame
+with this technique.
+** This affliction is cured once all bleeding is clotted away.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

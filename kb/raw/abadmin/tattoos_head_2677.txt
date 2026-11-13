@@ -1,0 +1,16 @@
+Ability: Head (Record #2677)
+Associated skill: Tattoos
+Skillpoints required: 18999
+Blurb: Wear two tattoos on your head.
+Syntax:
+Abfile:
+Your understanding of inks permits you to wear two mystical tattoos on
+your head.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,24 @@
+Ability: Sandling (Record #713)
+Associated skill: Artificing
+Skillpoints required: 13999
+Blurb: A diminutive denizen of Garash.
+Syntax: ELEMENTAL DESCEND
+Extra info: Burrow cooldown: 2.50 seconds of equilibrium
+Abfile:
+ Channels required: Earth
+
+One of four elementals you can summon, the sandling will lower you into
+the ground, effectively burying you. Additionally, you will be able to
+burrow laterally so long as the ground is soft enough to permit.
+However, you may not burrow deeper than one level below ground.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

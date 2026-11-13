@@ -1,0 +1,18 @@
+Ability: Mindprints (Record #944)
+Associated skill: Telepathy
+Skillpoints required: 60000
+Blurb: Take a mindprint of your subject.
+Syntax: MIND PRINT
+MINDPRINTS
+FORGET <adventurer>
+Abfile:
+Once you have locked minds with an adventurer, you are able to gain intimate knowledge of their mind, making it easier to gain and hold a mind lock in the future. However, due to the incredible complexity of the mind, you may only hold five mindprints at once. MIND PRINT will take a mindprint of the adventurer you have locked. MINDPRINTS will list whom you have mindprints of, and FORGET will remove an adventurer from your list, allowing you to MINDPRINT a new adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

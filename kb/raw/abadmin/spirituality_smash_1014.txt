@@ -1,0 +1,16 @@
+Ability: Smash (Record #1014)
+Associated skill: Spirituality
+Skillpoints required: 5999
+Blurb: Deal a crushing blow to one of your opponent's limbs.
+Syntax: SMASH ARMS|LEGS <target> [CHASTEN <BODY|MIND|affliction>]
+Abfile:
+This ability will allow you to crush one of your opponents arms or legs with your mace, rendering it useless.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

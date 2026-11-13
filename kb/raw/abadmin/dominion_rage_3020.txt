@@ -1,0 +1,20 @@
+Ability: Rage (Record #3020)
+Associated skill: Dominion
+Skillpoints required: 25999
+Blurb: Throw off pacifying afflictions.
+Syntax: RAGE
+Abfile:
+This ability will allow you to cure certain pacifying afflictions,
+notably those that are normally cured by eating bellwort.
+
+* All contextual relevant information like affliction stage or stacks is
+preserved upon reapplication.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 150 mana

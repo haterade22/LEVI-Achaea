@@ -1,0 +1,17 @@
+Ability: Travel (Record #933)
+Associated skill: Telepathy
+Skillpoints required: 39999
+Blurb: Cross great distances to your subject in a single step.
+Syntax: MIND TRAVEL
+Abfile:
+An extremely complicated ability, this opens up a pathway between your mind and that of an individual you have locked, allowing you to travel to your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 500 mana

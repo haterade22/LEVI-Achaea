@@ -1,0 +1,19 @@
+Ability: Gust (Record #1546)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Knock your prey to the ground with a mighty exhalation.
+Syntax: BREATHGUST <target>
+Abfile:
+Use your massive lungs to blow your opponent off their feet.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 100 mana
+Skill specialisation: dragonform
+The ability name BREATHGUST is mapped to this ability.

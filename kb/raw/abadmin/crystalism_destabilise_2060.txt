@@ -1,0 +1,74 @@
+Ability: Destabilise (Record #2060)
+Associated skill: Crystalism
+Skillpoints required: 60000
+Blurb: The power to destabilise crystalline vibrations is formidable indeed.
+Syntax: VIBE DESTABILISE <vibe type>
+Abfile:
+Your mastery over Crystalism grants insights into the exact tonal
+frequencies necessary to throw crystalline vibrations into disarray and
+causing them to become unstable. This will inevitably cause the
+vibration to be destroyed, but their instability will cause them to have
+various potent effects upon the location before they expire.
+
+
+Adduction: will attempt to draw all those in adjacent locations into the
+room.
+
+Alarm: informs you of all people in the local area.
+
+Creeps: afflicts everyone in the room with fear, agoraphobia, and
+claustrophobia.
+
+Disorientation: prones and gives dizziness to everyone in the room.
+
+Dissipate: drains mana from everyone in the room.
+
+Dissonance: breaks all magical shields protecting adventurer's in the
+location.
+
+Energise: restores some health for each person besides the destabiliser
+
+
+Forest: causes nontrivial bleeding to everyone in the room.
+
+Gravity: forces all those in the sky above back to the ground.
+
+Grounding: launches everyone in the room into the sky.
+
+Harmony: will restore health to everyone in the room.
+
+Heat: deals fire damage and causes ablaze to everyone in the room.
+
+Lullaby: strips the metawake and insomnia defences.
+
+Oscillate: deals minor damage and afflicts everyone in the room with
+both epilepsy and stupidity.
+
+Palpitation: deals damage to everyone in the room.
+
+Plague: breaks the limbs of everyone in the room.
+
+Retardation: afflicts everyone in the room with the curse of Aeon.
+
+Reverberation: destroys all monolith, cube, knife, and eye sigils on the
+ground in your location.
+
+Silence: blocks all usage of communication channels for a short time by
+all present when used, even if they then leave the room.
+
+Revelation: strips the phase, astralform, or blackwind defences from
+everyone in the room.
+
+Stridulation: disrupts the mental equilibrium of everyone in the room.
+
+Tremors: creates rubble to block the exits of the room.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 400 mana

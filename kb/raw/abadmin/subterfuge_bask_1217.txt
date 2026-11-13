@@ -1,0 +1,19 @@
+Ability: Bask (Record #1217)
+Associated skill: Subterfuge
+Skillpoints required: 3999
+Blurb: Bathing in the hot sun.
+Syntax: BASK
+Abfile:
+In an outdoor room you may bask in the hot sun, replenishing your
+strength and curing your afflictions.
+
+A desperate serpent may also bask in the presence of a lightwall.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

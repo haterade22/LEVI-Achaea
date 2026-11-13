@@ -1,0 +1,17 @@
+Ability: Radiance (Record #943)
+Associated skill: Telepathy
+Skillpoints required: 58999
+Blurb: Destroy your subject with a single blast of mental energy.
+Syntax: MIND RADIANCE
+Abfile:
+The most powerful attack a telepath has, this allows you to build up an awesome amount of telepathic power, then release it to your hapless victim, killing him instantly. It takes some time to build up, during which you may do nothing else. Further, you may not execute this ability if your target is in the same location as you. Your concentration will also be broken if your target moves into your location.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 800 mana

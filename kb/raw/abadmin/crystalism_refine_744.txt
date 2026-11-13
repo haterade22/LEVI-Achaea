@@ -1,0 +1,26 @@
+Ability: Refine (Record #744)
+Associated skill: Crystalism
+Skillpoints required: 0
+Blurb: Refine a piece of crystal out of the Master.
+Syntax: REFINE [1-10] <shape>
+Abfile:
+This ability must be done in the presence of the Master Crystal. It will refine one of the possible crystal shapes from the Master, reducing the Master Crystal by one facet.
+
+Possible shapes are:
+
+Pyramid         Torus          Pentagon
+Cylinder        Cube           Diamond
+Sphere          Polyhedron     Spiral
+Egg             Disc
+
+In order to replenish the facets of the Master Crystal, you must find pearls, and FOLD PEARL INTO CRYSTAL.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Resource: 50 mana

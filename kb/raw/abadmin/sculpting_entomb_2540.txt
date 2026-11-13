@@ -1,0 +1,17 @@
+Ability: Entomb (Record #2540)
+Associated skill: Sculpting
+Skillpoints required: 50999
+Blurb: A feast for the earth.
+Syntax: TERRAN ENTOMB
+Abfile:
+Those that think to flee your fury through the earth are fools indeed.
+With this ability, you may instantly slay all those that burrow below
+you, providing they be at half health or less.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,25 @@
+Ability: Scrag (Record #987)
+Associated skill: Domination
+Skillpoints required: 2499
+Blurb: Scrag, tender of the bloodleech pool.
+Syntax: COMMAND BLOODLEECH AT <target>
+Abfile:
+Scrag is the tender of the bloodleech pool upon the Plane of Chaos. When
+called upon, he shall send one of his servants to you: when commanded,
+it shall thin the blood of your foe, causing them to suffer from
+haemophilia.
+
+When primebonded, the leech shall coax out the blood of your foe, making
+them bleed. If their blood is thinned, the amount of bleeding will be
+increased.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of entity balance
+Resource: 50 mana
+The ability name BLOODLEECH is mapped to this ability.

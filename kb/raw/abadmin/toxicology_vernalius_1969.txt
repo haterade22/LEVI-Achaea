@@ -1,0 +1,17 @@
+Ability: Vernalius (Record #1969)
+Associated skill: Toxicology
+Skillpoints required: 20999
+Blurb: A venom that weakens the muscles.
+Syntax: None
+Extra info: Ingredients: 2 kelp, 1 goldenseal, 1 purpleink or
+2 aurum, 1 plumbum, 1 purpleink
+Abfile:
+A venom that weakens the muscles.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

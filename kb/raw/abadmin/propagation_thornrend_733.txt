@@ -1,0 +1,29 @@
+Ability: Thornrend (Record #733)
+Associated skill: Propagation
+Skillpoints required: 499
+Blurb: Rend your foes with your lethal vines.
+Syntax: THORNREND <target> [venom] [limb] [plant to propagate arms with]
+Abfile:
+You may now lash the flesh of your foes with your thorny vines, doing
+damage.
+
+If you have learned the TARGETING ability in Weaponry, you may
+optionally direct your thornrend at a specific body part, causing
+additional damage to an arm, leg, the head, or the torso of your
+opponent.
+
+If you have gained the ENVENOM ability in Weaponry then you may envenom
+your arms, which will deliver a venom to your target when you thornrend.
+Otherwise, you may SECRETE SAP to coat your arms in a single
+application.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 80 mana

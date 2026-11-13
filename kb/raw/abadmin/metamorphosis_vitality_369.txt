@@ -1,0 +1,17 @@
+Ability: Vitality (Record #369)
+Associated skill: Metamorphosis
+Skillpoints required: 15999
+Blurb: Call upon a rush of adrenaline to heal you.
+Syntax: VITALITY
+This ability will be hidden on ablistings.
+Abfile:
+You may only activate this ability when very near full health and mana. Once active, when you drop to less than twenty-five percent of your maximum health without dying, you will get a sudden rush of adrenaline that will heal you significantly.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

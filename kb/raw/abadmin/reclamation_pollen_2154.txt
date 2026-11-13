@@ -1,0 +1,21 @@
+Ability: Pollen (Record #2154)
+Associated skill: Reclamation
+Skillpoints required: 26999
+Blurb: Choke the life from them.
+Syntax: RECLAMATION POLLEN
+RECLAMATION TERMINATE POLLEN/ALL
+Abfile:
+This potent pollen will enter the lungs and throat of those that inhale
+it, asphyxiating them.
+
+Poison, sleep, refresh spores and pollen are all mutually exclusive.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Resource: 250 mana

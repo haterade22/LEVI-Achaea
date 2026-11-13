@@ -1,0 +1,24 @@
+Ability: Tykonos (Record #2487)
+Associated skill: Shikudo
+Skillpoints required: 0
+Blurb: A highly defensive form.
+Syntax: ADOPT TYKONOS FORM
+Extra info: Transitions: Willows Shaken by the Wind
+Attacks: THRUST, SWEEP, RISINGKICK
+Abfile:
+The forms of Shikudo are the backbone of the art. You can only be in one
+form at a time, though you may flow between the forms at opportune
+moments, once you further your studies. Many of the Shikudo strikes may
+only be performed in certain forms, and each form conveys its own set of
+benefits upon the practitioner.
+
+The Tykonos form is primarily a defensive form, and you will find
+yourself able to divert damage more easily when in this form.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

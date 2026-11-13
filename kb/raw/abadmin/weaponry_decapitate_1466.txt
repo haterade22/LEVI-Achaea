@@ -1,0 +1,17 @@
+Ability: Decapitate (Record #1466)
+Associated skill: Weaponry
+Skillpoints required: 9999
+Blurb: Hack the head from an adventurer's corpse.
+Syntax: DECAPITATE <corpse>
+PIKE <head>
+Abfile:
+Provided you have an edged weapon in one of your hands, you will be able to decapitate a corpse. You may then do whatever you like with the head, including buying a pike and then PIKEing the head. Note that heads, being organic matter, do not tend to stick around too long, and if put on a pike, the pike will also decay away when the head does.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

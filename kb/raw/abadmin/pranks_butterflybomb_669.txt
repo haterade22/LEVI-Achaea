@@ -1,0 +1,19 @@
+Ability: Butterflybomb (Record #669)
+Associated skill: Pranks
+Skillpoints required: 7999
+Blurb: Blast people from the skies and trees.
+Syntax: CONSTRUCT BUTTERFLY BOMB
+THROW BOMB <direction>/AT GROUND
+Extra info: Requires: 1 iron
+Abfile:
+Upon exploding, this bomb will rise up into the air and knock those in the trees and skies to the ground. You can make two bombs out of a single commodity.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name BUTTERFLY BOMB is mapped to this ability.

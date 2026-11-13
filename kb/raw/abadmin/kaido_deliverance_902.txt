@@ -1,0 +1,16 @@
+Ability: Deliverance (Record #902)
+Associated skill: Kaido
+Skillpoints required: 60000
+Blurb: Grant your enemies release from this mortal coil.
+Syntax: KAI DELIVERANCE
+Abfile:
+Once activating this ability, there will be a short delay. After this time, anyone who attempts to harm you for the next thirty seconds from close by will die instantly in a massive backlash of Kai energy.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 81 Kai energy

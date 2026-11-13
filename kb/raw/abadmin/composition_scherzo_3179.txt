@@ -1,0 +1,17 @@
+Ability: Scherzo (Record #3179)
+Associated skill: Composition
+Skillpoints required: 20999
+Blurb: Through thick and thin.
+Syntax:
+Abfile:
+This fast paced movement will periodically regenerate your health and
+that of your allies. This operates independently of other regeneration
+sources (so stacks with artefacts and similar).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

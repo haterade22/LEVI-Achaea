@@ -1,0 +1,17 @@
+Ability: Heartstop (Record #1403)
+Associated skill: Survival
+Skillpoints required: 46999
+Blurb: Slay yourself by stopping your heart.
+Syntax: HEARTSTOP
+Abfile:
+This lethal ability will cause your heart to immediately stop, killing yourself in an instant. Use it with caution, for it will cost you more experience than a standard death.
+
+If you are a Vodun or Puppetry user, please be aware that using heartstop will destroy all puppets of the last person to do damage to you before you heartstopped.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

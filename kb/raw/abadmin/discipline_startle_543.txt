@@ -1,0 +1,15 @@
+Ability: Startle (Record #543)
+Associated skill: Discipline
+Skillpoints required: 37999
+Blurb: Order your bird to harass an opponent's steed.
+Syntax: FALCON STARTLE <target>
+Abfile:
+This ability will allow your falcon to startle an opponent's steed, tossing the poor rider off. Note that this works regardless of whether your opponent is on the ground, in the trees, or flying. You simply need be in the same room, and the falcon will fly to the correct elevation to startle your target's mount.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

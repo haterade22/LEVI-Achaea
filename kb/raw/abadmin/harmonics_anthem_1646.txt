@@ -1,0 +1,17 @@
+Ability: Anthem (Record #1646)
+Associated skill: Harmonics
+Skillpoints required: 299
+Blurb: A mighty defensive harmonic protecting against damage.
+Syntax: PLAY ANTHEM
+Abfile:
+This harmonic protects the bard and his allies by completely absorbing one type of damage. The type of damage absorbed changes rapidly throughout the lifetime of the harmonic.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 250 mana

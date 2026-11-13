@@ -1,0 +1,33 @@
+Ability: Trointeth (Record #2456)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: Heresy is not even the beginning.
+Syntax: INTONE TROINTETH
+This ability will be hidden on ablistings.
+Abfile:
+Speak this heretical word and the shrines of the divine shall become
+muted. Note that as your proficiency within the Conquest research tree
+increases, so too does your grasp of this word as follows:
+
+At level two, it impacts your current room.
+At level three, it impacts your current and adjacent rooms.
+At level four, it impacts your current room, adjacent rooms, and the
+rooms adjacent to those.
+At level five, it impacts your current room, adjacent rooms, the rooms
+adjacent to those, and the rooms adjacent to those.
+
+The cooldown and duration decrease and increase respectively as you
+increase in the research, though particularly in the case of duration
+these gains are much more minor than the other benefits conveyed.
+
+When worldburn is activated, the Trointeth cooldown on all shrines for
+that order is cleared.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of word balance

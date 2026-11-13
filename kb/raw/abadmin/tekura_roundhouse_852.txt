@@ -1,0 +1,20 @@
+Ability: Roundhouse (Record #852)
+Associated skill: Tekura
+Skillpoints required: 8999
+Blurb: A twisting kick.
+Syntax: RHK <target>
+Abfile:
+This powerful kick shall shatter any magical shield surrounding your
+target(*).
+
+* If your foe is suffering from a damaged torso, they will also be
+proned when their shield/prismatic barrier is broken.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of leg balance

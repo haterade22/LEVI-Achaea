@@ -1,0 +1,19 @@
+Ability: Empathy (Record #923)
+Associated skill: Telepathy
+Skillpoints required: 20999
+Blurb: Establishing a physical link through your telepathy.
+Syntax: MIND EMPATHY
+MIND UNEMPATHY
+Extra info: MIND UNEMPATHY cooldown: 3.00 seconds of equilibrium.
+Abfile:
+This ability will channel much damage done to a locked adventurer over the telepathic link to you. Be careful with it though, for it is possible to die if too much damage is inflicted upon you via the telepathic link. This ability costs a regular drain of mental power.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

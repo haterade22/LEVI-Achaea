@@ -1,0 +1,17 @@
+Ability: Cacophony (Record #1650)
+Associated skill: Harmonics
+Skillpoints required: 3999
+Blurb: Destroy the reverberation vibration of a magi.
+Syntax: PLAY CACOPHONY
+Abfile:
+Destroys one reverberation vibration. This is not a true harmonic: it does not have duration and cannot be moved via Andante or Battaglia.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 7.20 seconds of equilibrium
+Resource: 175 mana

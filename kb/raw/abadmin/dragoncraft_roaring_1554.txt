@@ -1,0 +1,19 @@
+Ability: Roaring (Record #1554)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Let loose an almighty roar.
+Syntax: DRAGONROAR <target>
+Abfile:
+Use your mighty roar to damage your opponent. This will cause greater damage to those that are not deaf.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana
+Skill specialisation: dragonform
+The ability name ROAR is mapped to this ability.

@@ -1,0 +1,17 @@
+Ability: Night (Record #948)
+Associated skill: Occultism
+Skillpoints required: 1499
+Blurb: Create darkness in the room.
+Syntax: NIGHT
+Abfile:
+Cast a shroud of darkness over a location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

@@ -1,0 +1,18 @@
+Ability: Web (Record #1485)
+Associated skill: Tattoos
+Skillpoints required: 22999
+Blurb: Snare another in a sticky web.
+Syntax: TOUCH WEB <target>
+Extra info: Inks: 1 Green ink
+1 Yellow ink
+Abfile:
+The web tattoo allows you to cast a sticky web over your opponent, entrapping him until he writhes out.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

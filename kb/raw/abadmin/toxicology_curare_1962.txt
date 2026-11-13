@@ -1,0 +1,17 @@
+Ability: Curare (Record #1962)
+Associated skill: Toxicology
+Skillpoints required: 5999
+Blurb: A venom of muscular paralysis.
+Syntax: None
+Extra info: Ingredients: 1 bloodroot, 1 bellwort, 1 greenink or
+1 magnesium, 1 cuprum, 1 greenink
+Abfile:
+Cause your victim's body to freeze with paralysis.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

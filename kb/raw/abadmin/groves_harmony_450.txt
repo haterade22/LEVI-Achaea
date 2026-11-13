@@ -1,0 +1,49 @@
+Ability: Harmony (Record #450)
+Associated skill: Groves
+Skillpoints required: 39665
+Blurb: Seek Nature's blessing through absolute harmony.
+Syntax: EVOKE HARMONY [STATUS|ME|<target>]
+
+Extra info: Imbued Sunlight: 250 (to give blessings)
+1000 (to harmonise)
+Abfile:
+When standing in one of several natural environments, a Druid may
+attempt to harmonise him or herself to that environment with EVOKE
+HARMONY.
+
+Once three Druids are in harmony with the same environment, all
+Druids(*) will be able to bestow a blessing associated with that
+harmonisation on him/herself or another adventurer(**), using EVOKE
+HARMONY <ME|target>.
+
+Only one environment may be fully harmonised at a time, and this
+harmonisation will last until the end of the year.
+
+EVOKE HARMONY STATUS will show the current state of harmony of the
+various environments.
+
+The effects of each environment are:
+
+   Forest: Increased health regeneration.
+   Ocean: Increased mana regeneration.
+   Mountains: Increased willpower and endurance regeneration.
+   Desert: Increased damage versus denizens.
+   Tundra: Increased effectiveness of frost and venom elixirs.
+
+* This ability is available to Druids of Eleusis and cityless Druids who
+are also members of the Heartwood Kin and the Scions of the Ithmia.
+
+** Harmony blessings may be granted to members of Eleusis and cityless
+members of the Heartwood Kin and the Scions of the Ithmia.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Sunlight and mana
+Skill specialisation: groves_druid_org

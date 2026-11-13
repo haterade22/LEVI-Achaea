@@ -1,0 +1,18 @@
+Ability: Lightning (Record #2041)
+Associated skill: Artificing
+Skillpoints required: 37999
+Blurb: A crystal to focus electricity.
+Syntax: WORKSHOP REFINE LIGHTNING CRYSTAL
+Abfile:
+When set into your Elemental Staff, this crystal will permit you to
+channel a LIGHTNING spell through it.
+
+* STAFF CAST LIGHTNING AT <target>, for instance.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

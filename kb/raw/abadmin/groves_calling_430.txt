@@ -1,0 +1,15 @@
+Ability: Calling (Record #430)
+Associated skill: Groves
+Skillpoints required: 12999
+Blurb: Call your loyal creatures back to your grove.
+Syntax: GROVE CALLING
+Abfile:
+This ability will call all creatures loyal to you back to your grove.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

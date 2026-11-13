@@ -1,0 +1,18 @@
+Ability: Squirrel (Record #325)
+Associated skill: Metamorphosis
+Skillpoints required: 0
+Blurb: A cute, bushy-tailed woodland creature.
+Syntax: MORPH SQUIRREL
+Extra info: Powers: Forage
+Digging
+Abfile:
+A cute, bushy-tailed woodland creature.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 16 mana

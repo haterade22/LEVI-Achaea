@@ -1,0 +1,18 @@
+Ability: Spike (Record #2271)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Tear your target apart with spiked armour.
+Syntax: SPIKE <target>
+Abfile:
+Shroud your armoured form in necromantic spikes and leap upon your target, causing grievous wounds as your armour tears into it.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_infernal

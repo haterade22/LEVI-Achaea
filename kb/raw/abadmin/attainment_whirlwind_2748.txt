@@ -1,0 +1,20 @@
+Ability: Whirlwind (Record #2748)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Destroy them with your onslaught.
+Syntax: WEAVE WHIRLWIND <target>
+Extra info: Uses denizen afflictions: Inhibit or Stun
+Abfile:
+Will blades into being and deliver a terrible onslaught against your
+foe, causing massive damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_psion

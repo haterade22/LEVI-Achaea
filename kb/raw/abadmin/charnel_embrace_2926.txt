@@ -1,0 +1,28 @@
+Ability: Embrace (Record #2926)
+Associated skill: Charnel
+Skillpoints required: 60000
+Blurb: The bane of life.
+Syntax: ACCURSED EMBRACE SICKNESS
+Abfile:
+Many terrible things were born of dabbling in the realm of death, but
+perhaps one of the most terrible consequences was the sickness that the
+Accursed brought into the living world. To embrace your nature as an
+Accursed is to accept that sickness upon yourself; death shall have its
+due(*), and time shall not heal this wound(**).
+
+* If you die with the death sickness and are resurrected by starbursts
+or similar means, you will not be cured of your afflictions. However,
+the sickness will pass from you to your killer in this instance.
+** Those labouring beneath the death sickness are entirely immune to
+lesser aeonic workings: attempts to bring down the curse of the Aeon
+upon such a target without foci to amplify the working (a vodun doll or
+puppet for example) shall fail.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

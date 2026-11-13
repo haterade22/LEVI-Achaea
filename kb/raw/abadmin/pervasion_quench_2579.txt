@@ -1,0 +1,15 @@
+Ability: Quench (Record #2579)
+Associated skill: Pervasion
+Skillpoints required: 2999
+Blurb: Flames are such a trivial inconvenience.
+Syntax: MANIFEST QUENCH <dir>
+Abfile:
+Extinguish a firewall that would bar your path.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

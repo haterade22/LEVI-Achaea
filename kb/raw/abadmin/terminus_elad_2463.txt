@@ -1,0 +1,18 @@
+Ability: Elad (Record #2463)
+Associated skill: Terminus
+Skillpoints required: 40999
+Blurb: They have no choice in the matter.
+Syntax: INTONE ELAD <target>
+This ability will be hidden on ablistings.
+Abfile:
+By targeting this word of power at one of the weak-willed, you can force
+them into following you around the land. Instantly obtain your army!
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of equilibrium and 6.50 seconds of word balance

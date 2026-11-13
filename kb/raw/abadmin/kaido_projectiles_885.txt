@@ -1,0 +1,18 @@
+Ability: Projectiles (Record #885)
+Associated skill: Kaido
+Skillpoints required: 18999
+Blurb: Avoiding many projectiles.
+Syntax: PROJECTILES [ON|OFF]
+RELAX PROJECTILES
+Abfile:
+At the cost of some mana, you are able to heighten your reflexes and dodge many projectiles.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: Mana
+Drain: Willpower

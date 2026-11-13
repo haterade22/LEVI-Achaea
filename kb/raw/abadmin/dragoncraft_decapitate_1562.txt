@@ -1,0 +1,17 @@
+Ability: Decapitate (Record #1562)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Hack the head from an adventurer's corpse with claws.
+Syntax: DECAPITATE <corpse>
+Abfile:
+Sink your claw into the sinew of the neck to rip the head from an adventurer's corpse.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of balance
+Skill specialisation: dragonform

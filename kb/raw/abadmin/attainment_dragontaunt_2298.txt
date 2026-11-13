@@ -1,0 +1,19 @@
+Ability: Dragontaunt (Record #2298)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Taunt your target into acting recklessly.
+Syntax: DRAGONTAUNT <target>
+Extra info: Gives denizen affliction: Recklessness
+Abfile:
+Taunt your target, temporarily forcing it to act recklessly with no regard for its safety for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds
+Resource: 18 rage
+Skill specialisation: br_red_dragon

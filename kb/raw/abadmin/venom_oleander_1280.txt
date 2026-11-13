@@ -1,0 +1,16 @@
+Ability: Oleander (Record #1280)
+Associated skill: Venom
+Skillpoints required: 699
+Blurb: Blindness.
+Syntax: SECRETE OLEANDER
+BITE <target>
+Abfile:
+Cause blindness in your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

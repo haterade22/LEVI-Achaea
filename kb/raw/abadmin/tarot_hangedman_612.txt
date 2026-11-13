@@ -1,0 +1,18 @@
+Ability: Hangedman (Record #612)
+Associated skill: Tarot
+Skillpoints required: 18999
+Blurb: Hinder your opponent with a mass of ropes.
+Syntax: FLING HANGEDMAN AT <target>
+Abfile:
+The Hangedman will entangle your foe in a mass of ropes.
+
+You cannot command entities while off balance from flinging this card.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

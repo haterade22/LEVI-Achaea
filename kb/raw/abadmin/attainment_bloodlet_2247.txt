@@ -1,0 +1,19 @@
+Ability: Bloodlet (Record #2247)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Your daegger will feast upon their blood.
+Syntax: BLOODLET <target>
+Extra info: Uses denizen afflictions: Sensitivity or Stun
+Abfile:
+Your daegger will attempt to slice into the veins of your victim and drink from them. If your target is afflicted by sensitivity or is stunned, the daegger will inflict increased damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_apostate

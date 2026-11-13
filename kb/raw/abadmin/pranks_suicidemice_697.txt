@@ -1,0 +1,27 @@
+Ability: Suicidemice (Record #697)
+Associated skill: Pranks
+Skillpoints required: 60000
+Blurb: Brainwash mice to carry bombs on their backs.
+Syntax: TIE CHEESE TO ROPE
+FISH FOR MICE
+REEL IN MOUSE
+EDUCATE MOUSE
+STRAP <bomb> TO <mouse>
+ORDER MOUSE KILL <target>
+CALL MICE
+Extra info: Educate cooldown: 5.00 seconds of balance
+Strap cooldown: 4.00 seconds of balance
+Abfile:
+Brainwash mice until they are willing to sacrifice their lives for you. First, get a rope and cheese, and then tie the rope to the cheese. Then, you have to fish for the mice in a city area. Reel the mouse in when one bites. Once you've caught one, you may educate him, which will prepare the mouse for use. Just strap a bomb onto his back, drop him, and ORDER MOUSE KILL <whoever>. If you are within approximately 10 rooms of your target, the mouse will immediately take off chasing your unlucky victim, and, upon finding the person, detonate the bomb.
+
+(OOC Note: These predated any of the recent, very regrettable terrorist acts, and are not intended to make light of them in any way.)
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance
+The ability name SUICIDEMOUSE is mapped to this ability.

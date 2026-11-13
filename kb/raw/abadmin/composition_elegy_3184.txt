@@ -1,0 +1,23 @@
+Ability: Elegy (Record #3184)
+Associated skill: Composition
+Skillpoints required: 43999
+Blurb: Weep for the dead.
+Syntax: COMPOSE ELEGY
+Abfile:
+This solemn song for the dead will lay the weariness of loss upon all
+who hear it. Each time an enemy hears your song, their celerity will be
+greatly reduced(*), and if they are already lethargic, it will be
+eliminated entirely(**).
+
+* Their celerity will be set to one movement below maximum to whatever
+they can normally move.
+** They will have their celerity maxed out completely.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

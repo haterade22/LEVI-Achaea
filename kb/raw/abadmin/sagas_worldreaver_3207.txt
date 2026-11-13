@@ -1,0 +1,25 @@
+Ability: Worldreaver (Record #3207)
+Associated skill: Sagas
+Skillpoints required: 60000
+Blurb: Annihilation.
+Syntax: RECITE WORLDREAVER
+Abfile:
+There is no saga so dire and no tale so terrible as that of He who cast
+down Gods and broke the world in His coming. The dread power of Bal'met
+may be gone from Creation, but in this harrowing recital can a sliver of
+the knowing of that impossible foe be made manifest. Though it will take
+all of your focus(*) to recite, at the culmination of this recounting
+all damage in the location will become unblockable for a short time.
+This affects all present: enemy, ally, and the one who gave voice to
+this most terrible of tales.
+
+* This is a channeled action.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 20.00 seconds of voice balance

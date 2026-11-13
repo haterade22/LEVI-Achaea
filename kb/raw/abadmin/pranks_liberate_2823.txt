@@ -1,0 +1,28 @@
+Ability: Liberate (Record #2823)
+Associated skill: Pranks
+Skillpoints required: 60000
+Blurb: They weren't using it anyway.
+Syntax: LIBERATE TONGUE OF <target>
+Abfile:
+Once you've got a good idea of how someone's wagging their tongue, you
+can grab that beauty right out of their mouth(*). You'll need to get it
+just right though, so it'll take some observing.
+
+Once someone is afflicted with stuttering, each time they
+communicate(**) you'll get a better idea of what you need. Once you've
+observed enough(***), the rest is up to you!
+
+* Yes, they die. Tragic but what can you do.
+** Any form of communication triggers this, as well as the puppet tickle
+ability. Laughter might not be the best medicine in this case.
+*** You'll need to observe four times to be able to liberate their
+tongue.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of balance

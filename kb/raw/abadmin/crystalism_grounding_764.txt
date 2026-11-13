@@ -1,0 +1,21 @@
+Ability: Grounding (Record #764)
+Associated skill: Crystalism
+Skillpoints required: 22999
+Blurb: Root yourself to the ground.
+Syntax: EMBED GROUNDING
+Abfile:
+ Shapes required: Sphere
+
+This vibration will root you to the ground, and make it difficult for
+you to be moved or move, provided you are not in a watery environment.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

@@ -1,0 +1,23 @@
+Ability: Devitalisation (Record #1809)
+Associated skill: Formulation
+Skillpoints required: 24000
+Blurb: The air itself turns against your victims.
+Syntax: WIELD DEVITALISATION
+THROW DEVITALISATION <AT GROUND|DIRECTION>
+Extra info: Reagents: 2 aurum, 1 cuprum
+Abfile:
+This experimental compound is insidious indeed. Those that inhale it
+shall find that over time their maximum health reserves shall steadily
+decrease, and they will be unable to recover such until they have
+separated themselves from the substance for a time. The alchemist should
+be especially wary, as at this point all attempts to create a filter via
+their protective mask have failed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.60 seconds of balance

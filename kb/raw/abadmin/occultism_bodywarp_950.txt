@@ -1,0 +1,20 @@
+Ability: Bodywarp (Record #950)
+Associated skill: Occultism
+Skillpoints required: 2999
+Blurb: Warping your own body is not for the faint of heart.
+Syntax: BODYWARP
+Abfile:
+You can warp your own form into an unspeakable image, causing a primal
+fear even in the most hardy so long as they can see you(*).
+
+* The victim must be unblind.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 75 mana

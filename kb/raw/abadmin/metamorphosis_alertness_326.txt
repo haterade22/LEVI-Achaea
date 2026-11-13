@@ -1,0 +1,20 @@
+Ability: Alertness (Record #326)
+Associated skill: Metamorphosis
+Skillpoints required: 299
+Blurb: Awareness of your surroundings.
+Syntax: ALERTNESS [ON|OFF]
+RELAX ALERTNESS
+This ability will be hidden on ablistings.
+Abfile:
+Your sense of hearing is heightened enough to allow you to detect movement in adjacent locations.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 20 mana
+Drain: Mana

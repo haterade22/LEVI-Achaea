@@ -1,0 +1,19 @@
+Ability: Swarm (Record #2227)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A group of wasps will sting your target.
+Syntax: SWARM <target>
+Extra info: Uses denizen afflictions: Aeon or Inhibit
+Abfile:
+Summon a swarm of wasps attack a target. The damage of the swarm is substantially increased if the target is unable to heal properly or is afflicted by aeon and unable to dodge effectively.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_sentinel

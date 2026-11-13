@@ -1,0 +1,17 @@
+Ability: Isorhythm (Record #1678)
+Associated skill: Voicecraft
+Skillpoints required: 1499
+Blurb: Claustrophobia is only a few, droning notes away.
+Syntax: SING ISORHYTHM AT <target>
+Abfile:
+Afflicts your target with claustrophobia.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 110 mana and 25 willpower

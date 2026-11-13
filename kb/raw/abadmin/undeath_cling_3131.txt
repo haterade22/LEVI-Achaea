@@ -1,0 +1,25 @@
+Ability: Cling (Record #3131)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: You will not go. At all.
+Syntax: SOULBLEED CLING
+Abfile:
+Should your physical form begin to crumble(*), this defence will ensure
+you cling onto unlife for as long as possible(**). During these final
+moments you will be invulnerable to all damage, but when your unholy
+fortitude fades you will fall into death and attempt to drag all those
+living with you(***).
+
+* If you drop below 10% of your maximum health.
+** You will become immune to all damage for 10 seconds.
+*** After 10 seconds has elapsed, you will die and deal a percent of all
+the damage you should've taken to those in your room.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

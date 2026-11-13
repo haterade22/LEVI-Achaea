@@ -1,0 +1,22 @@
+Ability: Tunnelvision (Record #1431)
+Associated skill: Vision
+Skillpoints required: 1000
+Blurb: Focus your attention upon a single target.
+Syntax: TUNNELVISION SHOW
+TUNNELVISION ON [target]
+TUNNELVISION OFF
+TUNNELVISION ADD <option>
+TUNNELVISION REMOVE <option>
+Extra info: Options are: DRINKING, EATING, SMOKING, APPLYING, DEFENCES, SAYS, ENTRIES, EXITS
+Abfile:
+This ability allows you to disregard much of what those around you are doing. By focusing your target upon an adventurer (with SETTARGET), you will be able to ignore certain groups of actions performed by all other individuals in your location.
+
+If you specify a person when enabling this ability, they will be considered your target for the purposes of tunnelvision when you do not have a target set.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

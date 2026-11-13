@@ -1,0 +1,17 @@
+Ability: Calming (Record #1498)
+Associated skill: Riding
+Skillpoints required: 1499
+Blurb: Calm your panicked steed.
+Syntax: SOOTHE <steed>
+Abfile:
+If your loyal steed is panicking, quickly soothe the poor beast with soft, comforting whispers.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+The ability name SOOTHE is mapped to this ability.

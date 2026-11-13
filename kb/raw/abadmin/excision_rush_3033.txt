@@ -1,0 +1,25 @@
+Ability: Rush (Record #3033)
+Associated skill: Excision
+Skillpoints required: 40999
+Blurb: First to fight, last to fail.
+Syntax: PERFORM RUSH <target> <dir>
+Abfile:
+Lead the charge into battle from an adjacent location(*), shattering
+through any icewall that may bar your path(**), and shocking the enemy
+of Creation you engage at your coming(***).
+
+* This is a channeled action with a windup period, and people will
+follow you when you move.
+** This will break icewalls, but not stonewalls, and no totems will
+strike you or your comrades on entering the new room.
+*** Your target will be disrupted if you are successful.
+Useable on: none
+Pre checks:
+Ability range: line of sight
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 2
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of wrath balance
+Resource: 6% Holy Wrath

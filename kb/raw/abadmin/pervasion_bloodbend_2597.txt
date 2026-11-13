@@ -1,0 +1,21 @@
+Ability: Bloodbend (Record #2597)
+Associated skill: Pervasion
+Skillpoints required: 46999
+Blurb: They shall dance on crimson strings.
+Syntax: MANIFEST BLOODBEND <target> TO <command>
+Abfile:
+Reach out to the vital fluids that flow through anyone that stands
+within your immediate area, commanding them to act(*). In order to carry
+this out, they must be bleeding sufficiently for you to take advantage
+of their vulnerability(**).
+
+* This does not work against fellow Elemental Lords of Water.
+** They must be bleeding for 250 health or more.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

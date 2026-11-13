@@ -1,0 +1,16 @@
+Ability: Traps (Record #683)
+Associated skill: Pranks
+Skillpoints required: 26999
+Blurb: The ability to search for traps in your location.
+Syntax: TRAPS
+Abfile:
+The TRAPS ability will search for traps in the room, giving you information about them. You will not be able to find traps laid by someone with higher skill than you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

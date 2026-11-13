@@ -1,0 +1,22 @@
+Ability: Rat (Record #859)
+Associated skill: Tekura
+Skillpoints required: 23999
+Blurb: A well-balanced stance.
+Syntax: RTS
+Abfile:
+This stance is geared toward superior accuracy, and is favoured by many
+for the purposes of facing those with superior avoidance. It also allows
+the tekura practitioner to block more often, granting superior defence.
+
+In addition, roundhouse kicks performed in this stance will have enough
+strength to shatter through prismatic barriers as well as magical
+shields.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

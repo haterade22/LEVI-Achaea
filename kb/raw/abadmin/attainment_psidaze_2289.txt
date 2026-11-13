@@ -1,0 +1,19 @@
+Ability: Psidaze (Record #2289)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Divert your opponent's attention.
+Syntax: PSIDAZE <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+Sparkles of psi energy will float before your target's vision, causing recurring amnesia as the sparkles distract your opponent.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_gold_dragon

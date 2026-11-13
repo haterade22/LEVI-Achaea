@@ -1,0 +1,20 @@
+Ability: Shackle (Record #3125)
+Associated skill: Undeath
+Skillpoints required: 5999
+Blurb: Fettered to mortality.
+Syntax: SOULBLEED SHACKLE <target>
+Abfile:
+Bind a living in shackles of soulbleed, limiting their ability to
+scramble away from your onslaught(*).
+
+* While shackled, a person cannot leave the area.
+** This ability can only be used every so often.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

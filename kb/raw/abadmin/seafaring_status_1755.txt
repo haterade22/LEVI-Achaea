@@ -1,0 +1,17 @@
+Ability: Status (Record #1755)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: An overview of all of the ship's weapons.
+Syntax: SHIP WEAPON STATUS
+Abfile:
+Gain an overview of all the ship's weapons, including the details of
+their ammunition, damage and months of usefulness remaining.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: weapons1

@@ -1,0 +1,17 @@
+Ability: Purpleink (Record #1608)
+Associated skill: InkMilling
+Skillpoints required: 24999
+Blurb: Create a purple ink.
+Syntax: MILL FOR PURPLE
+Extra info: Reagents: 2 x red, 2 x blue, 2 x common, 2 x uncommon, 1 x rare
+Abfile:
+AB INKMILLING REAGENTS lists the different types of reagents.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

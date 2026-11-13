@@ -1,0 +1,25 @@
+Ability: Doublestrike (Record #2130)
+Associated skill: Skirmishing
+Skillpoints required: 55999
+Blurb: Strike, then strike again.
+Syntax: DOUBLESTRIKE <target> [limb] [venom]
+Abfile:
+With this ability, you may use your chosen weapon to deal a lateral
+slash, then using the momentum continue your attack to strike with the
+haft of your weapon.
+
+Against adventurers, the blow with the haft shall first deliver
+impatience. If the target is already impatient, it shall deal epilepsy.
+
+Against denizens, your damage will be split amongst the slice of your
+weapon and strike of its haft.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed

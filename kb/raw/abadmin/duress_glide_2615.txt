@@ -1,0 +1,19 @@
+Ability: Glide (Record #2615)
+Associated skill: Duress
+Skillpoints required: 15999
+Blurb: As fast as lightning.
+Syntax: GLIDE <direction> [distance]
+Abfile:
+When flying, you may glide on the air currents in a given direction,
+moving many rooms at a time. You may additionally specify a number of
+rooms to move(*).
+
+* Between 1 and 11. If on the wilderness map, the max is 5.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

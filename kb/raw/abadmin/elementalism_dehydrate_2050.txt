@@ -1,0 +1,24 @@
+Ability: Dehydrate (Record #2050)
+Associated skill: Elementalism
+Skillpoints required: 21999
+Blurb: Make them vulnerable to the consuming flame.
+Syntax: CAST DEHYDRATE AT <target>
+Abfile:
+This working of fire and water will sap the excess moisture from your
+victim, making them become dehydrated for a time(*) and suffer some
+damage.
+
+* Gives the nausea and weariness afflictions.
+** If they already have weariness, they will be given a stack of
+burning. If they already have nausea, gives a stack of freeze. If they
+have both, it gives burning (not both freeze and burning).
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium
+Resource: 45 mana

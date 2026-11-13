@@ -1,0 +1,16 @@
+Ability: Conceal (Record #1200)
+Associated skill: Woodlore
+Skillpoints required: 50999
+Blurb: Conceal the nature of a trap's effect.
+Syntax: CONCEAL TRAP <direction>
+Abfile:
+This powerful ability will allow you to disguise the effects of a trap from he who sets it off. The victim will know he set off a trap, but will not immediately know what kind of trap was set off.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

@@ -1,0 +1,17 @@
+Ability: Sloth (Record #358)
+Associated skill: Metamorphosis
+Skillpoints required: 10999
+Blurb: A slow, ponderous creature.
+Syntax: MORPH SLOTH
+Extra info: Powers: Rest
+Abfile:
+A slow, ponderous creature.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 2 mana

@@ -1,0 +1,16 @@
+Ability: Look (Record #1407)
+Associated skill: Vision
+Skillpoints required: 0
+Blurb: Gain knowledge of your immediate surroundings.
+Syntax: LOOK/L
+Abfile:
+A simple ability inherent in all visual beings.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name LOOKING is mapped to this ability.

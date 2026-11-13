@@ -1,0 +1,24 @@
+Ability: Sandfever (Record #2885)
+Associated skill: Pestilence
+Skillpoints required: 20999
+Blurb: A single step is a quest indeed.
+Syntax:
+Abfile:
+Beneath the oppressive sun of the desert the infamous sandfever was
+born. A hapless individual labouring under this disease will find
+movement a truly exhausting task; once mighty warriors will find
+themselves drained by even the most simple of movement(*), and once
+sharp minds shall fall into silent disarray(**).
+
+* While afflicted with this affliction a person's celerity becomes 1:
+this means you can only move one room before having to wait to move
+again.
+** You cannot focus your mind while afflicted with sandfever.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

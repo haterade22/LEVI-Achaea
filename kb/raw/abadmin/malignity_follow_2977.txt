@@ -1,0 +1,17 @@
+Ability: Follow (Record #2977)
+Associated skill: Malignity
+Skillpoints required: 2999
+Blurb: To find the prey.
+Syntax: HYENA FOLLOW <target>
+Abfile:
+Your hyena has learned to fear you enough that you may order it to
+follow a particular adventurer. When the hyena loses the adventurer,
+generally because the adventurer goes indoors, it will stop following.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

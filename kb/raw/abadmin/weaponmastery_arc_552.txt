@@ -1,0 +1,23 @@
+Ability: Arc (Record #552)
+Associated skill: Weaponmastery
+Skillpoints required: 47999
+Blurb: Swing your blade in a controlled arc.
+Syntax: ARC [<venom>]
+ARC <target> [<venom>]
+Abfile:
+By swinging your sword in a controlled arc, you will be able to damage
+everyone in the room with your sword.
+
+If you optionally specify a target, the arc shall only strike that
+person, but the blow is far swifter to recover from (3.00 seconds).
+
+Note that this ability may be performed off equilibrium.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.75 seconds of balance

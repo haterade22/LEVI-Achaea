@@ -1,0 +1,17 @@
+Ability: Suffuse (Record #912)
+Associated skill: Telepathy
+Skillpoints required: 4999
+Blurb: Suffuse the mind of your subject with mental energy.
+Syntax: MIND SUFFUSE
+Abfile:
+Not all of the Telepathic arts are concerned with harming your target. This is one that is not. What it does is take some of your considerable mental strength and give it to the adventurer you have mind locked, albeit with some loss due to the energy it takes to transfer the mana over the telepathic link.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: Mana

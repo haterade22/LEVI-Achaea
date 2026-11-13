@@ -1,0 +1,26 @@
+Ability: Pierce (Record #3071)
+Associated skill: Anathema
+Skillpoints required: 49999
+Blurb: Scars for those with eyes to see.
+Syntax: UNNAMABLE PIERCE
+Abfile:
+Where great work has been done, Creation has thus been scarred. These
+wounds may be reopened briefly for those with the will to see it so, and
+you may travel to them(*).
+
+* A random room from a list of predetermined locations. You must be on
+the main continent.
+** A monolith sigil prevents this ability.
+*** You can only do this once every minute.
+**** When used by a citizen of Ashtan beside the Living Book of
+Eschaton, pierce will take you to the Plane of Chaos.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 3% karma

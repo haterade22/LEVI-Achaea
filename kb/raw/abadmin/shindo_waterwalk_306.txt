@@ -1,0 +1,17 @@
+Ability: Waterwalk (Record #306)
+Associated skill: Shindo
+Skillpoints required: 26999
+Blurb: Dance over the waves.
+Syntax: WATERWALK [ON|OFF]
+RELAX WATERWALK
+Abfile:
+So swift are your footsteps that water will not part beneath your feet, permitting you to glide across the surface.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

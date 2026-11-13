@@ -1,0 +1,21 @@
+Ability: Jera (Record #1138)
+Associated skill: Runelore
+Skillpoints required: 2999
+Blurb: A rune to increase the vitality of the bearer.
+Syntax: SKETCH JERA ON ME/<target>
+Abfile:
+ Inks required: 1 Purple
+Symbol: Mighty Oak
+
+While the rune lasts, this will increase the bearer's strength and
+constitution by 1.
+
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

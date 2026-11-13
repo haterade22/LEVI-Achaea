@@ -1,0 +1,18 @@
+Ability: Deathlink (Record #2282)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Absorb some of the damage an ally takes.
+Syntax: DEATHLINK <target>
+Abfile:
+For the next 8 seconds, 50% of the damage taken by the target of the deathlink is instead directed at you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 43.00 seconds
+Resource: 30 rage
+Skill specialisation: br_infernal

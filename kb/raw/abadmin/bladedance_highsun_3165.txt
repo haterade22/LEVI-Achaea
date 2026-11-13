@@ -1,0 +1,32 @@
+Ability: Highsun (Record #3165)
+Associated skill: Bladedance
+Skillpoints required: 29999
+Blurb: A high point of the day.
+Syntax: BLADE HIGHSUN <target> <HEAD|LEFT ARM|RIGHT ARM>
+Abfile:
+A downward strike with the edge of the blade aimed at the head or arms
+of a partner, the highsun strike delivers the first affliction that your
+foe does not have from:
+
+When aimed at the head:
+From the front: clumsiness, weariness, or recklessness.
+From the side: addiction, generosity, or confusion.
+From the back: paralysis, generosity, or diminished(*).
+
+When aimed at the arms:
+From the front: clumsiness, weariness, or haemophilia.
+From the side: weariness, clumsiness, or healthleech.
+From the back: paralysis, healthleech, or sensitivity.
+
+* Diminished prevents the use of any active cures while afflicted with
+it.
+
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance

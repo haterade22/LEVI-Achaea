@@ -1,0 +1,17 @@
+Ability: Limerick (Record #1701)
+Associated skill: Voicecraft
+Skillpoints required: 19999
+Blurb: Sing an impatience-causing limerick at your opponent.
+Syntax: SING LIMERICK AT <target>
+Abfile:
+Afflict your target with impatience.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 100 mana and 20 willpower

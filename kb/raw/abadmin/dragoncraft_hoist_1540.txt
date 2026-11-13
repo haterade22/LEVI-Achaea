@@ -1,0 +1,19 @@
+Ability: Hoist (Record #1540)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Snatch up your next meal from the ground.
+Syntax: HOIST <target>
+RELEASE <target>
+DEPOSIT
+Abfile:
+From within the skies, you may swoop down on an opponent and HOIST them off the ground. Once you have them clasped within your mighty talons, you can move about with them and either RELEASE them, causing them great damage if they are unfortunate enough not to be able to fly, or DEPOSIT them on the ground somewhere.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance
+Skill specialisation: dragonform

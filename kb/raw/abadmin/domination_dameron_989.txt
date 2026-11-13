@@ -1,0 +1,24 @@
+Ability: Dameron (Record #989)
+Associated skill: Domination
+Skillpoints required: 5999
+Blurb: Jy'Barrak Dameron, the Hand
+Syntax: COMMAND MINION AT <target>
+Abfile:
+Jy'Barrak Dameron is the right hand of the infernal throne. The minion
+he shall send to aid you can be commanded to unravel the very mind of
+your target, slaying them instantly(*).
+
+The minions of Dameron gain no benefit from being primebonded, though
+when one is present it will protect all of your other entities from
+being banished from the prime.
+
+* They must be enlightened, as with unravel via the occultism skill.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name MINION is mapped to this ability.

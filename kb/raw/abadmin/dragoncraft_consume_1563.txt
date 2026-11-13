@@ -1,0 +1,17 @@
+Ability: Consume (Record #1563)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Eat the corpses of your prey.
+Syntax: CONSUME <corpse/head>
+Abfile:
+Make a tasty snack out of corpses of adventurers and denizens, or munch on the heads of your victims like peanuts.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance
+Skill specialisation: dragonform

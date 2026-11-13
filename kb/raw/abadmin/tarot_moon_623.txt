@@ -1,0 +1,24 @@
+Ability: Moon (Record #623)
+Associated skill: Tarot
+Skillpoints required: 52999
+Blurb: Bestow the maladies of the moon upon your enemy.
+Syntax: FLING MOON AT <target> [affliction]
+Extra info: Specified affliction cooldown: 2.10 seconds of balance (at transcendent Tarot).
+Abfile:
+The moon tarot will give your enemy maladies associated with the mind.
+The affliction will be random if unspecified, and hidden from the
+victim. If you specify an affliction, the ability is faster to recover
+from, but the victim shall see what was delivered. You may pick from:
+stupidity, masochism, hallucinations, hypersomnia, confusion, epilepsy,
+claustrophobia, or agoraphobia.
+
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

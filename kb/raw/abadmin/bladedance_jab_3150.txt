@@ -1,0 +1,36 @@
+Ability: Jab (Record #3150)
+Associated skill: Bladedance
+Skillpoints required: 999
+Blurb: Control the distance.
+Syntax: BLADE JAB <target> <LEFT ARM|TORSO|RIGHT ARM>
+Abfile:
+The simplest of techniques with the rapier, this swift jab teaches the
+student to gauge distance accurately while also inflicting piercing
+wounds to an adversary. As with other bladedance techniques, the jab
+will have different results based on your position in relation to your
+partner and where the jab lands. These results are as follows:
+
+From the front:
+At the arms: the limb will be broken.
+At the torso: afflicts with nausea.
+
+From the side:
+At the arms: afflicts with clumsiness.
+At the torso: afflicts with asthma.
+
+From the back:
+At the arms: gives weariness. If the jab breaks the arm, deals bonus
+damage.
+At the torso: afflicts with anorexia. If the jab breaks the torso, tonal
+trauma takes place(*).
+
+* See AB BLADEDANCE TONAL.
+Useable on: adventurers and denizens
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Blasphemy (Record #3256)
+Associated skill: Memorium
+Skillpoints required: 30999
+Blurb: With blade and will.
+Syntax: BLASPHEME <target> <logograph> <pestilence attack> <swarm>
+BLASPHEME <target> <pestilence attack> <swarm> <logograph>
+Abfile:
+You may now flawlessly weave your tracing with your wielding of the dark
+arts of pestilence.
+
+* This essentially lets you perform both actions in one command.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

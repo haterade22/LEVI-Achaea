@@ -1,0 +1,33 @@
+Ability: Transmutate (Record #2013)
+Associated skill: Transmutation
+Skillpoints required: 0
+Blurb: Turn one mineral into another.
+Syntax: TRANSMUTATE <#> <mineral> TO <mineral>
+Abfile:
+Using transmutation, one mineral may be turned into another. Ferrum to
+antimony, realgar to arsenic, argentum to aurum: all is possible with
+the correct knowledge and materials. In order to perform the
+transmutation, you must be standing within a transmutation laboratory in
+which you have permission to work.
+
+Each transmutation requires reactants. The Cauda Pavonis has seen fit to
+grant each city alchemist a stipend of 200 drams of transmutation
+reactants per month. To use your stipend, simply perform a transmutation
+within your home laboratory. Those who wish to perform additional
+transmutations or to perform transmutations in other laboratories will
+need to purchase additional reactants from one of the alchemists
+residing within the alchemical laboratory complexes.
+
+Your skill in Transmutation will determine which minerals you are able
+to transmutate to (you may transmutate from any mineral, regardless of
+skill).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of balance
+Resource: 100 mana

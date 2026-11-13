@@ -1,0 +1,21 @@
+Ability: Mannaz (Record #1156)
+Associated skill: Runelore
+Skillpoints required: 32999
+Blurb: Return hearing to a victim.
+Syntax: SKETCH MANNAZ ON GROUND/<totem>
+Abfile:
+ Inks required: 1 Red
+Symbol: Bell
+
+Returns hearing to an enemy who enters and sees it. Disappears after one
+use unless it is on a totem.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

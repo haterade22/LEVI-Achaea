@@ -1,0 +1,20 @@
+Ability: Eternalnight (Record #3197)
+Associated skill: Sagas
+Skillpoints required: 20999
+Blurb: And no sun did shine.
+Syntax: RECITE ETERNALNIGHT <target>
+Abfile:
+The tale of Slith's attempt to bring an Eternal Night upon Achaea is one
+which has spellbound many a listener over the years. Indeed, the story
+is so entwined with the act of focus that your listener, each time they
+hear the next lines of the tale, will be healed of any other attempts to
+transfix them under which they may labour.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium and 16.00 seconds of voice balance

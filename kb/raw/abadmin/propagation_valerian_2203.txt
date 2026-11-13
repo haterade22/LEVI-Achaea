@@ -1,0 +1,21 @@
+Ability: Valerian (Record #2203)
+Associated skill: Propagation
+Skillpoints required: 9999
+Blurb: A plant that grows in mountainous areas.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH VALERIAN
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Increased psychic resistance.
+Body: Reduces the mana cost of clotting your wounds.
+Arms: Your thornrends will additionally deliver the slickness
+affliction.
+Legs: Move more quickly through mountainous areas.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

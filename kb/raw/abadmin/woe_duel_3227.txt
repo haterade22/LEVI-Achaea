@@ -1,0 +1,24 @@
+Ability: Duel (Record #3227)
+Associated skill: Woe
+Skillpoints required: 45999
+Blurb: A triumvirate new and broken.
+Syntax: RECITE DUEL <target>
+Abfile:
+There was a time when three gods went to face the Prince most Dread, and
+three gods failed to bring him low. Recite this tale to an
+individual(*), and both they and three of your citymates will benefit
+from an increased capacity
+for war for a time(**).
+
+* The target must not be Cyrenian, and three Cyrenians in your location
+except yourself must be present. Otherwise this reciting will fail.
+** They will have faster balance recovery for a time.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds of voice balance

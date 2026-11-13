@@ -1,0 +1,16 @@
+Ability: Intimidate (Record #1511)
+Associated skill: Riding
+Skillpoints required: 18999
+Blurb: Encourage your mount to intimidate other mounts.
+Syntax: INTIMIDATE <steed>
+Abfile:
+Enrage your steed into a fury and it will attempt to intimidate another steed, sending it panicking. The success of the intimidation depends on your skill in riding and the level of your steed versus the level of the target steed and the riding skill of its rider (if mounted).
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

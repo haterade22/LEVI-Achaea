@@ -1,0 +1,28 @@
+Ability: Imposition (Record #2733)
+Associated skill: Emulation
+Skillpoints required: 19999
+Blurb: Your word against their will.
+Syntax: ENACT IMPOSITION <target> <command>
+Abfile:
+The act of imposing one's will on others was something of a divisive
+topic among the Aldar. Nevertheless, there were those that felt the mind
+was the key to all understanding, and bending the mind to one's will was
+a natural step in that exploration. Though the terrible dominion of the
+Protean mind ring was never fully emulated, progress was made. You may
+command a target to obey your command, and some time later(*) they will
+carry out that action.
+
+* The higher the intelligence of your target, the greater their ability
+to resist, and the longer the action shall take before it is carried
+out.
+
+
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

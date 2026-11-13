@@ -1,0 +1,17 @@
+Ability: Fear (Record #907)
+Associated skill: Telepathy
+Skillpoints required: 999
+Blurb: Fill your target's mind with an irrational fear.(*)
+Syntax: MIND FEAR [target]
+Abfile:
+With this ability, you are able to throw the mind of a locked adventurer into a state of irrational fear.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 100 mana

@@ -1,0 +1,17 @@
+Ability: Predict (Record #2356)
+Associated skill: TwoArts
+Skillpoints required: 17999
+Blurb: Know yourself, know your foe.
+Syntax: PREDICT <target>
+Abfile:
+The trained blademaster shall be able to assess the state
+of a foe's limbs with a single glance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

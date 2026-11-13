@@ -1,0 +1,17 @@
+Ability: Thunderstorm (Record #314)
+Associated skill: Shindo
+Skillpoints required: 43999
+Blurb: Unleash a galvanic surge of power.
+Syntax: SHIN THUNDERSTORM
+Abfile:
+As the storm releases its might through crackling bolts of lightning, so may you channel Shin energy into a savage electrical assault upon all in the vicinity. The galvanic forces released are likely to jangle the nerves of those struck.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 30 Shin energy

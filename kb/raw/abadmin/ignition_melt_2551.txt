@@ -1,0 +1,15 @@
+Ability: Melt (Record #2551)
+Associated skill: Ignition
+Skillpoints required: 1599
+Blurb: To think mere vapour would bar your path.
+Syntax: IGNITE ICEWALL <direction>
+Abfile:
+With a flick of a finger turn an icewall into steam.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

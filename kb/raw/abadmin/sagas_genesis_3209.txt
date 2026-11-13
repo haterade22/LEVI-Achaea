@@ -1,0 +1,21 @@
+Ability: Genesis (Record #3209)
+Associated skill: Sagas
+Skillpoints required: 36999
+Blurb: All things controlled
+Syntax: RECITE GENESIS
+Abfile:
+The tale of the Genesis is one inexorably intertwined with that of the
+Tsol'teth, and the terrible deeds they wrought upon the overland in
+their relentless quest to realise divinity. When speaking this tale, the
+first two sections of the story shall normalise any reverberation
+vibrations present in the location, and at the last, any retardation
+vibe that might be present will succumb to this crushing power.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance and 2.50 seconds of equilibrium

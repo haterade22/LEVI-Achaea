@@ -1,0 +1,34 @@
+Ability: Reprise (Record #2738)
+Associated skill: Emulation
+Skillpoints required: 40999
+Blurb: It's not over yet.
+Syntax: ENACT REPRISE <target>
+Abfile:
+Resurrection. Such a long-studied field and so many disasters therein.
+Though the art was long since mastered, all forms that exist utilise
+some external force; doing so through pure force of will and power is
+something that many Aldars strove for, but never could realise. Perhaps
+the final reason for the end to this line of study was the terrible act
+which came to be known as the reprise.
+
+When a mutual ally falls in battle, providing you have their corpse upon
+the ground at your feet you may enact the reprise. They shall return to
+life immediately, ready to continue the battle. However, after only a
+short while the power that drew them back to their mortal shell shall be
+exhausted, and their soul will be torn away and sent plunging into the
+Halls of Death. This death is unavoidable; no secondary effects can
+prevent it from occurring. Perhaps most cruelly of all, when the
+individual dies for this second and most final time, their blood shall
+fall upon the hands of their resurrector.
+
+Note that you may not perform this act while recovering from/maintaining
+a lifebond due to the conflicting nature of the methodologies involved.
+Useable on: adventurers
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium

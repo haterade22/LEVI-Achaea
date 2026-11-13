@@ -1,0 +1,17 @@
+Ability: Loki (Record #1976)
+Associated skill: Toxicology
+Skillpoints required: 42999
+Blurb: An unpredictable toxin.
+Syntax: None
+Extra info: Ingredients: 2 goldenseal, 2 kelp, 2 bloodroot, 1 ginseng, 2 yellowink or
+2 plumbum, 2 magnesium, 2 aurum, 1 ferrum, 2 yellowink
+Abfile:
+This unpredictable toxin will afflict your victim with a random venom.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

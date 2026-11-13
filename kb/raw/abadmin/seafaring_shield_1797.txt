@@ -1,0 +1,22 @@
+Ability: Shield (Record #1797)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Seaspell to protect a ship from some attacks.
+Syntax: INVOKE SHIELD
+Extra info: Power cost: 200
+This ability will be hidden on ablistings.
+Abfile:
+A seaspell to weave a shield around your ship to protect it from damage
+attacks. Can be shattered by a wavescythe seaspell.
+
+Note: if used in quick succession, the cost will increase by 200 for
+each use in the last minute. Each use will reset this timer, and this
+additional cost will be a maximum increase of 800 energy.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

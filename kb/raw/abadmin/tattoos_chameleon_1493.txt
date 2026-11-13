@@ -1,0 +1,18 @@
+Ability: Chameleon (Record #1493)
+Associated skill: Tattoos
+Skillpoints required: 54999
+Blurb: Change your identity to the casual observer.
+Syntax: TOUCH CHAMELEON <target>
+Extra info: Inks: 1 Gold ink
+1 Purple ink
+1 Yellow ink
+Abfile:
+Using this tattoo, you may assume the identity (on most public who lists) of any other adventurer, whether active in the realms or not. Simply touch it again, with your name as the target, to resume your normal appearance.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

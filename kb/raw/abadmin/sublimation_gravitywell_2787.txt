@@ -1,0 +1,24 @@
+Ability: Gravitywell (Record #2787)
+Associated skill: Sublimation
+Skillpoints required: 35999
+Blurb: Control the distance.
+Syntax: MANIPULATE GRAVITYWELL
+This ability will be hidden on ablistings.
+Abfile:
+Manipulate the fundamental forces and bring a gravitywell into being.
+All in adjacent rooms will be pulled inwards upon creation.
+
+Overdraw effect: The well will destabilise four seconds after its
+creation, with a chance to throw all those present from the well's room.
+Any attempt to recast this ability will reset any ongoing gravitywell
+destabilisation.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 5% Wellspring Energy

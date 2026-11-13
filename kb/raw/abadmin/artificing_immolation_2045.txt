@@ -1,0 +1,16 @@
+Ability: Immolation (Record #2045)
+Associated skill: Artificing
+Skillpoints required: 49999
+Blurb: They will char under your power.
+Syntax: WORKSHOP REFINE IMMOLATION CRYSTAL
+Abfile:
+* They will be afflicted with ablaze (or have their burning level
+increase) four seconds after your staffcast.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

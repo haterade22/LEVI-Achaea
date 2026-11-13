@@ -1,0 +1,17 @@
+Ability: Assessing (Record #1386)
+Associated skill: Survival
+Skillpoints required: 2499
+Blurb: Ascertaining the health of a target.
+Syntax: ASSESS <target>
+Abfile:
+You've now gained the ability to see the health of another adventurer by evaluating the seriousness of their wounds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 50 mana

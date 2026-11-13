@@ -1,0 +1,18 @@
+Ability: Fog (Record #722)
+Associated skill: Elementalism
+Skillpoints required: 28999
+Blurb: Conjure up obscuring fog.
+Syntax: CAST FOG
+Abfile:
+With the powers of air and water, you may cause an elemental fog to fill
+your surroundings.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

@@ -1,0 +1,30 @@
+Ability: Sear (Record #1022)
+Associated skill: Spirituality
+Skillpoints required: 16999
+Blurb: Order your angel to sear an unlucky adventurer.
+Syntax: ANGEL SEAR <target>
+ANGEL SEAR ICEWALL <direction>
+Abfile:
+With this ability, you may command your guardian angel to sear an
+opponent with intense heat, causing them to burst into flames. If the
+target is a denizen, this will not consume any of your angel's power.
+
+If your target is an adventurer and already ablaze, they shall become
+sensitive to pain(*).
+
+Alternatively, your angel can target an icewall with its flames, melting
+it.
+
+* This respects the deafness defence: if this is present the angel shall
+strip it instead.
+
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 10 Angel power and 100 mana

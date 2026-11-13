@@ -1,0 +1,15 @@
+Ability: Weaponprobe (Record #1464)
+Associated skill: Weaponry
+Skillpoints required: 1
+Blurb: Learning of venoms or magical effects on weapons.
+Syntax: WP|WPROBE|WEAPONPROBE <item>
+Abfile:
+Using this ability, you will be able to see what venoms or magical effects have been put on an item, and, if it is a weapon, get a general idea of how much damage it can cause, how awkward it is, and how quickly you could use it. The weaponprobe ability also may enhance the detail shown in II (INFO INVENTORY).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

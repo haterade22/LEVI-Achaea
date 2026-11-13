@@ -1,0 +1,31 @@
+Ability: Fire (Record #2009)
+Associated skill: Augmentation
+Skillpoints required: 30999
+Blurb: Enchant rings with fire resistance.
+Syntax: BEGIN ENCHANTMENT OF <ring> WITH FIRE RESISTANCE
+ACTIVATE FIRE RESISTANCE
+Abfile:
+  To use:
+   Can be activated once it is worn.
+
+Type:
+   Enchanted on rings.
+
+Actions:
+   2x1, 2x5, 2x10, 2x5, 2x3, 2x6, 2x11, 2x6, 2x3, 2x5
+
+Comms:
+   1 elemental ice, 2 silver
+
+A ring of fire resistance will grant a defence reducing the effects of
+fire damage.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name FIRERESISTANCE is mapped to this ability.

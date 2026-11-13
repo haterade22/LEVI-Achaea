@@ -1,0 +1,24 @@
+Ability: Doublewhirl (Record #2098)
+Associated skill: Weaponmastery
+Skillpoints required: 8000
+Blurb: Strike twice as fast.
+Syntax: DOUBLEWHIRL <target> [limb1] [limb2]
+Extra info: Two flails or morningstars.
+Abfile:
+You have reached a point in your training where you may now utilise two
+weapons at once to attack. Your skill is such that you may target each
+separate attack to a different limb of your target. When you strike an
+already damaged limb of an opponent with this attack, that limb will
+gain a fracture(*).
+
+* Excluding the legs.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Balance cost varies based on weapon speed
+Skill specialisation: knight_dualblunt

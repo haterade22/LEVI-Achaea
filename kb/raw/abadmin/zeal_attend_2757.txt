@@ -1,0 +1,19 @@
+Ability: Attend (Record #2757)
+Associated skill: Zeal
+Skillpoints required: 1599
+Blurb: They shall hear what you have to say.
+Syntax: RECITE ATTEND <target>
+Abfile:
+Some would seek to close their ears as well as their hearts to the holy
+truth of the Light and Fire. No matter. With this verse you may force
+them to attend you, stripping away such protections with a simple
+sentence.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

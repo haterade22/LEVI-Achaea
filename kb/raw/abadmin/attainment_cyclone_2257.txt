@@ -1,0 +1,19 @@
+Ability: Cyclone (Record #2257)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Repeatedly slash your target as you spin.
+Syntax: CYCLONE <target>
+Extra info: Uses denizen afflictions: Clumsiness or Stun
+Abfile:
+Spin in a tight circle, slashing out with your blade as you pass by your target. Opponents that are too stunned or clumsy to avoid the brunt of the onslaught will take substantially increased damage.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_bard

@@ -1,0 +1,16 @@
+Ability: Lasso (Record #1514)
+Associated skill: Riding
+Skillpoints required: 22999
+Blurb: Lasso and ride wild mounts.
+Syntax: LASSO <mount>
+Abfile:
+If you find a wild steed that is not loyal to any other, you may attempt to lasso and ride it. You must be wielding a rope to make the attempt.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

@@ -1,0 +1,17 @@
+Ability: Preeminence (Record #2393)
+Associated skill: Shadowmancy
+Skillpoints required: 33999
+Blurb: The shadows tell you all.
+Syntax: SHADOW PREEMINENCE
+Abfile:
+While standing within magical darkness, you may form a connection with
+all other locations shrouded in a similar form, determining anyone that
+stands within said shadows.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

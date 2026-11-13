@@ -1,0 +1,22 @@
+Ability: Taug (Record #3219)
+Associated skill: Woe
+Skillpoints required: 16999
+Blurb: A doom on Gruul's line.
+Syntax: RECITE TAUG
+Abfile:
+Bound, but never broken. Imprisoned, but yet imperious. The tale of that
+guise named Taug is one which doomed the line of Gruul and broke a
+nation even in their triumph. Speak this tale most grim and the blood
+rains will fall, and all will remember the horror of the king without a
+crown.
+
+* Blood rain in a location prevents magical travel into that location.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 19.00 seconds of voice balance and 3.00 seconds of equilibrium

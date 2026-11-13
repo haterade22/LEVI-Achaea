@@ -1,0 +1,21 @@
+Ability: Dustbomb (Record #1196)
+Associated skill: Woodlore
+Skillpoints required: 36999
+Blurb: Numb the senses of this trap's victims.
+Syntax: ASSEMBLE DUSTBOMB TRAP
+LAY DUSTBOMB <direction>
+Abfile:
+ Commodities: 1 Diamond Dust, 1 Rope
+
+When sprung, the dustbomb will numb a person's senses, cutting off much
+sensory input for a time.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

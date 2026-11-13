@@ -1,0 +1,27 @@
+Ability: Perfection (Record #2936)
+Associated skill: Shindo
+Skillpoints required: 58999
+Blurb: Alone against the horde.
+Syntax: SHIN PERFECTION
+Abfile:
+By enhancing your battle instincts with shin energy, they can become as
+close to perfect as a mortal warrior can aspire to. Though this is of
+little benefit when meeting foes in single combat, when facing armies
+all but your primary adversary(*) shall find that your sense of danger
+is so profound that any attacks they direct against your person may be
+evaded outright(**).
+
+* The first person to hit you will never miss. This resets every 5
+seconds if they have not hit in that time.
+** All subsequent single target attacks from other adventurers have a
+chance to miss you outright. This does not work against ranged
+abilities, and you must be relatively unhindered for it to work.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 40 Shin energy

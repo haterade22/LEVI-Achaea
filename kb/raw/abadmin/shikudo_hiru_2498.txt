@@ -1,0 +1,16 @@
+Ability: Hiru (Record #2498)
+Associated skill: Shikudo
+Skillpoints required: 9999
+Blurb: Rattle their skull with a strike from your staff.
+Syntax: HIRU
+Abfile:
+Deliver a blow to your foe's head with your staff. This will give them
+dizziness; if they are prone, it may also afflict them with confusion.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

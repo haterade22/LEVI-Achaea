@@ -1,0 +1,21 @@
+Ability: Silence (Record #762)
+Associated skill: Crystalism
+Skillpoints required: 18999
+Blurb: A sound-negating vibration.
+Syntax: EMBED SILENCE
+Abfile:
+ Shapes required: Egg
+
+This vibration alters itself constantly so as to cancel out most sound
+in the room.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

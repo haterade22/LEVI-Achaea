@@ -1,0 +1,17 @@
+Ability: Persevere (Record #3118)
+Associated skill: Zeal
+Skillpoints required: 11999
+Blurb: There will be barriers to overcome.
+Syntax: RECITE PERSEVERE <target>
+Abfile:
+You will persevere even when your enemy flees to the skies. Reciting
+this holy verse will draw them back down to your level.
+Useable on: adventurers
+Pre checks:
+Ability range: same location at any elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

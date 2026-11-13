@@ -1,0 +1,16 @@
+Ability: Mast (Record #1747)
+Associated skill: Seafaring
+Skillpoints required: 699
+Blurb: Climb the ship's mast to the crow's nest.
+Syntax: CLIMB MAST
+Abfile:
+Scale the mainmast of your ship to the crow's nest for a better view.
+Same syntax to climb down the mast as well!
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

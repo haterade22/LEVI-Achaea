@@ -1,0 +1,21 @@
+Ability: Kosuira (Record #2481)
+Associated skill: Spiritlore
+Skillpoints required: 52999
+Blurb: Kosuira, The Child Sorceress.
+Syntax: INVOKE GLACIATION
+Extra info: Attune effect: increased resistance against psychic damage.
+Abfile:
+A protege in the art of Terminus, Kosuira learned much more of the art
+than any modern day Depthswalker. Though much of this knowledge is now
+out of reach, by tapping into her spirit you may bring down an
+invocation, freezing the ground in your location and doing similarly for
+all adjacent locations.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name DEPTHSWALKER is mapped to this ability.

@@ -1,0 +1,20 @@
+Ability: Veil (Record #2399)
+Associated skill: Shadowmancy
+Skillpoints required: 47999
+Blurb: Cloak your movements to the paramount degree.
+Syntax: SHADOW VEIL
+EMERGE
+Abfile:
+While wearing your cloak, you may invoke this highest of the shadow
+evasion abilities. You will be so hidden as to not appear on alertness
+or similar detection methods.
+
+At the time of your choosing, you may EMERGE from the shadows.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,19 @@
+Ability: Scourge (Record #2639)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Let them burn at your command.
+Syntax: MANIFEST SCOURGE <target>
+Abfile:
+Scourge your target with a lash of flame, leaving them sensitive and
+raw.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 27.00 seconds
+Resource: 25 rage
+Skill specialisation: br_fire_lord

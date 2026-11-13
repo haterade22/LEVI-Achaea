@@ -1,0 +1,26 @@
+Ability: Songbird (Record #1703)
+Associated skill: Voicecraft
+Skillpoints required: 59099
+Blurb: Whistle a helpful songbird to your shoulder.
+Syntax: WHISTLE FOR SONGBIRD
+Abfile:
+Whistle for a songbird who will accompany many of your songs for a time,
+assisting you in battle. When you sing one of the songs listed below as
+"Triggers", the songbird will occasionally choose one of the songs
+listed below as "Actions" and direct the song at your target.
+
+Triggers: Solo, Chant, Passion, Pastorale, Qasida, Ditty, Isorhythm,
+Requiem, Noise, Vibrato, Tremolo, Maqam, Epic, Haiku, Poem, Ode,
+Limerick
+
+Actions: Passion, Pastorale, Ditty, Requiem, Maqam, Haiku, Ode.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 500 mana

@@ -1,0 +1,17 @@
+Ability: Agoraphobia (Record #1347)
+Associated skill: Curses
+Skillpoints required: 5999
+Blurb: Fear of open spaces.
+Syntax: CURSE <target> AGORAPHOBIA
+Abfile:
+Afflict your victim with a fear of open spaces.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 100 mana

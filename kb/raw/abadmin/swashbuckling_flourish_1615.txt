@@ -1,0 +1,16 @@
+Ability: Flourish (Record #1615)
+Associated skill: Swashbuckling
+Skillpoints required: 0
+Blurb: Intimidate an opponent with a flourish of your blade.
+Syntax: FLOURISH <target>
+Abfile:
+Strike fear into your opponent's heart with a complex flourish, showing exactly what you will be doing to him in the coming combat.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

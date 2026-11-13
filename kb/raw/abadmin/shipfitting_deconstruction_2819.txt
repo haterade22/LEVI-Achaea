@@ -1,0 +1,20 @@
+Ability: Deconstruction (Record #2819)
+Associated skill: Shipfitting
+Skillpoints required: 59999
+Blurb: Dismantle an entire ship.
+Syntax: SHIPFIT DISMANTLE SHIP <ship>
+Abfile:
+For those wizened enough to wish to retire from the sea, you may
+deconstruct a ship in its entirety, returning a portion of the
+commodities used for construction.
+
+This is not possible on a ship owned by an organisation, or on a ship
+with artefacts, or for a ship outfitted with resetting equipment.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

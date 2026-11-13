@@ -1,0 +1,22 @@
+Ability: Sanguinehand (Record #2857)
+Associated skill: Memorium
+Skillpoints required: 5999
+Blurb: The arcane guides your hand.
+Syntax:
+Abfile:
+You have become sufficiently in tune with the arcane flows that now,
+when your sorcery causes blood to diverge from its standard pathways,
+you may stand ready to collect such if your ritual blade is clean(*).
+
+* If your ritual knife possesses no blood, certain abilities will result
+in you immediately catching the blood of someone you utilise those
+abilities against. These will be noted in their relevant ability files.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

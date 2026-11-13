@@ -1,0 +1,23 @@
+Ability: Accord (Record #3200)
+Associated skill: Sagas
+Skillpoints required: 40999
+Blurb: Betrayal most foul.
+Syntax: RECITE ACCORD
+Abfile:
+This tale is one of agreement, but more, one of the most profound
+betrayal. All that hear it shall know an echo of that most dread choice,
+and will be struck down with the betrayal affliction for a time.
+
+* All afflicted with betrayal have a chance to consider anyone an enemy
+in a given moment, or an ally as no ally at all. Note that this does not
+in fact modify either ally or enemy lists in the process.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 15.00 seconds of voice balance and 3.00 seconds of equilibrium

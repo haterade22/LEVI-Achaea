@@ -1,0 +1,26 @@
+Ability: Pithakhan (Record #1137)
+Associated skill: Runelore
+Skillpoints required: 1499
+Blurb: Attack the mental reserves of your enemies.
+Syntax: SKETCH PITHAKHAN ON GROUND/<totem>
+SKETCH PITHAKHAN ON <weapon>
+Abfile:
+Symbol: Square Box
+
+When sketched on the ground or on a totem, it attacks an enemy's mana
+when he or she encounters it. Disappears after one use, unless it is on
+a totem. Won't affect blind people.
+
+When sketched upon a weapon, it enables the weapon to occasionally drain
+mana from a target, though this always occurs if the target has a
+damaged head (requiring a restoration apply to heal it). This will only
+apply if the weapon is a runeblade.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

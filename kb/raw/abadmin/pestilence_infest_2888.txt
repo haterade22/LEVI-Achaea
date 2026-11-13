@@ -1,0 +1,25 @@
+Ability: Infest (Record #2888)
+Associated skill: Pestilence
+Skillpoints required: 35999
+Blurb: Rampant from within.
+Syntax: SWARM INFEST <swarm>
+Abfile:
+Your options once one of your swarms has burrowed inside a victim are
+numerous. While perhaps not as viscerally satisfying as tearing your
+minions free, infestation is a more subtle working. Though your swarm
+will be expelled in the process, you can have them leave behind remnants
+of that plague which they carry, which will manifest at a later time(*).
+
+Weariness will affect this ability.
+
+* The plague your swarm is carrying will relapse twice at a later time,
+though it is not given on the process of infestation itself.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

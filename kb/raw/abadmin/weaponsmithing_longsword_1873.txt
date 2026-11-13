@@ -1,0 +1,19 @@
+Ability: Longsword (Record #1873)
+Associated skill: Weaponsmithing
+Skillpoints required: 58999
+Blurb: The standard against which all is based.
+Syntax: FORGE FOR LONGSWORD
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Leather
+8 Steel
+Abfile:
+The standard against which all is based.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

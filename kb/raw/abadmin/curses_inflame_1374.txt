@@ -1,0 +1,17 @@
+Ability: Inflame (Record #1374)
+Associated skill: Curses
+Skillpoints required: 58999
+Blurb: Set a victim's very blood aflame.
+Syntax: CURSE <target> INFLAME
+Abfile:
+This potent curse will cause your target's blood to catch a flame. It requires that your victim first be bleeding; the more they suffer, the greater the potency of the curse.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of balance
+Resource: 350 mana

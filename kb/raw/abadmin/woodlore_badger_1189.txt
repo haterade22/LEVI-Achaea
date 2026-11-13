@@ -1,0 +1,25 @@
+Ability: Badger (Record #1189)
+Associated skill: Woodlore
+Skillpoints required: 22999
+Blurb: Call for the aid of a very grumpy badger.
+Syntax: SUMMON BADGER
+Abfile:
+The grumpy badger is a fearsome foe and is able to rip into opponents
+with its claws, causing great amounts of bleeding(*). If the target is
+sufficiently bleeding already(**), the badger will enter a frenzy and
+additionally give asthma.
+
+* The bleeding is increased if the target also has haemophilia.
+** 200 bleeding or more.
+*** Those enemied to the forests will not be able to call upon the aid
+of Nature to assist them.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,18 @@
+Ability: Parch (Record #2592)
+Associated skill: Pervasion
+Skillpoints required: 35999
+Blurb: Let them thirst for the denied.
+Syntax: MANIFEST PARCH <target>
+Extra info: Flux effect: if weariness and haemophilia are both present, also gives addiction.
+Abfile:
+Pull water from your foe's skin, leaving them parched and lethargic(*).
+
+* Gives lethargy.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

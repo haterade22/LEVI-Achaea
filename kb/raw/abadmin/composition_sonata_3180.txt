@@ -1,0 +1,16 @@
+Ability: Sonata (Record #3180)
+Associated skill: Composition
+Skillpoints required: 25999
+Blurb: To unburden all with ears to hear.
+Syntax:
+Abfile:
+The movement of the sonata shall unburden you and your allies of their
+afflictions periodically, healing one at random.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

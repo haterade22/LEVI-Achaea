@@ -1,0 +1,28 @@
+Ability: Aeternam (Record #1652)
+Associated skill: Harmonics
+Skillpoints required: 9999
+Blurb: Access the place of eternal song to store harmonics.
+Syntax: PLAY AETERNAM                    (What harmonics are in the POES)
+PLAY AETERNAM <harmonic>         (Attempt to add a harmonic)
+PLAY POES <harmonic> [<target>]  (Use a harmonic from the POES)
+Extra info: List in POES: 350 mana
+Add to POES: 8.00 seconds of equilibrium and 350 mana
+Use from POES: 3.60 seconds of equilibrium, 150 mana + mana cost of the chosen harmonic
+Abfile:
+Use of the Aeternam permits the bard to 'store' up to twenty harmonics, no more than two of any kind, in the Place of Eternal Song (also called POES). Each attempt to store another harmonic in the POES has a limited chance to succeed, so many attempts may be required. Not every harmonic may be stored in the POES. The knowledge of which are storable, and which are not, is for the bard to discover.
+
+PLAY AETERNAM to get in touch with the Place of Eternal Song to see what is there for you.
+
+Two advantages accrue to those who have stored harmonics in the POES:
+- the bard may now draw a harmonic from the POES in awkward circumstances (not wielding the proper bardic instrument, or webbed, paralysed, transfixed, tied up in ropes, or entrapped by the hanged man); or
+- harmonics drawn from the POES will disturb the bard's equilibrium slightly less, in other, non-awkward circumstances!
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: Mana

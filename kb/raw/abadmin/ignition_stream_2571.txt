@@ -1,0 +1,17 @@
+Ability: Stream (Record #2571)
+Associated skill: Ignition
+Skillpoints required: 53999
+Blurb: Your gaze is reach enough.
+Syntax: IGNITE STREAM <target> <dir>
+Abfile:
+Strike down those of your enemies that stand within your line of sight
+with a column of flame. If your target is already ablaze this attack
+does increased damage; if they are not, they will be set alight.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

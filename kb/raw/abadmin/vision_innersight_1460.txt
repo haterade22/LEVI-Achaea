@@ -1,0 +1,21 @@
+Ability: Innersight (Record #1460)
+Associated skill: Vision
+Skillpoints required: 57999
+Blurb: Sense your experience more accurately.
+Syntax: SCORE
+Abfile:
+With Innersight, you see your level of experience to a higher degree of
+accuracy when reviewing your SCORE. This is further increased while you
+have set CONFIG SHOWXPDROPS ON.
+
+In addition, adventurers with classes that use life essence, karma, or
+holy wrath will be able to determine the value of those reserves to a
+finer degree.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,21 @@
+Ability: Congregation (Record #2670)
+Associated skill: Devotion
+Skillpoints required: 48999
+Blurb: Beckon forth the holy rites.
+Syntax: PERFORM CONGREGATION <rite1> [rite2]
+Abfile:
+You may now beckon forth up to two holy rites from somewhere else you
+have placed them in the land. This notably does not incur any additional
+devotion cost, though you may not summon either the rites of piety or
+warding in this manner.
+Useable on: room
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 200 mana and 50 willpower
+Skill specialisation: devo_priest

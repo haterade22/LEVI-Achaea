@@ -1,0 +1,19 @@
+Ability: Concussion (Record #653)
+Associated skill: Puppetry
+Skillpoints required: 50999
+Blurb: Give your victim a concussion.
+Syntax: PUPPET CONCUSSION
+Extra info: Fashions:
+Required: 40
+Used    : 20
+Abfile:
+An extremely potent affliction, the concussion gives one afflicted with it amnesia every second.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

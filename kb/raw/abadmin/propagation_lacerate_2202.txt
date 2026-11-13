@@ -1,0 +1,18 @@
+Ability: Lacerate (Record #2202)
+Associated skill: Propagation
+Skillpoints required: 7999
+Blurb: Lay open their throat with your vines.
+Syntax: LACERATE <target>
+Abfile:
+You will now be capable of lacerating a target's throat, slashing vocal
+cords and causing great pain.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 150 mana

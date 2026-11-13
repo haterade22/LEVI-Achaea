@@ -1,0 +1,17 @@
+Ability: Kaicripple (Record #897)
+Associated skill: Kaido
+Skillpoints required: 43999
+Blurb: Cripple your target completely.
+Syntax: KAI CRIPPLE <target>
+Abfile:
+By sending out a crushing whip of Kai, you can crush the limbs of your target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 41 Kai energy

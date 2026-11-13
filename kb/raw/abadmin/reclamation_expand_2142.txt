@@ -1,0 +1,21 @@
+Ability: Expand (Record #2142)
+Associated skill: Reclamation
+Skillpoints required: 1499
+Blurb: Slowly but surely.
+Syntax: RECLAMATION EXPAND
+Abfile:
+Once you have begun reclaiming a location, you may expand on your
+network by performing this ability adjacent to a room you have already
+reclaimed. The restrictions are similar to reclaiming a room with the
+reclaim ability, although you may reclaim as many rooms in this way as
+you are able.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of balance
+Resource: 150 mana

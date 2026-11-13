@@ -1,0 +1,17 @@
+Ability: Noise (Record #1686)
+Associated skill: Voicecraft
+Skillpoints required: 14999
+Blurb: A screeching, meaningless noise that numbs the mind.
+Syntax: SING NOISE AT <target>
+Abfile:
+This song can be used to interrupt the tumble of other adventurers. The more afflictions a target suffers from, the higher the chance of success.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 50 mana and 10 willpower

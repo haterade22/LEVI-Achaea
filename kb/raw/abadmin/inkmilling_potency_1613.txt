@@ -1,0 +1,16 @@
+Ability: Potency (Record #1613)
+Associated skill: InkMilling
+Skillpoints required: 60000
+Blurb: Absolute mastery of inkmilling gives tattoos more charges.
+Syntax: None
+Abfile:
+Due to your transcendent understanding of inks, when inking any tattoos
+with multiple charges, they will have 10 more charges than normal.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

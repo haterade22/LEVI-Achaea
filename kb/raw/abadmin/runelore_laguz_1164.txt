@@ -1,0 +1,21 @@
+Ability: Laguz (Record #1164)
+Associated skill: Runelore
+Skillpoints required: 50999
+Blurb: Increased damage to the limbs of your foe.
+Syntax: SKETCH LAGUZ ON <weapon>
+Abfile:
+ Inks required: 1 Purple
+Symbol: Long Slim Blade
+
+When sketched upon a runeblade, the weapon will deal more damage to a
+target's limbs.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

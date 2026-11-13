@@ -1,0 +1,21 @@
+Ability: Wail (Record #2932)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Let them know your pain.
+Syntax: ACCURSED WAIL <target>
+Abfile:
+Give an enemy a taste of your own doom. They won't be walking that
+off(*).
+
+* Gives clumsiness.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 38.00 seconds
+Resource: 32 rage
+Skill specialisation: br_pariah

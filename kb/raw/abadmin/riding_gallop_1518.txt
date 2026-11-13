@@ -1,0 +1,16 @@
+Ability: Gallop (Record #1518)
+Associated skill: Riding
+Skillpoints required: 28999
+Blurb: Gallop on your steed with great speed.
+Syntax: GALLOP <direction> [distance] (between 1 and 11 rooms)
+Abfile:
+Gallop quickly in a direction upon a mounted steed.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name GALLOPING is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Rain (Record #442)
+Associated skill: Groves
+Skillpoints required: 25999
+Blurb: Conjuring a magical shower of rejuvenating rain.
+Syntax: GROVE RAIN
+Abfile:
+By calling a refreshing rain into your grove, you will cause everyone in the grove to experience relatively rapid refreshing of endurance and willpower.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 250 sunlight

@@ -1,0 +1,18 @@
+Ability: Cloak (Record #2379)
+Associated skill: Shadowmancy
+Skillpoints required: 1599
+Blurb: The cloak of power from ancient lore.
+Syntax: SHADOW CLOAK
+Abfile:
+The cloaks of power were a secret known only to the Tsol'teth Overlords
+of ancient times. While wearing this cloak, you may perform many of the
+more mysterious of the shadow abilities. Additionally, the cloak shall
+grant you protection from various forms of attack.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

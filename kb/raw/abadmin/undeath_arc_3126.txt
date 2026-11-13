@@ -1,0 +1,15 @@
+Ability: Arc (Record #3126)
+Associated skill: Undeath
+Skillpoints required: 25999
+Blurb: The living fall in droves.
+Syntax: ARC
+Abfile:
+Swing your blade in a great arc, cutting down all that stand nearby.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

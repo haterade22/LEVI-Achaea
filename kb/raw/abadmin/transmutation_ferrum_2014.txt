@@ -1,0 +1,16 @@
+Ability: Ferrum (Record #2014)
+Associated skill: Transmutation
+Skillpoints required: 0
+Blurb: A mineral to cleanse the blood.
+Syntax: EXTRACT FERRUM
+TRANSMUTATE <#> <mineral> TO FERRUM
+Abfile:
+The ferrum mineral will cure ailments of the blood.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

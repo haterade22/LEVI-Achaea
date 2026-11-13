@@ -1,0 +1,18 @@
+Ability: Squeeze (Record #2544)
+Associated skill: Sculpting
+Skillpoints required: 58999
+Blurb: Crush the life from them.
+Syntax: TERRAN SQUEEZE <target>
+Abfile:
+Take hold of your unfortunate foe and squeeze the life from them. This
+attack will do more damage based on how much internal trauma your target
+is suffering; if they have both serious internal trauma and a calcified
+torso, they will be slain instantly.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,16 @@
+Ability: Tunesmithing (Record #1618)
+Associated skill: Swashbuckling
+Skillpoints required: 999
+Blurb: Harness the power of your songblessed rapier.
+Syntax: TUNESMITH <your songblessed rapier> <song>
+Abfile:
+Call upon the power of song within your songblessed rapier to imbue your next jab with a certain power. As your skill level in Swashbuckling increases, you will gain more songs with which you can tunesmith your rapier. There are four such possible songs, and the first is ACCENTATO. See AB SWASHBUCKLING ACCENTATO.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana

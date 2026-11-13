@@ -1,0 +1,17 @@
+Ability: Sac (Record #1883)
+Associated skill: Harvesting
+Skillpoints required: 5999
+Blurb: The venom sac of a snake.
+Syntax: HARVEST SAC
+Abfile:
+The venom sacs of rattlesnakes, marsh and wood vipers can only be
+harvested after the snake is dead. When it is dead, HARVEST SAC will
+remove its venom sacs for your use.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

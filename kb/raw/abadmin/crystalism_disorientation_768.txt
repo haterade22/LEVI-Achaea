@@ -1,0 +1,21 @@
+Ability: Disorientation (Record #768)
+Associated skill: Crystalism
+Skillpoints required: 29999
+Blurb: Disorient your enemies with dizziness.
+Syntax: EMBED DISORIENTATION
+Abfile:
+ Shapes required: Spiral
+
+By disrupting the inner ear, this vibration will cause periodic
+dizziness in your enemies.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

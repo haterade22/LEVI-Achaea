@@ -1,0 +1,36 @@
+Ability: Footwork (Record #3164)
+Associated skill: Bladedance
+Skillpoints required: 199
+Blurb: Poetry in motion.
+Syntax: passive
+Abfile:
+Your footwork is the envy and ambition of lesser dancers: poetry in
+motion to make even the most cold-hearted soul stop and regard. As you
+enter the deadly dance with a partner, you will take the front position.
+As you strike, you will move around them, taking the side position, and
+eventually entering their blindspot in the back position.
+
+The novice bladedancer will move into side position after five strikes
+in the front position and into back position after two further strikes.
+They will return to the front position after a single attack in the back
+position.
+
+Most bladedance techniques function differently against your partner
+depending on your position, and your partner will be unable to parry
+attacks entirely performed from their blindspot.
+
+Additionally, you will deal bonus damage to any denizens when striking
+from the back position.
+Note that if your partner escapes you, reengaging swiftly will let you
+preserve your positional sense, but if they evade you for too long you
+will need to return to the front position.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

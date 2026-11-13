@@ -1,0 +1,17 @@
+Ability: Splinter (Record #2708)
+Associated skill: Psionics
+Skillpoints required: 1999
+Blurb: A spike of psychic force.
+Syntax: PSI SPLINTER <target>
+Abfile:
+A precisely targeted spike of psychic force will shatter the magical
+shields surrounding your opponents.
+Useable on: adventurers and denizens
+Pre checks: balance and equilibrium
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium

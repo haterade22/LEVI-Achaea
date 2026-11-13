@@ -1,0 +1,35 @@
+Ability: Emanation (Record #3148)
+Associated skill: Elementalism
+Skillpoints required: 58999
+Blurb: The elements unleashed.
+Syntax: CAST EMANATION AT <target> <AIR|EARTH|FIRE|WATER>
+Abfile:
+This higher order spell will allow you, when you are majorly resonant
+with one of the Elemental Planes, to unleash all of your accumulated
+power in a single devastating strike. This clears any resonance you have
+with the given Plane, and each type has a various effect:
+
+Air: your target will be struck down with paralysis and dizziness, as
+well as being stunned for a short time. If they already have dizziness,
+they will be given asthma instead.
+
+Earth: your target's torso will become calcified. Additionally, if cast
+against someone with serious internal trauma, your foe shall be slain
+
+Fire: your target will be given two stacks of the ablaze affliction.
+
+Water: your target will be given a level of freeze (or have the
+insulation defence stripped), and will be disrupted along with being
+afflicted with stuttering.
+
+All emanations deal damage.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium
+Resource: 100 mana

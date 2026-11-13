@@ -1,0 +1,16 @@
+Ability: Grain (Record #1578)
+Associated skill: Gathering
+Skillpoints required: 1499
+Blurb: Wheat, rice, corn, maize, barley, oats, rye...
+Syntax: GATHER GRAIN
+Abfile:
+Grain grows in the various grasslands around Achaea, and may be refined into flour.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

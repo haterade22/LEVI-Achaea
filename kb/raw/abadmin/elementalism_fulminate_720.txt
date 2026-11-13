@@ -1,0 +1,22 @@
+Ability: Fulminate (Record #720)
+Associated skill: Elementalism
+Skillpoints required: 23999
+Blurb: Fry your enemies with awesome bolts of lightning.
+Syntax: CAST FULMINATE AT <target>
+Abfile:
+Strike down an adventurer with a sizzling bolt of lightning.
+
+* Gives the fulminated affliction. If they already have this affliction,
+gives the epilepsy affliction. If they have both, gives the paralysis
+affliction.
+** Also deals damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium
+Resource: 120 mana

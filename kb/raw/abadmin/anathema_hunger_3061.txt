@@ -1,0 +1,23 @@
+Ability: Hunger (Record #3061)
+Associated skill: Anathema
+Skillpoints required: 19999
+Blurb: To slake until the spring runs dry.
+Syntax: CROON HUNGER <target>
+Abfile:
+If your victim labours under three or more stacks of horror, you can
+croon to them of the Unnamable's hunger, whispering of the sweet truth
+of its inevitability. They too shall find a portion of that hunger, for
+the touch of Chaos is upon all(*).
+
+
+* Gives addiction.
+Useable on: none
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of anathema balance
+Resource: 0.20% karma

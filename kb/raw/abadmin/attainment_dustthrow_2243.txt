@@ -1,0 +1,19 @@
+Ability: Dustthrow (Record #2243)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: That stuff will make them cough for days.
+Syntax: DUSTTHROW <target>
+Extra info: Gives denizen affliction: Inhibit
+Abfile:
+Throw a pinch of diamond dust into a target's face. The uncontrollable coughing and heaving will make regaining health very difficult for a short time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 25.00 seconds
+Resource: 18 rage
+Skill specialisation: br_jester

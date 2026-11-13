@@ -1,0 +1,22 @@
+Ability: Flair (Record #2815)
+Associated skill: Shipfitting
+Skillpoints required: 26999
+Blurb: Aesthetic ship customisation.
+Syntax: SHIPFIT DYE SAILS <colour>
+SHIPFIT <PAINT|STAIN> HULL WITH <colour>
+SHIPFIT TRIM HULL WITH <material>
+SAMPLE <material>
+Abfile:
+Beyond the mere function of lesser shipfitters, add true flair to a
+ship, personalising it to suit your own tastes. Dyeing sails, painting,
+and staining will require pigments and ship commodities, while trimming
+a hull will require ship commodities and material samples. This ability
+will also allow a shipfitter to sample materials.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

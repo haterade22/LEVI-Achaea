@@ -1,0 +1,21 @@
+Ability: Palpitation (Record #752)
+Associated skill: Crystalism
+Skillpoints required: 699
+Blurb: Cause small heart attacks in your enemies.
+Syntax: EMBED PALPITATION
+Abfile:
+ Shapes required: Cylinder
+
+This vibration will cause small heart attacks in your enemies, doing
+damage.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

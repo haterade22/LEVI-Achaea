@@ -1,0 +1,16 @@
+Ability: Alarm (Record #1191)
+Associated skill: Woodlore
+Skillpoints required: 26999
+Blurb: Put an alarm on a trap.
+Syntax: SET ALARM <direction>
+Abfile:
+Set an alarm on a trap such that the trap owner will be notified when the trap is sprung.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

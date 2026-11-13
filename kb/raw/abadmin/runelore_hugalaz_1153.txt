@@ -1,0 +1,26 @@
+Ability: Hugalaz (Record #1153)
+Associated skill: Runelore
+Skillpoints required: 26999
+Blurb: Call down a hailstorm around you.
+Syntax: SKETCH HUGALAZ ON GROUND
+SKETCH HUGALAZ ON <weapon>
+Abfile:
+ Inks required: 1 Blue
+Symbol: Ball of Ice
+
+When sketched upon the ground, this rune brings a hailstorm down upon
+your enemies. It fades immediately upon use.
+
+When sketched upon a weapon, this rune provides some chance that the
+weapon will deliver an additional burst of hail damage when it strikes.
+To sketch it upon a weapon requires the weapon to be a RUNEBLADE.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

@@ -1,0 +1,27 @@
+Ability: Magisterion (Record #3199)
+Associated skill: Sagas
+Skillpoints required: 30999
+Blurb: And so the dead did stir and...
+Syntax: RECITE MAGISTERION
+Abfile:
+The tale of the Magisterion is a grim one, and one inexorably tied in
+with the Underworld and the lord who once ruled there. When reciting it,
+your retelling will destroy necromantic constructs(*), though a
+necromancer being present will require much more effort to overcome(**).
+
+* On the first tick with no necromancer present, gravehands are
+destroyed. On the second tick gravehands are destroyed even if a
+necromancer is present. On the third tick, infestation maggots are
+destroyed.
+** If a necromancer (Oppression users count as necromancers for the
+purposes of this ability) is present, this recital is a channeled
+action.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance

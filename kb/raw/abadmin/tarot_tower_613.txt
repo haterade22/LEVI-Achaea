@@ -1,0 +1,16 @@
+Ability: Tower (Record #613)
+Associated skill: Tarot
+Skillpoints required: 22999
+Blurb: Cause a crumbling tower to appear in your location.
+Syntax: FLING TOWER AT GROUND
+Abfile:
+The Tower card will cause a crumbling tower to appear in your location, which will then collapse, making it difficult to leave via some of the exits.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

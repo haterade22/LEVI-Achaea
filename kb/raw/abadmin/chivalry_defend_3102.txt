@@ -1,0 +1,18 @@
+Ability: Defend (Record #3102)
+Associated skill: Chivalry
+Skillpoints required: 50000
+Blurb: A shield for the worthy.
+Syntax: DEFEND <target>
+UNDEFEND
+Abfile:
+Sometimes your honour will demand that you stand in the way of one who
+would see another harmed. With this skill, you may take much of the
+damage intended for another, though not all.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

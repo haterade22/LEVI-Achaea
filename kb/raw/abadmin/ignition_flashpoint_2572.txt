@@ -1,0 +1,26 @@
+Ability: Flashpoint (Record #2572)
+Associated skill: Ignition
+Skillpoints required: 54999
+Blurb: From an ember to an inferno.
+Syntax: FLASHPOINTS
+FLASHPOINT PLACE
+FLASHPOINT MERGE
+FLASHPOINT SEVER
+Abfile:
+By placing a primal spark in a location, you may merge with that spark
+from anywhere on the same plane or continent, instantly travelling to
+its location(*). You may have up to three sparks at a time, but take
+note: upon merging with a spark your form will be unable to produce a
+new spark for a short time(**), making it impossible to place another
+flashpoint.
+
+* Blocked by a monolith on either end.
+** 1 minute.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

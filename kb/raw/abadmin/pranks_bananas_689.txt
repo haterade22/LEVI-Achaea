@@ -1,0 +1,17 @@
+Ability: Bananas (Record #689)
+Associated skill: Pranks
+Skillpoints required: 39999
+Blurb: Litter the floor with banana peels.
+Syntax: LITTER FLOOR WITH PEELS
+Abfile:
+You are now able to conjure up a handful of banana peels on the ground. These slippery items will make it more difficult for people to leave the room.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 150 mana

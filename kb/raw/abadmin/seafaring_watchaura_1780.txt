@@ -1,0 +1,17 @@
+Ability: Watchaura (Record #1780)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Summon an aura of omniscience.
+Syntax:
+Abfile:
+This ability grants access to the watch ship aura. See AB SEAFARING
+SHIPAURA for details.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: watch1

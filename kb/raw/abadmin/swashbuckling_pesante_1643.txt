@@ -1,0 +1,17 @@
+Ability: Pesante (Record #1643)
+Associated skill: Swashbuckling
+Skillpoints required: 60000
+Blurb: Stun an opponent with the power of your tunesmithed rapier.
+Syntax: TUNESMITH <your songblessed rapier> PESANTE
+Abfile:
+Deliver a stunning percussive blast to your opponent on your next jab, providing they do not have the deafness defence.
+In the event the target has deafness, it will be stripped instead.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 mana

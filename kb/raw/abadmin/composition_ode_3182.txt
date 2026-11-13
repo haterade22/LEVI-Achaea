@@ -1,0 +1,20 @@
+Ability: Ode (Record #3182)
+Associated skill: Composition
+Skillpoints required: 35999
+Blurb: For heroes do we sing.
+Syntax: COMPOSE ODE
+Abfile:
+This song about legendary heroes shall take the breath away from any
+enemy that hears you sing it, making them unable to say anything for a
+short time(*). If they are asthmatic, this time is increased.
+
+* Only impacts say. Telepathic channels are not influenced.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium

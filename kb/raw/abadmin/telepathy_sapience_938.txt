@@ -1,0 +1,20 @@
+Ability: Sapience (Record #938)
+Associated skill: Telepathy
+Skillpoints required: 48999
+Blurb: Instantly know your subject's thoughts and actions.
+Syntax: MIND SAPIENCE
+UNWATCH
+Extra info: Also drains willpower.
+Abfile:
+By essentially tapping into a locked adventurer's cortex, you are able to see anything the adventurer does. UNWATCH to cease watching your target's actions. Note that this ability comes with a very steep mental cost.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana
+Drain: Mana

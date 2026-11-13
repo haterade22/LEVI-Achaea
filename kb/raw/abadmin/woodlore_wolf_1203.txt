@@ -1,0 +1,22 @@
+Ability: Wolf (Record #1203)
+Associated skill: Woodlore
+Skillpoints required: 56999
+Blurb: Call the mighty grey wolf to your side.
+Syntax: SUMMON WOLF
+Abfile:
+The most powerful of the animals that will come to your call, the mighty
+wolf will attack with its fangs and claws, damaging its victims. If your
+foe is lacking the deafness defence they will also be shaken by the
+wolf's howl, increasing the damage taken.
+
+* Those enemied to the forests will not be able to call upon the aid of
+Nature to assist them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

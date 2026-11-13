@@ -1,0 +1,22 @@
+Ability: Infect (Record #2879)
+Associated skill: Pestilence
+Skillpoints required: 999
+Blurb: Your minions carry much.
+Syntax: SWARM INFECT <swarm> <plague>
+Abfile:
+Your deadly swarms bring ruin upon your enemies, but sometimes a more
+insidious approach is required. Each swarm can be infected with one of
+the deadly plagues that your arcane art may manufacture: these can then
+be conveyed through various methods.
+
+Note that the process of infecting takes time, so preparation before
+battle is key.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium

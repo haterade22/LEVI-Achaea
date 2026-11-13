@@ -1,0 +1,29 @@
+Ability: Manifestation (Record #3081)
+Associated skill: Anathema
+Skillpoints required: 13999
+Blurb: Ever closer to transcendence.
+Syntax:
+Abfile:
+The Unnamables were forged as warriors by the Occultists of Ashtan, and
+are well prepared for the wielding of karma. However, ritual preparation
+and martial training cannot replace a life spent in study, and an
+Unnamable lacks the delicate control that these scholars of Chaos enjoy.
+Though a weakness, the Unnamables have made this also their strength.
+
+Though drawing karma through your body will ravage your mind and flesh,
+even as the Unnamable grows more overcome he shall force his body to
+strive ever closer to transcendence. Flesh shall warp and mutate, bones
+shall twist and grow, and by a battle's culmination the Unnamable shall
+be closer to its namesake than ever before(*).
+
+* As you become more warped by chaotic energy, you will mutate a random
+manifestation of the Unnamable. See the relevant ability files for
+details. You cannot control which manifestation you receive.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

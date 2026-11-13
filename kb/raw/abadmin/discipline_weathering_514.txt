@@ -1,0 +1,15 @@
+Ability: Weathering (Record #514)
+Associated skill: Discipline
+Skillpoints required: 699
+Blurb: Increase your ability to weather damage.
+Syntax: WEATHERING
+Abfile:
+Your budding control over your body will assist you in weathering the storm of life by increasing your constitution by one point.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

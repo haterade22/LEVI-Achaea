@@ -1,0 +1,30 @@
+Ability: Designate (Record #1950)
+Associated skill: Spiritlore
+Skillpoints required: 45999
+Blurb: Designate the owners of your tribal totems.
+Syntax: DESIGNATE <person> AS OWNER OF <totem>
+DESIGNATE ORDER OF <deity> AS OWNER OF <totem>
+DESIGNATE <organisation> AS OWNER OF <totem>
+CLAIM <totem>
+REJECT <totem>
+Abfile:
+With this ability you may designate an owner for a specific totem. Only
+the crafter of the totem may use this ability. The totem remains owned
+by the crafter until the designated owner (or a member of the designated
+owner organisation) CLAIMs the totem. If the totem is claimed, then the
+designated owner becomes the true owner. If the totem is rejected, then
+the crafter remains the owner. At that point the crafter may attempt
+another designation as desired. Houses, Cities, Orders, Oakstone, and
+individuals may own totems - clans may not.
+
+When you designate a totem, its tuning is automatically set against the
+enemies of the new owner.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

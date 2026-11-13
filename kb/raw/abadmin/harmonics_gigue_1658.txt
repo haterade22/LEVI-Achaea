@@ -1,0 +1,17 @@
+Ability: Gigue (Record #1658)
+Associated skill: Harmonics
+Skillpoints required: 16999
+Blurb: Decrease equilibrium recovery time for your allies.
+Syntax: PLAY GIGUE
+Abfile:
+Improves recovery of equilibrium for all of the bard's allies in the same location as the harmonic.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.60 seconds of equilibrium
+Resource: 250 mana

@@ -1,0 +1,18 @@
+Ability: Extirpate (Record #2133)
+Associated skill: Skirmishing
+Skillpoints required: 60000
+Blurb: Return them to the embrace of nature.
+Syntax: EXTIRPATE <target>
+Abfile:
+Once you have petrified an enemy, you may take your spear and shatter
+their stone body into myriad shards, ending their life and returning
+their remains to the embrace of nature.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of balance

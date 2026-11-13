@@ -1,0 +1,17 @@
+Ability: Spinning (Record #1201)
+Associated skill: Skirmishing
+Skillpoints required: 7999
+Blurb: Set up a defensive shield with a spear or trident.
+Syntax: SPIN SPEAR/TRIDENT
+STOP
+Abfile:
+At the cost of a large endurance drain, you may spin your spear or trident in such a way as to cause you to automatically deliver an attack to anyone attacking you physically. You will cease spinning the spear as soon as you do anything aggressive, or when you do STOP.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

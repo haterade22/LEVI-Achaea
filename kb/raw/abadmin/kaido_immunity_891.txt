@@ -1,0 +1,18 @@
+Ability: Immunity (Record #891)
+Associated skill: Kaido
+Skillpoints required: 30999
+Blurb: Immunity from most poisons.
+Syntax: IMMUNITY
+Abfile:
+By maintaining a state of complete calm during which you may perform no
+other actions, you will be able to shrug off any venom that may attempt
+to enter your bloodstream via any means.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,19 @@
+Ability: Penance (Record #2766)
+Associated skill: Zeal
+Skillpoints required: 20999
+Blurb: Let them gaze upon their sins.
+Syntax: RECITE PENANCE <target>
+Abfile:
+Recite this holy verse and allow the profane soul to gaze upon their
+past sins, paralysing them with the truth of their corruption(*).
+
+* Gives the paralysis affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

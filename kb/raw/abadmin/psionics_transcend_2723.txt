@@ -1,0 +1,27 @@
+Ability: Transcend (Record #2723)
+Associated skill: Psionics
+Skillpoints required: 50999
+Blurb: Perfect unity of the mind and body.
+Syntax: PSI TRANSCEND [skill to use if full transcendence only]
+Abfile:
+By attaining a truly transcendent mind, you may operate your physical
+and mental abilities in complete harmony(*). To attain this state of
+mind you must exercise your body's potential while focusing on the
+state of transcendence(**).
+
+* Once your mind and body achieve full transcendence, you can perform a
+psionics action while off equilibrium and for no incurred equilibrium
+cost.
+
+** Each time you perform a weaving-based attack while transcendence is
+active you will increase how harmonised your mind and body are. A
+failure to attack after some time will cause your state to regress.
+Useable on: none
+Pre checks: balance and equilibrium
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

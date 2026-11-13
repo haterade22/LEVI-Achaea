@@ -1,0 +1,16 @@
+Ability: Auralbless (Record #1617)
+Associated skill: Swashbuckling
+Skillpoints required: 699
+Blurb: Use your song-blessed blade to remove deafness.
+Syntax: AURALBLESS <target>
+Abfile:
+With a deft and carefully-aimed blow, knock the hearing back into your target, removing deafness and forcing them to sit up and take notice of your songs.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

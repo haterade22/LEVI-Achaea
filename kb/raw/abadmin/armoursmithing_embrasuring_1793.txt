@@ -1,0 +1,19 @@
+Ability: Embrasuring (Record #1793)
+Associated skill: Armoursmithing
+Skillpoints required: 60000
+Blurb: Add an embrasure to a forged piece of armour.
+Syntax: EMBRASURE <armour>
+Abfile:
+Your diligence in your craft has developed so that you may add the first
+embrasure upon a piece of crafted armour, unlocking its potential to
+hold paragons.
+
+Extra Information: Comms: FORGINGCOMMS EMBRASURE <armour item>
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

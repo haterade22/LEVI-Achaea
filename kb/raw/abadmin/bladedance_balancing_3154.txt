@@ -1,0 +1,19 @@
+Ability: Balancing (Record #3154)
+Associated skill: Bladedance
+Skillpoints required: 49999
+Blurb: Poise weeps at your perfection.
+Syntax: BALANCING <ON|OFF>
+RELAX BALANCING
+Abfile:
+With this ability, you will have superior balance, making it much more
+difficult to knock you off your feet with abilities such as sweepkick,
+or the earthquake vibration. There is a mana drain associated with it,
+however.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

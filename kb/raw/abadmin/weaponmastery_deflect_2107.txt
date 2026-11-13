@@ -1,0 +1,17 @@
+Ability: Deflect (Record #2107)
+Associated skill: Weaponmastery
+Skillpoints required: 37599
+Blurb: Redirect incoming projectiles.
+Syntax: DEFLECT
+Abfile:
+You may now deflect incoming arrows toward less vital areas of your
+body, mitigating their overall damage.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_twohanded

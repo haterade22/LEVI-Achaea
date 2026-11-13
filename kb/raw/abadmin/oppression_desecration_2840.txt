@@ -1,0 +1,19 @@
+Ability: Desecration (Record #2840)
+Associated skill: Oppression
+Skillpoints required: 19999
+Blurb: Banish the holy rites of the Bloodsworn Gods.
+Syntax: DESECRATE <rite>
+Abfile:
+Using your Necromantic essence, you may sever any devotional rites from
+the location in which you stand. If the layer of the rite is present,
+this ability takes some time, during which you may make no actions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: Life Essence

@@ -16,8 +16,8 @@ Hypnosis: Mental manipulation through suggestions (including Impulse)
 ## Confidence on this page
 
 - **WIKI**: the Achaea wiki as filed in `kb/raw/wiki/` and generated into `kb/classes/serpent.md`.
-  An in-game `AB` wins where they differ. No AB of a Serpent class skill is filed yet (`kb/raw/ab/` and `kb/raw/abadmin/` hold
-  only OBLIVIATE, Attainment, "Skill specialisation: br_serpent"); the ABs cited in the PvE sections were pasted in chat.
+  An in-game `AB` wins where they differ. The game's record of every Serpent ability is in `kb/raw/abadmin/` (`subterfuge_*`,
+  `venom_*`, `hypnosis_*`, 2026-11-13; differences: `kb/classes/abadmin-vs-wiki.md`). The PvE ABs were pasted in chat.
 - **CONFIRMED**: game text in `kb/raw/`: AFFLICTION SHOW and WHATCURES records, HELP files, combat logs.
 - **PLAYER**: the notes relayed on 2026-10-12 (`kb/raw/players/serpent-2026-10-12.txt`).
 - **UNVERIFIED**: nothing in `kb/raw` supports it yet.
@@ -209,8 +209,8 @@ bitepayload_ladder: |
   (camus loop) -> the monkshood reaction (asthma + masochism + weariness, and since v4.7.419
   only while impatience reads under 0.70; at 0.30 or more it also needs asthma, weariness and masochism at
   0.70, because a bite brings no suggestion; the pre-empt's impulse brings its own masochism, so it passes true and skips that bar, :1229-1233) -> the kalmia, loki and aconite reactions (never curare: it consumes scytherus) ->
-  curare / kalmia / vernalius for a missing lock piece. A BITE costs 4.00 s of balance (WIKI)
-  against DSTAB's 2.80 s.
+  curare / kalmia / vernalius for a missing lock piece. A BITE costs 1.90 s of balance (ABADMIN 1275;
+  the wiki says 4.00) against DSTAB's 2.80 s (ABADMIN 1235), so DSTAB still gives more venoms a second.
 
 rebounding_reapply_preempt: |
   Our strip line "You flay away X's aura of rebounding defence." stamps the clock
@@ -450,8 +450,8 @@ v4.7.419.
   "Balance cost varies based on weapon speed" (`kb/classes/infernal.md`, Duality) and ran about
   2.0-2.4 s in Mystor's Infernal logs (`kb/combat/fights/2026-10-11_mystor_shikudo-vs-infernal-dwc_win_FceAmb0o.md`,
   `..._vNTjvghY.md`). Hydra FUROR (2.00 s) and Sentinel DOUBLESTRIKE carry one venom each. Within
-  the Serpent kit the claim holds: BITE is 4.00 s for one venom.
-- **Unverified.** The 2.80 s is wiki only (no `AB DOUBLESTAB`), and the wiki may predate a rebalance.
+  the Serpent kit the claim holds: BITE is 1.90 s for one venom (ABADMIN 1275; the wiki's 4.00 is stale).
+- **Confirmed base (ABADMIN, 2026-11-13).** DOUBLESTAB 2.80 s, FRENZY 2.20 s, FUROR 2.00 s of balance, as the wiki says.
 - **Measured (other Serpents, 2026-11-07).** DSTAB to the next attack: median 1.83 s, p10 1.73, min 1.545 (n=195,
   `kb/mechanics/clocks.md`; rule `attack.gap.others.dstab`, not usable: p90-p10 is over 0.2). Far below the wiki's 2.80.
 - **Measured (ours, the 2026-11-07 spar).** The game prints "Balance used: 1.8s." for our DSTAB (24 of 24). From that
@@ -1652,10 +1652,10 @@ still FAIL).
 
 **Our costs** (kb/sim/rules_hand.json, MEASURED, client clock, from the game's cost line to the recovery line):
 
-| Ability | Stated (WIKI) | Printed | Median | p10-p90 | n | From the first reply | Rule |
+| Ability | Stated (ABADMIN; the wiki gives BITE 4.00) | Printed | Median | p10-p90 | n | From the first reply | Rule |
 |---|---|---|---|---|---|---|---|
 | DSTAB | 2.80 bal | 1.8 | 1.634 | 1.578-1.741 | 24 | 1.75 | `attack.cost.own.dstab` |
-| Impulse's BITE | 4.00 bal | 1.7 | 1.563 | 1.477-1.581 | 13 | 1.676 | `attack.cost.own.bite` |
+| Impulse's BITE | 1.90 bal | 1.7 | 1.563 | 1.477-1.581 | 13 | 1.676 | `attack.cost.own.bite` |
 | IMPULSE | 1.70 eq | 1.44 | 1.242 | 1.201-1.289 | 13 | 1.353 | `attack.cost.own.impulse_eq` |
 | FLAY | 2.00 bal | 1.7 | 1.530 | - | 1 | 1.65 | `attack.cost.own.flay` (not usable) |
 | PINSHOT | 3.00 bal | 1.8 | 1.742 | - | 1 | 1.856 | `attack.cost.own.pinshot` (not usable) |

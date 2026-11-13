@@ -1,0 +1,21 @@
+Ability: Clawparry (Record #1560)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Fend off pesky attacks with your talons.
+Syntax: CLAWPARRY <body part>
+Extra info: Body Parts: HEAD
+TORSO
+RIGHT/LEFT ARM
+RIGHT/LEFT LEG
+NOTHING
+Abfile:
+Use your claws to fend off pesky attacks aimed at you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: dragonform

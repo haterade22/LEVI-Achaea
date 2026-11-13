@@ -1,0 +1,19 @@
+Ability: Torture (Record #2834)
+Associated skill: Oppression
+Skillpoints required: 9999
+Blurb: Let the heathens suffer for their blasphemy.
+Syntax: HELLFORGE INVEST TORTURE
+Abfile:
+Imbue necromantic energy into your blade, replacing a venom application
+on the next blow. Your blade shall corrupt their blood, causing
+haemophilia. In addition, if said blow breaks the targeted limb, it
+shall also incur more bleeding than normal.
+
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

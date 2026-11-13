@@ -1,0 +1,22 @@
+Ability: Gravity (Record #771)
+Associated skill: Crystalism
+Skillpoints required: 40999
+Blurb: Increase the power of gravity in the room.
+Syntax: EMBED GRAVITY
+Abfile:
+ Shapes required: Egg, Torus
+
+The oscillations of this vibration cause the downward pull of gravity to
+be increased in your room, pulling those in the trees and sky to the
+ground.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

@@ -1,0 +1,27 @@
+Ability: Incandescence (Record #2574)
+Associated skill: Ignition
+Skillpoints required: 60000
+Blurb: Let them look upon you and despair.
+Syntax: MANIFEST INCANDESCENCE
+Extra info: Clears all spark on use.
+Abfile:
+By becoming a conduit for Kkractle's power, you may surround yourself in
+the terrible incandescence of the Primal Fire. Anyone looking upon you
+while targeting you with a hostile act will be transfixed. If you are
+under 25% of your maximum health, your fire will burn so bright that
+they will instead be slain outright.
+
+You may not perform any actions while incandescent, though you may
+during the short windup period for said incandescence to manifest.
+
+Note that on successfully using this ability all of your spark will be
+wiped and you will become unable to become incandescent again for three
+minutes, unless upon the Elemental Plane of Fire.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

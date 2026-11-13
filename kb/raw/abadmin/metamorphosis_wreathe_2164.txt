@@ -1,0 +1,27 @@
+Ability: Wreathe (Record #2164)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Wreathe your hands in searing flame.
+Syntax: WREATHE
+This ability will be hidden on ablistings.
+Abfile:
+Using some of your inner flame(*), you may wreathe your hands in fire
+for a short time.
+
+When mauling an adventurer, this will deliver the ablaze affliction; if
+they are already on fire, it will do significantly increased damage.
+
+When mauling a denizen, your damage will increase and be dealt as fire
+damage rather than cutting.
+
+* This ability will decrease your inner flame by one level.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: meta_druid

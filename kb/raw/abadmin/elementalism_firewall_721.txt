@@ -1,0 +1,18 @@
+Ability: Firewall (Record #721)
+Associated skill: Elementalism
+Skillpoints required: 26999
+Blurb: Create a wall of elemental fire.
+Syntax: CAST FIREWALL <direction>
+Abfile:
+Channeling the power of elemental fire, you will create walls of burning
+flame.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 100 mana

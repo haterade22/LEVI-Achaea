@@ -1,0 +1,17 @@
+Ability: Tune (Record #1679)
+Associated skill: Voicecraft
+Skillpoints required: 2999
+Blurb: Protect against damage of all types.
+Syntax: SING TUNE
+Abfile:
+Adds a damage-reducing defense, which decreases damage of all kinds.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 200 mana and 20 willpower

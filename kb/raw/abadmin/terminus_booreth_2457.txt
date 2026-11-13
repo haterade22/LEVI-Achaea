@@ -1,0 +1,18 @@
+Ability: Booreth (Record #2457)
+Associated skill: Terminus
+Skillpoints required: 20999
+Blurb: It's not paranoia if...
+Syntax: INTONE BOORETH
+This ability will be hidden on ablistings.
+Abfile:
+The sound of this word shall instill a madness in all who hear it,
+making them believe that anyone and everyone is an enemy.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of word balance

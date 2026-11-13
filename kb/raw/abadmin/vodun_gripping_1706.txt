@@ -1,0 +1,18 @@
+Ability: Gripping (Record #1706)
+Associated skill: Vodun
+Skillpoints required: 0
+Blurb: Grip your dolls tighter than ever before.
+Syntax: GRIP
+RELAX GRIP
+Abfile:
+While using this ability, you will prevent items from being knocked out
+of your grip.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

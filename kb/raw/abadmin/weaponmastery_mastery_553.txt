@@ -1,0 +1,18 @@
+Ability: Mastery (Record #553)
+Associated skill: Weaponmastery
+Skillpoints required: 49999
+Blurb: Through intense concentration, increase your blade mastery.
+Syntax: MASTERY [ON|OFF]
+RELAX MASTERY
+Abfile:
+Mastery is the ability to pour such concentration into your bladework
+that your ability to penetrate cutting defences increases.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_dualcutting

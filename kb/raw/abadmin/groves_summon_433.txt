@@ -1,0 +1,16 @@
+Ability: Summon (Record #433)
+Associated skill: Groves
+Skillpoints required: 17999
+Blurb: After a time, bring anyone in the forest to your grove.
+Syntax: GROVE SUMMON <target>
+Abfile:
+With this ability, you may begin the process of summoning any adventurer in a forest to your grove. It will take a small amount of time, during which the adventurer may escape the summoning by moving. Also any actions on your part during the summoning process will halt the summons.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 50 sunlight

@@ -1,0 +1,17 @@
+Ability: Analyse (Record #1326)
+Associated skill: Hypnosis
+Skillpoints required: 26999
+Blurb: Discover the implanted suggestions in someone.
+Syntax: ANALYSE <target|ME>
+Abfile:
+With this ability, you may analyse a person's state of mind (including
+your own), to determine any hypnotic suggestions that may be implanted.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of equilibrium

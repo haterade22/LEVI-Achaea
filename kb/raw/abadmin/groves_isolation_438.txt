@@ -1,0 +1,16 @@
+Ability: Isolation (Record #438)
+Associated skill: Groves
+Skillpoints required: 20999
+Blurb: Transport yourself to the Glade of Isolation.
+Syntax: GROVE ISOLATION
+Abfile:
+This powerful ability will take you, and anyone following you to a secret grove with exits to many places in the land. Be warned though, that it is quite expensive in sunlight energy.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 220 sunlight

@@ -1,0 +1,18 @@
+Ability: Howl (Record #331)
+Associated skill: Metamorphosis
+Skillpoints required: 699
+Blurb: Letting loose a blood-curdling howl.
+Syntax: HOWL <target>
+This ability will be hidden on ablistings.
+Abfile:
+Drain the mental strength of an opponent with your blood-curdling howl.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

@@ -1,0 +1,23 @@
+Ability: Overwhelm (Record #2518)
+Associated skill: Weaponmastery
+Skillpoints required: 53999
+Blurb: Dispatch them with a single catastrophic blow.
+Syntax: BATTLEFURY OVERWHELM <target>
+Extra info: Requires a warhammer.
+Abfile:
+Set your feet and raise your hammer, in preparation for a single
+catastrophic blow. Your next brain attempt will be altered to do damage
+based on how many skull fractures the target has and does not require
+your opponent to be prone.
+
+This ability requires you possess both standard balance as well as
+battlefury balance, and consumes both.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: knight_twohanded

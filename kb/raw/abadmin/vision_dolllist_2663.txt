@@ -1,0 +1,3 @@
+Ability: Dolllist (Record #2663)
+Associated skill: Vision
+Maps to record 1412 (LISTS).

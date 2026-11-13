@@ -1,0 +1,22 @@
+Ability: Redsea (Record #3206)
+Associated skill: Sagas
+Skillpoints required: 35999
+Blurb: The oceans ran as blood.
+Syntax: RECITE REDSEA
+Abfile:
+A tale of disruption and corruption, the day the seas ran red with blood
+is one wrought by Baelgrim's hand. By retelling that grim tale, water's
+wrath may be made manifest upon all who hear, and they will suffer its
+disruption(*).
+
+* Water disruption is a timed affliction that causes you to lose some
+mana when you sip health elixirs or similar.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 18.00 seconds of voice balance and 2.50 seconds of equilibrium

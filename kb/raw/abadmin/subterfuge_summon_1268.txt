@@ -1,0 +1,3 @@
+Ability: Summon (Record #1268)
+Associated skill: Subterfuge
+Maps to record 1265 (SNAKE).

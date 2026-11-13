@@ -1,0 +1,29 @@
+Ability: Convergence (Record #3149)
+Associated skill: Elementalism
+Skillpoints required: 60000
+Blurb: Unbounded arcane might.
+Syntax: CAST CONVERGENCE AT <target>
+Abfile:
+This formidable higher order spell requires that your victim has
+progressed to the fourth stage of the dissonance affliction and requires
+moderate resonance to all of the Elemental Planes at a minimum. You may
+then place this mark upon your target, and thus spell their doom. A
+target you have converged is vulnerable to your staffcast magic no
+matter where they might flee upon your current plane, and your
+scrying magic will incur no equilibrium when seeking them out.
+Additionally, they will become very vulnerable to all forms of elemental
+and magical damage coming from your arcane personage, and your magic
+will bypass any shield or prismatic barrier they may attempt to
+raise(*).
+
+* Or similar defences.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.90 seconds of equilibrium
+Resource: 300 mana

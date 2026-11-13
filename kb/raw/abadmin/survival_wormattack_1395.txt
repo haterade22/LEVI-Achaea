@@ -1,0 +1,16 @@
+Ability: Wormattack (Record #1395)
+Associated skill: Survival
+Skillpoints required: 17999
+Blurb: Attacking dimensional wormholes.
+Syntax: WORM CANCEL
+Abfile:
+To use this ability, you must first possess the ability Wormholes in Vision. Using this ability, you may attack a wormhole and attempt to destroy it. Once you start the process, you must finish it without executing any commands, or you will have to start over. It is not a short process at all, as it is an extremely complicated thing to close a dimensional wormhole.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium

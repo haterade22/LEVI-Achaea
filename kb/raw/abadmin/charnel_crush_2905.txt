@@ -1,0 +1,26 @@
+Ability: Crush (Record #2905)
+Associated skill: Charnel
+Skillpoints required: 55999
+Blurb: No mercy for trespass.
+Syntax: CRYPT TRAP BUILD CRUSH
+CRYPT TRAP DISMANTLE CRUSH
+Abfile:
+Perhaps the most formidable trap in the array available to you, this
+deadly surprise for intruders shall trigger upon anyone other than
+yourself entering the chamber in which it is placed. The walls shall
+slowly begin to move inwards; around ten seconds later, they shall
+complete their terminal journey, crushing any that remain between them
+and leaving nothing but the dead in their wake.
+
+You may only have one of this trap in your whole crypt, and while it
+will not trigger upon you entering its room, you are still vulnerable to
+the final crushing impact.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

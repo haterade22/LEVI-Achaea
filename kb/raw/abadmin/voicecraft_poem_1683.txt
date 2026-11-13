@@ -1,0 +1,17 @@
+Ability: Poem (Record #1683)
+Associated skill: Voicecraft
+Skillpoints required: 9999
+Blurb: A poem of gluttony and decay to induce nausea.
+Syntax: RECITE POEM AT <target>
+Abfile:
+Afflicts your target with nausea similar to the euphorbia effect.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 150 mana and 30 willpower

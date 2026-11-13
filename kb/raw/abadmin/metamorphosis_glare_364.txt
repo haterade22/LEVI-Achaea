@@ -1,0 +1,19 @@
+Ability: Glare (Record #364)
+Associated skill: Metamorphosis
+Skillpoints required: 55999
+Blurb: Curse your foe with mental maladies.
+Syntax: GLARE <target> [STUPIDITY|IMPATIENCE]
+This ability will be hidden on ablistings.
+Abfile:
+With this ability, you may curse your foe with stupidity or impatience.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 200 mana
+Skill specialisation: meta_sentinel

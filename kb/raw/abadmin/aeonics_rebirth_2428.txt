@@ -1,0 +1,22 @@
+Ability: Rebirth (Record #2428)
+Associated skill: Aeonics
+Skillpoints required: 60000
+Blurb: Death shall never claim you.
+Syntax: CHRONO REBIRTH
+Abfile:
+This greatest of the time abilities exacts a terrible price upon the
+user. Not only can it only be used sparingly, but when activated it
+shall immediately raise you to the maximum age possible for you to
+survive.
+
+However, the power it grants is equally terrible. You may return from
+the very brink of death, reforming your mortal shell around your soul.
+Be warned. You shall return extremely weak in mind and body.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

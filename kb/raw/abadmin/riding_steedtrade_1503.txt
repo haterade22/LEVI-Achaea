@@ -1,0 +1,16 @@
+Ability: Steedtrade (Record #1503)
+Associated skill: Riding
+Skillpoints required: 5999
+Blurb: You can trade your steed, bestowing its loyalty to another.
+Syntax: STEEDTRADE <steed> TO <adventurer>
+Abfile:
+Trade your steed to another, transferring its loyalty. Make sure you get a good price! A steed that wears a collar of Lupus may not be traded under any conditions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

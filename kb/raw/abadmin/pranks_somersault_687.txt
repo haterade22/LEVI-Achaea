@@ -1,0 +1,16 @@
+Ability: Somersault (Record #687)
+Associated skill: Pranks
+Skillpoints required: 33999
+Blurb: Quickly somersault past obstructions.
+Syntax: SOMERSAULT <direction>
+Abfile:
+With this ability you can escape a location even if you're webbed or paralysed. It is faster than 'tumbling' in Survival, as a bonus.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

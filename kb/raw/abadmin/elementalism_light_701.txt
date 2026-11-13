@@ -1,0 +1,18 @@
+Ability: Light (Record #701)
+Associated skill: Elementalism
+Skillpoints required: 0
+Blurb: Light up your surroundings.
+Syntax: CAST LIGHT
+Abfile:
+With the illuminating power of fire, you may momentarily reveal those in
+the room who may be hiding.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 50 mana

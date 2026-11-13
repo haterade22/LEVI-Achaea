@@ -1,0 +1,20 @@
+Ability: Whip (Record #1860)
+Associated skill: Weaponsmithing
+Skillpoints required: 16999
+Blurb: The feared weapon of those who practice serpentry.
+Syntax: FORGE FOR WHIP
+FORGE (to continue after interruption)
+Extra info: Commodities: 1 Iron
+5 Leather
+2 Wood
+Abfile:
+The feared weapon of those who practice serpentry.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

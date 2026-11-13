@@ -1,0 +1,3 @@
+Ability: Revitalization (Record #1066)
+Associated skill: Devotion
+Maps to record 1065 (REVITALISATION).

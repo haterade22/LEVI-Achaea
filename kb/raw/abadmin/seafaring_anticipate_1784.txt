@@ -1,0 +1,19 @@
+Ability: Anticipate (Record #1784)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Know when a ship changes course or manoeuvre.
+Syntax: SHIP ANTICIPATE SHOW
+SHIP ANTICIPATE STOP
+SHIP ANTICIPATE START <full or short name of ship in range>
+Abfile:
+Your naval experience has allowed your eyes to anticipate the movement
+of ships in range.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: watch3

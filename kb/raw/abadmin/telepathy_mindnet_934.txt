@@ -1,0 +1,17 @@
+Ability: Mindnet (Record #934)
+Associated skill: Telepathy
+Skillpoints required: 41999
+Blurb: Cast a mental net about your surroundings.
+Syntax: MINDNET [ON|OFF]
+RELAX MINDNET
+Abfile:
+At a constant mana drain, this ability throws up a telepathic net over the local area, informing you whenever anyone moves into or out of range of the net.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

@@ -1,0 +1,16 @@
+Ability: Leap (Record #2660)
+Associated skill: Sculpting
+Skillpoints required: 23999
+Blurb: Obstructions? What obstructions.
+Syntax: LEAP <direction>
+Abfile:
+Leap past barriers that would bar your path, such as ice or
+stonewalls.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

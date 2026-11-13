@@ -1,0 +1,24 @@
+Ability: Mistral (Record #2631)
+Associated skill: Duress
+Skillpoints required: 60000
+Blurb: That which heralds death.
+Syntax: MANIFEST MISTRAL
+RUSH <direction>
+Abfile:
+Assume the form of the fabled mistral, an icy wind which is completely
+immune from the world around it. While in this form the actions you may
+perform are extremely limited, and you may only maintain it for a time
+before you will be forced back into corporeal form.
+
+Though assuming the mistral has a short windup usually, if you are
+flying at the time of initiation the transformation is instantaneous.
+In addition, you may RUSH in a direction to bypass closed doors, though
+this is a channeled action and will not bypass doors that are locked.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,22 @@
+Ability: Bloodboil (Record #717)
+Associated skill: Elementalism
+Skillpoints required: 17999
+Blurb: Boil off that which afflicts you.
+Syntax: CAST BLOODBOIL
+Abfile:
+Through the purifying powers of fire, and the recuperative powers of
+water, you may cure yourself of an affliction with this spell. If you
+suffer under the haemophilia affliction your blood will be too thin for
+this spell to take effect, and if you have both major resonance with the
+Elemental Planes of Fire and Water this ability will have a chance to
+cure a second affliction.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 75 mana

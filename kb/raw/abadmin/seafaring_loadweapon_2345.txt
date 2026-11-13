@@ -1,0 +1,17 @@
+Ability: Loadweapon (Record #2345)
+Associated skill: Seafaring
+Skillpoints required: 0
+Blurb: Load ship weapons without using balance.
+Syntax: Passive
+Abfile:
+This ability allows you to load ammunition into ship weapons without
+incurring any balance loss.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Skill specialisation: weapons1

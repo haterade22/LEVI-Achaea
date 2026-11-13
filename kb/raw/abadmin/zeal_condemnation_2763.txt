@@ -1,0 +1,17 @@
+Ability: Condemnation (Record #2763)
+Associated skill: Zeal
+Skillpoints required: 9999
+Blurb: There will be a reckoning.
+Syntax: RECITE CONDEMNATION <target>
+Abfile:
+Condemn your foe with this holy verse, striking them down with the
+justice affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

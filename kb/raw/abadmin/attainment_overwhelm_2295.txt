@@ -1,0 +1,18 @@
+Ability: Overwhelm (Record #2295)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Charge with the brunt of your massive body.
+Syntax: OVERWHELM <target>
+Abfile:
+Overwhelm your massive form at your target, causing great damage as you collide.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_red_dragon

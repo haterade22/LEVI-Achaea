@@ -1,0 +1,16 @@
+Ability: Portals (Record #2691)
+Associated skill: Attainment
+Skillpoints required: 1
+Blurb: Godly Rescue
+Syntax: PORTALS
+Abfile:
+Access to the Ring of Portals, which will provide convenient access to
+many useful places throughout the lands.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

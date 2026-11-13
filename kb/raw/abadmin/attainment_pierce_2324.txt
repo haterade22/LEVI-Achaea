@@ -1,0 +1,17 @@
+Ability: Pierce (Record #2324)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Your daegger can shatter a denizen's shield.
+Syntax: DAEGGER PIERCE <target>
+Abfile:
+Order your daegger to pierce through a denizen's shield, rendering it useless.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_apostate

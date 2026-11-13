@@ -1,0 +1,19 @@
+Ability: Webbomb (Record #678)
+Associated skill: Pranks
+Skillpoints required: 18999
+Blurb: Explode strands of webbing to bind everyone in the room.
+Syntax: CONSTRUCT WEB BOMB
+THROW BOMB <direction>/AT GROUND
+Extra info: Requires: 1 rope
+Abfile:
+When this bomb explodes, it will throw out magically sticky webbing everywhere. You can make two bombs out of a single commodity.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+The ability name WEB BOMB is mapped to this ability.

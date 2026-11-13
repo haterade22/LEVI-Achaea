@@ -1,0 +1,19 @@
+Ability: Imbibe (Record #1731)
+Associated skill: Vodun
+Skillpoints required: 43999
+Blurb: Afflict your opponent through your doll.
+Syntax: VODUN IMBIBE <venom>
+Extra info: Fashions:
+Required: 10
+Used    : 1
+Abfile:
+Imbibe a venom directly into the bloodstream of your doll's model with a pin. You must have a vial of whatever venom you wish to imbibe with in your inventory.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

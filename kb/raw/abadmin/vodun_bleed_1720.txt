@@ -1,0 +1,19 @@
+Ability: Bleed (Record #1720)
+Associated skill: Vodun
+Skillpoints required: 18999
+Blurb: Bloodlet your enemy.
+Syntax: VODUN BLEED
+Extra info: Fashions:
+Required: 10
+Used    : 1
+Abfile:
+Cause blood to begin pouring from the pores of your unlucky opponent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

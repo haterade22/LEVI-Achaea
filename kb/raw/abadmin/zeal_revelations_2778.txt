@@ -1,0 +1,19 @@
+Ability: Revelations (Record #2778)
+Associated skill: Zeal
+Skillpoints required: 60000
+Blurb: Show them Evil's horror.
+Syntax: RECITE REVELATIONS <target>
+Abfile:
+Recite this holy verse to reveal to a heretic the true depths of Evil's
+depravity; permit them not the chance to turn their eyes away.
+
+* Gives the hellsight affliction.
+Useable on: adventurers
+Pre checks:
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.60 seconds of prayer balance

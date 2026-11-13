@@ -1,0 +1,17 @@
+Ability: Aria (Record #1694)
+Associated skill: Voicecraft
+Skillpoints required: 36999
+Blurb: Give a friend a short-term health bonus.
+Syntax: SING ARIA AT <target>
+Abfile:
+Aid someone with an increase in health for a short time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: Yes
+Useable paralysed: No
+Cooldown: 3.00 seconds of voice balance
+Resource: 130 mana and 30 willpower

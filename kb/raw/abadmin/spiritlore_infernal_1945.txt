@@ -1,0 +1,3 @@
+Ability: Infernal (Record #1945)
+Associated skill: Spiritlore
+Maps to record 1944 (MARAK).

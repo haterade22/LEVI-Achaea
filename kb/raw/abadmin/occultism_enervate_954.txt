@@ -1,0 +1,21 @@
+Ability: Enervate (Record #954)
+Associated skill: Occultism
+Skillpoints required: 6999
+Blurb: Suck the strength from your enemy's aura.
+Syntax: ENERVATE <target>
+Abfile:
+Using the power of your aura, you can send forth a tendril and suck out
+the energy from the aura of another, thereby draining another's mental
+energy to add to your own. If your subject is afflicted with manaleech
+or they are frozen, the amount of their mental strength you drain will
+be increased.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

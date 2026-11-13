@@ -1,0 +1,36 @@
+Ability: Research (Record #2429)
+Associated skill: Terminus
+Skillpoints required: 0
+Blurb: Knowledge is power.
+Syntax: RESEARCH <tree>
+RESEARCH STATUS
+RESEARCH POINTS
+Abfile:
+While both Aeonics and Shadowmancy made the Tsol'teth terrible indeed,
+it was the art of Terminus that allowed them to perform many of their
+more cataclysmic feats of power. Terminus allows one to use the ancient
+Tsol'teth language to enact various outcomes; some are relatively minor,
+and some are near miracles in their scope.
+
+However, the knowledge of the Tsol'teth was guarded jealously, and no
+one person could learn it all. As you progress through the skill you
+shall gain access to various research trees that you may study. The more
+you study a tree, the more abilities you shall unlock. As you progress
+you shall also be able to study more trees, as your mental capacity
+shall expand to accommodate.
+
+Note: tier 1 through 4 abilities all cost one research point. Tier 5
+abilities cost 2, though tier 5 abilities are not available until later
+in Terminus.
+
+You must be in an equipped Terminus lab to research trees - the only
+currently known lab is accessed through the MEMORY ability in
+Aeonics.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

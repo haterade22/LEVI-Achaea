@@ -1,0 +1,20 @@
+Ability: Elm (Record #2205)
+Associated skill: Propagation
+Skillpoints required: 17599
+Blurb: A potent herb with limited applications.
+Syntax: PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH ELM
+Abfile:
+When propagated, this plant conveys the following bonuses:
+
+Head: Allows you to writhe out of transfixation much faster.
+Body: Allows you to writhe entanglements faster.
+Arms: Your thornrend attack shall deliver dizziness.
+Legs: Move faster through tundra and polar regions.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

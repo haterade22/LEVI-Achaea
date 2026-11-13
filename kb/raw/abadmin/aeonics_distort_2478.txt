@@ -1,0 +1,3 @@
+Ability: Distort (Record #2478)
+Associated skill: Aeonics
+Maps to record 2426 (DISTORTION).

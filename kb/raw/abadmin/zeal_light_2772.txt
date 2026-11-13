@@ -1,0 +1,20 @@
+Ability: Light (Record #2772)
+Associated skill: Zeal
+Skillpoints required: 30999
+Blurb: The rallying cry of the Light.
+Syntax: RECITE LIGHT
+Abfile:
+The rallying cry of the light, this verse will heal all of your blessed
+comrades in your location and for each one healed it shall cure an
+affliction from you.
+
+Each priest may only call upon the light every 25 seconds or so.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 1
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of prayer balance

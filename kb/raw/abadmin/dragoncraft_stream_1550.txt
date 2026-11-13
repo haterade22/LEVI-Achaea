@@ -1,0 +1,21 @@
+Ability: Stream (Record #1550)
+Associated skill: Dragoncraft
+Skillpoints required: 0
+Blurb: Blast your foes from great distances.
+Syntax: BREATHSTREAM <target> <direction>
+Abfile:
+Concentrate your breath weapon into a tight stream to hit your opponent at a range. This will hit your target as long as they are within line of sight.
+
+** Requires summoned breath.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 400 mana
+Skill specialisation: dragonform
+The ability name BREATHSTREAM is mapped to this ability.

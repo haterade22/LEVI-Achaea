@@ -1,0 +1,19 @@
+Ability: Charge (Record #2634)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Crash through defensive barriers.
+Syntax: TERRAN CHARGE <target>
+Abfile:
+Wreathe yourself in the power of Garash, and charge straight through
+magical shields that your foe would attempt to guard against your
+assault with.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_earth_lord

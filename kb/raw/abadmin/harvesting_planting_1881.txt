@@ -1,0 +1,16 @@
+Ability: Planting (Record #1881)
+Associated skill: Harvesting
+Skillpoints required: 2999
+Blurb: Planting herbs and plants in new locations.
+Syntax: PLANT <flower/root/seed/bark/etc>
+Abfile:
+Your harmony with the forest has reached a level that, with this ability, you may transplant plants from one place to another. After you harvest a plant, you will have 1 hour in which to PLANT it somewhere else. After this period of time is up, the plant will not be able to be planted. Further, you cannot put the plant in your rift or pocketbelt. It is important to remember to re-plant things only in the type of environment that you harvested it from, or it will quickly die. The exception is kelp, which can be planted in river, freshwater, or ocean environments. In order to see what environment type a room is, use the SURVEY ability, which is an ability in Survival.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of balance

@@ -1,0 +1,17 @@
+Ability: Gauge (Record #2626)
+Associated skill: Duress
+Skillpoints required: 45999
+Blurb: The degree of their demise.
+Syntax: GAUGE <target>
+Abfile:
+Intently study a target, determining how elevated the pressure
+surrounding them may be. This ability does not consume balance or
+equilibrium, though you may only utilise it every second or so.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

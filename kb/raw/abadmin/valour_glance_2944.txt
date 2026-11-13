@@ -1,0 +1,18 @@
+Ability: Glance (Record #2944)
+Associated skill: Valour
+Skillpoints required: 1500
+Blurb: See as your companion sees.
+Syntax: EAGLE GLANCE
+Abfile:
+Look through the eyes of your eagle, seeing its immediate
+surroundings(*).
+
+* Does not work if it is in someone's inventory or similar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

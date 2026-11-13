@@ -1,0 +1,17 @@
+Ability: Forsake (Record #2698)
+Associated skill: Ignition
+Skillpoints required: 0
+Blurb: Return to your mundane form.
+Syntax: FORSAKE FIRE
+Abfile:
+Cast off your elemental form, returning to your prior state of being.
+Forsaking your element in this way shall not be a complete process; the
+fire shall still cling to you for a time, leaving you ablaze.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

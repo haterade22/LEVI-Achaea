@@ -1,0 +1,24 @@
+Ability: Mistfiend (Record #2057)
+Associated skill: Artificing
+Skillpoints required: 52999
+Blurb: A dread minion of Sllshya.
+Syntax: ELEMENTAL CONDENSE
+ELEMENTAL FOGBANK
+Abfile:
+The powerful mistfiend will permit you to control water on a macro scale
+within your local area. Command it to form a fogbank, and all magically
+flooded locations nearby will be dispersed to form fog in those rooms;
+command it to condense, and all magical fog shall turn to water to flood
+said rooms instead.
+
+* The mistfiend may only act once every minute.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.20 seconds of equilibrium
+Resource: 300 mana

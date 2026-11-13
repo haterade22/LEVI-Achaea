@@ -1,0 +1,23 @@
+Ability: Fissure (Record #2537)
+Associated skill: Sculpting
+Skillpoints required: 36999
+Blurb: Down into the darkness.
+Syntax: MANIFEST FISSURE <target>
+Abfile:
+When an opponent is suitably unable to move(*), you may form a fissure
+beneath them, dropping them down into the ground(**).
+
+* The target must be prone with at least one broken leg for this to
+work.
+
+** This ability may only be performed in burrowable environments, and
+your target will be forceably pushed back to the surface after a time
+(providing they do not move themselves).
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

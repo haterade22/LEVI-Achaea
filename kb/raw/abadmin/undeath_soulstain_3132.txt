@@ -1,0 +1,20 @@
+Ability: Soulstain (Record #3132)
+Associated skill: Undeath
+Skillpoints required: 40999
+Blurb: The harvest is long.
+Syntax:
+Abfile:
+As your unholy hunger grows, so does your mastery over soulbleed. You
+will now rebuild some of your physical form whenever you kill
+someone(*).
+
+* Killing now restores one of your lives, but will not increase your
+lives past the maximum of 3.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

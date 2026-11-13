@@ -1,0 +1,27 @@
+Ability: Glance (Record #1409)
+Associated skill: Vision
+Skillpoints required: 0
+Blurb: See summarised information about your surroundings.
+Syntax: GLANCE/GL/QL
+GLANCE <direction>
+GLANCE GROUND
+GLANCE HARBOUR
+Abfile:
+A simple ability that is inherent that allows you to see the contents of
+your current room.
+
+In addition, you may glance in a direction to see the contents of an
+adjacent room, or glance ground if you are flying or in the trees, or
+glance harbour if you are stood on the quarterdeck of a docked ship. It
+should be noted these latter uses incur a minor equilibrium cost.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.50 seconds of equilibrium
+The ability name GLANCING is mapped to this ability.

@@ -1,0 +1,17 @@
+Ability: Jacks (Record #2323)
+Associated skill: Attainment
+Skillpoints required: 11999
+Blurb: Small toys that can pierce denizen shields.
+Syntax: THROW JACKS AT <target>
+Abfile:
+These typical toys for children have had their spines sharpened. When thrown at a denizen's shield, the sharpened spines can shred the shield and render it ineffective.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 17 rage
+Skill specialisation: br_jester

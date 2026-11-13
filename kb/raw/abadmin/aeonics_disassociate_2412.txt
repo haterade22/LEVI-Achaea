@@ -1,0 +1,20 @@
+Ability: Disassociate (Record #2412)
+Associated skill: Aeonics
+Skillpoints required: 7999
+Blurb: Gain now is pain later.
+Syntax: CHRONO DISASSOCIATE [BOOST]
+Abfile:
+This ability shall allow you to become numb to all damage taken for nine
+seconds. However, when the nine seconds end, you shall take the total
+damage you would have suffered, and more.
+
+If boosted, the disassociation shall only last for five seconds.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 400 age

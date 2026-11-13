@@ -1,0 +1,23 @@
+Ability: Khentimen (Record #3244)
+Associated skill: Spiritlore
+Skillpoints required: 58999
+Blurb: If you dare.
+Syntax: SPIRIT BIND Khentimen
+Abfile:
+Long have shamans been cautioned against reaching out to those damned
+souls who practice that art most maligned.
+
+* Performing this ability shall create a mirage style effect upon the
+location. See AB CHARNEL MIRAGE for full details - the mechanics are
+identical.
+** Note that no higher communion is necessary to attempt this most
+foolish of undertakings. After all. It won't help.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.80 seconds of equilibrium

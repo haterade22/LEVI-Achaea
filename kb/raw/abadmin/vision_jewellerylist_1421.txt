@@ -1,0 +1,3 @@
+Ability: Jewellerylist (Record #1421)
+Associated skill: Vision
+Maps to record 1411 (LIST).

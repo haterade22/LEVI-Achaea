@@ -1,0 +1,18 @@
+Ability: Brazier (Record #1488)
+Associated skill: Tattoos
+Skillpoints required: 35999
+Blurb: Summon another to you.
+Syntax: TOUCH BRAZIER <target>
+Extra info: Inks: 2 Red inks
+2 Yellow inks
+Abfile:
+The brazier tattoo allows you to invoke and summon another adventurer, providing he does not have a cloak of protection. It has a range that is limited to the local area.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium

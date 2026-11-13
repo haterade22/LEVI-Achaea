@@ -1,0 +1,17 @@
+Ability: Refuge (Record #1033)
+Associated skill: Spirituality
+Skillpoints required: 48999
+Blurb: Have your angel transport you to a place of safety.
+Syntax: ANGEL REFUGE
+Abfile:
+Using this ability, you may order your Angel to take you to Nirvana.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 300 Angel power

@@ -1,0 +1,17 @@
+Ability: Astralvision (Record #957)
+Associated skill: Occultism
+Skillpoints required: 9999
+Blurb: Your aura gives insights into that which is around.
+Syntax: ASTRALVISION
+Abfile:
+You are an Occultist, attuned to the aura of all living beings and able to seek out their lifeforce. With this power, you will gain both deathsight and lifevision.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 700 mana

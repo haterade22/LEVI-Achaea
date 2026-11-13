@@ -1,0 +1,39 @@
+Ability: Distraction (Record #3096)
+Associated skill: Subterfuge
+Skillpoints required: 58999
+Blurb: The blindspot is where you thrive.
+Syntax: CONJURE DISTRACTION <delay> [MINUTES]
+Abfile:
+With your mastery of illusion and knowing where to apply pressure just
+so, you can now weave an illusory distraction over a city(*). You can
+delay your distraction to activate up to 2 minutes(**) after you weave
+it, and the process of weaving requires you do nothing for the initial
+preparation. Due to the complexity of this process and how critical it
+is that you be able to layer the illusion upon the correct reality,
+distractions cannot be formed while phased.
+
+When the distraction activates, the guards of said city will be too
+focussed on identifying if it is a genuine attack or not to respond to
+calls for help from citizens(***). The distraction itself lasts around
+five minutes.
+
+Guards who are already on high alert will not fall for the
+distraction(****).
+
+* You must be an enemy of the city in question.
+** The delay is specified in seconds by default, though you can specify
+it in minutes if so desired.
+*** Guards will still respond to calls for help from other guards or
+denizens, for instance if one is attacked.
+**** Guards are on high alert during all sanctioned raids or for around
+20 minutes after a previous distraction has ended.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1500 mana

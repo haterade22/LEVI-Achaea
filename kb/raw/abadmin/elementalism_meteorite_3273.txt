@@ -1,0 +1,28 @@
+Ability: Meteorite (Record #3273)
+Associated skill: Elementalism
+Skillpoints required: 41999
+Blurb: To sunder that which wards.
+Syntax: CAST METEORITE AT <target> <FLAMING|FROZEN|PURE> [4-10]
+Abfile:
+This arcane work enables you to call down a delayed meteorite to shatter
+magical shields. If no shield is present when the meteorite resolves
+then the spell will fail, otherwise the shield is broken and an effect
+is conveyed:
+
+Flaming: a level of the ablaze affliction.
+Frozen: a level of freeze.
+Pure: a random broken limb.
+
+* Note that in addition to the air channel always mandated by this
+ability a fire, water, or earth channel will additionally be required
+for the respective meteor type.
+** If you do not specify a delay, a random one in the range is chosen.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (bypasses shield/prismatic)
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of equilibrium

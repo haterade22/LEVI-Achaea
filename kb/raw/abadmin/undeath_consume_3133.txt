@@ -1,0 +1,20 @@
+Ability: Consume (Record #3133)
+Associated skill: Undeath
+Skillpoints required: 40999
+Blurb: To snuff the candle.
+Syntax: SOULBLEED CONSUME <target>
+Abfile:
+It is time for the living to die. If you have wounded someone enough(*)
+you may consume what is left of their life, ending it in an instant.
+
+* For the purposes of this skill, sufficiently wounded means they either
+have 15 grievous wounds OR are under 50% of their maximum health.
+Useable on: none
+Pre checks: balance, equilibrium, and prone
+Ability range: same room and elevation
+Aggression type: aggressive (blocked by shield/prismatic)
+Requires arms: 2
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

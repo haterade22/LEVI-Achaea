@@ -1,0 +1,16 @@
+Ability: Camus (Record #1292)
+Associated skill: Venom
+Skillpoints required: 18999
+Blurb: A more powerful version of Sumac.
+Syntax: SECRETE CAMUS
+BITE <target>
+Abfile:
+A more powerful version of Sumac poison. This venom can not be used to envenom a weapon.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

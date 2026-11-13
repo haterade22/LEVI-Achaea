@@ -1,0 +1,18 @@
+Ability: Razorwind (Record #2191)
+Associated skill: Weatherweaving
+Skillpoints required: 28999
+Blurb: A wind to lacerate the skin.
+Syntax: CAST RAZORWIND AT <target>
+Abfile:
+This potent air spell will inflict healthleech against adventurers, or
+deal cutting damage against denizens.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.35 seconds of equilibrium
+Resource: 38 mana

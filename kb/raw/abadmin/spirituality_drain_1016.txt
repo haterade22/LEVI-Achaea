@@ -1,0 +1,17 @@
+Ability: Drain (Record #1016)
+Associated skill: Spirituality
+Skillpoints required: 7999
+Blurb: Gain health from your angel.
+Syntax: ANGEL DRAIN
+Abfile:
+Your Angel stands ready to sacrifice even her very essence for your benefit. This ability will replenish some of your health at a cost to her.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 527 Angel power

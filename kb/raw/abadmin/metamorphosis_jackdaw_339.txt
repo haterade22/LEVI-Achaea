@@ -1,0 +1,18 @@
+Ability: Jackdaw (Record #339)
+Associated skill: Metamorphosis
+Skillpoints required: 1499
+Blurb: The black jackdaw.
+Syntax: MORPH JACKDAW
+Extra info: Powers: Fly
+Land
+Abfile:
+The black jackdaw.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 30 mana
