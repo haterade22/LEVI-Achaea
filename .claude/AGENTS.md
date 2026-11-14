@@ -398,7 +398,7 @@ denizen that dragged us lives on this ripple, and the next ripple is a different
 
 ### Prefer the game's own fire text to an affliction-name lookup
 `Your <limb> breaks with a loud crack.` had no handler anywhere — ~25 of them in 90 seconds
-of one live log. `ataxia_brokenLimbFound` (`self_limb_tracking/002_Track_The_Damage.lua:339`)
+of one live log. `ataxia_brokenLimbFound` (`self_limb_tracking/002_Track_The_Damage.lua:352`)
 only branches on the `damaged*`/`mangled*` affliction families, so a level-1 break never reset
 the accumulator: damage kept climbing past the real break, `ataxia_selfHitsToBreak` pinned at
 0, the threshold latched `critical` forever, and every one-shot reaction latch stayed set.

@@ -56,8 +56,9 @@ attacks use arms: Apostate, Blademaster, Depthswalker, Monk, Runewarden, Serpent
 `1` means the attacker needs at least one unbroken arm (PLAYER, the user 2026-11-13), so breaking both arms
 stops the ability; `2` (6 records) is read as both arms unbroken (INFERRED). No log we hold shows an ability
 refused for a broken arm. Psion Weaving (all but PREPARE) and Emulation, and Pariah Memorium and Pestilence,
-state an arm, so two broken arms stop most of those classes' attacks. Our Psion offence sends only Psionics
-with both of its own arms out (`psion.armsOut`, `psion/001_Levi_Psion_Logic.lua`).
+state an arm, so two broken arms stop most of those classes' attacks. With both of our own arms out
+(`ataxia_selfArmsOut`, `self_limb_tracking/002_Track_The_Damage.lua`), our Psion offence sends only
+Psionics, and our Pariah offence sends only VIRULENCE, which states `Requires arms: 0` with Pre checks.
 
 ## Where the game and the wiki differ
 

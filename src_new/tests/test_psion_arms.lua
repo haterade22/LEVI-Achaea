@@ -20,6 +20,10 @@ ataxia = { settings = { separator = ";" }, afflictions = {} }  -- no playersHere
 haveAff = function(aff) return held[aff] or false end
 send = function(cmd) sent[#sent + 1] = cmd end
 
+-- The arm test is the shared ataxia_selfArmsOut, so load its real file first.
+local limbOk, limbErr = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/self_limb_tracking/002_Track_The_Damage.lua")
+if not limbOk then error("Failed to load the limb file: " .. tostring(limbErr)) end
+
 local ok, err = pcall(dofile, file)
 if not ok then error("Failed to load the Psion file: " .. tostring(err)) end
 

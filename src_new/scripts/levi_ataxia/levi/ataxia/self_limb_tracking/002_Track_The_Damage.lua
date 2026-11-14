@@ -174,6 +174,19 @@ function ataxia_selfLimbBroken(limb)
 		or (limb == "torso" and (ataxia.afflictions.mildtrauma or ataxia.afflictions.serioustrauma))
 end
 
+-- Both of OUR arms out of use: each arm broken, damaged or mangled. An ABADMIN record that states
+-- `Requires arms: 1` needs at least one arm that is none of these (the user, 2026-11-13;
+-- kb/classes/abadmin-vs-wiki.md, "The `Requires arms` field"). Unlike ataxia_selfLimbBroken, a
+-- level-1 break counts: the game names it brokenleftarm (kb/afflictions/afflictions.json).
+-- Readers: psion.armsOut (psion/001), pariah.dispatch (pariah/001).
+function ataxia_selfArmsOut()
+	local a = (ataxia and ataxia.afflictions) or {}
+	local function out(side)
+		return a["broken" .. side .. "arm"] or a["damaged" .. side .. "arm"] or a["mangled" .. side .. "arm"]
+	end
+	return (out("left") and out("right")) and true or false
+end
+
 -- Get a summary of limb status
 function ataxia_selfLimbStatus(limb)
 	limb = limb:lower()

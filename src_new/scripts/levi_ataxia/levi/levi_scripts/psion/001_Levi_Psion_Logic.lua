@@ -109,12 +109,9 @@ end
 --- Emulation record, says `Requires arms: 1` (kb/classes/abadmin-vs-wiki.md, "The `Requires arms` field"):
 --- the attacker needs at least one unbroken arm (the user, 2026-11-13). No Psionics record states an arm,
 --- although those records have Pre checks values, so a round of Psionics alone still goes out.
+--- The test is the shared ataxia_selfArmsOut (self_limb_tracking/002), which Pariah reads too.
 function psion.armsOut()
-  local a = (ataxia and ataxia.afflictions) or {}
-  local function out(side)
-    return a["broken" .. side .. "arm"] or a["damaged" .. side .. "arm"] or a["mangled" .. side .. "arm"]
-  end
-  return (out("left") and out("right")) and true or false
+  return ataxia_selfArmsOut and ataxia_selfArmsOut() or false
 end
 
 --- Check if 2+ critical unweaves present (deconstruct kill condition)

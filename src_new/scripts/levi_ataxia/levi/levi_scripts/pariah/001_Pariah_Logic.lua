@@ -169,6 +169,19 @@ local function selectSwarmSting()
   return sting
 end
 
+--- With both arms out and no VIRULENCE to send, say why the key did nothing: at most once in 3 s,
+--- because a held key sends a round on every press. A window on getEpoch(), never `==` (CLAUDE.md, v4.7.469).
+local ARMS_ECHO_GAP = 3
+function pariah.armsOutEcho()
+  local now = getEpoch()
+  local last = ataxiaTemp and ataxiaTemp.pariahArmsEchoAt
+  if last and now - last < ARMS_ECHO_GAP then return end
+  if ataxiaTemp then ataxiaTemp.pariahArmsEchoAt = now end
+  local why = pariah.state.virulenceTimer and "virulence is on its 10 s delay"
+    or "virulence needs 3 of rebbies, sandfever, flushings, pyramides"
+  pariah.echo("Both arms out: no attack sent (" .. why .. ").")
+end
+
 --------------------------------------------------------------------------------
 -- Main dispatch (adaptive — no mode argument)
 --------------------------------------------------------------------------------
@@ -178,6 +191,20 @@ function pariah.dispatch()
   local atk = combatQueue()
   local e   = ataxia.vitals.epitaph
   taccelerates = taccelerates or 0  -- system-global, managed by 013_Accelerate.lua
+
+  -- Both of OUR arms out (2026-11-13): every Memorium record (TRACE, CRUX, BLOOD) and the swarm commands
+  -- STING, BURROW, INFEST, SCOURGE and LATENCY say `Requires arms: 1`, and the attacker needs at least one
+  -- unbroken arm (the user). VIRULENCE states `Requires arms: 0` with Pre checks, so the 0 is a statement,
+  -- and it bypasses a shield: it is the one attack left. Without its plagues we send nothing and say why,
+  -- because every other command of the round would be refused.
+  if ataxia_selfArmsOut and ataxia_selfArmsOut() then
+    if pariah.canVirulence() and not pariah.state.virulenceTimer then
+      send("queue addclearfull freestand " .. atk .. "virulence " .. target)
+    else
+      pariah.armsOutEcho()
+    end
+    return
+  end
 
   getLockingAffliction()
   checkTargetLocks()

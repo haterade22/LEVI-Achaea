@@ -16,12 +16,19 @@ Charnel: Death and corpse manipulation
 ## Shields, from the game's records (2026-11-13)
 `kb/classes/shield.md`: FISSURE 2863 breaks a shield and says it bypasses one. VIRULENCE 2883, LATENCY 2891,
 BURROW 2886, STING 2887 and INFEST 2888 also say they bypass a shield; most other Memorium, Pestilence and Charnel
-records say a shield blocks them. The shield branch (`pariah/001_Pariah_Logic.lua`:197-203) sends FISSURE first, even
-when LATENCY (:226) or VIRULENCE (:230) is ready. A candidate, not a change: no log we hold shows a Pariah attack into
+records say a shield blocks them. The shield branch (`pariah/001_Pariah_Logic.lua`:224-231) sends FISSURE first, even
+when LATENCY (:254) or VIRULENCE (:257) is ready. A candidate, not a change: no log we hold shows a Pariah attack into
 a shield. Test it in a spar: `virulence <target>` and `swarm latency pyramides` at a shielded target, keep the lines.
 63 of the 81 Pariah records say `Requires arms: 1` (`abadmin-vs-wiki.md`, "The `Requires arms` field"): the
-attacker needs at least one unbroken arm (the user, 2026-11-13). So two broken arms stop most Pariah attacks.
-Our Pariah offence (`pariah/001`) does not check its own arms yet.
+attacker needs at least one unbroken arm (the user, 2026-11-13). So two broken arms stop most Pariah attacks: every
+Memorium record (TRACE, CRUX, BLOOD) and the swarm commands STING, BURROW, INFEST, SCOURGE and LATENCY.
+VIRULENCE 2883 states `Requires arms: 0` with Pre checks, so its 0 is a statement, and it bypasses a shield.
+Since v4.7.500, with both of OUR arms out (`ataxia_selfArmsOut`, `self_limb_tracking/002`:182: broken, damaged or
+mangled on each side), `pariah.dispatch` (`pariah/001`:200) sends `virulence <target>` alone when `pariah.canVirulence()`
+holds and `pariah.state.virulenceTimer` (the 10 s delay, trigger `plague_swarm_related/009`) is clear. Otherwise it
+sends nothing and says why, at most once in 3 s (`pariah.armsOutEcho`, :175). One arm out changes nothing.
+Test: `test_pariah_arms.lua`. The VIRULENCE record names pairs of plagues (Pyramides + Flushings = Healthleech, and
+five more), while `canVirulence` asks for 3 of rebbies, sandfever, flushings and pyramides: a stricter gate, unchanged.
 
 ## Kill Routes
 

@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-13 - v4.7.500: a Pariah with both arms broken sends VIRULENCE only
+
+- **Two broken arms stop most Pariah attacks.** Every Memorium record (TRACE, CRUX, BLOOD) and the swarm commands STING, BURROW, INFEST, SCOURGE and LATENCY say `Requires arms: 1`, and the attacker needs at least one unbroken arm (the user). Our Pariah offence did not check its own arms, so with both arms out it kept sending rounds that could not go. VIRULENCE states `Requires arms: 0` with Pre checks, so that 0 is a statement, and it bypasses a shield. Now, with both arms out, `pariah.dispatch` sends `virulence <target>` alone when its plagues are up and its 10 s delay is over. Otherwise it sends nothing and says why, at most once in 3 s. One arm out changes nothing. Test: `test_pariah_arms.lua`.
+- **One arm test for every class.** `ataxia_selfArmsOut()` (`self_limb_tracking/002`) is the shared test: a broken, damaged or mangled arm on each side. `psion.armsOut()` now reads it.
+- **Open:** `ataxia_selfLimbBroken`, which the SLC both-arms flee reads, counts only damaged and mangled arms. The game also has a level-1 `brokenleftarm`, so two level-1 breaks do not start the flee. Not changed here.
+
+---
+
 ## 2026-11-13 - v4.7.499: a Psion with both arms broken sends Psionics only
 
 - **Two broken arms stop a Psion's weaves.** Every Weaving record except PREPARE, and every Emulation record, says `Requires arms: 1`. The user confirmed what that means: the attacker needs at least one unbroken arm. Our Psion offence did not check its own arms, so with both arms out it kept sending `weave` rounds that could not go. Now `psion.armsOut()` (a broken, damaged or mangled arm on each side) makes the round the transcend alone: `psi transcend <blast|muddle|shatter|excise> <target>`, plus `psi excise` at 30% mana or less. No Psionics record states an arm. The round leaves out the shield wield and LIGHTBIND, which is Emulation. With one arm working, nothing changes. Test: `test_psion_arms.lua`.
