@@ -490,47 +490,8 @@ gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
 ## Current System Components
 
 ### Mudlet Mapper (mmp)
-- `mmp.gotoRoom(roomID)` - Navigate to a specific room
-- `mmp.gotoArea(areaName)` - Navigate to area entrance
-- `mmp.gotoFeature(featureName)` - Navigate to map features
-- `mmp.getPath(from, to)` - Calculate and cache paths
-- `mmp.fixPath()` - Optimize paths for sprint/dash/gallop
-- Fast travel integration (wings, tarot, harness, pebble)
-- Balance-aware movement with GMCP integration
-- Multi-game support (Achaea, Aetolia, Lusternia, Imperian)
 
-**The mapper is a SEPARATE, self-updating package** (IRE mudlet-mapper, its own "Check for updates"
-prompt). `src_new/scripts/mudlet-mapper/` is a stale reference snapshot that the build never ships
-(`INCLUDE_ROOTS = {"Levi_Ataxia"}`), so its code is not what runs. **Never ship copies of mapper items
-inside Levi_Ataxia** -- v4.7.374 removed four copies of its hourly update timer that had been doubling
-its polling, and that Muddler had merged into one timer (same name, same group) at an unstable
-interval. Before relying on an `mmp.*` name, check it against upstream `mudlet-mapper.xml`, not the
-snapshot.
-
-**Map source (upstream, 2026-10):** `mconfig crowdmap on|off` became `mconfig mapsource
-game|published|service` (`crowdmap` survives as a deprecated alias; `mmp.settings.crowdmap` is gone,
-read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `crowdmapservicesend`
-(default off) reports local map changes to it. Two consequences for this package:
-- **Upstream wraps Mudlet's global map-write API** (`setRoomName`, `addRoom`, `deleteRoom`,
-  `setRoomUserData`, `addSpecialExit`, `setRoomEnv`, `setDoor`, `createMapLabel`, ...). With sending on,
-  ANY call from ANY package is reported to the shared service. Our only map write today is `lockRoom`
-  (`genrunning/003`), which is not wrapped. Think twice before adding a map write, and never write
-  Mnemosyne/dementia-derived data into the Mudlet map.
-- **`gmcpmapupdates` + Mnemosyne dementia:** with it on, `mmp.syncSafeRoomInfo` writes every
-  `gmcp.Room.Info`'s name, environment, indoor/outdoor flag and area onto the mapped room of that
-  number, unchecked. Dementia (Creville's Legacy) sends a real room number with hallucinated details on
-  that channel (see the v4.7.249 dead-reckoning note), so it must be OFF in the tower.
-  **The package enforces that (v4.7.377, `mnemosyne/016_Mapper_GMCP_Guard.lua`):**
-  - "mnemosyne entered" switches it off (silent `setOption`, read back), but only if it was on.
-  - "mnemosyne left" switches it back on, but only if WE switched it off.
-  - A `gmcp.Char.Vitals` check covers the three paths that raise no event: a reload mid-climb (the
-    restored `inMnemosyne` makes `mnemHere`'s transition guard silent), the user re-enabling it
-    mid-climb, and a restore owed from an earlier session.
-  - The debt marker `ataxiaBasher.mapperGmcpOwed` is DELIBERATELY saved. The mapper writes its options
-    only on sysExitEvent and we save on disconnect, so a clean exit stores both "off" and "owed",
-    while a crash stores neither.
-  - `ataxia_loadSettings` does not restore: on a fresh start it can run before the mapper's own
-    option load, which would overwrite the restore after the marker was already cleared.
+**Moved (2026-11-13).** See `.claude/projects/mapper/README.md`.
 
 ### Ataxia Combat System
 
@@ -554,11 +515,7 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 
 ### GUI System (ataxiagui)
 
-~20 windows using `Adjustable.Container`. Tabbed chat, map, bash stats, afflictions, vital bars, SLC, and more.
-
-**Full documentation**: See `memory/gui-windows.md` (Adjustable.Container patterns, namespace migration status, vital bars, ANSI color handling)
-
-**Chat colours are the GAME'S CONFIG COLOUR (v4.7.375).** `zgui.showChat` (`update_windows/001_showChat.lua`) keeps the ANSI in `Comm.Channel.Text.text` (`ataxiagui_chatAnsiToDecho`), so the chat matches the main window. Clans take CONFIG COLOUR CLANS. Never repaint from a package palette. The channel comes from **`Text.channel`** (`ataxiagui_chatChannel`), never from the deprecated `Comm.Channel.Start`: Start arrives AFTER Text, so on the Text event it names the PREVIOUS message's channel. v4.7.100 read it first, and every line was coloured and routed as the one before it.
+**Moved (2026-11-13).** See `.claude/projects/gui/README.md`.
 
 ### Gear Audit & BiS Analysis (`gearAudit`)
 
@@ -569,120 +526,20 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 **Moved (2026-11-13).** The reference is `.claude/projects/armour/README.md`.
 
 ### Item Catalog (`itemCatalog`)
-Catalogs artefacts, talismans, promo items, and special equipment. Cross-references against a knowledge base to identify what each item does. Auto-probes unknowns and flags them for review.
 
-**Key Files:**
-| File | Purpose |
-|------|---------|
-| `src_new/scripts/.../item_catalog/001_Item_Catalog_Init.lua` | Namespace, config, state machine, echo helpers, skip patterns |
-| `src_new/scripts/.../item_catalog/002_Item_Catalog_DB.lua` | Knowledge base (200+ artefacts, all talisman sets) |
-| `src_new/scripts/.../item_catalog/003_Item_Catalog_Functions.lua` | Scan orchestration, KB matching, display, search, command dispatch |
-| `src_new/scripts/.../item_catalog/004_Item_Catalog_Save_Load.lua` | Persistence (save/load/backup) |
-| `src_new/aliases/.../item_catalog/001_Item_Catalog.lua` | `catalog` alias dispatcher |
-
-**Namespace:** `itemCatalog` (global). **Alias:** `catalog`.
-
-**Data Structures:**
-- `itemCatalog.kb` — Knowledge base keyed by normalized item name (type, category, power, effect, credits, tier)
-- `itemCatalog.talismanKB` — Talisman keyword lookup (set, effect)
-- `itemCatalog.items` — Discovered items keyed by ID (name, location, source, kbKey, probeText, userNote, etc.)
-
-**Scan Flow:** ARTEFACT LIST → TALISMAN LIST → Auto-probe unknowns (0.7s delay). Uses `tempRegexTrigger` with timer-based end-of-output detection and MORE pagination handling.
-
-**Commands:**
-| Command | Purpose |
-|---------|---------|
-| `catalog scan` | Full scan (ARTEFACT LIST + TALISMAN LIST + auto-probe) |
-| `catalog quick` | Quick scan (no probing) |
-| `catalog show [artefacts\|talismans\|promo\|unknown]` | Display by type/category |
-| `catalog search <keyword>` | Search name, power, effect, set, category |
-| `catalog info <id>` | Full item details |
-| `catalog note <id> <text>` | Add manual annotation |
-| `catalog unknowns` | List unidentified items |
-| `catalog save` / `catalog load` | Manual save/load |
-| `catalog help` | Command reference |
-
-**Persistence:** `table.save/load` to `getMudletHomeDir()/itemcatalog` with `_ataxia_backup.itemcatalog` fallback. Integrated into `ataxia_saveSettings()`/`ataxia_loadSettings()`.
+**Moved (2026-11-13).** See `.claude/projects/item-catalog/README.md`.
 
 ### Our artefacts (`ataxiaArtefacts`, v4.7.494)
 
-A player's report: our docs and logic did not count the artefacts we own (the Aldar Diadem: 15% faster
-equilibrium, worn at all times). `misc_scripts/033_Artefacts.lua` reads the PLAYER'S OWN list, so the
-package is right for anyone who installs it; never a fixed list.
-- **Source:** the game's `ARTEFACT POWER LIST OWNED` (`Item ID | Item Name | Power | Level`). Trigger 802
-  (the header) opens a 10 s window and trigger 803 reads each row; the list REPLACES the saved one in
-  `ataxia.settings.artefacts.powers` (saved with `ataxia`). Rows are parsed from their END: the name
-  column is cut at 35 characters and can run into the power with one space, the power column at 20
-  (`class_switch_reducti`, matched by prefix against the known powers), level `-` = no levels. The first
-  login with nothing saved asks once (`ataxia_artefactLogin`, 19 s after login). Never scanned, the item
-  catalog (`itemCatalog.items[*].kbKey` -> `kb.power/tier`) stands in.
-- **API:** `ataxia_artefact(power)` -> `{id, name, level, from}` or nil; `ataxia_artefactLevel(power)`
-  (0 = none, 1 = no levels); `ataxia_artefactSize(power, field, default)` reads `A.EFFECTS[power]`, which
-  names the source of each size; `ataxia_eqFactor(form)` / `ataxia_eqSeconds(base, form)`: faster_eq
-  (x0.93 / x0.85) times Rain (x0.85, `A.RAIN_FACTOR`), with a one-line reason. Quick-witted is named in
-  the reason but not counted (its size is unknown). A class script guards every call
-  (`if ataxia_artefact then`): `check_orphans.py` check 1c is strict.
-- **Readers today:** Shaman's stand-in curse count (trigger `shaman/011`, `genrunning/004`: 10 + the skull
-  pendant's 2/4/6; trigger 012's game line stays the real writer), the Tekura punch (`tekura6.classifyHit`
-  splits a hit at the midpoint of the learned kick and punch, so a spiked-knuckles punch is not learned as
-  a kick; TKD's prep line is `100 - tekura.punchDamage()`), and the Shikudo staff level
-  (`ataxia.shikudoLevel` scales `shikudo/006` getAttackDamage's defaults). **A size that only
-  `docs/artefacts-reference.md` gives is not used in code** (hamstring +5 s, the tuning fork's x2, the
-  Collar's +20%: Release B). The game's `ARTEFACT POWER SHOW` text, filed 2026-11-13 in `kb/raw/artefacts/`,
-  states no size, so each size still needs a source: the item's own text, a HELP file or our logs.
-- **`aconfig artefact`**: list what we own, what each changes and who reads it; `aconfig artefact scan`
-  asks the game again; `aconfig artefact <power> off|on [level]|auto` overrides one
-  (`ataxia.settings.artefacts.override`). Tests: `test_artefacts.lua` (the pasted 74-row list,
-  `kb/raw/live/artefact_power_list_owned_2026-11-13.txt`), `test_tekura_punch.lua`.
+**Moved (2026-11-13).** See `.claude/projects/artefacts/README.md`.
 
 ### Player Database (ataxiaNDB)
-- Fetches from Achaea API (`http://api.achaea.com/characters/`)
-- Tracks: name, city, house, class, level, XP rank, player kills, mark, army rank, dauntless
-- City-based name highlighting with per-city colours
-- Enemy and army rank tracking
-- Auto-honours hidden-city players (queued with 2s spacing after API batch)
-- `an refresh [city]` — bulk `honours` to update mark/army/dauntless (honours-only data)
-- Threat queries: `an marks`, `an army`, `an dauntless`, `an threats` (all support optional city filter)
-- Player notes: `an noteadd/noteshow/noteremove`
 
-**Mindnet party calls (v4.7.472, `telepathy/001_Mindnet.lua`).** `ataxia_mindnetTellParty(name, area)` (`013_Raid_Mode_Things`) decides the `pt <name> IN!` line. `raid mindnet` off stops it. Raid on and Annwyn call everyone, and Mhaldor calls its city enemies, as before. Otherwise, in any area and only in a party, it calls a player who is not us, is not on `ataxiaTemp.allies`, and whose `ataxiaNDB_getCitizenship` differs from our city (`Unknown` and `Rogues` differ). The city enemy list is not the filter, because in the fight that prompted this it missed most of the other side. **`ataxia.channels` (GMCP `Comm.Channel.List`) gives both inputs: `party` is listed while in a party, and the caption of `ct` is our city's name.** `ataxia_raidMode` is the wrong reader for this setting, because it returns false with raid off. `raid.mindnet` is seeded true at load, because `ataxia_raidToggle` flips nil to true. Rules and sources: `kb/mechanics/mindnet.md`. Test: `test_mindnet_report.lua`.
+**Moved (2026-11-13).** See `.claude/projects/ndb/README.md`.
 
 ### Setup Wizard (leviSetup)
-In-game configuration wizard accessed via `ataxia setup`.
 
-**Key File**: `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/020_Setup_Wizard.lua`
-
-**Namespace**: `leviSetup` — all functions under this table, dispatched via `leviSetup.dispatch(cmd, rest)`. Note: the internal Lua namespace was intentionally kept as `leviSetup` (internal only); only the user-facing alias changed from `levi setup` to `ataxia setup`.
-
-**Commands**:
-| Command | Purpose |
-|---------|---------|
-| `ataxia setup` | Main menu |
-| `ataxia setup class` | Set/auto-detect class |
-| `ataxia setup separator` | Command separator |
-| `ataxia setup weapons` | Weapon IDs |
-| `ataxia setup basher` | Basher settings (flee, gold pack, shield swap) |
-| `ataxia setup sipping` | Health/mana sip thresholds |
-| `ataxia setup tracking` | Affliction tracking status (V3 is always on) |
-| `ataxia setup combat` | Party relay, auto-loot, gag clot |
-| `ataxia setup gui` | Toggle GUI on/off |
-| `ataxia setup ndb` | NDB highlight colours |
-| `ataxia setup install` | Guided install walkthrough (atinstall/abinstall/aninstall) |
-| `ataxia setup status` | One-page settings overview |
-| `ataxia setup guide` | Configuration guides (ataxia/basher/ndb) |
-| `ataxia setup reporting` | Mnemosyne run tracker (token, auto on/off, test) |
-| `ataxia setup earrings [auto]` | Travel earrings: `auto` sends EARRINGS and saves every partner |
-
-**Earrings are paired with PLAYERS, and pairings change (v4.7.488).** `ataxia setup earrings auto`
-saves every `Earring#N ... is paired with <Name>.` row (with or without `(M)`) as
-`ataxia.settings.user.artefacts.earrings[<name>] = "earringN"`, and REPLACES the table:
-`leviSetup.earringMerge` drops an entry whose earring has a new partner or whose partner is not
-listed; an empty scan changes nothing. A fixed list of 9 names dropped 5 of 11 earrings before.
-The travel aliases are temporary aliases made by `leviSetup.earringAliases()` (at
-`ataxia system loaded`, and after each scan or manual set): `h` + the first 3 letters of a
-partner, never for a prefix two partners share or one in `leviSetup.EARRING_RESERVED` (`orn`,
-the horn alias). There is no catch-all `^h...$` alias, because it would take words other
-aliases own. Test: `test_earring_auto.lua`.
+**Moved (2026-11-13).** See `.claude/projects/setup-wizard/README.md`.
 
 ### Mnemosyne Run Tracker (`ataxia.mnemosyne`)
 
