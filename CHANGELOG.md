@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-11-14 - Two rules for parallel sessions: claim shared work, ask one question (docs and tooling, no version bump)
+
+Up to five sessions work on this repository at once. Several of them found the same red CI step and fixed it, then reverted and deconflicted. Others read whole files for answers that could not change what they did next.
+
+- **Rule A, claim shared work** (`CLAUDE.md`, "Parallel Sessions"). A top-level session claims a fix, a feature or a red `main` with the new `tools/claim.py` before it starts. A subagent never claims; it reports a red `main` to its parent.
+- **`tools/claim.py`** keeps one sub-folder per claim in `C:\Users\mikew\source\repos\Achaea\.claims`, outside every worktree and outside git, made with one atomic `mkdir`: of two sessions that take the same name at the same time, one wins. `ci-fail <step id>` reads the latest `build.yml` run on `main` and says whether a failure is on `main` or on the session's branch; it waits at most 6 tries for a run in progress, then says UNKNOWN. `pushed` gives a red `main` to the session that just pushed. `take --over` makes the new claim before it removes a dead one. `--help` holds the full protocol.
+- **Rule B, ask one question and take one answer**, is in `CLAUDE.md` and in `docs/ai-includes/agent-brief.md`, because subagents make most lookups and `Explore` and `Plan` agents get no `CLAUDE.md`.
+- `tools/test_claim.py` (33 tests, a CI step and a `tools/ci_local.py` row `claim-test`) runs two processes that take the same name, 50 times, and checks that exactly one wins each time.
+
+---
+
 ## 2026-11-14 - The TAOM adoption: all seven phases are on `main` (docs only, no version bump)
 
 - `docs/reviews/adopt-taom-2026-11-13.md` has a Status section: each phase, its commits and its result, and what is still open (three probes that need a new session, 9 test leaks, 10 report-only sites, issue #177).

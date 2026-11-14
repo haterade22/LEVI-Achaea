@@ -29,6 +29,7 @@
     {"id": "budget", "what": "CLAUDE.md is within its byte ceiling (docs/adrs/002): new detail goes to its one home, not into that file", "argv": ["tools/check_context_budget.py"], "quick": true},
     {"id": "budget-test", "what": "the budget and the moves check", "argv": ["tools/test_check_context_budget.py"]},
     {"id": "release-test", "what": "the decisions of tools/release.py (tag-ready, post)", "argv": ["tools/test_release.py"]},
+    {"id": "claim-test", "what": "tools/claim.py: one winner of two parallel takes, the takeover order, the red-main decisions", "argv": ["tools/test_claim.py"]},
     {"id": "githooks-test", "what": ".githooks/pre-push refuses the bad release pushes and lets the good ones go", "argv": ["tools/test_githooks.py"]},
     {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": ["V_TXT=$(cat version.txt", "muddler_project/mfile", "ataxiaVersion", "v${V_TXT//./[.]}[: ]"]},
     {"id": "unit", "what": "the Lua test suite (src_new/tests)", "argv": ["tools/run_lua_tests.py"], "needs": ["lupa"], "quick": true, "ci_marker": "lua5.1 src_new/tests/test_runner.lua"},

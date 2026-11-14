@@ -75,6 +75,27 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 
 ---
 
+## Parallel Sessions (MANDATORY)
+
+Up to five sessions work on this repository at the same time. `C` below is `/c/Python314/python -B tools/claim.py`; `--help` holds the full protocol.
+
+**Rule A - Claim shared work.** Shared work is one problem or one outcome that another session can also start: a red main, a feature, a bug fix. Two sessions that edit the same file do not do shared work; the rebase handles that. Rule A is for top-level sessions only. A subagent never claims work and reports a red main to its parent.
+1. Before you start a fix or a feature, run `C take <name> --as <your ListAgents name> --work "<one line>"`. Read the other claims it lists: one can be the same work under another name.
+2. When a CI step fails, run `C ci-fail <step id> --as <name>`. It says whether the failure is on main or on your branch, and it claims a failure on main for you.
+3. If the script says TAKEN, do work that does not depend on it, or stop and report. If the owner is not in ListAgents, the claim is dead: run `C take <name> --over --as <name>`.
+4. Right after a push to main, run `C pushed --as <name>`. When your work is on main, or when you stop, run `C release <name> --as <name>` (after a compaction: `C release --all-mine --as <name>`).
+
+**Rule B - Ask one question, take one answer.**
+1. Before a lookup, write one line: the question, and the decision it serves.
+2. If no answer can change your next action, do not make the lookup.
+3. Keep the query narrow: search for the pattern and read only the lines you need.
+4. When the result answers the question, stop. Do not examine the rest.
+5. Always in scope: before you change a thing, find what depends on it. Confirm that the code you found runs (its ancestor folders are active, and no other trigger has the same pattern).
+6. If you see an unrelated problem, report it in one line. Do not examine it.
+7. If that unrelated problem is a red main, claim it under Rule A. A subagent reports it to its parent instead.
+
+---
+
 ## Build, Test and Release (MANDATORY)
 
 ```bash
