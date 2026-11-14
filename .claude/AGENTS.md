@@ -1156,3 +1156,268 @@ left (`kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`, lines 41-48).
 Eight hook scripts live in `.claude/hooks/` and are registered in `.claude/settings.local.json`. **None of them runs today.** Claude Code reads settings only from the folder a session starts in, and sessions start in the parent folder. Three of them (`block-git-bypass.sh`, `lint-before-commit.sh`, `protect-config.sh`) also read `$TOOL_INPUT`, while hook input arrives on stdin, so they could not block. The facts and their sources are in `docs/reference/harness-facts.md`. Do not rely on a hook. The gates that work are `tools/ci_local.py` before a push and CI after it.
 
 Never bypass a gate (`--no-verify`, `git push --force`): correct the cause.
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Lessons Learned (Combat System Development)
+
+### Silent gates: four rules from the 2026-08-19 Grulk death (v4.7.275)
+
+A 123-second PvP loss took two full analysis passes to explain. Both passes were slowed by the
+same class of problem, and all four rules generalise well beyond that fight.
+
+**1. A status display that prints BEFORE the send is not evidence of a send.**
+The `[BM ...]` block prints inside `runDoublePrep`, after `blademaster.run()`'s guards but before
+`sendAttack`'s. It reported healthy prep **89 times while 10 commands reached the server**.
+Instrument every `return` in a guard chain — debounced per-*reason*, so a change of reason still
+prints immediately (that transition is the interesting part).
+
+**2. `send(cmd, false)` makes a command invisible in the log.**
+`ataxia_breakLock` sends `fitness` that way, so a log shows only the server's replies. The first
+analysis pass concluded fitness had never been sent; it had fired twice, and the cooldown refusals
+were sitting right there in the log. **Before concluding a command was never sent, check the
+sender's echo flag.**
+
+**3. Two components can each correctly defer to the other and produce total inaction.**
+`blademaster.sendAttack` deferred to `ataxia_lockBreak()`; `ataxia_lockBreak` declines when
+`ataxia_canActive()` is false. With weariness up, neither did anything — for 86 seconds, silently.
+**When A defers to B, A must verify B can actually run.**
+
+**4. A gate can INVERT — get stricter exactly as the threat gets worse.**
+`canParry()` blocked on prone, paralysis and limb damage: every one a state a limb-prep class
+manufactures on purpose. The parry froze precisely as the opponent closed in (2 parries in 44
+throws). The identical reasoning error had already been found and fixed in the PvE *selection*
+path in v4.7.221 and never checked in the *send* gate. **When you fix a reasoning error in one
+layer, grep for the same reasoning in the others.**
+
+**Corollary on precedence:** `if A or B and not C` parses as `A or (B and not C)`. This was live in
+`Algedonic.AntiSentinel`, making a single damaged left arm trigger a rift-lock panic ~20 times a
+fight. Parenthesise mixed `and`/`or` conditions.
+
+**Corollary on affliction decoding:** our prompt abbreviations come from
+`ataxia/008_Affliction_Colouring.lua`, and some are one letter apart in meaning. `par` is
+**paranoia**; `PAR` is **paralysis**. `dar` is darkshade, `ver` vertigo, `stu` stupidity.
+**Never infer an affliction from its abbreviation -- look it up.** Also: the prompt WRAPS across
+two lines when the affliction block is long, so a naive log parser silently drops exactly the
+most-afflicted (i.e. most interesting) prompts.
+
+**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`. Since v4.7.419 blackout uses it (4 s: Psion LIGHTSTEAL 525, Knight CONCUSS `snb/008`), and MIND DISRUPT gives `disrupted` a 10 s BACKSTOP (`telepathy_tekura/007`; the game gives it no duration, only Concentrate cures it) that the target's CONCENTRATE line (788) cancels through `ataxia_tarAffFaded`.
+
+**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire (the slickness proof goes through `proveAffAbsentV3` first since v4.7.479, so the branches it rules out go too). A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
+
+**Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
+in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
+prompt, the question is whether GMCP surfaces it at all -- and adding a text trigger to "fix"
+it strands a phantom affliction unless GMCP also sends the matching Remove.
+
+**Corollary on log forensics:** when reading a combat log, count what *didn't* happen. Consumption
+totals, cure confirmations per eat, and outbound-command counts are all recoverable from a log and
+are usually more informative than the lines that did fire.
+
+### A guarded start with an unguarded stop is not a pair (v4.7.292)
+
+The balance banner printed `BALANCE: 0.000` constantly. **Two triggers stop one stopwatch** --
+`balances/001_Limb_Balance` ("...on your legs.") and `balances/006_All_Limbs` ("...on all limbs.")
+both call `endBalTimer()` + `balanceHighlight()`, and both lines arrive in the same round. The first
+stopped and RESET the watch; the second stopped an already-reset watch, read ~0, and printed it as a
+measurement. `timerOnBalUsed` had always refused to start a running watch; nothing ever refused to
+stop a stopped one.
+
+Two rules generalise:
+- **Guard both ends or neither.** EQ was corrected at the same time despite having only one stopper:
+  the asymmetry was the defect, and fixing only the half that bites leaves the other waiting for a
+  second trigger to be added.
+- **"Zero" and "nothing was running" are different answers.** The fabricated 0.000 was written into
+  `bashStats.lastBalanceTime` and zeroed `currentBalanceDamage` a second time, so a round's damage
+  was attributed to a balance of no length -- a display bug that was quietly corrupting DPS.
+
+### Mudlet Trigger Patterns
+
+**Problem**: Strict regex anchors (`^` and `$`) can fail in Mudlet due to line processing quirks.
+
+```lua
+-- BAD: May not match due to anchors
+"^You observe .+ \\[(\\d+)\\]$"
+
+-- GOOD: More flexible, still specific
+"You observe .+ \\[(\\d+)\\]"
+```
+
+**Best Practices**:
+- Avoid `^` and `$` unless absolutely necessary
+- Use `.+` (one or more) instead of `.*` (zero or more) when content is expected
+- Test patterns against actual game output before deploying
+
+### Counter Incrementing (Button Spam Issue)
+
+**Problem**: Incrementing counters in dispatch/combo builder functions causes them to increment on every button press, not just when the action fires.
+
+```lua
+-- BAD: In buildComboBrokenstar() - called every button press
+blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+combo = "bladetwist;discern " .. target
+
+-- GOOD: Use trigger to increment when action actually fires
+blademaster.bladetwistTriggerID = tempRegexTrigger(
+  "BLADETWIST \\[\\|\\] BLADETWIST \\[\\|\\] BLADETWIST",
+  function()
+    blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+  end
+)
+```
+
+**The server queue does the same to a planner's history (v4.7.420).** An offense key sends `queue addclear
+free ...`, which REPLACES a round still waiting on equilibrium or balance, so history kept across rounds (the
+last round's kind, a MIND run, a prelude count, a latch, an alternated side) must move when the GAME RUNS the
+round. Counted per press, `shikudo/007` (caught in review) ran the same kind of round twice per recovery,
+turned a critical MIND IMPATIENCE into a combo and spent its KAI CHOKE prelude unsent. 007 and 011 commit a
+pending round on the queue's run line, matched on its FIRST row since it wraps (`.claude/AGENTS.md`).
+
+### Limb Balancing Strategy
+
+**Problem**: When attacking two limbs with asymmetric damage, one limb reaches threshold before the other.
+
+**Solution**: Always hit the **LOWER damage limb as primary** to balance progression.
+
+```lua
+function blademaster.getFocusLeg()
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  return (LL <= RL) and "left" or "right"
+end
+
+function blademaster.getCentreslashDirection()
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+  return (head <= torso) and "down" or "up"
+end
+```
+
+### Mounted Target Handling
+
+**Problem**: KNEES on a mounted target DISMOUNTS instead of PRONING.
+
+**Solution**: Dismount on the final prep hit (before double-break), then KNEES on double-break will properly prone.
+
+```lua
+if phase == "leg_prep" then
+  -- Dismount during final prep hit if mounted + hamstrung
+  if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
+    return "knees"  -- Dismount now
+  end
+  return blademaster.selectPrepStrike()
+end
+```
+
+### Phase Transition Triggers
+
+**Problem**: State-based phase transitions fail when triggers don't capture values correctly.
+
+**Best Practices**:
+1. Use simple, robust trigger patterns for critical state updates
+2. Log trigger fires during debugging to verify they're matching
+3. Have fallback phase logic when triggers miss
+4. Always update both state flags and values (e.g., `bleedingReady = true` AND `targetBleeding = value`)
+
+### Writhe/Escape Handling
+
+**Problem**: Target escaping (writhe from impale, standing from prone) should preserve progress.
+
+**Best Practices**:
+1. On writhe: Keep `bleedingReady` and `targetBleeding` - don't reset progress
+2. Check if target is still prone after writhe (free re-impale!)
+3. If bleeding >= 700 and not impaled, can go directly to brokenstar
+
+```lua
+function blademaster.onTargetUnimpaled()
+  blademaster.state.isImpaled = false
+  -- Keep bleedingReady and targetBleeding - we built that progress!
+
+  if blademaster.hasAff("prone") then
+    cecho("[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
+  elseif blademaster.state.bleedingReady then
+    -- Go to brokenstar phase (checked in getPhaseBrokenstar)
+  end
+end
+```
+
+---
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Common Pitfalls & Solutions
+
+### Pitfall: Trusting Combat Messages
+```lua
+-- BAD: Assuming affliction was applied
+if matches[1]:find("You jab") then
+  target.affs.paralysis = true  -- They might have shrugging!
+end
+
+-- GOOD: Track attempts, confirm with diagnose/death messages
+if matches[1]:find("You jab") then
+  target.affAttempts.paralysis = true
+end
+```
+
+### Pitfall: Not Handling Blackout
+```lua
+-- BAD: Assuming vitals are accurate
+if ataxia.vitals.hp < 1000 then
+  sip health
+end
+
+-- GOOD: Check for blackout first
+if not ataxia.afflictions.blackout and ataxia.vitals.hp < 1000 then
+  sip health
+end
+```
+
+### Pitfall: Hardcoded Timing
+```lua
+-- BAD: Assuming 2s balance
+tempTimer(2.0, function() doNextAttack() end)
+
+-- GOOD: Use stopwatches and balance regain events
+function ataxia.balance.regained("bal")
+  doNextAttack()
+end
+```
+
+### Pitfall: `os.clock()` is CPU time, not a clock
+Lua 5.1 defines `os.clock()` as CPU time; it equals wall time only under Windows' C runtime, so on
+Linux and macOS a game timer built on it barely advances. Time game events with `getEpoch()`, and move
+every stamp and every comparison of one timer together. v4.7.419 replaced the last `os.clock()` calls
+(the rebound-recovery prediction, the crushed-throat apply window, the balance-time display and the
+Serpent offense's `now()`); `test_serpent_notes.lua` holds `os.clock` still, so a Serpent timer that
+reads it again fails its test.
+
+### Pitfall: a bare weapon keyword can wield the wrong item (v4.7.456)
+`wield staff` matches every item that answers to "staff", and artefacts do not look like their
+keyword: the user's Shar'ilian lightspire is an illusion staff. In the 2026-10-27 group log the game
+took it on about half the Shikudo rounds and refused each combo. Wield by ITEM ID (`staff489282`),
+resolved from a setting or from GMCP `Char.Items` by the item's NAME (`shikudo.staffRef`,
+`shikudo/006`; the Two Handed basher does the same, `basher/015`). A bare keyword is a last resort,
+and it should say so once.
+
+### Pitfall: ASSESS and CONTEMPLATE cost balance without their trait (v4.7.456)
+ASSESS is free only with the HEALTH INSPECTOR trait, CONTEMPLATE only with MIND WARDEN (the user).
+`misc_scripts/031_Traits.lua` reads TRAIT LIST KNOWN and answers `ataxia_assessFree()` /
+`ataxia_contemplateFree()`; an unread trait list answers no. For EVERY class it wraps `send` once:
+`ataxia_traitFilter` removes each whole two-word `assess <x>` / `contemplate <x>` command whose
+trait we lack (split on our separator and on `;`, a `queue ...` prefix kept, an empty command not
+sent). So an offense may keep writing ASSESS into its rounds; it simply does not leave the package.
+Read the target's health some other way when it matters. To send one on purpose (the `assess`
+alias), call `ataxia_rawSend`. Mnemosyne's "boon contemplate <name>" is three words and passes.
+
+### Pitfall: two triggers on one party line run the action twice (v4.7.456)
+`highlighting/011_Party_Leader` had the same four patterns as `party_targetting/002`, and both ran
+`t NAME`, so every leader call switched target twice and, through `partyrelay`, said the target back
+to the party. Before adding a trigger, grep for one on the same line (the same rule as the cure
+triggers in memory affliction-tracking.md).
+
+---
