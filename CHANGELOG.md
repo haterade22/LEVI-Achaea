@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-11-13 - What loads and what binds: the harness facts, and the TAOM adoption review (docs only, no version bump)
+
+- **`docs/reference/harness-facts.md` (new)** records how Claude Code treats this repository as the maintainer uses it, each row with its source and date. Every session starts in the parent folder, so: the 8 Claude Code hooks in `.claude/settings.local.json` never ran, the 6 custom agents were never offered, and `CLAUDE.md` loads only after the first file access below the repository and is cut at about 131,000 to 143,000 characters (about line 1,140 of 3,901). Three hooks also read `$TOOL_INPUT`, while hook input arrives on stdin: a test with `git push --force` on stdin was allowed. The page separates what was seen (36 session transcripts, tests) from what the documentation says and from what is not yet verified.
+- **`docs/reviews/adopt-taom-2026-11-13.md` (new)** is the record of a review of the maintainer's TAOM repository for methods this repository can use: 270 practices read, each checked against our files and attacked by a skeptic; 74 to adopt now, 73 after design, 82 later, 41 rejected. It lists the seven phases adopted, each deferral with the condition that reopens it, and each cut with its reason. The row data is `adopt-taom-2026-11-13-rows.json` beside it.
+- **`.claude/rules/tests.md` (new) is a canary.** It is the first path-scoped rule here (`src_new/tests/**`, `tools/test_*.py`) and carries a marker line. A new session that reads a test file shows whether such rules load from the parent folder. Until that is seen, no design depends on path rules. It holds four test rules that were written nowhere: the two-edit test, a literal expected value, a real game line with its path, and three results (pass, failure, NOT RUN).
+- **Issue #177** records the known, unfixed profile-backup restore defect (`ataxia_loadSettings` replaces live namespaces with data-only copies when no disk save is found). Until now it was recorded only in a code comment and in the part of `CLAUDE.md` that does not load.
+
+---
+
 ## 2026-11-13 - One local run of CI: `tools/ci_local.py` (tooling and docs only, no version bump)
 
 Work goes straight to `main` with no pull request, so the local run is the only check before `main`. Until now that run was a list of commands in three documents, and the lists were three steps behind CI.
