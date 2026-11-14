@@ -1,0 +1,13 @@
+# The user's own FITNESS under paralysis, against Mystor, pasted in chat on 2026-11-14 with the words
+# "Paralysis does not stop fitness". The lines below are verbatim. PAR on the prompt is paralysis
+# (`src_new/scripts/levi_ataxia/levi/ataxia/008_Affliction_Colouring.lua`:30); it is still up on the prompt after the cure.
+Mystor's aura of weapons rebounding disappears.
+Mystor points an imperious finger at you.
+You feel a tightening sensation grow in your lungs.
+08:25:34:144 [12195] [99] |(Penwize)|[ [ PAR AST ]] (paused) 
+Mystor takes a long drag off faes pipe.
+08:25:34:334 [12195] [99] |(Penwize)|[ [ PAR AST ]] (paused) 
+You inhale deeply, purging yourself of your asthmatic condition.
+Balance used: 2.8s.
+08:25:37:001 [12195] [100] |(Penwize)|[ [ PAR ]] (paused) 
+(((((((((((((((((((( BALANCE: 2.743 ))))))))))))))))))))

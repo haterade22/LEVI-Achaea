@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-11-14 - v4.7.501: our HAMSTRING lasts 15 s with the eagle feather; paralysis does not block FITNESS
+
+- **Our hamstring lasts 10 + 5 s with the ethereal lightning eagle feather** (power `enhanced_shin`). The size is from `docs/artefacts-reference.md`; the game's power record states none, and the user accepted the +5 s on 2026-11-14. New `ataxia_ourHamstringSeconds()` (`017_Affliction_Management.lua`) reads it through `ataxia_artefactSize`, so a player without the feather, or with it switched off by `aconfig artefact enhanced_shin off`, keeps 10 s.
+  - `striking/002_Hamstring.lua`: only OUR strike line ("..., you strike at <t>'s hamstring ...") gets the longer clock. Another Blademaster's line keeps the game's 10 s, because their artefacts are not known.
+  - `blademaster/005_CC_BM_Ice.lua`: `onHamstringApplied(seconds)` stores the length, and `selectPrepStrike` re-hamstrings only when that length has run out. Before, our offence struck a second hamstring after 10 s while the first still had 5 s left.
+  - `033_Artefacts.lua`: the `enhanced_shin` row names its readers.
+  - Tests: `test_target_timed_affs.lua` runs the real trigger body on two real lines (ours from `kb/raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt`, another Blademaster's from `kb/raw/logs/2026-10-27_shikudo-group-mhaldor.txt`), with and without the feather and with the override off, and the Blademaster prep clock. A revert of the trigger fails 2 tests; a revert of 005 fails 1.
+- **Paralysis does not block FITNESS** (`kb/CONFLICTS.md` #82, now Resolved). The user's own capture (`kb/raw/live/fitness-paralysis_2026-11-14.txt`: `PAR AST`, the cure line, `Balance used: 2.8s.`, `PAR` still up) agrees with the five logged fires. No code change: `ataxia_canActive` never gated FITNESS on paralysis. `kb/afflictions/class-cures.md` now says CONFIRMED.
+
+---
+
 ## 2026-11-14 - The core loads at the start of a session: seen (docs only, no version bump)
 
 - **The launch-load probe passed.** The first session started after the parent folder got its two-line `CLAUDE.md` lists three files in its launch record: the parent file, `LEVI-Achaea/CLAUDE.md` and `MEMORY.md`. The core arrived whole, before any file access. `docs/reference/harness-facts.md` now records this as seen, not inferred.

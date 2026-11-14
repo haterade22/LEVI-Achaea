@@ -107,6 +107,7 @@ blademaster.state = {
   lastSuppressReason = nil,
   -- Other
   lastHamstringTime = 0,
+  lastHamstringSeconds = nil, -- the length of the last hamstring (onHamstringApplied)
   compassDamage = 14.9,
 }
 
@@ -115,7 +116,7 @@ blademaster.config = {
   breakThreshold = 100,
   prepThreshold = 90,
   killHealthThreshold = 30,
-  hamstringDuration = 10,
+  hamstringDuration = 10,     -- the game's; our own strike can last longer (onHamstringApplied)
   proneTimerDuration = 9,     -- Seconds from salve to stand
   balanceslashThreshold = 4,  -- Switch to balanceslash on this attack number
   brokenstarBleedThreshold = 700,  -- Bleeding level for brokenstar execution
@@ -676,7 +677,8 @@ end
 function blademaster.selectPrepStrike()
   -- Prep phase strikes: Hamstring first, then afflictions
   local now = os.time()
-  local hamstringExpired = (now - (blademaster.state.lastHamstringTime or 0)) >= blademaster.config.hamstringDuration
+  local hamstringFor = blademaster.state.lastHamstringSeconds or blademaster.config.hamstringDuration
+  local hamstringExpired = (now - (blademaster.state.lastHamstringTime or 0)) >= hamstringFor
   if not blademaster.hasAff("hamstring") or hamstringExpired then
     return "hamstring"
   end
@@ -1928,8 +1930,11 @@ blademaster.damageCapture = {
   lastCaptureTime = 0,
 }
 
-function blademaster.onHamstringApplied()
+-- `seconds`: how long this hamstring lasts. striking/002 passes ataxia_ourHamstringSeconds() for
+-- our own strike (15 s with the eagle feather), and nil for another Blademaster's (the game's 10 s).
+function blademaster.onHamstringApplied(seconds)
   blademaster.state.lastHamstringTime = os.time()
+  blademaster.state.lastHamstringSeconds = tonumber(seconds)
 end
 
 function blademaster.captureLegDamage(damage, side)

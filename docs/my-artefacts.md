@@ -17,7 +17,7 @@ no size, so another source must confirm one ("The game's power records", below).
 | faster_eq | Aldar Diadem, 2 | `ataxia_eqFactor` / `ataxia_eqSeconds` (033): x0.85, Rain x0.85 more | -- |
 | hand_to_hand | spiked knuckles, 3 | `tekura6.classifyHit` (tekura/002) learns the punch from our hits; `tekura.punchDamage` (tekura/001) reads it | -- |
 | swiftcurse | sapphire skull pendant, 3 | the stand-in curse count, 10 + 6 (trigger shaman/011, genrunning/004); trigger 012 still gives the game's count | +3 s JINX duration |
-| enhanced_shin | eagle feather | -- | HAMSTRING +5 s (Release B; the game's power record states no size) |
+| enhanced_shin | eagle feather | `ataxia_ourHamstringSeconds` (017) -> our hamstring line (`striking/002`) and `blademaster/005`: our HAMSTRING lasts 10 + 5 s (v4.7.501; the size from `docs/artefacts-reference.md`, accepted by the user 2026-11-14) | ANNIHILATE chance |
 | tuning | silver tuning fork | -- | Bard symphony timer x2 (Release B; the game's power record states no size) |
 | magic_damage, criticals, weaving_mastery | Collar 3, Stygian pendant 3, mirror 3 | -- | no damage-kill threshold counts them (below) |
 | rapid_resonation, symphonic_master, swift_runes, faster_mindlock | haematite, insignia, runestone, Intellect Crown | -- | docs only (`.claude/classes/<class>.md`) |
@@ -267,7 +267,7 @@ Owned:                   an Aldar Diadem (385702), level 2
 
 **No answer states an effect size.** So these records cannot confirm the hamstring +5 s, the tuning
 fork's x2 or any other size in this page. Release B needs another source for each size: the item's
-own text, a HELP file, or a measurement in our logs.
+own text, a HELP file, or a measurement in our logs. The user accepted the hamstring +5 s on 2026-11-14 (v4.7.501).
 
 30 of our powers work only while the item is worn: anti_web, battlerage_decay, breathe_underwater,
 celerity, constitution, dash, dexterity, elemental_resistances, endurance_regen, faster_eq,

@@ -25,8 +25,8 @@ package is right for anyone who installs it; never a fixed list.
   splits a hit at the midpoint of the learned kick and punch, so a spiked-knuckles punch is not learned as
   a kick; TKD's prep line is `100 - tekura.punchDamage()`), and the Shikudo staff level
   (`ataxia.shikudoLevel` scales `shikudo/006` getAttackDamage's defaults). **A size that only
-  `docs/artefacts-reference.md` gives is not used in code** (hamstring +5 s, the tuning fork's x2, the
-  Collar's +20%: Release B). The game's `ARTEFACT POWER SHOW` text, filed 2026-11-13 in `kb/raw/artefacts/`,
+  `docs/artefacts-reference.md` gives is not used in code** (the tuning fork's x2, the Collar's +20%:
+  Release B), unless the user accepts it: the hamstring +5 s (2026-11-14, v4.7.501, `ataxia_ourHamstringSeconds`). The game's `ARTEFACT POWER SHOW` text, filed 2026-11-13 in `kb/raw/artefacts/`,
   states no size, so each size still needs a source: the item's own text, a HELP file or our logs.
 - **`aconfig artefact`**: list what we own, what each changes and who reads it; `aconfig artefact scan`
   asks the game again; `aconfig artefact <power> off|on [level]|auto` overrides one

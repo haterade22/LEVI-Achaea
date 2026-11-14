@@ -41,13 +41,17 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-		-- 10s, the game's duration. The old timer set tAffs.hamstring = nil, which V3 overwrote on
-		-- its next sync, so hamstring never expired (v4.7.405).
-		ataxia_tarAffTimed("hamstring")
+		-- The game's 10 s, and 15 s for OUR strike with the eagle feather (v4.7.501,
+		-- ataxia_ourHamstringSeconds, 017). Pattern 1 is our strike, pattern 2 another
+		-- Blademaster's, whose artefacts we do not know. The old timer set tAffs.hamstring = nil,
+		-- which V3 overwrote on its next sync, so hamstring never expired (v4.7.405).
+		local ours = matches[1]:find(", you strike at ", 1, true) ~= nil
+		local secs = ours and ataxia_ourHamstringSeconds and ataxia_ourHamstringSeconds() or nil
+		ataxia_tarAffTimed("hamstring", secs)
 
 		-- Update BM dispatch timestamp for hamstring tracking
 		if blademaster and blademaster.onHamstringApplied then
-			blademaster.onHamstringApplied()
+			blademaster.onHamstringApplied(secs)
 		end
 
 if not ataxia.afflictions.aeon and partyrelay then

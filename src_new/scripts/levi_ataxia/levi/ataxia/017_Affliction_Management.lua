@@ -216,6 +216,16 @@ ataxia_TARGET_AFF_SECONDS = {
   blackout = 4,        -- game: 4 seconds, cured by time (AFFLICTION SHOW); the old timers used 3.5
 }
 
+-- OUR hamstring lasts longer with the Blademaster eagle feather (power enhanced_shin, +5 s; the size
+-- from docs/artefacts-reference.md, accepted by the user 2026-11-14: the game's power record states
+-- none). Only our own strike gets it: another Blademaster's artefacts are not known, so their
+-- hamstring keeps the game's 10 s (striking/002 tells the two lines apart).
+function ataxia_ourHamstringSeconds()
+  local base = ataxia_TARGET_AFF_SECONDS.hamstring
+  local add = ataxia_artefactSize and ataxia_artefactSize("enhanced_shin", "add", 0) or 0
+  return base + (tonumber(add) or 0)
+end
+
 function ataxia_tarAffTimed(aff, seconds)
   if aff == "dazzle" then aff = "dazzled" end   -- the old key, no shipped caller now, see above
   seconds = seconds or ataxia_TARGET_AFF_SECONDS[aff]
