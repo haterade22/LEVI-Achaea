@@ -1582,11 +1582,14 @@ end
 
 -- Per-class special rage thresholds for the standard battlerage pattern
 -- Classes not listed here use unique logic handled below
+-- The rage is the game's record of the class's special (kb/classes/battlerage.md). Two were
+-- wrong until 2026-11-13: Blue Dragon AGUE costs 14 (ABADMIN 2309; was 16) and Infernal
+-- SOULSHIELD 20 (ABADMIN 2281; was 21).
 ataxiaBasher_specialRageThresholds = {
-  ["Blue Dragon"] = 16,
+  ["Blue Dragon"] = 14,
   Bard = 28,
   Runewarden = 28,
-  Infernal = 21,
+  Infernal = 20,
   Pariah = 32,
   Blademaster = 26,
   Magi = 35,

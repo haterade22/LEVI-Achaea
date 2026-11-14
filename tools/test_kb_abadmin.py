@@ -181,7 +181,7 @@ class Compare(unittest.TestCase):
             wp = os.path.join(d, "abilities.json")
             with open(wp, "w", encoding="utf-8") as fh:
                 json.dump(wiki, fh)
-            return ka.build(ab, wp)
+            return ka.build(ab, wp)[:2]  # the battlerage page: class Battlerage
 
     def test_a_cost_that_differs_is_listed_and_an_uncovered_skill_too(self):
         wiki = {"Alchemy": {"abilities": [{"skill": "Robes", "cooldown": "3.00 seconds of equilibrium",
@@ -220,11 +220,68 @@ class Compare(unittest.TestCase):
         self.assertIn("| 3 | Alchemy | Robes | 2.00 seconds of equilibrium | self | `kb/raw/abadmin/alchemy_robes_3.txt` |", md)
 
     def test_the_repo_pages_are_current(self):
-        js, md = ka.build()
+        js, md, br = ka.build()
         with open(ka.OUT_JSON, encoding="utf-8") as fh:
             self.assertEqual(fh.read(), js)
         with open(ka.OUT_MD, encoding="utf-8") as fh:
             self.assertEqual(fh.read(), md)
+        with open(ka.OUT_BR, encoding="utf-8") as fh:
+            self.assertEqual(fh.read(), br)
+
+
+# Runewarden ETCH, the record as filed (kb/raw/abadmin/attainment_etch_2278.txt): it USES an affliction for more
+# damage; it does not need one.
+ETCH = """Ability: Etch (Record #2278)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: A fiery rune will strike your opponent.
+Syntax: ETCH RUNE AT <target>
+Extra info: Uses denizen afflictions: Aeon or Stun
+Abfile:
+Draw the outline of a rune in the air with your weapon, sending the rune crashing into your opponent, doing extra damage if the target is unable to dodge the attack because of aeon or stun.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_runewarden
+"""
+
+
+class Battlerage(unittest.TestCase):
+    def page(self, files):
+        with tempfile.TemporaryDirectory() as d:
+            ab = os.path.join(d, "abadmin")
+            os.makedirs(ab)
+            for name, text in files.items():
+                with open(os.path.join(ab, name), "w", encoding="utf-8") as fh:
+                    fh.write(text)
+            return ka.build(ab, os.path.join(d, "none.json"))[2]
+
+    def test_gives_uses_and_rage_come_from_the_record(self):
+        by = ka.battlerage([ka.parse_record(OBLIVIATE), ka.parse_record(ETCH), ka.parse_record(ROBES)])
+        self.assertEqual(sorted(by), ["br_runewarden", "br_serpent"])  # Robes has no br_ line
+        ob, = by["br_serpent"]
+        self.assertEqual((ob["gives"], ob["uses"], ob["rage"]), ("Amnesia", "", 28))
+        et, = by["br_runewarden"]
+        self.assertEqual((et["gives"], et["uses"], et["rage"]), ("", "Aeon or Stun", 25))
+
+    def test_a_class_section_sorted_by_rage(self):
+        page = self.page({"attainment_etch_2278.txt": ETCH, "attainment_obliviate_2115.txt": OBLIVIATE,
+                          "alchemy_robes_3.txt": ROBES})
+        self.assertIn("2 records, 2 classes. 1 give a", page)
+        self.assertIn("## Runewarden (`br_runewarden`)", page)
+        self.assertIn("| 2278 | Etch | ETCH RUNE AT <target> | 25 | 23.00 seconds | denizens | -- | Aeon or Stun | "
+                      "Draw the outline of a rune in the air with your weapon, sending the rune crashing into your "
+                      "opponent, doing extra damage if the target is unable to dodge the attack because of aeon or stun. |", page)
+        self.assertIn("| 2115 | Obliviate | OBLIVIATE <target> | 28 | 41.00 seconds | denizens | Amnesia | -- |", page)
+        self.assertLess(page.index("## Runewarden"), page.index("## Serpent"))
+        self.assertNotIn("Robes", page)
 
 
 if __name__ == "__main__":

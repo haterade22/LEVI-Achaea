@@ -62,7 +62,7 @@ blocks the cure **on its own** (see Dragonheal below).
 | With no asthma | it still runs and spends balance: `You are already quite fit.`, then `Balance used: 2.8s.` | CONFIRMED (live), n=1. A stray FITNESS costs 2.8 s of balance. Whether it starts the lockout is not known |
 | Spends | balance only: 2.8 s printed, against 3.00 stated on the wiki. Our seat: printed 2.8, our stopwatch 2.785 (`raw/live/seebalances_2026-11-01.txt`) | CONFIRMED (live), n=7 |
 | Lockout | about 10 s; earliest 9.06 s | CONFIRMED (live), n=8 pairs. Our seat: 9.97, 9.81, 9.06. The other 5 have 1 s stamps and all read 10 |
-| While paralysed | works | CONFIRMED (live), 3 logs |
+| While paralysed | works in the logs; the user (2026-11-13) and the game's record (`Useable paralysed: No`, `raw/abadmin/discipline_fitness_520.txt`) say it does not | CONFLICT, `../CONFLICTS.md` #82. 3 FITNESS fires under real paralysis: `raw/logs/2026-10-11_mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt`:3811-3816 (the game refused his other commands with "You are paralysed and unable to do that." in the same batch), `2026-11-01_claes_runewarden-vs-apostate_loss_LcJC-rJ5.txt`:744-760, `2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt`:4616-4617. The code still lets it fire |
 | Under weariness | refused, and the lockout clock keeps running | CONFIRMED (live) |
 
 **Equilibrium evidence.** The logs hold 11 fires. 5 came with equilibrium up, 5 right after it returned, 1

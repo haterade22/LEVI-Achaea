@@ -126,10 +126,10 @@ describe("ataxiaBasher_rwBattlerage -- the owned rotation", function()
     expect(has(ataxiaBasher_rwBattlerage(";"), "collide 7")).toBeTrue()
   end)
 
-  it("ETCH only when the denizen carries aeon or stun (it consumes one)", function()
+  it("ETCH takes its turn when the denizen carries aeon or stun", function()
     reset(); ataxia.vitals.rage = 100
     ataxiaTemp.rwBrAt = { bulwark = clock }
-    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at")).toBeFalse()
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at")).toBeFalse() -- onslaught first
     reset(); ataxia.vitals.rage = 100; denizenAffs.aeon = true
     ataxiaTemp.rwBrAt = { bulwark = clock }
     expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
@@ -146,11 +146,43 @@ describe("ataxiaBasher_rwBattlerage -- the owned rotation", function()
     clock = clock + 4
     expect(has(ataxiaBasher_rwBattlerage(";"), "collide")).toBeTrue()
     clock = clock + 4
+    -- The other three are stamped: etch is the last resort (100 rage covers 25 + onslaught's 36).
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
+    clock = clock + 4
     expect(ataxiaBasher_rwBattlerage(";")).toBe("") -- all stamped
-    clock = clock + 20  -- collide (16s from t+8) and onslaught (23s from t+4) back
+    clock = clock + 16  -- collide (16s from t+8) and onslaught (23s from t+4) back
     expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught")).toBeTrue()
     clock = clock + 30  -- 45s past the bulwark stamp
     expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+  end)
+
+  -- The game's record (ABADMIN 2278): etch does damage, "extra damage if the target is unable
+  -- to dodge the attack because of aeon or stun". Without one it is the last resort.
+  it("ETCH without aeon or stun fires only when nothing else is ready", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.rwBrAt = { bulwark = clock, onslaught = clock, collide = clock }
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("etch rune at 7;")
+    expect(ataxiaTemp.rwBrPending.verb).toBe("etch")
+    expect(ataxiaTemp.rwBrAt.etch).toBe(clock)
+  end)
+
+  it("a last-resort ETCH keeps the rage onslaught needs", function()
+    reset(); ataxia.vitals.rage = 60   -- 25 + 36 = 61
+    ataxiaTemp.rwBrAt = { bulwark = clock, onslaught = clock, collide = clock }
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("")
+    reset(); ataxia.vitals.rage = 61
+    ataxiaTemp.rwBrAt = { bulwark = clock, onslaught = clock, collide = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
+    reset(); ataxia.vitals.rage = 70; ataxiaBasher.rageFloor = 10  -- the floor counts too
+    ataxiaTemp.rwBrAt = { bulwark = clock, onslaught = clock, collide = clock }
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("")
+    ataxiaBasher.rageFloor = nil
+  end)
+
+  it("a last-resort ETCH honours its own cooldown", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.rwBrAt = { bulwark = clock, onslaught = clock, collide = clock, etch = clock - 10 }
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("")
   end)
 
   it("owns culling: reap outranks the rotation and ignores the rage floor", function()
@@ -483,12 +515,17 @@ describe("Rage-Fuelled spends the charge on the MOST EXPENSIVE ready ability (v4
     expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
   end)
 
-  it("still honours the affliction gate -- etch needs aeon or stun", function()
+  it("still honours the affliction gate -- the charge does not go to an etch with no aeon or stun", function()
     reset(); ataxia.vitals.rage = 0
     ataxiaTemp.brFreeCharge = true
     ataxiaTemp.rwBrAt = { onslaught = clock, bulwark = clock }
     expect(has(ataxiaBasher_rwBattlerage(";"), "etch")).toBeFalse() -- no aff: skipped
     expect(has(ataxiaBasher_rwBattlerage(";"), "collide 7")).toBeTrue()
+    -- Nothing else ready: the last resort keeps the charge for an ability worth more.
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.brFreeCharge = true
+    ataxiaTemp.rwBrAt = { onslaught = clock, bulwark = clock, collide = clock }
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("")
   end)
 
   it("is behaviour-identical with no charge -- the ordering is untouched", function()

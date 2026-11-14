@@ -401,7 +401,13 @@ battlerage:
   # PvE rotation is OWNED (RW_BR, basher/002) — timer-free, real AB cooldowns:
   owned_rotation:
     bulwark:   { rage: 28, cd: 45, target: self, note: "25% damage negation, 15s -- NOT mob-count gated" }
-    etch:      { rage: 25, cd: 23, needs: "aeon or stun on the denizen (it consumes one)" }
+    etch:      { rage: 25, cd: 23, uses: "aeon or stun: extra damage, not needed (ABADMIN 2278)" }
+    # Etch with aeon or stun on the denizen fires in its turn. Without one it is the LAST RESORT
+    # (2026-11-13, basher/002:3711): only when nothing else fired, and only with rage for its 25 AND
+    # onslaught's 36 (plus the rage floor), so it never delays onslaught; never on a Rage-Fuelled
+    # charge. Before, etch never fired without the affliction: the old note "it consumes one"
+    # had no source, and the game's record says only "extra damage if the target is unable to
+    # dodge the attack because of aeon or stun". Whether etch takes the aeon or stun away is open.
     onslaught: { rage: 36, cd: 23 }
     collide:   { rage: 14, cd: 16 }
   # Fire lines -- each calls ataxiaBasher_rwConfirm(key) (002:1467-1473), which restamps
@@ -429,7 +435,7 @@ battlerage:
       of the 15s DURATION, not the 45s cooldown, so nothing in the rotation needs it today;
       it is the line to wire if we ever want true bulwark uptime measurement.
   # Legend deck: XYLTHUS plants a battlerage-style STUN, which is what Etch cashes in --
-  # Etch's needsAff is {aeon, stun} (002:1460) and stun carries dur = 4s in
+  # Etch's needsAff is {aeon, stun} (002:3652) and stun carries dur = 4s in
   # ataxiaBasher_BR_AFFS (basher/008:60-62). The Mnemosyne card layer (basher/010) draws it
   # only when 25 rage is affordable AND Etch is off cooldown (010:97-99, CARD_EXPLOIT), and
   # records the stun only once the draw is CONFIRMED -- an optimistic stamp is what let Etch

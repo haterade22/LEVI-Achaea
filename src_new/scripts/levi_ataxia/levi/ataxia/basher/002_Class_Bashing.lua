@@ -3630,21 +3630,27 @@ end
 -- AB values (all "Works on/against: Denizens" except Bulwark, which is Self):
 --   Bulwark  28r / 45s cd -- negates 25% of ALL damage for 15s   <- the 15s is the
 --            DURATION, not the cooldown; 45s is as often as it can be held.
---   Etch     25r / 23s -- ETCH RUNE AT <t>, "Afflictions Used: Aeon or Stun": bonus
---            damage only when the mob cannot dodge, so it is gated on the denizen
---            actually carrying one (the Depthswalker Erasure rule -- solo it simply
---            never fires and costs nothing).
+--   Etch     25r / 23s -- ETCH RUNE AT <t>. The game's record (ABADMIN 2278,
+--            kb/raw/abadmin/attainment_etch_2278.txt): "Uses denizen afflictions: Aeon or
+--            Stun", and the rune does damage, "doing extra damage if the target is unable to
+--            dodge the attack because of aeon or stun". So aeon or stun adds damage; etch
+--            does not need one. With one on the denizen it fires in its turn. Without one
+--            it is a LAST RESORT (2026-11-13): only when nothing else fired, and only from
+--            rage above the dearest other ability's cost, so it never delays onslaught.
+--            Before 2026-11-13 it never fired without the affliction, so solo etch was
+--            never sent. Whether etch takes the aeon or stun away is not known.
 --   Onslaught 36r / 23s -- big damage.
 --   Collide   14r / 16s -- filler.
 local RW_BR = {
   -- `control` is a slight stretch here and deliberately so: Runewarden has NO battlerage
-  -- that slows a DENIZEN (etch CONSUMES aeon/stun rather than applying it, onslaught and
-  -- collide are pure damage). Bulwark is the nearest equivalent -- negate 25% of ALL
-  -- damage for 15s -- and against a control-first mob that mitigation must not be
+  -- that slows a DENIZEN (etch only does more damage to a mob with aeon or stun, onslaught
+  -- and collide are pure damage; kb/classes/battlerage.md). Bulwark is the nearest
+  -- equivalent -- negate 25% of ALL damage for 15s -- and against a control-first mob that mitigation must not be
   -- displaced by the Rage-Fuelled "spend the dearest first" rule, which would otherwise
   -- pick onslaught (36r) over it.
   { key = "bulwark",   cmd = "bulwark",       rage = 28, cd = 45, noTarget = true, slows = true },
-  { key = "etch",      cmd = "etch rune at",  rage = 25, cd = 23, needsAff = { "aeon", "stun" } },
+  { key = "etch",      cmd = "etch rune at",  rage = 25, cd = 23, needsAff = { "aeon", "stun" },
+    lastResort = true },
   { key = "onslaught", cmd = "onslaught",     rage = 36, cd = 23 },
   { key = "collide",   cmd = "collide",       rage = 14, cd = 16 },
 }
@@ -3700,6 +3706,26 @@ function ataxiaBasher_rwBattlerage(sp)
       ataxiaTemp.rwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
       ataxiaBasher_brSent()
       return cmd
+    end
+  end
+  -- The last resort: an ability whose affliction only adds damage (etch, above) fires
+  -- without it when nothing else did. It spends only the rage above the dearest other
+  -- ability's cost, so a held onslaught can still pay when it comes back. A Rage-Fuelled
+  -- charge is kept for an ability that is worth more.
+  if ataxiaBasher_brFree and ataxiaBasher_brFree() then return "" end
+  for _, ab in ipairs(RW_BR) do
+    if ab.lastResort and (nowT - (tonumber(ataxiaTemp.rwBrAt[ab.key]) or 0)) >= ab.cd then
+      local reserve = 0
+      for _, other in ipairs(RW_BR) do
+        if other ~= ab then reserve = math.max(reserve, tonumber(other.rage) or 0) end
+      end
+      if ataxiaBasher_rageAfford(rage, ab.rage + reserve) then
+        local cmd = ab.cmd.." "..target..sp
+        ataxiaTemp.rwBrAt[ab.key] = nowT
+        ataxiaTemp.rwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
+        ataxiaBasher_brSent()
+        return cmd
+      end
     end
   end
   return ""

@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-13 - v4.7.497: battlerage from the game's records; Runewarden etch fires solo
+
+The full ABADMIN capture holds the game's own record of every battlerage ability. This release checks the basher against those records.
+
+- **A new generated page, `kb/classes/battlerage.md`** (`tools/kb_abadmin.py`, `--check` in CI): 188 records, 31 classes, with rage, cooldown, target, the denizen affliction each gives or the two it uses, and its text. Every class has the same shape: a 14-rage small attack (16 s), a 17-rage shield break, a 36-rage large attack (23 s), and in 29 classes one 25-rage ability that uses an affliction (23 s).
+- **Two special-battlerage costs were wrong** (`ataxiaBasher_specialRageThresholds`, `basher/001`): Blue Dragon AGUE costs 14 rage (was 16) and Infernal SOULSHIELD 20 (was 21). Against two or more denizens the shared path holds rage for the special, so at 14-15 rage (Blue Dragon) or 20 (Infernal) it sent nothing. Now it sends the special.
+- **Runewarden ETCH fires without aeon or stun.** The code held etch back until the denizen had aeon or stun, from a note that etch "consumes" one. No source said that. The game's record says the rune does damage, with "extra damage if the target is unable to dodge the attack because of aeon or stun". With aeon or stun up, etch fires in its turn as before. Without one, it is now the last resort: it fires only when bulwark, onslaught and collide did not, and only with rage for its 25 plus onslaught's 36, so a held onslaught can still pay. It never takes a Rage-Fuelled charge. Before this, a solo Runewarden never sent etch.
+- **The "uses" abilities are not all alike.** Most do more damage with the affliction. Air Lord Compress, Fire Lord Cataclysm and Water Lord Waterfall need it. Erasure, Stormflare and Whirlwind state no condition. `.claude/projects/basher/battlerage-pve.md` lists them.
+- **Paralysis and the class cures: an open question, no code change** (`kb/CONFLICTS.md` #82). The user says FITNESS does not work while paralysed, and the game's records agree ("Useable paralysed: No"). But five logs show FITNESS, SALT and ERUPTION fire under real paralysis, once in the same batch as the game's own paralysis refusal. The code still lets the cure fire. A live test under curare settles it. An ABADMIN flag is the game's data, not proof of what it enforces.
+
 ## 2026-11-13 - v4.7.496: `kbcapture abilities` reads the real ABADMIN SHOW record
 
 The first `kbcapture abilities` run stopped after id 300: "300 ids in a row had no ability record: the end of the list. Last record: none." The capture itself worked. It wrote 287 full records in 208 s. But v4.7.494 looked for `ABADMIN ID: <n>`, which is the header of the `AB` command. `ABADMIN SHOW` prints another layout:
