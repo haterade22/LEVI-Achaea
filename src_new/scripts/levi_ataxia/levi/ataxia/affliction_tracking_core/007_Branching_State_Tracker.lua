@@ -1300,7 +1300,8 @@ passiveCooldownTimingsV3 = {
     -- 20s cooldowns
     passive_suntarot = 20.0,
     passive_panacea = 20.0,
-    passive_fool = 20.0,
+    -- 35s cooldowns
+    passive_fool = 35.0,         -- ABADMIN 606 (Tarot Fool): "* 35 second cooldown." Was 20 until 2026-11-13
 }
 
 function startPassiveCooldownV3(abilityKey)

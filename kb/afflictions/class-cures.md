@@ -43,15 +43,15 @@ blocks the cure **on its own** (see Dragonheal below).
 | Druid, Sylvan | Grove Cure (Groves) | 1 aff | **nothing** | (not captured) | **no trigger** | HELP |
 | Dragon | Dragonheal (Dragoncraft) | 3 affs (1 if prone) | **weariness AND recklessness together** | "X lets out a great keening, casting the impurities from her form." | 005: +3 random (1 if prone); removes neither blocker, since only BOTH together block it (fixed v4.7.395) | HELP + guide |
 | Magi | Bloodboil (Elementalism) | 1 aff | **haemophilia**, or **both** arms broken | "Perspiration suddenly breaks out on X's forehead." | 004: -haemophilia, +1 random | HELP + guide |
-| Jester, Occultist | Fool (Tarot) | 3 affs; can be used on others | **paralysis** or **prone** | "X presses a tarot to his forehead, producing a wan smile." (or "to Y's forehead") | 008: -paralysis, +3 random | HELP + guide |
+| Jester, Occultist | Fool (Tarot) | 3 affs; can be used on others; 35 s cooldown (ABADMIN 606) | **paralysis** or **prone** | "X presses a tarot to his forehead, producing a wan smile." (or "to Y's forehead") | 008: -paralysis, +3 random | HELP + guide |
 | Psion | Expunge (Psionics) | impatience first, otherwise a mental | **confusion** | "A slight tightening of the eyes is the only sign X makes that he has made a great effort of will." | 006: -confusion, -impatience if tracked, else a mental from a list | HELP + guide |
 | Serpent | Shrugging (Venom) | 1 aff | **weariness** | "X hunches his shoulders and lets out a soft hiss." Ours: "Focusing inward, you purge your body of afflictions.", then the cured affliction's own line: it took confusion in the one capture (`raw/live/shrugging_2026-11-08.txt`) | 015: -weariness, +1 random. Ours: `curing_bals/006`:42 and `serpent/008_Shruggin`:34 | HELP + guide; our own line live, the user's paste, n=1 |
 | Shaman | Daina / Purification (Spiritlore) | 1 aff | **selarnia** | "A pale mist begins to rise from the skin of X." | 011: -selarnia, +1 random | HELP + guide |
 | Fire Lord | Slough | 1 aff | **prone** | "The fiery outer layers of X fall away, turning to dust..." | 016: -prone, +1 random (fixed v4.7.395; it used to erase weariness, and its full-line pattern could not survive the wrap) | HELP |
 | Water Lord | Purify | 1 aff | **weariness** | (two lines, see trigger) | 012: -weariness, +1 random | HELP |
 | Earth Lord | Eruption | 1 aff | **weariness** | "Magma erupts forth from beneath the plates that cover X." | 017: +1 random (does not remove weariness) | HELP |
-| Knights | Rage | varies by line | (not in sources) | "X's eyes flash with rage." | 013 | code only |
-| Monk | Continuation | 1 aff | (not in sources) | "X gives a great shout of exertion." | 018: -weariness, +1 random | code only |
+| Knights (Discipline, Valour, Malignity, Dominion) | Rage | a bellwort affliction ("certain pacifying afflictions, notably those that are normally cured by eating bellwort") | (not stated) | "X's eyes flash with rage.", then a line that can name the cure | 013: retribution or lovers by the next line, else `taRaged` (retribution, else the first of 7 bellwort afflictions). Until 2026-11-13 it also took paralysis, with no source | ABADMIN 541/2960/2990/3020; the line is code only (no log holds it) |
+| Two-handed knights (Weaponmastery) | Continuation | **paralysis**; afterwards FITNESS is blocked "for a short time" | (not stated) | "X gives a great shout of exertion." | 018: -paralysis, for a knight class or an unknown one. Until 2026-11-13: Monk only, -weariness +1 random, with no source | ABADMIN 2061; 3 shouts in one log, each after a curare paralysis (`raw/logs/ours/2026-11-03_102138_Tabethys.log`:4339-4345, 4871-4938, 7313-7407); FITNESS fired 0.5 s after the first (:4363), so the FITNESS block is not seen |
 | Sylvan | Root | 1 aff | (not in sources) | "X stands suddenly upright, rooted to the earth." | 020: -haemophilia, +1 random | code only |
 
 ### Fitness in detail (2026-11-01)
@@ -224,3 +224,30 @@ Slough (016). See `src_new/tests/test_class_cure_triggers.lua`.
 Still open (also in ../CONFLICTS.md):
 - **Grove Cure** (Druid/Sylvan) has no trigger, and it has no blocker, so it can always break a
   lock. Its line still needs to be captured.
+
+## The game's records (ABADMIN, 2026-11-13)
+
+The full ABADMIN capture holds a record for each cure above ([../classes/abadmin.json](../classes/abadmin.json)).
+**The text agrees with the "Blocked by" column wherever it names a blocker:** SALT (stupidity, 5), BLOODBOIL
+(haemophilia, 717), DRAGONHEAL (weariness and recklessness together, 1533), DAINA (selarnia, 1922), ACCELERATE
+(recklessness, and prone for the boost, 2411), ERUPTION (weariness, 2536), PURIFY (weariness, 2580), EXPUNGE
+(confusion, 2707). The records of ALLEVIATE (265), PHOENIX (321), FITNESS (261 and six more), MIGHT (383), FOOL (606), SHRUGGING
+(1277), SLOUGH (2553), RAGE and CONTINUATION name no blocker, so the HELP file and the guide stay the source for
+those. BLOODBOIL's "both arms broken" is in HELP only. No record is named GROVE CURE or ROOT.
+
+**Two rows were wrong until 2026-11-13** (the Active cures table): CONTINUATION is the two-handed knights' paralysis cure, not
+a Monk's random cure, and RAGE cures bellwort afflictions, not paralysis. FOOL's cooldown is 35 s, not 20
+(`passiveCooldownTimingsV3`, `affliction_tracking_core/007`; no code reads that table).
+
+**The flags do not help here.** Of the 26 class-cure records (7 FITNESS, 4 RAGE and 15 others), only SHRUGGING
+(`Pre checks: equilibrium`) and EXPUNGE (`balance and equilibrium`) have a Pre checks value, and both say
+`Useable paralysed: Yes`. The other 24 show `Requires arms: 0`, `Requires legs: 0`, `Useable entangled: No`, `Useable paralysed: No`, the set that 2456 of
+the 2576 records with no Pre checks value show ([../classes/abadmin-vs-wiki.md](../classes/abadmin-vs-wiki.md),
+"Pre checks and the flags"), and no record without a value says `Useable paralysed: Yes`. FITNESS needs
+equilibrium (CONFIRMED live, "Fitness in detail"), and its record says nothing of it. So the `No` on FITNESS, SALT and ERUPTION
+is not evidence that paralysis blocks them; the five logged fires under paralysis still stand
+([../CONFLICTS.md](../CONFLICTS.md) #82).
+
+**Not modelled:** a knight's CONTINUATION for ourselves (no first-person lines yet: `curing_bals/006`+`007` need
+them first, CLAUDE.md), and CONTINUATION in the simulator's victim (`tools/sim/victim.lua` gives knights FITNESS
+only, and the logs do not say which knights fight two-handed).

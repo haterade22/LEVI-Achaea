@@ -51,15 +51,15 @@ Freeze file `tools/sim/gates_whole.json`, sha256 `1de3efb56ed6f8f7de1ab27e3f7676
 | `channel.salve.blocked_by` | slickness |  | READ |  | kb/afflictions/cure-channels.md:20 |  |
 | `channel.smoke.blocked_by` | asthma |  | READ |  | kb/afflictions/cure-channels.md:21 |  |
 | `channel.tree.blocked_by` | paralysis |  | READ |  | kb/afflictions/cure-channels.md:24 |  |
-| `class.accelerate` | classes Depthswalker, cures class.accelerate.cures, blocked_by recklessness, needs eq, spends eq class.accelerate.eq, lockout class.accelerate.lockout |  | READ |  | kb/afflictions/class-cures.md:39 | it needs and spends equilibrium: the prompt went from exT to xT (2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt rows 2086-2098) |
+| `class.accelerate` | classes Depthswalker, cures class.accelerate.cures, blocked_by recklessness, needs eq, spends eq class.accelerate.eq, lockout class.accelerate.lockout |  | READ |  | kb/afflictions/class-cures.md:40 | it needs and spends equilibrium: the prompt went from exT to xT (2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt rows 2086-2098) |
 | `class.accelerate.cures` | 1 | 2 | ASSUMED |  | kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088-2092 | one affliction, or two when boosted. The only fire in the four logs was boosted and took two (fratricide, asthma) |
 | `class.accelerate.eq` | 2.12 | 1.5 / 3.0 | MEASURED | 1 | kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2096 | 'Equilibrium used: 2.12s.' after the one (boosted) fire. n=1, so it is swept |
 | `class.accelerate.lockout` | 19.45 | 15.0 / 19.45 / 25.0 | MEASURED | 1 | kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088,2097,2409 | the fire at 2088 (stamp 53743.36), a refusal at 2097, 'ACCELERATE BACK. You may accelerate time ...' at 2409 (53762.81). One fire, so it is swept |
-| `class.cure.policy` | at once | hold | ASSUMED |  | kb/afflictions/class-cures.md:34-54 | the victim fires its class cure as soon as it is open and useful |
-| `class.dagaz` | classes Runewarden, passive True, period clock.dagaz, cures one, first voyria |  | READ |  | kb/afflictions/class-cures.md:137 | voyria first: azbErKcK rows 3856-3857 |
-| `class.dagaz.phase` | random | half a period | ASSUMED |  | kb/afflictions/class-cures.md:137 | when the rune ticks relative to the fight. --median puts the first tick at half a period |
-| `class.fitness` | classes Infernal / Paladin / Runewarden / Monk / Blademaster / Druid / Sentinel, cures asthma, blocked_by weariness, needs bal / eq, spends bal 2.8, lockout clock.fitness, while_paralysed True |  | READ |  | kb/afflictions/class-cures.md:41,60-65 |  |
-| `class.salt` | classes Alchemist, cures one, blocked_by stupidity, needs eq, spends eq class.salt.eq, lockout clock.salt |  | READ |  | kb/afflictions/class-cures.md:36 | which affliction salt takes is not known: random, as the tree. It needs and spends equilibrium (class.salt.eq) |
+| `class.cure.policy` | at once | hold | ASSUMED |  | kb/afflictions/class-cures.md:35-55 | the victim fires its class cure as soon as it is open and useful |
+| `class.dagaz` | classes Runewarden, passive True, period clock.dagaz, cures one, first voyria |  | READ |  | kb/afflictions/class-cures.md:174 | voyria first: azbErKcK rows 3856-3857 |
+| `class.dagaz.phase` | random | half a period | ASSUMED |  | kb/afflictions/class-cures.md:174 | when the rune ticks relative to the fight. --median puts the first tick at half a period |
+| `class.fitness` | classes Infernal / Paladin / Runewarden / Monk / Blademaster / Druid / Sentinel, cures asthma, blocked_by weariness, needs bal / eq, spends bal 2.8, lockout clock.fitness, while_paralysed True |  | READ |  | kb/afflictions/class-cures.md:42,59-66 |  |
+| `class.salt` | classes Alchemist, cures one, blocked_by stupidity, needs eq, spends eq class.salt.eq, lockout clock.salt |  | READ |  | kb/afflictions/class-cures.md:37 | which affliction salt takes is not known: random, as the tree. It needs and spends equilibrium (class.salt.eq) |
 | `class.salt.eq` | 2.55 | 3.0 | MEASURED | 7 | kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:497,824,1783,2232,4033,4497,4920 | 'Equilibrium used: 2.55s.' three rows before each of the 7 'Directing the energy of salt' lines (two before 'Drawing upon the latent alchemical energies'). The wiki says 3.00 (kb/raw/wiki/Alchemy.wiki:92); Elmer's shield shows the same 0.85 ratio (3.40 of 4.00) |
 | `cure.options_join` | or |  | READ |  | kb/afflictions/cure-channels.md:23 | the groups of cure_options are alternatives: focus alone cures anorexia. kb_affliction_db.py joins them with 'and' (kb/CONFLICTS.md #60) |
 | `defence.rebounding.delay` | clock.rebounding |  | MEASURED | 460 | kb/mechanics/clocks.json, clocks.rebounding (n=460; kb/mechanics/foundations.md:148 gives the older n=67) | the aura comes up this long after the smoke, and the smoke spends the lungs clock. n is the clock's |
@@ -413,7 +413,7 @@ The package's default priority for a stack (`burning4`) or an affliction afflict
 
 | File | sha256 (16) |
 |---|---|
-| `kb/sim/rules_hand.json` | `6367a181cd420a2d` |
+| `kb/sim/rules_hand.json` | `1ba17b3d9c490447` |
 | `kb/mechanics/clocks.json` | `acf3ebc1cd2c7b55` |
 | `kb/afflictions/afflictions.json` | `1fe2c0394ca42b4b` |
 | `.claude/databases/venoms.yaml` | `da9f100670a46530` |

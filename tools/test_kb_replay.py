@@ -206,7 +206,7 @@ class LabelsFromCode(unittest.TestCase):
         self.assertFalse(R.is_true(self.s_for("x_claes_x.txt", rows), "Runewarden"))
 
     def test_the_code_reads_an_earth_lords_cure_the_wrong_way_round(self):
-        # Before v4.7.484 the code read this against class-cures.md:51 (kb/CONFLICTS.md #54). The label replays the code those logs ran.
+        # Before v4.7.484 the code read this against class-cures.md:52 (kb/CONFLICTS.md #54). The label replays the code those logs ran.
         self.assertNotIn("Earth Lord", R.BLOCKERS)
         s = self.s_for(JD, [claes("00:000", "AST SLCK ANO IMP PAR")])
         self.assertTrue(R.is_true(s, "Earth Lord"))

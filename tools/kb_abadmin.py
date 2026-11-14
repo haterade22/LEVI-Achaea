@@ -227,6 +227,39 @@ def cell(s):
     return (s or "").replace("|", "/") or "--"
 
 
+DEFAULT_FLAGS = (0, 0, "No", "No")  # arms, legs, entangled, paralysed
+
+
+def flags(r):
+    return (r.get("arms"), r.get("legs"), r.get("entangled"), r.get("paralysed"))
+
+
+def render_flags(recs):
+    """How often a record with no Pre checks line carries the default flags: on such a record a flag is
+    not evidence of what the game checks (kb/CONFLICTS.md #82)."""
+    named = [r for r in recs if r["ability"] and "maps_to" not in r]
+    filled = [r for r in named if r.get("prechecks")]
+    empty = [r for r in named if not r.get("prechecks")]
+    dflt = sum(1 for r in empty if flags(r) == DEFAULT_FLAGS)
+    dflt_filled = sum(1 for r in filled if flags(r) == DEFAULT_FLAGS)
+    para = sum(1 for r in filled if r.get("paralysed") == "Yes")
+    para_empty = sum(1 for r in empty if r.get("paralysed") == "Yes")
+    return [
+        "## Pre checks and the flags",
+        "",
+        f"Of the {len(named)} named records that are not pointers, {len(filled)} have a `Pre checks:` line with a",
+        f"value (\"balance, equilibrium, and prone\" and the like) and {len(empty)} do not. Of those {len(empty)},",
+        f"{dflt} show the same flags: `Requires arms: 0`, `Requires legs: 0`, `Useable entangled: No`, `Useable",
+        f"paralysed: No`, and {para_empty} say `Useable paralysed: Yes`. Of the {len(filled)} with a value, {dflt_filled} show",
+        f"that set and {para} say `Useable paralysed: Yes`. So on a record with no Pre checks value, the flags look like",
+        "defaults, not like the checks the game makes. FITNESS is such a record: it needs equilibrium as well as",
+        "balance (CONFIRMED live) and fired under paralysis in our logs, but its record has no Pre checks value and",
+        "says `Useable paralysed: No` (`kb/afflictions/class-cures.md`, \"The game's records\";",
+        "`kb/CONFLICTS.md` #82). Check a flag against a log before code reads it.",
+        "",
+    ]
+
+
 def render_md(recs, diffs, unlisted, uncovered):
     pointers = sum(1 for r in recs if "maps_to" in r)
     empty = [r["id"] for r in recs if not r["ability"]]
@@ -252,6 +285,9 @@ def render_md(recs, diffs, unlisted, uncovered):
         f"{len(diffs)}. Not listed on the wiki page of their skill: {len(unlisted)}. "
         f"Skills the wiki pages do not cover: {len(uncovered)}.",
         "",
+    ]
+    out += render_flags(recs)
+    out += [
         "## Where the game and the wiki differ",
         "",
     ]

@@ -15,6 +15,18 @@ name a cost per mode that its Cooldown line does not (FREEZE: Cooldown 2.20 s, "
 
 Records: 3079 (197 of them pointers to another record; 4 empty slots with no name or skill, ids 3293, 3294, 3295, 3296). Differ from the wiki: 57. Not listed on the wiki page of their skill: 48. Skills the wiki pages do not cover: 30.
 
+## Pre checks and the flags
+
+Of the 2878 named records that are not pointers, 302 have a `Pre checks:` line with a
+value ("balance, equilibrium, and prone" and the like) and 2576 do not. Of those 2576,
+2456 show the same flags: `Requires arms: 0`, `Requires legs: 0`, `Useable entangled: No`, `Useable
+paralysed: No`, and 0 say `Useable paralysed: Yes`. Of the 302 with a value, 143 show
+that set and 8 say `Useable paralysed: Yes`. So on a record with no Pre checks value, the flags look like
+defaults, not like the checks the game makes. FITNESS is such a record: it needs equilibrium as well as
+balance (CONFIRMED live) and fired under paralysis in our logs, but its record has no Pre checks value and
+says `Useable paralysed: No` (`kb/afflictions/class-cures.md`, "The game's records";
+`kb/CONFLICTS.md` #82). Check a flag against a log before code reads it.
+
 ## Where the game and the wiki differ
 
 | ID | Skill | Ability | Game cost | Wiki cost | Game target | Wiki target | Differs |

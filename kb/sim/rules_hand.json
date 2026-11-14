@@ -187,7 +187,7 @@
     {
       "id": "class.fitness",
       "tag": "READ",
-      "source": "kb/afflictions/class-cures.md:41,60-65",
+      "source": "kb/afflictions/class-cures.md:42,59-66",
       "value": {
         "classes": [
           "Infernal",
@@ -218,7 +218,7 @@
     {
       "id": "class.salt",
       "tag": "READ",
-      "source": "kb/afflictions/class-cures.md:36",
+      "source": "kb/afflictions/class-cures.md:37",
       "value": {
         "classes": [
           "Alchemist"
@@ -251,7 +251,7 @@
     {
       "id": "class.accelerate",
       "tag": "READ",
-      "source": "kb/afflictions/class-cures.md:39",
+      "source": "kb/afflictions/class-cures.md:40",
       "value": {
         "classes": [
           "Depthswalker"
@@ -310,7 +310,7 @@
     {
       "id": "class.dagaz",
       "tag": "READ",
-      "source": "kb/afflictions/class-cures.md:137",
+      "source": "kb/afflictions/class-cures.md:174",
       "value": {
         "classes": [
           "Runewarden"
@@ -331,7 +331,7 @@
         "half a period"
       ],
       "tag": "ASSUMED",
-      "source": "kb/afflictions/class-cures.md:137",
+      "source": "kb/afflictions/class-cures.md:174",
       "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period"
     },
     {
@@ -341,7 +341,7 @@
         "hold"
       ],
       "tag": "ASSUMED",
-      "source": "kb/afflictions/class-cures.md:34-54",
+      "source": "kb/afflictions/class-cures.md:35-55",
       "note": "the victim fires its class cure as soon as it is open and useful"
     },
     {

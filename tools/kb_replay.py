@@ -302,7 +302,7 @@ def line_class(text):
 
 LOGGER_CLASS_WORDS = {"shikudo": "Monk", "runewarden-snb": "Runewarden", "runewarden": "Runewarden", "earthlord": "Earth Lord",
                       "alchemist": "Alchemist", "depthswalker": "Depthswalker", "blademaster": "Blademaster"}
-# kb/afflictions/class-cures.md:51 (HELP). The code has no row for an Earth Lord, and read it the other way round until v4.7.484. See
+# kb/afflictions/class-cures.md:52 (HELP). The code has no row for an Earth Lord, and read it the other way round until v4.7.484. See
 # class_cure_blocked and kb/CONFLICTS.md #54.
 CURE_BLOCKERS_EXTRA = {"Earth Lord": "weariness"}
 
@@ -655,7 +655,7 @@ def class_cure_blocked(s, cls, game=False):
     """not ataxia_canActive(), as the code ran it for these logs, before v4.7.484.
 
     The code has no row for an Earth Lord. For a class holding "Elemental" it returned true only WITH weariness up, the
-    reverse of class-cures.md:51, until v4.7.484 fixed the test (003_Lock_breakers.lua:249-256). The logs predate the
+    reverse of class-cures.md:52, until v4.7.484 fixed the test (003_Lock_breakers.lua:249-256). The logs predate the
     fix, so the replay keeps the old reading. game=True uses the game's blocker instead. Only the reproduction of the earlier count uses it."""
     start = s.clock.get("classcure")
     if start is not None and s.t - start < CHANNEL_MAX["classcure"]:

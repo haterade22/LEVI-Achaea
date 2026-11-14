@@ -253,6 +253,19 @@ Skill specialisation: br_runewarden
 """
 
 
+class Flags(unittest.TestCase):
+    def test_the_flags_section_counts_defaults_by_pre_checks(self):
+        # OBLIVIATE and ROBES have no Pre checks value; a copy of ROBES with one says Useable paralysed: Yes.
+        filled = (ROBES.replace("Ability: Robes (Record #3)", "Ability: Shrugging (Record #1277)")
+                  .replace("Pre checks:\n", "Pre checks: equilibrium\n")
+                  .replace("Useable paralysed: No", "Useable paralysed: Yes"))
+        recs = [ka.parse_record(t) for t in (OBLIVIATE, ROBES, filled, FISTSIGIL)]
+        text = " ".join(" ".join(ka.render_flags(recs)).split())
+        self.assertIn("Of the 3 named records that are not pointers, 1 have a `Pre checks:` line", text)
+        self.assertIn("and 2 do not. Of those 2, 1 show the same flags", text)  # ROBES needs one arm
+        self.assertIn("and 0 say `Useable paralysed: Yes`. Of the 1 with a value, 0 show that set and 1 say", text)
+
+
 class Battlerage(unittest.TestCase):
     def page(self, files):
         with tempfile.TemporaryDirectory() as d:

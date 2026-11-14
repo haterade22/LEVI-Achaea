@@ -5,7 +5,7 @@
   ".claude/databases/venoms.yaml": "da9f100670a46530",
   "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
   "kb/mechanics/clocks.json": "acf3ebc1cd2c7b55",
-  "kb/sim/rules_hand.json": "6367a181cd420a2d",
+  "kb/sim/rules_hand.json": "1ba17b3d9c490447",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "84500af0cf22efc1",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "a67d445f9502d3a2",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "0662a95087ef51bb",
@@ -362,7 +362,7 @@
   },
   "class.accelerate": {
    "note": "it needs and spends equilibrium: the prompt went from exT to xT (2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt rows 2086-2098)",
-   "source": "kb/afflictions/class-cures.md:39",
+   "source": "kb/afflictions/class-cures.md:40",
    "tag": "READ",
    "value": {
     "blocked_by": [
@@ -420,13 +420,13 @@
     "hold"
    ],
    "note": "the victim fires its class cure as soon as it is open and useful",
-   "source": "kb/afflictions/class-cures.md:34-54",
+   "source": "kb/afflictions/class-cures.md:35-55",
    "tag": "ASSUMED",
    "value": "at once"
   },
   "class.dagaz": {
    "note": "voyria first: azbErKcK rows 3856-3857",
-   "source": "kb/afflictions/class-cures.md:137",
+   "source": "kb/afflictions/class-cures.md:174",
    "tag": "READ",
    "value": {
     "classes": [
@@ -445,12 +445,12 @@
     "half a period"
    ],
    "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period",
-   "source": "kb/afflictions/class-cures.md:137",
+   "source": "kb/afflictions/class-cures.md:174",
    "tag": "ASSUMED",
    "value": "random"
   },
   "class.fitness": {
-   "source": "kb/afflictions/class-cures.md:41,60-65",
+   "source": "kb/afflictions/class-cures.md:42,59-66",
    "tag": "READ",
    "value": {
     "blocked_by": [
@@ -481,7 +481,7 @@
   },
   "class.salt": {
    "note": "which affliction salt takes is not known: random, as the tree. It needs and spends equilibrium (class.salt.eq)",
-   "source": "kb/afflictions/class-cures.md:36",
+   "source": "kb/afflictions/class-cures.md:37",
    "tag": "READ",
    "value": {
     "blocked_by": [

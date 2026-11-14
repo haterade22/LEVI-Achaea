@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-13 - v4.7.498: the class-cure triggers checked against the game's records
+
+The full ABADMIN capture holds the game's record of every class cure. This release checks our class-cure triggers and `kb/afflictions/class-cures.md` against those 26 records.
+
+- **Knight CONTINUATION now cures paralysis.** The game's record (ABADMIN 2061, two-handed knights) says Continuation "allows you to overcome paralysis". Our trigger for its line ("<name> gives a great shout of exertion.") was named "Continuation (Monk)". It acted only for a Monk target, and then took weariness and one random affliction, so a knight's real Continuation changed nothing in our tracker. It is now `passive_active/018_Continuation_(Knight).lua`: for a Runewarden, Infernal, Paladin or Unnamable target (or one whose class we do not know), it takes paralysis off the target and starts the Continuation cooldown. A Monk's shout does nothing.
+- **Knight RAGE no longer takes paralysis.** RAGE cures "certain pacifying afflictions, notably those that are normally cured by eating bellwort" (ABADMIN 541, 2960, 2990, 3020). Our trigger also took paralysis off the target, and no source ever said it should. So after a knight's rage we believed a paralysis gone that was still there. It now takes only what `taRaged` takes: retribution and the first bellwort affliction it holds.
+- **FOOL's cooldown is 35 s** (ABADMIN 606), not 20. Nothing reads that table yet, so no behaviour changes.
+- **An ABADMIN flag is often a default.** A record with no `Pre checks` value shows the same four flags: arms 0, legs 0, entangled No, paralysed No. 2456 of the 2576 such records show exactly that set, and none says paralysed Yes. Of the 26 class-cure records, only SHRUGGING and EXPUNGE have a `Pre checks` value, and both say paralysed Yes. So "Useable paralysed: No" on FITNESS, SALT and ERUPTION is not evidence that paralysis blocks them. `kb/classes/abadmin-vs-wiki.md` has a new generated section with the counts ("Pre checks and the flags"). `kb/CONFLICTS.md` #82 (does paralysis block the class cures?) stays open with this added: only the user's word says it does, and five logs say it does not. No cure code changed.
+- **`kb/afflictions/class-cures.md`** has the corrected Rage, Continuation and Fool rows, and a new section "The game's records (ABADMIN, 2026-11-13)". Where a record names a blocker, it agrees with the HELP file. The citations of the page's lines in other files are corrected (`kb/sim/rules_hand.json`, `kb/CONFLICTS.md`, `tools/kb_replay.py`, a fight page), and `kb/sim/rules.json` is regenerated.
+
 ## 2026-11-13 - v4.7.497: battlerage from the game's records; Runewarden etch fires solo
 
 The full ABADMIN capture holds the game's own record of every battlerage ability. This release checks the basher against those records.

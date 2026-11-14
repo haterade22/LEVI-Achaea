@@ -124,3 +124,67 @@ describe("Fire Lord Slough (016)", function()
     expect(cures[1].n).toBe(1)
   end)
 end)
+
+-- The game's records (2026-11-13, kb/raw/abadmin/): CONTINUATION is the two-handed knights'
+-- paralysis cure (ABADMIN 2061), and RAGE cures the bellwort afflictions (541/2960/2990/3020).
+describe("Knight Continuation cures paralysis (018)", function()
+  local FILE = "018_Continuation_(Knight).lua"
+  local SHOUT = "Agathon gives a great shout of exertion."  -- kb/raw/logs/ours/2026-11-03_102138_Tabethys.log:4345
+
+  it("matches the logged line", function()
+    expect(TL.anyMatches(patterns(FILE), SHOUT)).toBeTrue()
+  end)
+
+  it("a knight's shout takes paralysis, and nothing at random", function()
+    for _, class in ipairs({ "Runewarden", "Infernal", "Paladin", "Unnamable" }) do
+      local cures, cds = fire(FILE, SHOUT, "Agathon", class, { paralysis = true, weariness = true })
+      expect(#cures).toBe(1)
+      expect(#cures[1].specific).toBe(1)
+      expect(cures[1].specific[1]).toBe("paralysis")
+      expect(cures[1].n).toBeNil()
+      expect(cds[1]).toBe("passive_continuation")
+    end
+  end)
+
+  it("an unknown class still counts: only knights have the ability", function()
+    expect(#fire(FILE, SHOUT, "Agathon", nil, {})).toBe(1)
+  end)
+
+  it("a Monk's shout does nothing: no Monk ability is Continuation", function()
+    expect(#fire(FILE, SHOUT, "Agathon", "Monk", {})).toBe(0)
+  end)
+end)
+
+describe("Knight Rage takes no paralysis (013)", function()
+  local function rage(next)
+    local fh = assert(io.open(DIR .. "013_Rage_(Knight).lua", "r"))
+    local body = fh:read("*a"):match("%]%]%-%-\r?\n(.*)$")
+    fh:close()
+    local cures, raged = {}, 0
+    local stubs = {
+      multimatches = { { "Blonk's eyes flash with rage.", "Blonk" }, {}, { next } },
+      isTargeted = function(n) return n == "Blonk" end,
+      onClassCureV3 = function(specific) cures[#cures + 1] = specific end,
+      taRaged = function() raged = raged + 1 end,
+      startPassiveCooldownV3 = function() end,
+      targetIshere = false,
+    }
+    local saved = {}
+    for k, v in pairs(stubs) do saved[k] = _G[k]; _G[k] = v end
+    local ok, err = pcall(assert((loadstring or load)(body)))
+    for k in pairs(stubs) do _G[k] = saved[k] end
+    if not ok then error(err) end
+    return cures, raged
+  end
+
+  it("a rage with no naming line takes a bellwort affliction and leaves paralysis", function()
+    local cures, raged = rage("Blonk lunges at you.")
+    expect(raged).toBe(1)
+    expect(#cures).toBe(0)
+  end)
+
+  it("the two naming lines still name their cure", function()
+    expect(rage("Blonk gives a sigh of relief.")[1][1]).toBe("retribution")
+    expect(rage("Blonk shakes his head and a look of clarity returns to his eyes.")[1][1]).toBe("lovers")
+  end)
+end)

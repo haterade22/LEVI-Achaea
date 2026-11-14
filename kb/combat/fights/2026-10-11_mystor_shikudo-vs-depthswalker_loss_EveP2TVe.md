@@ -139,7 +139,7 @@
   - The first attune shows two lines (162, 164).
   - Later re-attunes (253, 367, 448, 564, 852, 907) print nothing.
   - Every ~7.5-8 s it gives "Your body trembles with weakness." plus an affliction: stupidity (495, 20:17:38), then dizziness (832 and 1006).
-- **Loop boost.** It costs "Belaziel grows older before your eyes." (370). kb/afflictions/class-cures.md:39 lists that line only for boosted Accelerate.
+- **Loop boost.** It costs "Belaziel grows older before your eyes." (370). kb/afflictions/class-cures.md:40 lists that line only for boosted Accelerate.
 - **Pre-fight Aeonics.**
   - `chrono distortion` (35). The room then reads "The surroundings are distorted, as if viewed through water." (113), likely the same spell.
   - `chrono dilation` (58).
@@ -255,7 +255,7 @@
 
 ## Game lines
 
-**How NEW is marked.** NEW means the line is on no curated `kb/*.md` page. I grepped for the distinctive lines, and only `grows older before your eyes` (kb/afflictions/class-cures.md:39) and `deft manoeuvre` (kb/combat/shikudo.md:184) were found. For generic lines I did not grep again, the mark is the chunk readers'. The raw logs in kb/raw may already hold some of these lines.
+**How NEW is marked.** NEW means the line is on no curated `kb/*.md` page. I grepped for the distinctive lines, and only `grows older before your eyes` (kb/afflictions/class-cures.md:40) and `deft manoeuvre` (kb/combat/shikudo.md:184) were found. For generic lines I did not grep again, the mark is the chunk readers'. The raw logs in kb/raw may already hold some of these lines.
 
 ### Our attacks and effects
 | Line | Text | NEW | Note |
