@@ -19,7 +19,7 @@ sibling subfolders `Achaea/lv-*/`. All 36 session transcripts read on 2026-11-13
 |---|---|---|---|
 | CI `validate` job (`.github/workflows/build.yml`) | Every push to `main`, every `v*` tag | AFTER the push. `main` has no branch protection. A `v*` tag builds a release only if `validate` passes. | EMPIRICAL, the workflow file, 2026-11-13 |
 | `tools/ci_local.py` | Whoever runs it | Before the push, by rule (CLAUDE.md, merge step 2). Nothing forces the run. It says `Ready to push: YES` only for a full run, every step PASS, on a tree equal to `HEAD`. | EMPIRICAL, 2026-11-13 |
-| Git hooks | Nobody today | `core.hooksPath` is not set and `.git/hooks` has no active hook. A git hook would bind every `git push` from every folder and every client. | EMPIRICAL, `git config core.hooksPath` exits 1, 2026-11-13 |
+| `.githooks/pre-push` | Every `git push` from a tree that has the file, from any folder and any client, once `core.hooksPath` is `.githooks` (set in the main checkout; worktrees share the setting, and each uses its own branch's copy of the file) | At the push. It refuses two `v*` tags in one push, a tag that is not `v` + `version.txt`, a tag whose commit is not on `origin/main`, a rewrite of `main`. `--no-verify` goes round it. A worktree on a branch cut before 2026-11-13 has no file and no check. | EMPIRICAL, `tools/test_githooks.py` (a scratch clone, 14 cases), 2026-11-13. `tools/ci_local.py` prints whether it is active. |
 | Claude Code hooks in `.claude/settings.local.json` | Nobody | Never loaded (section 2), and three could not block if they were (section 3). | EMPIRICAL + DOC, 2026-11-13 |
 
 ## 2. What loads in a session that starts in the parent folder

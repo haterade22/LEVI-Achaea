@@ -103,7 +103,7 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
 2. Build with `/build` (or `./build.sh`)
 3. Commit all changes (version files + any code changes), tag with `v<new_version>`
-4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
+4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below; `.githooks/pre-push` refuses two `v*` tags in one push, a tag that is not `v` + `version.txt` at its commit, a tag whose commit is not on `origin/main`, and a rewrite of `main`)
 5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
 
 **IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.

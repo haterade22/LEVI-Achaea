@@ -455,6 +455,13 @@ class Header(unittest.TestCase):
         with mock.patch.object(ci, "git", lambda root, *args, **kw: None):
             self.assertIsNone(ci.tree_state("x"))
 
+    def test_push_hook_line(self):
+        self.assertTrue(ci.push_hook_line(".githooks", True).startswith("ACTIVE"))
+        self.assertTrue(ci.push_hook_line(".githooks/", True).startswith("ACTIVE"))
+        self.assertIn("core.hooksPath", ci.push_hook_line(None, True))
+        self.assertIn("core.hooksPath", ci.push_hook_line(".git/hooks", True))
+        self.assertIn("no .githooks/pre-push", ci.push_hook_line(".githooks", False))
+
     def test_git_run_keeps_its_time_limit(self):
         status, text = ci.git_run(ROOT, "rev-parse", "--git-dir")
         self.assertEqual(status, 0)

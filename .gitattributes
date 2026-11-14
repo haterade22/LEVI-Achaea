@@ -11,3 +11,6 @@
 # Binary files - never diff or merge
 *.mpackage binary
 *.db binary
+
+# Git hooks run under sh on every system: a CR breaks them
+.githooks/* text eol=lf

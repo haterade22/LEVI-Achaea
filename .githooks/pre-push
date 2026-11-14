@@ -1,0 +1,111 @@
+#!/bin/sh
+# .githooks/pre-push -- refuse the release pushes that have gone wrong before.
+#
+# Active after:  git config core.hooksPath .githooks   (once, in the main checkout; worktrees share it)
+# Bypass, when you mean it:  git push --no-verify
+#
+# A v* tag is a release: CI builds the package from the tag and the updater installs "Latest".
+# This hook runs for every `git push`, from any folder and any client, so it does not depend on an
+# AI client's own hooks. It runs no test and reads only local refs: well under a second.
+#
+# REFUSED:
+#   1. More than one v* tag in one push.            (`git push --tags` re-pointed "Latest", v4.7.208)
+#   2. A v* tag that is not "v" + version.txt at the tagged commit.   (v4.7.313 tagged the commit before the bump)
+#   3. A v* tag whose commit is not on origin/main. (v4.7.448 was released from an unmerged branch)
+#   4. A non-fast-forward update of main.
+# WARNING only:
+#   A v* tag lower than the highest local v* tag (it would become "Latest" with an older version).
+#   Not a refusal: the documented recovery deletes a tag and pushes it again while newer tags exist.
+# PASSES untouched: branch pushes, tag deletes, dmap-v* tags.
+# What it cannot read it does not judge: it prints "pre-push: NOT checked: <what>" and lets the push go.
+#
+# Tests: tools/test_githooks.py (a scratch clone with a must-refuse and a must-allow table).
+
+zero() { case "$1" in *[!0]*) return 1 ;; *) return 0 ;; esac; }
+
+say() { echo "pre-push: $*" >&2; }
+
+refused=0
+v_tags=""
+v_count=0
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "$local_ref" ] || continue
+
+  # A delete (local side is all zeros) is never judged: the recovery for a bad tag is a delete.
+  if zero "$local_sha"; then
+    continue
+  fi
+
+  case "$remote_ref" in
+    refs/tags/v[0-9]*)
+      tag=${remote_ref#refs/tags/}
+      v_count=$((v_count + 1))
+      v_tags="$v_tags $tag"
+
+      commit=$(git rev-parse --verify --quiet "$local_sha^{commit}" 2>/dev/null)
+      if [ -z "$commit" ]; then
+        say "NOT checked: $tag (cannot read the tagged commit)"
+        continue
+      fi
+
+      # 2. The tag is the version of the tree it tags.
+      if version=$(git show "$commit:version.txt" 2>/dev/null) && [ -n "$version" ]; then
+        version=$(printf '%s' "$version" | tr -d '[:space:]')
+        if [ "v$version" != "$tag" ]; then
+          say "REFUSED: tag $tag is on a commit whose version.txt says $version."
+          say "         Tag the commit that bumped the version, or delete this local tag (git tag -d $tag)."
+          refused=1
+        fi
+      else
+        say "NOT checked: $tag against version.txt (no version.txt at that commit)"
+      fi
+
+      # 3. The tagged commit is on main, as origin last showed it to this clone.
+      if git rev-parse --verify --quiet refs/remotes/origin/main >/dev/null 2>&1; then
+        if ! git merge-base --is-ancestor "$commit" refs/remotes/origin/main 2>/dev/null; then
+          say "REFUSED: the commit of $tag is not on origin/main."
+          say "         Push the commit to main first and wait for its Build & Validate run."
+          say "         If main moved, run: git fetch origin   and try again."
+          refused=1
+        fi
+      else
+        say "NOT checked: $tag against origin/main (this clone has no origin/main ref)"
+      fi
+
+      # Warning: a lower version than the highest tag this clone knows.
+      top=$(git tag -l 'v[0-9]*' --sort=-v:refname 2>/dev/null | head -n 1)
+      if [ -n "$top" ] && [ "$top" != "$tag" ]; then
+        newest=$(printf '%s\n%s\n' "$top" "$tag" | sort -V 2>/dev/null | tail -n 1)
+        if [ "$newest" = "$top" ]; then
+          say "WARNING: $tag is below the highest local tag $top. A release of $tag becomes \"Latest\" with an older version."
+        fi
+      fi
+      ;;
+
+    refs/heads/main)
+      # 4. main only moves forward.
+      if zero "$remote_sha"; then
+        continue   # main does not exist on the remote yet
+      fi
+      if ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+        say "NOT checked: main fast-forward (this clone does not have the remote's commit; git itself refuses a non-forced rewrite)"
+        continue
+      fi
+      if ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+        say "REFUSED: this push would rewrite main (it is not a fast-forward)."
+        say "         Run: git fetch origin && git rebase origin/main   then push again."
+        refused=1
+      fi
+      ;;
+  esac
+done
+
+# 1. One release tag for each push.
+if [ "$v_count" -gt 1 ]; then
+  say "REFUSED: this push carries $v_count version tags:$v_tags"
+  say "         Push ONE tag by name (git push origin vX.Y.Z). Never git push --tags."
+  refused=1
+fi
+
+exit "$refused"

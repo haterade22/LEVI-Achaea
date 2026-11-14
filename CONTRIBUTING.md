@@ -20,6 +20,19 @@ python tools/run_lua_tests.py [src_new/tests/test_x.lua]
 
 VS Code: `Ctrl+Shift+B` runs the default build task. See [.vscode/tasks.json](.vscode/tasks.json) for all tasks.
 
+## One-time setup
+
+```bash
+git config core.hooksPath .githooks    # in the main checkout; worktrees share it
+```
+
+This turns on `.githooks/pre-push`, which runs on every `git push` from any folder and any client.
+It refuses the release pushes that have gone wrong before: more than one `v*` tag in one push
+(`git push --tags`), a tag that is not `v` + `version.txt` at its commit, a tag whose commit is not
+on `origin/main`, and a rewrite of `main`. It runs no test and takes well under a second. What it
+cannot read it does not judge (`pre-push: NOT checked: ...`). `git push --no-verify` goes round it
+when you mean to. Its tests are `tools/test_githooks.py`.
+
 ## Branching & releasing
 
 | Action | Convention |

@@ -265,6 +265,8 @@ Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conv
 3. Commit, tag, and push: `git tag v<version>` → `git push && git push origin v<version>`
 4. CI/CD automatically creates a GitHub Release with the `.mpackage`
 
+> **Run `git config core.hooksPath .githooks` once** (see [CONTRIBUTING.md](CONTRIBUTING.md), "One-time setup"): the pre-push hook then refuses the mistakes below.
+>
 > **Push the one tag by name — never `git push --tags`.** It pushes every stale local tag too,
 > and each one fires the release workflow against *that tag's old source*. GitHub picks
 > "Latest" by publish time rather than version number, so a stale release published last

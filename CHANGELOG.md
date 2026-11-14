@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-11-13 - A push gate: `.githooks/pre-push` (tooling only, no version bump)
+
+The costly release mistakes all happened at the push: `git push --tags` re-pointed "Latest" (v4.7.208), a tag went on the commit before the version bump (v4.7.313), and a release was tagged on an unmerged branch (v4.7.448). The rules against them lived in prose and in memory. The Claude Code hooks never ran (`docs/reference/harness-facts.md`). A git hook runs on every push, from any folder and any client.
+
+- **`.githooks/pre-push` refuses four pushes:** more than one `v*` tag in one push; a `v*` tag that is not `v` + `version.txt` at the tagged commit; a `v*` tag whose commit is not on `origin/main`; a non-fast-forward update of `main`.
+- **It lets the rest go:** branch pushes, tag deletes (the recovery for a bad tag is a delete), `dmap-v*` tags. A tag below the highest local tag gives a warning only, because the recovery pushes an old tag again while newer ones exist. What it cannot read it does not judge: it prints `pre-push: NOT checked: <what>` and passes. `git push --no-verify` goes round it.
+- **It runs no test and reads only local refs,** so it takes well under a second. The checks before a push are still `tools/ci_local.py`.
+- **Turn it on once:** `git config core.hooksPath .githooks` in the main checkout (worktrees share the setting). `tools/ci_local.py` prints `push hook   ACTIVE` or says what is missing. A worktree on a branch cut before today has no hook file and no check.
+- **Tests: `tools/test_githooks.py`** (14 cases, a CI step). Each builds a scratch clone with a local bare remote and runs real `git push` commands. A refusal counts only when the hook's own text is in the output. Proof that the tests can fail: with the hook's exit forced to 0, five tests fail; with the version rule switched off, two fail.
+- **CI:** the release build job now fails when the tag is not `v` + `version.txt` (the same rule, for a push that skipped the hook). `.gitattributes` pins `.githooks/*` to LF: a CR breaks a hook under `sh`.
+
+---
+
 ## 2026-11-13 - The docs stop claiming gates that do not run; evidence rules added (docs only, no version bump)
 
 Follows `docs/reference/harness-facts.md`: the Claude Code hooks never ran and the custom agents were never offered, but six documents said they did.

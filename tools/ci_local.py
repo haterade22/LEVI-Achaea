@@ -327,6 +327,15 @@ def version_notes(local, tag, main, tag_in_tree=None, main_in_tree=None):
     return notes
 
 
+def push_hook_line(hooks_path, has_file):
+    """Whether `git push` from this tree runs .githooks/pre-push. A worktree on an older branch has no such file."""
+    if not has_file:
+        return "NOT ACTIVE: this tree has no .githooks/pre-push (a branch cut before 2026-11-13); no push check runs here"
+    if (hooks_path or "").replace("\\", "/").rstrip("/") != ".githooks":
+        return "NOT ACTIVE: run `git config core.hooksPath .githooks` once in the main checkout"
+    return "ACTIVE: .githooks/pre-push checks every git push from this tree"
+
+
 def is_ancestor(root, commit):
     """True / False, or None when there is nothing to compare. An unknown commit is not in this tree: False."""
     if not commit:
@@ -353,6 +362,8 @@ def header(root, python, remote=True, dirty=None, out=print):
     if sys.version_info[:2] > CI_PYTHON:
         out("            NOTE: CI runs python3 %d.%d. A feature newer than that in tools/*.py passes here and fails there."
             % CI_PYTHON)
+    out("push hook   %s" % push_hook_line(git(root, "config", "core.hooksPath"),
+                                          os.path.isfile(os.path.join(root, ".githooks", "pre-push"))))
     try:
         with open(os.path.join(root, "version.txt"), encoding="utf-8") as fh:
             local = fh.read().strip()
