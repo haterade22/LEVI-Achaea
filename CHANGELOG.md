@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-11-13 - One local run of CI: `tools/ci_local.py` (tooling and docs only, no version bump)
+
+Work goes straight to `main` with no pull request, so the local run is the only check before `main`. Until now that run was a list of commands in three documents, and the lists were three steps behind CI.
+
+- **`python -B tools/ci_local.py` runs every step of CI's `validate` job** and prints PASS, FAIL or NOT RUN for each. It never stops at the first failure. `Ready to push: YES` appears only after a full run with every step PASS. `--quick` runs the 7 fast steps (about 7 s), `--only <id>` runs named steps, `--list` says what each step proves. The Lua syntax step and the Lua suite run through `lupa` (Lua 5.1), with the interpreter that started the run.
+- **A step that cannot run is NOT RUN, never a pass.** Under the `python3` on this machine's PATH (no `lupa`, no `yaml`) the run reports 10 steps NOT RUN and exits 2. Exit status: 1 for a FAIL, 2 for a NOT RUN, 0 for neither.
+- **The first lines say where the run is:** the tree, the branch, the interpreter, and `version.txt` against the top `v` tag on origin and against `origin/main`. Three releases lost their version number to another session (2026-10-23, 2026-11-03, 2026-11-13); a higher tag on origin now prints a warning.
+- **One step list: `tools/ci_steps.json`.** `tools/test_ci_local.py` (29 tests, a CI step itself) fails when the table and `build.yml` name different tools. It also fails when a `tools/test_*.py`, a `tools/check_*.py` or a tool with `--check` is neither a step nor listed with its reason (`check_colours.py`, `kb_log_import.py`). Proof: with the `wrap` row removed, two tests fail; with a new `tools/test_zz_orphan.py`, one test fails.
+- **CI changes (`build.yml`).** `tools/test_fightlog_import.py` runs in CI now (it was in no list). The version step also requires the heading `## <date> - v<version.txt>: <title>` in `CHANGELOG.md`; two releases went out with no entry (v4.7.413, v4.7.477). `tools/test_ci_local.py` is the last step.
+- **Docs:** the `/verify` skill is one call of the runner and holds no copy of the list. `CONTRIBUTING.md` has the runner and a short "Adding a gate" section (three exit results, report-only first, prove the gate on real bad input, wire it). `CLAUDE.md` names the runner in the test notes and in merge step 2.
+
+---
+
 ## 2026-11-13 - No silent green: a check that cannot run says NOT RUN (tooling and tests only, no version bump)
 
 Some of our checks could pass when they checked nothing. The local run is the only check before `main`, so a false pass there goes straight to players. These five repairs give each tool three results: exit 0 is a pass, exit 1 is a finding, exit 2 is NOT RUN.

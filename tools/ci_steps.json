@@ -1,0 +1,39 @@
+{
+  "about": [
+    "The steps of the validate job in .github/workflows/build.yml, for tools/ci_local.py.",
+    "A row with argv runs as: <python> -B <argv>. A row with builtin runs inside ci_local.py.",
+    "tools/test_ci_local.py fails when this table and build.yml disagree, and when a test, a check",
+    "or a --check tool under tools/ is neither a row here nor listed in not_in_ci with its reason.",
+    "ci_marker: text that build.yml must contain, for a step that CI runs in another form."
+  ],
+  "steps": [
+    {"id": "syntax", "what": "Lua 5.1 syntax of every src_new/**/*.lua", "builtin": "lua_syntax", "needs": ["lupa"], "quick": true, "ci_marker": "luac5.1 -p"},
+    {"id": "orphans", "what": "no active item calls a global or field that nothing live defines", "argv": ["tools/check_orphans.py"], "quick": true},
+    {"id": "orphans-test", "what": "the orphan checker's own tests", "argv": ["tools/test_check_orphans.py"]},
+    {"id": "wrap", "what": "every trigger pattern fits one server-wrapped row", "argv": ["tools/check_wrap.py"], "quick": true},
+    {"id": "timing", "what": "kb/mechanics clocks and scoreboard match the logs", "argv": ["tools/kb_timing.py", "--check"]},
+    {"id": "timing-test", "what": "the log parser and the clocks", "argv": ["tools/test_kb_timing.py"]},
+    {"id": "replay", "what": "kb/mechanics/replay.md matches the logs", "argv": ["tools/kb_replay.py", "--check"]},
+    {"id": "replay-test", "what": "the replay of the deaths", "argv": ["tools/test_kb_replay.py"]},
+    {"id": "sim", "what": "kb/sim/forward.* match their inputs", "argv": ["tools/kb_sim.py", "--check"], "needs": ["lupa"]},
+    {"id": "sim-test", "what": "the simulator tool", "argv": ["tools/test_kb_sim.py"], "needs": ["lupa"]},
+    {"id": "rules", "what": "kb/sim/rules.* match their sources (Lua files are inputs)", "argv": ["tools/kb_rules.py", "--check"], "needs": ["lupa"]},
+    {"id": "rules-test", "what": "the whole-fight rules", "argv": ["tools/test_kb_rules.py"], "needs": ["lupa"]},
+    {"id": "events", "what": "kb/sim/events.* match the logs", "argv": ["tools/kb_events.py", "--check"]},
+    {"id": "events-test", "what": "the census and the race table", "argv": ["tools/test_kb_events.py"]},
+    {"id": "theorycraft-test", "what": "the theorycraft CLI and the whole-fight engine", "argv": ["tools/test_theorycraft.py"], "needs": ["lupa"]},
+    {"id": "capture-test", "what": "the kbcapture importer", "argv": ["tools/test_kb_capture_import.py"]},
+    {"id": "abadmin", "what": "the ABADMIN pages match kb/raw/abadmin", "argv": ["tools/kb_abadmin.py", "--check"]},
+    {"id": "abadmin-test", "what": "the ABADMIN generator", "argv": ["tools/test_kb_abadmin.py"]},
+    {"id": "fightlog-test", "what": "the fight-log importer", "argv": ["tools/test_fightlog_import.py"]},
+    {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": "Check version consistency"},
+    {"id": "unit", "what": "the Lua test suite (src_new/tests)", "argv": ["tools/run_lua_tests.py"], "needs": ["lupa"], "quick": true, "ci_marker": "lua5.1 src_new/tests/test_runner.lua"},
+    {"id": "yaml", "what": "every src_new/**/_groups.yaml parses", "builtin": "yaml", "needs": ["yaml"], "quick": true, "ci_marker": "yaml.safe_load"},
+    {"id": "convert-test", "what": "the Muddler converter", "argv": ["tools/test_convert_to_muddler.py"], "needs": ["yaml"], "quick": true},
+    {"id": "ci-local-test", "what": "this table against build.yml, and the runner's verdicts", "argv": ["tools/test_ci_local.py"], "needs": ["lupa", "yaml"]}
+  ],
+  "not_in_ci": {
+    "tools/check_colours.py": "By decision (see its docstring): usage strings give false positives, so it runs by hand on the files a change names.",
+    "tools/kb_log_import.py": "Its --check compares each HTML export with its filed text. It reports on exports a person just added; it is not a gate on the tree."
+  }
+}

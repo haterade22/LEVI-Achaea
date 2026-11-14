@@ -8,8 +8,11 @@ For the full technical reference (build system, architecture, GMCP patterns, cla
 # Full build (convert src_new → Muddler → .mpackage)
 ./build.sh
 
-# Tests only
-lua5.1 src_new/tests/test_runner.lua
+# Every check that CI's validate job runs (PASS / FAIL / NOT RUN for each step)
+python -B tools/ci_local.py
+
+# The Lua suite only, or one file (lupa embeds Lua 5.1; a bare `lua` is often 5.4)
+python tools/run_lua_tests.py [src_new/tests/test_x.lua]
 
 # Convert only (skip Muddler / Java)
 ./build.sh --convert-only
@@ -57,8 +60,12 @@ See [CLAUDE.md § Naming Conventions](CLAUDE.md#naming-conventions) for the full
 Test files live in `src_new/tests/` and are named `test_*.lua`. The runner discovers them automatically.
 
 ```bash
-lua5.1 src_new/tests/test_runner.lua
+python tools/run_lua_tests.py                              # the whole suite
+python tools/run_lua_tests.py src_new/tests/test_x.lua     # one file
 ```
+
+Use a Python that has `lupa` (`pip install lupa`). The runner exits 0 when all tests pass, 1 when a
+test fails, and 2 (NOT RUN) when it has no `lupa` or finds no test file.
 
 Write tests for new logic where feasible. At minimum, new public functions should have a happy-path test. `mock_mudlet.lua` stubs the Mudlet API so tests run outside the client.
 
@@ -94,17 +101,32 @@ causing the second definition to silently shadow the first.
 
 ## CI
 
-GitHub Actions (`.github/workflows/build.yml`) runs on every push and PR:
+GitHub Actions (`.github/workflows/build.yml`) runs the `validate` job on every push to `main`, every
+`v*` tag and every pull request. `main` takes direct pushes, so CI runs AFTER the push: run the same
+steps before it.
 
-1. Lua syntax check (all `src_new/**/*.lua`)
-2. `tools/check_orphans.py` -- no active item calls a global defined only by a disabled script, or by nothing
-3. `tools/test_check_orphans.py` -- the orphan checker's own tests
-4. `tools/check_wrap.py` -- no trigger pattern is wider than a server-wrapped row (v4.7.351)
-5. `tools/kb_timing.py`, `kb_replay.py`, `kb_sim.py`, `kb_rules.py` and `kb_events.py`, each with `--check` -- the generated kb pages match their sources. Each has its own `tools/test_kb_*.py`, also run here, and `tools/test_theorycraft.py` tests the CLI and the whole-fight engine
-6. Version consistency check (version.txt / mfile / _groups.yaml)
-7. Unit tests (`lua5.1 src_new/tests/test_runner.lua`)
-8. YAML validation
-9. `tools/test_convert_to_muddler.py` -- the Muddler converter's own tests (after step 8: the converter imports yaml)
+```bash
+python -B tools/ci_local.py          # every validate step; push only on "Ready to push: YES"
+python -B tools/ci_local.py --quick  # the fast steps
+python -B tools/ci_local.py --list   # each step and what it proves
+```
+
+The step list is `tools/ci_steps.json`. It is the only list: `tools/test_ci_local.py` (a CI step itself)
+fails when it and `build.yml` name different tools, and when a `tools/test_*.py`, a `tools/check_*.py`
+or a tool with `--check` is neither a step nor listed under `not_in_ci` with its reason.
+
+### Adding a gate
+
+- **Three results, by exit status.** 0 = pass, 1 = a finding, 2 = NOT RUN (the gate could not run or
+  had nothing to check). NOT RUN is never a pass. Empty input is NOT RUN: a walk that finds no file
+  must not print OK.
+- **Report-only first.** Land a new check behind a `STRICT_*` flag, as `tools/check_orphans.py` did,
+  and make it strict when its report is clean. A gate with false positives gets switched off.
+- **Prove it where it runs.** A gate is done when it has refused one real bad input: break the thing it
+  guards, see the gate fail, restore it. Try the states it will meet: a run from the wrong folder, a
+  worktree, a missing tool, a wrong interpreter.
+- **Wire it.** Add the tool to `build.yml` and to `tools/ci_steps.json` in the same change. A check
+  that nothing runs prevents nothing.
 
 `tools/kb_affliction_db.py` is not in CI and has no `--check`: every run rewrites `kb/afflictions/database.md` and `afflictions.json`.
 

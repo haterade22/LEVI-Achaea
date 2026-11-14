@@ -1,80 +1,66 @@
 ---
 name: verify
-description: Run comprehensive build + test + git verification and produce a pass/fail report
+description: Run CI's validate job locally with tools/ci_local.py and report PASS, FAIL or NOT RUN for each step. Use before every push to main and before you say a change is done.
 argument-hint: "[quick|full]"
 ---
 
 # Verification Report
 
-Run the full verification suite and produce a pass/fail report.
-
 Mode: `$ARGUMENTS` (default: `full`)
 
-## Quick Mode
+One command runs every step of the `validate` job in `.github/workflows/build.yml`. The step list is
+`tools/ci_steps.json`; `tools/test_ci_local.py` fails when that list and `build.yml` disagree, so this
+skill holds no copy of it.
 
-1. **Lua syntax check** — Validate all `.lua` files compile:
-   ```bash
-   find src_new -name '*.lua' -type f -exec luac5.1 -p {} \; 2>&1
-   ```
-   If `luac5.1` is not available, use the YAML-header-stripping approach from `lint-before-commit.sh`.
+## Run
 
-2. **Build** — Run the full pipeline:
-   ```bash
-   ./build.sh
-   ```
+Use the interpreter that has `lupa` (Lua 5.1) and `pyyaml`. On the maintainer's Windows machine that
+is `/c/Python314/python`. The `python3` on PATH has neither.
 
-3. **Report** — Pass/fail verdict.
+```bash
+/c/Python314/python -B tools/ci_local.py            # full: every step, about 60-80 s
+/c/Python314/python -B tools/ci_local.py --quick    # quick: syntax, orphans, wrap, version, Lua suite, yaml, converter
+/c/Python314/python -B tools/ci_local.py --only rules unit
+/c/Python314/python -B tools/ci_local.py --list     # what each step proves
+```
 
-## Full Mode (all of quick, plus)
+Run it from the worktree you will push. The first lines print the tree, the branch and whether
+`version.txt` is behind the top tag on origin.
 
-4. **Unit tests** — Run the test suite:
-   ```bash
-   lua5.1 src_new/tests/test_runner.lua
-   ```
+## Read the result
 
-5. **CI parity** — Run every Python step of `.github/workflows/build.yml`. A generated KB page fails CI when one of its inputs changes, and a Lua file can be an input:
-   ```bash
-   for c in tools/check_orphans.py tools/test_check_orphans.py tools/check_wrap.py "tools/kb_timing.py --check" tools/test_kb_timing.py "tools/kb_replay.py --check" tools/test_kb_replay.py "tools/kb_sim.py --check" tools/test_kb_sim.py "tools/kb_rules.py --check" tools/test_kb_rules.py "tools/kb_events.py --check" tools/test_kb_events.py tools/test_theorycraft.py tools/test_convert_to_muddler.py; do python -B $c > /dev/null || echo "FAIL: $c"; done
-   ```
-   `kb_sim.py` needs `lupa`. If a `kb_*.py --check` prints STALE, run the same tool without `--check` and read the diff (`kb_sim.py` takes about 12 minutes).
+- **PASS**: the step ran and exited 0.
+- **FAIL**: the step ran and found a problem. The last rows of its output are printed below it.
+- **NOT RUN**: the step could not run (no `lupa`, no `yaml`, an exit 2, or left out by `--quick`).
+  NOT RUN is never a pass. Correct the cause and run again.
+- Exit status: 1 for a FAIL, 2 for a NOT RUN, 0 for neither.
+- `Ready to push: YES` appears only after a full run with every step PASS.
 
-6. **Version consistency** — Verify all 3 version sources match:
-   - `version.txt`
-   - `muddler_project/mfile` (JSON `version` field)
-   - `src_new/scripts/_groups.yaml` (`ataxiaVersion` value)
+If a `kb_*.py --check` step prints STALE, run that tool without `--check` and read the diff
+(`kb_sim.py` takes about 12 minutes). Generated pages change only through their generator.
 
-7. **Git status** — Check for uncommitted changes:
-   ```bash
-   git status --short
-   git diff --stat
-   ```
+## What the run does not cover
 
-8. **CHANGELOG check** — Verify CHANGELOG.md has been updated if source files changed:
-   ```bash
-   git diff --name-only HEAD | grep -v CHANGELOG
-   ```
+Say these in the report; do not imply them:
 
-9. **TODO/FIXME scan** — Count open items in source:
-   ```bash
-   grep -rE 'TODO|FIXME|HACK|XXX' src_new/ --include='*.lua' | wc -l
-   ```
+- Linux path behaviour (CI runs on Linux; a test that makes a folder passed here and failed there, v4.7.477).
+- The live game. No agent can test against Achaea.
+- The `Build & Validate` run on `main`. Watch it after the push, selected by workflow name.
+- `./build.sh` (the Muddler package). CI builds the package only for a `v*` tag. Run `./build.sh`
+  when you need a local package; it rewrites `muddler_project/mfile`.
 
-## Report Format
+## Report format
+
+Quote the runner's own lines. Do not retype a verdict that you did not see this turn.
 
 ```
 VERIFICATION REPORT
-====================
-Mode: [quick|full]
-Date: [timestamp]
+Mode: [quick|full]   Tree: <path>   Commit: <sha>
 
-[PASS/FAIL] Lua syntax check     — N files checked, N errors
-[PASS/FAIL] Build                 — build.sh exit code
-[PASS/FAIL] Unit tests            — N passed, N failed
-[PASS/FAIL] CI parity             — N steps, N failed
-[PASS/FAIL] Version consistency   — version.txt=X, mfile=Y, yaml=Z
-[PASS/FAIL] Git status            — N staged, N unstaged, N untracked
-[PASS/FAIL] CHANGELOG updated     — [yes/no]
-[INFO]      TODO/FIXME count      — N items
+<the PASS / FAIL / NOT RUN rows from tools/ci_local.py>
+<its summary row and its "Ready to push" row>
 
-VERDICT: READY FOR COMMIT / ISSUES FOUND
+Git: <git status --short, or "clean">
+Not covered: Linux paths, the live game, the main CI run
+VERDICT: READY TO PUSH / NOT READY (<reason>)
 ```

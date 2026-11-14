@@ -271,20 +271,18 @@ folder, so it does not match) and Muddler at `E:\muddle-shadow-1.1.0` (the secon
 build passed with them on 2026-11-13. To get Muddler again:
 `gh release download 1.1.0 -R demonnic/muddler -p muddle-shadow-1.1.0.zip`.
 
-**Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
+**Testing**: Run `/c/Python314/python -B tools/ci_local.py` before every push: it runs each step of CI's `validate` job and prints PASS, FAIL or NOT RUN for each (`--quick` for the fast steps, `--list` for what each step proves). For the Lua suite alone, or one file: `/c/Python314/python tools/run_lua_tests.py [one_test_file.lua]`. Tests use `mock_mudlet.lua` to stub the Mudlet API.
 **Local Lua on this Windows machine (2026-11-13).** No native Lua 5.1 is installed. `C:\Tools\lua51`
 is gone (since at least 2026-11-04), and the `luac.exe` on PATH (`AppData\Local\Programs\Lua\bin`) is
 Lua 5.4. Mudlet runs 5.1, and a 5.4 `luac` rejects escapes that 5.1 accepts. The pre-commit lint hook
 falls back to that `luac` (`.claude/hooks/lint-before-commit.sh`:15-20), and the VS Code "Run Tests"
 task falls back from `lua5.1` to the 5.4 `lua` (`.vscode/tasks.json`:42), which gives false failures
-(`global 'unpack'`). `lupa` embeds Lua 5.1, so run the suite with
-`/c/Python314/python tools/run_lua_tests.py [one_test_file.lua]`, and CI's `luac5.1 -p` step with:
-```bash
-/c/Python314/python -c "import glob,lupa.lua51 as l;c=l.LuaRuntime().eval('function(s,n) local f,e=loadstring(s,n) return e end');fs=glob.glob('src_new/**/*.lua',recursive=True);bad=[e for e in (c(open(f,'rb').read(),'@'+f) for f in fs) if e];print(len(fs),'files,',len(bad),'errors');[print(e) for e in bad]"
-```
-Run them before pushing: otherwise CI is the first place a test runs. The tests are not all of CI, so also run the
-`python3 -B tools/...` steps of `.github/workflows/build.yml` (`/verify full` lists them). A generated KB page fails CI when
-one of its inputs changes, and a Lua file can be an input (`kb_rules.py` stopped PR #169 that way).
+(`global 'unpack'`). `lupa` embeds Lua 5.1, so `tools/ci_local.py` runs the syntax step and the suite through it,
+with the interpreter that started it. A step that cannot run (no `lupa`, no `yaml`, nothing to check) is NOT RUN
+and the run exits 2: it is never a pass (2026-11-13; before that `kb_sim.py --check` printed "skip" and exited 0
+under the `python3` on PATH). The step list is `tools/ci_steps.json`, and `tools/test_ci_local.py` fails when it
+and `build.yml` disagree. A generated KB page fails CI when one of its inputs changes, and a Lua file can be an
+input (`kb_rules.py` stopped PR #169 that way), so run the full list, not only the suite.
 **Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name
 in the drive root (`\s1hk.`), which is not writable (`test_kb_capture.lua` failed 13 tests this
 way while Linux and lupa passed); move such a name into `%TEMP%`, as that test does.
@@ -332,9 +330,10 @@ and never switch the shared tree's branch while another session may be working i
 Two pushed branches with no PR sat unmerged for days (`fix/bm-strike-knees`, `docs/audit-after-484`).
 `main` has no branch protection, and `build.yml` runs on every push to `main`. So:
 1. Work in your own worktree, on your own branch.
-2. Run EVERY step of the `validate` job in `build.yml` locally. No PR CI runs before `main` any more,
-   so this is the only check before the push. Use `/c/Python314/python`, which has `lupa` and `yaml`
-   (the `python3` on PATH has neither), and `tools/run_lua_tests.py` (bare `lua` is 5.4).
+2. Run `/c/Python314/python -B tools/ci_local.py` and push only on `Ready to push: YES`. It runs EVERY
+   step of the `validate` job in `build.yml`. No PR CI runs before `main` any more, so this is the only
+   check before the push. That interpreter has `lupa` and `yaml`; the `python3` on PATH has neither, and
+   there the run says NOT RUN and exits 2.
 3. `git fetch origin && git rebase origin/main`, then run the checks again if the rebase pulled in changes.
    After a docs rebase, check `file:line` citations into files that `main` changed.
 4. `git push origin HEAD:main` from the worktree. This never switches the shared tree's branch.
