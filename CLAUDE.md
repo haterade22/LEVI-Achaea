@@ -18,7 +18,9 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 
 Sessions start in the parent folder, not in this repository. That decides what you have (`docs/reference/harness-facts.md` has each fact with its source):
 
-- **This file** loads after your first file access below the repository, and only its start: about 131,000 characters in the maintainer's sessions, 40,000 on a small context window. So it stays under 40,000 bytes (`tools/check_context_budget.py` fails a larger file). After a compaction it is gone until the next file access here.
+- **At launch** a `CLAUDE.md` in the parent folder imports this file from the MAIN checkout (seen 2026-11-14). After you push a change to this file, fast-forward the main checkout, or new sessions keep the old rules.
+
+- **Without that import, this file** loads after your first file access below the repository, and only its start: about 131,000 characters in the maintainer's sessions, 40,000 on a small context window. So it stays under 40,000 bytes (`tools/check_context_budget.py` fails a larger file). After a compaction it is gone until the next file access here.
 - **Subagents.** `Explore` and `Plan` get no `CLAUDE.md`; whether any other type gets this file is not verified. Start every spawn prompt and workflow agent prompt with: read `<absolute path of the tree>/docs/ai-includes/agent-brief.md` first. Then add the rules of the task and the files to read. A workflow script stops when that brief is empty.
 - **No Claude Code hook runs, and the custom agents in `.claude/agents/` are not offered.** The gates that work: `tools/ci_local.py` before a push, `.githooks/pre-push` at the push, CI after it.
 - **Skills** (`/version-bump`, `/build`, `/kb-ingest`, `/verify` and others) are listed only after the first file access here. Invoke each by the name the skill list gives: it can carry a folder prefix (`lv-<name>:build`), and `verify` always does (`LEVI-Achaea:verify`), because the bare name is a built-in.

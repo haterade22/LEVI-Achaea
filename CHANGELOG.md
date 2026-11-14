@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-11-14 - The core loads at the start of a session: seen (docs only, no version bump)
+
+- **The launch-load probe passed.** The first session started after the parent folder got its two-line `CLAUDE.md` lists three files in its launch record: the parent file, `LEVI-Achaea/CLAUDE.md` and `MEMORY.md`. The core arrived whole, before any file access. `docs/reference/harness-facts.md` now records this as seen, not inferred.
+- **One consequence, now a rule in `CLAUDE.md`:** the import reads the MAIN checkout's copy. After a push that changes `CLAUDE.md`, fast-forward the main checkout, or new sessions keep the old rules. (That session did not have the "Parallel Sessions" section, because the main checkout was one commit behind.)
+- **The parent folder is clean:** the stale `version.txt` (4.7.134), the stale memory copy from March and the ignored `autoMemoryDirectory` key are removed, and the merged worktree `lv-earrings` with its branch. The documents that warned about the stale `version.txt` say so.
+- Still open: whether `.claude/rules/tests.md` loads when a session reads a test file, and whether `/add-dir LEVI-Achaea` offers the custom agents.
+
+---
+
 ## 2026-11-14 - Two rules for parallel sessions: claim shared work, ask one question (docs and tooling, no version bump)
 
 Up to five sessions work on this repository at once. Several of them found the same red CI step and fixed it, then reverted and deconflicted. Others read whole files for answers that could not change what they did next.

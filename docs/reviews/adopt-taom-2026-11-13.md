@@ -100,7 +100,7 @@ All seven phases are on `main`. Each push passed `tools/ci_local.py` before it a
 | 6 | `4d8ee1c6` | `docs/ai-includes/agent-brief.md` |
 | 7 | `4d8ee1c6` and the commit before it | A leak report in the Lua test runner (9 leaks), check 3 in `tools/check_orphans.py` (10 sites), `tools/release.py tag-ready` and `post` |
 
-Still open: the three probes below (a person must start the session); the 9 leaks and the 10 check-3 sites, each a
+Still open: two of the three probes below (the launch-load probe passed on 2026-11-14); the 9 leaks and the 10 check-3 sites, each a
 place to look; issue #177.
 
 ## Deferred, each with the condition that reopens it
@@ -154,7 +154,7 @@ The reason for each is in the rows file. The groups:
 | Probe | Why | Record the result in |
 |---|---|---|
 | Start a session in the parent folder, read one file under `src_new/tests/`: does `.claude/rules/tests.md` load? Repeat in an `lv-*` worktree. | Decides whether area knowledge can live in path rules. | `docs/reference/harness-facts.md`, section 2 |
-| Does the two-line parent `CLAUDE.md` (created 2026-11-14) load the core at launch? Start a session and ask for the "Trap Sheet" before any file access. | Launch loading survives compaction and reaches non-Explore subagents. | The same section |
+| DONE 2026-11-14: the two-line parent `CLAUDE.md` loads the core at launch (seen in the launch record of a new session; the core arrived whole). | Launch loading survives compaction and reaches non-Explore subagents. | `docs/reference/harness-facts.md`, section 2 |
 | `/add-dir LEVI-Achaea`: are the six agents offered? | Decides whether the custom agents can be used at all. | The same section |
 
 ## Follow-up

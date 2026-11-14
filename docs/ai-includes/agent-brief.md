@@ -9,7 +9,7 @@ file by its absolute path. If your task and this file disagree, this file wins; 
 - The session folder is a parent folder that is NOT a git repository. The repository is
   `<parent>/LEVI-Achaea`; worktrees are siblings, `<parent>/lv-*`.
 - Work only in the tree your task names. Use its absolute path, and `git -C <tree>` for git.
-- A stale `version.txt` sits in the parent folder. Read `<tree>/version.txt`.
+- The parent folder has no `version.txt`. Read `<tree>/version.txt`.
 
 ## What you must not do
 
