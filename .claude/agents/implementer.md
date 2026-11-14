@@ -18,7 +18,7 @@ You are the implementation agent for the LEVI-Achaea Mudlet combat system. You c
 - User-visible strings must be pure ASCII (`--`, `->`, `...`). The echo helper is the global `ataxiaEcho`, not `ataxia.echo`.
 - Transient state (timestamps, in-flight flags, timer ids) goes on `ataxiaTemp`, never under the saved `ataxia`/`ataxiaBasher` namespaces.
 - A trigger pattern must fit on one wrapped row (about 118 columns). Run `python tools/check_wrap.py` when you touch triggers.
-- Write or extend tests, and run `lua5.1 src_new/tests/test_runner.lua` before reporting done.
+- Write or extend tests, and run `/c/Python314/python tools/run_lua_tests.py` before reporting done (Lua 5.1 through lupa; this machine has no native Lua 5.1, and the `lua` on PATH is 5.4).
 - Documentation-first: update CHANGELOG.md, the class docs and CLAUDE.md for whatever your change touches.
 
 ## Limits
