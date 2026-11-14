@@ -90,5 +90,5 @@ VERDICT: CLEAN / NEEDS FIXES / BLOCKED
 
 For each CRITICAL or HIGH finding:
 1. Make the fix
-2. Run `lua5.1 src_new/tests/test_runner.lua`
+2. Run `/c/Python314/python -B tools/ci_local.py --quick` (the Lua suite alone: `/c/Python314/python tools/run_lua_tests.py`)
 3. Run `./build.sh`

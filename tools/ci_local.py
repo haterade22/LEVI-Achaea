@@ -6,26 +6,32 @@
     python -B tools/ci_local.py --list     # the steps and what each one proves
 
 Since 2026-11-11 work goes straight to main with no pull request, so this run is the ONLY check
-before main. Two releases failed on main after a partial local run (v4.7.477, v4.7.484). The step
-list lives in tools/ci_steps.json; tools/test_ci_local.py fails when it and build.yml disagree.
+before main. v4.7.484 was stopped on its pull request by a stale generated page after a partial
+local run; with no pull request that failure lands on main and holds the release tag. The step
+list lives in tools/ci_steps.json; tools/test_ci_local.py fails when a step of build.yml's
+validate job has no row there, or a row has no step.
 
-Verdicts. PASS: the step ran and exited 0. FAIL: it ran and found a problem. NOT RUN: it could not
-run (this interpreter lacks lupa or yaml, the step exited 2, or --quick/--only left it out). A step
-that did not run is never counted as a pass.
+Verdicts. PASS: the step ran and exited 0. FAIL: it ran and found a problem. NOT RUN: a selected
+step could not run (this interpreter lacks lupa or yaml, or the step exited 2). A step that did
+not run is never counted as a pass. --quick and --only leave steps out; the run names them.
 
 Exit status: 1 if a selected step FAILED, else 2 if a selected step could NOT RUN, else 0.
-"Ready to push: YES" needs a full run (no --quick, no --only) with every step PASS.
+"Ready to push: YES" needs a full run (no --quick, no --only), every step PASS, and a working
+tree equal to HEAD: the run tests the files on disk, and a push carries only what is committed.
 
 Use the interpreter that has lupa (Lua 5.1) and pyyaml. Every step runs with that same interpreter.
-This run does not cover: Linux path behaviour, the live game, and the CI run on main itself.
+This run does not cover: Linux path behaviour, CI's own Python and Lua binaries, the live game,
+and the CI run on main itself.
 """
 import argparse
 import glob
 import json
+import locale
 import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +39,7 @@ STEPS_FILE = os.path.join(ROOT, "tools", "ci_steps.json")
 PASS, FAIL, NOT_RUN = "PASS", "FAIL", "NOT RUN"
 TAIL = 25          # rows of a step's output shown when it did not pass
 REMOTE_WAIT = 20   # seconds for the one network read (the tags on origin)
+CI_PYTHON = (3, 12)   # ubuntu-latest's python3 when this was written; a newer local Python gets a note
 
 
 def load_table(path=STEPS_FILE):
@@ -53,24 +60,41 @@ def can_import(name):
 
 
 # ---------------------------------------------------------------------------------------------
-# Built-in steps. Each returns (verdict, one line).
+# Built-in steps. Each returns (verdict, one line; more rows may follow after a newline).
 # ---------------------------------------------------------------------------------------------
 
 
+def lua_files(root):
+    """What CI's `find src_new -name '*.lua' -type f` lists. A walk, so a '[' in the tree's path cannot hide files."""
+    return sorted(os.path.join(folder, name) for folder, _, names in os.walk(os.path.join(root, "src_new"))
+                  for name in names if name.endswith(".lua"))
+
+
 def lua_syntax(root):
-    """CI runs `luac5.1 -p` on each file. loadstring in lupa's Lua 5.1 compiles the same chunk without running it."""
+    """CI runs `luac5.1 -p` on each file. loadstring in lupa's Lua 5.1 compiles the same chunk without running it.
+
+    Lua 5.1's lexer asks the C library which bytes are letters. luac5.1 runs in the C locale; Python starts in the
+    user's, where a byte such as 0xE9 is a letter and would compile as part of a name. So the scan runs in the C locale.
+    """
     import lupa.lua51 as lupa
-    files = sorted(glob.glob(os.path.join(root, "src_new", "**", "*.lua"), recursive=True))
+    files = lua_files(root)
     if not files:
         return NOT_RUN, "no .lua file under src_new"
     lua = lupa.LuaRuntime(unpack_returned_tuples=True)
-    compile_only = lua.eval("function(source, name) local fn, err = loadstring(source, name) return err end")
+    # The message can hold a raw byte of the file (a BOM, a smart quote); make it ASCII in Lua, or lupa cannot hand it over.
+    compile_only = lua.eval(r"function(source, name) local fn, err = loadstring(source, name) "
+                            r"return err and (err:gsub('[\128-\255]', '?')) end")
     bad = []
-    for path in files:
-        with open(path, "rb") as fh:
-            err = compile_only(fh.read(), "@" + os.path.relpath(path, root).replace(os.sep, "/"))
-        if err:
-            bad.append(err if isinstance(err, str) else err.decode("utf-8", "replace"))
+    before = locale.setlocale(locale.LC_CTYPE)
+    locale.setlocale(locale.LC_CTYPE, "C")
+    try:
+        for path in files:
+            with open(path, "rb") as fh:
+                err = compile_only(fh.read(), "@" + os.path.relpath(path, root).replace(os.sep, "/"))
+            if err:
+                bad.append(err if isinstance(err, str) else err.decode("ascii", "replace"))
+    finally:
+        locale.setlocale(locale.LC_CTYPE, before)
     if bad:
         return FAIL, "%d of %d files have a syntax error:\n%s" % (len(bad), len(files), "\n".join(bad[:TAIL]))
     return PASS, "%d files" % len(files)
@@ -83,10 +107,11 @@ def read_versions(root):
     with open(os.path.join(root, "muddler_project", "mfile"), encoding="utf-8") as fh:
         v_mfile = str(json.load(fh).get("version", "")).strip()
     with open(os.path.join(root, "src_new", "scripts", "_groups.yaml"), encoding="utf-8") as fh:
-        found = re.search(r'ataxiaVersion = \\"([0-9][0-9.]*)', fh.read())
+        # Every match, as CI's grep takes them: two assignments are a mismatch there, so they are one here.
+        v_yaml = " and ".join(re.findall(r'ataxiaVersion = \\"([0-9][0-9.]*)', fh.read()))
     with open(os.path.join(root, "CHANGELOG.md"), encoding="utf-8") as fh:
         heading = re.search(r"^## \d{4}-\d{2}-\d{2} - v%s[: ]" % re.escape(v_txt), fh.read(), re.M)
-    return v_txt, v_mfile, found.group(1) if found else "", bool(heading)
+    return v_txt, v_mfile, v_yaml, bool(heading)
 
 
 def version(root):
@@ -101,7 +126,7 @@ def version(root):
 
 def yaml_files(root):
     import yaml
-    files = sorted(glob.glob(os.path.join(root, "src_new", "**", "_groups.yaml"), recursive=True))
+    files = sorted(glob.glob(os.path.join(glob.escape(root), "src_new", "**", "_groups.yaml"), recursive=True))
     if not files:
         return NOT_RUN, "no _groups.yaml under src_new"
     bad = []
@@ -137,14 +162,14 @@ def run_step(step, root=ROOT, python=sys.executable, importable=can_import):
     if "builtin" in step:
         try:
             verdict, line = BUILTINS[step["builtin"]](root)
-        except Exception as exc:  # a missing file, a bad JSON: report it against this step
+        except Exception as exc:  # a missing file, a bad JSON, a wrong encoding: report it against this step
             return FAIL, "%s: %s" % (type(exc).__name__, exc), ""
         first, _, rest = line.partition("\n")
         return verdict, first, rest
     env = dict(os.environ, PYTHONIOENCODING="utf-8")
     try:
-        done = subprocess.run([python, "-B"] + list(step["argv"]), cwd=root, env=env, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT, encoding="utf-8", errors="replace")
+        done = subprocess.run([python, "-B"] + list(step["argv"]), cwd=root, env=env, stdin=subprocess.DEVNULL,
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8", errors="replace")
     except OSError as exc:
         return NOT_RUN, "could not start: %s" % exc, ""
     if done.returncode == 0:
@@ -195,8 +220,22 @@ def exit_status(results):
 
 
 def ready(results):
-    """A push needs every step of the table to have run and passed."""
+    """Every step of the table ran and passed. (main() also wants the working tree to equal HEAD.)"""
     return bool(results) and all(verdict == PASS and not left_out for _, verdict, _, left_out in results)
+
+
+def ready_line(results, dirty):
+    """The last verdict row. dirty: the rows of `git status --porcelain`, or None when git could not say."""
+    if not ready(results):
+        ran = [verdict for _, verdict, _, left_out in results if not left_out]
+        why = "a step failed" if FAIL in ran else "a step could not run" if NOT_RUN in ran else "this was not a full run"
+        return "Ready to push: NO (%s)" % why
+    if dirty is None:
+        return "Ready to push: NO (every step passed, but git could not say whether the tree equals HEAD)"
+    if dirty:
+        return ("Ready to push: NOT YET (every step passed on the files on disk, but %d differ from HEAD or are untracked. "
+                "A push carries only what is committed: commit them, then check that no new file is left out)" % len(dirty))
+    return "Ready to push: YES"
 
 
 # ---------------------------------------------------------------------------------------------
@@ -204,13 +243,38 @@ def ready(results):
 # ---------------------------------------------------------------------------------------------
 
 
-def git(root, *args, wait=None):
+def git_run(root, *args, wait=None):
+    """(exit status, stdout) of a git command, or (None, "") when it could not run or ran out of time.
+
+    stdout goes to a file, not a pipe: Git for Windows' `cmd\\git.exe` is a wrapper, and a pipe held open by the
+    real git under it would make the time limit wait for the whole command.
+    """
+    env = dict(os.environ, GIT_TERMINAL_PROMPT="0")
     try:
-        done = subprocess.run(["git", "-C", root] + list(args), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                              encoding="utf-8", errors="replace", timeout=wait)
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    return done.stdout.strip() if done.returncode == 0 else None
+        with tempfile.TemporaryFile() as out:
+            proc = subprocess.Popen(["git", "-C", root] + list(args), stdin=subprocess.DEVNULL, stdout=out,
+                                    stderr=subprocess.DEVNULL, env=env)
+            try:
+                status = proc.wait(timeout=wait)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                return None, ""
+            out.seek(0)
+            return status, out.read().decode("utf-8", "replace")
+    except OSError:
+        return None, ""
+
+
+def git(root, *args, wait=None):
+    """The command's output, stripped at the right, or None when it failed."""
+    status, text = git_run(root, *args, wait=wait)
+    return text.rstrip() if status == 0 else None
+
+
+def tree_state(root):
+    """The rows of `git status --porcelain` (untracked files included, ignored ones not), or None when git cannot say."""
+    text = git(root, "status", "--porcelain")
+    return None if text is None else [row for row in text.splitlines() if row.strip()]
 
 
 def version_key(text):
@@ -229,35 +293,80 @@ def top_tag(ls_remote_text):
     return best
 
 
-def version_notes(local, tag, main):
-    """Warnings for the header. Three releases lost their number to another session (2026-10-23, 11-03, 11-13)."""
+def tag_commit(ls_remote_text, tag):
+    """The commit a tag names in `git ls-remote --tags` output: the peeled ^{} row of an annotated tag when there is one."""
+    plain = peeled = None
+    for row in (ls_remote_text or "").splitlines():
+        parts = row.split()
+        if len(parts) == 2 and parts[1] == "refs/tags/%s^{}" % tag:
+            peeled = parts[0]
+        elif len(parts) == 2 and parts[1] == "refs/tags/" + tag:
+            plain = parts[0]
+    return peeled or plain
+
+
+def version_notes(local, tag, main, tag_in_tree=None, main_in_tree=None):
+    """Warnings for the header. Releases have lost their number to another session (2026-10-23, 11-03, 11-11, 11-13).
+
+    tag_in_tree / main_in_tree: whether the top tag's commit / origin/main is an ancestor of HEAD (None = not known).
+    """
     notes = []
     here = version_key(local)
     if here is None:
         return ["WARNING: version.txt does not hold a version"]
     if tag and version_key(tag) > here:
         notes.append("WARNING: origin has tag %s, above this tree's version.txt (%s). Rebase before a release." % (tag, local))
+    elif tag and version_key(tag) == here and tag_in_tree is False:
+        notes.append("WARNING: origin has tag %s on a commit that is not in this tree. If this tree bumped to %s, "
+                     "that number is taken: rebase and take the next one." % (tag, local))
     if main and version_key(main) and version_key(main) > here:
         notes.append("WARNING: origin/main (as last fetched) is at %s, above this tree (%s). Fetch and rebase." % (main, local))
+    elif main and main_in_tree is False:
+        notes.append("NOTE: origin/main (as last fetched) has commits this tree does not have. Rebase before the push; "
+                     "if this tree bumps the version, check that the number is still free.")
     return notes
 
 
-def header(root, python, remote=True, out=print):
+def is_ancestor(root, commit):
+    """True / False, or None when there is nothing to compare. An unknown commit is not in this tree: False."""
+    if not commit:
+        return None
+    status, _ = git_run(root, "merge-base", "--is-ancestor", commit, "HEAD")
+    if status is None:
+        return None
+    return status == 0
+
+
+def header(root, python, remote=True, dirty=None, out=print):
     out("tree        %s" % root)
     out("branch      %s @ %s" % (git(root, "rev-parse", "--abbrev-ref", "HEAD") or "?",
                                  git(root, "rev-parse", "--short", "HEAD") or "?"))
-    out("python      %s (lupa/Lua 5.1: %s, yaml: %s)" % (python, "yes" if can_import("lupa") else "NO",
-                                                         "yes" if can_import("yaml") else "NO"))
+    if dirty is None:
+        out("git         NOT checked (git could not report the state of this tree)")
+    elif dirty:
+        out("git         %d files differ from HEAD or are untracked; the steps test the files on disk" % len(dirty))
+    else:
+        out("git         clean: the files on disk are the commit")
+    out("python      %s %d.%d (lupa/Lua 5.1: %s, yaml: %s)" % (python, sys.version_info[0], sys.version_info[1],
+                                                               "yes" if can_import("lupa") else "NO",
+                                                               "yes" if can_import("yaml") else "NO"))
+    if sys.version_info[:2] > CI_PYTHON:
+        out("            NOTE: CI runs python3 %d.%d. A feature newer than that in tools/*.py passes here and fails there."
+            % CI_PYTHON)
     try:
         with open(os.path.join(root, "version.txt"), encoding="utf-8") as fh:
             local = fh.read().strip()
-    except OSError:
+    except (OSError, UnicodeError):
         local = ""
-    tag = top_tag(git(root, "ls-remote", "--tags", "origin", "refs/tags/v*", wait=REMOTE_WAIT)) if remote else None
+    listing = git(root, "ls-remote", "--tags", "origin", "refs/tags/v*", wait=REMOTE_WAIT) if remote else None
+    tag = top_tag(listing)
     main = git(root, "show", "origin/main:version.txt")
+    main = main.strip() if main else main
     out("version     this tree %s | top tag on origin %s | origin/main as last fetched %s" % (
         local or "?", tag or ("NOT checked" if remote else "not asked"), main or "NOT checked"))
-    for note in version_notes(local, tag, main):
+    tag_in_tree = is_ancestor(root, tag_commit(listing, tag)) if tag else None
+    main_in_tree = is_ancestor(root, "refs/remotes/origin/main") if main else None
+    for note in version_notes(local, tag, main, tag_in_tree, main_in_tree):
         out(note)
     out("")
 
@@ -284,7 +393,11 @@ def main(argv=None):
     ap.add_argument("--list", action="store_true", help="print the steps and stop")
     ap.add_argument("--no-remote", action="store_true", help="do not read the tags on origin")
     args = ap.parse_args(argv)
-    table = load_table()
+    try:
+        table = load_table()
+    except (OSError, ValueError) as exc:
+        print("ci_local: NOT RUN -- cannot read tools/ci_steps.json: %s" % exc)
+        return 2
     if args.list:
         list_steps(table)
         return 0
@@ -294,20 +407,22 @@ def main(argv=None):
         if unknown:
             print("ci_local: no step named %s. Steps: %s" % (", ".join(unknown), ", ".join(ids)))
             return 2
-    header(ROOT, sys.executable, remote=not args.no_remote)
+    dirty = tree_state(ROOT)
+    header(ROOT, sys.executable, remote=not args.no_remote, dirty=dirty)
     began = time.time()
     results = run_all(select(table["steps"], args.quick, set(args.only) if args.only else None))
     left = [step["id"] for step, _, _, left_out in results if left_out]
     count = {verdict: sum(1 for _, v, _, left_out in results if v == verdict and not left_out) for verdict in (PASS, FAIL, NOT_RUN)}
     print("\n%d PASS, %d FAIL, %d NOT RUN in %.0f s" % (count[PASS], count[FAIL], count[NOT_RUN], time.time() - began))
     if left:
-        print("Left out (NOT RUN): %s" % ", ".join(left))
-    if ready(results):
-        print("Ready to push: YES")
-    else:
-        why = "a step failed" if count[FAIL] else "a step could not run" if count[NOT_RUN] else "this was not a full run"
-        print("Ready to push: NO (%s)" % why)
-    print("Not covered by this run: Linux path behaviour, the live game, the CI run on main.")
+        print("Left out: %s" % ", ".join(left))
+    print(ready_line(results, dirty))
+    if dirty and ready(results):
+        for row in dirty[:12]:
+            print("    " + row)
+        if len(dirty) > 12:
+            print("    ... and %d more" % (len(dirty) - 12))
+    print("Not covered by this run: Linux path behaviour, CI's own Python and Lua binaries, the live game, the CI run on main.")
     return exit_status(results)
 
 

@@ -65,7 +65,8 @@ python tools/run_lua_tests.py src_new/tests/test_x.lua     # one file
 ```
 
 Use a Python that has `lupa` (`pip install lupa`). The runner exits 0 when all tests pass, 1 when a
-test fails, and 2 (NOT RUN) when it has no `lupa` or finds no test file.
+test fails, and 2 (NOT RUN) when it has no `lupa` or finds no test file. It runs the same way on
+Windows, Linux and macOS (where the `lupa` wheel has no `io.popen`, `tools/run_lua_tests.py` supplies one).
 
 Write tests for new logic where feasible. At minimum, new public functions should have a happy-path test. `mock_mudlet.lua` stubs the Mudlet API so tests run outside the client.
 
@@ -112,8 +113,13 @@ python -B tools/ci_local.py --list   # each step and what it proves
 ```
 
 The step list is `tools/ci_steps.json`. It is the only list: `tools/test_ci_local.py` (a CI step itself)
-fails when it and `build.yml` name different tools, and when a `tools/test_*.py`, a `tools/check_*.py`
-or a tool with `--check` is neither a step nor listed under `not_in_ci` with its reason.
+fails when a step of the `validate` job has no row there or a row has no step, and when a
+`tools/test_*.py`, a `tools/check_*.py` or a tool with `--check` is neither a step nor listed under
+`not_in_ci` with its reason.
+
+`Ready to push: YES` needs a full run, every step PASS, and a working tree equal to `HEAD`: the run
+tests the files on disk, and a push carries only what is committed. The run does not cover Linux
+path behaviour, CI's own Python and Lua binaries, the live game, or the CI run on `main` itself.
 
 ### Adding a gate
 

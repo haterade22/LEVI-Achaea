@@ -145,7 +145,7 @@ LEVI-Achaea/
 │   ├── kb_abadmin.py          # KB: kb/raw/abadmin/*.txt -> kb/classes/abadmin.json + abadmin-vs-wiki.md (the game's ABADMIN SHOW record against the wiki) + battlerage.md (every class's battlerage records: rage, cooldown, the affliction each gives or uses) + shield.md (per class, the records that say a shield blocks them or that they go through); `--check` in CI
 │   ├── test_kb_abadmin.py     # its tests (in CI)
 │   ├── fightlog_import.py     # copy in-game `fightlog` recordings into kb/raw/logs/ours/, summarise them; `--score` prints the round delivery pass bars
-│   ├── test_fightlog_import.py # its tests: `python -B tools/test_fightlog_import.py` (not in CI)
+│   ├── test_fightlog_import.py # its tests: `python -B tools/test_fightlog_import.py` (in CI)
 │   ├── kb_log_import.py       # KB: convert Mudlet HTML log exports in kb/raw/logs/ to text, skip fights already filed
 │   ├── kb_timing.py           # KB: parse every log (one stamp rule, importable), generate kb/mechanics/clocks.md, clocks.json, scoreboard.md; a stated cost comes from kb/classes/abadmin.json (the game's record) before abilities.json; `--check` in CI, so re-run it after filing a log or an ABADMIN capture
 │   ├── test_kb_timing.py      # its tests: `python -B tools/test_kb_timing.py` (in CI)
@@ -196,7 +196,7 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 **Claude Code**: Use `/build` skill or invoke the `build-and-version` subagent.
 
-**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, **an orphaned-call check**, the trigger-wrap check, the `--check` of each generated KB page (`kb_timing`, `kb_replay`, `kb_sim`, `kb_rules`, `kb_events`, `kb_abadmin`), the tests of those tools and of the `kbcapture` importer, version consistency checks, unit tests, and YAML validation on every push to `main`, every `v*` tag and every pull request to `main`. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
+**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs the `validate` job on every push to `main`, every `v*` tag and every pull request to `main`. Its steps are the rows of `tools/ci_steps.json`; `python -B tools/ci_local.py --list` prints each one and what it proves. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
 
 **`tools/check_orphans.py` — a script switched off must take its callers with it (v4.7.261).**
 `isActive: 'no'` on a script does NOT disable the triggers that call into it. They stay live, call
@@ -281,7 +281,7 @@ task falls back from `lua5.1` to the 5.4 `lua` (`.vscode/tasks.json`:42), which 
 with the interpreter that started it. A step that cannot run (no `lupa`, no `yaml`, nothing to check) is NOT RUN
 and the run exits 2: it is never a pass (2026-11-13; before that `kb_sim.py --check` printed "skip" and exited 0
 under the `python3` on PATH). The step list is `tools/ci_steps.json`, and `tools/test_ci_local.py` fails when it
-and `build.yml` disagree. A generated KB page fails CI when one of its inputs changes, and a Lua file can be an
+and the `validate` job of `build.yml` disagree. A generated KB page fails CI when one of its inputs changes, and a Lua file can be an
 input (`kb_rules.py` stopped PR #169 that way), so run the full list, not only the suite.
 **Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name
 in the drive root (`\s1hk.`), which is not writable (`test_kb_capture.lua` failed 13 tests this
@@ -333,7 +333,8 @@ Two pushed branches with no PR sat unmerged for days (`fix/bm-strike-knees`, `do
 2. Run `/c/Python314/python -B tools/ci_local.py` and push only on `Ready to push: YES`. It runs EVERY
    step of the `validate` job in `build.yml`. No PR CI runs before `main` any more, so this is the only
    check before the push. That interpreter has `lupa` and `yaml`; the `python3` on PATH has neither, and
-   there the run says NOT RUN and exits 2.
+   there the run says NOT RUN and exits 2. `NOT YET` means the steps passed on files that are not
+   committed: the push carries only the commit, so commit first (a new file left untracked fails on `main`).
 3. `git fetch origin && git rebase origin/main`, then run the checks again if the rebase pulled in changes.
    After a docs rebase, check `file:line` citations into files that `main` changed.
 4. `git push origin HEAD:main` from the worktree. This never switches the shared tree's branch.
@@ -408,7 +409,7 @@ Open the `LEVI-Achaea/` folder in VS Code. Recommended extensions are in `.vscod
 |---------|---------|
 | `/build` | Run the full build pipeline |
 | `/version-bump <version>` | Sync version across all 3 tracked locations |
-| `/verify [quick\|full]` | Build + test + version check + git status report |
+| `/verify [quick\|full]` | Run CI's `validate` job locally (`tools/ci_local.py`): PASS / FAIL / NOT RUN for each step; no package build (`/build` does that) |
 | `/build-fix` | Fix build/lint errors one at a time, minimal diffs |
 | `/deep-review [system]` | Launch 4 parallel agents: Lua quality, combat correctness, triggers, completeness |
 | `/codex-verify [system]` | Dispatch independent Codex verification in background |

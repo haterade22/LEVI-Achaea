@@ -15,19 +15,12 @@ Run the build and capture output:
 ./build.sh 2>&1
 ```
 
-If build succeeds, try lint check:
+If the build succeeds, run the syntax step and the Lua suite (Lua 5.1 through `lupa`; this machine has no `lua5.1`):
 ```bash
-find src_new -name '*.lua' -type f | while read f; do
-  # Strip YAML header before checking
-  lua_content=$(sed '1{/^---$/,/^---$/d}' "$f")
-  echo "$lua_content" | luac5.1 -p - 2>&1 | sed "s|stdin|$f|"
-done
+/c/Python314/python -B tools/ci_local.py --only syntax unit
 ```
 
-If both pass, try tests:
-```bash
-lua5.1 src_new/tests/test_runner.lua 2>&1
-```
+A step that prints NOT RUN did not run: correct the cause (the interpreter must have `lupa`), do not report a pass.
 
 ## Step 2: Parse Error
 

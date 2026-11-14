@@ -12,7 +12,7 @@ Regression-safe removal of AI-generated bloat in: `$ARGUMENTS`
 
 Before any deletions, verify baseline:
 ```bash
-lua5.1 src_new/tests/test_runner.lua
+/c/Python314/python tools/run_lua_tests.py
 ./build.sh
 ```
 
@@ -52,7 +52,7 @@ Scan target files for these patterns:
 
 For each identified instance:
 1. Delete the bloat
-2. Run tests: `lua5.1 src_new/tests/test_runner.lua`
+2. Run tests: `/c/Python314/python tools/run_lua_tests.py`
 3. If tests pass: keep deletion, move to next
 4. If tests fail: revert, mark as "load-bearing" and skip
 

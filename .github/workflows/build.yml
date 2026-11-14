@@ -111,8 +111,9 @@ jobs:
           fi
           echo "All 3 versions match: $V_TXT"
 
-          # A release with no changelog entry reached players twice (v4.7.413, v4.7.477).
-          if ! grep -qE "^## [0-9]{4}-[0-9]{2}-[0-9]{2} - v${V_TXT//./\.}[: ]" CHANGELOG.md; then
+          # Every released version has a changelog heading in the one format that tools read.
+          # This checks that the heading exists, not that the entry is complete.
+          if ! grep -qE "^## [0-9]{4}-[0-9]{2}-[0-9]{2} - v${V_TXT//./[.]}[: ]" CHANGELOG.md; then
             echo "ERROR: CHANGELOG.md has no heading '## <date> - v$V_TXT: <title>'"
             exit 1
           fi

@@ -287,17 +287,13 @@ Then reinstall the `.mpackage` in Mudlet.
 ### Run Tests
 
 ```bash
-lua5.1 src_new/tests/test_runner.lua
+python -B tools/ci_local.py                                # every step of CI's validate job; push only on "Ready to push: YES"
+python tools/run_lua_tests.py [src_new/tests/test_x.lua]   # the Lua suite only, or one file
 ```
 
-Or use the "Run Tests" task in VS Code. Tests use `src_new/tests/mock_mudlet.lua` to stub the Mudlet API so combat logic can run outside the client.
+Use a Python that has `lupa` (it embeds Lua 5.1, the Lua that Mudlet runs) and `pyyaml`. A bare `lua` is often 5.4 and gives false failures. Tests use `src_new/tests/mock_mudlet.lua` to stub the Mudlet API so combat logic can run outside the client.
 
-Two lint checks run in CI beside the tests and are worth running before a push:
-
-```bash
-python tools/check_orphans.py   # nothing active calls into a disabled script, or a function no file defines
-python tools/check_wrap.py      # no trigger pattern is too wide to match a server-wrapped line
-```
+`python -B tools/ci_local.py --list` prints each CI step and what it proves (see [CONTRIBUTING.md](CONTRIBUTING.md), "CI").
 
 ### Build a Separate Package
 

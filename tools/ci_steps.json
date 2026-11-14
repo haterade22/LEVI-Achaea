@@ -4,7 +4,7 @@
     "A row with argv runs as: <python> -B <argv>. A row with builtin runs inside ci_local.py.",
     "tools/test_ci_local.py fails when this table and build.yml disagree, and when a test, a check",
     "or a --check tool under tools/ is neither a row here nor listed in not_in_ci with its reason.",
-    "ci_marker: text that build.yml must contain, for a step that CI runs in another form."
+    "ci_marker: command text (one string or a list) that ONE step of build.yml must hold, for a step CI runs in another form."
   ],
   "steps": [
     {"id": "syntax", "what": "Lua 5.1 syntax of every src_new/**/*.lua", "builtin": "lua_syntax", "needs": ["lupa"], "quick": true, "ci_marker": "luac5.1 -p"},
@@ -26,7 +26,7 @@
     {"id": "abadmin", "what": "the ABADMIN pages match kb/raw/abadmin", "argv": ["tools/kb_abadmin.py", "--check"]},
     {"id": "abadmin-test", "what": "the ABADMIN generator", "argv": ["tools/test_kb_abadmin.py"]},
     {"id": "fightlog-test", "what": "the fight-log importer", "argv": ["tools/test_fightlog_import.py"]},
-    {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": "Check version consistency"},
+    {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": ["V_TXT=$(cat version.txt", "muddler_project/mfile", "ataxiaVersion", "v${V_TXT//./[.]}[: ]"]},
     {"id": "unit", "what": "the Lua test suite (src_new/tests)", "argv": ["tools/run_lua_tests.py"], "needs": ["lupa"], "quick": true, "ci_marker": "lua5.1 src_new/tests/test_runner.lua"},
     {"id": "yaml", "what": "every src_new/**/_groups.yaml parses", "builtin": "yaml", "needs": ["yaml"], "quick": true, "ci_marker": "yaml.safe_load"},
     {"id": "convert-test", "what": "the Muddler converter", "argv": ["tools/test_convert_to_muddler.py"], "needs": ["yaml"], "quick": true},
