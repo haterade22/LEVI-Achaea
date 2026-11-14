@@ -414,7 +414,7 @@ The package's default priority for a stack (`burning4`) or an affliction afflict
 | File | sha256 (16) |
 |---|---|
 | `kb/sim/rules_hand.json` | `9e747d11cedbb72c` |
-| `kb/mechanics/clocks.json` | `7f916fd01f103c43` |
+| `kb/mechanics/clocks.json` | `c0f29c89ae73e675` |
 | `kb/afflictions/afflictions.json` | `1fe2c0394ca42b4b` |
 | `.claude/databases/venoms.yaml` | `da9f100670a46530` |
 | `src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua` | `a67d445f9502d3a2` |
