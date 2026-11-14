@@ -26,7 +26,7 @@ List all relevant files and their line counts.
 Review all target files for:
 - **Lua 5.1 compatibility** — no Lua 5.2+ features (goto, bitwise ops, string.format %a)
 - **Variable scoping** — `local` declarations, no accidental globals (check luacheck would pass)
-- **Naming conventions** — camelCase for locals, UPPER_CASE for constants, dot.notation for modules
+- **Naming conventions** — as `CLAUDE.md` "Naming Conventions": public functions are `snake_case` with the owning namespace prefix (`ataxia_`, `ataxiaBasher_`); module-internal helpers are `local`; legacy names are migrated only when a file is touched
 - **Dead code** — unreachable branches, unused locals, commented-out blocks
 - **Error handling** — pcall/xpcall around GMCP parsing, nil checks on table lookups
 - **Performance** — avoid string concatenation in hot loops, prefer table.concat

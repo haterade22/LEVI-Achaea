@@ -36,11 +36,11 @@ All offense systems must use:
 
 ## Quality Gates
 
-Hooks run automatically on every tool use:
-- **lint-before-commit.sh** validates Lua syntax before `git commit`. Fix syntax errors and re-stage if blocked.
-- **Concurrent build prevention** — only one build at a time. Wait if blocked.
-- **protect-config.sh** blocks edits to `.claude/settings*.json`.
-- **block-git-bypass.sh** blocks `--no-verify`, `--force`, `--hard` on git commands.
+The Claude Code hooks in `.claude/hooks/` do not run today (`docs/reference/harness-facts.md`). The gates are yours to run:
+- `/c/Python314/python -B tools/ci_local.py --quick` after a change; the lead runs the full run before a push.
+- Only the lead builds. Nothing enforces one build at a time.
+- Do not edit `.claude/settings*.json`.
+- Never use `--no-verify`, `git push --force` or `git reset --hard`.
 
 ## Communication
 When you complete your work or encounter a blocker, clearly state:

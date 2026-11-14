@@ -24,8 +24,8 @@ VS Code: `Ctrl+Shift+B` runs the default build task. See [.vscode/tasks.json](.v
 
 | Action | Convention |
 |--------|-----------|
-| Feature / fix | Work directly on `main` (solo project) |
-| Release | Bump version → build → commit → `git tag v4.x.y` → push tag |
+| Feature / fix | Work in your own worktree on your own branch. When the local run says `Ready to push: YES`, push straight to `main` (`git push origin HEAD:main`); no pull request. Stage files by path: several sessions can share a tree |
+| Release | Bump version → `tools/ci_local.py` → commit → push to `main` → wait for its `Build & Validate` run → `git tag v4.x.y` on that commit → push that ONE tag by name (never `git push --tags`) |
 | Version bump | `/version-bump <version>` in Claude Code, or edit the 3 files manually (see below) |
 
 ## Version tracking

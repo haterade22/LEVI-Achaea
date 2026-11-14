@@ -42,10 +42,10 @@ All offense systems MUST use the V3 tracking API:
 
 ## Quality Gates
 
-Hooks run automatically — you don't need to invoke them:
-- **lint-before-commit.sh** validates Lua syntax on staged files before `git commit`. Fix syntax errors and re-stage if blocked.
-- **protect-config.sh** blocks edits to `.claude/settings*.json`. Use `/update-config` or ask the user.
-- **block-git-bypass.sh** blocks `--no-verify`, `--force`, `--hard` on git commands.
+The Claude Code hooks in `.claude/hooks/` do not run today (`docs/reference/harness-facts.md`). The gates are yours to run:
+- `/c/Python314/python -B tools/ci_local.py --quick` after a change (Lua 5.1 syntax, orphaned calls, trigger wrap, the Lua suite); the full run before a push.
+- Do not edit `.claude/settings*.json`; ask the user.
+- Never use `--no-verify`, `git push --force` or `git reset --hard`.
 
 ## Porting Foreign Code
 

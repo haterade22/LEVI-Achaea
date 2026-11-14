@@ -80,6 +80,15 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 4. Did I learn something reusable? → Update memory files
 5. Did I change class combat logic? → Update relevant `.claude/classes/*.md`
 
+## Evidence Before Claims (MANDATORY)
+
+- **Run the proving command in this turn and quote its result row.** A result from memory, from an earlier turn or from another agent's summary is a claim, not evidence. "Tests pass" needs the row `Passed: N  Failed: 0` or `Ready to push: YES` from a run you just made.
+- **A finding is a hypothesis.** What a subagent, a workflow, Codex or a reviewer reports is read at its named source before any fix. Reviewers have been wrong here in both directions.
+- **A verifier that returns nothing is UNVERIFIED, never REFUTED.** A dead or empty verifier says nothing about the claim.
+- **A negative search names its scope.** "No match in `src_new/triggers`", not "it does not exist".
+- **Say what was not covered:** the live game, Linux paths, the CI run on `main`, a file you did not open.
+- **Lessons are grep-first.** Before a change in an area, grep the headings of `.claude/AGENTS.md` (and of the memory file `bug-patterns.md`) for that area. Do not read them whole, and do not skip them.
+
 ## Versioning & Auto-Update
 
 **Version is tracked in 3 places** (must stay in sync):
@@ -173,24 +182,27 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
 
 ## Model & Effort Selection (MANDATORY)
 
-**Goal: each task runs on the cheapest model and the lowest reasoning effort that will still do it well.** Defaulting to Opus at high effort for everything is the waste this rule exists to stop. Where this section and the older *Model Routing Guidance* table disagree, this section wins.
+**Goal: each task runs on the cheapest model and the lowest reasoning effort that will still do it well.** Defaulting to Opus at high effort for everything is the waste this rule exists to stop.
 
 **Main session = orchestrator.** The main session plans, decides and reviews. It hands execution to subagents and picks a model and effort for each one based on the task. It does not do bulk or mechanical work itself (sweeping searches, mass reads, running builds and tests, boilerplate edits).
 
 ### Routing guide
 
-| Tier | Model / effort | Agent | Use for |
+| Tier | Model / effort | Spawn | Use for |
 |------|----------------|-------|---------|
-| 1 | Haiku / `low` | `fast-reader` | File/code search, grepping, listing, reading and summarizing files, simple renames, formatting, boilerplate, running tests or builds and reporting results, small edits that are already well specified |
-| 2 | Sonnet / `medium` | `implementer` | Most everyday coding: implementing features from a clear plan, writing tests, normal bug fixes, refactors inside one module, docs, code review of small diffs |
-| 3 | Opus / `high` | `architect` | Architecture and design decisions, ambiguous or cross-cutting changes, hard debugging where the cause is unknown, security-sensitive code, data migrations, anything expensive to get wrong or hard to undo |
-| 4 | Fable | `architect` + per-call `model: "fable"` | Only the hardest reasoning problems, or when Opus has already failed. Don't use it routinely |
+| 1 | Haiku / `low` | `Explore` (read-only) or `general-purpose`, with `model: "haiku"` | File/code search, grepping, listing, reading and summarizing files, simple renames, formatting, boilerplate, running tests or builds and reporting results, small edits that are already well specified |
+| 2 | Sonnet / `medium` | `general-purpose` with `model: "sonnet"` | Most everyday coding: implementing features from a clear plan, writing tests, normal bug fixes, refactors inside one module, docs, code review of small diffs |
+| 3 | Opus / `high` | `Plan` (read-only) or `general-purpose`, with `model: "opus"` | Architecture and design decisions, ambiguous or cross-cutting changes, hard debugging where the cause is unknown, security-sensitive code, data migrations, anything expensive to get wrong or hard to undo |
+| 4 | Fable | as tier 3, with `model: "fable"` | Only the hardest reasoning problems, or when Opus has already failed. Don't use it routinely |
 
-**Project defaults:** combat-mechanics reasoning is tier 3 unless it is clearly mechanical. That covers lock strategy, V3 affliction tracking, SSC curingset writes, and anything in the shared `ataxia/` core. Lessons Learned is mostly a list of cheap-looking changes that weren't. The existing agents keep their tiers: `build-and-version` = Haiku, `offense-system` and `team-class-offense` = Sonnet.
+**The custom agents are not offered today.** The six definitions in `.claude/agents/` (`fast-reader`, `implementer`, `architect`, `build-and-version`, `offense-system`, `team-class-offense`) load only when a session starts inside this repository, and sessions start in the parent folder (`docs/reference/harness-facts.md`). So spawn a built-in agent and set the model for that call, as the table says. `Explore` and `Plan` receive no `CLAUDE.md`: put the rules the agent needs in its prompt.
+
+**Project defaults:** combat-mechanics reasoning is tier 3 unless it is clearly mechanical. That covers lock strategy, V3 affliction tracking, SSC curingset writes, and anything in the shared `ataxia/` core. Lessons Learned is mostly a list of cheap-looking changes that weren't.
 
 ### How model and effort are set
 
-- **Agent definition** (`.claude/agents/*.md` frontmatter), the primary mechanism:
+- **Per call, which is the mechanism that works today:** the Agent tool's `model` parameter (`haiku | sonnet | opus | fable`). The tool also takes an `effort` parameter, which may only be used when instructions explicitly ask. This section is that explicit permission: set effort per call when the task needs a level other than the default.
+- **Agent definition** (`.claude/agents/*.md` frontmatter), for a session that starts inside the repository:
   ```yaml
   ---
   name: fast-reader
@@ -199,7 +211,6 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
   effort: low       # low | medium | high | xhigh | max
   ---
   ```
-- **Per call:** the Agent tool's `model` parameter (`haiku | sonnet | opus | fable`) overrides the frontmatter for that one spawn. The tool also takes an `effort` parameter, which may only be used when instructions explicitly ask. This section is that explicit permission: override effort per call when the task needs a different level from the agent's default.
 - **Model precedence:** per-call `model` > frontmatter `model` > `CLAUDE_CODE_SUBAGENT_MODEL` env var > the main session's model.
 - `xhigh`/`max` only matter on Opus and Fable. Use them only after `high` has visibly fallen short.
 
@@ -207,7 +218,7 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
 
 - **Start at the lowest tier that plausibly fits.**
 - **If a subagent's output is wrong, incomplete, or shows confusion, retry ONCE at the next tier up.** Never retry at the same tier: a second identical attempt mostly buys the same answer. An agent replying `ESCALATE: <why>` counts as a failure at its tier.
-- **De-escalate:** when an Opus task breaks into well-defined steps, hand those steps down to Sonnet or Haiku. `architect` tags every step of its plan with the tier that should run it.
+- **De-escalate:** when an Opus task breaks into well-defined steps, hand those steps down to Sonnet or Haiku. A plan tags each step with the tier that should run it.
 
 ### Transparency
 
@@ -920,8 +931,8 @@ build passed with them on 2026-11-13. To get Muddler again:
 **Testing**: Run `/c/Python314/python -B tools/ci_local.py` before every push: it runs each step of CI's `validate` job and prints PASS, FAIL or NOT RUN for each (`--quick` for the fast steps, `--list` for what each step proves). For the Lua suite alone, or one file: `/c/Python314/python tools/run_lua_tests.py [one_test_file.lua]`. Tests use `mock_mudlet.lua` to stub the Mudlet API.
 **Local Lua on this Windows machine (2026-11-13).** No native Lua 5.1 is installed. `C:\Tools\lua51`
 is gone (since at least 2026-11-04), and the `luac.exe` on PATH (`AppData\Local\Programs\Lua\bin`) is
-Lua 5.4. Mudlet runs 5.1, and a 5.4 `luac` rejects escapes that 5.1 accepts. The pre-commit lint hook
-falls back to that `luac` (`.claude/hooks/lint-before-commit.sh`:15-20), and the VS Code "Run Tests"
+Lua 5.4. Mudlet runs 5.1, and a 5.4 `luac` rejects escapes that 5.1 accepts. The lint hook script
+would fall back to that `luac` (`.claude/hooks/lint-before-commit.sh`:15-20; it does not run today), and the VS Code "Run Tests"
 task falls back from `lua5.1` to the 5.4 `lua` (`.vscode/tasks.json`:42), which gives false failures
 (`global 'unpack'`). `lupa` embeds Lua 5.1, so `tools/ci_local.py` runs the syntax step and the suite through it,
 with the interpreter that started it. A step that cannot run (no `lupa`, no `yaml`, nothing to check) is NOT RUN
@@ -945,20 +956,9 @@ Open the `LEVI-Achaea/` folder in VS Code. Recommended extensions are in `.vscod
 - **Run Tests** (default test task) — Execute unit tests
 - **Build Levi_Test** — Build the test/distribution package
 
-**Hooks** (`.claude/settings.local.json`):
+**Hooks.** Eight hook scripts live in `.claude/hooks/` and are registered in `.claude/settings.local.json`. **None of them runs today.** Claude Code reads settings only from the folder a session starts in, and sessions start in the parent folder. Three of them (`block-git-bypass.sh`, `lint-before-commit.sh`, `protect-config.sh`) also read `$TOOL_INPUT`, while hook input arrives on stdin, so they could not block. The facts and their sources are in `docs/reference/harness-facts.md`. Do not rely on a hook. The gates that work are `tools/ci_local.py` before a push and CI after it.
 
-| Hook | Event | Purpose |
-|------|-------|---------|
-| `session-start.sh` | SessionStart | Prints version, branch, recent commits on startup |
-| `lint-before-commit.sh` | PreToolUse (Bash) | Blocks `git commit` if Lua syntax errors exist |
-| `block-git-bypass.sh` | PreToolUse (Bash) | Prevents `--no-verify`, `--force`, `--hard` flags |
-| `protect-config.sh` | PreToolUse (Edit\|Write) | Blocks edits to `.claude/settings*.json` |
-| `pre-compact.sh` | Notification (compact) | Saves working context before compaction |
-| `check-changelog.sh` | Stop | Reminds to update CHANGELOG.md if Lua files changed |
-| `log-permission-denied.sh` | PermissionDenied | Audit logs blocked tool calls to `.claude/logs/` |
-| `set-session-title.sh` | UserPromptSubmit | Auto-sets session title to `LEVI: <branch> (v<version>)` |
-
-**Claude Code skills**:
+**Claude Code skills** (listed in a session only after the first file access below this repository; a name that collides with a built-in appears as `LEVI-Achaea:verify`):
 
 | Command | Purpose |
 |---------|---------|
@@ -979,7 +979,7 @@ Open the `LEVI-Achaea/` folder in VS Code. Recommended extensions are in `.vscod
 
 Use `/reload-plugins` to pick up new or modified skills without restarting Claude Code.
 
-**Custom subagents** (`.claude/agents/`):
+**Custom subagents** (`.claude/agents/`; not offered in a session that starts in the parent folder, see *Model & Effort Selection*):
 - `offense-system` — Enforces project patterns when creating class offense systems
 - `build-and-version` — Handles version bumps and builds with validation
 - `team-class-offense` — Team agent for parallel class development
@@ -3848,54 +3848,9 @@ Weave-based combat with 2 modes (mind/flurry) and 3 simultaneous kill routes: Ps
 
 ---
 
-## Model Routing Guidance
-
-Different tasks benefit from different model tiers. The `build-and-version` agent already routes to Haiku for efficiency.
-
-| Task Type | Recommended Model | Rationale |
-|-----------|------------------|-----------|
-| Architecture design, complex offense systems, lock strategy | Opus | Deep combat mechanic reasoning, multi-file coordination |
-| Standard development (features, bug fixes, triggers) | Sonnet | Good balance of speed and capability for typical coding |
-| Builds, version bumps, syntax checks | Haiku | Mechanical tasks with clear steps, speed over reasoning |
-| Code review, documentation updates | Sonnet | Benefits from context understanding without deep planning |
-| Multi-class parallel development (team agent) | Sonnet per worker, Opus for lead | Workers follow patterns; lead coordinates strategy |
-
-**Current agent model assignments:**
-- `build-and-version`: `haiku` (configured)
-- `offense-system`: `sonnet` (configured)
-- `team-class-offense`: `sonnet` (configured)
-- `fast-reader`: `haiku`, effort `low` (configured)
-- `implementer`: `sonnet`, effort `medium` (configured)
-- `architect`: `opus`, effort `high` (configured)
-
-**When to escalate to Opus:**
-- Designing new combat system architecture from scratch
-- Debugging subtle cross-system interactions (e.g., V3 affliction tracking + class offense)
-- Refactoring shared `ataxia/` core modules
-- Planning multi-session development arcs
-
 ---
 
-## Hooks
-
-The project uses Claude Code hooks for automated quality gates and context preservation. All hook scripts live in `.claude/hooks/`.
-
-| Hook | Event | Purpose |
-|------|-------|---------|
-| `session-start.sh` | SessionStart | Shows branch, version, recent commits, uncommitted changes |
-| `pre-compact.sh` | Notification (compact) | Dumps working state to stderr before context compaction |
-| `protect-config.sh` | PreToolUse (Write/Edit) | Blocks AI edits to `.claude/settings*.json` files |
-| `block-git-bypass.sh` | PreToolUse (Bash) | Blocks `--no-verify`, `--force`, `--hard` on git commands |
-| `lint-before-commit.sh` | PreToolUse (Bash) | Validates Lua syntax on staged files before `git commit` |
-| *(inline)* | PreToolUse (Bash) | Prevents concurrent build processes |
-
-**Exit codes:** 0 = allow, 2 = block tool use. All hooks have jq-with-grep fallbacks for portability.
-
----
-
----
-
-**Last Updated**: 2026-11-09
+**Last Updated**: 2026-11-13
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

@@ -392,24 +392,13 @@ grep -r "functionName" src_new/
 | `.luacheckrc` | Lua 5.1 linter config (run with `luacheck src_new/`) |
 | `stylua.toml` | Lua formatter config (run with `stylua src_new/path/to/file.lua`) |
 | `.github/workflows/build.yml` | CI/CD: syntax check, version check, tests, release builds |
-| `.claude/skills/` | `/build` and `/version-bump` slash commands for Claude Code |
+| `.claude/skills/` | Slash commands for Claude Code (`/build`, `/version-bump`, `/verify`, `/kb-ingest` and others) |
 | `.claude/agents/` | Custom subagents for offense development, builds, and team work |
-| `.claude/hooks/` | Automated quality gates (see below) |
+| `.claude/hooks/` | Hook scripts for Claude Code (they do not run today; see below) |
 
 ## Claude Code Hooks
 
-The project uses hooks (configured in `.claude/settings.local.json`) to enforce quality gates automatically:
-
-| Hook | Trigger | What it does |
-|------|---------|-------------|
-| `session-start.sh` | Session start | Shows branch, version, recent commits, uncommitted changes |
-| `pre-compact.sh` | Context compaction | Saves working state to stderr so it survives into post-compact context |
-| `lint-before-commit.sh` | `git commit` | Validates Lua syntax on staged `.lua` files (strips YAML headers) |
-| `protect-config.sh` | Write/Edit | Blocks AI edits to `.claude/settings*.json` |
-| `block-git-bypass.sh` | Bash (git) | Blocks `--no-verify`, `--force`, `--hard`, `--no-gpg-sign` |
-| *(inline)* | Bash (build) | Prevents concurrent build processes |
-
-Exit codes: **0** = allow, **2** = block. If a hook blocks your commit, fix the issue and retry.
+Eight hook scripts live in `.claude/hooks/` and are registered in `.claude/settings.local.json`. **None of them runs today.** Claude Code reads settings only from the folder a session starts in, and sessions start in the parent folder. Three of them (`block-git-bypass.sh`, `lint-before-commit.sh`, `protect-config.sh`) also read `$TOOL_INPUT`, while hook input arrives on stdin, so they could not block. The facts and their sources are in `docs/reference/harness-facts.md`. Do not rely on a hook. The gates that work are `tools/ci_local.py` before a push and CI after it.
 
 ## Further Documentation
 

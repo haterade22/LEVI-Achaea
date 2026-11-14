@@ -1151,15 +1151,8 @@ left (`kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`, lines 41-48).
   U-turn refusal (`S._fled`) hid the hole. Replayed with a pull, all seven tests failed on the old code.
   Before you trust a replay, run it on the old code and read which guard stopped it.
 
-## Quality Gates (Hooks)
+## Quality Gates
 
-Hooks in `.claude/hooks/` run automatically and block operations that fail validation:
+Eight hook scripts live in `.claude/hooks/` and are registered in `.claude/settings.local.json`. **None of them runs today.** Claude Code reads settings only from the folder a session starts in, and sessions start in the parent folder. Three of them (`block-git-bypass.sh`, `lint-before-commit.sh`, `protect-config.sh`) also read `$TOOL_INPUT`, while hook input arrives on stdin, so they could not block. The facts and their sources are in `docs/reference/harness-facts.md`. Do not rely on a hook. The gates that work are `tools/ci_local.py` before a push and CI after it.
 
-| Hook | Blocks on |
-|------|-----------|
-| `lint-before-commit.sh` | Lua syntax errors in staged `.lua` files (runs `luac -p`) |
-| `protect-config.sh` | Write/Edit to `.claude/settings*.json` files |
-| `block-git-bypass.sh` | Dangerous git flags (`--no-verify`, `--force`, `--hard`) |
-| *(inline)* | Concurrent `muddle.bat` or `convert_to_muddler.py` processes |
-
-When blocked (exit 2), fix the issue and retry. Never attempt to bypass hooks.
+Never bypass a gate (`--no-verify`, `git push --force`): correct the cause.

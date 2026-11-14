@@ -28,7 +28,7 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
    - Any warnings from the conversion step
 
 4. **After a successful build, always complete the full release flow:**
-   - Commit all pending changes (version files + any code changes)
+   - Commit THIS session's files, staged by path (version files + your code changes). Never `git add -A` or `git commit -a`: another session can have files in the same tree
    - Tag the commit: `git tag v<version>` (read version from `version.txt`)
    - Push the commit straight to `main` (no pull request): `git push origin HEAD:main`. When the
      `Build & Validate` run for that commit on `main` passes, `git push origin v<version>`. See "Merge finished work straight into `main`" in `CLAUDE.md`

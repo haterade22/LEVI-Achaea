@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-13 - The docs stop claiming gates that do not run; evidence rules added (docs only, no version bump)
+
+Follows `docs/reference/harness-facts.md`: the Claude Code hooks never ran and the custom agents were never offered, but six documents said they did.
+
+- **Hooks: one true paragraph replaces four tables.** `CLAUDE.md` (two tables), `.claude/AGENTS.md`, `GETTING_STARTED.md` and three agent files said that hooks "run automatically" and block a bad commit, a forced push or a second build. None of them runs. Each place now says so, names the gates that work (`tools/ci_local.py` before a push, CI after it), and points at the facts page.
+- **Model and effort routing names agents that a session can spawn.** The tier table named `fast-reader`, `implementer` and `architect`, which are never offered. It now names the built-in agents with a model for each call (`Explore` or `general-purpose` with `model: "haiku"`, and so on), and says that `Explore` and `Plan` receive no `CLAUDE.md`. The older "Model Routing Guidance" section is deleted: the newer section already overruled it.
+- **New section "Evidence Before Claims (MANDATORY)" in `CLAUDE.md`,** inside the part that loads: run the proving command in this turn and quote its result; a finding from a subagent, a workflow, Codex or a reviewer is a hypothesis; a verifier that returns nothing is UNVERIFIED, never REFUTED; a negative search names its scope; say what was not covered; grep the lesson headings before a change in an area.
+- **Stale workflow text corrected.** `CONTRIBUTING.md` said "work directly on `main`" and gave a release order with the tag before the push; it now gives the worktree flow and the real order. The `/build` skill said "commit all pending changes"; it now says to stage this session's files by path. `/deep-review` named a naming convention this project does not use, and `/review-codex` had a typo example that compared a word with itself.
+- `CLAUDE.md` is 450,440 bytes (it was 451,376).
+
+---
+
 ## 2026-11-13 - `CLAUDE.md`: the every-task rules come first (docs only, no version bump)
 
 `CLAUDE.md` loads only in part: about the first 131,000 to 143,000 characters in the maintainer's sessions, and the first 40,000 on a small context window (`docs/reference/harness-facts.md`). The rules that every task needs were after that point, at lines 2,954 to 3,901.

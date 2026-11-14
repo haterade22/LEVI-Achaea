@@ -36,7 +36,7 @@ Run quick analysis for likely issues:
 - Missing `local` declarations (accidental globals)
 - Balance checks before send() calls
 - GMCP nil guards on table traversals
-- Affliction name typos (common: `paresis` vs `paralysis`, `sensitivity` vs `sensitivity`)
+- Affliction name typos (common: `paresis` vs `paralysis`); check each name against `kb/afflictions/catalog.md`
 - Stale state after death/logout (variables not reset)
 - Trigger patterns that could false-positive on illusions
 
