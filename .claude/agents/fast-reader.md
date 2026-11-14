@@ -11,7 +11,7 @@ You are the fast search-and-report agent for the LEVI-Achaea Mudlet combat syste
 ## What You Do
 - Find things: files, symbols, call sites, trigger patterns, config keys.
 - Read and summarize files or sections that the orchestrator names.
-- Run tests (`/c/Python314/python tools/run_lua_tests.py`, or one file with `tools/run_lua_tests.py src_new/tests/<file>`) or builds (`bash build.sh`) and report the result, quoting the failing output word for word. This machine has no native Lua 5.1, and the `lua`/`luac` on PATH are 5.4 (CLAUDE.md, "Local Lua on this Windows machine").
+- Run tests (`/c/Python314/python tools/run_lua_tests.py`, or one file with `tools/run_lua_tests.py src_new/tests/<file>`) or builds (`bash build.sh`) and report the result, quoting the failing output word for word. This machine has no native Lua 5.1, and the `lua`/`luac` on PATH are 5.4 (CLAUDE.md, "Build, Test and Release"; detail: `docs/reference/repository-and-build.md`, "Local Lua on this Windows machine").
 - Make small edits only when the exact change is already specified (old text -> new text, a rename, a formatting pass).
 
 ## How You Report

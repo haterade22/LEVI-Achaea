@@ -989,7 +989,7 @@ LEVI-Achaea/
 ├── .gitattributes              # LF line endings, binary markers
 ├── .luacheckrc                 # Lua 5.1 linter config
 ├── stylua.toml                 # Lua formatter config
-├── CLAUDE.md                   # Full system documentation (AI assistant guide)
+├── CLAUDE.md                   # AI assistant guide: every-task rules and the index to the references
 ├── GETTING_STARTED.md          # Setup and usage guide
 ├── CHANGELOG.md                # Change history
 └── README.md                   # This file
@@ -1050,7 +1050,7 @@ Build tasks are in `.vs/tasks.vs.json`. Right-click the root folder in Solution 
 | [kb/classes/](kb/classes/) | Every class's skills and abilities |
 | [kb/CONFLICTS.md](kb/CONFLICTS.md) | Source and code disagreements, and their resolutions |
 | [GETTING_STARTED.md](GETTING_STARTED.md) | Setup guide, system overview, common tasks |
-| [CLAUDE.md](CLAUDE.md) | Full technical reference (architecture, APIs, combat mechanics, development guidelines) |
+| [CLAUDE.md](CLAUDE.md) | Rules for every change (build, test, release, conventions) and the index ("Where Things Are") to the system, class and game documents |
 | [CHANGELOG.md](CHANGELOG.md) | Change history with dates and details |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
 | [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card reference and PVE guide |

@@ -1,6 +1,6 @@
 # Contributing to LEVI-Achaea
 
-For the full technical reference (build system, architecture, GMCP patterns, class mechanics) see [CLAUDE.md](CLAUDE.md).
+For the rules every change follows (build, test, release, conventions) see [CLAUDE.md](CLAUDE.md). Its "Where Things Are" table leads to the build system, architecture, GMCP and class documents.
 
 ## Quick-start
 
@@ -38,7 +38,7 @@ when you mean to. Its tests are `tools/test_githooks.py`.
 | Action | Convention |
 |--------|-----------|
 | Feature / fix | Work in your own worktree on your own branch. When the local run says `Ready to push: YES`, push straight to `main` (`git push origin HEAD:main`); no pull request. Stage files by path: several sessions can share a tree |
-| Release | Bump version → `tools/ci_local.py` → commit → push to `main` → wait for its `Build & Validate` run → `git tag v4.x.y` on that commit → push that ONE tag by name (never `git push --tags`) |
+| Release | Bump version → `tools/ci_local.py` → commit → push to `main` → `tools/release.py tag-ready <version>` (it prints the tag command when the `Build & Validate` run of that commit passed) → push that ONE tag by name (never `git push --tags`) → `tools/release.py post` (is `muddler_project/build/` the release?). The steps and the incident behind each: `CLAUDE.md` and `docs/ai-includes/git-and-release.md` |
 | Version bump | `/version-bump <version>` in Claude Code, or edit the 3 files manually (see below) |
 
 ## Version tracking
@@ -55,7 +55,7 @@ CI will fail if they diverge. Use the `/version-bump` Claude Code skill to updat
 
 ## Naming conventions
 
-See [CLAUDE.md § Naming Conventions](CLAUDE.md#naming-conventions) for the full standard. Short version:
+See [docs/reference/development-notes.md § Naming Conventions](docs/reference/development-notes.md#naming-conventions) for the full standard (`CLAUDE.md`, "Code Conventions", has the short form). Short version:
 
 - **Public functions** — `ataxia_snake_case()`, `ataxiaBasher_snake_case()`, `ataxiaNDB_snake_case()`
 - **Module-internal helpers** — declare `local`, no prefix

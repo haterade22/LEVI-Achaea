@@ -62,12 +62,14 @@ Prompt (GMCP vitals)
                  └─ Class-specific bashing function
 ```
 
-**The queued round is ONE entry** (`queue addclearfull freestand stand;<a>;<b>;...`): it needs balance
-AND equilibrium to fire, and its commands run back to back. So only ONE equilibrium-SPENDING action
-can pay per round -- a second one is refused after its cooldown was stamped (CLAUDE.md "One resource
-spender per assembled round"; the Psion keepers repeated it in v4.7.349, fixed v4.7.351). An action
+**The queued round is NOT one entry** (`queue addclearfull freestand stand;<a>;<b>;...`): Mudlet splits `;`
+before it sends, so only `stand` is queued; the others go raw and the game's auto-queue re-adds those it
+refuses (corrected 2026-11-01; `.claude/AGENTS.md`, "chain is NOT one queue entry"; `kb/CONFLICTS.md` #53).
+Each helper's gate is still stale, so only ONE equilibrium-SPENDING action can pay per round -- a second
+one is refused after its cooldown was stamped (`00-reference-from-claude-md.md`, "One resource spender per
+assembled round"; the Psion keepers repeated it in v4.7.349, fixed v4.7.351). An action
 that REQUIRES equilibrium without spending it (the Psion's free transcendence shatter) must go
-BEFORE the ones that spend it. And since the round waits for BOTH, a paid equilibrium action added to
+BEFORE the ones that spend it. And a paid equilibrium action added to
 a balance class's round slows every swing to its cooldown -- the Psion's paid shatter did, and was
 removed in v4.7.356 (the weaves it delayed were what built transcendence).
 

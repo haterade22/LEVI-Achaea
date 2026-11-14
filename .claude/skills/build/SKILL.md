@@ -15,9 +15,10 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
 
 ## Steps
 
-1. Run the build script from the LEVI-Achaea directory:
+1. Run the build script of the tree that holds your change: your worktree `lv-<name>`, not the main checkout
+   (`cd LEVI-Achaea` from the session's start folder is the main checkout). The script changes to its own folder:
    ```bash
-   cd LEVI-Achaea && bash build.sh [args]
+   bash <absolute path of your worktree>/build.sh [args]
    ```
 
 2. Check the exit code. If non-zero, report the error output.
@@ -27,17 +28,18 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
    - File size of the built package
    - Any warnings from the conversion step
 
-4. **After a successful build, always complete the full release flow:**
+4. **After a successful build, always complete the full release flow, in the order of "The release order" in `CLAUDE.md`** ("Build, Test and Release", steps 1 to 8; the incident behind each step is in `docs/ai-includes/git-and-release.md`). In short:
    - Commit THIS session's files, staged by path (version files + your code changes). Never `git add -A` or `git commit -a`: another session can have files in the same tree
-   - Tag the commit: `git tag v<version>` (read version from `version.txt`)
-   - Push the commit straight to `main` (no pull request): `git push origin HEAD:main`. When the
-     `Build & Validate` run for that commit on `main` passes, `git push origin v<version>`. See "Merge finished work straight into `main`" in `CLAUDE.md`
+   - `/c/Python314/python -B tools/ci_local.py`, and go on only at `Ready to push: YES`; then `git fetch origin && git rebase origin/main`
+   - `git push origin HEAD:main` (no pull request). Do NOT tag yet
+   - `/c/Python314/python -B tools/release.py tag-ready <version>`: only when the `Build & Validate` run for that commit passed does it print the tag command. Run that command (it tags that commit and pushes the ONE tag)
+   - When the tag's run has built the release: `/c/Python314/python -B tools/release.py post`, and run the refresh commands it prints (the maintainer imports from `muddler_project/build/` in the main checkout)
    - This ensures the auto-updater and GitHub Releases stay current
    - **Never `git push --tags`.** It pushes every stale local tag, each of which fires the
      `v*` release workflow against that tag's OLD source. GitHub picks "Latest" by publish
      time, not semver, so the last stale release to finish hijacks
      `/releases/latest/download/Levi_Ataxia.mpackage` — the URL `sysupdate` installs from.
-     Push the one tag by name. See the release-flow section of `CLAUDE.md`.
+     Push the one tag by name. `.githooks/pre-push` refuses two `v*` tags in one push.
 
 ## Requirements
 - Java 8+ (`build.sh` finds it via `JAVA_HOME` or its candidate list; on 2026-11-13 the JRE 8 at
@@ -46,7 +48,6 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
 - Python 3 with `pyyaml` (the converter imports `yaml`)
 
 ## Important
-- Only one build may run at a time — a hook automatically blocks concurrent builds
-- Before committing, `lint-before-commit.sh` validates Lua syntax on staged `.lua` files
-- Git safety hooks block `--no-verify`, `--force`, and `--hard` flags
+- Only one build at a time. Nothing enforces this (no Claude Code hook runs, `docs/reference/harness-facts.md`): check that no other session is building
+- No hook lints a commit or blocks `--no-verify`, `--force` or `--hard`. The gates that work: `tools/ci_local.py` before a push, `.githooks/pre-push` at the push, CI after it
 - The source of truth is always `src_new/` — never edit files in `muddler_project/src/`

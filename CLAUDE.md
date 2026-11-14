@@ -19,9 +19,9 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 Sessions start in the parent folder, not in this repository. That decides what you have (`docs/reference/harness-facts.md` has each fact with its source):
 
 - **This file** loads after your first file access below the repository, and only its start: about 131,000 characters in the maintainer's sessions, 40,000 on a small context window. So it stays under 40,000 bytes (`tools/check_context_budget.py` fails a larger file). After a compaction it is gone until the next file access here.
-- **Subagents.** `Explore` and `Plan` get no `CLAUDE.md`. Put the rules an agent needs into its prompt, and name the files it must read.
+- **Subagents.** `Explore` and `Plan` get no `CLAUDE.md`; whether any other type gets this file is not verified. Start every spawn prompt and workflow agent prompt with: read `<absolute path of the tree>/docs/ai-includes/agent-brief.md` first. Then add the rules of the task and the files to read. A workflow script stops when that brief is empty.
 - **No Claude Code hook runs, and the custom agents in `.claude/agents/` are not offered.** The gates that work: `tools/ci_local.py` before a push, `.githooks/pre-push` at the push, CI after it.
-- **Skills** (`/verify`, `/version-bump`, `/build`, `/kb-ingest` and others) appear after the first file access here.
+- **Skills** (`/version-bump`, `/build`, `/kb-ingest`, `/verify` and others) are listed only after the first file access here. Invoke each by the name the skill list gives: it can carry a folder prefix (`lv-<name>:build`), and `verify` always does (`LEVI-Achaea:verify`), because the bare name is a built-in.
 - **Memory** (`MEMORY.md`) loads at launch. The maintainer's standing rules are there. It is outside git.
 
 ---
@@ -71,7 +71,7 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 - **A verifier that returns nothing is UNVERIFIED, never REFUTED.** A dead or empty verifier says nothing about the claim.
 - **A negative search names its scope.** "No match in `src_new/triggers`", not "it does not exist".
 - **Say what was not covered:** the live game, Linux paths, the CI run on `main`, a file you did not open.
-- **Lessons are grep-first.** Before a change in an area, grep the headings of `.claude/AGENTS.md` (and of the memory file `bug-patterns.md`) for that area. Do not read them whole, and do not skip them.
+- **Lessons are grep-first.** Before a change in an area, grep the headings and the bold bullet openings of `.claude/AGENTS.md` (and of the memory file `bug-patterns.md`) for that area. Do not read them whole, and do not skip them.
 
 ---
 
@@ -90,18 +90,18 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 - **The version lives in 3 places that must match:** `version.txt`, `muddler_project/mfile`, and `ataxiaVersion` in `src_new/scripts/_groups.yaml`. Use `/version-bump`. Every change to shipped Lua is a version, with the heading `## YYYY-MM-DD - vX.Y.Z: <title>` in `CHANGELOG.md` (CI checks it). Docs, `kb/` and `tools/` changes have no version.
 - **When asked to rebuild the package, do the full release flow** (bump, build, commit, push, tag). A local build alone does not reach the players: the updater installs the GitHub release.
 
-**The release order.** Each step has failed at least once; the incidents are in `docs/ai-includes/git-and-release.md`.
+**The release order.** Each step has failed at least once. The incident behind each step is in `docs/ai-includes/git-and-release.md` ("The release steps and their incidents").
 
 1. Work in your own sibling worktree (`lv-<name>`) on your own branch. Never switch the branch of a tree that another session can be using. **Stage by path; never `git add -A` or `git commit -a`.** `ListAgents` shows the other sessions.
 2. `git fetch --tags`. If origin has a tag above `version.txt`, rebase before you bump. Check again before the bump, before the push and before the tag: another session can take your number.
 3. Run the full `tools/ci_local.py`. Push only on `Ready to push: YES`. `NOT YET` means files are not committed.
 4. `git fetch origin && git rebase origin/main`; run the check again if the rebase brought changes.
 5. `git push origin HEAD:main`. No pull request (the maintainer, 2026-11-11). `main` has no branch protection.
-6. Watch the `Build & Validate` run for that commit, selected by workflow name (a push also starts "Dementia Mapper").
+6. Watch the `Build & Validate` run for that commit, selected by workflow name (a push also starts "Dementia Mapper"). `python -B tools/release.py tag-ready X.Y.Z` does this: it prints the tag command, with the commit spelled out, only when that run passed.
 7. Only after that run passes: tag that commit and `git push origin vX.Y.Z`. **Push the ONE tag by name. NEVER `git push --tags`**: each stale local tag builds an old release, and the newest build becomes "Latest".
-8. Refresh `muddler_project/build/` in the main checkout from the release asset (the maintainer imports the package from that folder), then remove the worktree and delete the branch.
+8. When the tag's run has built the release, refresh `muddler_project/build/` in the main checkout: download `Levi_Ataxia.mpackage` from the release into that folder, and unzip `Levi_Ataxia.xml` from it into the same folder (the release ships only the mpackage; the maintainer imports from that folder, and the xml was left old twice). `python -B tools/release.py post` says whether both files are the release and prints the commands. Then remove the worktree and delete the branch.
 
-Write a release as ONE `&&` chain with the commit message in a file: a command on the line after a heredoc runs even when the chain failed. `.githooks/pre-push` refuses two `v*` tags in one push, a tag that is not `v` + `version.txt`, a tag whose commit is not on `origin/main`, and a rewrite of `main`. The build system, the converter and the IDE tasks: `docs/reference/repository-and-build.md`.
+Write a release as ONE `&&` chain with the commit message in a file: a command on the line after a heredoc runs even when the chain failed. `.githooks/pre-push` refuses two `v*` tags in one push, a tag that is not `v` + `version.txt`, a tag whose commit is not on `origin/main`, and a rewrite of `main`. The build system and the IDE tasks: `docs/reference/repository-and-build.md`. The converter's options and the auto-updater: `docs/ai-includes/git-and-release.md`.
 
 ---
 
@@ -157,10 +157,10 @@ Before each delegation, write one line naming the model, the effort and the reas
 
 ## Code Conventions
 
-- **Public functions** are `snake_case` with the prefix of their namespace: `ataxia_`, `ataxiaBasher_`, `ataxiaNDB_`, `ataxiagui_`; the mapper is `mmp.*`. **Module tables** are camelCase (`ataxia`, `ataxiaBasher`, `ataxiaNDB`, `ataxiaTables`). **Helpers inside a module** are `local`. Legacy names are migrated only when a file is changed much.
+- **Public functions** are the namespace prefix, one underscore, then camelCase: `ataxia_saveSettings`, `ataxiaBasher_assembleAttack`, `ataxiaNDB_getClass`, `ataxiagui_createMap` (not `ataxia_save_settings`, not `ataxiaCheckForMissing`); the mapper is `mmp.*`. **Module tables** are camelCase (`ataxia`, `ataxiaBasher`, `ataxiaNDB`, `ataxiaTables`). **Helpers inside a module** are `local`. Legacy names are migrated only when a file is changed much.
 - **Files** are `NNN_Descriptive_Name.lua` (the number is the load order); **folders** are `snake_case`.
 - **Initialise with `X = X or {}`**, and give anything a prompt path reads its full shape at load time (a reload must not crash the live path).
-- **Echo to the player with the global `ataxiaEcho(...)`.** `ataxia.echo` and `ataxia.decho` do not exist; 17 call sites were once written against them and died silently. Guard an optional helper or use a real one.
+- **Echo to the player with the global `ataxiaEcho(...)`.** `ataxia.echo` and `ataxia.decho` do not exist; 17 call sites were once written against `ataxia.echo` and died silently. Guard an optional helper or use a real one.
 - **Pure ASCII in anything that becomes an echo string.**
 - **Game time is `getEpoch()`**, never `os.clock()` (that is CPU time).
 - Namespace, event and test patterns with examples: `docs/reference/development-notes.md`.
@@ -169,29 +169,30 @@ Before each delegation, write one line naming the model, the effort and the reas
 
 ## Trap Sheet
 
-One line for each invariant. The full text, with the incident, is the entry of that title in `.claude/AGENTS.md`: grep the quoted words before you work in that area.
+One line for each invariant. The full text, with the incident, is in `.claude/AGENTS.md`: grep the quoted words in the whole file before you work in that area (an entry is a heading, or a bullet that opens in bold).
 
 | Trap | Rule | Grep in `.claude/AGENTS.md` |
 |---|---|---|
 | The game line is the authority | A line from the game outranks our bookkeeping. Keep the derived value as a backstop; do not let it overrule the line | "outranks our bookkeeping" |
-| Three separate facts | A confirmation, a lapse and a refusal each get their own handler. Stamp state on the confirmation line, never at send time | "Stamp on the confirmation line" |
+| Three separate facts | A confirmation, a lapse and a refusal each get their own handler. A belief about the world (an affliction given, the round history) is stamped on the game's line, not when the round is built or the key is pressed | "Stamp on the confirmation line", "Round history moves" |
 | `queue addclearfull` | It wipes the whole queue. A queued command that is not an attack needs one line and a bounded hold of the dispatcher | "must hold the dispatcher", "HOLD and a REPLAY" |
 | A `;` chain | Mudlet splits `;` before it sends: only the first command is queued | "chain is NOT one queue entry" |
-| Saved and session state | `ataxia` and `ataxiaBasher` are saved to disk. Session beliefs, timer ids and GUI objects go on `ataxiaTemp` (`docs/adrs/001-no-gui-objects-in-saved-state.md`) | "ataxiaTemp" |
+| Saved and session state | `ataxia` and `ataxiaBasher` are saved to disk. Session beliefs and trigger, timer and handler ids go on `ataxiaTemp`. A GUI object goes in an unsaved table such as `ataxiagui.*`, never under `ataxia` (`docs/adrs/001-no-gui-objects-in-saved-state.md`). Report: `tools/check_orphans.py`, check 3 | "ataxiaTemp" |
 | Reload | A global that only login sets crashes the always-live path after a reload | "login-only globals" |
 | A changed default | It reaches new installs only. Existing saves need a one-shot migration | "one-shot migration" |
-| Trigger patterns | A pattern must fit one server-wrapped row (119 to 124 columns): match an early phrase. `type: 3` is the exact whole line. Gate: `tools/check_wrap.py` | "EXACT WHOLE LINE" |
+| Trigger patterns | A pattern must fit one server-wrapped row (119 to 124 columns): match an early phrase. `type: 3` is the exact whole line. Gate: `tools/check_wrap.py` | "Count a game line", "EXACT WHOLE LINE" |
 | A callee that does not exist | Grep the DEFINITION and its `isActive` before you call a helper. A switched-off script does not switch off its callers. Gate: `tools/check_orphans.py` | "nil callee has four shapes" |
 | Events | Register the exact event (`gmcp.Room.Info`), not its prefix (`gmcp.Room`) | "prefix event" |
-| Silence | Every guard return gives a reason. Zero is an answer; silence is not. A guarded start needs a guarded stop | "Silent gates", "silence is not" |
-| Tests | Break back every fix: revert it and see a test fail. Run the real code and the real pattern. All test files share ONE Lua state: restore every global you replace | "Break-backs that pass", "Tests can assert the bug" |
-| Evidence about the game | Captured behaviour outranks wiki and AB text. Grep `kb/` and `.claude/classes/` before you ask the maintainer or call a line "uncaptured" | "grep the docs" |
+| Silence | Every guard return gives a reason. Zero is an answer; silence is not. A guarded start needs a guarded stop | "Silent gates", "silence is not", "guarded start" |
+| Tests | Break back every fix: revert it and see a test fail. Run the real code and the real pattern. All test files share ONE Lua state: restore every global you replace (the test run lists each leak; `CONTRIBUTING.md`, "Tests") | "Break-backs that pass", "Tests can assert the bug", "hygiene faults" |
+| A fix at one site | The same fault sits in the other consumers, the other layer and the mirror path. Grep every site that reads or writes the thing and count them; the site that looks different is the one a sweep misses | "Fix every consumer", "grep for the same reasoning", "audit the WRITE globally" |
+| Evidence about the game | Captured behaviour outranks wiki and AB text. Grep `kb/`, `.claude/classes/` and `src_new/triggers/` for the wording before you ask the maintainer or call a line "uncaptured" | "grep the docs", "Trust the captured behaviour" |
 
 ---
 
 ## Where Things Are
 
-Read the document of a system before you change that system. The left column keeps the section titles this file used until 2026-11-13, so an old reference to "CLAUDE.md, <title>" still leads somewhere.
+Read the document of a system before you change that system. The left column keeps the titles of the top-level sections and of each system that this file held until 2026-11-13, so an old reference to "CLAUDE.md, <title>" still leads somewhere. For any other title (a sub-heading, a bold paragraph title), run `git grep -nF '<title>' -- .claude docs kb`: the text moved verbatim, so the title is still a row in its new home.
 
 | Subject (old section title) | Read |
 |---|---|
@@ -212,11 +213,11 @@ Read the document of a system before you change that system. The left column kee
 | Player Database (ataxiaNDB) | `.claude/projects/ndb/README.md` |
 | Setup Wizard (leviSetup) | `.claude/projects/setup-wizard/README.md` |
 | Mudlet Mapper (mmp) | `.claude/projects/mapper/README.md` (a separate package; never ship mapper items in Levi_Ataxia) |
-| Lessons Learned; Common Pitfalls & Solutions | `.claude/AGENTS.md` (grep the headings; do not read it whole) |
+| Lessons Learned; Common Pitfalls & Solutions | `.claude/AGENTS.md` (grep the headings and the bold bullet openings; do not read it whole) |
 | Repository Structure; Build System (Muddler); VS Code; Combat Systems Index | `docs/reference/repository-and-build.md` |
 | Versioning & Auto-Update; the merge rules and their incidents | `docs/ai-includes/git-and-release.md` |
 | Development Guidelines; Testing Approach; Important Considerations; Technical Context; Key Concepts; GMCP Data Reference; Resources & References; Questions to Ask When Developing | `docs/reference/development-notes.md`; test rules in `CONTRIBUTING.md` and `.claude/rules/tests.md` |
-| Agent Teams; porting foreign combat scripts | `docs/ai-includes/agent-teams.md` |
+| Agent Teams; porting foreign combat scripts | `docs/ai-includes/agent-teams.md`; the brief every subagent reads first: `docs/ai-includes/agent-brief.md` |
 | What loads in a session, hooks, this machine | `docs/reference/harness-facts.md` |
 | Decisions | `docs/adrs/` |
 | Templates for new offence, limb and lock code | `.claude/templates/README.md` |

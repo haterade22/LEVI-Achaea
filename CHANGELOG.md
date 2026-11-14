@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-11-14 - `CLAUDE.md` is a 25 KB core; a brief for subagents; three reports for shipped defects; two release commands (docs and tooling, no version bump)
+
+**`CLAUDE.md` is 25,382 bytes** (450,746 on 2026-11-13). It now loads whole, also on a small context window, and a 40,000-byte cap holds it there (`tools/context_budget.json`).
+
+- **What is in it:** how the file reaches a session; the one-home ladder; the evidence rules; build, test and the eight release steps; the model and effort table; the code conventions; a trap sheet of 14 invariants, each with the words to grep in `.claude/AGENTS.md`; and "Where Things Are", a table from each subject to its document, keyed by the old section titles.
+- **What left it, and where it went** (each move its own commit, each proven with `tools/check_context_budget.py --moves`: 0 rows lost):
+
+| What moved | To |
+|---|---|
+| Repository Structure, Build System, VS Code, Combat Systems Index (30 KB) | `docs/reference/repository-and-build.md` (new) |
+| Lessons Learned, Common Pitfalls (14 KB) | `.claude/AGENTS.md` (appended) |
+| Mudlet Mapper, GUI, Item Catalog, Our artefacts, ataxiaNDB, Setup Wizard (13 KB) | `.claude/projects/{mapper,gui,item-catalog,artefacts,ndb,setup-wizard}/README.md` (new) |
+| Versioning & Auto-Update (8 KB) | `docs/ai-includes/git-and-release.md` (new) |
+| Infernal, Blademaster, Apostate, Runewarden, Tekura, Psion notes; Agent Teams (9 KB) | `.claude/classes/<class>.md`, `docs/ai-includes/agent-teams.md` (appended) |
+| Development Guidelines, Testing Approach, Key Concepts, GMCP, and four small sections (14 KB) | `docs/reference/development-notes.md` (new) |
+| The `kbcapture` and `fightlog` descriptions | `kb/README.md`, "Capture tools" |
+
+- **The release incidents are in git now.** `docs/ai-includes/git-and-release.md` has a table of each release step: the rule, what happened (with date and version), and what enforces it today, or "nothing". Most of these incidents were recorded only in notes outside the repository.
+- **The core was reviewed before the push.** Four reviewers checked each new sentence against its source, and a second reader checked each finding: 37 confirmed and corrected. Examples: the naming rule said `snake_case` where the code is prefix, underscore, camelCase (`ataxia_saveSettings`); release step 8 left out the unzip of `Levi_Ataxia.xml`, the step that was skipped twice; one trap row was stronger than its source; the `/build` skill gave a release order that put the tag before the push; two basher documents still said that a `;` chain is one queue entry, which was corrected on 2026-11-01.
+
+**`docs/ai-includes/agent-brief.md` (new)** is the one file a spawn prompt names. Built-in `Explore` and `Plan` agents get no `CLAUDE.md`, and every subagent in 36 sessions was a built-in type. The brief says: which tree to work in, what an agent must not do, the tools that write when run plainly and their safe form, how to check something, the evidence rule, the shape of a finding, and the decisions that a reviewer must not report as defects.
+
+**Three reports for defects that reach players (all report-only; none changes an exit status yet):**
+
+- **Globals a test file leaves replaced.** All test files share one Lua state, and the mock's reset does not put `send`, `tempTimer` or `getEpoch` back. `src_new/tests/test_runner.lua` now lists each leak: `LEAK <file>: <name>`. Today: 9 (6 `getEpoch`, 2 `expandAlias`, 1 `send`). When the list is empty, a leak becomes a failure.
+- **`tools/check_orphans.py`, check 3: patterns with a recorded incident, in active code.** `os.clock()` (CPU time, not a clock): 0 sites. A handler on bare `gmcp.Room` (it also fires for `gmcp.Room.WrongDir`): 2 sites, in Mnemosyne. A timer, trigger or handler id stored on a SAVED namespace (`ataxia`, `ataxiaBasher`): 8 sites. Each site is a place to look, not a proven defect. No shipped Lua changed.
+- Both have tests (`tools/test_check_orphans.py`, `tools/test_ci_local.py`).
+
+**`tools/release.py` (new) turns two release steps into commands.** Both only read; they print the commands to run.
+
+- `tag-ready <version>` finds the newest commit on `origin/main` at that version, takes the `Build & Validate` run of THAT commit by workflow name, and prints the tag command with the commit spelled out only when the run passed. A run that is not finished, a failed run and an unreachable GitHub each give their own answer.
+- `post [version]` reads the version inside `muddler_project/build/Levi_Ataxia.mpackage` and inside the loose `Levi_Ataxia.xml` in the main checkout, compares both with the release, and prints the refresh commands when either is old.
+- `tools/test_release.py` (9 tests) is a CI step.
+
+---
+
 ## 2026-11-13 - `CLAUDE.md` is 106 KB, down from 450 KB; nothing was lost (docs only, no version bump)
 
 Claude Code delivers only about the first 131,000 to 143,000 characters of this file in the maintainer's sessions (`docs/reference/harness-facts.md`). At 450 KB, two thirds of it never arrived. It is now 105,763 bytes, so the whole file arrives.

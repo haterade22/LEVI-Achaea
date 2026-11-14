@@ -62,8 +62,9 @@ when target 1 was reached (2026-11-13).
 `tools/check_context_budget.py --moves --base <commit>` compares `CLAUDE.md` at the base commit with
 the file on disk. Every line that left must be found verbatim in a destination file, or belong to a
 section declared as deleted; for a deleted section, every backticked identifier must still exist in
-a tracked file. A move leaves a one-line pointer under the old heading, so a citation by section
-title still resolves. Deduplication of a moved block against its destination is later work, done by
+a tracked file. Until the core was written, a move left a one-line pointer under the old heading. The core replaced
+the headings and pointers with the "Where Things Are" table in `CLAUDE.md`, whose left column keeps the old section
+titles. A sub-section title is found with `git grep`, because the text moved verbatim. Deduplication of a moved block against its destination is later work, done by
 the owner of that system doc.
 
 ### 4. What stays in `CLAUDE.md`
@@ -81,8 +82,8 @@ sheet (one line for each invariant, the full text in its home).
 - A pointer is not a delivery: an agent must open the system doc. `docs/ai-includes/agent-brief.md`
   (phase 6 of the adoption plan) and the pointer index are the mitigation. Path-scoped rules would be
   a better one; whether they load here is not yet verified (`docs/reference/harness-facts.md`).
-- Shipped Lua comments that cite a `CLAUDE.md` section by title (17 files) keep working while the
-  pointer line stays under that title. They are corrected when their file next ships in a version.
+- Shipped Lua comments that cite a `CLAUDE.md` section by title (17 files) resolve through the "Where Things Are"
+  table, or through `git grep` of the title for a sub-section. They are corrected when their file next ships in a version.
 
 ## Alternatives rejected
 
@@ -120,6 +121,15 @@ current size and ceiling.
 | 2026-11-13 | Serpent to `.claude/classes/serpent.md` | 139,039 |
 | 2026-11-13 | Achaea Classes Reference to `.claude/classes/README.md` | 130,735 |
 | 2026-11-13 | Combat core, persistence, armour to `.claude/projects/{ataxia-core,persistence,armour}/README.md` | 105,763 |
+| 2026-11-13 | Repository Structure and Build System to `docs/reference/repository-and-build.md` | 75,577 |
+| 2026-11-13 | Lessons Learned and Common Pitfalls to `.claude/AGENTS.md` | 62,250 |
+| 2026-11-13 | Six small system references to `.claude/projects/` | 49,951 |
+| 2026-11-13 | Versioning and release to `docs/ai-includes/git-and-release.md` | 42,414 |
+| 2026-11-13 | Six class notes to `.claude/classes/`; Agent Teams to `docs/ai-includes/agent-teams.md` | 35,212 |
+| 2026-11-13 | General development notes to `docs/reference/development-notes.md` | 22,111 |
+| 2026-11-14 | The core: new summary sections; headings and pointers replaced by the "Where Things Are" table; corrected after a review | see the check |
 
 Target 1 (120,000 bytes) was reached on 2026-11-13, and the check is strict from that commit. Every move above was
 proven with `tools/check_context_budget.py --moves`: 0 rows lost. The proof line is in each commit message.
+
+Target 2 (40,000 bytes) was reached on 2026-11-13, and the ceiling is fixed at 40,000.

@@ -367,7 +367,8 @@ grep -rl "shaman\|tzantza\|curseward" src_new/triggers/levi_ataxia/for_levi/levi
 ---
 
 **Related files**:
-- `CLAUDE.md` -- Main project documentation (Agent Teams quick reference section)
+- `CLAUDE.md` -- The every-task rules and the index to the references (the Agent Teams quick reference is now at the end of this file)
+- `docs/ai-includes/agent-brief.md` -- The brief that every subagent reads first
 - `.claude/AGENTS.md` -- Coding instructions for combat systems
 - `.claude/classes/` -- Per-class mechanics documentation (26 classes)
 

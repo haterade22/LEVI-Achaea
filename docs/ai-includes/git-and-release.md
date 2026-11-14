@@ -15,8 +15,8 @@
 **Version bump workflow** (for every release):
 1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
 2. Build with `/build` (or `./build.sh`)
-3. Commit all changes (version files + any code changes), tag with `v<new_version>`
-4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below; `.githooks/pre-push` refuses two `v*` tags in one push, a tag that is not `v` + `version.txt` at its commit, a tag whose commit is not on `origin/main`, and a rewrite of `main`)
+3. Commit this session's files, staged by path (version files + your code changes). Do not tag yet
+4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, tag that commit and push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below; `.githooks/pre-push` refuses two `v*` tags in one push, a tag that is not `v` + `version.txt` at its commit, a tag whose commit is not on `origin/main`, and a rewrite of `main`)
 5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
 
 **IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
@@ -92,3 +92,27 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
 **Comparison tool** (`tools/compare_builds.py`):
 - Compares old Python-built XML against Muddler project source
 - Verifies item counts, names, hierarchy, and code content
+
+---
+
+## The release steps and their incidents
+
+The steps are in `CLAUDE.md` ("Build, Test and Release"). This table is the reason for each one. It was assembled on
+2026-11-13 from the text above and from the maintainer's release notes, which until then were outside git.
+
+| Step | Rule | What happened | Enforced by |
+|---|---|---|---|
+| 1 | Own worktree and branch; stage by path; never switch a shared tree's branch | 2026-10-01, v4.7.371: a second session changed branch between another session's `checkout -b` and `commit`, so the commit landed on the wrong branch and both had picked the same version. 2026-10-11, v4.7.413: `git add -A` shipped half of another session's work | Nothing. Rule only |
+| 2 | Check the top tag on origin before the bump, before the push and before the tag | 2026-10-23: v4.7.448 was tagged on an unmerged branch, and v4.7.449 from `main` would have dropped its fix. 2026-11-03: two numbers were taken by another session during one fix. 2026-11-13: a commit that waited for approval lost v4.7.493; a tag with the lower number would have become "Latest" | `tools/ci_local.py` prints a warning (a higher tag on origin, or the same number on a commit this tree does not have). `.githooks/pre-push` refuses a tag whose commit is not on `origin/main` |
+| 3 | Run every `validate` step before the push | 2026-11-09, PR #169: `kb_rules.py --check` failed in CI after a partial local run (a Lua file is an input of a generated page). 2026-11-13: `kb_sim.py --check` printed "skip" and exited 0 under the `python3` on PATH | `tools/ci_local.py`: one list, NOT RUN is never a pass, `Ready to push: YES` only for a full clean run on a committed tree |
+| 4 | Rebase on `origin/main`, then check again | 2026-11-13: after a rebase, lines that other documents cite had moved | Nothing. Rule only |
+| 5 | Push straight to `main`; no pull request | 2026-11-11 (the maintainer): two pushed branches with no pull request sat unmerged for days | Nothing; `main` has no branch protection. `.githooks/pre-push` refuses a rewrite of `main` |
+| 6 | Wait for the `Build & Validate` run of that commit, selected by workflow name | 2026-11-03, v4.7.477: tagged when the checks had not started; a test that made a folder passed on Windows and failed on Linux, so `version.txt` on `main` announced a version that had no release. 2026-11-09, v4.7.484: a watcher followed "Dementia Mapper", the other workflow a push starts, and reported success | `tools/release.py tag-ready <version>` prints the tag command only when that run passed for that commit |
+| 6 | A tag run with no jobs is an outage: run it again, do not tag again | 2026-11-09, v4.7.481: the tag run failed with `jobs: []` during a GitHub Actions outage | Nothing. Check the jobs list and githubstatus.com, then `gh run rerun <id>` |
+| 7 | Tag the commit that holds the version; push ONE tag by name; never `git push --tags` | 2026-08-03, v4.7.208: `--tags` pushed stale tags, each built an old release, and "Latest" pointed at a two-week-old build. 2026-09-16, v4.7.313: the tag went on the commit before the bump, so the "v4.7.313" package said 4.7.312 | `.githooks/pre-push` refuses two `v*` tags in one push and a tag that is not `v` + `version.txt`. The release build fails when the tag is not `v` + `version.txt` |
+| 7 | One `&&` chain, with the commit message in a file | 2026-09-16, v4.7.313: the tag command stood on the line after a heredoc, so it ran although the chain before it had failed | Nothing. Rule only |
+| 8 | Refresh `muddler_project/build/` in the main checkout: the mpackage AND the unzipped `Levi_Ataxia.xml` | A release made from a worktree leaves that folder at the old version, and the maintainer imports from it. Skipped for three releases by 2026-11-12; the xml alone was left old for v4.7.499 and v4.7.500 | `tools/release.py post` compares both files with the release and prints the commands |
+| 8 | Remove the merged worktree and branch | 2026-11-11: nine old worktrees made the Lua language server index about 15,000 files | Nothing. Rule only |
+
+Repair of a wrong "Latest": `gh release edit v<version> --latest`, then `gh release delete <stray> --yes --cleanup-tag=false` (see "NEVER `git push --tags`" above).
+

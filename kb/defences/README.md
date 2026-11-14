@@ -49,7 +49,7 @@ satiation defence") is what makes it worth casting; `ataxia_satiationTick`
 ## Our names that are not in this list
 
 `ataxiaTables.defences` (inline in `_groups.yaml`) maps a client-side name to the SERVER-SIDE name
-(CLAUDE.md, "Defence tables"). Checked against the list above, 9 of its 153 values are missing:
+(`.claude/projects/basher/00-reference-from-claude-md.md`, "Defence tables"). Checked against the list above, 9 of its 153 values are missing:
 
 | Client name | Our server-side value | Game list has | Likely meaning |
 |---|---|---|---|

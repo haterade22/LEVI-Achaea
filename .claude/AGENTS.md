@@ -1096,7 +1096,7 @@ press makes the round that runs depend on how often the key was pressed. Found i
 Shikudo lock (`shikudo/007`, `sr`): with two presses per recovery, Rain ran the same kind of round every
 window; the third press of a critical MIND IMPATIENCE turned it into a combo that landed hiraku first;
 and in a truelock the fourth press jumped to KAI CHOKE, so the confuse/disrupt prelude never went out.
-It is CLAUDE.md's "Counter Incrementing (Button Spam Issue)" with the server queue doing the replacing.
+It is "Counter Incrementing (Button Spam Issue)" (below, in this file) with the server queue doing the replacing.
 
 How 007 and `vv` (`shikudo/011`) do it:
 - the round sent is kept PENDING with what it would change (007: its kind, the sides it alternated to,

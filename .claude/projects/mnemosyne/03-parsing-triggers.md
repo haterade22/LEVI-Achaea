@@ -334,8 +334,8 @@ blocks **we were already parsing and then discarding**.
 | `mnemosyne/077` | `A fulgent eddy falls still.` | `M.onBoonClaimConfirmed` |
 
 **075 and 076 are anchorless on purpose.** Both fields sit inside an indented status block, so `^`
-would depend on how the game pads them, and CLAUDE.md's own trigger guidance is to avoid `^`/`$`
-unless they earn their place. Both phrases are distinctive enough that a false positive is not
+would depend on how the game pads them, and the trigger guidance in `.claude/AGENTS.md` ("Mudlet
+Trigger Patterns") is to avoid `^`/`$` unless they earn their place. Both phrases are distinctive enough that a false positive is not
 credible.
 
 **076 is the important one.** `Remaining lives` is the only run-scoped STAKE this package has ever

@@ -19,7 +19,7 @@ You are the implementation agent for the LEVI-Achaea Mudlet combat system. You c
 - Transient state (timestamps, in-flight flags, timer ids) goes on `ataxiaTemp`, never under the saved `ataxia`/`ataxiaBasher` namespaces.
 - A trigger pattern must fit on one wrapped row (about 118 columns). Run `python tools/check_wrap.py` when you touch triggers.
 - Write or extend tests, and run `/c/Python314/python tools/run_lua_tests.py` before reporting done (Lua 5.1 through lupa; this machine has no native Lua 5.1, and the `lua` on PATH is 5.4).
-- Documentation-first: update CHANGELOG.md, the class docs and CLAUDE.md for whatever your change touches.
+- Documentation-first: put each fact in its one home (the table in CLAUDE.md, "Documentation-First Knowledge Base"): `CHANGELOG.md`, `.claude/classes/<class>.md`, `.claude/projects/<system>/`, `kb/`. Never add system detail to CLAUDE.md.
 
 ## Limits
 - If the plan proves ambiguous or wrong, or the change spreads beyond one module, stop and reply `ESCALATE: <what is unclear>`. Do not improvise architecture.

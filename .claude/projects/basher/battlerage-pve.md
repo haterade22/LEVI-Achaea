@@ -415,7 +415,7 @@ Depthswalker always did this. Psion stored `verb = ab.cmd` and was never release
 Golden Dragon also stores `ab.cmd` and works only because its four commands happen to equal
 their keys; that is a coincidence, not a design, so do not copy it into a fifth rotation.
 
-**One resource spender per assembled round.** The chain is a single queue entry, so a helper
+**One resource spender per assembled round.** The chain is not one queue entry (Mudlet splits `;`), but each helper's gate is still stale, so a helper
 gating on current balance/word/shin state cannot see what an earlier element of the same chain
 already claimed. Blademaster now threads `shinSpent`; Depthswalker now threads `wordUsed`. When
 the cooldown stamp lives inside the helper, the caller must skip the CALL, not the result.

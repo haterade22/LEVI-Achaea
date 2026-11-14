@@ -407,6 +407,6 @@ Eight hook scripts live in `.claude/hooks/` and are registered in `.claude/setti
 | Document | Purpose |
 |----------|---------|
 | [README.md](README.md) | Project overview, build instructions, repo structure |
-| [CLAUDE.md](CLAUDE.md) | Full technical reference — architecture, combat mechanics, APIs, development guidelines |
+| [CLAUDE.md](CLAUDE.md) | Rules for every change (build, test, release, conventions) and the index ("Where Things Are") to the system, class and game documents |
 | [CHANGELOG.md](CHANGELOG.md) | Detailed change history |
 | [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card effects and PVE guide |
