@@ -9,7 +9,7 @@ sources:
   - kb/classes/abilities.json
 code:
   - tools/kb_timing.py
-latest_filed: 2026-11-07
+latest_filed: 2026-11-14
 ---
 
 # Clocks: stated against observed
@@ -437,6 +437,7 @@ A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKn
 | shikudo-group-alias-2 | 2026-11-03_shikudo-group-alias-2.txt | sentinel | Ours, client log | 2026-11-03 | - | 1880 | 0 | 0 | same fight as ours/2026-11-03_102138_Tabethys, out of the pools |
 | shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 2026-11-03 | - | 3739 | 0 | 0 | same fight as ours/2026-11-03_081009_Froedine, out of the pools |
 | serpent-spar-saibel | 2026-11-07_serpent-spar-saibel.txt | sentinel | Ours, client log | 2026-11-07 | - | 174 | 0 | 0 | same fight as ours/2026-11-07_164635_Saibel, out of the pools |
+| mtfwoA4F | 2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt | none | - | 2026-11-14 | - | 0 | 0 | 0 | skipped: 0 prompts with no time in them |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder (Alchemist) | 2026-10-12 | 4.7.418 | 90 | 0 | 0 |  |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder (Monk) | 2026-10-27 | 4.7.450 | 3311 | 0 | 0 |  |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder (Infernal) | 2026-10-27 | 4.7.450 | 3930 | 0 | 0 |  |

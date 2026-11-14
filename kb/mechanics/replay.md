@@ -13,7 +13,7 @@ code:
   - tools/kb_timing.py
   - src_new/triggers/levi_ataxia/for_levi/leviticus/determine_class/
   - src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua
-latest_filed: 2026-11-07
+latest_filed: 2026-11-14
 ---
 
 # Replay: do route rules warn before a death?
@@ -321,7 +321,7 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 
 ## Logs read
 
-46 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys`, the two `2026-11-03_shikudo-group-alias` logs hold the recordings of 2026-11-03, and `2026-11-07_serpent-spar-saibel` is the same fight as `ours/164635_Saibel` (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses.
+47 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt`, `2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys`, the two `2026-11-03_shikudo-group-alias` logs hold the recordings of 2026-11-03, and `2026-11-07_serpent-spar-saibel` is the same fight as `ours/164635_Saibel` (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses.
 
 | Id | File | Family | Client | Prompts | Result |
 |---|---|---|---|---|---|
@@ -359,6 +359,7 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 | shikudo-group-alias-2 | 2026-11-03_shikudo-group-alias-2.txt | sentinel | Ours, client log | 1880 | same fight |
 | shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 3739 | same fight |
 | serpent-spar-saibel | 2026-11-07_serpent-spar-saibel.txt | sentinel | Ours, client log | 174 | same fight |
+| mtfwoA4F | 2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt | none | - | 0 | not read |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder | 90 | no death shown |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder | 3311 | died |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder | 3930 | no death shown |

@@ -3821,7 +3821,7 @@
   }
  },
  "generated_by": "tools/kb_timing.py",
- "latest_filed": "2026-11-07",
+ "latest_filed": "2026-11-14",
  "logs": [
   {
    "family": "sentinel",
@@ -4295,6 +4295,20 @@
    "in_pools": false,
    "logger": "Ours, client log",
    "prompts": 174,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": null,
+   "file": "2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt",
+   "filed": "2026-11-14",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "mtfwoA4F",
+   "in_pools": false,
+   "logger": null,
+   "prompts": 0,
    "unstamped_prompts": 0,
    "version": null,
    "wrapped": 0

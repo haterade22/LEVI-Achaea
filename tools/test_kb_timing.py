@@ -1168,7 +1168,9 @@ class RealLogs(unittest.TestCase):
 
     def test_every_log_parses_except_the_one_with_no_stamps(self):
         skipped = [log.name for log in self.logs if log.family is None]
-        self.assertEqual(skipped, ["2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt"])
+        # Zax's log (filed 2026-11-14) stamps its own target lines, not its prompts.
+        self.assertEqual(skipped, ["2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt",
+                                   "2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt"])
 
     def test_the_stamps_never_go_back(self):
         for log in self.logs:
