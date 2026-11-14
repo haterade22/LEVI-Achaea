@@ -312,53 +312,7 @@ or an earlier test's stamp sits in this test's future and reads as fresh.
 
 ## Agent Teams
 
-Claude Code agent teams enable parallel development across isolated combat subsystems. See `docs/ai-includes/agent-teams.md` for the full guide.
-
-### Quick Reference
-
-**When to use**:
-- Parallel class system development (e.g., shaman + blademaster simultaneously)
-- Cross-system feature rollouts (e.g., adding V3 tracking to multiple classes)
-- Parallel code review of independent subsystems
-- Documentation sprints across multiple class files
-
-**When NOT to use**:
-- Single class edits, threshold tweaks, trigger fixes
-- Sequential debugging (cause-and-effect tracing)
-- Changes to shared `ataxia/` core files (serialize through lead)
-
-**File ownership rule**: Each teammate owns a class directory under `levi_scripts/`. The `ataxia/` core (affliction tracking, curing, balance) is shared -- coordinate through the team lead before modifying.
-
-**Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
-
-### Porting Foreign Combat Scripts
-
-**Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
-
-**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has no writer for `tLimbs` (no file defines it since 3c312975; triggers 392 and 393 threw on it until v4.7.479) — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
-
-**Prevention checklist for ported code:**
-1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`
-2. If no writes found, the table is dead — map to the canonical source (usually `lb[target].hits` for limb data, `tAffs` for afflictions)
-3. For file-scope `local` state tables, verify they are reset at the top of the per-tick entry point — stale sentinels from prior ticks cause phantom actions
-4. When two functions must agree on a threshold (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags — don't mix conventions from the source and destination systems
-5. Never write a new offense file (>200 lines) in a single pass — write namespace + calc first, build, then add each form's logic incrementally
-
-```lua
--- BAD: Assumed tLimbs was populated (it wasn't)
-local tl = tLimbs
-gm.llFLASH = (tl.LL + ld.shikFlashheel >= 100)
-
--- GOOD: Read from canonical trigger-fed source
-local function getLimb(key)
-  if not target or not lb or not lb[target] or not lb[target].hits then return 0 end
-  return lb[target].hits[LIMB_NAMES[key]] or 0
-end
-gm.LL = getLimb("LL")
-gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
-```
-
----
+**Moved (2026-11-13).** See `docs/ai-includes/agent-teams.md` (the section of this name, at the end of that file).
 
 ## Technical Context
 
@@ -643,94 +597,28 @@ gmcp.Room.Info = {
 
 ## Infernal DWC Vivisect Combat System
 
-4-limb and 2-limb vivisect offense. Phases: DAMAGE KILL → KILL → EXECUTE → PREP → RIFTLOCK. Optimized 2-attack execute sequence using epteth/epseth cross-limb breaks.
-
-**Full documentation**: See `memory/dwc.md` (phase progression, execute sequence, break prevention, riftlock, helper functions, config)
-
-**Key files:** `dwc/001_Infernal_DWC_Vivisect.lua` (4-limb), `dwc/002_Infernal_DWC_Vivisect_2L.lua` (2-limb). **Namespace:** `infernalDWC` / `infernalDWC2L`. **Class docs:** `.claude/classes/infernal.md`
-
----
+**Moved (2026-11-13).** See `.claude/classes/infernal.md` (the section of this name, at the end of that file).
 
 ## Blademaster Combat System
 
-3 modes: double-prep (`bmd`), quad-prep (`bmdq`), brokenstar (`bmbs`), plus group (`bmgroup`). Lightning/Ice phase system for damage kills.
-
-**PvP offense is keypress-driven.** `ataxia_promptCommands` re-dispatches every prompt only when
-`ataxiaBasher.enabled` (the PvE basher). `blademaster.retryTick` (v4.7.275) keeps swinging for
-`config.retryWindow` (12s) after the last **manual** press — anchored to `markManual()`, not to the
-last run, so it cannot sustain itself. Toggle: **`bmretry on|off|<seconds>`**.
-
-**`queue addclear freestand` requires STANDING.** An entry that cannot satisfy it sits until the
-next dispatch's `addclear` *replaces* it — mashing the alias while prone queues one attack ten
-times, not ten attacks.
-
-**Full documentation**: See `memory/blademaster.md` (strategies, phase system, helper functions, config, brokenstar kill route, the FITNESS/weariness deadlock)
-
-**Key file:** `blademaster/005_CC_BM_Ice.lua`. **Namespace:** `blademaster`. **Class docs:** `.claude/classes/blademaster.md`
-
----
+**Moved (2026-11-13).** See `.claude/classes/blademaster.md` (the section of this name, at the end of that file).
 
 ## Apostate Combat System
 
-Dual-slot curse engine via DEADEYES. 6 modes: lock (default), mental, group, corrupt, vivisect, sleep. Consolidated from 14 legacy files into `apostate` namespace with V3 integration.
-
-**Full documentation**: See `memory/apostate.md` (curse priority engine, lock progression, corrupt calculator, kill routes, config)
-
-**Key file:** `apostate/015_CC_Apostate.lua`. **Namespace:** `apostate`. **Class docs:** `.claude/classes/apostate.md`
-
----
+**Moved (2026-11-13).** See `.claude/classes/apostate.md` (the section of this name, at the end of that file).
 
 ## Runewarden Two Handed Combat System
 
-`rw2h` (v4.7.465): BATTLEFURY PERCEIVE every round, decide after its answer (the header clears the
-fracture counts and the parry, because absent types print no line). Fracture stacking head (unparried) >
-one cracked rib > one wrist fracture > legs; focus SPEED until the target sips, PRECISION after, SPEED
-again when they apply health (triggers 394/153). Kill paths `rw2h impale` (6 tendons -> devastate +
-upset -> impale -> disembowel) and `rw2h overwhelm` (break the head, overwhelm at 5 skull, brain).
-Runeblades are empowered by `remweap` (`gear_system/003`, WEAPONLIST -> probe -> sketch -> EMPOWER).
-
-**Pitfall:** the old 2H aliases called five globals that NOTHING defines and errored on every press.
-`check_orphans` could not see that shape until check 1c (2026-11-08).
-
-**Key file:** `rw_2h/001_RW_2H_Logic.lua`. **Namespace:** `rw2h`. **Class docs:** `.claude/classes/runewarden.md`
-(sections "Runeblades" and "Two Handed offence").
-
----
+**Moved (2026-11-13).** See `.claude/classes/runewarden.md` (the section of this name, at the end of that file).
 
 ## Tekura Monk Combat System
 
-Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). Both use `combo target <kick> <punch1> <punch2>` format with break-guarded prep phases.
-
-**Full documentation**: See `memory/tekura.md` (phases, break guards, kai modes, candidate pools, limb attack mapping, config)
-
-**Key files:** `tekura/002_Tekura_6Limb_Offense.lua` (TK6), `tekura/001_Tekura_Offense.lua` (TKD). **Namespace:** `tekura6` / `tekura`.
-
-**Aliases:** `zz` = TK6 with kai surge, `xx` = legacy TKD, `vv` = TK6 with kai cripple, all with a Tekura
-stance. With none (a Shikudo), `zz`/`xx` run the dispatch offense (`shikudo/006`) and `vv` its Telepathy
-variant, `shikudo.dispatchMind` (`shikudo/011`, v4.7.420).
-
-**Kill route (TK6):** Prep all 6 limbs to 86%+ → Break arms+torso (Horse stance) → Wrench torso + break legs (Bear stance) → Backbreaker.
-
-**Kai modes:** `tekura6.config.kaiMode` — `"surge"` (45 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
-
-**The dismount is paid for (v4.7.419).** TK6 sends it only when `ataxia_kaiAfford` (monk/004) passes;
-unknown kai is not enough. Since v4.7.420 trigger 265 records whose mount the flag is
-(`ataxiaTemp.mountedWho`, matched with either name starting the other, `ownsMount`, `tekura/002`:281, and completed by `updateTarget`): a
-flag recorded for another target is no mount (no dismount, no kai, `tk6status` NO), and one recorded for this
-target counts even if it was up when they became the target. A known rider with kai short gets prep instead
-(echoed once). Only an ownerless flag still uses the seen-down-then-up inference (`tk6status`: YES?), and there
-is no second dismount while our surge holds the target (`ataxiaTemp.kaiSurgeWho`).
-The kaido aliases warn when kai is known short and still send; `kc` falls back to MIND CRUSH.
-
----
+**Moved (2026-11-13).** See `.claude/classes/monk.md` (the section of this name, at the end of that file).
 
 ## Psion Combat System
 
-Weave-based combat with 2 modes (mind/flurry) and 3 simultaneous kill routes: Psi Excise (mana kill), Deconstruct (unweave execute), Flurry (damage burst). Unified `psion` namespace with V3 integration and rebounding handling.
+**Moved (2026-11-13).** See `.claude/classes/psion.md` (the section of this name, at the end of that file).
 
-**Full documentation**: See `memory/psion.md` (kill routes, weave selection priority, rebounding bypass rules, V3 integration, config)
-
-**Key file:** `psion/001_Levi_Psion_Logic.lua`. **Namespace:** `psion`. **Class docs:** `.claude/classes/psion.md`
 
 ---
 

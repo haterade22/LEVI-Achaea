@@ -869,3 +869,24 @@ also attunes SLEIZAK. Torn tendons give the clumsiness.
 
 **Open:** battlefury balance is not tracked: a focus sent off battlefury balance fails and the
 hit goes without it.
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Runewarden Two Handed Combat System
+
+`rw2h` (v4.7.465): BATTLEFURY PERCEIVE every round, decide after its answer (the header clears the
+fracture counts and the parry, because absent types print no line). Fracture stacking head (unparried) >
+one cracked rib > one wrist fracture > legs; focus SPEED until the target sips, PRECISION after, SPEED
+again when they apply health (triggers 394/153). Kill paths `rw2h impale` (6 tendons -> devastate +
+upset -> impale -> disembowel) and `rw2h overwhelm` (break the head, overwhelm at 5 skull, brain).
+Runeblades are empowered by `remweap` (`gear_system/003`, WEAPONLIST -> probe -> sketch -> EMPOWER).
+
+**Pitfall:** the old 2H aliases called five globals that NOTHING defines and errored on every press.
+`check_orphans` could not see that shape until check 1c (2026-11-08).
+
+**Key file:** `rw_2h/001_RW_2H_Logic.lua`. **Namespace:** `rw2h`. **Class docs:** `.claude/classes/runewarden.md`
+(sections "Runeblades" and "Two Handed offence").
+
+---

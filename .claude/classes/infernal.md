@@ -1585,3 +1585,17 @@ base x0.85 (the Aldar Diadem, worn at all times); the factors and our readings a
 `kb/mechanics/balance-and-queueing.md`, "Our speed factors", and the code reads them through
 `ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`). Server-queued rounds already wait for the real
 equilibrium, so only a comment, a doc or a timer that sizes a wait needs the factor.
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Infernal DWC Vivisect Combat System
+
+4-limb and 2-limb vivisect offense. Phases: DAMAGE KILL → KILL → EXECUTE → PREP → RIFTLOCK. Optimized 2-attack execute sequence using epteth/epseth cross-limb breaks.
+
+**Full documentation**: See `memory/dwc.md` (phase progression, execute sequence, break prevention, riftlock, helper functions, config)
+
+**Key files:** `dwc/001_Infernal_DWC_Vivisect.lua` (4-limb), `dwc/002_Infernal_DWC_Vivisect_2L.lua` (2-limb). **Namespace:** `infernalDWC` / `infernalDWC2L`. **Class docs:** `.claude/classes/infernal.md`
+
+---

@@ -687,3 +687,17 @@ apostate.status()
 - Added group mode with pure lock pieces (no hinder, no probability gates)
 - Added reboundHold gate to dispatch
 - Anorexia+sicken pairing in Curse 2 (fills uncertain slickness/paralysis)
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Apostate Combat System
+
+Dual-slot curse engine via DEADEYES. 6 modes: lock (default), mental, group, corrupt, vivisect, sleep. Consolidated from 14 legacy files into `apostate` namespace with V3 integration.
+
+**Full documentation**: See `memory/apostate.md` (curse priority engine, lock progression, corrupt calculator, kill routes, config)
+
+**Key file:** `apostate/015_CC_Apostate.lua`. **Namespace:** `apostate`. **Class docs:** `.claude/classes/apostate.md`
+
+---

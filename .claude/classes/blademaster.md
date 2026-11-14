@@ -1334,3 +1334,26 @@ them, and they need different answers:
 **So the keeper is the herb saving**, and it only had to be made to behave: the defence being TIMED
 is exactly why it re-fires, and the pre-v4.7.315 guard was fed by the game's attempt echo, so it
 could not close until the command had made the round trip -- six DEAF in 0.15s for one trance.
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Blademaster Combat System
+
+3 modes: double-prep (`bmd`), quad-prep (`bmdq`), brokenstar (`bmbs`), plus group (`bmgroup`). Lightning/Ice phase system for damage kills.
+
+**PvP offense is keypress-driven.** `ataxia_promptCommands` re-dispatches every prompt only when
+`ataxiaBasher.enabled` (the PvE basher). `blademaster.retryTick` (v4.7.275) keeps swinging for
+`config.retryWindow` (12s) after the last **manual** press — anchored to `markManual()`, not to the
+last run, so it cannot sustain itself. Toggle: **`bmretry on|off|<seconds>`**.
+
+**`queue addclear freestand` requires STANDING.** An entry that cannot satisfy it sits until the
+next dispatch's `addclear` *replaces* it — mashing the alias while prone queues one attack ten
+times, not ten attacks.
+
+**Full documentation**: See `memory/blademaster.md` (strategies, phase system, helper functions, config, brokenstar kill route, the FITNESS/weariness deadlock)
+
+**Key file:** `blademaster/005_CC_BM_Ice.lua`. **Namespace:** `blademaster`. **Class docs:** `.claude/classes/blademaster.md`
+
+---

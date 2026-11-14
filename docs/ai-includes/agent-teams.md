@@ -370,3 +370,57 @@ grep -rl "shaman\|tzantza\|curseward" src_new/triggers/levi_ataxia/for_levi/levi
 - `CLAUDE.md` -- Main project documentation (Agent Teams quick reference section)
 - `.claude/AGENTS.md` -- Coding instructions for combat systems
 - `.claude/classes/` -- Per-class mechanics documentation (26 classes)
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Agent Teams
+
+Claude Code agent teams enable parallel development across isolated combat subsystems. See `docs/ai-includes/agent-teams.md` for the full guide.
+
+### Quick Reference
+
+**When to use**:
+- Parallel class system development (e.g., shaman + blademaster simultaneously)
+- Cross-system feature rollouts (e.g., adding V3 tracking to multiple classes)
+- Parallel code review of independent subsystems
+- Documentation sprints across multiple class files
+
+**When NOT to use**:
+- Single class edits, threshold tweaks, trigger fixes
+- Sequential debugging (cause-and-effect tracing)
+- Changes to shared `ataxia/` core files (serialize through lead)
+
+**File ownership rule**: Each teammate owns a class directory under `levi_scripts/`. The `ataxia/` core (affliction tracking, curing, balance) is shared -- coordinate through the team lead before modifying.
+
+**Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
+
+### Porting Foreign Combat Scripts
+
+**Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
+
+**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has no writer for `tLimbs` (no file defines it since 3c312975; triggers 392 and 393 threw on it until v4.7.479) — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
+
+**Prevention checklist for ported code:**
+1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`
+2. If no writes found, the table is dead — map to the canonical source (usually `lb[target].hits` for limb data, `tAffs` for afflictions)
+3. For file-scope `local` state tables, verify they are reset at the top of the per-tick entry point — stale sentinels from prior ticks cause phantom actions
+4. When two functions must agree on a threshold (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags — don't mix conventions from the source and destination systems
+5. Never write a new offense file (>200 lines) in a single pass — write namespace + calc first, build, then add each form's logic incrementally
+
+```lua
+-- BAD: Assumed tLimbs was populated (it wasn't)
+local tl = tLimbs
+gm.llFLASH = (tl.LL + ld.shikFlashheel >= 100)
+
+-- GOOD: Read from canonical trigger-fed source
+local function getLimb(key)
+  if not target or not lb or not lb[target] or not lb[target].hits then return 0 end
+  return lb[target].hits[LIMB_NAMES[key]] or 0
+end
+gm.LL = getLimb("LL")
+gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
+```
+
+---

@@ -758,3 +758,15 @@ level at a time), so it was both the cheapest to leave and the slowest to clear.
 The low levels are parked on purpose: `Algedonic.AntiPsion` prioaffs mind and body at 2+ stacks, and
 `CURING PRIOAFF` is a TEMPORARY prioritisation that writes nothing stored -- so the parked base and
 the prioaff are not in conflict, they are the two halves of "ignore it until it matters".
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Psion Combat System
+
+Weave-based combat with 2 modes (mind/flurry) and 3 simultaneous kill routes: Psi Excise (mana kill), Deconstruct (unweave execute), Flurry (damage burst). Unified `psion` namespace with V3 integration and rebounding handling.
+
+**Full documentation**: See `memory/psion.md` (kill routes, weave selection priority, rebounding bypass rules, V3 integration, config)
+
+**Key file:** `psion/001_Levi_Psion_Logic.lua`. **Namespace:** `psion`. **Class docs:** `.claude/classes/psion.md`

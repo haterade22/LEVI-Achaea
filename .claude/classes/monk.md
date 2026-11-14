@@ -1931,3 +1931,34 @@ numbers: spiked knuckles (`hand_to_hand` 3, +35% Tekura punch damage: TK6 learns
 hits, `tekura6.classifyHit`, and TKD reads it, `tekura.punchDamage`), the Intellect Crown
 (`faster_mindlock`, MIND LOCK 40% faster; no MIND LOCK reading of ours), the steel armband of the
 Fist (`tekura_accuracy` 3) (v4.7.494).
+
+---
+
+> Moved verbatim from `CLAUDE.md` on 2026-11-13 (`docs/adrs/002-knowledge-delivery-tiers.md`). Until then every session loaded this text. It is not yet reconciled with the other documents of this subject: where they disagree, check the code or the game source, then correct the wrong one.
+
+## Tekura Monk Combat System
+
+Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). Both use `combo target <kick> <punch1> <punch2>` format with break-guarded prep phases.
+
+**Full documentation**: See `memory/tekura.md` (phases, break guards, kai modes, candidate pools, limb attack mapping, config)
+
+**Key files:** `tekura/002_Tekura_6Limb_Offense.lua` (TK6), `tekura/001_Tekura_Offense.lua` (TKD). **Namespace:** `tekura6` / `tekura`.
+
+**Aliases:** `zz` = TK6 with kai surge, `xx` = legacy TKD, `vv` = TK6 with kai cripple, all with a Tekura
+stance. With none (a Shikudo), `zz`/`xx` run the dispatch offense (`shikudo/006`) and `vv` its Telepathy
+variant, `shikudo.dispatchMind` (`shikudo/011`, v4.7.420).
+
+**Kill route (TK6):** Prep all 6 limbs to 86%+ → Break arms+torso (Horse stance) → Wrench torso + break legs (Bear stance) → Backbreaker.
+
+**Kai modes:** `tekura6.config.kaiMode` — `"surge"` (45 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
+
+**The dismount is paid for (v4.7.419).** TK6 sends it only when `ataxia_kaiAfford` (monk/004) passes;
+unknown kai is not enough. Since v4.7.420 trigger 265 records whose mount the flag is
+(`ataxiaTemp.mountedWho`, matched with either name starting the other, `ownsMount`, `tekura/002`:281, and completed by `updateTarget`): a
+flag recorded for another target is no mount (no dismount, no kai, `tk6status` NO), and one recorded for this
+target counts even if it was up when they became the target. A known rider with kai short gets prep instead
+(echoed once). Only an ownerless flag still uses the seen-down-then-up inference (`tk6status`: YES?), and there
+is no second dismount while our surge holds the target (`ataxiaTemp.kaiSurgeWho`).
+The kaido aliases warn when kai is known short and still send; `kc` falls back to MIND CRUSH.
+
+---
