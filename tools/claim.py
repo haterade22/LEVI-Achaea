@@ -1,49 +1,67 @@
 """Claim shared work, so that two parallel sessions do not fix the same thing (CLAUDE.md, Rule A).
 
-    python -B tools/claim.py take <name> --as <you> [--work "<text>"]   # before a fix or a feature
-    python -B tools/claim.py take <name> --as <you> --over              # the owner is not in ListAgents
-    python -B tools/claim.py ci-fail <step id> --as <you>               # a CI step failed: main or yours?
-    python -B tools/claim.py pushed --as <you>                          # right after a push to main
-    python -B tools/claim.py release <name> --as <you>                  # the work is on main, or you stop
-    python -B tools/claim.py release --all-mine --as <you>              # after a compaction
-    python -B tools/claim.py list
+    C take <claim> --as <you> [--work "<text>"]    # before a fix or a feature
+    C take <claim> --over <generation> --as <you>  # the owner is not in ListAgents (TAKEN prints this command)
+    C ci-fail <step id> --as <you>                 # a CI step failed: main or yours? Run it before you diagnose
+    C pushed --as <you> [--sha <commit>]           # right after a push to main
+    C release <claim> --as <you>                   # the work is on main, or you stop
+    C list [--as <you>]                            # every claim, or yours (after a compaction)
+
+C is `C:/Python314/python.exe -B tools/claim.py`, the same text in Git Bash and in PowerShell. <you> is your
+name as ListAgents shows it. <claim> is a short name of the outcome: letters, digits, - and _; the script
+makes it lower case, so Fix-X and fix-x are one claim.
 
 Shared work is one problem or one outcome that another session can also start: a red main, a feature,
 a bug fix. Two sessions that edit the same file do not do shared work; the rebase handles that. Only a
-top-level session claims. A subagent never claims work; it reports a red main to its parent. <you> is
-your name as ListAgents shows it.
+top-level session claims. A subagent never claims work; it reports a red main to its parent.
 
-The claims folder is C:\\Users\\mikew\\source\\repos\\Achaea\\.claims (environment variable LEVI_CLAIMS_DIR
-overrides it). It is outside every worktree and outside git, so every session sees the same claims. One
-claim is one sub-folder, made with one atomic mkdir: of two sessions that take the same name at the same
-time, exactly one wins. The folder holds owner.txt (owner, work, time in UTC).
+Each result ends with a NEXT: line. Do what it says.
 
-take: makes the claim, then lists every other claim. Read that list: another session can hold the same
-work under another name. TAKEN (exit 1) means that another session owns the work. Then do work that
-does not depend on it, or stop and report.
+The claims are rows in one SQLite file, claims.db, in C:\\Users\\mikew\\source\\repos\\Achaea\\.claims (the
+environment variable LEVI_CLAIMS_DIR overrides the folder). The folder is outside every worktree and outside
+git, so every session sees the same claims. Each command is one transaction: two commands never interleave,
+and a command that fails changes nothing. Each change of owner gives the claim a new generation number.
 
-take --over: this script cannot call ListAgents (that is a Claude tool). Check the owner there. An idle
-owner is live: leave the claim. If the owner is not in ListAgents, the claim is dead. --over makes your
-claim <name>.<you> first, and only then removes the dead folder, so the work is never unclaimed.
+take: makes the claim, then lists every other claim. Read that list. If another claim is the same outcome
+under another name, yours is the later one: release it and treat the other claim as TAKEN.
+
+TAKEN (exit 1): another session owns the work. The script puts you on the waiter list of the claim. Look for
+the owner in ListAgents (the script cannot: ListAgents is a Claude tool). An idle owner is live: message it,
+then do work that does not depend on the claim, or end your turn; its reply wakes you. Never take the claim
+of a listed owner. If the owner is not listed, the claim is dead: run the takeover command that TAKEN printed.
+
+take --over <generation>: takes a dead claim, but only if its generation is still the one you saw. If
+another session took the claim first, the generation changed and you get TAKEN. Of two takers, one wins.
+
+The owner's duties: when a session asks about your claim, reply at once: you work on it, or you release it
+and say so. release prints the waiter list: message each waiter that the claim is free.
 
 ci-fail: fetches origin and reads the latest build.yml run on main (gh run list --workflow build.yml
---branch main --limit 1). It waits while that run is in progress or is for an older commit than
-origin/main, at most 6 tries 30 s apart, then says UNKNOWN (exit 2). Main green: the failure is on your
-branch: YOURS, no claim. Main red after a push (a main-pushed-* claim exists): the oldest pusher owns it,
-no claim. Main red otherwise: it claims main-<step id>. Give the step id exactly as tools/ci_local.py
-prints it.
+--branch main --limit 1). It waits while that run is in progress or is for an older commit than origin/main,
+30 s between tries and 240 s in all. Main green: YOURS, the failure is on your branch, no claim. Main red:
+a session that already holds a main-<step> claim fixes it; if there is none, the first main-pushed-* claim
+owns it; if there is none, the script claims main-<step id> for you. Give the step id exactly as
+tools/ci_local.py prints it. NOT RUN or UNKNOWN (exit 2) means that main was not read: git or gh is missing,
+gh is not logged in, the network is down, or the run was cancelled. Then do not diagnose the step: do work
+that does not depend on it, or stop and report.
 
-pushed: claims main-pushed-<you>. Release it when the build.yml run of that push is green.
+pushed: claims main-pushed-<first 10 characters of the commit>, from HEAD or from --sha. Each push is its
+own claim. Release a push claim only when the build.yml run of that commit, or of your fix for it, is green.
 
-release: removes only a claim whose owner.txt names you.
+release: removes only a claim that you own, and says RELEASED only after the store confirms it.
+
+After a compaction: run list --as <you>. Keep each claim that you still work on and each push that is not
+green. Release the others, one by one.
 
 Exit status: 0 = yours / done, 1 = TAKEN or owned by another session, 2 = refused, NOT RUN or UNKNOWN.
 """
 import argparse
+import contextlib
+import functools
 import json
 import os
 import re
-import shutil
+import sqlite3
 import subprocess
 import sys
 import time
@@ -52,19 +70,33 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_ROOT = r"C:\Users\mikew\source\repos\Achaea\.claims"
 ENV = "LEVI_CLAIMS_DIR"
-NAME = re.compile(r"[A-Za-z0-9_-]+")   # no dot: <name>.<you> is the takeover folder
-PUSHED = "main-pushed-"
-TRIES, WAIT = 6, 30
+DB = "claims.db"
+COMMAND = "C:/Python314/python.exe -B tools/claim.py"
+KEY = re.compile(r"[a-z0-9_-]+")
+SESSION = re.compile(r"[A-Za-z0-9_-]+")
+SHA = re.compile(r"[0-9a-f]{10,40}")
+AUTH = re.compile(r"auth|401|credential|log ?in", re.I)
+MAIN, PUSHED = "main-", "main-pushed-"
+WAIT, LIMIT, CALL = 30, 240, 20   # seconds: between tries, for all tries of ci-fail, for one git or gh call
+BUSY = 10                         # seconds that a command waits for another command's transaction
+MISSING = "the program is not installed or not on PATH"
 
 
-def run(args, cwd=ROOT, wait=60):
-    """(exit status, stdout) or (None, "") when the program could not run or ran out of time."""
+def run(args, cwd=ROOT, wait=CALL):
+    """(exit status, stdout, first line of stderr). Status None: the program did not run; the text says why."""
     try:
-        done = subprocess.run(args, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                              timeout=wait, env=dict(os.environ, GIT_TERMINAL_PROMPT="0"))
-    except (OSError, subprocess.TimeoutExpired):
-        return None, ""
-    return done.returncode, done.stdout.decode("utf-8", "replace")
+        done = subprocess.run(args, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              timeout=wait, env=dict(os.environ, GIT_TERMINAL_PROMPT="0", LC_ALL="C"))
+    except FileNotFoundError:
+        return None, "", MISSING
+    except (OSError, subprocess.TimeoutExpired) as err:
+        return None, "", type(err).__name__
+    err = done.stderr.decode("utf-8", "replace").strip().splitlines()
+    return done.returncode, done.stdout.decode("utf-8", "replace"), (err[0][:200] if err else "")
+
+
+def why(status, err):
+    return err or "exit %s" % status
 
 
 def stamp():
@@ -77,81 +109,122 @@ def claims_root():
 
 def root_problem(root, run=run):
     """A reason to refuse the claims folder, or None. A folder inside a git tree hides claims from other trees."""
-    parent = os.path.dirname(os.path.abspath(root))
-    status, text = run(["git", "-C", parent, "rev-parse", "--is-inside-work-tree"])
+    if not os.path.isabs(root):
+        return "%s is not an absolute path; every session must see the same claims folder" % root
+    at = os.path.abspath(root)
+    while not os.path.isdir(at) and os.path.dirname(at) != at:
+        at = os.path.dirname(at)   # git is asked at the nearest folder that exists; the check makes nothing
+    status, text, err = run(["git", "-C", at, "rev-parse", "--is-inside-work-tree"])
     if status == 0 and text.strip() == "true":
         return "%s is inside a git work tree; the claims folder must be outside every tree" % root
-    return None
+    if status is not None and status != 0 and "not a git repository" in err:
+        return None
+    return "git could not say if %s is outside every work tree (%s)" % (root, why(status, err))
 
 
 # ---------------------------------------------------------------------------------------------
-# the folder
+# the store
 # ---------------------------------------------------------------------------------------------
 
 
-def write_owner(path, me, work, now):
-    tmp = os.path.join(path, "owner.txt.tmp")
-    with open(tmp, "w", encoding="utf-8") as fh:
-        fh.write("owner: %s\nwork: %s\ntime: %s\n" % (me, " ".join((work or "").split()), now()))
-    os.replace(tmp, os.path.join(path, "owner.txt"))
-
-
-def read_owner(path):
-    found = {"owner": "(unknown: no owner.txt yet)", "work": "", "time": ""}
+@contextlib.contextmanager
+def store(root):
+    """One transaction on <root>/claims.db. An exception inside it changes nothing."""
+    os.makedirs(root, exist_ok=True)
+    db = sqlite3.connect(os.path.join(root, DB), timeout=BUSY, isolation_level=None)
+    db.row_factory = sqlite3.Row
     try:
-        with open(os.path.join(path, "owner.txt"), encoding="utf-8") as fh:
-            for line in fh:
-                key, _, value = line.partition(":")
-                if key.strip() in found:
-                    found[key.strip()] = value.strip()
-    except OSError:
-        pass
-    return found
+        db.execute("BEGIN IMMEDIATE")
+        db.execute("CREATE TABLE IF NOT EXISTS claims (key TEXT PRIMARY KEY, gen INTEGER NOT NULL, owner TEXT NOT NULL,"
+                   " work TEXT NOT NULL, time TEXT NOT NULL, waiters TEXT NOT NULL)")
+        db.execute("CREATE TABLE IF NOT EXISTS counter (id INTEGER PRIMARY KEY CHECK (id = 1), gen INTEGER NOT NULL)")
+        db.execute("INSERT OR IGNORE INTO counter (id, gen) VALUES (1, 0)")
+        yield db
+        db.execute("COMMIT")
+    except BaseException:
+        if db.in_transaction:
+            db.execute("ROLLBACK")
+        raise
+    finally:
+        db.close()
 
 
-def all_folders(root):
-    try:
-        return sorted(f for f in os.listdir(root) if os.path.isdir(os.path.join(root, f)))
-    except OSError:
-        return []
+def guarded(command):
+    """A store that does not answer is exit 2, never a success and never an empty list."""
+    @functools.wraps(command)
+    def safe(*args, **kwargs):
+        try:
+            return command(*args, **kwargs)
+        except (sqlite3.Error, OSError) as err:
+            out = kwargs.get("out", print)
+            out("claim: REFUSED -- the claims store in %s did not answer (%s: %s). This command changed nothing."
+                % (kwargs.get("root") or claims_root(), type(err).__name__, err))
+            out("NEXT: run the command again. If it fails again, stop and report. Do not start the work.")
+            return 2
+    return safe
 
 
-def folders_of(root, name):
-    """The claim folders of one name: <name>, and <name>.<owner> after a takeover."""
-    return [f for f in all_folders(root) if f == name or f.startswith(name + ".")]
+def row(db, key):
+    return db.execute("SELECT * FROM claims WHERE key = ?", (key,)).fetchone()
 
 
-def describe(root, folder):
-    owner = read_owner(os.path.join(root, folder))
-    return "%s  %s  %s  %s" % (folder, owner["owner"], owner["time"] or "?", owner["work"])
+def rows(db):
+    """Every claim, the first one made first. A takeover keeps the place of the claim."""
+    return db.execute("SELECT * FROM claims ORDER BY rowid").fetchall()
 
 
-def show_others(root, mine, out):
-    others = [f for f in all_folders(root) if f != mine]
-    if not others:
-        out("claim: no other claims.")
-        return
-    out("claim: the other claims (is one of them the same work?):")
-    for folder in others:
-        out("  " + describe(root, folder))
+def next_gen(db):
+    db.execute("UPDATE counter SET gen = gen + 1 WHERE id = 1")
+    return db.execute("SELECT gen FROM counter WHERE id = 1").fetchone()[0]
 
 
-def report_taken(root, name, folder, out):
-    owner = read_owner(os.path.join(root, folder))
-    out("claim: TAKEN by %s since %s: %s" % (owner["owner"], owner["time"] or "?", owner["work"] or folder))
-    out("  Do work that does not depend on it, or stop and report.")
-    out("  If %s is not in ListAgents, the claim is dead: claim.py take %s --over --as <you>" % (owner["owner"], name))
+def claims_now(root):
+    with store(root) as db:
+        return [dict(r) for r in rows(db)]
 
 
-def bad_names(out, me, *names):
-    for name in names:
-        if not NAME.fullmatch(name or ""):
-            out("claim: REFUSED -- %r is not a claim name (letters, digits, - and _ only)" % name)
-            return True
-    if not NAME.fullmatch(me or ""):
+def claim_in(db, key, me, work, over, now):
+    """Take, or take over, inside one transaction: ('new' | 'mine' | 'over' | 'taken', the claim as it was)."""
+    held = row(db, key)
+    if held is None:
+        db.execute("INSERT INTO claims (key, gen, owner, work, time, waiters) VALUES (?, ?, ?, ?, ?, '')",
+                   (key, next_gen(db), me, work, now()))
+        return "new", None
+    if held["owner"] == me:
+        return "mine", held
+    if over is not None and over == held["gen"]:
+        waiters = " ".join(w for w in held["waiters"].split() if w != me)
+        db.execute("UPDATE claims SET gen = ?, owner = ?, work = ?, time = ?, waiters = ? WHERE key = ?",
+                   (next_gen(db), me, work or held["work"], now(), waiters, key))
+        return "over", held
+    if me not in held["waiters"].split():
+        db.execute("UPDATE claims SET waiters = ? WHERE key = ?", ((held["waiters"] + " " + me).strip(), key))
+    return "taken", held
+
+
+def describe(claim):
+    return "%s  %s  %s  generation %d  %s" % (claim["key"], claim["owner"], claim["time"], claim["gen"], claim["work"])
+
+
+def say_taken(held, me, out):
+    out("claim: TAKEN -- " + describe(held))
+    out("  You are on its waiter list: its owner messages you when it releases the claim.")
+    out("NEXT: look for %s in ListAgents. If it is listed (an idle owner is live), message it, then do work that does not "
+        "depend on this claim, or end your turn. If it is not listed, the claim is dead: run `%s take %s --over %d --as %s`"
+        % (held["owner"], COMMAND, held["key"], held["gen"], me))
+
+
+def bad_names(out, me, *keys):
+    for key in keys:
+        if not KEY.fullmatch(key or ""):
+            out("claim: REFUSED -- %r is not a claim name (letters, digits, - and _ only)" % key)
+            break
+    else:
+        if SESSION.fullmatch(me or ""):
+            return False
         out("claim: REFUSED -- %r is not a session name (letters, digits, - and _ only)" % me)
-        return True
-    return False
+    out("NEXT: run the command again with a valid name.")
+    return True
 
 
 # ---------------------------------------------------------------------------------------------
@@ -159,153 +232,178 @@ def bad_names(out, me, *names):
 # ---------------------------------------------------------------------------------------------
 
 
-def take(name, me, work="", over=False, root=None, out=print, now=stamp):
+@guarded
+def take(key, me, work="", over=None, root=None, out=print, now=stamp, then=None):
     root = root or claims_root()
-    if bad_names(out, me, name):
+    key = (key or "").lower()
+    if bad_names(out, me, key):
         return 2
-    os.makedirs(root, exist_ok=True)
-    if over:
-        mine = name + "." + me
-        try:
-            os.mkdir(os.path.join(root, mine))
-        except FileExistsError:
-            pass
-        write_owner(os.path.join(root, mine), me, work, now)
-        for folder in folders_of(root, name):
-            if folder != mine:
-                out("claim: removed the dead claim " + describe(root, folder))
-                shutil.rmtree(os.path.join(root, folder), ignore_errors=True)
-        out("claim: CLAIMED %s for %s" % (mine, me))
-        show_others(root, mine, out)
-        return 0
-    path = os.path.join(root, name)
-    try:
-        os.mkdir(path)
-    except FileExistsError:
-        report_taken(root, name, name, out)
+    with store(root) as db:
+        how, held = claim_in(db, key, me, " ".join((work or "").split()), over, now)
+        others = [r for r in rows(db) if r["key"] != key]
+    if how == "taken":
+        if over is not None:
+            out("claim: %s changed after you looked: it is generation %d now, not %d." % (key, held["gen"], over))
+        say_taken(held, me, out)
         return 1
-    taken_over = [f for f in folders_of(root, name) if f != name]
-    if taken_over:
-        try:
-            os.rmdir(path)
-        except OSError:
-            pass
-        report_taken(root, name, taken_over[0], out)
-        return 1
-    write_owner(path, me, work, now)
-    out("claim: CLAIMED %s for %s" % (name, me))
-    show_others(root, name, out)
+    if how == "over":
+        out("claim: took over the dead claim of %s" % held["owner"])
+    if how == "mine":
+        out("claim: %s is already yours (since %s)" % (key, held["time"]))
+    else:
+        out("claim: CLAIMED %s for %s" % (key, me))
+    if then:
+        out(then)
+    elif others:
+        out("claim: the other claims:")
+        for other in others:
+            out("  " + describe(other))
+        out("NEXT: read the other claims. If one of them is the same outcome as yours, run `%s release %s --as %s` and "
+            "treat that claim as TAKEN. If none is, do the work." % (COMMAND, key, me))
+    else:
+        out("NEXT: no other claims. Do the work. Release the claim when the work is on main, or when you stop.")
     return 0
 
 
-def release(name, me, root=None, out=print):
+@guarded
+def release(key, me, root=None, out=print):
     root = root or claims_root()
-    if bad_names(out, me, name):
+    key = (key or "").lower()
+    if bad_names(out, me, key):
         return 2
-    found = folders_of(root, name)
-    mine = [f for f in found if read_owner(os.path.join(root, f))["owner"] == me]
-    for folder in mine:
-        shutil.rmtree(os.path.join(root, folder), ignore_errors=True)
-        out("claim: RELEASED " + folder)
-    if not mine and found:
-        out("claim: REFUSED -- not yours: " + describe(root, found[0]))
+    with store(root) as db:
+        held = row(db, key)
+        if held is not None and held["owner"] == me:
+            done = db.execute("DELETE FROM claims WHERE key = ? AND owner = ?", (key, me)).rowcount
+            if done != 1:
+                raise sqlite3.Error("the delete of %s removed %d rows" % (key, done))
+    if held is None:
+        out("claim: nothing to release: no claim %s" % key)
+    elif held["owner"] != me:
+        out("claim: REFUSED -- not yours: " + describe(held))
+        out("NEXT: leave it. Only its owner releases it.")
         return 1
-    if not found:
-        out("claim: nothing to release: no claim %s" % name)
+    else:
+        out("claim: RELEASED " + key)   # after the commit: the store confirmed the removal
+        if held["waiters"]:
+            out("NEXT: message each waiter that %s is free: %s" % (key, ", ".join(held["waiters"].split())))
+            return 0
+    out("NEXT: nothing more for this claim.")
     return 0
 
 
-def release_all_mine(me, root=None, out=print):
+@guarded
+def pushed(me, sha=None, root=None, out=print, run=run, now=stamp):
     root = root or claims_root()
     if bad_names(out, me):
         return 2
-    mine = [f for f in all_folders(root) if read_owner(os.path.join(root, f))["owner"] == me]
-    for folder in mine:
-        shutil.rmtree(os.path.join(root, folder), ignore_errors=True)
-        out("claim: RELEASED " + folder)
-    if not mine:
-        out("claim: %s holds no claims" % me)
-    return 0
-
-
-def pushed(me, root=None, out=print, now=stamp):
-    root = root or claims_root()
-    if bad_names(out, me):
+    seen = ""
+    if not sha:
+        status, text, err = run(["git", "-C", ROOT, "rev-parse", "HEAD"])
+        sha, seen = (text.strip(), "") if status == 0 else ("", " (git rev-parse HEAD: %s)" % why(status, err))
+    sha = sha.lower()
+    if not SHA.fullmatch(sha):
+        out("claim: REFUSED -- no commit to claim: %r is not a commit id%s" % (sha, seen))
+        out("NEXT: run pushed again with --sha <the full id of the commit that you pushed>.")
         return 2
-    name = PUSHED + me
-    if os.path.isdir(os.path.join(root, name)) and read_owner(os.path.join(root, name))["owner"] == me:
-        out("claim: %s is already yours. Release it when the build.yml run of your push is green." % name)
-        return 0
-    status = take(name, me, work="a push to main: a red build.yml run on main is mine", root=root, out=out, now=now)
-    if status == 0:
-        out("claim: release it when the build.yml run of your push is green: claim.py release %s --as %s" % (name, me))
-    return status
+    key = PUSHED + sha[:10]
+    return take(key, me, work="a push to main, commit %s: a red build.yml run of it is mine" % sha, root=root, out=out,
+                now=now, then="NEXT: watch the build.yml run of %s. Only when it is green, run `%s release %s --as %s`. "
+                              "If it is red, run ci-fail." % (sha[:10], COMMAND, key, me))
 
 
 def latest_main_run(run):
-    """('green' | 'red' | 'wait', note) for the newest build.yml run on main, or (None, why)."""
-    status, _ = run(["git", "-C", ROOT, "fetch", "--quiet", "origin", "main"])
+    """('green' | 'red', short sha), ('wait', why) or ('stop', the NOT RUN or UNKNOWN line)."""
+    status, _, err = run(["git", "-C", ROOT, "fetch", "--quiet", "origin", "main"])
     if status != 0:
-        return None, "fetch"
-    status, head = run(["git", "-C", ROOT, "rev-parse", "refs/remotes/origin/main"])
-    head = head.strip() if status == 0 else ""
-    status, text = run(["gh", "run", "list", "--workflow", "build.yml", "--branch", "main", "--limit", "1",
-                        "--json", "headSha,status,conclusion"])
+        return "stop", "NOT RUN -- git fetch origin main failed (%s). Nothing was checked." % why(status, err)
+    status, head, err = run(["git", "-C", ROOT, "rev-parse", "refs/remotes/origin/main"])
+    head = head.strip()
+    if status != 0 or not head:
+        return "stop", "NOT RUN -- git rev-parse origin/main failed (%s). Nothing was checked." % why(status, err)
+    status, text, err = run(["gh", "run", "list", "--workflow", "build.yml", "--branch", "main", "--limit", "1",
+                             "--json", "headSha,status,conclusion"])
+    if status is None and err == MISSING:
+        return "stop", "UNKNOWN -- gh did not run: %s. The state of main was not read." % err
+    if status != 0:
+        if status is not None and AUTH.search(err):
+            return "stop", "UNKNOWN -- gh is not logged in (%s). The state of main was not read." % err
+        return "wait", "gh failed (%s)" % why(status, err)
     try:
-        runs = json.loads(text) if status == 0 else None
+        runs = json.loads(text)
     except ValueError:
         runs = None
-    if not runs or not head:
+    if not runs:
         return "wait", "gh gave no build.yml run on main"
     latest = runs[0]
     if latest.get("headSha") != head:
         return "wait", "the latest build.yml run is for %s, origin/main is %s" % (str(latest.get("headSha"))[:10], head[:10])
     if latest.get("status") != "completed":
         return "wait", "the build.yml run of %s is %s" % (head[:10], latest.get("status"))
-    return ("green" if latest.get("conclusion") == "success" else "red"), head[:10]
+    if latest.get("conclusion") == "success":
+        return "green", head[:10]
+    if latest.get("conclusion") in ("failure", "timed_out"):
+        return "red", head[:10]
+    return "stop", ("UNKNOWN -- the build.yml run of %s ended as %r: that is not a pass and not a failure of the code."
+                    % (head[:10], latest.get("conclusion")))
 
 
-def ci_fail(step, me, root=None, out=print, run=run, sleep=time.sleep, tries=TRIES, wait=WAIT, now=stamp):
+@guarded
+def ci_fail(step, me, root=None, out=print, run=run, sleep=time.sleep, clock=time.monotonic, wait=WAIT, limit=LIMIT,
+            now=stamp):
     root = root or claims_root()
+    step = (step or "").lower()
     if bad_names(out, me, step):
         return 2
-    note = ""
-    for attempt in range(tries):
-        if attempt:
-            sleep(wait)
+    end = clock() + limit
+    while True:
         verdict, note = latest_main_run(run)
-        if verdict is None:
-            out("claim: NOT RUN -- git fetch origin main failed (offline?). Nothing was checked.")
-            return 2
         if verdict != "wait":
             break
-    else:
-        out("claim: UNKNOWN -- %s after %d tries. Run ci-fail again later; claim nothing yet." % (note, tries))
+        if clock() + wait > end:
+            verdict, note = "stop", "UNKNOWN -- %s, after %d s of tries." % (note, limit)
+            break
+        sleep(wait)
+    if verdict == "stop":
+        out("claim: " + note)
+        out("NEXT: do not diagnose step %s yet. Do work that does not depend on it, or stop and report. "
+            "Run ci-fail again when git and gh answer." % step)
         return 2
     if verdict == "green":
         out("claim: main is green at %s. YOURS - fix it on your branch, no claim." % note)
+        out("NEXT: fix step %s on your branch." % step)
         return 0
-    pushers = [f for f in all_folders(root) if f.startswith(PUSHED)]
-    if pushers:
-        oldest = min(pushers, key=lambda f: (read_owner(os.path.join(root, f))["time"] or "~", f))
-        owner = read_owner(os.path.join(root, oldest))["owner"]
-        if owner == me:
-            out("claim: main is RED at %s after your push. It is yours to fix." % note)
-            return 0
-        out("claim: main is RED at %s after a push by %s (%s). That push owns it: do not fix it." % (note, owner, oldest))
-        out("  If %s is not in ListAgents, the claim is dead: claim.py take %s --over --as <you>" % (owner, oldest))
-        return 1
+    with store(root) as db:
+        claims = rows(db)
+        own = next((r for r in claims if r["key"] == MAIN + step and r["owner"] == me), None)
+        fixer = next((r for r in claims if not r["key"].startswith(PUSHED) and r["key"].startswith(MAIN)
+                      and r["owner"] != me), None)
+        pusher = next((r for r in claims if r["key"].startswith(PUSHED)), None)
+        key = (own or fixer or pusher or {"key": MAIN + step})["key"]
+        how, held = claim_in(db, key, me, "red main: CI step %s" % step, None, now)
     out("claim: main is RED at %s." % note)
-    return take("main-" + step, me, work="red main: CI step %s" % step, root=root, out=out, now=now)
+    if how == "taken":
+        out("claim: %s" % ("the session that pushed owns the red main." if key.startswith(PUSHED)
+                           else "another session already fixes the red main."))
+        say_taken(held, me, out)
+        return 1
+    if key.startswith(PUSHED):
+        out("claim: it follows your push (%s). It is yours to fix." % key)
+        out("NEXT: fix main. Release %s only when the build.yml run of your fix is green." % key)
+        return 0
+    out("claim: %s" % ("%s is already yours" % key if how == "mine" else "CLAIMED %s for %s" % (key, me)))
+    out("NEXT: diagnose and fix step %s on main. Release %s when main is green." % (step, key))
+    return 0
 
 
-def list_claims(root=None, out=print):
+@guarded
+def list_claims(me=None, root=None, out=print):
     root = root or claims_root()
-    folders = all_folders(root)
-    if not folders:
-        out("claim: no claims in %s" % root)
-    for folder in folders:
-        out(describe(root, folder))
+    claims = [c for c in claims_now(root) if me is None or c["owner"] == me]
+    if not claims:
+        out("claim: %s" % ("%s holds no claims" % me if me else "no claims in %s" % root))
+    for found in claims:
+        out(describe(found) + ("  waiters: " + found["waiters"] if found["waiters"] else ""))
     return 0
 
 
@@ -315,37 +413,35 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="command", required=True)
     p_take = sub.add_parser("take", help="claim a fix or a feature")
-    p_take.add_argument("name")
+    p_take.add_argument("claim")
     p_take.add_argument("--work", default="", help="one line: what the work is")
-    p_take.add_argument("--over", action="store_true", help="the owner is not in ListAgents: take the dead claim")
+    p_take.add_argument("--over", type=int, metavar="GENERATION",
+                        help="the owner is not in ListAgents: take the dead claim, if it still has this generation")
     p_ci = sub.add_parser("ci-fail", help="a CI step failed: is it main or your branch?")
     p_ci.add_argument("step")
-    sub.add_parser("pushed", help="right after a push to main")
+    p_push = sub.add_parser("pushed", help="right after a push to main")
+    p_push.add_argument("--sha", help="the commit that you pushed (default: HEAD of this tree)")
     p_rel = sub.add_parser("release", help="remove your claim")
-    p_rel.add_argument("name", nargs="?")
-    p_rel.add_argument("--all-mine", action="store_true")
-    sub.add_parser("list", help="every claim")
-    for p in (p_take, p_ci, sub.choices["pushed"], p_rel):
-        p.add_argument("--as", dest="me", required=True, help="your name as ListAgents shows it")
+    p_rel.add_argument("claim")
+    p_list = sub.add_parser("list", help="every claim, or with --as only yours")
+    for p in (p_take, p_ci, p_push, p_rel, p_list):
+        p.add_argument("--as", dest="me", required=p is not p_list, help="your name as ListAgents shows it")
     args = ap.parse_args(argv)
     root = claims_root()
     problem = root_problem(root)
     if problem:
         print("claim: REFUSED -- " + problem)
+        print("NEXT: stop and report. Do not start the work.")
         return 2
     if args.command == "take":
-        return take(args.name, args.me, work=args.work, over=args.over, root=root)
+        return take(args.claim, args.me, work=args.work, over=args.over, root=root)
     if args.command == "ci-fail":
         return ci_fail(args.step, args.me, root=root)
     if args.command == "pushed":
-        return pushed(args.me, root=root)
+        return pushed(args.me, sha=args.sha, root=root)
     if args.command == "release":
-        if args.all_mine:
-            return release_all_mine(args.me, root=root)
-        if not args.name:
-            ap.error("release needs a name, or --all-mine")
-        return release(args.name, args.me, root=root)
-    return list_claims(root=root)
+        return release(args.claim, args.me, root=root)
+    return list_claims(me=args.me, root=root)
 
 
 if __name__ == "__main__":
