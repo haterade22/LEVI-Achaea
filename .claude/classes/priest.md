@@ -199,6 +199,13 @@ avoid:
   - "Letting voyria stick"
   - "Fighting in their sanctuary"
 
+shield_records: |
+  The game's records (2026-11-13, `kb/classes/shield.md`): 22 of the 28 Zeal records say they bypass a shield,
+  WRATH 2771, ASH 2765 (spiritburn) and REBUKE 2777 (HERESY gives inquisition) among them; only Devotion
+  CONGREGATION 2670 and PURIFY 2672 say a shield blocks them. Our `Algedonic.AntiPriest`
+  (`algedonic_defense_1.0/001_Anti_Priorities.lua`:853-878) still raises a shield at 2 or more of guilt,
+  spiritburn and tenderskin. No log we hold has a Priest fight, so this is open (`kb/CONFLICTS.md` #84).
+
 recommended_strategy: |
   Keep health above angel execute threshold.
   Kill their angel if it's doing significant damage.
