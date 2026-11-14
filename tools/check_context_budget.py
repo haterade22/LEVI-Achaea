@@ -149,11 +149,11 @@ def judge_moves(base_text, now_text, destination_rows, deleted_sections=(), corp
     moved, deleted, lost = [], [], []
     for row, count in gone.items():
         if row in destination_rows:
-            moved.append(row)
+            moved.extend([row] * count)
         elif allowed[row] >= count:
-            deleted.append(row)
+            deleted.extend([row] * count)
         else:
-            lost.append(row)
+            lost.extend([row] * count)
     missing = [token for token in identifiers(deleted) if token not in corpus]
     return {"left": sum(gone.values()), "moved": moved, "deleted": deleted, "lost": lost, "missing_identifiers": missing}
 

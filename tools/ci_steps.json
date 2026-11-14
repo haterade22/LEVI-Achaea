@@ -26,7 +26,7 @@
     {"id": "abadmin", "what": "the ABADMIN pages match kb/raw/abadmin", "argv": ["tools/kb_abadmin.py", "--check"]},
     {"id": "abadmin-test", "what": "the ABADMIN generator", "argv": ["tools/test_kb_abadmin.py"]},
     {"id": "fightlog-test", "what": "the fight-log importer", "argv": ["tools/test_fightlog_import.py"]},
-    {"id": "budget", "what": "CLAUDE.md is within its byte ceiling (docs/adrs/002); report-only until it is under 120,000 bytes", "argv": ["tools/check_context_budget.py"], "quick": true},
+    {"id": "budget", "what": "CLAUDE.md is within its byte ceiling (docs/adrs/002): new detail goes to its one home, not into that file", "argv": ["tools/check_context_budget.py"], "quick": true},
     {"id": "budget-test", "what": "the budget and the moves check", "argv": ["tools/test_check_context_budget.py"]},
     {"id": "githooks-test", "what": ".githooks/pre-push refuses the bad release pushes and lets the good ones go", "argv": ["tools/test_githooks.py"]},
     {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": ["V_TXT=$(cat version.txt", "muddler_project/mfile", "ataxiaVersion", "v${V_TXT//./[.]}[: ]"]},

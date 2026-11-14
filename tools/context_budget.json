@@ -2,9 +2,9 @@
   "about": [
     "Byte ceilings for the files Claude Code loads as instructions. See docs/adrs/002-knowledge-delivery-tiers.md.",
     "A ceiling only goes down: after a move out of the file, run tools/check_context_budget.py --lower.",
-    "strict false = an over-size file is reported and does not fail; it becomes true when CLAUDE.md is at or under 120,000 bytes."
+    "strict true since 2026-11-13 (CLAUDE.md reached 120,000 bytes or less): an over-size file fails the check."
   ],
-  "strict": false,
+  "strict": true,
   "headroom": 2048,
   "files": {
     "CLAUDE.md": {

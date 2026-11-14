@@ -32,6 +32,7 @@ Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers li
 | [05-commands.md](05-commands.md) | `mnem` subcommands and the `BOON CLAIM` intercept |
 | [06-history.md](06-history.md) | Local run history, the affix library, and the `mnem boons/affixes/library/quiet` reports |
 | [07-explorer.md](07-explorer.md) | The `mnem explore` auto-sweep: state machine, navigation, basher integration |
+| [00-reference-from-claude-md.md](00-reference-from-claude-md.md) | The 180 KB reference that was the Mnemosyne section of `CLAUDE.md` until 2026-11-13, moved verbatim. Not yet reconciled with the files above: where they disagree, check the code |
 
 ## Persistence
 

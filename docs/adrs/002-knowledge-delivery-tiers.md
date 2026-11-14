@@ -54,8 +54,8 @@ check is a step of `tools/ci_local.py` and of CI.
 - Target 1: 120,000 bytes, so that the whole file arrives in the maintainer's sessions.
 - Target 2: 40,000 bytes, so that it arrives whole on a 200K window. Then the ceiling is fixed.
 
-The check starts report-only (`"strict": false`), as every new gate here does, and becomes strict
-when target 1 is reached.
+The check started report-only (`"strict": false`), as every new gate here does, and became strict
+when target 1 was reached (2026-11-13).
 
 ### 3. Text that leaves `CLAUDE.md` is moved, not rewritten, and the move is proven
 
@@ -111,3 +111,15 @@ current size and ceiling.
 | 2026-11-13 | Before | 450,746 |
 | 2026-11-13 | Sections reordered (every-task rules first); false hook and agent claims removed | 450,440 |
 | 2026-11-13 | The one-home ladder replaces the "update every document" list and the Documentation Requirements section | 450,313 |
+| 2026-11-13 | Gear Audit (pilot) to `.claude/projects/gear-audit/README.md` | 446,967 |
+| 2026-11-13 | Mnemosyne to `.claude/projects/mnemosyne/00-reference-from-claude-md.md` | 266,815 |
+| 2026-11-13 | Basher, `bashStats`, mob damage to `.claude/projects/basher/00-reference-from-claude-md.md` | 223,187 |
+| 2026-11-13 | V3 tracking to `.claude/projects/affliction-tracking-v3/00-reference-from-claude-md.md` | 209,337 |
+| 2026-11-13 | Defense Systems and SLC to `.claude/projects/defense/README.md` | 175,997 |
+| 2026-11-13 | Afflictions, locks and SSC to `.claude/projects/curing/README.md` | 149,624 |
+| 2026-11-13 | Serpent to `.claude/classes/serpent.md` | 139,039 |
+| 2026-11-13 | Achaea Classes Reference to `.claude/classes/README.md` | 130,735 |
+| 2026-11-13 | Combat core, persistence, armour to `.claude/projects/{ataxia-core,persistence,armour}/README.md` | 105,763 |
+
+Target 1 (120,000 bytes) was reached on 2026-11-13, and the check is strict from that commit. Every move above was
+proven with `tools/check_context_budget.py --moves`: 0 rows lost. The proof line is in each commit message.

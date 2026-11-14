@@ -195,6 +195,11 @@ class Moves(unittest.TestCase):
         self.assertEqual(verdict["lost"], [])
         self.assertEqual(verdict["missing_identifiers"], ["gone_helper"])
 
+    def test_the_three_counts_add_up(self):
+        base = "same\nsame\nonly\nkeep\n"
+        verdict = cb.judge_moves(base, "keep\n", {"same"})
+        self.assertEqual((verdict["left"], len(verdict["moved"]), len(verdict["lost"])), (3, 2, 1))
+
     def test_nothing_left_is_reported_as_zero(self):
         self.assertEqual(cb.judge_moves(BASE, BASE, set())["left"], 0)
 

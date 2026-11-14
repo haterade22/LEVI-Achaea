@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-11-13 - `CLAUDE.md` is 106 KB, down from 450 KB; nothing was lost (docs only, no version bump)
+
+Claude Code delivers only about the first 131,000 to 143,000 characters of this file in the maintainer's sessions (`docs/reference/harness-facts.md`). At 450 KB, two thirds of it never arrived. It is now 105,763 bytes, so the whole file arrives.
+
+- **Nine moves, each its own commit, each proven.** The text moved verbatim to the home that `docs/adrs/002-knowledge-delivery-tiers.md` names, and a one-line pointer stays under the old heading. For each move, `tools/check_context_budget.py --moves` compared the file before and after and found every row that left in its new home: 0 rows lost, nine times. The proof line is in each commit message.
+
+| What moved | To | Size |
+|---|---|---|
+| Mnemosyne Run Tracker | `.claude/projects/mnemosyne/00-reference-from-claude-md.md` | 180 KB |
+| ataxiaBasher, `bashStats`, mob damage | `.claude/projects/basher/00-reference-from-claude-md.md` | 44 KB |
+| Defense Systems and the Self Limb Counter | `.claude/projects/defense/README.md` (new) | 33 KB |
+| Afflictions, locks and server-side curing | `.claude/projects/curing/README.md` (new) | 27 KB |
+| V3 target affliction tracking | `.claude/projects/affliction-tracking-v3/00-reference-from-claude-md.md` | 14 KB |
+| Serpent combat system | `.claude/classes/serpent.md` (appended) | 11 KB |
+| Ataxia combat core | `.claude/projects/ataxia-core/README.md` (new) | 10 KB |
+| Data persistence and the profile backup | `.claude/projects/persistence/README.md` (new) | 10 KB |
+| Achaea Classes Reference | `.claude/classes/README.md` (appended) | 9 KB |
+| Armour and paragon management | `.claude/projects/armour/README.md` (new) | 6 KB |
+| Gear Audit (the pilot) | `.claude/projects/gear-audit/README.md` (new) | 4 KB |
+
+- **Each moved file says what it is:** moved verbatim, not yet reconciled with the other documents of its subject. Where two documents disagree, check the code or the game source, then correct the wrong one. The moved blocks still hold version history that `CHANGELOG.md` also holds; removing that is later work for each system doc.
+- **The byte budget is strict from this commit** (`tools/context_budget.json`: ceiling 107,811). A change that makes `CLAUDE.md` larger than its ceiling fails `tools/ci_local.py` and CI. New system detail goes to `.claude/projects/<system>/`, a game fact to `kb/`, a lesson to `.claude/AGENTS.md`.
+- **Before a change to a system, read its document.** The pointer under each heading of `CLAUDE.md` names it. A pointer is not a delivery: the agent must open the file.
+- The moves check now counts each occurrence of a repeated row, so its three numbers add up.
+
+---
+
 ## 2026-11-13 - One home for each fact, and a byte budget for `CLAUDE.md` (docs and tooling, no version bump)
 
 `CLAUDE.md` was 72 KB in June and 450 KB now, and Claude Code delivers only the start of it. The cause was our own rule: every task had to update `CLAUDE.md` as well as the class docs, the knowledge base and memory. The maintainer decided on 2026-11-13: one home for each fact.

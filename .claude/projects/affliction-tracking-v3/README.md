@@ -54,6 +54,7 @@ affConfigV3.enabled = false  -- Disable V3
 - [02-api-reference.md](02-api-reference.md) - Function reference
 - [03-trigger-integration.md](03-trigger-integration.md) - How triggers integrate with V3
 - [04-display-integration.md](04-display-integration.md) - Limb Counter window integration
+- [00-reference-from-claude-md.md](00-reference-from-claude-md.md) - The V3 section of `CLAUDE.md` until 2026-11-13, moved verbatim. Not yet reconciled with the files above: where they disagree, check the code
 
 ## Integrated Combat Classes
 
