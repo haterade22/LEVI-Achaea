@@ -418,6 +418,12 @@ class CiFail(Folder):
         self.assertIn("rate limit", self.text())
         self.assertEqual(len(fake.gh_calls()), 4)
 
+    def test_a_rate_limit_that_names_authenticated_requests_is_not_a_login_failure(self):
+        fake = FakeRun([(1, "API rate limit exceeded for 1.2.3.4. (Authenticated requests get a higher rate limit.)")])
+        self.assertEqual(self.ci_fail(fake), 2)
+        self.assertNotIn("not logged in", self.text())
+        self.assertEqual(len(fake.gh_calls()), 4, "a rate limit ends, so it is retried")
+
     def test_a_rate_limit_that_ends_is_answered(self):
         fake = FakeRun([(1, "HTTP 403: API rate limit exceeded"), gh_run()])
         self.assertEqual(self.ci_fail(fake), 0)
@@ -500,7 +506,7 @@ class Root(unittest.TestCase):
 
     def test_help_holds_the_protocol(self):
         for word in ("take", "ci-fail", "pushed", "release", "--over", "ListAgents", "subagent", "NEXT:", "waiter",
-                     "compaction", "same outcome"):
+                     "compaction", "same outcome", "main- is for a red main"):
             self.assertIn(word, claim.__doc__)
 
 

@@ -9,7 +9,8 @@
 
 C is `C:/Python314/python.exe -B tools/claim.py`, the same text in Git Bash and in PowerShell. <you> is your
 name as ListAgents shows it. <claim> is a short name of the outcome: letters, digits, - and _; the script
-makes it lower case, so Fix-X and fix-x are one claim.
+makes it lower case, so Fix-X and fix-x are one claim. A name that starts with main- is for a red main:
+ci-fail and pushed make those claims. Do not give that prefix to other work.
 
 Shared work is one problem or one outcome that another session can also start: a red main, a feature,
 a bug fix. Two sessions that edit the same file do not do shared work; the rebase handles that. Only a
@@ -326,7 +327,7 @@ def latest_main_run(run):
     if status is None and err == MISSING:
         return "stop", "UNKNOWN -- gh did not run: %s. The state of main was not read." % err
     if status != 0:
-        if status is not None and AUTH.search(err):
+        if status is not None and AUTH.search(err) and "rate limit" not in err.lower():
             return "stop", "UNKNOWN -- gh is not logged in (%s). The state of main was not read." % err
         return "wait", "gh failed (%s)" % why(status, err)
     try:
