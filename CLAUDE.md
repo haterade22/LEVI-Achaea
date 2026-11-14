@@ -56,6 +56,652 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 
 ---
 
+## Documentation Requirements
+
+**MANDATORY**: After every code change, you MUST update all relevant documentation before considering the task complete. This is not optional.
+
+### CHANGELOG.md
+- **Update `CHANGELOG.md` after every change** — bug fixes, new features, refactors, anything that modifies behavior
+- Group entries by date, with newest at the top
+- Each entry must include: **what changed** (files), **why** (root cause / motivation), and **how** (what the fix/feature does)
+- Use the existing format in `CHANGELOG.md` as a template
+
+### Other Documentation
+- **CLAUDE.md**: Update if you add new systems, change architecture, modify build processes, or add new conventions
+- **Memory files** (`~/.claude/projects/.../memory/`): Update with stable patterns, conventions, and lessons learned
+- **Class docs** (`.claude/classes/*.md`): Update if combat mechanics or class-specific logic changes
+- **Plan files** (`~/.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
+- **README.md / GETTING_STARTED.md**: Update if setup steps, dependencies, or usage instructions change
+
+### Checklist (run mentally after every task)
+1. Did I change code? → Update `CHANGELOG.md`
+2. Did I add/remove files? → Update `CHANGELOG.md`, verify build includes them
+3. Did I change system architecture? → Update `CLAUDE.md`
+4. Did I learn something reusable? → Update memory files
+5. Did I change class combat logic? → Update relevant `.claude/classes/*.md`
+
+## Versioning & Auto-Update
+
+**Version is tracked in 3 places** (must stay in sync):
+
+| Location | Format | Purpose |
+|----------|--------|---------|
+| `version.txt` | Plain text (`4.3.2`) | Remote check — fetched by clients on login |
+| `muddler_project/mfile` | JSON (`"version": "4.3.2"`) | Build metadata — muddler reads this |
+| `_groups.yaml` init script | Lua (`ataxiaVersion = "4.3.2"`) | Runtime global — compared against remote |
+
+**Version bump workflow** (for every release):
+1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
+2. Build with `/build` (or `./build.sh`)
+3. Commit all changes (version files + any code changes), tag with `v<new_version>`
+4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
+5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
+
+**IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
+
+**NEVER `git push --tags` (2026-08-03, learned the hard way).** It pushes every local tag the
+remote lacks, and this clone carries stale ones. Each stale tag fires the `v*` release workflow,
+which builds **that tag's old source** and publishes it as a release. GitHub then picks "Latest"
+by **publish time, not semver**, so the last stale release to finish becomes
+`/releases/latest` — the exact URL `sysupdate` downloads from
+(`releases/latest/download/Levi_Ataxia.mpackage`). Pushing `v4.7.208` this way re-pointed Latest
+at a two-week-old `v4.7.46` build while `version.txt` on raw `main` still advertised 4.7.208:
+`sysupdate` would have installed the old package and only the `onInstalled` version cross-check
+would have caught it. **The version CHECK (raw `main`) and the version DOWNLOAD
+(`releases/latest`) read different sources and can disagree.** Repair without losing history:
+`gh release edit v<version> --latest`, then `gh release delete <stray> --yes --cleanup-tag=false`.
+
+**Several Claude sessions can share this working tree (2026-10-11).** A session that stages with
+`git add -A` or `git commit -a` commits whatever another session has in progress: the Serpent
+release v4.7.413 shipped half of the Shikudo tracking work that way, unmentioned in its changelog
+entry, and switched the tree to `main` under the session whose work it was. **Stage by path; check
+`git status` for files that are not yours before committing, branching or bumping the version;
+and never switch the shared tree's branch while another session may be working in it.**
+`ListAgents` shows the other sessions on this machine.
+
+**Merge finished work straight into `main`; do not open a pull request (the user, 2026-11-11).**
+Two pushed branches with no PR sat unmerged for days (`fix/bm-strike-knees`, `docs/audit-after-484`).
+`main` has no branch protection, and `build.yml` runs on every push to `main`. So:
+1. Work in your own worktree, on your own branch.
+2. Run `/c/Python314/python -B tools/ci_local.py` and push only on `Ready to push: YES`. It runs EVERY
+   step of the `validate` job in `build.yml`. No PR CI runs before `main` any more, so this is the only
+   check before the push. That interpreter has `lupa` and `yaml`; the `python3` on PATH has neither, and
+   there the run says NOT RUN and exits 2. `NOT YET` means the steps passed on files that are not
+   committed: the push carries only the commit, so commit first (a new file left untracked fails on `main`).
+3. `git fetch origin && git rebase origin/main`, then run the checks again if the rebase pulled in changes.
+   After a docs rebase, check `file:line` citations into files that `main` changed.
+4. `git push origin HEAD:main` from the worktree. This never switches the shared tree's branch.
+   If the push is refused because `main` moved, go back to step 3.
+5. Watch the `Build & Validate` run for that commit on `main` (select by workflow name; a push also
+   starts "Dementia Mapper"). A release tag goes on that commit only after the run passes.
+6. Remove the worktree and delete the branch (`git worktree remove`, `git branch -D`, and the remote
+   branch if it was pushed). Save a patch of any uncommitted changes first.
+
+**Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
+- On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
+- If newer: shows notification, prompts user to type `SYSUPDATE`
+- `sysupdate` alias: downloads `.mpackage` → save settings + profile backup → `uninstallPackage` → `installPackage` → cleanup
+- **An update removes every edit inside the package (player report, 2026-11-03; backup since v4.7.478).** It does not merge. `ataxia.updater.backupProfile` writes `<profile>/sysupdate_backups/backup_1.xml` first (the last 3 stay, because the next update must not overwrite the only copy of an edit, and never `current/`, because Mudlet loads the newest file there). **Mudlet refuses `uninstallPackage` while a profile save runs, and the save runs on a background thread**, so `swapPackage` starts 1 s later and retries once a second, up to 30 tries, then stops with the old version in place (read in Mudlet's `development` source, not yet seen in a client). `saveProfile`'s first argument is a FOLDER (`saveProfile(folder, name)`, name since Mudlet 4.20; `true, path` or `nil, message`). `reportBackup` runs after the install, because only then is the file complete. A failed backup does not stop the update.
+- Uses `sysDownloadDone`/`sysDownloadError` events (same pattern as mudlet-mapper), not `tempTimer`
+- **Install triggers a load**: `sysInstallPackage` → `ataxia_updateApplied` → `ataxia_loadSettings()` (when not already loaded), so an install/self-update loads settings immediately — no reconnect required
+
+**Conversion script** (`tools/convert_to_muddler.py`):
+- Strips YAML headers from Lua files, outputs pure Lua
+- Builds nested JSON hierarchy from `_groups.yaml` files
+- Handles name collisions by prepending parent group names
+- Preserves group inline scripts
+- Converts pattern types, timer formats, key codes
+- Rewrites stale file `hierarchy:` headers using per-type dissolved group sets (strips intermediate wrapper names)
+- Unwraps root groups in JSON output (emits children directly into array, preventing extra nesting level from Muddler)
+- Supports multi-package builds via CLI arguments:
+  - `--package-name` — Package identifier (default: `Levi_Ataxia`)
+  - `--package-title` — Human-readable title
+  - `--package-version` — Version string
+  - `--package-author` — Author name
+  - `--include-roots` — Root group names to include from `_groups.yaml`
+  - `--include-dirs` — Source subdirectory names to scan (default: derived from roots)
+
+**Building a custom package**:
+```bash
+python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project \
+  --package-name My_Package --include-roots My_Package
+```
+
+**Comparison tool** (`tools/compare_builds.py`):
+- Compares old Python-built XML against Muddler project source
+- Verifies item counts, names, hierarchy, and code content
+
+## Model & Effort Selection (MANDATORY)
+
+**Goal: each task runs on the cheapest model and the lowest reasoning effort that will still do it well.** Defaulting to Opus at high effort for everything is the waste this rule exists to stop. Where this section and the older *Model Routing Guidance* table disagree, this section wins.
+
+**Main session = orchestrator.** The main session plans, decides and reviews. It hands execution to subagents and picks a model and effort for each one based on the task. It does not do bulk or mechanical work itself (sweeping searches, mass reads, running builds and tests, boilerplate edits).
+
+### Routing guide
+
+| Tier | Model / effort | Agent | Use for |
+|------|----------------|-------|---------|
+| 1 | Haiku / `low` | `fast-reader` | File/code search, grepping, listing, reading and summarizing files, simple renames, formatting, boilerplate, running tests or builds and reporting results, small edits that are already well specified |
+| 2 | Sonnet / `medium` | `implementer` | Most everyday coding: implementing features from a clear plan, writing tests, normal bug fixes, refactors inside one module, docs, code review of small diffs |
+| 3 | Opus / `high` | `architect` | Architecture and design decisions, ambiguous or cross-cutting changes, hard debugging where the cause is unknown, security-sensitive code, data migrations, anything expensive to get wrong or hard to undo |
+| 4 | Fable | `architect` + per-call `model: "fable"` | Only the hardest reasoning problems, or when Opus has already failed. Don't use it routinely |
+
+**Project defaults:** combat-mechanics reasoning is tier 3 unless it is clearly mechanical. That covers lock strategy, V3 affliction tracking, SSC curingset writes, and anything in the shared `ataxia/` core. Lessons Learned is mostly a list of cheap-looking changes that weren't. The existing agents keep their tiers: `build-and-version` = Haiku, `offense-system` and `team-class-offense` = Sonnet.
+
+### How model and effort are set
+
+- **Agent definition** (`.claude/agents/*.md` frontmatter), the primary mechanism:
+  ```yaml
+  ---
+  name: fast-reader
+  description: ...
+  model: haiku      # haiku | sonnet | opus | fable | inherit | full model id
+  effort: low       # low | medium | high | xhigh | max
+  ---
+  ```
+- **Per call:** the Agent tool's `model` parameter (`haiku | sonnet | opus | fable`) overrides the frontmatter for that one spawn. The tool also takes an `effort` parameter, which may only be used when instructions explicitly ask. This section is that explicit permission: override effort per call when the task needs a different level from the agent's default.
+- **Model precedence:** per-call `model` > frontmatter `model` > `CLAUDE_CODE_SUBAGENT_MODEL` env var > the main session's model.
+- `xhigh`/`max` only matter on Opus and Fable. Use them only after `high` has visibly fallen short.
+
+### Escalation and de-escalation
+
+- **Start at the lowest tier that plausibly fits.**
+- **If a subagent's output is wrong, incomplete, or shows confusion, retry ONCE at the next tier up.** Never retry at the same tier: a second identical attempt mostly buys the same answer. An agent replying `ESCALATE: <why>` counts as a failure at its tier.
+- **De-escalate:** when an Opus task breaks into well-defined steps, hand those steps down to Sonnet or Haiku. `architect` tags every step of its plan with the tier that should run it.
+
+### Transparency
+
+Before each delegation, write one line naming the model, the effort and the reason, so the choices can be audited:
+
+    → Haiku/low: repo-wide search for ataxiaBasher_rageAfford call sites
+    → Sonnet/medium: implement step 2 of the approved plan (Psion keeper hold)
+    → Opus/high: diagnose the escape-ladder livelock, cause unknown
+
+---
+
+## Development Guidelines
+
+### Naming Conventions
+
+**Functions** — use `snake_case` with the owning namespace as a prefix:
+
+| Namespace | Prefix | Example |
+|-----------|--------|---------|
+| Core system | `ataxia_` | `ataxia_saveSettings()`, `ataxia_promptAffs()` |
+| Basher | `ataxiaBasher_` | `ataxiaBasher_assembleAttack()` |
+| NDB | `ataxiaNDB_` | `ataxiaNDB_getClass()` |
+| GUI | `ataxiagui_` | `ataxiagui_createMap()` |
+| MMP | `mmp.*` | `mmp.gotoRoom()` |
+
+**Module tables** — `camelCase` no underscore: `ataxia`, `ataxiaNDB`, `ataxiaBasher`, `ataxiaTables`, `mmp`.
+
+**Private / module-internal helpers** — declare `local`, no prefix required.
+
+**Files** — `NNN_Descriptive_Name.lua` (three-digit numeric prefix for load order).
+
+**Directories** — `snake_case`.
+
+**What to avoid**:
+- camelCase public functions (`ataxiaCheckForMissing` → prefer `ataxia_checkForMissing`)
+- Unprefixed globals (`haveDef`, `needToSalt`) — make `local` or add namespace prefix
+- Mixed conventions within a single file
+
+Migration is gradual: apply the standard to new code and any file touched significantly.
+
+### Namespace Pattern
+```lua
+-- All system code under namespaces
+ataxia = ataxia or {}
+ataxia.afflictions = ataxia.afflictions or {}
+ataxia.balance = ataxia.balance or {}
+ataxia.defense = ataxia.defense or {}
+
+mmp = mmp or {}
+mmp.settings = mmp.settings or {}
+
+ataxiagui = ataxiagui or {}
+ataxiaNDB = ataxiaNDB or {}
+```
+
+### Initialization Pattern
+```lua
+function ataxia.initialize()
+  -- Setup file paths
+  ataxia.filepath = getMudletHomeDir() .. "/AtaxiaSaves"
+  if not io.exists(ataxia.filepath) then
+    lfs.mkdir(ataxia.filepath)
+  end
+
+  -- Request GMCP data
+  sendGMCP([[ Core.Supports.Add [ "Comm.Channel 1" ] ]])
+  sendGMCP([[ Core.Supports.Add ["IRE.Target 1"] ]])
+  sendGMCP("IRE.Rift.Request")
+  sendGMCP("Char.Items.Inv")
+
+  -- Initialize subsystems
+  ataxia.loadSettings()
+  ataxia.balance.reset()
+
+  raiseEvent("ataxia system loaded")
+end
+
+registerAnonymousEventHandler("gmcp.Char.Name", "ataxia.initialize")
+```
+
+### Event-Driven Architecture
+```lua
+-- Raise custom events for inter-module communication
+raiseEvent("aff gained", "paralysis")
+raiseEvent("aff lost", "paralysis")
+raiseEvent("ataxia system loaded")
+
+-- Other modules listen
+registerAnonymousEventHandler("aff gained", "updateUI")
+```
+
+### Echo/Debug Pattern
+
+**THIS SECTION TAUGHT A HELPER THAT DOES NOT EXIST (corrected v4.7.281).** It presented
+`ataxia.echo` as the idiom, and `ataxia.echo` is defined nowhere in the tree -- which is precisely
+how **17 call sites** came to be written against it and silently die (`attempt to call field 'echo'
+(a nil value)`), including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
+A pattern in this guide gets copied without checking, so a wrong one here becomes a bug everywhere.
+
+**The real helper is the global `ataxiaEcho`**, defined in a `_groups.yaml` inline script:
+
+```lua
+-- The user-facing echo. GLOBAL, not a namespace field:
+ataxiaEcho("shin augment probe -- samples cleared.")
+-- renders: (LEVI): shin augment probe -- samples cleared.
+
+-- Colour tags pass straight through, since it is cecho underneath:
+ataxiaEcho("<gold>SHIN AUGMENT<reset> -- measured duration by spend")
+
+-- Quiet commands (no local echo of the command itself):
+send(command, false)
+```
+
+Module-scoped alternatives that DO exist, where a subsystem wants its own prefix: `shecho`
+(Shaman), `ataxia.mnemosyne.echo` / `.decho` (Mnemosyne, `M.echo` internally), and
+`ataxiaBasher_dsAlert` (basher denizen-state alerts, gated on `ataxiaBasher.brAlerts`).
+
+`ataxia.decho` is likewise undefined. Its six guarded calls in `affliction_tracking_core/008_V3_Integration.lua`
+therefore never printed a `[V3] ILLUSION:` line, until v4.7.479 sent them through `illusionEcho` (008:76).
+**Guard an optional helper or use a real one; never assume.**
+
+`tools/check_orphans.py` now fails CI on a namespace field that is called but assigned nowhere, so
+this class of mistake cannot ship silently again.
+
+**Echo strings must be pure ASCII** (2026-07-26): typographic characters (em-dashes `—`,
+arrows `→`, ellipses `…`, curly quotes) mojibake through the packaging/display pipeline
+(`—` rendered as `â€"` in-game). Use `--`, `->`, `...`, `'` in any string passed to
+echo/cecho/send. Decorative box-drawing borders in status screens are currently
+tolerated; never add new non-ASCII to user-visible strings.
+
+---
+
+## Testing Approach
+
+### Mock GMCP Data
+```lua
+gmcp = gmcp or {}
+gmcp.Char = gmcp.Char or {}
+gmcp.Char.Vitals = {bal="1", eq="1", hp=5000, maxhp=5000}
+gmcp.Char.Afflictions = {List = {}}
+```
+
+### Test files share one Lua state
+`src_new/tests/test_runner.lua` runs every `test_*.lua` in ONE Lua state, in filename order, so a
+global that a test file replaces (`send`, `io.open`, `tempTimer`, `getEpoch`, `ataxiaEcho`, a
+module stub) is still replaced for every file after it. Restore it at the end of the file, and
+inside a test restore it under `pcall` so a failing `expect` cannot leak it. Two real cases:
+`test_settings.lua` mocked `io.open` (a write handle for any path opened without a mode) and never
+restored it, so a later test reading a trigger file got a table with no `read` (fixed v4.7.321);
+`test_swarm_tactics.lua` restores `send` part-way down the file, so blocks after that point capture
+sends locally. A fixture that rewinds a mock clock must also clear every stamp taken on that clock,
+or an earlier test's stamp sits in this test's future and reads as fresh.
+
+### Performance Considerations
+- **Sub-second response times critical**
+- Optimize trigger patterns (use specific strings over wildcards)
+- Cache frequently accessed data
+- Minimize table creation in hot paths (balance/prompt triggers)
+- Use stopwatches for precise timing
+- Avoid expensive operations in prompt triggers
+
+---
+
+## Common Pitfalls & Solutions
+
+### Pitfall: Trusting Combat Messages
+```lua
+-- BAD: Assuming affliction was applied
+if matches[1]:find("You jab") then
+  target.affs.paralysis = true  -- They might have shrugging!
+end
+
+-- GOOD: Track attempts, confirm with diagnose/death messages
+if matches[1]:find("You jab") then
+  target.affAttempts.paralysis = true
+end
+```
+
+### Pitfall: Not Handling Blackout
+```lua
+-- BAD: Assuming vitals are accurate
+if ataxia.vitals.hp < 1000 then
+  sip health
+end
+
+-- GOOD: Check for blackout first
+if not ataxia.afflictions.blackout and ataxia.vitals.hp < 1000 then
+  sip health
+end
+```
+
+### Pitfall: Hardcoded Timing
+```lua
+-- BAD: Assuming 2s balance
+tempTimer(2.0, function() doNextAttack() end)
+
+-- GOOD: Use stopwatches and balance regain events
+function ataxia.balance.regained("bal")
+  doNextAttack()
+end
+```
+
+### Pitfall: `os.clock()` is CPU time, not a clock
+Lua 5.1 defines `os.clock()` as CPU time; it equals wall time only under Windows' C runtime, so on
+Linux and macOS a game timer built on it barely advances. Time game events with `getEpoch()`, and move
+every stamp and every comparison of one timer together. v4.7.419 replaced the last `os.clock()` calls
+(the rebound-recovery prediction, the crushed-throat apply window, the balance-time display and the
+Serpent offense's `now()`); `test_serpent_notes.lua` holds `os.clock` still, so a Serpent timer that
+reads it again fails its test.
+
+### Pitfall: a bare weapon keyword can wield the wrong item (v4.7.456)
+`wield staff` matches every item that answers to "staff", and artefacts do not look like their
+keyword: the user's Shar'ilian lightspire is an illusion staff. In the 2026-10-27 group log the game
+took it on about half the Shikudo rounds and refused each combo. Wield by ITEM ID (`staff489282`),
+resolved from a setting or from GMCP `Char.Items` by the item's NAME (`shikudo.staffRef`,
+`shikudo/006`; the Two Handed basher does the same, `basher/015`). A bare keyword is a last resort,
+and it should say so once.
+
+### Pitfall: ASSESS and CONTEMPLATE cost balance without their trait (v4.7.456)
+ASSESS is free only with the HEALTH INSPECTOR trait, CONTEMPLATE only with MIND WARDEN (the user).
+`misc_scripts/031_Traits.lua` reads TRAIT LIST KNOWN and answers `ataxia_assessFree()` /
+`ataxia_contemplateFree()`; an unread trait list answers no. For EVERY class it wraps `send` once:
+`ataxia_traitFilter` removes each whole two-word `assess <x>` / `contemplate <x>` command whose
+trait we lack (split on our separator and on `;`, a `queue ...` prefix kept, an empty command not
+sent). So an offense may keep writing ASSESS into its rounds; it simply does not leave the package.
+Read the target's health some other way when it matters. To send one on purpose (the `assess`
+alias), call `ataxia_rawSend`. Mnemosyne's "boon contemplate <name>" is three words and passes.
+
+### Pitfall: two triggers on one party line run the action twice (v4.7.456)
+`highlighting/011_Party_Leader` had the same four patterns as `party_targetting/002`, and both ran
+`t NAME`, so every leader call switched target twice and, through `partyrelay`, said the target back
+to the party. Before adding a trigger, grep for one on the same line (the same rule as the cure
+triggers in memory affliction-tracking.md).
+
+---
+
+## Important Considerations
+
+### Things to Remember
+- Achaea has 26 classes (21 base + 4 Elemental Lords + Dragon) with unique mechanics
+- Server-side curing exists but custom systems provide advantages
+- Illusions and hidden afflictions are common (use diagnosis)
+- Combat logs can be several hundred lines per second
+- System must handle disconnections/reconnections gracefully
+- Blackout hides all vitals and afflictions (special handling required)
+- Aeon/retardation slow down actions (disable batching). Only the last command of the last run happens, so a slowed alias round is one command (`kb/mechanics/balance-and-queueing.md`)
+- Some afflictions prevent certain actions (paralysis, stun, etc.)
+
+### Things to Avoid
+- Hardcoded delays (server-side timing varies by ping)
+- Assuming affliction order from attacks
+- Trusting all game output without verification (illusions exist)
+- Over-automating (ToS compliance concerns)
+- Blocking the main thread with heavy processing
+- Creating tables in hot paths (prompt/vitals triggers)
+- Using wildcards excessively in triggers
+- Global variable pollution (use namespaces)
+
+---
+
+## Lessons Learned (Combat System Development)
+
+### Silent gates: four rules from the 2026-08-19 Grulk death (v4.7.275)
+
+A 123-second PvP loss took two full analysis passes to explain. Both passes were slowed by the
+same class of problem, and all four rules generalise well beyond that fight.
+
+**1. A status display that prints BEFORE the send is not evidence of a send.**
+The `[BM ...]` block prints inside `runDoublePrep`, after `blademaster.run()`'s guards but before
+`sendAttack`'s. It reported healthy prep **89 times while 10 commands reached the server**.
+Instrument every `return` in a guard chain — debounced per-*reason*, so a change of reason still
+prints immediately (that transition is the interesting part).
+
+**2. `send(cmd, false)` makes a command invisible in the log.**
+`ataxia_breakLock` sends `fitness` that way, so a log shows only the server's replies. The first
+analysis pass concluded fitness had never been sent; it had fired twice, and the cooldown refusals
+were sitting right there in the log. **Before concluding a command was never sent, check the
+sender's echo flag.**
+
+**3. Two components can each correctly defer to the other and produce total inaction.**
+`blademaster.sendAttack` deferred to `ataxia_lockBreak()`; `ataxia_lockBreak` declines when
+`ataxia_canActive()` is false. With weariness up, neither did anything — for 86 seconds, silently.
+**When A defers to B, A must verify B can actually run.**
+
+**4. A gate can INVERT — get stricter exactly as the threat gets worse.**
+`canParry()` blocked on prone, paralysis and limb damage: every one a state a limb-prep class
+manufactures on purpose. The parry froze precisely as the opponent closed in (2 parries in 44
+throws). The identical reasoning error had already been found and fixed in the PvE *selection*
+path in v4.7.221 and never checked in the *send* gate. **When you fix a reasoning error in one
+layer, grep for the same reasoning in the others.**
+
+**Corollary on precedence:** `if A or B and not C` parses as `A or (B and not C)`. This was live in
+`Algedonic.AntiSentinel`, making a single damaged left arm trigger a rift-lock panic ~20 times a
+fight. Parenthesise mixed `and`/`or` conditions.
+
+**Corollary on affliction decoding:** our prompt abbreviations come from
+`ataxia/008_Affliction_Colouring.lua`, and some are one letter apart in meaning. `par` is
+**paranoia**; `PAR` is **paralysis**. `dar` is darkshade, `ver` vertigo, `stu` stupidity.
+**Never infer an affliction from its abbreviation -- look it up.** Also: the prompt WRAPS across
+two lines when the affliction block is long, so a naive log parser silently drops exactly the
+most-afflicted (i.e. most interesting) prompts.
+
+**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`. Since v4.7.419 blackout uses it (4 s: Psion LIGHTSTEAL 525, Knight CONCUSS `snb/008`), and MIND DISRUPT gives `disrupted` a 10 s BACKSTOP (`telepathy_tekura/007`; the game gives it no duration, only Concentrate cures it) that the target's CONCENTRATE line (788) cancels through `ataxia_tarAffFaded`.
+
+**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire (the slickness proof goes through `proveAffAbsentV3` first since v4.7.479, so the branches it rules out go too). A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
+
+**Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
+in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
+prompt, the question is whether GMCP surfaces it at all -- and adding a text trigger to "fix"
+it strands a phantom affliction unless GMCP also sends the matching Remove.
+
+**Corollary on log forensics:** when reading a combat log, count what *didn't* happen. Consumption
+totals, cure confirmations per eat, and outbound-command counts are all recoverable from a log and
+are usually more informative than the lines that did fire.
+
+### A guarded start with an unguarded stop is not a pair (v4.7.292)
+
+The balance banner printed `BALANCE: 0.000` constantly. **Two triggers stop one stopwatch** --
+`balances/001_Limb_Balance` ("...on your legs.") and `balances/006_All_Limbs` ("...on all limbs.")
+both call `endBalTimer()` + `balanceHighlight()`, and both lines arrive in the same round. The first
+stopped and RESET the watch; the second stopped an already-reset watch, read ~0, and printed it as a
+measurement. `timerOnBalUsed` had always refused to start a running watch; nothing ever refused to
+stop a stopped one.
+
+Two rules generalise:
+- **Guard both ends or neither.** EQ was corrected at the same time despite having only one stopper:
+  the asymmetry was the defect, and fixing only the half that bites leaves the other waiting for a
+  second trigger to be added.
+- **"Zero" and "nothing was running" are different answers.** The fabricated 0.000 was written into
+  `bashStats.lastBalanceTime` and zeroed `currentBalanceDamage` a second time, so a round's damage
+  was attributed to a balance of no length -- a display bug that was quietly corrupting DPS.
+
+### Mudlet Trigger Patterns
+
+**Problem**: Strict regex anchors (`^` and `$`) can fail in Mudlet due to line processing quirks.
+
+```lua
+-- BAD: May not match due to anchors
+"^You observe .+ \\[(\\d+)\\]$"
+
+-- GOOD: More flexible, still specific
+"You observe .+ \\[(\\d+)\\]"
+```
+
+**Best Practices**:
+- Avoid `^` and `$` unless absolutely necessary
+- Use `.+` (one or more) instead of `.*` (zero or more) when content is expected
+- Test patterns against actual game output before deploying
+
+### Counter Incrementing (Button Spam Issue)
+
+**Problem**: Incrementing counters in dispatch/combo builder functions causes them to increment on every button press, not just when the action fires.
+
+```lua
+-- BAD: In buildComboBrokenstar() - called every button press
+blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+combo = "bladetwist;discern " .. target
+
+-- GOOD: Use trigger to increment when action actually fires
+blademaster.bladetwistTriggerID = tempRegexTrigger(
+  "BLADETWIST \\[\\|\\] BLADETWIST \\[\\|\\] BLADETWIST",
+  function()
+    blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+  end
+)
+```
+
+**The server queue does the same to a planner's history (v4.7.420).** An offense key sends `queue addclear
+free ...`, which REPLACES a round still waiting on equilibrium or balance, so history kept across rounds (the
+last round's kind, a MIND run, a prelude count, a latch, an alternated side) must move when the GAME RUNS the
+round. Counted per press, `shikudo/007` (caught in review) ran the same kind of round twice per recovery,
+turned a critical MIND IMPATIENCE into a combo and spent its KAI CHOKE prelude unsent. 007 and 011 commit a
+pending round on the queue's run line, matched on its FIRST row since it wraps (`.claude/AGENTS.md`).
+
+### Limb Balancing Strategy
+
+**Problem**: When attacking two limbs with asymmetric damage, one limb reaches threshold before the other.
+
+**Solution**: Always hit the **LOWER damage limb as primary** to balance progression.
+
+```lua
+function blademaster.getFocusLeg()
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  return (LL <= RL) and "left" or "right"
+end
+
+function blademaster.getCentreslashDirection()
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+  return (head <= torso) and "down" or "up"
+end
+```
+
+### Mounted Target Handling
+
+**Problem**: KNEES on a mounted target DISMOUNTS instead of PRONING.
+
+**Solution**: Dismount on the final prep hit (before double-break), then KNEES on double-break will properly prone.
+
+```lua
+if phase == "leg_prep" then
+  -- Dismount during final prep hit if mounted + hamstrung
+  if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
+    return "knees"  -- Dismount now
+  end
+  return blademaster.selectPrepStrike()
+end
+```
+
+### Phase Transition Triggers
+
+**Problem**: State-based phase transitions fail when triggers don't capture values correctly.
+
+**Best Practices**:
+1. Use simple, robust trigger patterns for critical state updates
+2. Log trigger fires during debugging to verify they're matching
+3. Have fallback phase logic when triggers miss
+4. Always update both state flags and values (e.g., `bleedingReady = true` AND `targetBleeding = value`)
+
+### Writhe/Escape Handling
+
+**Problem**: Target escaping (writhe from impale, standing from prone) should preserve progress.
+
+**Best Practices**:
+1. On writhe: Keep `bleedingReady` and `targetBleeding` - don't reset progress
+2. Check if target is still prone after writhe (free re-impale!)
+3. If bleeding >= 700 and not impaled, can go directly to brokenstar
+
+```lua
+function blademaster.onTargetUnimpaled()
+  blademaster.state.isImpaled = false
+  -- Keep bleedingReady and targetBleeding - we built that progress!
+
+  if blademaster.hasAff("prone") then
+    cecho("[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
+  elseif blademaster.state.bleedingReady then
+    -- Go to brokenstar phase (checked in getPhaseBrokenstar)
+  end
+end
+```
+
+---
+
+## Agent Teams
+
+Claude Code agent teams enable parallel development across isolated combat subsystems. See `docs/ai-includes/agent-teams.md` for the full guide.
+
+### Quick Reference
+
+**When to use**:
+- Parallel class system development (e.g., shaman + blademaster simultaneously)
+- Cross-system feature rollouts (e.g., adding V3 tracking to multiple classes)
+- Parallel code review of independent subsystems
+- Documentation sprints across multiple class files
+
+**When NOT to use**:
+- Single class edits, threshold tweaks, trigger fixes
+- Sequential debugging (cause-and-effect tracing)
+- Changes to shared `ataxia/` core files (serialize through lead)
+
+**File ownership rule**: Each teammate owns a class directory under `levi_scripts/`. The `ataxia/` core (affliction tracking, curing, balance) is shared -- coordinate through the team lead before modifying.
+
+**Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
+
+### Porting Foreign Combat Scripts
+
+**Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
+
+**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has no writer for `tLimbs` (no file defines it since 3c312975; triggers 392 and 393 threw on it until v4.7.479) — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
+
+**Prevention checklist for ported code:**
+1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`
+2. If no writes found, the table is dead — map to the canonical source (usually `lb[target].hits` for limb data, `tAffs` for afflictions)
+3. For file-scope `local` state tables, verify they are reset at the top of the per-tick entry point — stale sentinels from prior ticks cause phantom actions
+4. When two functions must agree on a threshold (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags — don't mix conventions from the source and destination systems
+5. Never write a new offense file (>200 lines) in a single pass — write namespace + calc first, build, then add each form's logic incrementally
+
+```lua
+-- BAD: Assumed tLimbs was populated (it wasn't)
+local tl = tLimbs
+gm.llFLASH = (tl.LL + ld.shikFlashheel >= 100)
+
+-- GOOD: Read from canonical trigger-fed source
+local function getLimb(key)
+  if not target or not lb or not lb[target] or not lb[target].hits then return 0 end
+  return lb[target].hits[LIMB_NAMES[key]] or 0
+end
+gm.LL = getLimb("LL")
+gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
+```
+
+---
+
 ## Technical Context
 
 ### What is Achaea?
@@ -286,97 +932,6 @@ input (`kb_rules.py` stopped PR #169 that way), so run the full list, not only t
 **Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name
 in the drive root (`\s1hk.`), which is not writable (`test_kb_capture.lua` failed 13 tests this
 way while Linux and lupa passed); move such a name into `%TEMP%`, as that test does.
-
-### Versioning & Auto-Update
-
-**Version is tracked in 3 places** (must stay in sync):
-
-| Location | Format | Purpose |
-|----------|--------|---------|
-| `version.txt` | Plain text (`4.3.2`) | Remote check — fetched by clients on login |
-| `muddler_project/mfile` | JSON (`"version": "4.3.2"`) | Build metadata — muddler reads this |
-| `_groups.yaml` init script | Lua (`ataxiaVersion = "4.3.2"`) | Runtime global — compared against remote |
-
-**Version bump workflow** (for every release):
-1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
-2. Build with `/build` (or `./build.sh`)
-3. Commit all changes (version files + any code changes), tag with `v<new_version>`
-4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
-5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
-
-**IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
-
-**NEVER `git push --tags` (2026-08-03, learned the hard way).** It pushes every local tag the
-remote lacks, and this clone carries stale ones. Each stale tag fires the `v*` release workflow,
-which builds **that tag's old source** and publishes it as a release. GitHub then picks "Latest"
-by **publish time, not semver**, so the last stale release to finish becomes
-`/releases/latest` — the exact URL `sysupdate` downloads from
-(`releases/latest/download/Levi_Ataxia.mpackage`). Pushing `v4.7.208` this way re-pointed Latest
-at a two-week-old `v4.7.46` build while `version.txt` on raw `main` still advertised 4.7.208:
-`sysupdate` would have installed the old package and only the `onInstalled` version cross-check
-would have caught it. **The version CHECK (raw `main`) and the version DOWNLOAD
-(`releases/latest`) read different sources and can disagree.** Repair without losing history:
-`gh release edit v<version> --latest`, then `gh release delete <stray> --yes --cleanup-tag=false`.
-
-**Several Claude sessions can share this working tree (2026-10-11).** A session that stages with
-`git add -A` or `git commit -a` commits whatever another session has in progress: the Serpent
-release v4.7.413 shipped half of the Shikudo tracking work that way, unmentioned in its changelog
-entry, and switched the tree to `main` under the session whose work it was. **Stage by path; check
-`git status` for files that are not yours before committing, branching or bumping the version;
-and never switch the shared tree's branch while another session may be working in it.**
-`ListAgents` shows the other sessions on this machine.
-
-**Merge finished work straight into `main`; do not open a pull request (the user, 2026-11-11).**
-Two pushed branches with no PR sat unmerged for days (`fix/bm-strike-knees`, `docs/audit-after-484`).
-`main` has no branch protection, and `build.yml` runs on every push to `main`. So:
-1. Work in your own worktree, on your own branch.
-2. Run `/c/Python314/python -B tools/ci_local.py` and push only on `Ready to push: YES`. It runs EVERY
-   step of the `validate` job in `build.yml`. No PR CI runs before `main` any more, so this is the only
-   check before the push. That interpreter has `lupa` and `yaml`; the `python3` on PATH has neither, and
-   there the run says NOT RUN and exits 2. `NOT YET` means the steps passed on files that are not
-   committed: the push carries only the commit, so commit first (a new file left untracked fails on `main`).
-3. `git fetch origin && git rebase origin/main`, then run the checks again if the rebase pulled in changes.
-   After a docs rebase, check `file:line` citations into files that `main` changed.
-4. `git push origin HEAD:main` from the worktree. This never switches the shared tree's branch.
-   If the push is refused because `main` moved, go back to step 3.
-5. Watch the `Build & Validate` run for that commit on `main` (select by workflow name; a push also
-   starts "Dementia Mapper"). A release tag goes on that commit only after the run passes.
-6. Remove the worktree and delete the branch (`git worktree remove`, `git branch -D`, and the remote
-   branch if it was pushed). Save a patch of any uncommitted changes first.
-
-**Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
-- On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
-- If newer: shows notification, prompts user to type `SYSUPDATE`
-- `sysupdate` alias: downloads `.mpackage` → save settings + profile backup → `uninstallPackage` → `installPackage` → cleanup
-- **An update removes every edit inside the package (player report, 2026-11-03; backup since v4.7.478).** It does not merge. `ataxia.updater.backupProfile` writes `<profile>/sysupdate_backups/backup_1.xml` first (the last 3 stay, because the next update must not overwrite the only copy of an edit, and never `current/`, because Mudlet loads the newest file there). **Mudlet refuses `uninstallPackage` while a profile save runs, and the save runs on a background thread**, so `swapPackage` starts 1 s later and retries once a second, up to 30 tries, then stops with the old version in place (read in Mudlet's `development` source, not yet seen in a client). `saveProfile`'s first argument is a FOLDER (`saveProfile(folder, name)`, name since Mudlet 4.20; `true, path` or `nil, message`). `reportBackup` runs after the install, because only then is the file complete. A failed backup does not stop the update.
-- Uses `sysDownloadDone`/`sysDownloadError` events (same pattern as mudlet-mapper), not `tempTimer`
-- **Install triggers a load**: `sysInstallPackage` → `ataxia_updateApplied` → `ataxia_loadSettings()` (when not already loaded), so an install/self-update loads settings immediately — no reconnect required
-
-**Conversion script** (`tools/convert_to_muddler.py`):
-- Strips YAML headers from Lua files, outputs pure Lua
-- Builds nested JSON hierarchy from `_groups.yaml` files
-- Handles name collisions by prepending parent group names
-- Preserves group inline scripts
-- Converts pattern types, timer formats, key codes
-- Rewrites stale file `hierarchy:` headers using per-type dissolved group sets (strips intermediate wrapper names)
-- Unwraps root groups in JSON output (emits children directly into array, preventing extra nesting level from Muddler)
-- Supports multi-package builds via CLI arguments:
-  - `--package-name` — Package identifier (default: `Levi_Ataxia`)
-  - `--package-title` — Human-readable title
-  - `--package-version` — Version string
-  - `--package-author` — Author name
-  - `--include-roots` — Root group names to include from `_groups.yaml`
-  - `--include-dirs` — Source subdirectory names to scan (default: derived from roots)
-
-**Building a custom package**:
-```bash
-python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project \
-  --package-name My_Package --include-roots My_Package
-```
-
-**Comparison tool** (`tools/compare_builds.py`):
-- Compares old Python-built XML against Muddler project source
-- Verifies item counts, names, hierarchy, and code content
 
 ### VS Code (Primary IDE)
 
@@ -2952,231 +3507,6 @@ send("curing priority defence list reset", false)
 
 ---
 
-## Development Guidelines
-
-### Naming Conventions
-
-**Functions** — use `snake_case` with the owning namespace as a prefix:
-
-| Namespace | Prefix | Example |
-|-----------|--------|---------|
-| Core system | `ataxia_` | `ataxia_saveSettings()`, `ataxia_promptAffs()` |
-| Basher | `ataxiaBasher_` | `ataxiaBasher_assembleAttack()` |
-| NDB | `ataxiaNDB_` | `ataxiaNDB_getClass()` |
-| GUI | `ataxiagui_` | `ataxiagui_createMap()` |
-| MMP | `mmp.*` | `mmp.gotoRoom()` |
-
-**Module tables** — `camelCase` no underscore: `ataxia`, `ataxiaNDB`, `ataxiaBasher`, `ataxiaTables`, `mmp`.
-
-**Private / module-internal helpers** — declare `local`, no prefix required.
-
-**Files** — `NNN_Descriptive_Name.lua` (three-digit numeric prefix for load order).
-
-**Directories** — `snake_case`.
-
-**What to avoid**:
-- camelCase public functions (`ataxiaCheckForMissing` → prefer `ataxia_checkForMissing`)
-- Unprefixed globals (`haveDef`, `needToSalt`) — make `local` or add namespace prefix
-- Mixed conventions within a single file
-
-Migration is gradual: apply the standard to new code and any file touched significantly.
-
-### Namespace Pattern
-```lua
--- All system code under namespaces
-ataxia = ataxia or {}
-ataxia.afflictions = ataxia.afflictions or {}
-ataxia.balance = ataxia.balance or {}
-ataxia.defense = ataxia.defense or {}
-
-mmp = mmp or {}
-mmp.settings = mmp.settings or {}
-
-ataxiagui = ataxiagui or {}
-ataxiaNDB = ataxiaNDB or {}
-```
-
-### Initialization Pattern
-```lua
-function ataxia.initialize()
-  -- Setup file paths
-  ataxia.filepath = getMudletHomeDir() .. "/AtaxiaSaves"
-  if not io.exists(ataxia.filepath) then
-    lfs.mkdir(ataxia.filepath)
-  end
-
-  -- Request GMCP data
-  sendGMCP([[ Core.Supports.Add [ "Comm.Channel 1" ] ]])
-  sendGMCP([[ Core.Supports.Add ["IRE.Target 1"] ]])
-  sendGMCP("IRE.Rift.Request")
-  sendGMCP("Char.Items.Inv")
-
-  -- Initialize subsystems
-  ataxia.loadSettings()
-  ataxia.balance.reset()
-
-  raiseEvent("ataxia system loaded")
-end
-
-registerAnonymousEventHandler("gmcp.Char.Name", "ataxia.initialize")
-```
-
-### Event-Driven Architecture
-```lua
--- Raise custom events for inter-module communication
-raiseEvent("aff gained", "paralysis")
-raiseEvent("aff lost", "paralysis")
-raiseEvent("ataxia system loaded")
-
--- Other modules listen
-registerAnonymousEventHandler("aff gained", "updateUI")
-```
-
-### Echo/Debug Pattern
-
-**THIS SECTION TAUGHT A HELPER THAT DOES NOT EXIST (corrected v4.7.281).** It presented
-`ataxia.echo` as the idiom, and `ataxia.echo` is defined nowhere in the tree -- which is precisely
-how **17 call sites** came to be written against it and silently die (`attempt to call field 'echo'
-(a nil value)`), including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
-A pattern in this guide gets copied without checking, so a wrong one here becomes a bug everywhere.
-
-**The real helper is the global `ataxiaEcho`**, defined in a `_groups.yaml` inline script:
-
-```lua
--- The user-facing echo. GLOBAL, not a namespace field:
-ataxiaEcho("shin augment probe -- samples cleared.")
--- renders: (LEVI): shin augment probe -- samples cleared.
-
--- Colour tags pass straight through, since it is cecho underneath:
-ataxiaEcho("<gold>SHIN AUGMENT<reset> -- measured duration by spend")
-
--- Quiet commands (no local echo of the command itself):
-send(command, false)
-```
-
-Module-scoped alternatives that DO exist, where a subsystem wants its own prefix: `shecho`
-(Shaman), `ataxia.mnemosyne.echo` / `.decho` (Mnemosyne, `M.echo` internally), and
-`ataxiaBasher_dsAlert` (basher denizen-state alerts, gated on `ataxiaBasher.brAlerts`).
-
-`ataxia.decho` is likewise undefined. Its six guarded calls in `affliction_tracking_core/008_V3_Integration.lua`
-therefore never printed a `[V3] ILLUSION:` line, until v4.7.479 sent them through `illusionEcho` (008:76).
-**Guard an optional helper or use a real one; never assume.**
-
-`tools/check_orphans.py` now fails CI on a namespace field that is called but assigned nowhere, so
-this class of mistake cannot ship silently again.
-
-**Echo strings must be pure ASCII** (2026-07-26): typographic characters (em-dashes `—`,
-arrows `→`, ellipses `…`, curly quotes) mojibake through the packaging/display pipeline
-(`—` rendered as `â€"` in-game). Use `--`, `->`, `...`, `'` in any string passed to
-echo/cecho/send. Decorative box-drawing borders in status screens are currently
-tolerated; never add new non-ASCII to user-visible strings.
-
----
-
-## Testing Approach
-
-### Mock GMCP Data
-```lua
-gmcp = gmcp or {}
-gmcp.Char = gmcp.Char or {}
-gmcp.Char.Vitals = {bal="1", eq="1", hp=5000, maxhp=5000}
-gmcp.Char.Afflictions = {List = {}}
-```
-
-### Test files share one Lua state
-`src_new/tests/test_runner.lua` runs every `test_*.lua` in ONE Lua state, in filename order, so a
-global that a test file replaces (`send`, `io.open`, `tempTimer`, `getEpoch`, `ataxiaEcho`, a
-module stub) is still replaced for every file after it. Restore it at the end of the file, and
-inside a test restore it under `pcall` so a failing `expect` cannot leak it. Two real cases:
-`test_settings.lua` mocked `io.open` (a write handle for any path opened without a mode) and never
-restored it, so a later test reading a trigger file got a table with no `read` (fixed v4.7.321);
-`test_swarm_tactics.lua` restores `send` part-way down the file, so blocks after that point capture
-sends locally. A fixture that rewinds a mock clock must also clear every stamp taken on that clock,
-or an earlier test's stamp sits in this test's future and reads as fresh.
-
-### Performance Considerations
-- **Sub-second response times critical**
-- Optimize trigger patterns (use specific strings over wildcards)
-- Cache frequently accessed data
-- Minimize table creation in hot paths (balance/prompt triggers)
-- Use stopwatches for precise timing
-- Avoid expensive operations in prompt triggers
-
----
-
-## Common Pitfalls & Solutions
-
-### Pitfall: Trusting Combat Messages
-```lua
--- BAD: Assuming affliction was applied
-if matches[1]:find("You jab") then
-  target.affs.paralysis = true  -- They might have shrugging!
-end
-
--- GOOD: Track attempts, confirm with diagnose/death messages
-if matches[1]:find("You jab") then
-  target.affAttempts.paralysis = true
-end
-```
-
-### Pitfall: Not Handling Blackout
-```lua
--- BAD: Assuming vitals are accurate
-if ataxia.vitals.hp < 1000 then
-  sip health
-end
-
--- GOOD: Check for blackout first
-if not ataxia.afflictions.blackout and ataxia.vitals.hp < 1000 then
-  sip health
-end
-```
-
-### Pitfall: Hardcoded Timing
-```lua
--- BAD: Assuming 2s balance
-tempTimer(2.0, function() doNextAttack() end)
-
--- GOOD: Use stopwatches and balance regain events
-function ataxia.balance.regained("bal")
-  doNextAttack()
-end
-```
-
-### Pitfall: `os.clock()` is CPU time, not a clock
-Lua 5.1 defines `os.clock()` as CPU time; it equals wall time only under Windows' C runtime, so on
-Linux and macOS a game timer built on it barely advances. Time game events with `getEpoch()`, and move
-every stamp and every comparison of one timer together. v4.7.419 replaced the last `os.clock()` calls
-(the rebound-recovery prediction, the crushed-throat apply window, the balance-time display and the
-Serpent offense's `now()`); `test_serpent_notes.lua` holds `os.clock` still, so a Serpent timer that
-reads it again fails its test.
-
-### Pitfall: a bare weapon keyword can wield the wrong item (v4.7.456)
-`wield staff` matches every item that answers to "staff", and artefacts do not look like their
-keyword: the user's Shar'ilian lightspire is an illusion staff. In the 2026-10-27 group log the game
-took it on about half the Shikudo rounds and refused each combo. Wield by ITEM ID (`staff489282`),
-resolved from a setting or from GMCP `Char.Items` by the item's NAME (`shikudo.staffRef`,
-`shikudo/006`; the Two Handed basher does the same, `basher/015`). A bare keyword is a last resort,
-and it should say so once.
-
-### Pitfall: ASSESS and CONTEMPLATE cost balance without their trait (v4.7.456)
-ASSESS is free only with the HEALTH INSPECTOR trait, CONTEMPLATE only with MIND WARDEN (the user).
-`misc_scripts/031_Traits.lua` reads TRAIT LIST KNOWN and answers `ataxia_assessFree()` /
-`ataxia_contemplateFree()`; an unread trait list answers no. For EVERY class it wraps `send` once:
-`ataxia_traitFilter` removes each whole two-word `assess <x>` / `contemplate <x>` command whose
-trait we lack (split on our separator and on `;`, a `queue ...` prefix kept, an empty command not
-sent). So an offense may keep writing ASSESS into its rounds; it simply does not leave the package.
-Read the target's health some other way when it matters. To send one on purpose (the `assess`
-alias), call `ataxia_rawSend`. Mnemosyne's "boon contemplate <name>" is three words and passes.
-
-### Pitfall: two triggers on one party line run the action twice (v4.7.456)
-`highlighting/011_Party_Leader` had the same four patterns as `party_targetting/002`, and both ran
-`t NAME`, so every leader call switched target twice and, through `partyrelay`, said the target back
-to the party. Before adding a trigger, grep for one on the same line (the same rule as the cure
-triggers in memory affliction-tracking.md).
-
----
-
 ## GMCP Data Reference
 
 ### Vitals (fires on prompt)
@@ -3210,30 +3540,6 @@ gmcp.Room.Info = {
   area = "Ashtan"
 }
 ```
-
----
-
-## Important Considerations
-
-### Things to Remember
-- Achaea has 26 classes (21 base + 4 Elemental Lords + Dragon) with unique mechanics
-- Server-side curing exists but custom systems provide advantages
-- Illusions and hidden afflictions are common (use diagnosis)
-- Combat logs can be several hundred lines per second
-- System must handle disconnections/reconnections gracefully
-- Blackout hides all vitals and afflictions (special handling required)
-- Aeon/retardation slow down actions (disable batching). Only the last command of the last run happens, so a slowed alias round is one command (`kb/mechanics/balance-and-queueing.md`)
-- Some afflictions prevent certain actions (paralysis, stun, etc.)
-
-### Things to Avoid
-- Hardcoded delays (server-side timing varies by ping)
-- Assuming affliction order from attacks
-- Trusting all game output without verification (illusions exist)
-- Over-automating (ToS compliance concerns)
-- Blocking the main thread with heavy processing
-- Creating tables in hot paths (prompt/vitals triggers)
-- Using wildcards excessively in triggers
-- Global variable pollution (use namespaces)
 
 ---
 
@@ -3542,240 +3848,6 @@ Weave-based combat with 2 modes (mind/flurry) and 3 simultaneous kill routes: Ps
 
 ---
 
-## Lessons Learned (Combat System Development)
-
-### Silent gates: four rules from the 2026-08-19 Grulk death (v4.7.275)
-
-A 123-second PvP loss took two full analysis passes to explain. Both passes were slowed by the
-same class of problem, and all four rules generalise well beyond that fight.
-
-**1. A status display that prints BEFORE the send is not evidence of a send.**
-The `[BM ...]` block prints inside `runDoublePrep`, after `blademaster.run()`'s guards but before
-`sendAttack`'s. It reported healthy prep **89 times while 10 commands reached the server**.
-Instrument every `return` in a guard chain — debounced per-*reason*, so a change of reason still
-prints immediately (that transition is the interesting part).
-
-**2. `send(cmd, false)` makes a command invisible in the log.**
-`ataxia_breakLock` sends `fitness` that way, so a log shows only the server's replies. The first
-analysis pass concluded fitness had never been sent; it had fired twice, and the cooldown refusals
-were sitting right there in the log. **Before concluding a command was never sent, check the
-sender's echo flag.**
-
-**3. Two components can each correctly defer to the other and produce total inaction.**
-`blademaster.sendAttack` deferred to `ataxia_lockBreak()`; `ataxia_lockBreak` declines when
-`ataxia_canActive()` is false. With weariness up, neither did anything — for 86 seconds, silently.
-**When A defers to B, A must verify B can actually run.**
-
-**4. A gate can INVERT — get stricter exactly as the threat gets worse.**
-`canParry()` blocked on prone, paralysis and limb damage: every one a state a limb-prep class
-manufactures on purpose. The parry froze precisely as the opponent closed in (2 parries in 44
-throws). The identical reasoning error had already been found and fixed in the PvE *selection*
-path in v4.7.221 and never checked in the *send* gate. **When you fix a reasoning error in one
-layer, grep for the same reasoning in the others.**
-
-**Corollary on precedence:** `if A or B and not C` parses as `A or (B and not C)`. This was live in
-`Algedonic.AntiSentinel`, making a single damaged left arm trigger a rift-lock panic ~20 times a
-fight. Parenthesise mixed `and`/`or` conditions.
-
-**Corollary on affliction decoding:** our prompt abbreviations come from
-`ataxia/008_Affliction_Colouring.lua`, and some are one letter apart in meaning. `par` is
-**paranoia**; `PAR` is **paralysis**. `dar` is darkshade, `ver` vertigo, `stu` stupidity.
-**Never infer an affliction from its abbreviation -- look it up.** Also: the prompt WRAPS across
-two lines when the affliction block is long, so a naive log parser silently drops exactly the
-most-afflicted (i.e. most interesting) prompts.
-
-**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`. Since v4.7.419 blackout uses it (4 s: Psion LIGHTSTEAL 525, Knight CONCUSS `snb/008`), and MIND DISRUPT gives `disrupted` a 10 s BACKSTOP (`telepathy_tekura/007`; the game gives it no duration, only Concentrate cures it) that the target's CONCENTRATE line (788) cancels through `ataxia_tarAffFaded`.
-
-**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire (the slickness proof goes through `proveAffAbsentV3` first since v4.7.479, so the branches it rules out go too). A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
-
-**Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
-in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
-prompt, the question is whether GMCP surfaces it at all -- and adding a text trigger to "fix"
-it strands a phantom affliction unless GMCP also sends the matching Remove.
-
-**Corollary on log forensics:** when reading a combat log, count what *didn't* happen. Consumption
-totals, cure confirmations per eat, and outbound-command counts are all recoverable from a log and
-are usually more informative than the lines that did fire.
-
-### A guarded start with an unguarded stop is not a pair (v4.7.292)
-
-The balance banner printed `BALANCE: 0.000` constantly. **Two triggers stop one stopwatch** --
-`balances/001_Limb_Balance` ("...on your legs.") and `balances/006_All_Limbs` ("...on all limbs.")
-both call `endBalTimer()` + `balanceHighlight()`, and both lines arrive in the same round. The first
-stopped and RESET the watch; the second stopped an already-reset watch, read ~0, and printed it as a
-measurement. `timerOnBalUsed` had always refused to start a running watch; nothing ever refused to
-stop a stopped one.
-
-Two rules generalise:
-- **Guard both ends or neither.** EQ was corrected at the same time despite having only one stopper:
-  the asymmetry was the defect, and fixing only the half that bites leaves the other waiting for a
-  second trigger to be added.
-- **"Zero" and "nothing was running" are different answers.** The fabricated 0.000 was written into
-  `bashStats.lastBalanceTime` and zeroed `currentBalanceDamage` a second time, so a round's damage
-  was attributed to a balance of no length -- a display bug that was quietly corrupting DPS.
-
-### Mudlet Trigger Patterns
-
-**Problem**: Strict regex anchors (`^` and `$`) can fail in Mudlet due to line processing quirks.
-
-```lua
--- BAD: May not match due to anchors
-"^You observe .+ \\[(\\d+)\\]$"
-
--- GOOD: More flexible, still specific
-"You observe .+ \\[(\\d+)\\]"
-```
-
-**Best Practices**:
-- Avoid `^` and `$` unless absolutely necessary
-- Use `.+` (one or more) instead of `.*` (zero or more) when content is expected
-- Test patterns against actual game output before deploying
-
-### Counter Incrementing (Button Spam Issue)
-
-**Problem**: Incrementing counters in dispatch/combo builder functions causes them to increment on every button press, not just when the action fires.
-
-```lua
--- BAD: In buildComboBrokenstar() - called every button press
-blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
-combo = "bladetwist;discern " .. target
-
--- GOOD: Use trigger to increment when action actually fires
-blademaster.bladetwistTriggerID = tempRegexTrigger(
-  "BLADETWIST \\[\\|\\] BLADETWIST \\[\\|\\] BLADETWIST",
-  function()
-    blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
-  end
-)
-```
-
-**The server queue does the same to a planner's history (v4.7.420).** An offense key sends `queue addclear
-free ...`, which REPLACES a round still waiting on equilibrium or balance, so history kept across rounds (the
-last round's kind, a MIND run, a prelude count, a latch, an alternated side) must move when the GAME RUNS the
-round. Counted per press, `shikudo/007` (caught in review) ran the same kind of round twice per recovery,
-turned a critical MIND IMPATIENCE into a combo and spent its KAI CHOKE prelude unsent. 007 and 011 commit a
-pending round on the queue's run line, matched on its FIRST row since it wraps (`.claude/AGENTS.md`).
-
-### Limb Balancing Strategy
-
-**Problem**: When attacking two limbs with asymmetric damage, one limb reaches threshold before the other.
-
-**Solution**: Always hit the **LOWER damage limb as primary** to balance progression.
-
-```lua
-function blademaster.getFocusLeg()
-  local LL = blademaster.getLL()
-  local RL = blademaster.getRL()
-  return (LL <= RL) and "left" or "right"
-end
-
-function blademaster.getCentreslashDirection()
-  local torso = blademaster.getTorso()
-  local head = blademaster.getHead()
-  return (head <= torso) and "down" or "up"
-end
-```
-
-### Mounted Target Handling
-
-**Problem**: KNEES on a mounted target DISMOUNTS instead of PRONING.
-
-**Solution**: Dismount on the final prep hit (before double-break), then KNEES on double-break will properly prone.
-
-```lua
-if phase == "leg_prep" then
-  -- Dismount during final prep hit if mounted + hamstrung
-  if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
-    return "knees"  -- Dismount now
-  end
-  return blademaster.selectPrepStrike()
-end
-```
-
-### Phase Transition Triggers
-
-**Problem**: State-based phase transitions fail when triggers don't capture values correctly.
-
-**Best Practices**:
-1. Use simple, robust trigger patterns for critical state updates
-2. Log trigger fires during debugging to verify they're matching
-3. Have fallback phase logic when triggers miss
-4. Always update both state flags and values (e.g., `bleedingReady = true` AND `targetBleeding = value`)
-
-### Writhe/Escape Handling
-
-**Problem**: Target escaping (writhe from impale, standing from prone) should preserve progress.
-
-**Best Practices**:
-1. On writhe: Keep `bleedingReady` and `targetBleeding` - don't reset progress
-2. Check if target is still prone after writhe (free re-impale!)
-3. If bleeding >= 700 and not impaled, can go directly to brokenstar
-
-```lua
-function blademaster.onTargetUnimpaled()
-  blademaster.state.isImpaled = false
-  -- Keep bleedingReady and targetBleeding - we built that progress!
-
-  if blademaster.hasAff("prone") then
-    cecho("[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
-  elseif blademaster.state.bleedingReady then
-    -- Go to brokenstar phase (checked in getPhaseBrokenstar)
-  end
-end
-```
-
----
-
-## Agent Teams
-
-Claude Code agent teams enable parallel development across isolated combat subsystems. See `docs/ai-includes/agent-teams.md` for the full guide.
-
-### Quick Reference
-
-**When to use**:
-- Parallel class system development (e.g., shaman + blademaster simultaneously)
-- Cross-system feature rollouts (e.g., adding V3 tracking to multiple classes)
-- Parallel code review of independent subsystems
-- Documentation sprints across multiple class files
-
-**When NOT to use**:
-- Single class edits, threshold tweaks, trigger fixes
-- Sequential debugging (cause-and-effect tracing)
-- Changes to shared `ataxia/` core files (serialize through lead)
-
-**File ownership rule**: Each teammate owns a class directory under `levi_scripts/`. The `ataxia/` core (affliction tracking, curing, balance) is shared -- coordinate through the team lead before modifying.
-
-**Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
-
-### Porting Foreign Combat Scripts
-
-**Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
-
-**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has no writer for `tLimbs` (no file defines it since 3c312975; triggers 392 and 393 threw on it until v4.7.479) — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
-
-**Prevention checklist for ported code:**
-1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`
-2. If no writes found, the table is dead — map to the canonical source (usually `lb[target].hits` for limb data, `tAffs` for afflictions)
-3. For file-scope `local` state tables, verify they are reset at the top of the per-tick entry point — stale sentinels from prior ticks cause phantom actions
-4. When two functions must agree on a threshold (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags — don't mix conventions from the source and destination systems
-5. Never write a new offense file (>200 lines) in a single pass — write namespace + calc first, build, then add each form's logic incrementally
-
-```lua
--- BAD: Assumed tLimbs was populated (it wasn't)
-local tl = tLimbs
-gm.llFLASH = (tl.LL + ld.shikFlashheel >= 100)
-
--- GOOD: Read from canonical trigger-fed source
-local function getLimb(key)
-  if not target or not lb or not lb[target] or not lb[target].hits then return 0 end
-  return lb[target].hits[LIMB_NAMES[key]] or 0
-end
-gm.LL = getLimb("LL")
-gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
-```
-
----
-
 ## Model Routing Guidance
 
 Different tasks benefit from different model tiers. The `build-and-version` agent already routes to Haiku for efficiency.
@@ -3804,54 +3876,6 @@ Different tasks benefit from different model tiers. The `build-and-version` agen
 
 ---
 
-## Model & Effort Selection (MANDATORY)
-
-**Goal: each task runs on the cheapest model and the lowest reasoning effort that will still do it well.** Defaulting to Opus at high effort for everything is the waste this rule exists to stop. Where this section and the older *Model Routing Guidance* table disagree, this section wins.
-
-**Main session = orchestrator.** The main session plans, decides and reviews. It hands execution to subagents and picks a model and effort for each one based on the task. It does not do bulk or mechanical work itself (sweeping searches, mass reads, running builds and tests, boilerplate edits).
-
-### Routing guide
-
-| Tier | Model / effort | Agent | Use for |
-|------|----------------|-------|---------|
-| 1 | Haiku / `low` | `fast-reader` | File/code search, grepping, listing, reading and summarizing files, simple renames, formatting, boilerplate, running tests or builds and reporting results, small edits that are already well specified |
-| 2 | Sonnet / `medium` | `implementer` | Most everyday coding: implementing features from a clear plan, writing tests, normal bug fixes, refactors inside one module, docs, code review of small diffs |
-| 3 | Opus / `high` | `architect` | Architecture and design decisions, ambiguous or cross-cutting changes, hard debugging where the cause is unknown, security-sensitive code, data migrations, anything expensive to get wrong or hard to undo |
-| 4 | Fable | `architect` + per-call `model: "fable"` | Only the hardest reasoning problems, or when Opus has already failed. Don't use it routinely |
-
-**Project defaults:** combat-mechanics reasoning is tier 3 unless it is clearly mechanical. That covers lock strategy, V3 affliction tracking, SSC curingset writes, and anything in the shared `ataxia/` core. Lessons Learned is mostly a list of cheap-looking changes that weren't. The existing agents keep their tiers: `build-and-version` = Haiku, `offense-system` and `team-class-offense` = Sonnet.
-
-### How model and effort are set
-
-- **Agent definition** (`.claude/agents/*.md` frontmatter), the primary mechanism:
-  ```yaml
-  ---
-  name: fast-reader
-  description: ...
-  model: haiku      # haiku | sonnet | opus | fable | inherit | full model id
-  effort: low       # low | medium | high | xhigh | max
-  ---
-  ```
-- **Per call:** the Agent tool's `model` parameter (`haiku | sonnet | opus | fable`) overrides the frontmatter for that one spawn. The tool also takes an `effort` parameter, which may only be used when instructions explicitly ask. This section is that explicit permission: override effort per call when the task needs a different level from the agent's default.
-- **Model precedence:** per-call `model` > frontmatter `model` > `CLAUDE_CODE_SUBAGENT_MODEL` env var > the main session's model.
-- `xhigh`/`max` only matter on Opus and Fable. Use them only after `high` has visibly fallen short.
-
-### Escalation and de-escalation
-
-- **Start at the lowest tier that plausibly fits.**
-- **If a subagent's output is wrong, incomplete, or shows confusion, retry ONCE at the next tier up.** Never retry at the same tier: a second identical attempt mostly buys the same answer. An agent replying `ESCALATE: <why>` counts as a failure at its tier.
-- **De-escalate:** when an Opus task breaks into well-defined steps, hand those steps down to Sonnet or Haiku. `architect` tags every step of its plan with the tier that should run it.
-
-### Transparency
-
-Before each delegation, write one line naming the model, the effort and the reason, so the choices can be audited:
-
-    → Haiku/low: repo-wide search for ataxiaBasher_rageAfford call sites
-    → Sonnet/medium: implement step 2 of the approved plan (Psion keeper hold)
-    → Opus/high: diagnose the escape-ladder livelock, cause unknown
-
----
-
 ## Hooks
 
 The project uses Claude Code hooks for automated quality gates and context preservation. All hook scripts live in `.claude/hooks/`.
@@ -3868,30 +3892,6 @@ The project uses Claude Code hooks for automated quality gates and context prese
 **Exit codes:** 0 = allow, 2 = block tool use. All hooks have jq-with-grep fallbacks for portability.
 
 ---
-
-## Documentation Requirements
-
-**MANDATORY**: After every code change, you MUST update all relevant documentation before considering the task complete. This is not optional.
-
-### CHANGELOG.md
-- **Update `CHANGELOG.md` after every change** — bug fixes, new features, refactors, anything that modifies behavior
-- Group entries by date, with newest at the top
-- Each entry must include: **what changed** (files), **why** (root cause / motivation), and **how** (what the fix/feature does)
-- Use the existing format in `CHANGELOG.md` as a template
-
-### Other Documentation
-- **CLAUDE.md**: Update if you add new systems, change architecture, modify build processes, or add new conventions
-- **Memory files** (`~/.claude/projects/.../memory/`): Update with stable patterns, conventions, and lessons learned
-- **Class docs** (`.claude/classes/*.md`): Update if combat mechanics or class-specific logic changes
-- **Plan files** (`~/.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
-- **README.md / GETTING_STARTED.md**: Update if setup steps, dependencies, or usage instructions change
-
-### Checklist (run mentally after every task)
-1. Did I change code? → Update `CHANGELOG.md`
-2. Did I add/remove files? → Update `CHANGELOG.md`, verify build includes them
-3. Did I change system architecture? → Update `CLAUDE.md`
-4. Did I learn something reusable? → Update memory files
-5. Did I change class combat logic? → Update relevant `.claude/classes/*.md`
 
 ---
 

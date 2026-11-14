@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-13 - `CLAUDE.md`: the every-task rules come first (docs only, no version bump)
+
+`CLAUDE.md` loads only in part: about the first 131,000 to 143,000 characters in the maintainer's sessions, and the first 40,000 on a small context window (`docs/reference/harness-facts.md`). The rules that every task needs were after that point, at lines 2,954 to 3,901.
+
+- **The sections are in a new order; no text changed.** First: Project Overview, Documentation-First, Documentation Requirements, Versioning & Auto-Update, Model & Effort Selection, Development Guidelines, Testing Approach, Common Pitfalls. These end before character 32,000. Lessons Learned and Agent Teams follow. The system reference (Repository Structure, Current System Components and the rest) comes after them.
+- **One line changed:** `### Versioning & Auto-Update` is now `## Versioning & Auto-Update`, because the section left its parent, "Repository Structure". Proof that nothing else changed: the sorted non-blank lines of the file before and after differ in that one line only.
+- A citation of a `CLAUDE.md` section by its title still resolves. A citation by line number does not; none exists in a tracked file outside `CHANGELOG.md`.
+
+---
+
 ## 2026-11-13 - What loads and what binds: the harness facts, and the TAOM adoption review (docs only, no version bump)
 
 - **`docs/reference/harness-facts.md` (new)** records how Claude Code treats this repository as the maintainer uses it, each row with its source and date. Every session starts in the parent folder, so: the 8 Claude Code hooks in `.claude/settings.local.json` never ran, the 6 custom agents were never offered, and `CLAUDE.md` loads only after the first file access below the repository and is cut at about 131,000 to 143,000 characters (about line 1,140 of 3,901). Three hooks also read `$TOOL_INPUT`, while hook input arrives on stdin: a test with `git push --force` on stdin was allowed. The page separates what was seen (36 session transcripts, tests) from what the documentation says and from what is not yet verified.
