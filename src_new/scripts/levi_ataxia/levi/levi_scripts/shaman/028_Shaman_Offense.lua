@@ -42,7 +42,7 @@ packageName: ''
     - coagulation: Convert bleed into slickness. Requires aspar spirit + bleed >= 200.
     - relapse: Force affliction to relapse after cure. Requires syvis spirit.
     - soulscourge: Mana damage.
-    - soulrend: Mana damage (higher, requires doll fashions > 0).
+    - soulrend: adds doll fashions (manaleech strongest); requires doll fashions > 0 (ABADMIN #1932).
 
     MODES:
     - group: Reactive gap-filling for group true lock (PRIMARY)
@@ -590,6 +590,22 @@ function shamanOffense.canSoulrend()
     return false
 end
 
+-- Breach + soulrend fashion burst (ANOTHER PLAYER's tip, Zax log mtfwoA4F; unconfirmed by our logs).
+-- CURSE <t> BREACH is the fast curse (1.00 s BASE; ours is BASE x ataxia_eqFactor). It charges jinx and
+-- carries INVOKE SOULREND. Fashions per rend rise as the target's mana falls (about 10-13 in the log).
+-- Gate: maligus bound, a doll on this target (not group mode), manaleech AND asthma up (asthma keeps
+-- them from smoking manaleech off). Paralysis is a bonus (blocks tree), not required.
+-- A plain false is a choice: the normal curse + invoke rotation runs instead.
+function shamanOffense.canBreachRend()
+    if not (shaman and shaman.spiritisbound and shaman.spiritisbound("maligus")) then
+        return false
+    end
+    if shamanOffense.state.mode == "group" or shamanOffense.state.dollTarget ~= target then
+        return false
+    end
+    return shamanOffense.hasAff("manaleech") and shamanOffense.hasAff("asthma") and true or false
+end
+
 --[[
     Invoke priority for curse rounds (relapse handled at buildAttack level):
     1. Soulrend — target has manaleech/confusion/shyness/paranoia/dementia + maligus bound
@@ -755,6 +771,9 @@ function shamanOffense.buildAttack()
         end
 
         -- ===== PRIORITY 4: REGULAR CURSE + INVOKE (also charges jinx for next balance) =====
+        if shamanOffense.canBreachRend() then
+            return atk .. prefix .. "curse " .. target .. " breach invoke soulrend"
+        end
         local invoke = shamanOffense.selectInvoke(primaryAff)
         if invoke then
             atk = atk .. prefix .. "curse " .. target .. " " .. primary .. " " .. invoke
@@ -827,6 +846,9 @@ function shamanOffense.buildAttack()
         -- Keeps the curse → jinx cycle going while relapse is on CD
         shamanOffense.state.swiftFired = false  -- New curse cycle
         shamanOffense.state.jinxUsedThisCycle = false  -- New cycle starts
+        if shamanOffense.canBreachRend() then
+            return atk .. prefix .. "curse " .. target .. " breach invoke soulrend"
+        end
         local invoke = shamanOffense.selectInvoke(primaryAff)
         if invoke then
             atk = atk .. prefix .. "curse " .. target .. " " .. primary .. " " .. invoke
@@ -894,6 +916,9 @@ function shamanOffense.buildAttack()
         -- Bloodlet fires aggressively here (haemo + bleed pressure)
         shamanOffense.state.swiftFired = false  -- New curse cycle
         shamanOffense.state.jinxUsedThisCycle = false  -- New cycle starts
+        if shamanOffense.canBreachRend() then
+            return atk .. prefix .. "curse " .. target .. " breach invoke soulrend"
+        end
         local invoke = shamanOffense.selectBleedInvoke(primaryAff)
         if invoke then
             atk = atk .. prefix .. "curse " .. target .. " " .. primary .. " " .. invoke
@@ -1244,7 +1269,7 @@ if tempAlias then
         shamanOffense.echo("  aspar   = invoke coagulation (bleed -> slickness)")
         shamanOffense.echo("  syvis   = invoke relapse (aff relapses after cure)")
         shamanOffense.echo("  marak   = invoke soulscourge (mana pressure)")
-        shamanOffense.echo("  maligus = invoke soulrend (enhanced mana pressure)")
+        shamanOffense.echo("  maligus = invoke soulrend (adds doll fashions)")
         shamanOffense.echo("Attunements (3): marak (+constitution), teraile (bleed on curses), maligus (drain health/mana)")
         shamanOffense.echo("Tether: anthius")
         shamanOffense.echo("")

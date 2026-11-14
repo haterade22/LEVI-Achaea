@@ -112,6 +112,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/players/kai-choke-2026-11-02.txt | The user: KAI CHOKE needs balance and equilibrium, as MIND CRUSH does, so neither can share a flush with a combo (CONFLICTS #56) | 2026-11-02 |
 | raw/players/strike-feet-2026-11-04.txt | The user: Blademaster's STRIKE FEET is removed, and STRIKE KNEES does its job | 2026-11-04 |
 | raw/players/fitness-2026-11-01.txt | The user: FITNESS needs balance and equilibrium, against the wiki's balance only (CONFLICTS #50) | 2026-11-01 |
+| raw/players/shaman-breach-soulrend-2026-11-14.txt | ANOTHER PLAYER's tip: CURSE <t> BREACH INVOKE SOULREND as a fast fashion burst with manaleech + asthma; unconfirmed by our logs | 2026-11-14 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
 | raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |
 | raw/players/cures-user-2026-10-23.txt | The user on the five names the game does not list: bleeding = CLOT (amount), drowning = pear, nocaloric = apply caloric (a defence); the four tempered humours = ginger/antimony | 2026-10-23 |

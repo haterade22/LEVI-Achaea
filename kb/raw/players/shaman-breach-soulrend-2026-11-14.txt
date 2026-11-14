@@ -1,0 +1,9 @@
+Source: a tip from ANOTHER PLAYER, passed on by the maintainer on 2026-11-14. Player not named. Verbatim.
+Confidence: unconfirmed by our own logs.
+
+You can curse breach, and its .9s speed, you can invoke soulrend on it, for super quick fashions
+So if you can ever get them to manaleech + ast + par, and they dont instantly cure manaleech or move, you just slam .9s curse x breach invoke soulrend 2x between eats for 20 fashions each
+Or watch their mana for roughly 86% (normally 1% above their mana sip threshold) and slam breach soulrends.
+
+Maintainer's addition (2026-11-14):
+Well, manaleech gives 10, but you get 2 in between eats. so thats 20 fashions super quick on the manaleech thing.

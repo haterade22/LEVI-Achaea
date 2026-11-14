@@ -101,8 +101,17 @@ breach:
   balance: eq
   effect: "Strip target's curseward — always top priority when present"
   syntax: "curse <target> breach"
-  notes: "Fires before any other strategy when target has curseward (028:672-675)"
+  notes: "Fires before any other strategy when target has curseward (028:672-675). Also the fast carrier for soulrend: see Fashion burst"
 ```
+BASE 1.00 s (kb/classes/shaman.md); ours is BASE x ataxia_eqFactor (about 0.85 s, kb/mechanics/balance-and-queueing.md "Our speed factors"); Zax printed Bal Spent 0.9 s (ANOTHER PLAYER).
+
+## Fashion burst (breach + soulrend)
+`curse <t> breach invoke soulrend` (maligus bound). Breach is the fast curse (1.00 s BASE, about 0.85 s ours), charges jinx, and the rend adds doll fashions. Sources, all ANOTHER PLAYER and unconfirmed by our logs: the tip `kb/raw/players/shaman-breach-soulrend-2026-11-14.txt` and Zax's log `kb/combat/fights/2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.md`.
+- **Window:** target has manaleech + asthma (asthma stops smoking, so manaleech stays). Paralysis is a bonus (blocks tree), not required: it was not up at any of Zax's five rends. The tip says two rends fit between their eats, about 10 fashions each (the maintainer: manaleech gives 10, two between eats = 20).
+- **Fashions per rend** in the log: 13 at target mana 60-61% and 59%, 10 at 73-75%. Lower target mana gives more.
+- **Manual tactic (not coded):** watch their mana near 86% (about 1% above their mana-sip threshold) and slam breach soulrends. The target's mana comes only from VODUN STATUS.
+- **Code:** `shamanOffense.canBreachRend()` (028:599) gates it: maligus bound, not group mode, doll on this target, manaleech + asthma. Called before the normal curse + invoke at the group-strategy slot (028:774), the lock slot (028:849) and the bleed slot (028:919). Curseward (plain `curse <t> breach`) and a charged jinx still come first. Test: `src_new/tests/test_shaman_breach_rend.lua`.
+- **Not confirmed live:** the server accepting it for us, our balance, our fashion counts. Record them from the 007_Soulrend echo.
 
 ## Modes
 Offense is mode-driven; `setMode` selects, `computeStrategy` derives the strategy each balance (028:1118-1128, 220-272).
@@ -124,7 +133,7 @@ bloodlet:    { spirit: teraile, effect: "haemophilia + start bleeding",  syntax:
 coagulation: { spirit: aspar,   effect: "convert bleed into an affliction (the game accepted it at bleed 120, Mystor's log 2026-10-11; our offense gates on 200)", syntax: "invoke coagulation <aff>" }
 relapse:     { spirit: syvis,   effect: "force aff to relapse after cure (paralysis is #1 target; skipped vs tree)", syntax: "invoke relapse <aff>" }
 soulscourge: { spirit: marak,   effect: "mana damage", syntax: "invoke soulscourge" }
-soulrend:    { spirit: maligus, effect: "higher mana damage; gated on manaleech/confusion/shyness/paranoia/dementia", syntax: "invoke soulrend" }
+soulrend:    { spirit: maligus, effect: "adds doll FASHIONS (not mana damage; ABADMIN #1932, kb/raw/abadmin/spiritlore_maligus_1932.txt; our trigger 007_Soulrend counts them). Modifiers manaleech > confusion > shyness > paranoia > dementia; a masked modifier is 33% weaker except manaleech; the rend happens before the curse aff lands. Gated here on manaleech/confusion/shyness/paranoia/dementia", syntax: "invoke soulrend" }
 ```
 
 ## Spiritlore — Required Combat Spirit Profile

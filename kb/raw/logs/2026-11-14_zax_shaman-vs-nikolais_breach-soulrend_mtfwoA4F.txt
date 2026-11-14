@@ -1,0 +1,1232 @@
+
+
+ 
+    
+  Mudlet, main console extract from Achaea profile
+  
+   
+  
+  
+  [B|E] [C-BK] H:7015|100% M:6957|100% [32.82] F:5 
+
+02:06:16.081 (1) [Nikolais]: 
+
+[Zax]: -Def: parrying (right leg).
+
+[Zax]: +Def: parrying (right leg).
+
+[Zax]: -Def: rebounding.
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry right leg/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your right leg.
+
+Your aura of weapons rebounding disappears.
+
+[Nikolais] HP: [==============================] (6275|6213) (101.00%)
+
+[Nikolais] Mp: [==============================] (5440|6834) (79.60%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 7 curses.
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6901|99% [32.82] F:5 
+
+02:06:22.260 (1) [Nikolais]: PAR(100%), 
+
+[Curing]: SMOKE MALACHITE
+
+You take a long drag of malachite off your pipe.
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6901|99% [32.82] F:5 
+
+02:06:22.302 (1) [Nikolais]: 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6901|99% [32.82] F:5 
+
+02:06:22.342 (1) [Nikolais]: 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.69s]
+
+[-|E] [C-BK] H:7015|100% M:6901|99% [32.82] F:5 
+
+02:06:22.945 (1) [Nikolais]: 
+
+[Zax]: -Def: parrying (right leg).
+
+[Zax]: +Def: parrying (left arm).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.9s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left arm/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left arm.
+
+[Nikolais] HP: [==============================] (6151|6213) (99.00%)
+
+[Nikolais] Mp: [==============================] (5304|6834) (77.61%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 6 curses.
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6921|99% [32.82] F:5 
+
+02:06:23.164 (1) [Nikolais]: PAR(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6921|99% [32.82] F:5 
+
+02:06:23.289 (1) [Nikolais]: PAR(100%), 
+
+Your lungs have recovered enough to smoke another mineral or plant.
+
+[Smoke Recov: 1.5s]
+
+[-|-] [C-BK] H:7015|100% M:6921|99% [32.82] F:5 
+
+02:06:23.805 (1) [Nikolais]: PAR(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6921|99% [32.82] F:5 
+
+02:06:23.885 (1) [Nikolais]: 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.72s]
+
+[-|E] [C-BK] H:7015|100% M:6921|99% [32.82] F:5 
+
+02:06:23.887 (1) [Nikolais]: 
+
+[Zax]: -Def: parrying (left arm).
+
+[Zax]: +Def: parrying (head).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.94s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry head/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your head.
+
+[Nikolais] HP: [==============================] (6027|6213) (97.01%)
+
+[Nikolais] Mp: [==============================] (5168|6834) (75.62%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 5 curses.
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6885|98% [32.82] F:5 
+
+02:06:24.112 (1) [Nikolais]: PAR(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6885|98% [32.82] F:5 
+
+02:06:24.227 (1) [Nikolais]: PAR(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.97s]
+
+[-|E] [C-BK] H:7015|100% M:6885|98% [32.82] F:5 
+
+02:06:25.085 (1) [Nikolais]: PAR(100%), 
+
+[Zax]: -Def: parrying (head).
+
+[Zax]: +Def: parrying (left leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 1.05s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/curse Nikolais clumsy invoke relapse paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+[Nikolais] HP: [==============================] (5783|6213) (93.08%)
+
+[Nikolais] Mp: [==============================] (5032|6834) (73.63%)
+
+You: Curse clumsy -> Nikolais
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke relapse paralysis -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 1.6s]
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6806|97% [32.82] F:5 
+
+02:06:25.165 (1) [Nikolais]: PAR(100%), clum(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6806|97% [32.82] F:5 
+
+02:06:25.285 (1) [Nikolais]: PAR(100%), clum(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6806|97% [32.82] F:5 
+
+02:06:25.655 (1) [Nikolais]: clum(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.75s]
+
+[-|E] [C-BK] H:7015|100% M:6806|97% [32.82] F:5 
+
+02:06:25.912 (1) [Nikolais]: clum(100%), 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (right leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 1.56s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry right leg/vodun status/swiftcurse Nikolais asthma/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your right leg.
+
+[Nikolais] HP: [==============================] (5969|6213) (96.07%)
+
+[Nikolais] Mp: [==============================] (4896|6834) (71.64%)
+
+You: Curse asthma -> Nikolais
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 4 curses.
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6891|99% [32.82] F:5 
+
+02:06:26.730 (1) [Nikolais]: clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6891|99% [32.82] F:5 
+
+02:06:26.837 (1) [Nikolais]: clum(100%), AST(100%), 
+
+Nikolais eats an aurum flake.
+
+[-|-] [C-BK] H:7015|100% M:6881|98% [32.82] F:5 
+
+02:06:27.293 (2) [Nikolais]: clum(50%), AST(50%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.79s]
+
+[-|E] [C-BK] H:7015|100% M:6881|98% [32.82] F:5 
+
+02:06:27.517 (2) [Nikolais]: clum(50%), AST(50%), 
+
+[Zax]: -Def: parrying (right leg).
+
+[Zax]: +Def: parrying (left leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 1s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/jinx paralysis manaleech Nikolais/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+[Nikolais] HP: [==============================] (5845|6213) (94.08%)
+
+[Nikolais] Mp: [==============================] (4760|6834) (69.65%)
+
+You: Jinx paralysis manaleech -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 2.0s]
+
+You observe thin red rivulets of blood dripping from Nikolais's wounds.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6815|97% [32.82] F:5 
+
+02:06:27.735 (2) [Nikolais]: PAR(100%), clum(50%), mleech(100%), AST(50%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6815|97% [32.82] F:5 
+
+02:06:27.864 (2) [Nikolais]: PAR(100%), clum(50%), mleech(100%), AST(50%), 
+
+You: Relapse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+[-|-] [C-BK] H:7015|100% M:6815|97% [32.82] F:5 
+
+02:06:28.132 (2) [Nikolais]: PAR(100%), clum(50%), mleech(100%), AST(50%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.79s]
+
+[-|E] [C-BK] H:7015|100% M:6815|97% [32.82] F:5 
+
+02:06:28.525 (2) [Nikolais]: PAR(100%), clum(50%), mleech(100%), AST(50%), 
+
+Nikolais eats a magnesium chip.
+
+[-|E] [C-BK] H:7015|100% M:6815|97% [32.82] F:5 
+
+02:06:29.077 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (left leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 2s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/curse Nikolais breach invoke soulrend/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+[Nikolais] HP: [==============================] (5597|6213) (90.09%)
+
+[Nikolais] Mp: [==============================] (4127|6834) (60.39%)
+
+You: Curse breach -> Nikolais
+
+Your attempt to breach finds no curseward.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke soulrend 13 -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 0.9s]
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6722|96% [32.82] F:18 
+
+02:06:29.738 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6722|96% [32.82] F:18 
+
+02:06:29.783 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+Nikolais takes a drink from an elegant diamond vial.
+
+[-|-] [C-BK] H:7015|100% M:6722|96% [32.82] F:18 
+
+02:06:29.864 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (left leg).
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.85s]
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.85s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/curse Nikolais breach invoke soulrend/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+[Nikolais] HP: [==============================] (5392|6213) (86.79%)
+
+[Nikolais] Mp: [==============================] (5120|6834) (74.92%)
+
+You: Curse breach -> Nikolais
+
+Your attempt to breach finds no curseward.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke soulrend 10 -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 0.9s]
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6629|95% [32.82] F:28 
+
+02:06:30.596 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+Nikolais eats an aurum flake.
+
+Nikolais takes a long drag off his pipe.
+
+[-|-] [C-BK] H:7015|100% M:6629|95% [32.82] F:28 
+
+02:06:30.632 (1) [Nikolais]: 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6629|95% [32.82] F:28 
+
+02:06:30.672 (1) [Nikolais]: 
+
+[Zax]: +Def: rebounding.
+
+You feel an aura of rebounding surround you.
+
+[-|-] [C-BK] H:7015|100% M:6629|95% [32.82] F:28 
+
+02:06:30.809 (1) [Nikolais]: 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (left leg).
+
+[Zax]: -Def: rebounding.
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.98s]
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.98s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/jinx paralysis clumsy Nikolais/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+Your aura of weapons rebounding disappears.
+
+[Nikolais] HP: [==============================] (5268|6213) (84.79%)
+
+[Nikolais] Mp: [==============================] (4984|6834) (72.93%)
+
+You: Jinx paralysis clumsy -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 2.0s]
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6547|94% [32.82] F:28 
+
+02:06:31.577 (1) [Nikolais]: PAR(100%), clum(100%), 
+
+[Curing]: SMOKE MALACHITE
+
+You take a long drag of malachite off your pipe.
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6547|94% [32.82] F:28 
+
+02:06:31.708 (1) [Nikolais]: PAR(100%), clum(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6537|93% [32.82] F:28 
+
+02:06:32.396 (1) [Nikolais]: clum(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.9s]
+
+[-|E] [C-BK] H:7015|100% M:6537|93% [32.82] F:28 
+
+02:06:32.476 (1) [Nikolais]: clum(100%), 
+
+Your lungs have recovered enough to smoke another mineral or plant.
+
+[Smoke Recov: 1.53s]
+
+[-|E] [C-BK] H:7015|100% M:6537|93% [32.82] F:28 
+
+02:06:33.150 (1) [Nikolais]: clum(100%), 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (left leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 1.99s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left leg/vodun status/jinx paralysis asthma Nikolais/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left leg.
+
+[Nikolais] HP: [==============================] (5330|6213) (85.79%)
+
+[Nikolais] Mp: [==============================] (4711|6834) (68.93%)
+
+You: Jinx paralysis asthma -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 2.0s]
+
+You observe thin red rivulets of blood dripping from Nikolais's wounds.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6530|93% [32.82] F:28 
+
+02:06:33.574 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6530|93% [32.82] F:28 
+
+02:06:33.734 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6530|93% [32.82] F:28 
+
+02:06:33.940 (1) [Nikolais]: clum(100%), AST(100%), 
+
+Nikolais takes a drink from an elegant diamond vial.
+
+[-|-] [C-BK] H:7015|100% M:6530|93% [32.82] F:28 
+
+02:06:34.308 (1) [Nikolais]: clum(100%), AST(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.91s]
+
+[-|E] [C-BK] H:7015|100% M:6530|93% [32.82] F:28 
+
+02:06:34.486 (1) [Nikolais]: clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (left leg).
+
+[Zax]: +Def: parrying (right leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 2.05s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry right leg/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your right leg.
+
+[Nikolais] HP: [==============================] (5042|6213) (81.15%)
+
+[Nikolais] Mp: [==============================] (5654|6834) (82.73%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 3 curses.
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6494|93% [32.82] F:28 
+
+02:06:35.625 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6494|93% [32.82] F:28 
+
+02:06:35.738 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6494|93% [32.82] F:28 
+
+02:06:35.740 (1) [Nikolais]: clum(100%), AST(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.73s]
+
+[-|E] [C-BK] H:7015|100% M:6494|93% [32.82] F:28 
+
+02:06:36.353 (1) [Nikolais]: clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (right leg).
+
+[Zax]: +Def: parrying (right leg).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.96s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry right leg/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your right leg.
+
+[Nikolais] HP: [==============================] (4918|6213) (79.16%)
+
+[Nikolais] Mp: [==============================] (5518|6834) (80.74%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 2 curses.
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6458|92% [32.82] F:28 
+
+02:06:36.591 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6458|92% [32.82] F:28 
+
+02:06:36.717 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+Nikolais eats a magnesium chip.
+
+[-|-] [C-BK] H:7015|100% M:6795|97% [32.82] F:28 
+
+02:06:37.278 (1) [Nikolais]: clum(100%), AST(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 1s]
+
+[-|E] [C-BK] H:7015|100% M:6795|97% [32.82] F:28 
+
+02:06:37.593 (1) [Nikolais]: clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (right leg).
+
+[Zax]: +Def: parrying (torso).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 1.08s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry torso/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your torso.
+
+[Nikolais] HP: [==============================] (5104|6213) (82.15%)
+
+[Nikolais] Mp: [==============================] (5382|6834) (78.75%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 1 curses.
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6759|97% [32.82] F:28 
+
+02:06:37.673 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6759|97% [32.82] F:28 
+
+02:06:37.809 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.82s]
+
+[-|E] [C-BK] H:7015|100% M:6759|97% [32.82] F:28 
+
+02:06:38.497 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (torso).
+
+[Zax]: +Def: parrying (left arm).
+
+[Zax]: -Def: swiftcurse.
+
+[Zax]: +Def: swiftcurse.
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.99s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry left arm/vodun status/swiftcurse/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your left arm.
+
+[Nikolais] HP: [==============================] (4980|6213) (80.15%)
+
+[Nikolais] Mp: [==============================] (5246|6834) (76.76%)
+
+You: Swiftcurse 
+
+[Eq Spent: 0.85s]
+
+You must regain equilibrium first.
+
+[B|-] [C-BK] H:7015|100% M:6559|94% [32.82] F:28 -200m 
+
+02:06:38.668 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+Nikolais eats a magnesium chip.
+
+Nikolais takes a drink from an elegant diamond vial.
+
+[B|-] [C-BK] H:7015|100% M:6559|94% [32.82] F:28 
+
+02:06:38.889 (1) [Nikolais]: clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (left arm).
+
+[Zax]: +Def: parrying (head).
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.89s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry head/vodun status/swiftcurse Nikolais paralysis/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your head.
+
+[Nikolais] HP: [==============================] (6213|6213) (100.00%)
+
+[Nikolais] Mp: [==============================] (5246|6834) (76.76%)
+
+You: Curse paralysis -> Nikolais
+
+Horror overcomes Nikolais's face as his body stiffens into paralysis.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 9 curses.
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6523|93% [32.82] F:28 
+
+02:06:39.565 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6523|93% [32.82] F:28 
+
+02:06:39.683 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+[Zax]: +Def: rebounding.
+
+You feel an aura of rebounding surround you.
+
+[-|-] [C-BK] H:7015|100% M:6523|93% [32.82] F:28 
+
+02:06:40.104 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.84s]
+
+[B|-] [C-BK] H:7015|100% M:6523|93% [32.82] F:28 
+
+02:06:40.407 (1) [Nikolais]: PAR(100%), clum(100%), AST(100%), 
+
+Nikolais eats a magnesium chip.
+
+[B|-] [C-BK] H:7015|100% M:6523|93% [32.82] F:28 
+
+02:06:40.495 (1) [Nikolais]: clum(100%), AST(100%), 
+
+[Zax]: -Def: parrying (head).
+
+[Zax]: +Def: parrying (right arm).
+
+[Zax]: -Def: rebounding.
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.97s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry right arm/vodun status/swiftcurse Nikolais manaleech/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your right arm.
+
+Your aura of weapons rebounding disappears.
+
+[Nikolais] HP: [==============================] (6089|6213) (98.00%)
+
+[Nikolais] Mp: [==============================] (5110|6834) (74.77%)
+
+You: Curse manaleech -> Nikolais
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+[Bal Spent: 1.0s]
+
+The swiftcurse is empowered with another 8 curses.
+
+You observe that Nikolais is bleeding slightly.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6477|93% [32.82] F:28 
+
+02:06:40.542 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6477|93% [32.82] F:28 
+
+02:06:40.654 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+[Curing]: SMOKE MALACHITE
+
+You take a long drag of malachite off your pipe.
+
+[-|-] [C-BK] H:7015|100% M:6477|93% [32.82] F:28 
+
+02:06:40.655 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.71s]
+
+[-|E] [C-BK] H:7015|100% M:6477|93% [32.82] F:28 
+
+02:06:41.256 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+[Zax]: -Def: parrying (right arm).
+
+[Zax]: +Def: parrying (torso).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.89s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry torso/vodun status/curse Nikolais breach invoke soulrend/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your torso.
+
+[Nikolais] HP: [==============================] (5788|6213) (93.16%)
+
+[Nikolais] Mp: [==============================] (4974|6834) (72.78%)
+
+You: Curse breach -> Nikolais
+
+Your attempt to breach finds no curseward.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke soulrend 10 -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 0.9s]
+
+You observe thin red rivulets of blood dripping from Nikolais's wounds.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6384|91% [32.82] F:38 
+
+02:06:41.435 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6384|91% [32.82] F:38 
+
+02:06:41.481 (1) [Nikolais]: clum(100%), mleech(100%), AST(100%), 
+
+Nikolais eats an aurum flake.
+
+[-|-] [C-BK] H:7015|100% M:6374|91% [32.82] F:38 
+
+02:06:42.084 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+Your lungs have recovered enough to smoke another mineral or plant.
+
+[Smoke Recov: 1.5s]
+
+[-|-] [C-BK] H:7015|100% M:6374|91% [32.82] F:38 
+
+02:06:42.160 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+[Zax]: -Def: parrying (torso).
+
+[Zax]: +Def: parrying (torso).
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.89s]
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.89s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry torso/vodun status/curse Nikolais breach invoke soulrend/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your torso.
+
+[Nikolais] HP: [==============================] (5974|6213) (96.15%)
+
+[Nikolais] Mp: [==============================] (4178|6834) (61.14%)
+
+You: Curse breach -> Nikolais
+
+Your attempt to breach finds no curseward.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke soulrend 13 -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 0.9s]
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+[-|-] [C-BK] H:7015|100% M:6281|90% [32.82] F:51 
+
+02:06:42.330 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+You are not the member of any party.
+
+[-|-] [C-BK] H:7015|100% M:6281|90% [32.82] F:51 
+
+02:06:42.373 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+You have recovered equilibrium.
+
+[Eq Recov: 0.75s]
+
+[-|E] [C-BK] H:7015|100% M:6281|90% [32.82] F:51 
+
+02:06:43.075 (2) [Nikolais]: clum(50%), mleech(100%), AST(50%), 
+
+[Zax]: -Def: parrying (torso).
+
+[Zax]: +Def: parrying (torso).
+
+You have recovered balance on all limbs.
+
+[Bal Recov: 0.91s]
+
+[System]: Running queued freestand command: PVP
+
+[Zax]: parry torso/vodun status/curse Nikolais breach invoke soulrend/discern Nikolais".
+
+You have no sanity.
+
+You hold no "bomb".
+
+You are not fallen or kneeling.
+
+You will now attempt to parry attacks to your torso.
+
+[Nikolais] HP: [==============================] (5850|6213) (94.16%)
+
+[Nikolais] Mp: [==============================] (4042|6834) (59.15%)
+
+You: Curse breach -> Nikolais
+
+Your attempt to breach finds no curseward.
+
+Nikolais seems diminished.
+
+Blood begins to run from the eyes and nose of Nikolais.
+
+You: Invoke soulrend 13 -> Nikolais
+
+Your malign power may be unleashed in the form of a jinx against your victim.
+
+[Bal Spent: 0.9s]
+
+You observe a small amount of blood trickling from minor wounds on Nikolais's body.
+
+[Eq Spent: 0.85s]
+
+ 

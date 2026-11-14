@@ -10,3 +10,4 @@ One page per combat log: who fought, how it went (with line numbers), the oppone
 | [Mystor (Shikudo) vs Agathon (Infernal, two scimitars): won with MIND SCYTHE](2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.md) | `kb/raw/logs/2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt` |
 | [Mystor (Shikudo) vs Agathon (Shaman): lost, truelocked](2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.md) | `kb/raw/logs/2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt` |
 | [Mystor (Shikudo) vs Agathon (Infernal, two scimitars): won with KAI CHOKE](2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.md) | `kb/raw/logs/2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt` |
+| [Zax (Shaman) vs Nikolais: breach + soulrend fashion burst (play date unknown)](2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.md) | `kb/raw/logs/2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt` |

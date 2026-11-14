@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-11-14 - v4.7.502: Shaman breach + soulrend fashion burst
+
+- **When the target has manaleech and asthma, our Shaman offence sends `curse <t> breach invoke soulrend`** in place of the regular curse + invoke that charges jinx (`028_Shaman_Offense.lua`: new `shamanOffense.canBreachRend()`, used at the lock, bleed and group PRIORITY 4 slots). Asthma stops the target smoking manaleech off, and manaleech is the strongest soulrend modifier. Breach is the fastest curse (1.00 s BASE; ours is BASE x `ataxia_eqFactor`). It needs no curseward, it charges jinx, and it carries the rend. So the rotation becomes jinx, breach-rend, jinx. The burst needs maligus bound and a doll on this target, and it is off in group mode. Curseward and a charged jinx still come first.
+  - Source: a player's tip (`kb/raw/players/shaman-breach-soulrend-2026-11-14.txt`) and Zax's log (`kb/raw/logs/2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt`, note in `kb/combat/fights/`). Zax made 5 rends with manaleech and asthma up and NO paralysis, so paralysis is not part of the gate. Each rend gave 13 fashions at 59-61% target mana and 10 at 73-75% (ANOTHER PLAYER). Not yet seen in our own fights.
+- **Soulrend adds doll fashions; it is not mana damage.** ABADMIN #1932 and our trigger `ataxia/007_Soulrend.lua` say so. `.claude/classes/shaman.md`, the 028 header and the `shspirits` echo said "mana damage". They are corrected, and the class doc has a new "Fashion burst" section. That section also records the tip's manual tactic: burst when the target's mana is near 86%. The offence does not read target mana.
+- Tests: `test_shaman_breach_rend.lua` (12 cases). If you remove the lock-slot call, 1 case fails.
+
+---
+
 ## 2026-11-14 - v4.7.501: our HAMSTRING lasts 15 s with the eagle feather; paralysis does not block FITNESS
 
 - **Our hamstring lasts 10 + 5 s with the ethereal lightning eagle feather** (power `enhanced_shin`). The size is from `docs/artefacts-reference.md`; the game's power record states none, and the user accepted the +5 s on 2026-11-14. New `ataxia_ourHamstringSeconds()` (`017_Affliction_Management.lua`) reads it through `ataxia_artefactSize`, so a player without the feather, or with it switched off by `aconfig artefact enhanced_shin off`, keeps 10 s.
