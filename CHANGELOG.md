@@ -16,7 +16,8 @@ Two reviews of the claim tool (commit `976acc0f`) showed that it could give the 
 - **`release --all-mine` is gone.** After a compaction it removed the claims of work in progress. `list --as <you>` shows a session's claims, and the session releases the ones it does not work on.
 - **Rule A** (`CLAUDE.md`, "Parallel Sessions") has six steps. The command is `C:/Python314/python.exe -B tools/claim.py`, which runs in Git Bash and in PowerShell; `/c/Python314/python` did not run in PowerShell. `<claim>` and `<you>` replace `<name>`, which meant both. The later of two claims for one outcome releases itself. An owner replies to a question about its claim and messages the waiters when it releases.
 - **Rule B** (`CLAUDE.md` and `docs/ai-includes/agent-brief.md`): a lookup is skipped only when no answer can change the next action, the implementation, the verification or the final result. Before a conclusion is reported, the code that was found is confirmed to run, and a review or a diagnosis looks for the case that disproves the answer.
-- `tools/test_claim.py` has 52 tests. New: two processes take over one dead claim, 20 times, with one winner each time; the printed takeover command is run; a locked store; two pushes; a fixer against a push marker.
+- `tools/test_claim.py` has 53 tests. New: two processes take over one dead claim, 20 times, with one winner each time; the printed takeover command is run; a locked store; two pushes; a fixer against a push marker; a rate limit from `gh` is retried and is not read as a login failure.
+- A claim name that starts with `main-` is for a red `main` only (`ci-fail` and `pushed` make those claims).
 - Not changed: the tool cannot say which CI step made `main` red. It was not run with five live sessions.
 
 ---
