@@ -8,7 +8,7 @@
   "headroom": 2048,
   "files": {
     "CLAUDE.md": {
-      "ceiling": 452361,
+      "ceiling": 449015,
       "target": 40000
     }
   }
