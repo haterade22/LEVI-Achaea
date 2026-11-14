@@ -47,11 +47,13 @@ file by its absolute path. If your task and this file disagree, this file wins; 
 ## Ask one question, take one answer
 
 1. Before a lookup, write one line: the question, and the decision it serves.
-2. If no answer can change your next action, do not make the lookup.
+2. If no answer can change your next action, your implementation, your verification or the final
+   result, do not make the lookup.
 3. Keep the query narrow: search for the pattern and read only the lines you need.
-4. When the result answers the question, stop. Do not examine the rest.
-5. Always in scope: before you change a thing, find what depends on it. Confirm that the code
-   you found runs (its ancestor folders are active, and no other trigger has the same pattern).
+4. When the result answers the question and step 5 is done, stop. Do not examine the rest.
+5. Always in scope, before you change a thing or report a conclusion: find what depends on it.
+   Confirm that the code you found runs (its ancestor folders are active, and no other trigger has
+   the same pattern). In a review or a diagnosis, look for the case that disproves your answer.
 6. If you see an unrelated problem, report it in one line. Do not examine it.
 7. If that unrelated problem is a red main, report it to your parent.
 

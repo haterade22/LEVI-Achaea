@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-11-14 - The claim tool keeps one owner; the session rules get their missing steps (docs and tooling, no version bump)
+
+Two reviews of the claim tool (commit `976acc0f`) showed that it could give the same work to two sessions, and that the short rule text had lost steps. The reviews are `rules-review/review-handover-976acc0f.md` and `rules-review/codex-handover-976acc0f-20261114/HANDOVER.md`, in the folder above the repository.
+
+- **`tools/claim.py` now keeps the claims as rows in one SQLite file**, `claims.db`, in the same `.claims` folder. Each command is one transaction. Before, two sessions that took over one dead claim each deleted the other's folder: both got exit 0 and no claim remained.
+- **A takeover names the generation that the taker saw:** `take <claim> --over <generation> --as <you>`. If another session took the claim first, the generation changed and the second taker gets TAKEN. The TAKEN message prints the complete command.
+- **A claim name is made lower case**, so `Fix-X` and `fix-x` are one claim.
+- **A session that gets TAKEN goes on the waiter list of the claim.** `release` prints that list, so the owner knows whom to message. `release` says RELEASED only after the store confirms it. A store that does not answer is exit 2.
+- **`pushed` claims `main-pushed-<commit>`**, one claim for each push. Before, a second push by one session had no claim of its own and lost its owner when the first push went green.
+- **`ci-fail`:** a session that already fixes the red `main` keeps it when another session pushes. A cancelled run is UNKNOWN, not a red `main`. A missing `git` or `gh`, and a `gh` that is not logged in, are not retried; other failures are retried for 240 s in all.
+- **Each result ends with a `NEXT:` line.** For NOT RUN and UNKNOWN it says: do not diagnose the step; do work that does not depend on it, or stop and report.
+- **`release --all-mine` is gone.** After a compaction it removed the claims of work in progress. `list --as <you>` shows a session's claims, and the session releases the ones it does not work on.
+- **Rule A** (`CLAUDE.md`, "Parallel Sessions") has six steps. The command is `C:/Python314/python.exe -B tools/claim.py`, which runs in Git Bash and in PowerShell; `/c/Python314/python` did not run in PowerShell. `<claim>` and `<you>` replace `<name>`, which meant both. The later of two claims for one outcome releases itself. An owner replies to a question about its claim and messages the waiters when it releases.
+- **Rule B** (`CLAUDE.md` and `docs/ai-includes/agent-brief.md`): a lookup is skipped only when no answer can change the next action, the implementation, the verification or the final result. Before a conclusion is reported, the code that was found is confirmed to run, and a review or a diagnosis looks for the case that disproves the answer.
+- `tools/test_claim.py` has 52 tests. New: two processes take over one dead claim, 20 times, with one winner each time; the printed takeover command is run; a locked store; two pushes; a fixer against a push marker.
+- Not changed: the tool cannot say which CI step made `main` red. It was not run with five live sessions.
+
+---
+
 ## 2026-11-14 - v4.7.502: Shaman breach + soulrend fashion burst
 
 - **When the target has manaleech and asthma, our Shaman offence sends `curse <t> breach invoke soulrend`** in place of the regular curse + invoke that charges jinx (`028_Shaman_Offense.lua`: new `shamanOffense.canBreachRend()`, used at the lock, bleed and group PRIORITY 4 slots). Asthma stops the target smoking manaleech off, and manaleech is the strongest soulrend modifier. Breach is the fastest curse (1.00 s BASE; ours is BASE x `ataxia_eqFactor`). It needs no curseward, it charges jinx, and it carries the rend. So the rotation becomes jinx, breach-rend, jinx. The burst needs maligus bound and a doll on this target, and it is off in group mode. Curseward and a charged jinx still come first.

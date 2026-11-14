@@ -79,20 +79,22 @@ Treat "the tests pass and it builds" as *necessary but not sufficient*. A task i
 
 ## Parallel Sessions (MANDATORY)
 
-Up to five sessions work on this repository at the same time. `C` below is `/c/Python314/python -B tools/claim.py`; `--help` holds the full protocol.
+Up to five sessions work on this repository at the same time. `C` below is `C:/Python314/python.exe -B tools/claim.py` (the same text in Git Bash and in PowerShell); `--help` holds the full protocol. `<you>` is your ListAgents name. `<claim>` is a short lower-case name of the outcome.
 
 **Rule A - Claim shared work.** Shared work is one problem or one outcome that another session can also start: a red main, a feature, a bug fix. Two sessions that edit the same file do not do shared work; the rebase handles that. Rule A is for top-level sessions only. A subagent never claims work and reports a red main to its parent.
-1. Before you start a fix or a feature, run `C take <name> --as <your ListAgents name> --work "<one line>"`. Read the other claims it lists: one can be the same work under another name.
-2. When a CI step fails, run `C ci-fail <step id> --as <name>`. It says whether the failure is on main or on your branch, and it claims a failure on main for you.
-3. If the script says TAKEN, do work that does not depend on it, or stop and report. If the owner is not in ListAgents, the claim is dead: run `C take <name> --over --as <name>`.
-4. Right after a push to main, run `C pushed --as <name>`. When your work is on main, or when you stop, run `C release <name> --as <name>` (after a compaction: `C release --all-mine --as <name>`).
+1. Before you start a fix or a feature, run `C take <claim> --as <you> --work "<one line>"`. It lists the other claims. If one of them is the same outcome, run `C release <claim> --as <you>` and treat that claim as TAKEN.
+2. When a CI step fails, run `C ci-fail <step id> --as <you>` before you diagnose. It says whether the failure is on main or on your branch, and it claims a failure on main for you.
+3. Each result ends with a `NEXT:` line: do what it says. On TAKEN, look for the owner in ListAgents. An idle owner is live: message it, then do work that does not depend on the claim, or end your turn (its reply wakes you). If the owner is not listed, run the takeover command that the script printed.
+4. When a session asks about your claim, reply at once: you work on it, or you release it and say so. When `release` prints waiters, message each of them.
+5. Right after a push to main, run `C pushed --as <you>`. It claims that commit. Release that claim only when the build.yml run of that commit, or of your fix for it, is green.
+6. When your work is on main, or when you stop, run `C release <claim> --as <you>`. After a compaction, run `C list --as <you>`: keep each claim that you still work on and each push that is not green, and release the others.
 
 **Rule B - Ask one question, take one answer.**
 1. Before a lookup, write one line: the question, and the decision it serves.
-2. If no answer can change your next action, do not make the lookup.
+2. If no answer can change your next action, your implementation, your verification or the final result, do not make the lookup.
 3. Keep the query narrow: search for the pattern and read only the lines you need.
-4. When the result answers the question, stop. Do not examine the rest.
-5. Always in scope: before you change a thing, find what depends on it. Confirm that the code you found runs (its ancestor folders are active, and no other trigger has the same pattern).
+4. When the result answers the question and step 5 is done, stop. Do not examine the rest.
+5. Always in scope, before you change a thing or report a conclusion: find what depends on it. Confirm that the code you found runs (its ancestor folders are active, and no other trigger has the same pattern). In a review or a diagnosis, look for the case that disproves your answer.
 6. If you see an unrelated problem, report it in one line. Do not examine it.
 7. If that unrelated problem is a red main, claim it under Rule A. A subagent reports it to its parent instead.
 
