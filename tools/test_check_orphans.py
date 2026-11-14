@@ -167,6 +167,57 @@ class EmptyWalk(unittest.TestCase):
         self.assertIsNone(co.unchecked())
 
 
+class IncidentPatterns(unittest.TestCase):
+    """CHECK 3 (report-only): os.clock(), a handler on bare gmcp.Room, an id stored on a saved namespace."""
+
+    FILES = {
+        "scripts/a/001_Live.lua": HEADER % ("script", "yes") + "\n".join([
+            "local t = os.clock()",                                               # 7: reported
+            "-- getEpoch(), not os.clock(): a comment is not a call",             # 8: not reported
+            'ataxia.bals.handler = registerAnonymousEventHandler("gmcp.Char.Vitals", "f")',   # 9: an id on a saved namespace
+            'registerAnonymousEventHandler("gmcp.Room", function() end)',         # 10: the bare prefix
+            'registerAnonymousEventHandler("gmcp.Room.Info", function() end)',    # 11: the exact event: fine
+            "ataxiaTemp.timer = tempTimer(1, function() end)",                    # 12: session state: fine
+            "ataxiaBasher.swarmTimer = tempTimer(40, [[x()]])",                   # 13: reported
+            "ataxia.settings.delay = 4",                                          # 14: data: fine
+        ]) + "\n",
+        "scripts/a/002_Off.lua": HEADER % ("script", "no") + "local t = os.clock()\n",
+        "triggers/t/001_Line.lua": HEADER % ("trigger", "yes") + "local now = os.clock ()\n",
+    }
+
+    def test_only_real_sites_in_active_code_are_reported(self):
+        with tree(self.FILES):
+            found = co.incident_sites()
+        self.assertEqual(sorted((caller.split("/")[-1], line, label) for caller, line, label in found), [
+            ("001_Line.lua", 7, "os.clock()"),
+            ("001_Live.lua", 7, "os.clock()"),
+            ("001_Live.lua", 9, "an id on a saved namespace"),
+            ("001_Live.lua", 10, 'a handler on bare "gmcp.Room"'),
+            ("001_Live.lua", 13, "an id on a saved namespace"),
+        ])
+
+    def test_report_only_leaves_the_exit_status_alone_and_strict_fails(self):
+        self.assertFalse(co.STRICT_INCIDENT_PATTERNS, "check 3 is report-only until its real list is dealt with")
+        with tree(self.FILES), contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(co.report_incident_patterns(), 0)
+        self.assertIn("(report-only)", out.getvalue())
+        self.assertIn("001_Live.lua:13", out.getvalue())
+        with mock.patch.object(co, "STRICT_INCIDENT_PATTERNS", True), tree(self.FILES), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(co.report_incident_patterns(), 1)
+        self.assertNotIn("(report-only)", out.getvalue())
+
+    def test_a_clean_tree_is_ok(self):
+        with tree({"scripts/a/001_Live.lua": HEADER % ("script", "yes") + "local t = getEpoch()\n"}), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(co.report_incident_patterns(), 0)
+        self.assertIn("OK", out.getvalue())
+
+    def test_the_real_tree_has_no_os_clock_call(self):
+        # The one pattern that is already clean stays clean, also while the check is report-only.
+        self.assertEqual([site for site in co.incident_sites() if site[2] == "os.clock()"], [])
+
+
 class NeverRun(unittest.TestCase):
     """Every NEVER_RUN row must stay true: the alias sits in a switched-off group folder, and the call is there."""
 

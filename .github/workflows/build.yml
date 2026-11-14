@@ -100,6 +100,9 @@ jobs:
       - name: Test the byte budget and the moves check
         run: python3 -B tools/test_check_context_budget.py
 
+      - name: Test the release commands
+        run: python3 -B tools/test_release.py
+
       - name: Test the git pre-push hook
         run: python3 -B tools/test_githooks.py
 

@@ -8,7 +8,7 @@
   ],
   "steps": [
     {"id": "syntax", "what": "Lua 5.1 syntax of every src_new/**/*.lua", "builtin": "lua_syntax", "needs": ["lupa"], "quick": true, "ci_marker": "luac5.1 -p"},
-    {"id": "orphans", "what": "no active item calls a global or field that nothing live defines", "argv": ["tools/check_orphans.py"], "quick": true},
+    {"id": "orphans", "what": "no active item calls a global or field that nothing live defines; report-only: patterns with a recorded incident", "argv": ["tools/check_orphans.py"], "quick": true},
     {"id": "orphans-test", "what": "the orphan checker's own tests", "argv": ["tools/test_check_orphans.py"]},
     {"id": "wrap", "what": "every trigger pattern fits one server-wrapped row", "argv": ["tools/check_wrap.py"], "quick": true},
     {"id": "timing", "what": "kb/mechanics clocks and scoreboard match the logs", "argv": ["tools/kb_timing.py", "--check"]},
@@ -28,6 +28,7 @@
     {"id": "fightlog-test", "what": "the fight-log importer", "argv": ["tools/test_fightlog_import.py"]},
     {"id": "budget", "what": "CLAUDE.md is within its byte ceiling (docs/adrs/002): new detail goes to its one home, not into that file", "argv": ["tools/check_context_budget.py"], "quick": true},
     {"id": "budget-test", "what": "the budget and the moves check", "argv": ["tools/test_check_context_budget.py"]},
+    {"id": "release-test", "what": "the decisions of tools/release.py (tag-ready, post)", "argv": ["tools/test_release.py"]},
     {"id": "githooks-test", "what": ".githooks/pre-push refuses the bad release pushes and lets the good ones go", "argv": ["tools/test_githooks.py"]},
     {"id": "version", "what": "version.txt, mfile and _groups.yaml agree; CHANGELOG.md has that version's heading", "builtin": "version", "quick": true, "ci_marker": ["V_TXT=$(cat version.txt", "muddler_project/mfile", "ataxiaVersion", "v${V_TXT//./[.]}[: ]"]},
     {"id": "unit", "what": "the Lua test suite (src_new/tests)", "argv": ["tools/run_lua_tests.py"], "needs": ["lupa"], "quick": true, "ci_marker": "lua5.1 src_new/tests/test_runner.lua"},

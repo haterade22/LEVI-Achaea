@@ -513,6 +513,21 @@ class LuaRunner(unittest.TestCase):
         self.assertEqual(status, 1, said)
         self.assertNotIn("All tests passed", said)
 
+    LEAKY = 'send = function() end\n' + GOOD
+    TIDY = 'local real = send\nsend = function() end\n' + GOOD + 'send = real\n'
+
+    def test_a_global_left_replaced_is_reported_and_does_not_fail_yet(self):
+        status, said = self.run_in({"test_one.lua": self.LEAKY, "test_two.lua": self.GOOD})
+        self.assertEqual(status, 0, said)
+        self.assertIn("(report-only): 1 ===", said)
+        self.assertRegex(said, r"LEAK \S*test_one\.lua: send")
+        self.assertNotIn("test_two.lua: send", said, "the leak is charged to the file that made it, once")
+
+    def test_a_global_put_back_is_not_a_leak(self):
+        status, said = self.run_in({"test_one.lua": self.TIDY})
+        self.assertEqual(status, 0, said)
+        self.assertNotIn("LEAK", said)
+
     def test_the_python_backed_popen_lists_the_files(self):
         # The lupa wheels for Linux and macOS have no io.popen; run_lua_tests.py then supplies this one.
         status, said = self.run_in({"test_one.lua": self.GOOD, "test_two.lua": self.GOOD}, force_shim=True)

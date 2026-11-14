@@ -38,7 +38,9 @@ The checks, in the order they print
     1c  active code calls a global that NO file defines (2026-11-08)
     2   NS.field(...) is called, and NS.field is assigned nowhere in the tree
     2b  active code calls NS.field(...), and only switched-off files assign it
-All five fail CI. 1b, 2b and 1c landed report-only, behind STRICT_SCRIPT_CALLERS,
+    3   active code holds a pattern with a recorded incident (2026-11-13, REPORT-ONLY): os.clock(),
+        a handler on bare "gmcp.Room", a timer/trigger/handler id stored on a SAVED namespace
+Checks 1 to 2b fail CI. 1b, 2b and 1c landed report-only, behind STRICT_SCRIPT_CALLERS,
 STRICT_INACTIVE_FIELDS and STRICT_UNDEFINED_GLOBALS, and each was made strict once its report was
 clean (1b and 2b in v4.7.419, 1c on 2026-11-08). A new check should start the same way.
 
@@ -78,6 +80,7 @@ SCRIPT_CALLER_DIRS = ("scripts",)
 STRICT_SCRIPT_CALLERS = True    # check 1b
 STRICT_INACTIVE_FIELDS = True   # check 2b
 STRICT_UNDEFINED_GLOBALS = True   # check 1c (2026-11-08: clean after the triage below)
+STRICT_INCIDENT_PATTERNS = False  # check 3 (2026-11-13: report-only; strict once each site is fixed or excused)
 
 # --- CHECK 1c: a global that NO file defines (2026-11-08) -------------------------------------
 #
@@ -549,6 +552,58 @@ def check_missing_fields():
     return missing, inactive_only, inactive_defs
 
 
+# CHECK 3. Each row: a label, the pattern (matched on a code row with comments removed), and the reason with its source.
+INCIDENT_PATTERNS = (
+    ("os.clock()", re.compile(r"\bos\.clock\s*\("),
+     "Lua 5.1's os.clock is CPU time, not a clock: use getEpoch() (.claude/AGENTS.md, \"os.clock() is CPU time\")"),
+    ('a handler on bare "gmcp.Room"', re.compile(r"registerAnonymousEventHandler\(\s*[\"']gmcp\.Room[\"']"),
+     "it also fires for gmcp.Room.WrongDir and every other Room event: register gmcp.Room.Info "
+     "(.claude/AGENTS.md, \"A prefix event is not the event you registered for\")"),
+    ("an id on a saved namespace", re.compile(
+        r"^\s*(?:ataxia|ataxiaBasher)(?:\.\w+)+\s*=\s*(?:tempTimer|tempRegexTrigger|tempTrigger|tempExactMatchTrigger|"
+        r"tempBeginOfLineTrigger|registerAnonymousEventHandler)\s*\("),
+     "`ataxia` and `ataxiaBasher` are saved to disk; a timer, trigger or handler id is session state and belongs on "
+     "`ataxiaTemp` (docs/adrs/001-no-gui-objects-in-saved-state.md)"),
+)
+
+
+def incident_sites():
+    """CHECK 3: (caller, line, label) for each INCIDENT_PATTERNS match in ACTIVE code. Comments do not count."""
+    findings = []
+    for path in walk(*(CALLER_DIRS + SCRIPT_CALLER_DIRS)):
+        active, body = split(path)
+        if not active:
+            continue
+        text = read_text(path)
+        header_lines = text[:len(text) - len(body)].count("\n")
+        for i, line in enumerate(strip_comments(body).splitlines()):
+            for label, pattern, _ in INCIDENT_PATTERNS:
+                if pattern.search(line):
+                    findings.append((rel(path), header_lines + i + 1, label))
+    return findings
+
+
+def report_incident_patterns():
+    """CHECK 3's report. Fails (returns 1) only once STRICT_INCIDENT_PATTERNS is set."""
+    findings = incident_sites()
+    if not findings:
+        print("check_orphans: OK -- no active code holds a pattern with a recorded incident.")
+        return 0
+    label = "" if STRICT_INCIDENT_PATTERNS else " (report-only)"
+    print("\n=== PATTERNS WITH A RECORDED INCIDENT%s: %d site(s) in active code ===" % (label, len(findings)))
+    for name, _, why in INCIDENT_PATTERNS:
+        sites = [(caller, line) for caller, line, found in findings if found == name]
+        if not sites:
+            continue
+        print("\n%s: %s" % (name, why))
+        for caller, line in sites:
+            print("  %s:%d" % (caller, line))
+    if not STRICT_INCIDENT_PATTERNS:
+        print("\nReport-only: each site is a place to look, not a proven defect. When every site is corrected or")
+        print("excused with its reason, set STRICT_INCIDENT_PATTERNS and a new site fails CI.")
+    return 1 if STRICT_INCIDENT_PATTERNS else 0
+
+
 def unchecked():
     """Why this run cannot vouch for the tree, or None. A walk that finds no file would make every
     check below print OK over nothing (a wrong working copy, a moved src_new, a bad checkout)."""
@@ -583,12 +638,14 @@ def main():
     if not orphaned:
         print("check_orphans: no inactive-script globals defined; nothing to check.")
         status = report_undefined_globals()
-        return report_missing_fields() | status
+        status |= report_missing_fields()
+        return report_incident_patterns() | status
 
     status = report_item_callers(orphaned)
     status |= report_script_callers(orphaned)
     status |= report_undefined_globals()
-    return report_missing_fields() | status
+    status |= report_missing_fields()
+    return report_incident_patterns() | status
 
 
 def report_item_callers(orphaned):
