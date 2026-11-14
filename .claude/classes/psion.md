@@ -224,6 +224,12 @@ most_effective:
 shield:
   effect: "Significantly slows their offense"
   weakness: "Stripped with `weave cleave <target>` (prioritized when shielded), not transcend"
+  records: "The game's records (2026-11-13, `kb/classes/shield.md`): CLEAVE 2360 and nine Psionics records
+    (BLAST, MUDDLE, SHATTER and six more) say they bypass a shield; the other Weaving and all Emulation attacks say a
+    shield blocks them. EXCISE 2725 says `non-aggressive`, and no log we hold shows an EXCISE. At 30% mana or less
+    the shield round already sends `psi transcend excise <target>` before the cleave (`psion/001`:263, :290-294),
+    so no change is needed. Every Weaving record but PREPARE, and every Emulation record, says `Requires arms: 1`; no Psionics
+    record states an arm. What a broken arm stops is open."
 
 reflections:
   effect: "TREMENDOUSLY shuts down their offense"

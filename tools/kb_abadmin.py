@@ -54,6 +54,7 @@ WIKI = os.path.join(ROOT, "kb", "classes", "abilities.json")
 OUT_JSON = os.path.join(ROOT, "kb", "classes", "abadmin.json")
 OUT_MD = os.path.join(ROOT, "kb", "classes", "abadmin-vs-wiki.md")
 OUT_BR = os.path.join(ROOT, "kb", "classes", "battlerage.md")
+OUT_SHIELD = os.path.join(ROOT, "kb", "classes", "shield.md")
 
 # An empty slot ("Ability:  (Record #3293)") has no name and no skill: it is kept, not compared.
 HEAD = re.compile(r"^Ability: (.*?) ?\(Record #(\d+)\)\s*$")
@@ -257,7 +258,7 @@ def render_flags(recs):
         "says `Useable paralysed: No` (`kb/afflictions/class-cures.md`, \"The game's records\";",
         "`kb/CONFLICTS.md` #82). Check a flag against a log before code reads it.",
         "",
-    ] + render_aggression(empty, filled)
+    ] + render_aggression(empty, filled) + render_limbs(named)
 
 
 AGGRESSION = ("non-aggressive", "aggressive (blocked by shield/prismatic)", "aggressive (bypasses shield/prismatic)")
@@ -282,8 +283,46 @@ def render_aggression(empty, filled):
     return out + [
         "`non-aggressive` is a default too. Subterfuge DOUBLESTAB, FLAY and PINSHOT and Venom BITE say it, and",
         "each is an attack on a player. So `non-aggressive` is no evidence that a shield lets an ability through.",
-        "The two `aggressive` values are statements. Hypnosis IMPULSE (3251) says `aggressive (bypasses",
-        "shield/prismatic)`, which the simulator does not follow yet (`kb/CONFLICTS.md` #83).",
+        "A record with a Pre checks value can say it too: Psionics EXCISE (2725), a kill on a player, does, and",
+        "no log we hold shows an EXCISE. The two `aggressive` values are statements. Hypnosis IMPULSE (3251) says",
+        "`aggressive (bypasses shield/prismatic)`, which the simulator does not follow yet (`kb/CONFLICTS.md` #83).",
+        "The shield breakers say it as well (Bladedance PUNCTUATE 3158, Elementalism METEORITE 3273, Memorium",
+        "FISSURE 2863), so `bypasses` means the ability reaches a shielded target. Per class: `shield.md`.",
+        "",
+    ]
+
+
+def render_limbs(named, classes=None):
+    """`Requires arms: 0` is a default as well: no Monk, Serpent or Blademaster record states an arm."""
+    classes = class_skills() if classes is None else classes
+    values = sorted({r.get("arms") for r in named if r.get("arms") is not None})
+    rows = []
+    for v in values:
+        e = sum(1 for r in named if r.get("arms") == v and not r.get("prechecks"))
+        f = sum(1 for r in named if r.get("arms") == v and r.get("prechecks"))
+        rows.append(f"| {v} | {e} | {f} |")
+    skill_of = {}
+    for r in named:
+        skill_of.setdefault(r["skill"], []).append(r)
+    per = []
+    for cls in sorted(classes):
+        rs = [r for s in classes[cls] for r in skill_of.get(s, [])]
+        armed = sum(1 for r in rs if (r.get("arms") or 0) >= 1)
+        per.append((cls, armed, len(rs)))
+    stated = ", ".join(f"{c} {a} of {n}" for c, a, n in sorted(per, key=lambda x: (-x[1], x[0])) if a)
+    none = ", ".join(c for c, a, n in per if not a)
+    return [
+        "### The `Requires arms` field",
+        "",
+        "| Requires arms | No Pre checks value | A Pre checks value |",
+        "|---|---|---|",
+    ] + rows + [
+        "",
+        "`Requires arms: 0` is a default too. The records of these classes state no arm at all, although their",
+        f"attacks use arms: {none}. The records that state one or two arms, per class: {stated}.",
+        "What `1` means (one arm that works, or one arm free) is open, and no log we hold shows an ability refused",
+        "for a broken arm. So a stated arm is a candidate for an arm-break plan (Psion Weaving and Emulation, Pariah",
+        "Memorium and Pestilence), not a fact the code can use.",
         "",
     ]
 
@@ -411,6 +450,73 @@ def render_battlerage(recs):
     return "\n".join(out) + "\n"
 
 
+BLOCKED, BYPASSES = AGGRESSION[1], AGGRESSION[2]
+
+
+def class_skills():
+    """{class: [skill, ...]} from tools/kb_wiki_skills.py, the one list of each class's skills."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import kb_wiki_skills
+    return kb_wiki_skills.CLASSES
+
+
+def render_shield(recs, classes=None):
+    """Per class and skill: the abilities whose record says a shield blocks them, and the ones it says go through."""
+    classes = class_skills() if classes is None else classes
+    named = [r for r in recs if r["ability"] and "maps_to" not in r]
+    by_skill = {}
+    for r in named:
+        by_skill.setdefault(r["skill"], []).append(r)
+
+    def names(rs, value):
+        return ", ".join(f"{r['ability']} {r['id']}" for r in sorted(rs, key=lambda r: r["id"]) if r.get("aggression") == value)
+
+    def row(skill):
+        rs = by_skill.get(skill, [])
+        silent = sum(1 for r in rs if r.get("aggression") not in (BLOCKED, BYPASSES))
+        return f"| {skill} | {cell(names(rs, BYPASSES))} | {cell(names(rs, BLOCKED))} | {silent} of {len(rs)} |"
+
+    stated = [r for r in named if r.get("aggression") in (BLOCKED, BYPASSES)]
+    n_blocked = sum(1 for r in stated if r["aggression"] == BLOCKED)
+    n_bypass = sum(1 for r in stated if r["aggression"] == BYPASSES)
+    out = [
+        "# Shields, from the game's records",
+        "",
+        "GENERATED by `tools/kb_abadmin.py` from `kb/raw/abadmin/` (the game's `ABADMIN SHOW <n>`). Do not edit:",
+        "re-run the tool.",
+        "",
+        "A record's `Aggression type` is `aggressive (blocked by shield/prismatic)`, `aggressive (bypasses",
+        "shield/prismatic)` or `non-aggressive`. `non-aggressive` is also the default: Subterfuge DOUBLESTAB (1235),",
+        "an attack on a player, says it (`abadmin-vs-wiki.md`, \"The Aggression type field\"). So only the two",
+        "`aggressive` values say anything about a shield.",
+        "",
+        f"{n_blocked} records say a shield blocks them, and {n_bypass} say they go through. The shield breakers are",
+        "in the second group (PUNCTUATE 3158, METEORITE 3273, FISSURE 2863): `bypasses` means the ability reaches a",
+        "shielded target, and a breaker then breaks the shield. The last column counts the records of the skill",
+        "that say neither, so the records are silent on them.",
+        "",
+        "**A record is the game's data, not proof of what it enforces** (`kb/CONFLICTS.md` #82). No log we hold shows",
+        "an attack of a `bypasses` record that is not a breaker landing through a shield, so code reads this list",
+        "only after a log confirms the row it needs (#83 is IMPULSE). `Useable on: none` is a default too: IMPULSE",
+        "says it, and it targets a player.",
+    ]
+    seen = set()
+    for cls in sorted(classes):
+        skills = classes[cls]
+        seen.update(skills)
+        out += ["", f"## {cls}", "",
+                "| Skill | Bypasses a shield | Blocked by a shield | Records that say neither |",
+                "|---|---|---|---|"] + [row(s) for s in skills]
+    other = sorted(s for s in by_skill if s not in seen and any(r.get("aggression") in (BLOCKED, BYPASSES)
+                                                                 for r in by_skill[s]))
+    if other:
+        out += ["", "## Skills of no class above", "",
+                "Racial, general or Lord skills, and skills the wiki pages do not list under a class.", "",
+                "| Skill | Bypasses a shield | Blocked by a shield | Records that say neither |",
+                "|---|---|---|---|"] + [row(s) for s in other]
+    return "\n".join(out) + "\n"
+
+
 def render_json(recs):
     rows = [{k: v for k, v in r.items() if k != "abfile"} for r in recs]
     return json.dumps({"source": "kb/raw/abadmin/ (ABADMIN SHOW)", "count": len(rows), "abilities": rows},
@@ -420,16 +526,17 @@ def render_json(recs):
 def build(ab_dir=AB_DIR, wiki_path=WIKI):
     recs = load_records(ab_dir)
     diffs, unlisted, uncovered = compare(recs, wiki_index(wiki_path))
-    return render_json(recs), render_md(recs, diffs, unlisted, uncovered), render_battlerage(recs)
+    return (render_json(recs), render_md(recs, diffs, unlisted, uncovered), render_battlerage(recs),
+            render_shield(recs))
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true", help="exit 1 if a generated file is out of date")
     args = ap.parse_args()
-    js, md, br = build()
+    js, md, br, sh = build()
     stale = []
-    for path, text in ((OUT_JSON, js), (OUT_MD, md), (OUT_BR, br)):
+    for path, text in ((OUT_JSON, js), (OUT_MD, md), (OUT_BR, br), (OUT_SHIELD, sh)):
         old = None
         if os.path.exists(path):
             with open(path, encoding="utf-8") as fh:

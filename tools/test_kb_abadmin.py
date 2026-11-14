@@ -220,13 +220,10 @@ class Compare(unittest.TestCase):
         self.assertIn("| 3 | Alchemy | Robes | 2.00 seconds of equilibrium | self | `kb/raw/abadmin/alchemy_robes_3.txt` |", md)
 
     def test_the_repo_pages_are_current(self):
-        js, md, br = ka.build()
-        with open(ka.OUT_JSON, encoding="utf-8") as fh:
-            self.assertEqual(fh.read(), js)
-        with open(ka.OUT_MD, encoding="utf-8") as fh:
-            self.assertEqual(fh.read(), md)
-        with open(ka.OUT_BR, encoding="utf-8") as fh:
-            self.assertEqual(fh.read(), br)
+        js, md, br, sh = ka.build()
+        for path, text in ((ka.OUT_JSON, js), (ka.OUT_MD, md), (ka.OUT_BR, br), (ka.OUT_SHIELD, sh)):
+            with open(path, encoding="utf-8") as fh:
+                self.assertEqual(fh.read(), text, path)
 
 
 # Runewarden ETCH, the record as filed (kb/raw/abadmin/attainment_etch_2278.txt): it USES an affliction for more
@@ -277,6 +274,42 @@ class Flags(unittest.TestCase):
         self.assertIn("| aggressive (bypasses shield/prismatic) | 0 | 1 |", text)
         self.assertNotIn("records have no `Aggression type` line", text)
         self.assertIn("`kb/CONFLICTS.md` #83", text)
+
+    def test_the_arms_table_and_the_classes_that_state_no_arm(self):
+        # ROBES says Requires arms: 1; OBLIVIATE says 0.
+        recs = [ka.parse_record(t) for t in (OBLIVIATE, ROBES)]
+        text = "\n".join(ka.render_limbs(recs, {"Alchemist": ["Alchemy"], "Serpent": ["Hypnosis"]}))
+        self.assertIn("| 0 | 1 | 0 |", text)
+        self.assertIn("| 1 | 1 | 0 |", text)
+        self.assertIn("although their\nattacks use arms: Serpent.", text)
+        self.assertIn("per class: Alchemist 1 of 1.", text)
+
+
+def shield_record(name, rid, skill, aggression):
+    return (ROBES.replace("Ability: Robes (Record #3)", f"Ability: {name} (Record #{rid})")
+            .replace("Associated skill: Alchemy", f"Associated skill: {skill}")
+            .replace("Aggression type: non-aggressive", f"Aggression type: {aggression}"))
+
+
+class Shield(unittest.TestCase):
+    def test_each_class_lists_what_goes_through_and_what_a_shield_blocks(self):
+        recs = [ka.parse_record(t) for t in (
+            shield_record("Impulse", 3251, "Hypnosis", ka.BYPASSES),
+            shield_record("Seal", 3252, "Hypnosis", "non-aggressive"),
+            shield_record("Charge", 2358, "Weaving", ka.BLOCKED),
+            shield_record("Cleave", 2360, "Weaving", ka.BYPASSES),
+            shield_record("Batter", 3119, "Undeath", ka.BYPASSES),
+            shield_record("Leap", 3121, "Undeath2", "non-aggressive"),
+        )]
+        page = ka.render_shield(recs, {"Serpent": ["Hypnosis", "Venom"], "Psion": ["Weaving"]})
+        self.assertIn("1 records say a shield blocks them, and 3 say they go through.", page)
+        self.assertIn("| Hypnosis | Impulse 3251 | -- | 1 of 2 |", page)
+        self.assertIn("| Venom | -- | -- | 0 of 0 |", page)
+        self.assertIn("| Weaving | Cleave 2360 | Charge 2358 | 0 of 2 |", page)
+        self.assertLess(page.index("## Psion"), page.index("## Serpent"))
+        # a skill of no class is listed only when one of its records states a value
+        self.assertIn("| Undeath | Batter 3119 | -- | 0 of 1 |", page)
+        self.assertNotIn("Undeath2", page)
 
 
 class Battlerage(unittest.TestCase):
