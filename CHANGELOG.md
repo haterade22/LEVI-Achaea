@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-13 - One home for each fact, and a byte budget for `CLAUDE.md` (docs and tooling, no version bump)
+
+`CLAUDE.md` was 72 KB in June and 450 KB now, and Claude Code delivers only the start of it. The cause was our own rule: every task had to update `CLAUDE.md` as well as the class docs, the knowledge base and memory. The maintainer decided on 2026-11-13: one home for each fact.
+
+- **`docs/adrs/002-knowledge-delivery-tiers.md` (new)** records the decision: the home of each kind of fact, the byte budget, how text leaves `CLAUDE.md` without loss, and what stays in it.
+- **The rule in `CLAUDE.md` is now a ladder.** A machine-checkable fact becomes a gate. A game fact goes to its `kb/` page. How a class is played goes to `.claude/classes/<class>.md`. How one of our systems works goes to `.claude/projects/<system>/`, never to a section of `CLAUDE.md`. A lesson goes to `.claude/AGENTS.md`. Release history goes to `CHANGELOG.md` only. Every task still updates every document it touches; what changed is where a new fact goes. The separate "Documentation Requirements" section said the same thing a second time and is merged into the ladder.
+- **`tools/check_context_budget.py` (new) holds `CLAUDE.md` to a byte ceiling** (`tools/context_budget.json`; today 452,361, the current size plus 2,048). The ceiling only goes down: `--lower` never raises it. The check is a step of `tools/ci_local.py` and of CI. It is report-only now and becomes strict when the file is at or under 120,000 bytes.
+- **The same tool proves a move.** `--moves --base <commit>` compares `CLAUDE.md` at that commit with the file on disk: each row that left must exist verbatim in a Markdown file that changed, or belong to a section declared as deleted, and then each backticked identifier of that section must still exist in a tracked file. It is run by hand before a push (CI's checkout has no history). `tools/test_check_context_budget.py` has 18 tests; a reworded row and an undeclared deletion both read as LOST.
+- **Next:** the large blocks move out, one section for each commit: Mnemosyne (180 KB), Basher (44 KB), Defense (33 KB) and the rest.
+
+---
+
 ## 2026-11-13 - A push gate: `.githooks/pre-push` (tooling only, no version bump)
 
 The costly release mistakes all happened at the push: `git push --tags` re-pointed "Latest" (v4.7.208), a tag went on the commit before the version bump (v4.7.313), and a release was tagged on an unmerged branch (v4.7.448). The rules against them lived in prose and in memory. The Claude Code hooks never ran (`docs/reference/harness-facts.md`). A git hook runs on every push, from any folder and any client.

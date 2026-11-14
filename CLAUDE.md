@@ -33,13 +33,20 @@ which round order it holds (`026_Fight_Log.lua`:272-284). `python tools/fightlog
 into `kb/raw/logs/ours/` and summarises them; it reads the Mudlet profiles on this machine, so run it before
 analysing one of the user's fights. Row format: `kb/raw/logs/README.md`.
 
-**On completing ANY task** (a feature, a fix, a research finding, a confirmed game mechanic), before considering it done, update every piece of documentation it touches:
+**On completing ANY task** (a feature, a fix, a research finding, a confirmed game mechanic), before considering it done, put each fact you learned in its ONE home, and correct every document that states the old fact. Other documents point to the home; they do not copy it (`docs/adrs/002-knowledge-delivery-tiers.md`, the maintainer's decision of 2026-11-13).
 
-- **Knowledge base** (`kb/`) — any confirmed game fact (cure, blocker, fire line, ability, mechanic) goes into the right `kb/` page with its source and confidence tag; new raw game text goes into `kb/raw/` unedited.
-- **Class docs** (`.claude/classes/<class>.md`) — kill routes, ability lists, cast syntax, cooldowns, bashing/basher rotations, and anything newly confirmed from AB screenshots or combat logs. If a section is a stub or is now wrong, rewrite it.
-- **Cross-cutting conventions** (`this file` + `.claude/AGENTS.md`) — new patterns, invariants, pitfalls, or architectural rules that apply beyond one class (e.g. reload-safety inits, the battlerage double-call trap).
-- **Memory files** (`memory/<system>.md` + `memory/MEMORY.md` index) — durable per-system knowledge and hard-won lessons.
-- **CHANGELOG.md** — every shipped version.
+| What you learned or changed | Its one home |
+|---|---|
+| Something a machine can check | A gate in `tools/` with a row in `tools/ci_steps.json`, and one line of prose that names the gate |
+| A rule that every task needs | This file. It has a byte budget (`tools/check_context_budget.py`), so a rule goes in as one or two lines |
+| A game fact: a cure, a blocker, a fire line, an ability, a timing | Its `kb/` page, with source and confidence tag. New raw game text goes into `kb/raw/`, unedited |
+| How one class is played or fought: kill routes, ability lists, cast syntax, rotations | `.claude/classes/<class>.md`. If a section is a stub or is now wrong, rewrite it |
+| How one of our systems works: architecture, state, commands, design reasons | `.claude/projects/<system>/` (a new system gets a folder with a `README.md`). **Never a section of this file** |
+| A lesson or pitfall, with its incident | One titled entry in `.claude/AGENTS.md`. If a machine can check it, write the gate and name it in the entry |
+| What a release changed, and why | `CHANGELOG.md` only: newest first, heading `## YYYY-MM-DD - vX.Y.Z: <title>` (CI checks the heading), then what changed, why, and how. Version history does not go into this file or into a system doc |
+| The maintainer's own rules and preferences; the state of this machine | Memory (`memory/<topic>.md` + the `MEMORY.md` index), which is outside git. A fact about the code or the game never lives only there |
+
+**Before you call a task done:** (1) each new fact is in its home; (2) `git grep` the old claim and correct each document that still states it (a fix can leave a doc calling the old behaviour current); (3) code that ships has its `CHANGELOG.md` entry; (4) plan files you worked from (`docs/plans/`) say what is done; (5) `README.md` / `GETTING_STARTED.md` are correct if setup or usage changed.
 
 **Rules of the knowledge base:**
 1. **Code-accurate over aspirational** — document what the code actually does *now*, with `file:line` anchors. If you can't verify it against the code or a game log, mark it as unconfirmed.
@@ -55,30 +62,6 @@ analysing one of the user's fights. Row format: `kb/raw/logs/README.md`.
 Treat "the tests pass and it builds" as *necessary but not sufficient*. A task is complete only when the knowledge base reflects it.
 
 ---
-
-## Documentation Requirements
-
-**MANDATORY**: After every code change, you MUST update all relevant documentation before considering the task complete. This is not optional.
-
-### CHANGELOG.md
-- **Update `CHANGELOG.md` after every change** — bug fixes, new features, refactors, anything that modifies behavior
-- Group entries by date, with newest at the top
-- Each entry must include: **what changed** (files), **why** (root cause / motivation), and **how** (what the fix/feature does)
-- Use the existing format in `CHANGELOG.md` as a template
-
-### Other Documentation
-- **CLAUDE.md**: Update if you add new systems, change architecture, modify build processes, or add new conventions
-- **Memory files** (`~/.claude/projects/.../memory/`): Update with stable patterns, conventions, and lessons learned
-- **Class docs** (`.claude/classes/*.md`): Update if combat mechanics or class-specific logic changes
-- **Plan files** (`~/.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
-- **README.md / GETTING_STARTED.md**: Update if setup steps, dependencies, or usage instructions change
-
-### Checklist (run mentally after every task)
-1. Did I change code? → Update `CHANGELOG.md`
-2. Did I add/remove files? → Update `CHANGELOG.md`, verify build includes them
-3. Did I change system architecture? → Update `CLAUDE.md`
-4. Did I learn something reusable? → Update memory files
-5. Did I change class combat logic? → Update relevant `.claude/classes/*.md`
 
 ## Evidence Before Claims (MANDATORY)
 
