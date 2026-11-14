@@ -3,6 +3,7 @@
     python -B tools/test_claim.py
 """
 import json
+import ntpath
 import os
 import shutil
 import subprocess
@@ -278,9 +279,10 @@ class Pushed(Folder):
 
 class Root(unittest.TestCase):
     def test_the_default_folder_is_outside_the_repository(self):
-        self.assertEqual(os.path.basename(claim.DEFAULT_ROOT), ".claims")
-        repo = os.path.dirname(HERE)
-        self.assertFalse(os.path.abspath(claim.DEFAULT_ROOT).startswith(os.path.abspath(repo) + os.sep))
+        # DEFAULT_ROOT is a Windows path; ntpath splits it the same way on the Linux CI runner.
+        self.assertEqual(ntpath.basename(claim.DEFAULT_ROOT), ".claims")
+        repo = ntpath.normcase(os.path.dirname(HERE))
+        self.assertFalse(ntpath.normcase(claim.DEFAULT_ROOT).startswith(repo + ntpath.sep))
 
     def test_a_folder_inside_a_git_tree_is_refused(self):
         fake = lambda args, **_: (0, "true\n")  # noqa: E731
