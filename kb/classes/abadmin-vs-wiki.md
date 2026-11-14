@@ -53,9 +53,11 @@ FISSURE 2863), so `bypasses` means the ability reaches a shielded target. Per cl
 
 `Requires arms: 0` is a default too. The records of these classes state no arm at all, although their
 attacks use arms: Apostate, Blademaster, Depthswalker, Monk, Runewarden, Serpent, Shaman, Sylvan. The records that state one or two arms, per class: Pariah 63 of 81, Psion 36 of 61, Paladin 25 of 130, Priest 24 of 101, Alchemist 22 of 97, Infernal 21 of 125, Bard 10 of 98, Magi 10 of 106, Unnamable 9 of 127, Sentinel 2 of 150, Druid 1 of 177, Jester 1 of 94, Occultist 1 of 91.
-What `1` means (one arm that works, or one arm free) is open, and no log we hold shows an ability refused
-for a broken arm. So a stated arm is a candidate for an arm-break plan (Psion Weaving and Emulation, Pariah
-Memorium and Pestilence), not a fact the code can use.
+`1` means the attacker needs at least one unbroken arm (PLAYER, the user 2026-11-13), so breaking both arms
+stops the ability; `2` (6 records) is read as both arms unbroken (INFERRED). No log we hold shows an ability
+refused for a broken arm. Psion Weaving (all but PREPARE) and Emulation, and Pariah Memorium and Pestilence,
+state an arm, so two broken arms stop most of those classes' attacks. Our Psion offence sends only Psionics
+with both of its own arms out (`psion.armsOut`, `psion/001_Levi_Psion_Logic.lua`).
 
 ## Where the game and the wiki differ
 

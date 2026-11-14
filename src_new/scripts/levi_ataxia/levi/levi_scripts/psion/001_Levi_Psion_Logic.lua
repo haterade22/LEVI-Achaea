@@ -105,6 +105,18 @@ function psion.hasShield()
   return haveAff("shield") or (tAffs and tAffs.shield)
 end
 
+--- Both of OUR arms out of use (broken, damaged or mangled). Every Weaving record but PREPARE, and every
+--- Emulation record, says `Requires arms: 1` (kb/classes/abadmin-vs-wiki.md, "The `Requires arms` field"):
+--- the attacker needs at least one unbroken arm (the user, 2026-11-13). No Psionics record states an arm,
+--- although those records have Pre checks values, so a round of Psionics alone still goes out.
+function psion.armsOut()
+  local a = (ataxia and ataxia.afflictions) or {}
+  local function out(side)
+    return a["broken" .. side .. "arm"] or a["damaged" .. side .. "arm"] or a["mangled" .. side .. "arm"]
+  end
+  return (out("left") and out("right")) and true or false
+end
+
 --- Check if 2+ critical unweaves present (deconstruct kill condition)
 function psion.canDeconstruct()
   local count = 0
@@ -286,6 +298,17 @@ function psion.buildAttack()
   psion.state.lastWeave = weave
   psion.state.lastTranscend = transcend
 
+  -- Priority 0: both our arms out. CLEAVE and the other Weaving attacks need an arm, and so does LIGHTBIND;
+  -- the transcend does not (WEAVE PREPARE does not either, but it only readies the next weave). Its BLAST, MUDDLE and SHATTER records say they bypass a shield (kb/classes/shield.md;
+  -- no log yet), so the round is the same with a shield up.
+  if psion.armsOut() then
+    psion.state.lastPrepare, psion.state.lastWeave = nil, nil
+    if (pm or 100) <= 30 then
+      return atk .. "psi transcend " .. transcend .. " " .. target .. sp .. "psi excise " .. target
+    end
+    return atk .. "psi transcend " .. transcend .. " " .. target
+  end
+
   -- Priority 1: Shield strip (cleave)
   if hasShield then
     return atk .. "psi transcend " .. transcend .. " " .. target
@@ -351,12 +374,14 @@ function psion.sendAttack(atk)
 
   local sp = ataxia.settings.separator or "::"
 
-  -- Prefix: wield shield
-  local prefix = "wield right shield" .. sp
+  -- Prefix: wield shield. With both arms out the round holds only Psionics, which needs no shield in hand,
+  -- and Emulation LIGHTBIND (2740) needs an arm, so both are left out.
+  local armsOut = psion.armsOut()
+  local prefix = armsOut and "" or ("wield right shield" .. sp)
 
   -- Suffix: lightbind + assess + contemplate
   local suffix = ""
-  if not (lightbind or false) then
+  if not (lightbind or false) and not armsOut then
     suffix = suffix .. sp .. "enact lightbind " .. target
   end
   suffix = suffix .. sp .. "assess " .. target .. sp .. "contemplate " .. target

@@ -19,7 +19,9 @@ BURROW 2886, STING 2887 and INFEST 2888 also say they bypass a shield; most othe
 records say a shield blocks them. The shield branch (`pariah/001_Pariah_Logic.lua`:197-203) sends FISSURE first, even
 when LATENCY (:226) or VIRULENCE (:230) is ready. A candidate, not a change: no log we hold shows a Pariah attack into
 a shield. Test it in a spar: `virulence <target>` and `swarm latency pyramides` at a shielded target, keep the lines.
-63 of the 81 Pariah records say `Requires arms: 1` (`abadmin-vs-wiki.md`, "The `Requires arms` field").
+63 of the 81 Pariah records say `Requires arms: 1` (`abadmin-vs-wiki.md`, "The `Requires arms` field"): the
+attacker needs at least one unbroken arm (the user, 2026-11-13). So two broken arms stop most Pariah attacks.
+Our Pariah offence (`pariah/001`) does not check its own arms yet.
 
 ## Kill Routes
 

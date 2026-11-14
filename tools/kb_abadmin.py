@@ -293,7 +293,8 @@ def render_aggression(empty, filled):
 
 
 def render_limbs(named, classes=None):
-    """`Requires arms: 0` is a default as well: no Monk, Serpent or Blademaster record states an arm."""
+    """`Requires arms: 0` is a default as well: no Monk, Serpent or Blademaster record states an arm. A stated `1`
+    means at least one unbroken arm (the user, 2026-11-13)."""
     classes = class_skills() if classes is None else classes
     values = sorted({r.get("arms") for r in named if r.get("arms") is not None})
     rows = []
@@ -320,9 +321,11 @@ def render_limbs(named, classes=None):
         "",
         "`Requires arms: 0` is a default too. The records of these classes state no arm at all, although their",
         f"attacks use arms: {none}. The records that state one or two arms, per class: {stated}.",
-        "What `1` means (one arm that works, or one arm free) is open, and no log we hold shows an ability refused",
-        "for a broken arm. So a stated arm is a candidate for an arm-break plan (Psion Weaving and Emulation, Pariah",
-        "Memorium and Pestilence), not a fact the code can use.",
+        "`1` means the attacker needs at least one unbroken arm (PLAYER, the user 2026-11-13), so breaking both arms",
+        "stops the ability; `2` (6 records) is read as both arms unbroken (INFERRED). No log we hold shows an ability",
+        "refused for a broken arm. Psion Weaving (all but PREPARE) and Emulation, and Pariah Memorium and Pestilence,",
+        "state an arm, so two broken arms stop most of those classes' attacks. Our Psion offence sends only Psionics",
+        "with both of its own arms out (`psion.armsOut`, `psion/001_Levi_Psion_Logic.lua`).",
         "",
     ]
 

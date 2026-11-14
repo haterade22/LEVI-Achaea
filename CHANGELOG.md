@@ -2,6 +2,13 @@
 
 ---
 
+## 2026-11-13 - v4.7.499: a Psion with both arms broken sends Psionics only
+
+- **Two broken arms stop a Psion's weaves.** Every Weaving record except PREPARE, and every Emulation record, says `Requires arms: 1`. The user confirmed what that means: the attacker needs at least one unbroken arm. Our Psion offence did not check its own arms, so with both arms out it kept sending `weave` rounds that could not go. Now `psion.armsOut()` (a broken, damaged or mangled arm on each side) makes the round the transcend alone: `psi transcend <blast|muddle|shatter|excise> <target>`, plus `psi excise` at 30% mana or less. No Psionics record states an arm. The round leaves out the shield wield and LIGHTBIND, which is Emulation. With one arm working, nothing changes. Test: `test_psion_arms.lua`.
+- **The `Requires arms` field, explained.** `kb/classes/abadmin-vs-wiki.md` now says that `1` means at least one unbroken arm (the user), and that `2` (6 records) is read as both arms (inferred). Two broken arms also stop most Pariah attacks (63 of 81 records); our Pariah offence does not check its own arms yet.
+
+---
+
 ## 2026-11-13 - v4.7.498: the class-cure triggers checked against the game's records
 
 The full ABADMIN capture holds the game's record of every class cure. This release checks our class-cure triggers and `kb/afflictions/class-cures.md` against those 26 records.

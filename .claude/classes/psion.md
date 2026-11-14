@@ -228,8 +228,11 @@ shield:
     (BLAST, MUDDLE, SHATTER and six more) say they bypass a shield; the other Weaving and all Emulation attacks say a
     shield blocks them. EXCISE 2725 says `non-aggressive`, and no log we hold shows an EXCISE. At 30% mana or less
     the shield round already sends `psi transcend excise <target>` before the cleave (`psion/001`:263, :290-294),
-    so no change is needed. Every Weaving record but PREPARE, and every Emulation record, says `Requires arms: 1`; no Psionics
-    record states an arm. What a broken arm stops is open."
+    so no change is needed. Every Weaving record but PREPARE, and every Emulation record, says `Requires arms: 1`: the attacker
+    needs at least one unbroken arm (the user, 2026-11-13). No Psionics record states an arm. So two broken arms
+    stop a Psion's weaves and Emulation, and since v4.7.499 our offence then sends the transcend alone, with no
+    shield wield and no lightbind (`psion.armsOut`, `psion/001`; a broken, damaged or mangled arm counts as out;
+    test `test_psion_arms.lua`). Against a Psion, breaking both arms leaves only Psionics."
 
 reflections:
   effect: "TREMENDOUSLY shuts down their offense"
