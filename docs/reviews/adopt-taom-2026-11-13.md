@@ -86,6 +86,23 @@ Each phase ships alone. No phase changes shipped Lua, so none has a version bump
 | 6 | `docs/ai-includes/agent-brief.md`: the one file a spawn prompt names. Area rules, one at a time, if the canary passed. | Every subagent in 36 sessions was a built-in type; Explore and Plan get no `CLAUDE.md`. | One core line; workflow scripts stop when the brief is empty. |
 | 7 | Report-only gates for shipped defects: a global-leak report in `test_runner.lua`; timer ids on saved namespaces and banned calls in `check_orphans.py`. `tools/release.py tag-ready` and `post`. | "One shared Lua state" is recorded in six places. The build-folder refresh was skipped three times. | Each report is a CI step; it turns strict when clean. |
 
+## Status (2026-11-14)
+
+All seven phases are on `main`. Each push passed `tools/ci_local.py` before it and the `Build & Validate` run after it.
+
+| Phase | Commits | Result |
+|---|---|---|
+| 1 | `ec237363`, `c88c0816`, `9670f8d9` | Exit 2 = NOT RUN in six tools; `tools/ci_local.py` over `tools/ci_steps.json` (28 steps today). A review before the push confirmed 28 defects; one would have failed CI on Linux |
+| 2 | `32043067`, `bee7d53e`, `df869e10` | `docs/reference/harness-facts.md`, this record, the canary rule, the reorder, the false hook claims removed. Issue #177 filed |
+| 3 | `ad330b94` | `.githooks/pre-push` (14 tests); `core.hooksPath` is set in the main checkout |
+| 4 | `472bd35f` to `e90ad034` | ADR-002, `tools/check_context_budget.py`, nine proven moves: 450,313 to 105,763 bytes; the budget is strict |
+| 5 | `8b02bfcc` to `4d8ee1c6` | Six more proven move groups and the core: 25,382 bytes, cap 40,000. A review confirmed 37 defects in the core and in documents that cite it; all corrected. A two-line `CLAUDE.md` in the parent folder imports the core |
+| 6 | `4d8ee1c6` | `docs/ai-includes/agent-brief.md` |
+| 7 | `4d8ee1c6` and the commit before it | A leak report in the Lua test runner (9 leaks), check 3 in `tools/check_orphans.py` (10 sites), `tools/release.py tag-ready` and `post` |
+
+Still open: the three probes below (a person must start the session); the 9 leaks and the 10 check-3 sites, each a
+place to look; issue #177.
+
 ## Deferred, each with the condition that reopens it
 
 | Item | Rows | Reopen when |
@@ -137,7 +154,7 @@ The reason for each is in the rows file. The groups:
 | Probe | Why | Record the result in |
 |---|---|---|
 | Start a session in the parent folder, read one file under `src_new/tests/`: does `.claude/rules/tests.md` load? Repeat in an `lv-*` worktree. | Decides whether area knowledge can live in path rules. | `docs/reference/harness-facts.md`, section 2 |
-| After phase 5: does a two-line parent `CLAUDE.md` that imports the core load it at launch? | Launch loading survives compaction and reaches non-Explore subagents. | The same section |
+| Does the two-line parent `CLAUDE.md` (created 2026-11-14) load the core at launch? Start a session and ask for the "Trap Sheet" before any file access. | Launch loading survives compaction and reaches non-Explore subagents. | The same section |
 | `/add-dir LEVI-Achaea`: are the six agents offered? | Decides whether the custom agents can be used at all. | The same section |
 
 ## Follow-up

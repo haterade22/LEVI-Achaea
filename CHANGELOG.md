@@ -2,6 +2,13 @@
 
 ---
 
+## 2026-11-14 - The TAOM adoption: all seven phases are on `main` (docs only, no version bump)
+
+- `docs/reviews/adopt-taom-2026-11-13.md` has a Status section: each phase, its commits and its result, and what is still open (three probes that need a new session, 9 test leaks, 10 report-only sites, issue #177).
+- The parent folder (outside git) now holds a `CLAUDE.md` with one line, `@LEVI-Achaea/CLAUDE.md`, so that the 25 KB core loads at the start of a session and stays after a compaction. `docs/reference/harness-facts.md` records it, and says that the launch load is inferred and not yet seen.
+
+---
+
 ## 2026-11-14 - `CLAUDE.md` is a 25 KB core; a brief for subagents; three reports for shipped defects; two release commands (docs and tooling, no version bump)
 
 **`CLAUDE.md` is 25,382 bytes** (450,746 on 2026-11-13). It now loads whole, also on a small context window, and a 40,000-byte cap holds it there (`tools/context_budget.json`).
