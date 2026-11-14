@@ -472,6 +472,20 @@ class Stated(unittest.TestCase):
         self.assertIn("blank", kb.stated_value(table, "Shadowmancy", "Reap")[1])
         self.assertIn("cannot read", kb.stated_value(table, "Weaponmastery", "Slice")[1])
 
+    def test_the_games_record_wins_and_the_note_names_the_wiki(self):
+        table = {("Venom", "Bite"): "4.00 seconds of balance", ("Subterfuge", "Doublestab"): "2.80 seconds of balance",
+                 ("Kaido", "Fitness"): "3.00 seconds of balance"}
+        game = {("Venom", "Bite"): (1275, "1.90 seconds of balance"), ("Subterfuge", "Doublestab"): (1235, "2.80 seconds of balance"),
+                ("Tattoos", "Shield"): (1476, "4.00 seconds of equilibrium"), ("Kaido", "Fitness"): (883, "Equilibrium")}
+        value, note = kb.stated_value(table, "Venom", "Bite", game)
+        self.assertEqual(value, (1.9, "balance"))
+        self.assertEqual(note, "Venom/Bite: 1.90 seconds of balance (ABADMIN 1275; the wiki: 4.00 seconds of balance)")
+        self.assertEqual(kb.stated_value(table, "Subterfuge", "Doublestab", game)[1],
+                         "Subterfuge/Doublestab: 2.80 seconds of balance (ABADMIN 1235)")
+        # A record with no wiki row, and a record with no number, which falls back to the wiki.
+        self.assertEqual(kb.stated_value(table, "Tattoos", "Shield", game)[0], (4.0, "equilibrium"))
+        self.assertEqual(kb.stated_value(table, "Kaido", "Fitness", game), ((3.0, "balance"), "Kaido/Fitness: 3.00 seconds of balance"))
+
     def test_a_printed_cost_goes_to_the_ability_in_its_packet(self):
         rows = ["You touch the tattoo and a nearly invisible magical shield forms around you.", "Equilibrium used: 3.40s.",
                 "H:1|1% M:1|1%  22:28:19:000  [ B ][0|0|0|0|0|0]"]
@@ -1226,6 +1240,13 @@ class RealLogs(unittest.TestCase):
         notes = {a["ability"]: a["stated_note"] for a in self.data["stated"]["own"]}
         self.assertTrue(notes["FITNESS"].startswith("Kaido/Fitness: "))
         self.assertTrue(notes["Engage"].startswith("Discipline/Engage: "))
+
+    def test_the_real_page_takes_bite_from_the_games_record(self):
+        own = {a["ability"]: a for a in self.data["stated"]["own"]}
+        opp = {a["ability"]: a for a in self.data["stated"]["opponents"]}
+        self.assertEqual((own["BITE"]["stated"], opp["BITE"]["stated"]), (1.9, 1.9))
+        self.assertIn("the wiki: 4.00", own["BITE"]["stated_note"])
+        self.assertEqual(own["Shield tattoo"]["stated"], 4.0)
 
     def test_the_page_says_filed_and_not_date(self):
         text = kb.generate()[kb.OUT_MD]

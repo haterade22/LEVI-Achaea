@@ -5247,7 +5247,7 @@
     },
     "ratio_to_stated": 0.654,
     "stated": 2.8,
-    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance",
+    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance (ABADMIN 1235)",
     "stats": {
      "max": 9.63,
      "median": 1.83,
@@ -5311,9 +5311,9 @@
     "dropped": {
      "no next attack": 1
     },
-    "ratio_to_stated": 0.422,
-    "stated": 4.0,
-    "stated_note": "Venom/Bite: 4.00 seconds of balance",
+    "ratio_to_stated": 0.889,
+    "stated": 1.9,
+    "stated_note": "Venom/Bite: 1.90 seconds of balance (ABADMIN 1275; the wiki: 4.00 seconds of balance)",
     "stats": {
      "max": 3.41,
      "median": 1.69,
@@ -5394,7 +5394,7 @@
     },
     "ratio_to_stated": 0.821,
     "stated": 2.0,
-    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance",
+    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance (ABADMIN 1213)",
     "stats": {
      "max": 4.946,
      "median": 1.642,
@@ -5446,7 +5446,7 @@
     },
     "ratio_to_stated": 1.072,
     "stated": 1.9,
-    "stated_note": "Evileye/Asthma: 1.90 seconds of balance",
+    "stated_note": "Evileye/Asthma: 1.90 seconds of balance (ABADMIN 94)",
     "stats": {
      "max": 6.535,
      "median": 2.037,
@@ -5523,7 +5523,7 @@
     ],
     "channel": "balance",
     "stated": 3.0,
-    "stated_note": "Kaido/Fitness: 3.00 seconds of balance"
+    "stated_note": "Kaido/Fitness: 3.00 seconds of balance (ABADMIN 883)"
    },
    {
     "ability": "Truewrack",
@@ -5553,7 +5553,7 @@
     ],
     "channel": "balance",
     "stated": 2.8,
-    "stated_note": "Physiology/Truewrack: 2.80 seconds of balance"
+    "stated_note": "Physiology/Truewrack: 2.80 seconds of balance (ABADMIN 38)"
    },
    {
     "ability": "Reap",
@@ -5605,7 +5605,7 @@
       "printed": {
        "4": 23
       },
-      "ratio": null,
+      "ratio": 1.0,
       "stats": {
        "max": 4.0,
        "median": 4.0,
@@ -5628,7 +5628,7 @@
       "printed": {
        "3.4": 6
       },
-      "ratio": null,
+      "ratio": 0.85,
       "stats": {
        "max": 3.4,
        "median": 3.4,
@@ -5654,7 +5654,7 @@
        "2.89": 3,
        "3.4": 14
       },
-      "ratio": null,
+      "ratio": 0.85,
       "stats": {
        "max": 3.4,
        "median": 3.4,
@@ -5677,7 +5677,7 @@
       "printed": {
        "3.4": 12
       },
-      "ratio": null,
+      "ratio": 0.85,
       "stats": {
        "max": 3.4,
        "median": 3.4,
@@ -5703,7 +5703,7 @@
        "2.89": 2,
        "3.4": 1
       },
-      "ratio": null,
+      "ratio": 0.723,
       "stats": {
        "max": 3.4,
        "median": 2.89,
@@ -5716,8 +5716,8 @@
      }
     ],
     "channel": "equilibrium",
-    "stated": null,
-    "stated_note": "no row in abilities.json"
+    "stated": 4.0,
+    "stated_note": "Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476)"
    },
    {
     "ability": "Pommelstrike",
@@ -5747,7 +5747,7 @@
     ],
     "channel": "balance",
     "stated": 1.5,
-    "stated_note": "TwoArts/Pommelstrike: 1.50 seconds of balance"
+    "stated_note": "TwoArts/Pommelstrike: 1.50 seconds of balance (ABADMIN 243)"
    },
    {
     "ability": "Homunculus attack",
@@ -5777,7 +5777,7 @@
     ],
     "channel": "equilibrium",
     "stated": 3.0,
-    "stated_note": "Physiology/Arms: 3.00 seconds of equilibrium"
+    "stated_note": "Physiology/Arms: 3.00 seconds of equilibrium (ABADMIN 29)"
    },
    {
     "ability": "Engage",
@@ -5817,7 +5817,7 @@
     ],
     "channel": "equilibrium",
     "stated": 2.5,
-    "stated_note": "Discipline/Engage: 2.50 seconds of equilibrium"
+    "stated_note": "Discipline/Engage: 2.50 seconds of equilibrium (ABADMIN 556)"
    },
    {
     "ability": "Concentrate",
@@ -5911,7 +5911,7 @@
       "printed": {
        "4": 6
       },
-      "ratio": null,
+      "ratio": 0.889,
       "stats": {
        "max": 4.0,
        "median": 4.0,
@@ -5924,8 +5924,8 @@
      }
     ],
     "channel": "equilibrium",
-    "stated": null,
-    "stated_note": "no row in abilities.json"
+    "stated": 4.5,
+    "stated_note": "Survival/Curseward: 4.50 seconds of equilibrium (ABADMIN 1405)"
    },
    {
     "ability": "Colossal fist",
@@ -5987,7 +5987,7 @@
     ],
     "channel": "balance",
     "stated": 2.8,
-    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance"
+    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance (ABADMIN 1235)"
    },
    {
     "ability": "BITE",
@@ -6003,7 +6003,7 @@
       "printed": {
        "1.7": 13
       },
-      "ratio": 0.425,
+      "ratio": 0.895,
       "stats": {
        "max": 1.7,
        "median": 1.7,
@@ -6016,8 +6016,8 @@
      }
     ],
     "channel": "balance",
-    "stated": 4.0,
-    "stated_note": "Venom/Bite: 4.00 seconds of balance"
+    "stated": 1.9,
+    "stated_note": "Venom/Bite: 1.90 seconds of balance (ABADMIN 1275; the wiki: 4.00 seconds of balance)"
    },
    {
     "ability": "IMPULSE",
@@ -6047,7 +6047,7 @@
     ],
     "channel": "equilibrium",
     "stated": 1.7,
-    "stated_note": "Hypnosis/Impulse: 1.70 seconds of equilibrium"
+    "stated_note": "Hypnosis/Impulse: 1.70 seconds of equilibrium (ABADMIN 3251)"
    },
    {
     "ability": "FLAY",
@@ -6077,7 +6077,7 @@
     ],
     "channel": "balance",
     "stated": 2.0,
-    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance"
+    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance (ABADMIN 1213)"
    },
    {
     "ability": "PINSHOT",
@@ -6107,7 +6107,7 @@
     ],
     "channel": "balance",
     "stated": 3.0,
-    "stated_note": "Subterfuge/Pinshot: 3.00 seconds of balance"
+    "stated_note": "Subterfuge/Pinshot: 3.00 seconds of balance (ABADMIN 1248)"
    }
   ],
   "own_ambiguous_packets": {},

@@ -132,11 +132,11 @@ is a small part of the printed costs: [clocks.md](clocks.md) says how much it co
 | Opponent's ability | Stated | Gap to next attack, median | n |
 |---|---|---|---|
 | Serpent DSTAB | 2.80 | 1.83 (Thato 1.81, Archaeon 1.82, Seurimas 1.83, Kalys 1.85) | 141 |
-| Serpent BITE | 1.90 (the game's record, ABADMIN 1275; the wiki and clocks.md: 4.00) | 1.70 | 18 |
+| Serpent BITE | 1.90 (the game's record, ABADMIN 1275; the wiki: 4.00) | 1.70 | 18 |
 | Serpent FLAY | 2.00 | 1.64-1.70 | 65 |
 | Apostate STARE | 1.90 | 2.04 | 129 |
 
-The game's records (`kb/raw/abadmin/`, 2026-11-13) settle part of this. BITE's base is 1.90 s, so its 4.00 was a stale wiki value. DSTAB (2.80), FLAY (2.00) and STARE (1.90) are the game's own figures, so the short DSTAB and FLAY gaps are a speed effect that our seat cannot see. `clocks.md` still states the wiki's figures, because `kb_timing.py` reads `abilities.json`, not the game's records.
+The game's records (`kb/raw/abadmin/`, 2026-11-13) settle part of this. BITE's base is 1.90 s, so its 4.00 was a stale wiki value. DSTAB (2.80), FLAY (2.00) and STARE (1.90) are the game's own figures, so the short DSTAB and FLAY gaps are a speed effect that our seat cannot see. Since 2026-11-13 `kb_timing.py` reads the game's record first (`kb/classes/abadmin.json`) and the wiki only where no record states a number, so `clocks.md` states BITE at 1.90 and its gap ratio is 0.89, not 0.42. The records also confirm the shield tattoo's base, 4.00 (ABADMIN 1476: Claes 4.00, Elmer and Nikita 3.40, our Monk 2.89 in Rain), and add a second exception beside Engage: Claes prints CURSEWARD at 4.00 against the record's 4.50 (ABADMIN 1405).
 [clocks.md](clocks.md) regenerates this table with one written rule for what a gap is, so its n differ from these. It adds p10 and min. **p10 is
 not a floor:** about 10% of gaps come sooner. DSTAB reads p10 1.73 and min 1.54, and that min is a real gap: the prompts on both sides of az:315 and
 az:350 put it at 1.539-1.557 s.

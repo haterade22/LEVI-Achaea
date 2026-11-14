@@ -257,6 +257,34 @@ def render_flags(recs):
         "says `Useable paralysed: No` (`kb/afflictions/class-cures.md`, \"The game's records\";",
         "`kb/CONFLICTS.md` #82). Check a flag against a log before code reads it.",
         "",
+    ] + render_aggression(empty, filled)
+
+
+AGGRESSION = ("non-aggressive", "aggressive (blocked by shield/prismatic)", "aggressive (bypasses shield/prismatic)")
+
+
+def render_aggression(empty, filled):
+    """The `Aggression type` field has a default too: non-aggressive. DOUBLESTAB says it, and it is an attack on a
+    player. The two aggressive values are statements."""
+    def count(rs):
+        return [sum(1 for r in rs if r.get("aggression") == a) for a in AGGRESSION]
+    e, f = count(empty), count(filled)
+    rows = ["| %s | %d | %d |" % (a, e[i], f[i]) for i, a in enumerate(AGGRESSION)]
+    other = len(empty) + len(filled) - sum(e) - sum(f)
+    out = [
+        "### The `Aggression type` field",
+        "",
+        "| Aggression type | No Pre checks value | A Pre checks value |",
+        "|---|---|---|",
+    ] + rows + [""]
+    if other:
+        out += [f"{other} records have no `Aggression type` line, or another value.", ""]
+    return out + [
+        "`non-aggressive` is a default too. Subterfuge DOUBLESTAB, FLAY and PINSHOT and Venom BITE say it, and",
+        "each is an attack on a player. So `non-aggressive` is no evidence that a shield lets an ability through.",
+        "The two `aggressive` values are statements. Hypnosis IMPULSE (3251) says `aggressive (bypasses",
+        "shield/prismatic)`, which the simulator does not follow yet (`kb/CONFLICTS.md` #83).",
+        "",
     ]
 
 

@@ -27,6 +27,19 @@ balance (CONFIRMED live) and fired under paralysis in our logs, but its record h
 says `Useable paralysed: No` (`kb/afflictions/class-cures.md`, "The game's records";
 `kb/CONFLICTS.md` #82). Check a flag against a log before code reads it.
 
+### The `Aggression type` field
+
+| Aggression type | No Pre checks value | A Pre checks value |
+|---|---|---|
+| non-aggressive | 2457 | 95 |
+| aggressive (blocked by shield/prismatic) | 63 | 154 |
+| aggressive (bypasses shield/prismatic) | 56 | 53 |
+
+`non-aggressive` is a default too. Subterfuge DOUBLESTAB, FLAY and PINSHOT and Venom BITE say it, and
+each is an attack on a player. So `non-aggressive` is no evidence that a shield lets an ability through.
+The two `aggressive` values are statements. Hypnosis IMPULSE (3251) says `aggressive (bypasses
+shield/prismatic)`, which the simulator does not follow yet (`kb/CONFLICTS.md` #83).
+
 ## Where the game and the wiki differ
 
 | ID | Skill | Ability | Game cost | Wiki cost | Game target | Wiki target | Differs |

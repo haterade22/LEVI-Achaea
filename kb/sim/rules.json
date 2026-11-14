@@ -4,8 +4,8 @@
  "inputs": {
   ".claude/databases/venoms.yaml": "da9f100670a46530",
   "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
-  "kb/mechanics/clocks.json": "acf3ebc1cd2c7b55",
-  "kb/sim/rules_hand.json": "1ba17b3d9c490447",
+  "kb/mechanics/clocks.json": "7f916fd01f103c43",
+  "kb/sim/rules_hand.json": "9e747d11cedbb72c",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "84500af0cf22efc1",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "a67d445f9502d3a2",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "0662a95087ef51bb",
@@ -28,7 +28,7 @@
    ],
    "first_reply": 1.676,
    "n": 13,
-   "note": "our seat: the bite of an IMPULSE with a venom. 'You sink your fangs into <target>, injecting ...' came in the impulse's packet 13 of 13. From 'Balance used: 1.7s.' to the next 'You have recovered balance on all limbs.'; printed 1.7, stated 4.00 (Venom/Bite). We did not see a plain BITE, so its line and cost are not known. The alt 1.676 (n=13) times it from the round's first reply, as attack.cost.own.dstab does. The analysis gave 1.665 with n=12: it left out the last bite (2036-2045), which has no next round. tools/test_kb_rules.py re-counts it",
+   "note": "our seat: the bite of an IMPULSE with a venom. 'You sink your fangs into <target>, injecting ...' came in the impulse's packet 13 of 13. From 'Balance used: 1.7s.' to the next 'You have recovered balance on all limbs.'; printed 1.7, stated 1.90 (the game's record, ABADMIN 1275; the wiki's 4.00 is stale). We did not see a plain BITE, so its line and cost are not known. The alt 1.676 (n=13) times it from the round's first reply, as attack.cost.own.dstab does. The analysis gave 1.665 with n=12: it left out the last bite (2036-2045), which has no next round. tools/test_kb_rules.py re-counts it",
    "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:594-604 (the first, and min), 1599-1611 (max), 2036-2045 (the last)",
    "tag": "MEASURED",
    "usable": true,
@@ -157,7 +157,7 @@
     1.79
    ],
    "n": 21,
-   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 4.0 s; not usable (p90-p10 is 0.205, over 0.2): swept p10..p90",
+   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 1.9 s; not usable (p90-p10 is 0.205, over 0.2): swept p10..p90",
    "source": "kb/mechanics/clocks.json stated.opponents BITE",
    "tag": "MEASURED",
    "usable": false,
@@ -269,8 +269,8 @@
     "a shield blocks the bite only",
     "it needs equilibrium only"
    ],
-   "note": "the wiki's IMPULSE takes no venom (Hypnosis.wiki:46); our form with a venom is rule attack.impulse.venom. In the spar all 13 were sent with balance and equilibrium both up, so whether it needs both is not tested. No log shows an impulse on a shield or on the coating. The engine refuses an impulse with no venom, or with a suggestion that is not a trivial one (attack.impulse.suggestions). With --gap queue the next action waits attack.cost.own.bite; with a numeric --gap it waits that gap, and a second impulse also waits for the attacker's equilibrium",
-   "source": "kb/raw/wiki/Hypnosis.wiki:46; tools/sim/attackers.lua (A.apply, impulse)",
+   "note": "the wiki's IMPULSE takes no venom (Hypnosis.wiki:46); our form with a venom is rule attack.impulse.venom. In the spar all 13 were sent with balance and equilibrium both up, so no log tests whether it needs both. The game's record (ABADMIN 3251) has 'Pre checks: balance, equilibrium, and prone', which supports the value and is against the alt 'it needs equilibrium only'. The same record says 'Aggression type: aggressive (bypasses shield/prismatic)'. That is not the default value (non-aggressive: 2457 of the 2576 records with no Pre checks value, kb/classes/abadmin-vs-wiki.md, \"The Aggression type field\"), so it is against 'a shield blocks all of it': the suggestion goes through a shield. Whether the bite of our form does is not stated. The engine still runs the value, because no log shows an impulse on a shield or on the coating (kb/CONFLICTS.md #83). The engine refuses an impulse with no venom, or with a suggestion that is not a trivial one (attack.impulse.suggestions). With --gap queue the next action waits attack.cost.own.bite; with a numeric --gap it waits that gap, and a second impulse also waits for the attacker's equilibrium",
+   "source": "kb/raw/wiki/Hypnosis.wiki:46; kb/raw/abadmin/hypnosis_impulse_3251.txt; tools/sim/attackers.lua (A.apply, impulse)",
    "tag": "ASSUMED",
    "value": "IMPULSE <suggestion> <venom>: it needs the attacker's equilibrium and balance. The suggestion lands, then a bite of the venom (attack.impulse.venom). It spends equilibrium (attack.cost.own.impulse_eq) and the bite's balance. A shield blocks all of it; sileris or fangbarrier blocks the bite only"
   },
@@ -4057,28 +4057,28 @@
     2.89,
     4.0
    ],
-   "note": "a victim with no logger: the cost two of the three loggers show",
+   "note": "a victim with no logger: the cost two of the three loggers show. The game's base is 4.00 (ABADMIN 1476), the alt that Claes shows",
    "source": "kb/sim/rules.json defence.shield.cost.*",
    "tag": "ASSUMED",
    "value": 3.4
   },
   "defence.shield.cost.Claes": {
    "n": 13,
-   "note": "'Equilibrium used: 4.00s.' after all 13 of Claes's shields",
+   "note": "'Equilibrium used: 4.00s.' after all 13 of Claes's shields. That is the base cost in the game's record (kb/raw/abadmin/tattoos_shield_1476.txt: 4.00 seconds of equilibrium), so Claes shows no equilibrium speed-up",
    "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:1258,1521,2041",
    "tag": "MEASURED",
    "value": 4.0
   },
   "defence.shield.cost.Elmer": {
    "n": 12,
-   "note": "3.40 s after 11 of Elmer's 12 shields (Z5 7, g 4); 2.89 s once (g row 2285)",
+   "note": "3.40 s after 11 of Elmer's 12 shields (Z5 7, g 4); 2.89 s once (g row 2285). 3.40 is x0.85 of the base 4.00 (ABADMIN 1476), the size of an Aldar Diadem; which artefact or trait Elmer has is not known. 2.89 is x0.72, the factor our Monk shows in Rain",
    "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:36,663,1386; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:445,2285",
    "tag": "MEASURED",
    "value": 3.4
   },
   "defence.shield.cost.Nikita": {
    "n": 10,
-   "note": "'Equilibrium used: 3.40s.' after all 10 of Nikita's shields",
+   "note": "'Equilibrium used: 3.40s.' after all 10 of Nikita's shields: x0.85 of the base 4.00 (ABADMIN 1476); the cause is not known",
    "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:528,729,2146",
    "tag": "MEASURED",
    "value": 3.4

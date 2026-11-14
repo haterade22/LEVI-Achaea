@@ -265,6 +265,19 @@ class Flags(unittest.TestCase):
         self.assertIn("and 2 do not. Of those 2, 1 show the same flags", text)  # ROBES needs one arm
         self.assertIn("and 0 say `Useable paralysed: Yes`. Of the 1 with a value, 0 show that set and 1 say", text)
 
+    def test_the_aggression_table_counts_each_value_by_pre_checks(self):
+        # IMPULSE's record (3251) has a Pre checks value and says it bypasses a shield.
+        impulse = (ROBES.replace("Ability: Robes (Record #3)", "Ability: Impulse (Record #3251)")
+                   .replace("Pre checks:\n", "Pre checks: balance, equilibrium, and prone\n")
+                   .replace("Aggression type: non-aggressive", "Aggression type: aggressive (bypasses shield/prismatic)"))
+        recs = [ka.parse_record(t) for t in (OBLIVIATE, ROBES, impulse, FISTSIGIL)]
+        text = "\n".join(ka.render_flags(recs))
+        self.assertIn("| non-aggressive | 2 | 0 |", text)
+        self.assertIn("| aggressive (blocked by shield/prismatic) | 0 | 0 |", text)
+        self.assertIn("| aggressive (bypasses shield/prismatic) | 0 | 1 |", text)
+        self.assertNotIn("records have no `Aggression type` line", text)
+        self.assertIn("`kb/CONFLICTS.md` #83", text)
+
 
 class Battlerage(unittest.TestCase):
     def page(self, files):

@@ -31,6 +31,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGS = os.path.join(ROOT, "kb", "raw", "logs")
 OURS = os.path.join(LOGS, "ours")
 ABILITIES = os.path.join(ROOT, "kb", "classes", "abilities.json")
+# The game's own record of each ability (ABADMIN SHOW, tools/kb_abadmin.py). Where it states a cost, it wins over the wiki.
+ABADMIN = os.path.join(ROOT, "kb", "classes", "abadmin.json")
 OUT_MD = os.path.join(ROOT, "kb", "mechanics", "clocks.md")
 OUT_JSON = os.path.join(ROOT, "kb", "mechanics", "clocks.json")
 OUT_SCORE = os.path.join(ROOT, "kb", "mechanics", "scoreboard.md")
@@ -741,7 +743,8 @@ def build_modifiers(logs):
 # STATED AGAINST OBSERVED
 # ---------------------------------------------------------------------------------------------
 
-# name, skill and ability in kb/classes/abilities.json (None: the file has no row), the channel, the line. The skill is
+# name, skill and ability (the record in kb/classes/abadmin.json, else the row in abilities.json; None: neither has one),
+# the channel, the line. The shield tattoo and CURSEWARD have an ABADMIN record and no wiki row. The skill is
 # the logger's own class's skill: FITNESS is printed only by Monks here (Elmer, Mystor), and Engage only by Claes, a
 # Runewarden. Another class's row can hold the same number today, and it would not follow a later change to this one.
 # WRACK is not here. Its line, "wracking his sanguine humour", is also what a TRUEWRACK prints when it reaches one humour
@@ -750,12 +753,12 @@ OWN_COSTS = (
     ("FITNESS", "Kaido", "Fitness", "balance", r"^You inhale deeply, purging yourself of your asthmatic condition"),
     ("Truewrack", "Physiology", "Truewrack", "balance", r"^You send ripples throughout .* wracking \S+ \w+ and \w+ humours"),
     ("Reap", "Shadowmancy", "Reap", "balance", r"^You unleash a vicious reaping blow at "),
-    ("Shield tattoo", None, None, "equilibrium", r"^You touch the tattoo and a nearly invisible magical shield"),
+    ("Shield tattoo", "Tattoos", "Shield", "equilibrium", r"^You touch the tattoo and a nearly invisible magical shield"),
     ("Pommelstrike", "TwoArts", "Pommelstrike", "balance", r"^As you draw .* from its scabbard, you drive the pommel"),
     ("Homunculus attack", "Physiology", "Arms", "equilibrium", r"^Reaching into the mind of your homunculus, you command it to attack"),
     ("Engage", "Discipline", "Engage", "equilibrium", r"^(?:You move in to engage |Engage:\s+\()"),
     ("Concentrate", None, None, "equilibrium", r"^You begin intense concentration to restore your equilibrium"),
-    ("Curseward", None, None, "equilibrium", r"^You bring a curseward into being"),
+    ("Curseward", "Survival", "Curseward", "equilibrium", r"^You bring a curseward into being"),
     ("Colossal fist", None, None, "balance", r"^With a roar you swing a colossal fist"),
     # Our Serpent seat, from the 2026-11-07 spar (ours/2026-11-07_164635_Saibel; editor lines, 1-based). Each ability
     # line and its cost line come in one packet: DSTAB lines 359 and 367, the impulse lines 1269 and 1270, its bite
@@ -823,10 +826,32 @@ def read_abilities():
     return table, {"rows": clean + blank + len(unreadable), "clean": clean, "blank": blank, "unreadable": unreadable}
 
 
-def stated_value(table, skill, ability):
-    """What abilities.json says, and a plain reason when it says no number."""
+def read_abadmin():
+    """{(skill, ability): (record id, cooldown text)} for every ABADMIN SHOW record that has a cooldown field."""
+    if not os.path.exists(ABADMIN):
+        return {}
+    with open(ABADMIN, encoding="utf-8") as fh:
+        records = json.load(fh)["abilities"]
+    game = {}
+    for r in records:
+        text = (r.get("cooldown") or "").strip()
+        if text and r.get("skill") and r.get("ability"):
+            game.setdefault((r["skill"], r["ability"]), (r["id"], text))
+    return game
+
+
+def stated_value(table, skill, ability, game=None):
+    """The stated cost and a note that names its source. The game's ABADMIN record wins where it states one number on one
+    balance; the wiki (abilities.json) is the fallback. The note names the wiki's value too when the two differ."""
     if skill is None:
         return None, "no row in abilities.json"
+    record = (game or {}).get((skill, ability))
+    if record and parse_cooldown(record[1]):
+        wiki = (table.get((skill, ability)) or "").strip()
+        note = "%s/%s: %s (ABADMIN %d" % (skill, ability, record[1], record[0])
+        if wiki and parse_cooldown(wiki) != parse_cooldown(record[1]):
+            note += "; the wiki: %s" % wiki
+        return parse_cooldown(record[1]), note + ")"
     text = table.get((skill, ability))
     if text is None:
         return None, "no row %s/%s" % (skill, ability)
@@ -888,11 +913,11 @@ def printed_cost_rows(logs):
     return total
 
 
-def build_own(logs, table):
+def build_own(logs, table, game=None):
     found, sources, dates, ambiguous = own_costs(logs)
     rows = []
     for name, skill, ability, channel, _ in OWN_COSTS:
-        stated, note = stated_value(table, skill, ability)
+        stated, note = stated_value(table, skill, ability, game)
         stated_s = stated[0] if stated and stated[1] == channel else None
         if stated and stated[1] != channel:
             note += "; we measure %s" % channel
@@ -938,7 +963,7 @@ def opponent_events(log):
     return events
 
 
-def build_opponents(logs, table):
+def build_opponents(logs, table, game=None):
     """The gap from each attack to that person's next attack. This is a distribution and it is never a cost: a clock gives
     the earliest action, never when (foundations.md, item 8). p10 is not a floor: 10% of gaps fall under it by definition."""
     gaps = collections.defaultdict(list)
@@ -970,7 +995,7 @@ def build_opponents(logs, table):
                     sources[name][who][log.id] += 1
     rows = []
     for name, skill, ability, _, _ in OPPONENT_ATTACKS:
-        stated, note = stated_value(table, skill, ability)
+        stated, note = stated_value(table, skill, ability, game)
         st = stats(gaps.get(name, []))
         near = sum(1 for g in gaps.get(name, []) if abs(g - st["median"]) <= 0.25) if st["n"] else 0
         by_person = []
@@ -1445,7 +1470,8 @@ def family_totals(logs):
 
 def build_data(logs):
     table_, census = read_abilities()
-    own, ambiguous = build_own(logs, table_)
+    game = read_abadmin()
+    own, ambiguous = build_own(logs, table_, game)
     return {
         "generated_by": "tools/kb_timing.py",
         "latest_filed": max(log.date for log in logs if log.date),
@@ -1457,7 +1483,7 @@ def build_data(logs):
                  for log in logs],
         "clocks": build_clocks(logs),
         "modifiers": build_modifiers(logs),
-        "stated": {"own": own, "own_ambiguous_packets": ambiguous, "opponents": build_opponents(logs, table_),
+        "stated": {"own": own, "own_ambiguous_packets": ambiguous, "opponents": build_opponents(logs, table_, game),
                    "own_printed_rows": printed_cost_rows(logs), "cooldown_field": census},
     }
 
@@ -1499,6 +1525,7 @@ def render_clocks(data):
         "sources:",
         "  - kb/raw/logs/",
         "  - kb/raw/logs/ours/",
+        "  - kb/classes/abadmin.json",
         "  - kb/classes/abilities.json",
         "code:",
         "  - tools/kb_timing.py",
@@ -1572,8 +1599,12 @@ def render_clocks(data):
     out += table(["Modifier", "Board", "n", "min", "p10", "median", "p90", "max", "Logs"], rows)
     out += ["", "## Stated against observed", "",
             "**Own costs** are the game's own `Balance used` and `Equilibrium used` lines (Mystor's `[Bal Spent]` is the "
-            "same line renamed). The ratio is the printed median over the value in `kb/classes/abilities.json`. A packet "
-            "with two candidate abilities on one channel is left out: %s." % (
+            "same line renamed). The ratio is the printed median over the stated value. The stated value is the game's "
+            "own record (`kb/classes/abadmin.json`, ABADMIN SHOW) where it states one number on one balance, else "
+            "`kb/classes/abilities.json` (the wiki); the Field column names which, and gives the wiki's value where the two "
+            "differ. Both are BASE costs. Our rows carry the Aldar Diadem, so our equilibrium ratio is about 0.85, and "
+            "about 0.72 in Rain (`balance-and-queueing.md`, \"Our speed factors\"); another logger's artefacts are not "
+            "known. A packet with two candidate abilities on one channel is left out: %s." % (
                 ", ".join("%s %d" % (k, v) for k, v in data["stated"]["own_ambiguous_packets"].items()) or "none"),
             "",
             "%d of %d printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this "
