@@ -55,7 +55,7 @@ jobs:
       - name: Test the replay of the deaths
         run: python3 -B tools/test_kb_replay.py
 
-      # The import fails the build if lupa has no Lua 5.1. Without it, kb_sim.py --check would only skip.
+      # The import fails the build if lupa has no Lua 5.1. Without it, kb_sim.py --check exits 2 (NOT RUN).
       - name: Install lupa for the simulator
         run: |
           pip install lupa==2.8 --quiet

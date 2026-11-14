@@ -116,8 +116,11 @@ end
 table.sort(test_files)
 
 if #test_files == 0 then
-  print("\nNo test files found (test_*.lua in src_new/tests/)")
-  print("Create test files like: src_new/tests/test_example.lua")
+  -- Zero files is NOT RUN, never a pass. Until 2026-11-13 this branch fell through to "All tests
+  -- passed!" and exit 0, so a run from the wrong folder (or a listing command that failed) was green.
+  print("\nNO TESTS FOUND (test_*.lua in src_new/tests/). Run from the repository root.")
+  print("NOT RUN: 0 test files")
+  os.exit(2)
 else
   for _, file in ipairs(test_files) do
     print("\n--- Loading: " .. file .. " ---")

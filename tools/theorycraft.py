@@ -460,7 +460,10 @@ class Engine:
 
     def __init__(self):
         if lupa is None:
-            raise SystemExit("theorycraft: needs lupa with Lua 5.1 (python -m pip install lupa)")
+            # Exit 2 = NOT RUN (a bare message would exit 1, which reads as a failed run).
+            print("NOT RUN: theorycraft needs lupa with Lua 5.1, and %s has none (python -m pip install lupa, or "
+                  "use the interpreter that has it)" % sys.executable, file=sys.stderr)
+            raise SystemExit(2)
         self.lua = lupa.LuaRuntime(unpack_returned_tuples=True)
         mods = []
         for name in LUA_FILES:

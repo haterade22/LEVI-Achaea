@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-13 - No silent green: a check that cannot run says NOT RUN (tooling and tests only, no version bump)
+
+Some of our checks could pass when they checked nothing. The local run is the only check before `main`, so a false pass there goes straight to players. These five repairs give each tool three results: exit 0 is a pass, exit 1 is a finding, exit 2 is NOT RUN.
+
+- **`tools/kb_sim.py --check` no longer passes without Lua 5.1.** With no `lupa`, it printed "skip" and exited 0. On this machine the `python3` on PATH has no `lupa`, so `python3 -B tools/kb_sim.py --check` was always green. It now prints `NOT RUN` with the interpreter's path and exits 2. `tools/kb_rules.py`, `tools/theorycraft.py` and `tools/run_lua_tests.py` exited 1 for the same cause, which reads as a finding. They now exit 2 with the same message.
+- **`tools/test_kb_sim.py` fails where it skipped.** `test_the_sim_runs_on_lua_51` skipped with no `lupa`, and the suite said OK.
+- **The Lua test runner fails on zero test files.** `src_new/tests/test_runner.lua` printed "No test files found" and then "All tests passed!" with exit 0. A run from the wrong folder was green. It now prints `NO TESTS FOUND` and `NOT RUN: 0 test files`, and exits 2. Proof: the runner in a scratch tree with `mock_mudlet.lua` and no test file gives exit 2; the full suite still gives 5146 passed.
+- **`tools/check_orphans.py` fails on an empty walk.** With no script file or no trigger, alias, timer or key file under `src_new`, each of its five checks printed OK. It now prints `NOT RUN` and exits 2 (`unchecked()`; four new tests in `tools/test_check_orphans.py`).
+- **Source of the method:** the adoption review of the maintainer's TAOM repository (2026-11-13). Its rule: no evidence is not a clean pass.
+
+---
+
 ## 2026-11-13 - v4.7.500: a Pariah with both arms broken sends VIRULENCE only
 
 - **Two broken arms stop most Pariah attacks.** Every Memorium record (TRACE, CRUX, BLOOD) and the swarm commands STING, BURROW, INFEST, SCOURGE and LATENCY say `Requires arms: 1`, and the attacker needs at least one unbroken arm (the user). Our Pariah offence did not check its own arms, so with both arms out it kept sending rounds that could not go. VIRULENCE states `Requires arms: 0` with Pre checks, so that 0 is a statement, and it bypasses a shield. Now, with both arms out, `pariah.dispatch` sends `virulence <target>` alone when its plagues are up and its 10 s delay is over. Otherwise it sends nothing and says why, at most once in 3 s. One arm out changes nothing. Test: `test_pariah_arms.lua`.

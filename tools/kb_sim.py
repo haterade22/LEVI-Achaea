@@ -28,6 +28,15 @@ try:
 except ImportError:
     lupa = None
 
+
+def not_run():
+    """Exit 2: the check could not run. Until 2026-11-13 `--check` printed "skip" and exited 0 with no lupa, so a
+    run under the wrong interpreter read as a pass. No Lua 5.1 is NOT RUN, never a pass and never a finding."""
+    print("NOT RUN: kb_sim needs lupa with Lua 5.1, and %s has none (python -m pip install lupa, or use the "
+          "interpreter that has it)" % sys.executable, file=sys.stderr)
+    raise SystemExit(2)
+
+
 ROOT = kb.ROOT
 ENGINE = os.path.join(ROOT, "tools", "sim", "forward.lua")
 CLOCKS = os.path.join(ROOT, "kb", "mechanics", "clocks.json")
@@ -692,7 +701,7 @@ def render_page(data):
 
 def build():
     if lupa is None:
-        raise SystemExit("lupa is not installed: pip install lupa")
+        not_run()
     boards, unknown, costs = extract_boards()
     engine = Engine()
     model = build_model(engine.lua, model_names(boards))
@@ -727,8 +736,7 @@ def strip(boards):
 
 def check():
     if lupa is None:
-        print("skip: lupa is not installed")
-        return 0
+        not_run()
     with open(OUT_JSON, encoding="utf-8") as fh:
         data = json.load(fh)
     bad = 0

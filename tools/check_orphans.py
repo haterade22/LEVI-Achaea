@@ -41,6 +41,9 @@ The checks, in the order they print
 All five fail CI. 1b, 2b and 1c landed report-only, behind STRICT_SCRIPT_CALLERS,
 STRICT_INACTIVE_FIELDS and STRICT_UNDEFINED_GLOBALS, and each was made strict once its report was
 clean (1b and 2b in v4.7.419, 1c on 2026-11-08). A new check should start the same way.
+
+Exit status: 0 = clean, 1 = a finding, 2 = NOT RUN (the walk found no script file or no
+trigger/alias/timer/key file, so nothing was checked; 2026-11-13).
 """
 
 import os
@@ -546,7 +549,23 @@ def check_missing_fields():
     return missing, inactive_only, inactive_defs
 
 
+def unchecked():
+    """Why this run cannot vouch for the tree, or None. A walk that finds no file would make every
+    check below print OK over nothing (a wrong working copy, a moved src_new, a bad checkout)."""
+    scripts = sum(1 for _ in walk("scripts"))
+    callers = sum(1 for _ in walk(*CALLER_DIRS))
+    if scripts and callers:
+        return None
+    return "found %d script file(s) and %d trigger/alias/timer/key file(s) under %s" % (scripts, callers, rel(SRC))
+
+
 def main():
+    reason = unchecked()
+    if reason:
+        # Exit 2 = NOT RUN: neither a pass nor a finding.
+        print("check_orphans: NOT RUN -- %s. Nothing was checked." % reason)
+        return 2
+
     live, dead = set(), {}
 
     for path in walk("scripts"):

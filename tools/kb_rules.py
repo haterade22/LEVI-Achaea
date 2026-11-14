@@ -302,7 +302,10 @@ def hand_rules(hand):
 
 def build():
     if lupa is None:
-        sys.exit("kb_rules: needs lupa with Lua 5.1 (python -m pip install lupa)")
+        # Exit 2 = NOT RUN (a bare message would exit 1, which reads as a finding in the rules).
+        print("NOT RUN: kb_rules needs lupa with Lua 5.1, and %s has none (python -m pip install lupa, or use "
+              "the interpreter that has it)" % sys.executable, file=sys.stderr)
+        sys.exit(2)
     with open(CLOCKS, encoding="utf-8") as fh:
         clocks = json.load(fh)
     with open(AFFLICTIONS, encoding="utf-8") as fh:

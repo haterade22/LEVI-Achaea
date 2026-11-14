@@ -140,8 +140,8 @@ class TestVerdict(unittest.TestCase):
 
 class TestRuntime(unittest.TestCase):
     def test_the_sim_runs_on_lua_51(self):
-        if K.lupa is None:
-            self.skipTest("lupa is not installed")
+        # A skip here read as a pass: the suite said OK while no cell could run. No Lua 5.1 is a failure of the run.
+        self.assertIsNotNone(K.lupa, "lupa with Lua 5.1 is missing for %s: this suite cannot vouch for the simulator" % sys.executable)
         self.assertEqual(K.lua_runtime().lua_version, (5, 1))
 
 

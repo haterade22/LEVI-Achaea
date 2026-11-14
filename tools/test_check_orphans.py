@@ -137,6 +137,36 @@ class UndefinedGlobals(unittest.TestCase):
         self.assertEqual([n for _, _, n in found], ["goneNew"])
 
 
+class EmptyWalk(unittest.TestCase):
+    """A walk that finds no file is NOT RUN (exit 2), never "OK": every check would pass over nothing."""
+
+    def run_main(self, files):
+        with tree(files), contextlib.redirect_stdout(io.StringIO()) as out:
+            return co.main(), out.getvalue()
+
+    def test_an_empty_tree_is_not_run(self):
+        status, said = self.run_main({})
+        self.assertEqual(status, 2)
+        self.assertIn("NOT RUN", said)
+        self.assertNotIn("OK", said)
+
+    def test_scripts_with_no_caller_files_is_not_run(self):
+        status, said = self.run_main({"scripts/a/001_Helpers.lua": HEADER % ("script", "yes") + "function helper() end\n"})
+        self.assertEqual(status, 2)
+        self.assertIn("0 trigger/alias/timer/key file(s)", said)
+
+    def test_a_small_clean_tree_still_passes(self):
+        status, said = self.run_main({
+            "scripts/a/001_Helpers.lua": HEADER % ("script", "yes") + "function helper() end\n",
+            "triggers/t/001_Line.lua": HEADER % ("trigger", "yes") + "helper()\n",
+        })
+        self.assertEqual(status, 0)
+        self.assertNotIn("NOT RUN", said)
+
+    def test_the_real_tree_is_checked(self):
+        self.assertIsNone(co.unchecked())
+
+
 class NeverRun(unittest.TestCase):
     """Every NEVER_RUN row must stay true: the alias sits in a switched-off group folder, and the call is there."""
 

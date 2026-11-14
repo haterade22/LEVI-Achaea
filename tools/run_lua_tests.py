@@ -4,7 +4,8 @@
     python tools/run_lua_tests.py           # the whole suite
     python tools/run_lua_tests.py src_new/tests/test_shikudo_tracking.lua   # one file
 
-Exits with the runner's own status (0 = all passed). Added v4.7.414: until then CI was the first
+Exits with the runner's own status (0 = all passed, 1 = a test failed, 2 = NOT RUN: no lupa here, or
+the runner found no test file). Added v4.7.414: until then CI was the first
 place a test ever ran on this Windows machine, which has no lua5.1.
 
 The runner (src_new/tests/test_runner.lua) finds test files with io.popen; with a file argument
@@ -17,7 +18,10 @@ import sys
 try:
     import lupa.lua51 as lupa
 except ImportError:
-    sys.exit("run_lua_tests: needs lupa (python -m pip install lupa)")
+    # Exit 2 = NOT RUN: no test ran, so this is neither a pass nor a test failure (1).
+    print("NOT RUN: run_lua_tests needs lupa with Lua 5.1, and %s has none (python -m pip install lupa, or use "
+          "the interpreter that has it)" % sys.executable, file=sys.stderr)
+    sys.exit(2)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
