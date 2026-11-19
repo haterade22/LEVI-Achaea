@@ -48,6 +48,8 @@ patterns:
   type: 1
 - pattern: '^\(Party\): (\w+) says, "(\w+): (\w+) (\w+) (\w+) (\w+)."$'
   type: 1
+- pattern: '^\(Party\): (\w+) says, "(\w+) - ((?:\[\w+\] ?)+)(?: - \d+%HP)?\.?"$'
+  type: 1
 ]]--
 
 -- Every called word goes through paAff (ataxia/001_Miscellaneous_Aff_Tracking_Methods): it turns a
@@ -58,8 +60,15 @@ patterns:
 -- name in every pattern (matches[3]) and the called words follow it. A Serin-only copy of the
 -- "has" pattern, with the target first, is gone: the "has" pattern reads Serin's lines too, and
 -- that copy's run reached isTargeted(matches[4]) = isTargeted(nil), which threw.
+-- The last pattern is a bracket list of any length: "Mizik - [sensitivity] [paralysis] - 42%HP."
+-- (Titonus, kb/raw/live/party-calls-bracket_2026-11-19.txt). Its third capture holds every
+-- bracket, so each bracketed word is read from it.
 if matches[3] and isTargeted(matches[3]) then
-  for i = 4, 7 do
-    if matches[i] then paAff(matches[i]) end
+  if matches[4] and matches[4]:find("[", 1, true) then
+    for aff in matches[4]:gmatch("%[(%w+)%]") do paAff(aff) end
+  else
+    for i = 4, 7 do
+      if matches[i] then paAff(matches[i]) end
+    end
   end
 end

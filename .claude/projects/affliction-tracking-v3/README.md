@@ -113,6 +113,22 @@ The salve triggers call `onSalveCureV3(salveType)`, which:
 | `395_Applied_Limbs.lua` | limbs | `onSalveCureV3("limbs")` |
 | `396_Salves.lua` | generic | `onTargetApplySalveV3()` (slickness only; a no-op when 391-395 charged this line) |
 
+### Party affliction calls
+A party member's call adds each called word through `paAff`
+(`ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua`), which turns a venom into its affliction
+(curare -> paralysis) and adds it with `tarAffed`. A call counts only when its target is ours
+(`isTargeted`). Tests: `test_target_cure_lines.lua`, "H2: party calls reach V3".
+
+| File | Formats read (the text inside the quotes) |
+|------|-------------------------------------------|
+| `426_Party_Afflictions.lua` | `T hit with X.`, `T has X.`, `T has been hit with X.`, `Rended T's ... with X.`, `T wracked: X.`, `Afflicted T: X.`, `T: X Y.`, `T: W X Y Z.`, and the bracket list `T - [X] [Y] ... - 42%HP.` (any number of brackets; the health part is optional; Titonus's format, `kb/raw/live/party-calls-bracket_2026-11-19.txt`) |
+| `428_Double_Party_Affs.lua` | `T wracked: X Y.`, `T truewracked: X Y.`, `T hit with X and Y.`, `T: X Y.` (also in 426, so that call runs twice; `paAff` adds nothing the second time) |
+| `436_PARTY_AFFS_DIFFERENT.lua` | ` X on T.` |
+
+No pattern reads a one-word call (`T: X.`) or a three-word call (`T: X Y Z.`), both seen on
+2026-11-19. Such a call can hold a word that is not an affliction ("fulminated"), and `paAff`
+adds any word it gets, so a pattern for them needs a filter first.
+
 ## Cure Tables
 
 ### Herb Cure Tables

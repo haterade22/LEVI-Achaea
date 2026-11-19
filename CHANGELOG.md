@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-19 - v4.7.504: party calls in Titonus's bracket format reach the target tracker
+
+Titonus calls afflictions on the party channel as `Mizik - [sensitivity] [paralysis] - 42%HP.` No party trigger read that format, so his calls never reached V3 or `tAffs`.
+
+- **`426_Party_Afflictions` has a new pattern for the bracket list.** It takes any number of `[affliction]` brackets, and the `- NN%HP` part is optional. The script reads each bracketed word and gives it to `paAff`, as it does for the other formats. A venom in a bracket becomes its affliction (curare -> paralysis).
+- The line is filed verbatim in `kb/raw/live/party-calls-bracket_2026-11-19.txt`. The formats that each party trigger reads are listed in `.claude/projects/affliction-tracking-v3/README.md` ("Party affliction calls").
+- Three tests in `test_target_cure_lines.lua`: the real line adds sensitivity and paralysis once each; a one-bracket and a three-bracket call with no health part match; another target's call adds nothing. With the bracket branch removed, two of them fail.
+
 ## 2026-11-19 - v4.7.503: the Serpent basher wields the whip before it flays a shield
 
 A tash'la miner raised a shield. The Serpent basher sent `flay <target> shield` three times, and the game refused each one: "You must be wielding a whip in order to flay someone." The miner's shield fell by itself, and the miner hit us for 1237 and broke our left arm. The Assassin's Blade backstab wields the dirk, and the camus bite needs no weapon, so nothing in the basher put the whip back in hand.

@@ -1,0 +1,22 @@
+Party affliction calls in a group fight on Mizik, 2026-11-19. The user's screenshot, typed out verbatim. The notes marked # are ours.
+
+# Prompt rows ("13:20:20:798 [7273] [99] |(Mizik)|[ [ ]]") are left out. "(((( BALANCE: 1.592 ))))", "[Levi]: Strategy: ..."
+# and "[AST] [WEA]" are our echoes. Two of our secrete rows are cut at the screenshot's right edge and are left out.
+# Titonus's call is the new format: target, " - ", one [affliction] per afflicted aff, " - ", the target's health.
+# Layta's and Pharaus's calls are the older "Target: words." format.
+(Party): You say, "Mizik: Stupidity."
+Saibel takes a drink from an oaken vial.
+(Party): Pharaus says, "Mizik: stupidity fulminated healthleech."
+You suddenly perceive the vague outline of an aura of rebounding around Layta.
+(Party): Layta says, "Mizik: Stupidity."
+(Party): Layta says, "Mizik: Healthleech."
+Titonus's aura of weapons rebounding disappears.
+Titonus slashes into Mizik's right arm with an ancient scimitar.
+Lightning-quick, Titonus jabs Mizik's right arm with a blackened Maldaathi war-scimitar.
+Gritting his teeth, Mizik drives off the attempt to afflict him with paralysis.
+Titonus moves in to engage Mizik.
+You start to wield Thoth's fang in your right hand.
+You quickly prick Mizik with your dirk.
+Striking like a snake, you prick Mizik a second time with your dirk.
+Balance used: 1.8s.
+(Party): Titonus says, "Mizik - [sensitivity] [paralysis] - 42%HP."

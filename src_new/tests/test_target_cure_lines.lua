@@ -796,6 +796,40 @@ describe("H2: party calls reach V3 (paAff, 426, 428, 436)", function()
     expect(v3Has("kalmia")).toBeFalse()
   end)
 
+  -- kb/raw/live/party-calls-bracket_2026-11-19.txt (Titonus's bracket format)
+  local BRACKET = '(Party): Titonus says, "Mizik - [sensitivity] [paralysis] - 42%HP."'
+
+  it("426: a bracket call adds each bracketed affliction, once each", function()
+    world("Mizik")
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), BRACKET)).toBeTrue()
+    fire("PARTY", BRACKET, "Titonus", "Mizik", "[sensitivity] [paralysis]")
+    expect(P("sensitivity")).toBe(1)
+    expect(P("paralysis")).toBe(1)
+    expect(afflictedEvents()).toBe(2)
+  end)
+
+  it("426: a bracket call of one, or of three with no health, matches and adds", function()
+    -- modelled on kb/raw/live/party-calls-bracket_2026-11-19.txt
+    local ONE = '(Party): Titonus says, "Mizik - [paralysis] - 9%HP."'
+    local THREE = '(Party): Titonus says, "Mizik - [asthma] [curare] [clumsiness]."'
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), ONE)).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), THREE)).toBeTrue()
+    world("Mizik")
+    fire("PARTY", THREE, "Titonus", "Mizik", "[asthma] [curare] [clumsiness]")
+    expect(P("asthma")).toBe(1)
+    expect(P("paralysis")).toBe(1)
+    expect(P("clumsiness")).toBe(1)
+    expect(v3Has("curare")).toBeFalse()
+    expect(afflictedEvents()).toBe(3)
+  end)
+
+  it("426: another target's bracket call moves nothing", function()
+    world("Saibel")
+    fire("PARTY", BRACKET, "Titonus", "Mizik", "[sensitivity] [paralysis]")
+    expect(P("sensitivity")).toBe(0)
+    expect(P("paralysis")).toBe(0)
+  end)
+
   it("436: ' curare on Saibel' adds paralysis", function()
     world("Saibel")
     local L = '(Party): Gavai says, " curare on Saibel."'
