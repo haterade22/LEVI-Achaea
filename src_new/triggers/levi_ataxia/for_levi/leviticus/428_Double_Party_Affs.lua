@@ -38,9 +38,9 @@ patterns:
   type: 1
 - pattern: '^\(Party\)\: (\w+) says\, "(\w+) hit with (\w+) and (\w+)."$'
   type: 1
-- pattern: '^\(Party\): (\w+) says, "(\w+): (\w+) (\w+)."$'
-  type: 1
 ]]--
+-- "T: X Y." is read by 426 alone (v4.7.505): 426 checks each word of that loose shape against the
+-- known afflictions, and this copy, which did not, added any two words of party chat.
 
 -- paAff turns a venom into its affliction and adds it with tarAffed (V3 and tAffs). The
 -- confirmAffV2 calls that followed passed the RAW word to applyAffV3, which put a venom name

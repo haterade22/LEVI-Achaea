@@ -830,6 +830,59 @@ describe("H2: party calls reach V3 (paAff, 426, 428, 436)", function()
     expect(P("paralysis")).toBe(0)
   end)
 
+  -- kb/raw/live/party-calls-bracket_2026-11-19.txt (Layta's and Pharaus's calls)
+  local ONE = '(Party): Layta says, "Mizik: Stupidity."'
+  local THREE = '(Party): Pharaus says, "Mizik: stupidity fulminated healthleech."'
+
+  it("426: a one-word call adds its affliction", function()
+    world("Mizik")
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), ONE)).toBeTrue()
+    fire("PARTY", ONE, "Layta", "Mizik", "Stupidity")
+    expect(P("stupidity")).toBe(1)
+    expect(afflictedEvents()).toBe(1)
+  end)
+
+  it("426: a three-word call adds all three afflictions", function()
+    world("Mizik")
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), THREE)).toBeTrue()
+    fire("PARTY", THREE, "Pharaus", "Mizik", "stupidity", "fulminated", "healthleech")
+    expect(P("stupidity")).toBe(1)
+    expect(P("fulminated")).toBe(1)
+    expect(P("healthleech")).toBe(1)
+    expect(afflictedEvents()).toBe(3)
+  end)
+
+  it("426: a colon call's word that is no affliction is left out and named", function()
+    -- modelled on kb/raw/live/party-calls-bracket_2026-11-19.txt
+    local CHAT = '(Party): Layta says, "Mizik: stupidity and curare."'
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), CHAT)).toBeTrue()
+    world("Mizik")
+    local said = {}
+    ataxiaEcho = function(s) said[#said + 1] = s end
+    fire("PARTY", CHAT, "Layta", "Mizik", "stupidity", "and", "curare")
+    expect(P("stupidity")).toBe(1)
+    expect(P("paralysis")).toBe(1)
+    expect(v3Has("and")).toBeFalse()
+    expect(tAffs["and"]).toBeNil()
+    expect(afflictedEvents()).toBe(2)
+    expect(#said).toBe(1)
+    expect(said[1]:find("'and'", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("426: a one-word chat call adds nothing", function()
+    -- modelled on kb/raw/live/party-calls-bracket_2026-11-19.txt
+    local CHAT = '(Party): Layta says, "Mizik: run."'
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY), CHAT)).toBeTrue()
+    world("Mizik")
+    fire("PARTY", CHAT, "Layta", "Mizik", "run")
+    expect(v3Has("run")).toBeFalse()
+    expect(afflictedEvents()).toBe(0)
+  end)
+
+  it("428 no longer reads 'T: X Y.' (426 reads it with the filter)", function()
+    expect(TL.anyMatches(TL.patterns(PATH.PARTY2), '(Party): Maldrantus says, "Saibel: impatience kalmia."')).toBeFalse()
+  end)
+
   it("436: ' curare on Saibel' adds paralysis", function()
     world("Saibel")
     local L = '(Party): Gavai says, " curare on Saibel."'

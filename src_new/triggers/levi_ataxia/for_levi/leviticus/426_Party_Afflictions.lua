@@ -50,6 +50,10 @@ patterns:
   type: 1
 - pattern: '^\(Party\): (\w+) says, "(\w+) - ((?:\[\w+\] ?)+)(?: - \d+%HP)?\.?"$'
   type: 1
+- pattern: '^\(Party\): (\w+) says, "(\w+): (\w+)\."$'
+  type: 1
+- pattern: '^\(Party\): (\w+) says, "(\w+): (\w+) (\w+) (\w+)\."$'
+  type: 1
 ]]--
 
 -- Every called word goes through paAff (ataxia/001_Miscellaneous_Aff_Tracking_Methods): it turns a
@@ -63,12 +67,25 @@ patterns:
 -- The last pattern is a bracket list of any length: "Mizik - [sensitivity] [paralysis] - 42%HP."
 -- (Titonus, kb/raw/live/party-calls-bracket_2026-11-19.txt). Its third capture holds every
 -- bracket, so each bracketed word is read from it.
+-- A "T: words." call (1 to 4 words; the 1- and 3-word shapes since v4.7.505, seen from Layta and
+-- Pharaus in kb/raw/live/party-calls-bracket_2026-11-19.txt) is loose enough to be party chat, so
+-- each word must be a known affliction or venom (ataxia_isCalledAff). A word that is not is echoed
+-- and left out; the rest of the call still counts.
+local colonCall = line and line:find('^%(Party%): %w+ says, "%w+: ') ~= nil
+local function give(word)
+  if colonCall and not ataxia_isCalledAff(word) then
+    ataxiaEcho("Party call: '" .. word .. "' is not a known affliction - not added.")
+    return
+  end
+  paAff(word)
+end
+
 if matches[3] and isTargeted(matches[3]) then
   if matches[4] and matches[4]:find("[", 1, true) then
     for aff in matches[4]:gmatch("%[(%w+)%]") do paAff(aff) end
   else
     for i = 4, 7 do
-      if matches[i] then paAff(matches[i]) end
+      if matches[i] then give(matches[i]) end
     end
   end
 end

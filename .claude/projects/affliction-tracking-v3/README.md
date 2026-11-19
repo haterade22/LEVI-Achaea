@@ -121,13 +121,20 @@ A party member's call adds each called word through `paAff`
 
 | File | Formats read (the text inside the quotes) |
 |------|-------------------------------------------|
-| `426_Party_Afflictions.lua` | `T hit with X.`, `T has X.`, `T has been hit with X.`, `Rended T's ... with X.`, `T wracked: X.`, `Afflicted T: X.`, `T: X Y.`, `T: W X Y Z.`, and the bracket list `T - [X] [Y] ... - 42%HP.` (any number of brackets; the health part is optional; Titonus's format, `kb/raw/live/party-calls-bracket_2026-11-19.txt`) |
-| `428_Double_Party_Affs.lua` | `T wracked: X Y.`, `T truewracked: X Y.`, `T hit with X and Y.`, `T: X Y.` (also in 426, so that call runs twice; `paAff` adds nothing the second time) |
+| `426_Party_Afflictions.lua` | `T hit with X.`, `T has X.`, `T has been hit with X.`, `Rended T's ... with X.`, `T wracked: X.`, `Afflicted T: X.`, the colon list `T: X.` / `T: X Y.` / `T: X Y Z.` / `T: W X Y Z.` (filtered, below), and the bracket list `T - [X] [Y] ... - 42%HP.` (any number of brackets; the health part is optional; Titonus's format, `kb/raw/live/party-calls-bracket_2026-11-19.txt`) |
+| `428_Double_Party_Affs.lua` | `T wracked: X Y.`, `T truewracked: X Y.`, `T hit with X and Y.` |
 | `436_PARTY_AFFS_DIFFERENT.lua` | ` X on T.` |
 
-No pattern reads a one-word call (`T: X.`) or a three-word call (`T: X Y Z.`), both seen on
-2026-11-19. Such a call can hold a word that is not an affliction ("fulminated"), and `paAff`
-adds any word it gets, so a pattern for them needs a filter first.
+**The colon list is filtered.** `paAff` adds any word it gets, and `T: words.` is also the shape
+of ordinary party chat ("Mizik: run."). So 426 gives a colon-list word to `paAff` only when
+`ataxia_isCalledAff(word)` (`ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua`) is true: the word
+is a venom of `paAff`'s table, a key of `ataxia_defaultCuringPrios()`, or an entry of
+`curingTable`, `curingTableV3`, `smokeCureTableV3` or `salveCureTableV3`. Each word is checked
+alone: a dropped word gets an `ataxiaEcho` that names it, and the call's other words still count.
+"fulminated" is an affliction (goldenseal cures it), so `Mizik: stupidity fulminated healthleech.`
+adds all three. An affliction that is in none of those tables is dropped from a colon call: add
+it to its cure table, or the default priorities, to have it read. The other formats are not
+filtered.
 
 ## Cure Tables
 

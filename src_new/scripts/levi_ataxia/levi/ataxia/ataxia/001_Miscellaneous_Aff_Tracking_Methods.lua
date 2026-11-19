@@ -279,35 +279,56 @@ end
 -- its own; they now pass every word through here instead. A call is a confirmation, so it is
 -- applied even when the affliction is already believed (it raises a branch-split one to certain);
 -- the " +aff+" echo still shows only a new one.
+local venom_to_affliction = {
+	xentio = "clumsiness",			eurypteria = "recklessness",
+	kalmia = "asthma",					digitalis = "shyness",
+	darkshade = "darkshade",			curare = "paralysis",
+	prefarar = "sensitivity",		monkshood = "disloyalty",
+	euphorbia = "nausea",				vernalius = "weariness",
+	larkspur = "dizziness",			slike = "anorexia",
+	notechis = "haemophilia",		vardrax = "addiction",
+	aconite = "stupidity",			gecko = "slickness",
+	voyria = "voyria",					delphinium = "sleep",
+	selarnia = "selarnia",
+}
+
 function paAff(affGave)
 	if type(affGave) ~= "string" then return end
 	local word = affGave:lower()
-	local affC = false
-	local venom_to_affliction = {
-		xentio = "clumsiness",			eurypteria = "recklessness",
-		kalmia = "asthma",					digitalis = "shyness",
-		darkshade = "darkshade",			curare = "paralysis",
-		prefarar = "sensitivity",		monkshood = "disloyalty",
-		euphorbia = "nausea",				vernalius = "weariness",
-		larkspur = "dizziness",			slike = "anorexia",
-		notechis = "haemophilia",		vardrax = "addiction",
-		aconite = "stupidity",			gecko = "slickness",
-		voyria = "voyria",					delphinium = "sleep",
-    selarnia = "selarnia",
-	}
-
-	for i,v in pairs(venom_to_affliction) do
-		if i == word then
-			affC = v
-			break
-		end
-	end
-
-	local aff = affC or word
+	local aff = venom_to_affliction[word] or word
 	if not haveAff(aff) then
 		cecho(" <green>+"..aff.."+")
 	end
 	tarAffed(aff)
+end
+
+-- Is this called word an affliction (or a venom) we know? paAff adds ANY word it gets, so a loose
+-- call format ("Mizik: Stupidity." / "Mizik: stupidity fulminated healthleech.", trigger 426) checks
+-- each word here first: party chat in that shape ("Mizik: run away") must add nothing. Known =
+-- a venom above, a key of the default SSC priority table (ataxia/001_Default_Curing_Prios), or an
+-- entry of a herb, smoke or salve cure table (curing/002 curingTable, affliction_tracking_core/007).
+-- The lists are read on each call, so a later reload of any of them is seen.
+function ataxia_isCalledAff(affGave)
+	if type(affGave) ~= "string" then return false end
+	local word = affGave:lower()
+	if venom_to_affliction[word] then return true end
+	if ataxia_defaultCuringPrios then
+		local ok, prios = pcall(ataxia_defaultCuringPrios)
+		if ok and type(prios) == "table" and prios[word] then return true end
+	end
+	for _, tbl in ipairs({ curingTable, curingTableV3, salveCureTableV3 }) do
+		if type(tbl) == "table" then
+			for _, list in pairs(tbl) do
+				for _, a in ipairs(list) do
+					if a == word then return true end
+				end
+			end
+		end
+	end
+	for _, a in ipairs(smokeCureTableV3 or {}) do
+		if a == word then return true end
+	end
+	return false
 end
 
 -- A KNOWN CURE LINE RIGHT AFTER A RANDOM ONE (2026-11-08 deep review, F14 and F43).

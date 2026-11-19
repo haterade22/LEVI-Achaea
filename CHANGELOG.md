@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-19 - v4.7.505: one- and three-word party calls are read, with a word filter
+
+Layta calls `Mizik: Stupidity.` and Pharaus calls `Mizik: stupidity fulminated healthleech.` (`kb/raw/live/party-calls-bracket_2026-11-19.txt`). No party trigger read a colon call of one or three words, so these never reached V3 or `tAffs`. `paAff` adds any word it gets, and `T: words.` is also the shape of ordinary party chat, so these calls needed a filter first.
+
+- **`426_Party_Afflictions` has patterns for `T: X.` and `T: X Y Z.`** It already read `T: X Y.` and `T: W X Y Z.`.
+- **Every word of a colon call is checked by the new `ataxia_isCalledAff`** (`ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua`). A word counts if it is a venom, a key of the default SSC priorities, or in a herb, smoke or salve cure table. A word that is not is left out, with an echo that names it; the call's other words still count. "fulminated" is a real affliction (goldenseal), so Pharaus's call adds all three.
+- **`428_Double_Party_Affs` no longer reads `T: X Y.`** It was a copy of 426's pattern with no filter, so two words of chat still went in.
+- `paAff`'s venom table moved to file level, so the filter reads the same venoms. `paAff` does what it did before.
+- Five tests in `test_target_cure_lines.lua`: both real calls add their afflictions; a chat word ("and", "run") adds nothing and is named; 428 no longer matches `T: X Y.`. With the filter turned off, the two chat tests fail.
+
 ## 2026-11-19 - v4.7.504: party calls in Titonus's bracket format reach the target tracker
 
 Titonus calls afflictions on the party channel as `Mizik - [sensitivity] [paralysis] - 42%HP.` No party trigger read that format, so his calls never reached V3 or `tAffs`.
