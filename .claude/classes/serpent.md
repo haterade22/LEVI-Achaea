@@ -989,6 +989,7 @@ flay:
   effect: "Strips the sileris coating (bare FLAY), or rebounding, or a shield; applies the whip's venom if the target is left with neither rebounding nor shield"
   syntax: "FLAY <target> / FLAY <target> REBOUNDING [<venom>] / FLAY <target> SHIELD [<venom>]"
   notes: "Our offense sends only the SHIELD/REBOUNDING forms (:1948-1953). A FLAY of a missing rebounding stripped the coating too (rule attack.flay.missing, n=1; gecko_strip above)"
+  needs_whip: "OURS, 2026-11-19 tash'la miner log (CONFIRMED, n=3): a FLAY with a dirk in hand is refused with 'You must be wielding a whip in order to flay someone.' and costs no balance (three refusals about 1 s apart). So every flay is sent after `wield shield whip`: the PvP offense (serpent/002, wieldWhip) and, since v4.7.503, the basher's shield flay (basher/002_Class_Bashing.lua, ataxiaBasher_serpentBashing). Trigger highlighting/016_Wield_Whip wields the whip on this refusal and on the garrote one"
 
 pinshot:
   skill: Subterfuge

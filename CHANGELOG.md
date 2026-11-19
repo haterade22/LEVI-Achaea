@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-19 - v4.7.503: the Serpent basher wields the whip before it flays a shield
+
+A tash'la miner raised a shield. The Serpent basher sent `flay <target> shield` three times, and the game refused each one: "You must be wielding a whip in order to flay someone." The miner's shield fell by itself, and the miner hit us for 1237 and broke our left arm. The Assassin's Blade backstab wields the dirk, and the camus bite needs no weapon, so nothing in the basher put the whip back in hand.
+
+- **The shielded round is now `wield shield whip`, then `flay <target> shield`** (`ataxiaBasher_serpentBashing`, `basher/002_Class_Bashing.lua`). The PvP offense already sends this wield before each of its flays.
+- **Trigger `highlighting/016_Wield_Whip` also matches the flay refusal**, so the whip goes into the hand on the game's line, as it already did for the garrote refusal.
+- The three shielded tests in `test_searing_light.lua` now require the wield directly before the flay. With the fix reverted, those three fail.
+
 ## 2026-11-14 - The claim tool keeps one owner; the session rules get their missing steps (docs and tooling, no version bump)
 
 Two reviews of the claim tool (commit `976acc0f`) showed that it could give the same work to two sessions, and that the short rule text had lost steps. The reviews are `rules-review/review-handover-976acc0f.md` and `rules-review/codex-handover-976acc0f-20261114/HANDOVER.md`, in the folder above the repository.

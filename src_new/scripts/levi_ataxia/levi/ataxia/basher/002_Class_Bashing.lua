@@ -4152,8 +4152,14 @@ function ataxiaBasher_serpentBashing()
    -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.
    command = command..ataxiaBasher_searingLightwall(ataxia.settings.separator)
 
+   -- THE WHIP (v4.7.503). FLAY needs a whip in hand, and no other Serpent basher round wields one:
+   -- the Assassin's Blade backstab above wields the dirk, and the camus bite needs no weapon. In the
+   -- 2026-11-19 tash'la miner log every shielded round was refused ("You must be wielding a whip in
+   -- order to flay someone.") until the shield fell by itself. `wield shield whip` is the command the
+   -- PvP offense sends before each of its flays (serpent/002, wieldWhip).
    if ataxiaBasher.shielded then
-      command = command.."flay "..target.." shield"..ataxia.settings.separator
+      local sp = ataxia.settings.separator
+      command = command.."wield shield whip"..sp.."flay "..target.." shield"..sp
    end
 
    command = command..brage

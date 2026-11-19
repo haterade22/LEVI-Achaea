@@ -167,7 +167,7 @@ describe("Searing Light -- CONJURE LIGHTWALL first, whatever the room holds", fu
     reset(); ataxiaBasher.shielded = true
     local cmd = ataxiaBasher_serpentBashing()
     expect(cmd:sub(1, #"conjure lightwall n;")).toBe("conjure lightwall n;") -- ahead of the flay, per the user
-    expect(has(cmd, "flay 7 shield")).toBeTrue()
+    expect(has(cmd, "wield shield whip;flay 7 shield")).toBeTrue() -- FLAY needs the whip in hand (v4.7.503)
   end)
 end)
 
@@ -230,7 +230,7 @@ describe("Serpent venom boons: bite with camus instead of garrote", function()
 
   it("a shielded round still flays the shield, and bites nothing", function()
     local cmd = bash({ maw = true, shielded = true })
-    expect(has(cmd, "flay 7 shield")).toBeTrue()
+    expect(has(cmd, "wield shield whip;flay 7 shield")).toBeTrue() -- FLAY needs the whip in hand (v4.7.503)
     expect(has(cmd, "bite")).toBeFalse()
     expect(has(cmd, "purge")).toBeFalse()
   end)
@@ -405,7 +405,7 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
   it("a shielded target is flayed first", function()
     local cmd = bash({ shielded = true })
     expect(has(cmd, "backstab")).toBeFalse()
-    expect(has(cmd, "flay 7 shield")).toBeTrue()
+    expect(has(cmd, "wield shield whip;flay 7 shield")).toBeTrue() -- FLAY needs the whip in hand (v4.7.503)
   end)
 
   -- v4.7.408, user: "You swiftly return to concealment in the wake of your triumph." -- "this rehides us also".
