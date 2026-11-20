@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-20 - v4.7.507: Convocation boon summons a denizen into an empty room
+
+With the Mnemosyne boon Convocation ("You may now use brazier tattoos on non-boss denizens, but your brazier tattoo incurs a 1 minutes cooldown."), the explore sweep now sends `touch brazier <keyword>` when the tattoo is off cooldown and our room has no denizen. This is the maintainer's rule of 2026-11-20. The summoned denizen comes to us, and the basher fights it here.
+
+- `M._brazierPick` (`mnemosyne/008_Explorer.lua`) runs in `M._exploreTick` after the Haemophiliac, Last Word and Death's Demise holds and before the sweep picks an exit. Its gates: the `mnemConvocation` flag, not Rimewrought (tattoos inert), explorer on, no navigation refusal, swarm idle, no denizen here, a keyword known, 60 s since the cooldown stamp, one try per room, balance and equilibrium. Each refusal names its reason in `mnem explore why` and `mnem explore`.
+- The keyword is the last word of a denizen we fought in this ripple ("an elderly constable" -> `constable`). It is kept on `ataxiaTemp.mnemBrazierKey` and cleared at run start, run end and ripple change.
+- New triggers 111 (`You wave your hand over the brazier tattoo and summon ...`) and 112 (`The colour is leeched from your brazier tattoo as it is greatly taxed.`). Line 112 starts the 60 s cooldown, so the stamp is on the game's line, not on our send.
+- The ready line and the refusal lines are not captured yet. Until they are, one try per room stops a resend loop when no such denizen is near.
+- Tests: `src_new/tests/test_mnem_brazier.lua`. Lines: `kb/raw/live/2026-11-20_convocation_brazier.txt`, `kb/mechanics/mnemosyne-affixes.md` ("Boon: Convocation").
+
 ## 2026-11-20 - v4.7.506: recklessness is cured first, a reveal gives one more retreat, hits through a shield end the stand
 
 We died in a Mnemosyne explore sweep (swarm on) to a manifested nightmare (`kb/raw/logs/2026-11-20_mnemosyne-nightmare-death.txt`, max HP about 15,696). Three faults, in the order they hit us:

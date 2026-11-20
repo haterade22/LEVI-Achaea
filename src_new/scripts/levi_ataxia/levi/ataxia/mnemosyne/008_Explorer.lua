@@ -161,6 +161,73 @@ function M._denizenCount()
 end
 local denizenCount = M._denizenCount
 
+-- ---------------------------------------------------------------------------
+-- Convocation boon: summon a denizen to us with the brazier tattoo
+-- ---------------------------------------------------------------------------
+-- "You may now use brazier tattoos on non-boss denizens, but your brazier tattoo incurs a 1
+-- minutes cooldown." User rule (2026-11-20): when we hold the boon, touch brazier whenever the
+-- tattoo is off cooldown and our room has no denizen. The keyword is the last word of the last
+-- non-own denizen we fought in this ripple ("an elderly constable" -> "constable").
+local BRAZIER_COOLDOWN = 60 -- seconds; the boon text's figure (OURS: not yet timed in a log)
+
+-- Last word of a denizen name, lower case, punctuation stripped; nil when none.
+local function brazierKeyword(name)
+  if type(name) ~= "string" then return nil end
+  local word
+  for w in name:lower():gmatch("[%a][%a'%-]*") do word = w end
+  if not word then return nil end
+  word = word:gsub("^[%-']+", ""):gsub("[%-']+$", "")
+  if word == "" then return nil end
+  return word
+end
+M._brazierKeyword = brazierKeyword
+
+-- Remember the keyword of the first non-own denizen in the room.
+function M._learnBrazierKey()
+  local dz = ataxia.denizensHere
+  if type(dz) ~= "table" then return end
+  for _, name in pairs(dz) do
+    if not isOwnDenizen(name) then
+      local k = brazierKeyword(name)
+      if k then
+        ataxiaTemp = ataxiaTemp or {}
+        ataxiaTemp.mnemBrazierKey = k
+        return
+      end
+    end
+  end
+end
+
+-- The command to send, or nil plus the reason (every refusal names itself; shown by
+-- `mnem explore why`). A success stamps the room as tried: without the refusal lines (not yet
+-- captured) it is the only stop for a resend loop when no such denizen is near.
+function M._brazierPick()
+  if mnemConvocation ~= true then return nil, "no Convocation boon" end
+  -- Rimewrought makes every tattoo inert (v4.7.333): a touch would cost a send for nothing.
+  if mnemRimewrought == true then return nil, "Rimewrought: tattoos inert" end
+  if not M.explore.on then return nil, "explorer off" end
+  if not inMnem() then return nil, "not in Mnemosyne" end
+  local nav = M._navRefusal()
+  if nav then return nil, nav end
+  if M.swarm and M.swarm.state and M.swarm.state ~= "idle" then
+    return nil, "swarm " .. tostring(M.swarm.state)
+  end
+  if M._roomHasDenizens() then return nil, "denizens here" end
+  ataxiaTemp = ataxiaTemp or {}
+  local key = ataxiaTemp.mnemBrazierKey
+  if not key then return nil, "no denizen fought yet this ripple (no keyword)" end
+  local at = ataxiaTemp.mnemBrazierAt
+  if at then
+    local left = BRAZIER_COOLDOWN - (getEpoch() - at)
+    if left > 0 then return nil, "tattoo on cooldown (" .. math.ceil(left) .. "s left)" end
+  end
+  if ataxiaTemp.mnemBrazierTriedRoom == MAP.current then return nil, "already tried in this room" end
+  local v = ataxia.vitals
+  if not (v and v.bal and v.eq) then return nil, "no balance/equilibrium" end
+  ataxiaTemp.mnemBrazierTriedRoom = MAP.current
+  return "touch brazier " .. key
+end
+
 -- Does the room have any planar (grid) exit? A room with NONE is the ripple's entry
 -- holding room (only `down`), not part of the 4x4 -- never a sweep or patrol goal.
 local function roomHasPlanarExit(num)
@@ -911,6 +978,9 @@ function M.exploreWhy()
   cecho("\n  <NavajoWhite>dead reckoning: "
     .. ((MAP.drActive and MAP.drActive()) and "<yellow>ON (dementia)" or "<DimGrey>off"))
   cecho("\n  <NavajoWhite>" .. M._glanceLine())
+  cecho("\n  <NavajoWhite>brazier:    <DimGrey>" .. (mnemConvocation == true
+    and ("Convocation held; last pick: " .. tostring(M.explore._brazierWhy or "sent or not yet checked"))
+    or "no Convocation boon"))
   if not cur then
     cecho("\n  <red>no current room<reset> -- nothing to decide from.\n")
     return
@@ -1680,6 +1750,7 @@ function M._exploreTick()
       M.explore.fightingRoom = MAP.current
       M._exploreEcho("clearing this room (" .. denizenCount() .. " denizen(s)) -- basher on it.")
     end
+    M._learnBrazierKey()
     return
   end
   M.explore.fightingRoom = nil
@@ -1733,6 +1804,17 @@ function M._exploreTick()
     local _, list = M._fractureStacks()
     M._exploreEcho("<indian_red>Death's Demise<reset> -- no fracture cured in " .. FRACTURE_STALL
       .. "s; moving on with " .. list .. " (SSC applies health only above 70% HP).")
+  end
+
+  -- Convocation: after every hold (a hold means "do not start a fight"), before choosing an exit.
+  -- Plain send: the basher is idle in an empty room, so no addclearfull wipes it.
+  local brazierCmd, brazierWhy = M._brazierPick()
+  M.explore._brazierWhy = brazierWhy
+  if brazierCmd then
+    M._exploreEcho("<cyan>Convocation<reset> -- summoning " .. tostring(ataxiaTemp.mnemBrazierKey))
+    send(brazierCmd, false)
+    M._scheduleTick(2)
+    return
   end
 
   local dir, why = M._nextExploreStep()
@@ -2164,6 +2246,7 @@ function M.exploreStatus()
     .. " moving=" .. tostring(M.explore.moving) .. (M.explore.tacticalMove and " (tactical)" or "")
     .. " swarm=" .. tostring(M.swarm and M.swarm.state or "n/a")
     .. " next=" .. tostring(M._nextExploreStep()))
+  M.echo("<gold>[explore]<reset> brazier: " .. tostring(mnemConvocation == true and (M.explore._brazierWhy or "ready or not yet checked") or "no Convocation boon"))
   -- A pending glance HOLDS the step and its send is echo-suppressed, so without this line a
   -- held sweep looked identical to a stalled one (v4.7.319, deep review).
   M.echo("<gold>[explore]<reset> " .. M._glanceLine())

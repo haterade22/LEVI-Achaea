@@ -1400,6 +1400,26 @@ elixir balance and gives periodic nausea).
   `{ room, total, at, released, announced }`; a new room or a fight (denizens present) resets it.
 
 
+### The Convocation brazier step
+
+After the three holds above and before the sweep picks an exit, `_exploreTick` calls
+`M._brazierPick()`. Boon `mnemConvocation` (via `M.BOON_FLAGS`): "use brazier tattoos on non-boss
+denizens, 1 minute cooldown". User rule (2026-11-20): touch brazier whenever it is off cooldown and
+the room has no denizen. The pick returns `touch brazier <key>` or nil plus a reason (shown by
+`mnem explore why` and `mnem explore`). Gates, in order: flag; not Rimewrought (tattoos inert); explorer on; in Mnemosyne; no
+`_navRefusal`; swarm idle; no denizen here; a keyword known; 60 s since `ataxiaTemp.mnemBrazierAt`;
+not already tried in this room (`mnemBrazierTriedRoom`, the stop for a resend loop while the refusal
+lines are uncaptured); balance and equilibrium. A send is plain `send` (no queue: the basher is
+idle in an empty room) and re-ticks after 2 s.
+
+- **Keyword** (`ataxiaTemp.mnemBrazierKey`): the last word, lower case, of the first non-own denizen
+  seen in a room with denizens (`M._learnBrazierKey`), re-learned from the summon line
+  (`onBrazierSummon`, trigger 111). Cleared at run start, run end and ripple change.
+- **Cooldown stamp** (`mnemBrazierAt`): set by the taxed line (trigger 112), not by the send. It is
+  cleared at run start only, never on a ripple change (the tattoo cooldown is game state).
+- Lines and the UNCONFIRMED ones: `kb/mechanics/mnemosyne-affixes.md`, "Boon: Convocation".
+
+
 ---
 
 ## The funnel window owns its own clock (v4.7.282)

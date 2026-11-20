@@ -153,6 +153,8 @@ end
 
 -- "You begin to wade out into the depths of the Mnemosyne..."
 function M.onRunStart()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom, ataxiaTemp.mnemBrazierAt = nil, nil, nil
   -- Cleared on the way IN as well as on the confirmed way out, and deliberately ABOVE the
   -- `_auto()` gate: telemetry is off by default, so anything below it never runs for most users
   -- and a run-scoped fact would carry over between dives. A RESUME keeps the baseline -- it is
@@ -305,6 +307,7 @@ function M.onRunEnd()
   mnemRimewrought = false -- ...and tattoos work again (v4.7.333)
   mnemFamine = false -- ...and food is worth what it says again (v4.7.333)
   mnemTantrum = false -- boons gone on a confirmed run-end
+  if ataxiaTemp then ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom = nil, nil end
   if M.clearBoonFlags then M.clearBoonFlags() end -- ...and every generically-latched boon
   if ataxiaTemp then
     ataxiaTemp.tantrumRipple = nil
@@ -754,6 +757,9 @@ function M.onRipple(n)
   -- A new ripple is a new boss: the chase budget and any stale panic go with it (v4.7.255).
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt, ataxiaTemp.bossPanicName = nil, nil, nil
+  -- Convocation: the keyword and the tried room are per ripple; mnemBrazierAt is real game state (the
+  -- tattoo cooldown) and is NOT cleared here.
+  ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom = nil, nil
   -- Re-latch owned boon flags. Called from HERE as well as the explorer because onRipple
   -- fires in every mode, whereas the explorer entry points only exist for `mnem explore`
   -- users -- a manual-mode basher would otherwise never get the re-latch at all (review
@@ -1363,6 +1369,26 @@ function M.latchBoonFlag(name)
     M.echo("<pale_green>Boon<reset> <gold>" .. clean .. "<reset> -- <cyan>" .. flag .. "<reset> armed.")
   end
   return flag
+end
+
+-- Convocation (brazier tattoo summons a denizen). Captured 2026-11-20 (OURS):
+--   You wave your hand over the brazier tattoo and summon an elderly constable to you.
+--   The colour is leeched from your brazier tattoo as it is greatly taxed.
+-- The summon line re-learns the keyword; the cooldown runs from the TAXED line (the game's
+-- confirmation), not from our send.
+function M.onBrazierSummon(name)
+  if M._brazierKeyword then
+    local k = M._brazierKeyword(name)
+    if k then
+      ataxiaTemp = ataxiaTemp or {}
+      ataxiaTemp.mnemBrazierKey = k
+    end
+  end
+end
+
+function M.onBrazierTaxed()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemBrazierAt = getEpoch()
 end
 
 -- Clear them all. Boons are per-RUN, so this belongs with the other run-end resets.

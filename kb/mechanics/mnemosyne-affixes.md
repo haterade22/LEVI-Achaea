@@ -87,6 +87,25 @@ the effects of the venom."):
 - UNCONFIRMED: a bite ran at 13:08:46:778 after the stand announced "attacks held until 70%" at
   13:08:45:710. The cause is not found (CHANGELOG v4.7.506).
 
+### Boon: Convocation (the brazier tattoo summons a denizen)
+
+Boon text: "You may now use brazier tattoos on non-boss denizens, but your brazier tattoo incurs a
+1 minutes cooldown." Raw lines: `kb/raw/live/2026-11-20_convocation_brazier.txt` (OURS, user paste
+2026-11-20, CONFIRMED, one capture):
+
+```
+You wave your hand over the brazier tattoo and summon an elderly constable to you.
+The colour is leeched from your brazier tattoo as it is greatly taxed.
+```
+
+- Command: `touch brazier <keyword>` with a keyword of the denizen; the denizen is pulled to us.
+- Cooldown: 60 s (the boon text; not yet timed in a log). Our code starts it on the second line
+  (`M.onBrazierTaxed`, 004_Parsers.lua).
+- UNCONFIRMED (no capture): the "tattoo ready again" line, the refusal while on cooldown, the refusal
+  for a keyword with no denizen near, and the refusal for a boss.
+- Our use: the explorer sends it in an empty room (`M._brazierPick`, 008_Explorer.lua), see
+  `.claude/projects/mnemosyne/07-explorer.md`.
+
 ## What the death taught
 
 The swarm's one retreat went into a Prey pursuit and a blood pool. After it, every exit was

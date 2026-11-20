@@ -232,8 +232,9 @@ of them.
 **Every consumer stays gated on its flag** (user: *"we need those boons for those skills to
 work"*). Without the boon the ability does not exist, and sending it is a refusal that costs a
 round. Current consumers: `mnemFontOfLife` (phial disengage +1 burst), `mnemVitalisingTincture`
-(the escape-ladder heal), `mnemShadowTempo` (Bard back-position priority). Flags latched with
-consumers still to come: Revel in Slaughter, Morudai, Stormcleaver, Convocation, Mutated Jaws,
+(the escape-ladder heal), `mnemShadowTempo` (Bard back-position priority), `mnemConvocation`
+(the explorer's brazier summon, `M._brazierPick`; triggers 111 and 112). Flags latched with
+consumers still to come: Revel in Slaughter, Morudai, Stormcleaver, Mutated Jaws,
 Wrath and Righteousness, Pyrrhic Victory, Razor Leaf.
 
 Adding a boon consumer is now a table row, not a trigger.
