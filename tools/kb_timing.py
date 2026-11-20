@@ -134,6 +134,7 @@ LOGGERS = (
     ("shikudo-group-mhaldor", "Ours, client log"),
     ("shikudo-group-alias", "Ours, client log"),
     ("serpent-spar", "Ours, client log"),
+    ("mnemosyne-nightmare-death", "Ours, client log"),
 )
 
 # Mystor's system prints the lock it believes in front of the board. These are not afflictions, and a naive

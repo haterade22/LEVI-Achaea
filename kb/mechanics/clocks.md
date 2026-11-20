@@ -9,7 +9,7 @@ sources:
   - kb/classes/abilities.json
 code:
   - tools/kb_timing.py
-latest_filed: 2026-11-14
+latest_filed: 2026-11-20
 ---
 
 # Clocks: stated against observed
@@ -20,7 +20,7 @@ latest_filed: 2026-11-14
 
 **Method per sample.** `printed` is a number the logger's client printed: `Tree (13.916)`, `[Eat Recov: 1.59s]`. `line` is the time from the most recent start row to the recovery row, on stamps of 0.01 s or better. `line_1s` is the same on 1 s stamps, so it is shown, never pooled and never usable. A pool takes one value per recovery line: printed if there is one, otherwise line. The tables by logger show line beside printed as a cross-check, so they count some recoveries twice.
 
-**Usable** means n >= 10 and p90-p10 <= 0.2. This tool does not relax that rule. Where a pool fails on width, this says what taking one logger out does. Eat 0.230: without Nikita 0.189 (their printed timer 0.331, their own stamps 0.140). Focus 0.212: without Nikita 0.183 (their printed timer 0.315, their own stamps 0.138); without Ours, recorder (Monk) 0.185. Moss, potash 0.201: without Claes 0.187; without Leviticus 0.199. Dagaz rune tick 0.270: no single logger's removal passes it. A printed width far above the same logger's stamps, on the same recoveries, points to that logger's timer and not to the players disagreeing on the clock.
+**Usable** means n >= 10 and p90-p10 <= 0.2. This tool does not relax that rule. Where a pool fails on width, this says what taking one logger out does. Eat 0.230: without Nikita 0.188 (their printed timer 0.331, their own stamps 0.140). Focus 0.210: without Nikita 0.182 (their printed timer 0.315, their own stamps 0.138); without Ours, recorder (Monk) 0.184. Moss, potash 0.201: without Claes 0.184; without Elmer 0.200; without Leviticus 0.198; without Nikita 0.200 (their printed timer 0.185, their own stamps 0.092). Dagaz rune tick 0.270: no single logger's removal passes it. A printed width far above the same logger's stamps, on the same recoveries, points to that logger's timer and not to the players disagreeing on the clock.
 
 **Staleness.** The Filed and Version columns show where each sample came from. Filed is the date in the file name. For the 2026-11-01 batch that is the day the export was saved (`tools/kb_log_import.py` reads the file's modified time), and the fight came on or before it. The logs print no date. Three Claes logs filed 2026-11-01 overlap on the wall clock with no shared row (`WO7tC3kL` 18:36-18:43, `Vr.NkCGD` 18:41-18:42, `4c_SeyaA` 18:42-18:45), so they are different days. Only our recorder's header gives a fight's date and a version. So any client log may predate the 2026-10-23 class leads, and a log filed before that date certainly does.
 
@@ -28,14 +28,14 @@ latest_filed: 2026-11-14
 
 | Channel | n | min | p10 | median | p90 | max | p90-p10 | Usable | Why not | Method, samples |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Eat | 1478 | 0.01 | 1.38 | 1.50 | 1.61 | 5.24 | 0.23 | no | p90-p10 is 0.230, over 0.2 | line 236, printed 1242 |
+| Eat | 1488 | 0.01 | 1.38 | 1.50 | 1.61 | 5.24 | 0.23 | no | p90-p10 is 0.230, over 0.2 | line 246, printed 1242 |
 | Smoke (lungs) | 279 | 0.28 | 1.40 | 1.48 | 1.58 | 3.00 | 0.18 | yes | - | line 35, printed 244 |
 | Salve, short | 173 | 0.65 | 0.82 | 0.92 | 1.00 | 1.08 | 0.18 | yes | - | line 19, printed 154 |
 | Salve, restoration | 30 | 3.78 | 3.94 | 4.02 | 4.04 | 4.18 | 0.11 | yes | - | printed 30 |
 | Salve, type not shown | 14 | 0.72 | 0.78 | 0.86 | 3.03 | 3.98 | 2.25 | no | p90-p10 is 2.250, over 0.2 | printed 14 |
-| Focus | 159 | 2.04 | 2.33 | 2.43 | 2.54 | 4.99 | 0.21 | no | p90-p10 is 0.212, over 0.2 | line 22, printed 137 |
+| Focus | 161 | 2.04 | 2.33 | 2.43 | 2.54 | 4.99 | 0.21 | no | p90-p10 is 0.210, over 0.2 | line 24, printed 137 |
 | Sip | 417 | 1.94 | 4.31 | 4.40 | 4.50 | 5.85 | 0.20 | yes | - | line 23, line_1s 1, printed 394 |
-| Moss, potash | 143 | 5.28 | 5.80 | 5.91 | 6.00 | 6.11 | 0.20 | no | p90-p10 is 0.201, over 0.2 | line 126, line_1s 2, printed 17 |
+| Moss, potash | 145 | 5.28 | 5.80 | 5.91 | 6.00 | 6.11 | 0.20 | no | p90-p10 is 0.201, over 0.2 | line 128, line_1s 2, printed 17 |
 | Tree | 193 | 13.32 | 13.88 | 13.96 | 14.05 | 14.21 | 0.17 | yes | - | line 14, printed 179 |
 | FITNESS lockout | 5 | 9.06 | 9.13 | 9.81 | 9.97 | 9.97 | 0.84 | no | n=5 is under 10 | line 5, line_1s 5 |
 | Immunity sip | 3 | 7.35 | 7.37 | 7.47 | 7.75 | 7.82 | 0.38 | no | n=3 is under 10 | line 2, printed 1 |
@@ -46,7 +46,7 @@ latest_filed: 2026-11-14
 
 Moss, potash and quartz are out of eat. Pear and calcite are on the smoke clock. A salve is sorted by the `[Curing]` row before it, by the skin, or by a following `stronger and healthier` limb line, and never by its own length. A salve with none of those stays in its own row. Rebounding reads the most recent third-person smoke. No line names the pipe, so a later smoke shortens a sample, and its width is not the clock's.
 
-Recovery lines with no printed value and no start row, so no sample: Eat 1, Immunity sip 1, Moss, potash 2, Sip 8, Smoke (lungs) 13, Tree 1.
+Recovery lines with no printed value and no start row, so no sample: Eat 2, Immunity sip 1, Moss, potash 3, Sip 8, Smoke (lungs) 13, Tree 2.
 
 ## By logger
 
@@ -65,6 +65,7 @@ Recovery lines with no printed value and no start row, so no sample: Eat 1, Immu
 | Mystor | line_1s | 290 | 1.00 | 1.00 | 2.00 | 2.00 | 2.00 | no | 2026-10-11 | - | EveP2TVe 8, FceAmb0o 28, c.iJVmpL 39, mystor/LcJC-rJ5 74, t54WWU6b 84, vNTjvghY 57 |
 | Nikita | printed | 250 | 1.12 | 1.32 | 1.45 | 1.65 | 1.89 | no | 2026-11-01 | - | L8LSw7xD 14, X8pRorzR 174, kAQnlFAW 62 |
 | Nikita | line | 249 | 1.22 | 1.46 | 1.54 | 1.60 | 1.67 | yes | 2026-11-01 | - | L8LSw7xD 14, X8pRorzR 174, kAQnlFAW 62 |
+| Ours, client log | line | 10 | 1.41 | 1.45 | 1.49 | 1.56 | 1.58 | yes | 2026-11-20 | - | mnemosyne-nightmare-death 10 |
 | Ours, recorder (Infernal) | line | 9 | 1.42 | 1.45 | 1.53 | 1.56 | 1.57 | no | 2026-10-27 | 4.7.450 | ours/135412_Tabethys 9 |
 | Ours, recorder (Monk) | line | 39 | 1.41 | 1.45 | 1.52 | 1.59 | 1.74 | yes | 2026-10-27, 2026-11-03 | 4.7.450, 4.7.471 | ours/102138_Tabethys 8, ours/102828_Harkon 2, ours/112717_Tabethys 29 |
 | Shikudo attacker (unnamed) | printed | 37 | 1.41 | 1.44 | 1.50 | 1.58 | 1.62 | yes | 2026-10-11 | - | attacker 37 |
@@ -144,6 +145,7 @@ Recovery lines with no printed value and no start row, so no sample: Eat 1, Immu
 | Mystor | line_1s | 35 | 2.00 | 2.00 | 2.00 | 3.00 | 5.00 | no | 2026-10-11 | - | EveP2TVe 4, c.iJVmpL 4, mystor/LcJC-rJ5 18, t54WWU6b 5, vNTjvghY 4 |
 | Nikita | printed | 28 | 2.26 | 2.31 | 2.42 | 2.62 | 2.79 | no | 2026-11-01 | - | X8pRorzR 26, kAQnlFAW 2 |
 | Nikita | line | 27 | 2.35 | 2.37 | 2.44 | 2.51 | 2.54 | yes | 2026-11-01 | - | X8pRorzR 26, kAQnlFAW 2 |
+| Ours, client log | line | 2 | 2.38 | 2.38 | 2.38 | 2.38 | 2.39 | no | 2026-11-20 | - | mnemosyne-nightmare-death 2 |
 | Ours, recorder (Monk) | line | 8 | 2.32 | 2.41 | 4.87 | 4.96 | 4.99 | no | 2026-10-27, 2026-11-03 | 4.7.450, 4.7.471 | ours/102138_Tabethys 2, ours/102828_Harkon 1, ours/112717_Tabethys 5 |
 | Shikudo attacker (unnamed) | printed | 1 | 2.46 | 2.46 | 2.46 | 2.46 | 2.46 | no | 2026-10-11 | - | attacker 1 |
 | Shikudo attacker (unnamed) | line | 1 | 2.12 | 2.12 | 2.12 | 2.12 | 2.12 | no | 2026-10-11 | - | attacker 1 |
@@ -181,6 +183,7 @@ Recovery lines with no printed value and no start row, so no sample: Eat 1, Immu
 | Mystor | line_1s | 13 | 5.00 | 6.00 | 6.00 | 6.00 | 6.00 | no | 2026-10-11 | - | EveP2TVe 1, FceAmb0o 4, c.iJVmpL 3, vNTjvghY 5 |
 | Nikita | printed | 4 | 5.80 | 5.80 | 5.85 | 5.99 | 6.03 | no | 2026-11-01 | - | X8pRorzR 4 |
 | Nikita | line | 4 | 5.87 | 5.88 | 5.92 | 5.97 | 5.98 | no | 2026-11-01 | - | X8pRorzR 4 |
+| Ours, client log | line | 2 | 5.83 | 5.83 | 5.86 | 5.89 | 5.90 | no | 2026-11-20 | - | mnemosyne-nightmare-death 2 |
 | Ours, recorder (Monk) | line | 11 | 5.84 | 5.84 | 5.94 | 5.98 | 6.05 | yes | 2026-10-27, 2026-11-03 | 4.7.450, 4.7.471 | ours/081009_Froedine 3, ours/081532_Tabethys 1, ours/102138_Tabethys 1, ours/102828_Harkon 1, ours/112717_Tabethys 5 |
 | Shikudo attacker (unnamed) | line | 3 | 5.88 | 5.89 | 5.93 | 5.95 | 5.96 | no | 2026-10-11 | - | attacker 3 |
 
@@ -259,7 +262,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | Modifier | Board | n | min | p10 | median | p90 | max | Logs |
 |---|---|---|---|---|---|---|---|---|
 | Shadowmadness on focus | with | 8 | 2.40 | 4.08 | 4.93 | 4.99 | 4.99 | EveP2TVe 3, ours/102138_Tabethys 1, ours/112717_Tabethys 4 |
-| Shadowmadness on focus | without | 151 | 2.04 | 2.33 | 2.43 | 2.51 | 2.79 | all other samples |
+| Shadowmadness on focus | without | 153 | 2.04 | 2.33 | 2.43 | 2.51 | 2.79 | all other samples |
 | Skull fractures on sip | with | 7 | 4.43 | 4.45 | 5.80 | 5.85 | 5.85 | CxxKSMq 5, JDvzR7j7 2 |
 | Skull fractures on sip | without | 410 | 1.94 | 4.31 | 4.40 | 4.50 | 4.91 | all other samples |
 
@@ -267,7 +270,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 
 **Own costs** are the game's own `Balance used` and `Equilibrium used` lines (Mystor's `[Bal Spent]` is the same line renamed). The ratio is the printed median over the stated value. The stated value is the game's own record (`kb/classes/abadmin.json`, ABADMIN SHOW) where it states one number on one balance, else `kb/classes/abilities.json` (the wiki); the Field column names which, and gives the wiki's value where the two differ. Both are BASE costs. Our rows carry the Aldar Diadem, so our equilibrium ratio is about 0.85, and about 0.72 in Rain (`balance-and-queueing.md`, "Our speed factors"); another logger's artefacts are not known. A packet with two candidate abilities on one channel is left out: none.
 
-355 of 1356 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
+356 of 1362 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
 
 | Ability | Channel | Stated | Field | Logger | n | Printed | Median | Ratio | Filed | Logs |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -279,6 +282,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | Shield tattoo | equilibrium | 4.00 | Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476) | Earth Lord (unnamed) | 6 | 3.4 x6 | 3.40 | 0.85 | 2026-11-01 | JDvzR7j7 1, OwkA-G99 5 |
 | Shield tattoo | equilibrium | 4.00 | Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476) | Elmer | 17 | 2.89 x3, 3.4 x14 | 3.40 | 0.85 | 2026-11-01 | 2N1HTSWZ 2, 3ys7NuHA 3, Z5cyffxx 7, g-lD00-h 5 |
 | Shield tattoo | equilibrium | 4.00 | Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476) | Nikita | 12 | 3.4 x12 | 3.40 | 0.85 | 2026-11-01 | X8pRorzR 10, kAQnlFAW 2 |
+| Shield tattoo | equilibrium | 4.00 | Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476) | Ours, client log | 1 | 2.29 x1 | 2.29 | 0.57 | 2026-11-20 | mnemosyne-nightmare-death 1 |
 | Shield tattoo | equilibrium | 4.00 | Tattoos/Shield: 4.00 seconds of equilibrium (ABADMIN 1476) | Ours, recorder (Monk) | 3 | 2.89 x2, 3.4 x1 | 2.89 | 0.72 | 2026-11-02, 2026-11-03 | ours/081009_Froedine 1, ours/102828_Harkon 1, ours/122916_Antoninus 1 |
 | Pommelstrike | balance | 1.50 | TwoArts/Pommelstrike: 1.50 seconds of balance (ABADMIN 243) | Blademaster (unnamed) | 6 | 1.1 x6 | 1.10 | 0.73 | 2026-11-01 | KtdftABt 6 |
 | Homunculus attack | equilibrium | 3.00 | Physiology/Arms: 3.00 seconds of equilibrium (ABADMIN 29) | Elmer | 4 | 2.55 x4 | 2.55 | 0.85 | 2026-11-01 | Z5cyffxx 4 |
@@ -397,7 +401,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | mystor | 6 | 4836 | 5 | 0 | 0 |
 | nikita | 3 | 2077 | 542 | 8 | 0 |
 | ours | 12 | 17624 | 0 | 0 | 0 |
-| sentinel | 5 | 6947 | 49 | 0 | 0 |
+| sentinel | 6 | 7030 | 49 | 0 | 0 |
 
 A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKnyyy` has prompts with no time in them, so it is skipped.
 
@@ -438,6 +442,7 @@ A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKn
 | shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 2026-11-03 | - | 3739 | 0 | 0 | same fight as ours/2026-11-03_081009_Froedine, out of the pools |
 | serpent-spar-saibel | 2026-11-07_serpent-spar-saibel.txt | sentinel | Ours, client log | 2026-11-07 | - | 174 | 0 | 0 | same fight as ours/2026-11-07_164635_Saibel, out of the pools |
 | mtfwoA4F | 2026-11-14_zax_shaman-vs-nikolais_breach-soulrend_mtfwoA4F.txt | none | - | 2026-11-14 | - | 0 | 0 | 0 | skipped: 0 prompts with no time in them |
+| mnemosyne-nightmare-death | 2026-11-20_mnemosyne-nightmare-death.txt | sentinel | Ours, client log | 2026-11-20 | - | 83 | 0 | 0 |  |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder (Alchemist) | 2026-10-12 | 4.7.418 | 90 | 0 | 0 |  |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder (Monk) | 2026-10-27 | 4.7.450 | 3311 | 0 | 0 |  |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder (Infernal) | 2026-10-27 | 4.7.450 | 3930 | 0 | 0 |  |

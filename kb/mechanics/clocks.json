@@ -363,6 +363,30 @@
     },
     {
      "filed": [
+      "2026-11-20"
+     ],
+     "logger": "Ours, client log",
+     "logs": {
+      "mnemosyne-nightmare-death": 10
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.585,
+      "median": 1.489,
+      "min": 1.411,
+      "n": 10,
+      "p10": 1.45,
+      "p90": 1.556,
+      "spread": 0.107
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
       "2026-10-27"
      ],
      "logger": "Ours, recorder (Infernal)",
@@ -463,16 +487,17 @@
     }
    ],
    "methods": {
-    "line": 236,
+    "line": 246,
     "printed": 1242
    },
    "spread_without": {
-    "Claes": 0.234,
-    "Earth Lord (unnamed)": 0.221,
-    "Elmer": 0.23,
+    "Claes": 0.232,
+    "Earth Lord (unnamed)": 0.22,
+    "Elmer": 0.228,
     "Leviticus": 0.23,
     "Mystor": 0.254,
-    "Nikita": 0.189,
+    "Nikita": 0.188,
+    "Ours, client log": 0.23,
     "Ours, recorder (Infernal)": 0.23,
     "Ours, recorder (Monk)": 0.23,
     "Shikudo attacker (unnamed)": 0.23
@@ -481,13 +506,13 @@
     "max": 5.24,
     "median": 1.504,
     "min": 0.014,
-    "n": 1478,
+    "n": 1488,
     "p10": 1.38,
     "p90": 1.61,
     "spread": 0.23
    },
    "title": "Eat",
-   "unpaired": 1,
+   "unpaired": 2,
    "usable": false,
    "why_not": "p90-p10 is 0.230, over 0.2"
   },
@@ -929,6 +954,30 @@
     },
     {
      "filed": [
+      "2026-11-20"
+     ],
+     "logger": "Ours, client log",
+     "logs": {
+      "mnemosyne-nightmare-death": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.386,
+      "median": 2.382,
+      "min": 2.378,
+      "n": 2,
+      "p10": 2.379,
+      "p90": 2.385,
+      "spread": 0.006
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    },
+    {
+     "filed": [
       "2026-10-27",
       "2026-11-03"
      ],
@@ -1005,32 +1054,33 @@
     }
    ],
    "methods": {
-    "line": 22,
+    "line": 24,
     "printed": 137
    },
    "spread_without": {
-    "Claes": 0.249,
+    "Claes": 0.241,
     "Earth Lord (unnamed)": 0.221,
-    "Elmer": 0.222,
-    "Leviticus": 0.213,
+    "Elmer": 0.217,
+    "Leviticus": 0.209,
     "Mystor": 0.222,
-    "Nikita": 0.183,
-    "Ours, recorder (Monk)": 0.185,
-    "Shikudo attacker (unnamed)": 0.213
+    "Nikita": 0.182,
+    "Ours, client log": 0.212,
+    "Ours, recorder (Monk)": 0.184,
+    "Shikudo attacker (unnamed)": 0.211
    },
    "stats": {
     "max": 4.992,
     "median": 2.43,
     "min": 2.044,
-    "n": 159,
+    "n": 161,
     "p10": 2.33,
-    "p90": 2.542,
-    "spread": 0.212
+    "p90": 2.54,
+    "spread": 0.21
    },
    "title": "Focus",
    "unpaired": 0,
    "usable": false,
-   "why_not": "p90-p10 is 0.212, over 0.2"
+   "why_not": "p90-p10 is 0.210, over 0.2"
   },
   "humour": {
    "by_logger": [
@@ -1413,6 +1463,30 @@
     },
     {
      "filed": [
+      "2026-11-20"
+     ],
+     "logger": "Ours, client log",
+     "logs": {
+      "mnemosyne-nightmare-death": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.901,
+      "median": 5.863,
+      "min": 5.825,
+      "n": 2,
+      "p10": 5.833,
+      "p90": 5.893,
+      "spread": 0.061
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    },
+    {
+     "filed": [
       "2026-10-27",
       "2026-11-03"
      ],
@@ -1467,31 +1541,32 @@
     }
    ],
    "methods": {
-    "line": 126,
+    "line": 128,
     "line_1s": 2,
     "printed": 17
    },
    "spread_without": {
-    "Claes": 0.187,
-    "Earth Lord (unnamed)": 0.226,
-    "Elmer": 0.201,
-    "Leviticus": 0.199,
-    "Mystor": 0.224,
-    "Nikita": 0.205,
-    "Ours, recorder (Monk)": 0.223,
-    "Shikudo attacker (unnamed)": 0.204
+    "Claes": 0.184,
+    "Earth Lord (unnamed)": 0.223,
+    "Elmer": 0.2,
+    "Leviticus": 0.198,
+    "Mystor": 0.222,
+    "Nikita": 0.2,
+    "Ours, client log": 0.201,
+    "Ours, recorder (Monk)": 0.218,
+    "Shikudo attacker (unnamed)": 0.201
    },
    "stats": {
     "max": 6.11,
-    "median": 5.912,
+    "median": 5.91,
     "min": 5.276,
-    "n": 143,
+    "n": 145,
     "p10": 5.8,
     "p90": 6.001,
     "spread": 0.201
    },
    "title": "Moss, potash",
-   "unpaired": 2,
+   "unpaired": 3,
    "usable": false,
    "why_not": "p90-p10 is 0.201, over 0.2"
   },
@@ -3757,7 +3832,7 @@
     "spread": 0.165
    },
    "title": "Tree",
-   "unpaired": 1,
+   "unpaired": 2,
    "usable": true,
    "why_not": ""
   }
@@ -3815,13 +3890,13 @@
   "sentinel": {
    "fixed": 0,
    "held": 0,
-   "logs": 5,
-   "prompts": 6947,
+   "logs": 6,
+   "prompts": 7030,
    "wrapped": 49
   }
  },
  "generated_by": "tools/kb_timing.py",
- "latest_filed": "2026-11-14",
+ "latest_filed": "2026-11-20",
  "logs": [
   {
    "family": "sentinel",
@@ -4314,6 +4389,20 @@
    "wrapped": 0
   },
   {
+   "family": "sentinel",
+   "file": "2026-11-20_mnemosyne-nightmare-death.txt",
+   "filed": "2026-11-20",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "mnemosyne-nightmare-death",
+   "in_pools": true,
+   "logger": "Ours, client log",
+   "prompts": 83,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
    "family": "ours",
    "file": "2026-10-12_201153_Tabethys.log",
    "filed": "2026-10-12",
@@ -4502,9 +4591,9 @@
    },
    "without": {
     "max": 2.79,
-    "median": 2.43,
+    "median": 2.428,
     "min": 2.044,
-    "n": 151,
+    "n": 153,
     "p10": 2.329,
     "p90": 2.512,
     "spread": 0.183
@@ -5704,6 +5793,28 @@
      },
      {
       "filed": [
+       "2026-11-20"
+      ],
+      "logger": "Ours, client log",
+      "logs": {
+       "mnemosyne-nightmare-death": 1
+      },
+      "printed": {
+       "2.29": 1
+      },
+      "ratio": 0.573,
+      "stats": {
+       "max": 2.29,
+       "median": 2.29,
+       "min": 2.29,
+       "n": 1,
+       "p10": 2.29,
+       "p90": 2.29,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
        "2026-11-02",
        "2026-11-03"
       ],
@@ -6125,6 +6236,6 @@
    }
   ],
   "own_ambiguous_packets": {},
-  "own_printed_rows": 1356
+  "own_printed_rows": 1362
  }
 }
