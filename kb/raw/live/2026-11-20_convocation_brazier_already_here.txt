@@ -1,0 +1,3 @@
+# Source: user paste 2026-11-20 (Mnemosyne, boon Convocation held). Command typed by hand; live state read by MCP right after: room 68702 held one denizen, "Ironbeard, the Magnanimous" (id 220291). Verbatim.
+> touch brazier halfling
+That person is already here.

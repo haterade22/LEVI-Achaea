@@ -101,6 +101,14 @@ The colour is leeched from your brazier tattoo as it is greatly taxed.
 - Command: `touch brazier <keyword>` with a keyword of the denizen; the denizen is pulled to us.
 - Cooldown: 60 s (the boon text; not yet timed in a log). Our code starts it on the second line
   (`M.onBrazierTaxed`, 004_Parsers.lua).
+- Refusal when the keyword matches a denizen already in our room (OURS, 2026-11-20, one capture,
+  `kb/raw/live/2026-11-20_convocation_brazier_already_here.txt`): `That person is already here.`
+  The command was `touch brazier halfling`, and the room held only "Ironbeard, the Magnanimous". So a
+  denizen keyword can be a word that is NOT in its name (probably its race). UNCONFIRMED that
+  Ironbeard was the match. Our pick never sends with a denizen in the room, so it does not expect
+  this line; the one-try-per-room gate covers it if the room list is stale.
+- Known limit of our keyword rule (last word of the name): a named denizen gives a word that may
+  not be a keyword ("Ironbeard, the Magnanimous" -> `magnanimous`). Not yet seen to fail.
 - UNCONFIRMED (no capture): the "tattoo ready again" line, the refusal while on cooldown, the refusal
   for a keyword with no denizen near, and the refusal for a boss.
 - Our use: the explorer sends it in an empty room (`M._brazierPick`, 008_Explorer.lua), see
