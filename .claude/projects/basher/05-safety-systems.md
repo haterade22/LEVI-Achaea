@@ -17,7 +17,8 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
      │    ├─ swarm.disengage() worked → "wait"  (spend the round LEAVING THE ROOM)
      │    └─ refused (no route back)  → fall through: fighting in place is the answer
      ├─ LAST STAND (v4.7.486): critical + no retreat + no known
-     │    shield-breaker here           → "shield", attacks held until 70%
+     │    shield-breaker or shield-pass here → "shield", attacks held until 70%
+     │    (ends early if hits pass the shield, v4.7.506)
      ├─ damage spike + can shield       → "shield" (one-cycle guard, keep attacking)
      └─ else                            → skip both flee checks below
 5. hpp ≤ fleeThresholdPct (25%)?        → "flee"
@@ -83,11 +84,34 @@ Two elementals hit 1,400-3,334 cold plus 950-1,070 blunt (the shadow line) a rou
 - While the shield is up: `"wait"`. In a no-flee area the attack loop also keeps the HP>=70 gate
   while `ataxiaBasher_lastStandHolding()` (001:658) is true (001:209).
 
-`ataxiaBasher_lastStandHolding()` ends the stand at `ataxiaBasher.lastStandRelease` (70%,
-`bash laststand release <pct>`), after `LAST_STAND_MAX` (30 s), or when a shield it SAW up is down
-(broken; 10 s cooldown). Each end prints `LAST STAND over (<why>) -- attacking.`. The state is
-`ataxiaTemp.lastStandAt`, `lastStandSentAt`, `lastStandSends`, `lastStandUp`, `lastStandCoolUntil`
-and `lastStandFlush`, never saved.
+`ataxiaBasher_lastStandHolding()` (001:660) ends the stand at `ataxiaBasher.lastStandRelease` (70%,
+`bash laststand release <pct>`), after `LAST_STAND_MAX` (30 s), when a shield it SAW up is down
+(broken; 10 s cooldown), or when hits pass the shield (below). Each end prints
+`LAST STAND over (<why>) -- attacking.`. The state is `ataxiaTemp.lastStandAt`, `lastStandSentAt`,
+`lastStandSends`, `lastStandUp`, `lastStandUpAt`, `lastStandPassHits`, `lastStandCoolUntil` and
+`lastStandFlush`, never saved.
+
+**A shield that rose does not always block (v4.7.506).** A manifested nightmare (Mnemosyne
+denizen, 2026-11-20, `kb/raw/logs/2026-11-20_mnemosyne-nightmare-death.txt`) landed 3413 psychic,
+1001 cutting, three colds of 2755-2925 and the killing 1659 psychic with our shield up. The game
+printed no shield-break line, so `ataxiaBasher_onShieldLine` learned nothing, the shield read "up"
+to the end, and the stand held every attack waiting for 70% (about 1,390 HP/s in, about 920 healed;
+`kb/mechanics/mnemosyne-affixes.md`, "The manifested nightmare"). The line that proves a shield
+fails is a `Health lost:` line while it is up. Trigger 351 calls `ataxiaBasher_lastStandHit`
+(001:780) for each one:
+
+- Only a blockable type counts. `unblockable` and `raw` never do (a shield stops neither, from
+  anyone). A hit within 0.5 s of first seeing the shield up does not count: it can share a packet
+  with the shield line.
+- The second counting hit ends the stand ("<type> hits pass the shield") with the 10 s cooldown
+  and stores the room in `ataxiaTemp.shieldPassRoom`.
+- `ataxiaBasher_shieldPassHere` (001:767) reads that room. While it holds, `lastStandWanted`
+  (001:635) starts no stand and `ataxiaBasher_canShield` (`can(x)/002`:20) refuses every shield, so
+  the spike and shield-threshold branches of `dangerLevel` stop shielding there too. The room is
+  forgotten on a room change (a `gmcp.Room.Info` handler, with the read as a backstop) and when the
+  basher is off. Session state, never saved.
+
+Tests: `test_basher_noflee.lua`, the shield-pass cases.
 
 Open: whether tash'la raze a shield; what the hold does against a pool that heals the denizens
 while we wait (Sanguine Restoration). Tests: `test_basher_noflee.lua`, "the last stand".

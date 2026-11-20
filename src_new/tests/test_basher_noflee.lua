@@ -817,3 +817,160 @@ describe("the last stand (v4.7.486)", function()
     done()
   end)
 end)
+
+-- ============================================================================
+-- 2026-11-20 -- HITS THROUGH THE SHIELD END THE STAND. From a death (manifested nightmare): the stand's
+-- shield rose and the nightmare kept landing (psychic 3413, physical cutting 1001, cold 2925, 2755,
+-- 2805, psychic 1659 -- the kill) with no shield-break line, so the stand held every attack waiting
+-- for 70% while the nightmare sat at 37%. The `Health lost:` lines go through the REAL trigger 351.
+-- The amounts and types are the maintainer's quote of that log (not yet filed); the line shape is
+-- kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt:31 ("Health lost: 1600 (cold).").
+-- ============================================================================
+describe("2026-11-20 -- hits through the shield end the last stand", function()
+  local TRIGGER = "src_new/triggers/levi_ataxia/for_levi/leviticus/351_Health_Lost_By_Type.lua"
+  local clock = 1000
+  local realEpoch = getEpoch
+  local saved = {}
+
+  local function fresh()
+    local okLoad, errLoad = pcall(dofile, basher_file)
+    if not okLoad then error(tostring(errLoad)) end
+    baseline()
+    clock = 1000
+    getEpoch = function() return clock end
+    saved.canShield, saved.rec, saved.matches = ataxiaBasher_canShield, bashStats_recordIncoming, matches
+    ataxiaBasher_canShield = function() return false end
+    bashStats_recordIncoming = nil -- the tally is not under test here
+    ataxiaBasher.enabled = true
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.lastStand, ataxiaBasher.lastStandRelease, ataxiaBasher.shieldBreakers = nil, nil, nil
+    for _, k in ipairs({ "lastStandAt", "lastStandSentAt", "lastStandSends", "lastStandUp",
+      "lastStandUpAt", "lastStandPassHits", "lastStandCoolUntil", "lastStandFlush", "shieldPassRoom" }) do
+      ataxiaTemp[k] = nil
+    end
+    ataxia.denizensHere = { [301] = "a manifested nightmare" }
+    ataxia.mnemosyne = nil
+    mnemBravado, mnemRimewrought = nil, nil
+    setArea("")
+    gmcp.Room.Info.num = 4242
+  end
+  local function done()
+    getEpoch = realEpoch
+    ataxiaBasher_canShield, bashStats_recordIncoming, matches = saved.canShield, saved.rec, saved.matches
+    ataxia.mnemosyne = nil
+    ataxiaBasher.enabled = nil
+    gmcp.Room.Info.num = nil
+    ataxiaTemp.shieldPassRoom = nil
+  end
+  local function healthLost(line)
+    local n, t = line:match("^Health lost: (%d+) %(([^)]+)%)%.?$")
+    assert(n, "not a Health lost line: " .. line)
+    matches = { line, n, t }
+    dofile(TRIGGER)
+  end
+  local function standWithShield()
+    ataxia.vitals.hpp = 33
+    expect(ataxiaBasher_lastStand(33)).toBe("shield")    -- 13:08:45, LAST STAND: 33%
+    clock = 1002.5
+    ataxia.defences.shield = true                         -- 13:08:48, the shield rises
+  end
+  local function run(fn)
+    fresh()
+    local ok, err = pcall(fn)
+    done()
+    if not ok then error(err, 0) end
+  end
+
+  it("replays the death: two blockable hits after the shield rose end the stand", function()
+    run(function()
+      standWithShield()
+      healthLost("Health lost: 3413 (psychic).")           -- same packet as the shield: not counted
+      expect(ataxiaTemp.lastStandAt).toBe(1000)
+      clock = 1003.5
+      healthLost("Health lost: 2086 (unblockable).")       -- our own retching
+      healthLost("Health lost: 30 (raw).")                 -- bleeding
+      healthLost("Health lost: 1001 (physical cutting).")  -- hit 1 through the shield
+      expect(ataxiaTemp.lastStandAt).toBe(1000)
+      clock = 1004.5
+      healthLost("Health lost: 2925 (cold).")              -- hit 2: the stand is over
+      expect(ataxiaTemp.lastStandAt).toBeNil()
+      expect(ataxiaTemp.shieldPassRoom).toBe(4242)
+      ataxia.vitals.hpp = 20
+      expect(ataxiaBasher_lastStandHolding()).toBeFalse()
+      expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()  -- no new stand in this room
+      clock = 1030                                          -- even after the cooldown
+      ataxia.defences.shield = nil
+      expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+      expect(ataxiaBasher_dangerLevel()).toBe("attack")
+    end)
+  end)
+
+  it("unblockable and raw damage never end it, nor a hit inside the settle window", function()
+    run(function()
+      standWithShield()
+      ataxiaBasher_lastStandHolding()                       -- the prompt sees the shield up
+      clock = 1002.8
+      healthLost("Health lost: 2925 (cold).")              -- 0.3 s after: could predate the shield
+      clock = 1004
+      for _ = 1, 4 do
+        healthLost("Health lost: 2086 (unblockable).")
+        healthLost("Health lost: 30 (raw).")
+      end
+      healthLost("Health lost: 2755 (cold).")              -- only one counted hit so far
+      expect(ataxiaTemp.lastStandAt).toBe(1000)
+      expect(ataxiaTemp.shieldPassRoom).toBeNil()
+    end)
+  end)
+
+  it("a hit with no last stand, or with no shield up, counts for nothing", function()
+    run(function()
+      ataxia.defences.shield = true
+      healthLost("Health lost: 2925 (cold).")
+      healthLost("Health lost: 2755 (cold).")
+      healthLost("Health lost: 2805 (cold).")
+      expect(ataxiaTemp.shieldPassRoom).toBeNil()
+      ataxia.defences.shield = nil
+      ataxia.vitals.hpp = 33
+      ataxiaBasher_lastStand(33)
+      clock = 1001
+      healthLost("Health lost: 2925 (cold).")
+      clock = 1002
+      healthLost("Health lost: 2755 (cold).")
+      expect(ataxiaTemp.lastStandAt).toBe(1000)
+    end)
+  end)
+
+  it("forgets the room when we leave it or the basher stops", function()
+    run(function()
+      ataxiaTemp.shieldPassRoom = 4242
+      expect(ataxiaBasher_shieldPassHere()).toBeTrue()
+      gmcp.Room.Info.num = 4243
+      expect(ataxiaBasher_shieldPassHere()).toBeFalse()
+      expect(ataxiaTemp.shieldPassRoom).toBeNil()
+      gmcp.Room.Info.num = 4242
+      ataxiaTemp.shieldPassRoom = 4242
+      ataxiaBasher.enabled = false
+      expect(ataxiaBasher_shieldPassHere()).toBeFalse()
+      expect(ataxiaTemp.shieldPassRoom).toBeNil()
+    end)
+  end)
+
+  it("canShield says no in that room, so the spike and threshold branches do not shield", function()
+    run(function()
+      local okc, errc = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/002_Misc_CanDo.lua")
+      if not okc then error(tostring(errc)) end
+      ataxia.denizensHere = {}                              -- nothing on the target list: shield allowed
+      ataxiaBasher.targetList = {}
+      ataxiaBasher.noShieldBreak = { mobs = {} }
+      expect(ataxiaBasher_canShield()).toBeTrue()
+      ataxiaTemp.shieldPassRoom = 4242
+      expect(ataxiaBasher_canShield()).toBeFalse()
+      ataxiaBasher.inMnemosyne = false
+      setArea("Test Bashing Area")
+      ataxia.vitals.hpp = 35                                -- at shieldThresholdPct (40)
+      expect(ataxiaBasher_dangerLevel()).toBe("attack")
+      ataxiaTemp.shieldPassRoom = nil
+      expect(ataxiaBasher_dangerLevel()).toBe("shield")
+    end)
+  end)
+end)

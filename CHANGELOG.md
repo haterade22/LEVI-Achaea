@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-20 - v4.7.506: recklessness is cured first, a reveal gives one more retreat, hits through a shield end the stand
+
+We died in a Mnemosyne explore sweep (swarm on) to a manifested nightmare (`kb/raw/logs/2026-11-20_mnemosyne-nightmare-death.txt`, max HP about 15,696). Three faults, in the order they hit us:
+
+- **Recklessness hid our health, and SSC cured it late.** The prompt and GMCP read 15696 HP while real health was about 2743 (17%), and the game printed no `Health lost:` lines. FITNESS cured it at 13:08:43:721. SSC had it predicted but cured pacifism (bash set priority 3) before it (6). `ataxia_prioRecklessness` (`004_Aff_gains_losses.lua`) sends `curing prioaff recklessness`, at most once per 4 s, with the basher on, from the predict branch of `gotUnknownAff` and from `gotAff`. The bash set table is unchanged.
+- **After the cure the swarm refused to leave** ("LOW HP -- 17% -- NOT leaving: we already left one room"). The new trigger `804_Recklessness_Cured` (`Prudence rules your psyche once again.`) stamps `ataxiaTemp.recklessCuredAt`. For 6 s after it, at critical health (`ataxiaBasher_lastStandCritical`), the one-retreat rule lets ONE more ground retreat through (`S._recklessReveal`, `S._spentRefuses`, `S._spendRecklessReveal` in `mnemosyne/009_Swarm_Tactics.lua`). Pursued, Prey and the U-turn rule still refuse. This is the maintainer's rule: "Once we cure recklessness and see our health is critical we need to leave."
+- **A shield that rose did not block.** The nightmare's hits (3413 psychic, 1001 cutting, three colds, the 1659 psychic kill) landed through our tattoo shield with no shield-break line, and the stand held every attack waiting for 70%. `ataxiaBasher_lastStandHit` (called from trigger 351) counts a blockable `Health lost` while the stand's shield is up (not `unblockable`, not `raw`, not within 0.5 s of the shield rising). The second ends the stand with the cooldown and stores the room in `ataxiaTemp.shieldPassRoom`. `ataxiaBasher_shieldPassHere` makes `lastStandWanted` and `ataxiaBasher_canShield` refuse a shield there. A room change or the basher going off forgets it.
+
+**Not found:** a bite ran at 13:08:46:778, after "LAST STAND ... attacks held until 70%" at 13:08:45:710 and before the shield rose at 13:08:48:227, and health fell to 178 in between. Only `ataxiaBasher_assembleAttack` sends attack rounds (behind `dangerLevel`). Either the stand released early or a held command raced the `cq all`. UNCONFIRMED, so v4.7.506 does not claim a fix for it.
+
+Tests: new `test_reckless_prio.lua`; additions to `test_basher_noflee.lua` (shield pass) and `test_swarm_tactics.lua` (reckless reveal). Docs: `.claude/projects/basher/05-safety-systems.md` ("The last stand"), `.claude/projects/mnemosyne/07-explorer.md` ("One retreat, then we fight"), `kb/afflictions/README.md` (recklessness hides our health), `kb/mechanics/mnemosyne-affixes.md` (the manifested nightmare), two entries in `.claude/AGENTS.md`.
+
 ## 2026-11-19 - v4.7.505: one- and three-word party calls are read, with a word filter
 
 Layta calls `Mizik: Stupidity.` and Pharaus calls `Mizik: stupidity fulminated healthleech.` (`kb/raw/live/party-calls-bracket_2026-11-19.txt`). No party trigger read a colon call of one or three words, so these never reached V3 or `tAffs`. `paAff` adds any word it gets, and `T: words.` is also the shape of ordinary party chat, so these calls needed a filter first.

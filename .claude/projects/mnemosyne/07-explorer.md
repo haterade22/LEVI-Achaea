@@ -449,7 +449,7 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   `state == "recovering"`: Roll Hide already shed them, so a repeat tumble sheds nothing and
   only walks us off the sweep (previously only the 10s cooldown stood between a slow heal and
   a tumble every ten seconds). Since v4.7.482 it also refuses, at any HP, once a retreat has
-  landed (see "One retreat, then we fight").
+  landed, except the reckless reveal of v4.7.506 (see "One retreat, then we fight").
 
 - **Vitalising Tincture** (`S._maybeTincture`, v4.7.241, needs the boon): 33% of maximum
   health on a 20s cooldown -- the largest single heal in the system, ~6,000 at tower pools, and
@@ -962,12 +962,14 @@ Every ground retreat now reads one latch, `S.retreatSpentAt`.
 | Question | Answer |
 |---|---|
 | When is it spent? | On the **landing**, in `S._noteLanding`. A refused leap or a lost tumble spends nothing. |
-| What does it refuse, at any HP? | The panic tumble (`_maybePanic`), the ground escape, the disengage (`S._retreatBlock`, which `_beginEscape`, `_escapeRouteReady`, `S.disengage` and both low-HP ladders read), and a new pull (the `onTick` pull gate). |
+| What does it refuse, at any HP? (one exception: the reckless reveal, below) | The panic tumble (`_maybePanic`), the ground escape, the disengage (`S._retreatBlock`, which `_beginEscape`, `_escapeRouteReady`, `S.disengage` and both low-HP ladders read), and a new pull (the `onTick` pull gate). |
 | What stays allowed? | The outdoor recovery hover, the Seclusion fling, the lava escape (`M.onLava`) and a retry of the same tumble (`_tumbleRetry`). None is a walk into another room of the same fight. |
 | What happens to a denizen in the landing room? | The normal basher fights it. |
 | What gives it back? | The room is empty and `S._mayReturn()` holds (85% and cured), a recovery ends (healed, stalled or capped), a fit re-entry starts (`_beginReenter`), Righteous Fire, a reload (`S._restoreRetreat`). `S.onRipple` clears it for a new ripple or an explorer restart. |
 
 If the landing room empties and we are not fit, `S._recoverHere` heals there before the sweep moves on. Otherwise the sweep walks into the next room hurt, with no retreat left.
+
+**The reckless reveal (v4.7.506).** "Once we cure recklessness and see our health is critical we need to leave." — user, 2026-11-20. Recklessness makes the prompt and GMCP read full health (`kb/afflictions/README.md`, "Recklessness hides our health"), so while it lasts no HP-gated escape can fire. The nightmare death (`kb/raw/logs/2026-11-20_mnemosyne-nightmare-death.txt`) read 15696 HP until FITNESS cured it at 13:08:43:721 and the next prompt read 2743 (17%). The swarm then refused to leave: "LOW HP -- 17% -- NOT leaving: we already left one room". Now trigger `804_Recklessness_Cured` (`Prudence rules your psyche once again.`) stamps `ataxiaTemp.recklessCuredAt`. For 6 s after it, at critical health (`ataxiaBasher_lastStandCritical`: `escapeAt` % or `panicHp`), `S._recklessReveal` (`mnemosyne/009`:532) makes `S._spentRefuses` (009:546) false, so the latch does not refuse ONE more ground retreat. `S._spendRecklessReveal` (009:551) uses it up in `_maybePanic` and `_beginEscape`. `_retreatBlock` (009:626), `_maybePanic` (009:1331) and the `onTick` ladder gate (009:2298) read the exemption. Pursued, Prey and the U-turn rule still refuse it. Tests: `test_swarm_tactics.lua`, the reckless-reveal cases.
 
 **Known cost, accepted by the rule:** an unkillable hazard or a strong denizen in the landing room can kill us. There is no config switch. Since v4.7.486 the basher's last stand (below) shields at critical health when no retreat is left.
 

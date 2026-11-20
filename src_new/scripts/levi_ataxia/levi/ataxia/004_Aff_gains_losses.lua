@@ -43,6 +43,27 @@ function confirmedUnknownAff()
 	end
 end
 
+-- RECKLESSNESS FIRST WHILE BASHING (2026-11-20, manifested nightmare death). Reckless, the game shows
+-- full health and mana in the prompt AND in GMCP Char.Vitals, and prints no `Health lost:` lines, so
+-- the basher and the swarm decide on numbers that are not real (15696/100% read while ~2743/17% was
+-- true). The bash set cured pacifism (prio 3) before recklessness (prio 6), and the truth came out
+-- only when FITNESS cured it -- at 17%, too late to leave. `curing prioaff` is a one-shot server
+-- reordering that writes no stored priority, so the bash set itself is unchanged. Throttled: the
+-- predict branch runs on every unknown affliction while the vitals read full.
+RECKLESS_PRIO_GAP = RECKLESS_PRIO_GAP or 4
+function ataxia_prioRecklessness(why)
+	if not (ataxiaBasher and ataxiaBasher.enabled) then return false, "the basher is off" end
+	ataxiaTemp = ataxiaTemp or {}
+	local nowT = getEpoch()
+	local last = tonumber(ataxiaTemp.recklessPrioAt)
+	if last and (nowT - last) >= 0 and (nowT - last) < RECKLESS_PRIO_GAP then
+		return false, "sent " .. string.format("%.1f", nowT - last) .. "s ago"
+	end
+	ataxiaTemp.recklessPrioAt = nowT
+	send("curing prioaff recklessness")
+	return true, why
+end
+
 -- TRUTHSEEKER (Mnemosyne boon, uncommon, v4.7.257): "The God of Darkness allows your eyes to
 -- perceive the truth of all hidden afflictions that may befall you."
 --
@@ -74,6 +95,7 @@ function gotUnknownAff()
 	end
 	if ataxia.vitals.hp == ataxia.vitals.maxhp and ataxia.vitals.mp == ataxia.vitals.maxmp then
 		send("curing predict recklessness")
+		ataxia_prioRecklessness("predicted from full vitals")
 	elseif not ataxiaTemp.lokiCheck then
 		tempLineTrigger(1, 1, [[confirmedUnknownAff()]])
 	end
@@ -350,6 +372,8 @@ function gotAff()
     end)
   elseif aff == "shivering" or aff == "frozen" then
     ataxia_tryVultureTalon()
+  elseif aff == "recklessness" then
+    ataxia_prioRecklessness("gained") -- 2026-11-20: it hides our health; cure it first (see above)
 	end
   --Are we close to being locked where we need to hit our active ability?
 	ataxia_lockBreak()

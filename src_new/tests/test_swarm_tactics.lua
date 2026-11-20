@@ -4786,6 +4786,138 @@ describe("v4.7.486 -- Prey: a ground retreat cannot shake a tracker", function()
   end)
 end)
 
+-- 2026-11-20, manifested nightmare death: recklessness hid our health (prompt and GMCP read full).
+-- FITNESS cured it ("Prudence rules your psyche once again.", the cure line in
+-- kb/afflictions/afflictions.json), the first true reading was 17%, and the swarm printed "NOT
+-- leaving: we already left one room -- what is in this one we kill." User: "Once we cure
+-- recklessness and see our health is critical we need to leave."
+describe("2026-11-20 -- a recklessness cure at critical health lifts the one-retreat limit once", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local TRIGGER = "src_new/triggers/levi_ataxia/for_levi/leviticus/804_Recklessness_Cured.lua"
+  local CURE_LINE = "Prudence rules your psyche once again."
+  local realCritical = ataxiaBasher_lastStandCritical
+  local function install()
+    -- The basher's definition (escapeAt % or panicHp) is tested in test_basher_noflee; here only
+    -- its answer matters.
+    ataxiaBasher_lastStandCritical = function(hpp) return (tonumber(hpp) or 100) <= 35 end
+  end
+  local function hurt(hp)
+    lowHp(hp * 100)
+    ataxia.vitals = { hpp = hp }
+  end
+  -- Escaped once out of room 200 into room 100 (which has a second door west), the retreat landed
+  -- and is spent; the nightmare is in room 100 with us.
+  local function spentInRoom100()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt, S._lastPanicAt = nil, nil
+    MAP.rooms[100].exits.west = 50
+    MAP.rooms[50] = { visited = true, exits = { east = 100 } }
+    MAP.current = 100
+    M.explore.fromRoom, M.explore.fromDir = 50, "e"
+    S.retreatSpentAt = clock
+    S.state = "idle"
+  end
+  local function cureLine()
+    expect(TL.anyMatches(TL.patterns(TRIGGER), CURE_LINE)).toBeTrue()
+    dofile(TRIGGER)
+  end
+  local function run(fn)
+    install()
+    local ok, err = pcall(fn)
+    ataxiaBasher_lastStandCritical = realCritical
+    MAP.rooms[50] = nil
+    if MAP.rooms[100] then MAP.rooms[100].exits.west = nil end
+    if not ok then error(err, 0) end
+  end
+
+  it("replays the death: refused before the cure line, leaves after it", function()
+    run(function()
+      spentInRoom100()
+      hurt(17)
+      sent = {}
+      local said = capture(function() S.onVitals() end)       -- 13:08:43, the GMCP 17% reading
+      expect(said:find("already left one room", 1, true) ~= nil).toBeTrue()
+      expect(count("leap") + count("tumble")).toBe(0)
+      cureLine()                                               -- the cure line of the same packet
+      expect(ataxiaTemp.recklessCuredAt).toBe(clock)
+      clock = clock + 2.5                                      -- the next emergency evaluation
+      said = capture(function() S.onVitals() end)
+      expect(said:find("RECKLESSNESS hid our health", 1, true) ~= nil).toBeTrue()
+      expect(count("leap w")).toBe(1)
+      expect(ataxiaTemp.recklessCuredAt).toBeNil()            -- used once
+    end)
+  end)
+
+  it("is used once: the next refusal stands", function()
+    run(function()
+      spentInRoom100()
+      hurt(17)
+      cureLine()
+      expect(S._retreatBlock("w")).toBeNil()
+      expect(S._spendRecklessReveal()).toBeTrue()
+      expect(S._retreatBlock("w")).toBe("we already left one room -- what is in this one we kill")
+    end)
+  end)
+
+  it("needs a fresh cure and critical health", function()
+    run(function()
+      spentInRoom100()
+      hurt(17)
+      expect(S._retreatBlock("w")).toBe("we already left one room -- what is in this one we kill")
+      cureLine()
+      clock = clock + 6
+      expect(S._retreatBlock("w")).toBe("we already left one room -- what is in this one we kill")
+      cureLine()
+      hurt(60)
+      expect(S._retreatBlock("w")).toBe("we already left one room -- what is in this one we kill")
+    end)
+  end)
+
+  it("the Roll Hide panic tumble may go once, too", function()
+    run(function()
+      spentInRoom100()
+      mnemRollHide = true
+      hurt(17)
+      expect(S._maybePanic(17)).toBeFalse()
+      cureLine()
+      sent = {}
+      expect(S._maybePanic(17)).toBeTrue()
+      expect(count("tumble")).toBe(1)
+      expect(ataxiaTemp.recklessCuredAt).toBeNil()
+      mnemRollHide = false
+    end)
+  end)
+
+  it("a swarm that follows still keeps us here", function()
+    run(function()
+      spentInRoom100()
+      hurt(17)
+      cureLine()
+      S.pursuedAt = clock
+      expect(S._retreatBlock("w")).toBe("the swarm follows every retreat -- fighting here")
+      S.pursuedAt = nil
+    end)
+  end)
+
+  -- The explorer tick's own ladder gate (noLadder) reads the same exemption, so the tick leaves
+  -- by the ground escape -- not by a pull, which a spent retreat still forbids.
+  it("the explorer tick leaves too, by the escape and not a pull", function()
+    run(function()
+      spentInRoom100()
+      mobs = 4
+      hurt(17)
+      cureLine()
+      sent = {}
+      local said = capture(function() S.onTick() end)
+      expect(said:find("RECKLESSNESS hid our health", 1, true) ~= nil).toBeTrue()
+      expect(count("leap w")).toBe(1)
+      expect(ataxiaTemp.swarmPullDir).toBeNil()
+    end)
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

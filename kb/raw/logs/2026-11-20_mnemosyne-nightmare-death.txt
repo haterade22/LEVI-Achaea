@@ -1,0 +1,357 @@
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 598 (psychic).
+A manifested nightmare screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 2530 (poison).
+Your vicious attack cleaves to a nearby enemy.
+13:08:41:633 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+The nightmare convulses and a forest of grasping hands erupts from its body, clawing across your torso before dissolving into pale vapour.
+Your blood seethes as deadly venom infects your system.
+Your immunity shields you from that which would bring you harm.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+You're tired. So very tired.
+You are confused as to the effects of the venom.
+13:08:41:702 [15696] [100] |(676041|81%)|[ [ bld(249) lov ago FLU SDF pac nau ]]
+You clot your wounds 13 times.
+You feel the power of the venom camus flowing through your veins.
+13:08:41:847 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+(((((((((((((((((((( BALANCE: 1.827 ))))))))))))))))))))
+You are feeling far too passive to do that.
+13:08:41:853 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+You have already predicted that you have that affliction.
+13:08:41:856 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+You have already predicted that you have that affliction.
+13:08:41:856 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+You may eat another plant or mineral.
+13:08:42:224 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:42:383 [15696] [100] |(676041|81%)|[ [ lov ago FLU SDF pac nau ]]
+You eat a cuprum flake.
+You shake your head, wondering what you ever saw in a manifested nightmare.
+You are feeling far too passive to do that.
+13:08:42:385 [15696] [100] |(676041|81%)|[ [ ago FLU SDF pac nau ]]
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 627 (psychic).
+13:08:42:584 [15696] [100] |(676041|80%)|[ [ ago FLU SDF pac nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:42:758 [15696] [100] |(676041|80%)|[ [ ago FLU SDF pac nau ]]
+You are feeling far too passive to do that.
+13:08:42:759 [15696] [100] |(676041|80%)|[ [ ago FLU SDF pac nau ]]
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your thoughts cloud as a strange sense of displacement overcomes you.
+13:08:43:223 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:43:374 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+You are feeling far too passive to do that.
+13:08:43:376 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+You have already predicted that you have that affliction.
+13:08:43:377 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+Your body has recovered enough to shrug afflictions once again.
+13:08:43:563 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+[CURE] 6 afflictions: shrugging
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 598 (psychic).
+13:08:43:624 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:43:716 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+You are feeling far too passive to do that.
+13:08:43:717 [15696] [100] |(676041|80%)|[ [ ago MYC FLU SDF pac nau ]]
+
+(MNEM): [explore] [swarm] LOW HP -- 17% -- NOT leaving: we already left one room -- what is in this one we kill.
+Focusing inward, you purge your body of afflictions.
+Prudence rules your psyche once again.
+As if by miracle, you lift another affliction from yourself.
+The unnatural calm that filled you lifts abruptly from you.
+Equilibrium used: 0.91s.
+13:08:43:721 [2743] [81] |(676041|80%)|[ [ ago MYC FLU SDF nau ]]
+13:08:43:803 [5987] [81] |(676041|80%)|[ [ ago MYC FLU SDF nau ]]
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+You may eat another plant or mineral.
+13:08:43:900 [5987] [81] |(676041|80%)|[ [ ago MYC FLU SDF nau ]]
+You eat a plumbum flake.
+Your thoughts suddenly crystalise, the insidious whispers falling abruptly silent.
+13:08:43:947 [5987] [81] |(676041|80%)|[ [ ago FLU SDF nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:44:044 [5987] [81] |(676041|80%)|[ [ ago FLU SDF nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:44:381 [5987] [81] |(676041|80%)|[ [ ago FLU SDF nau ]]
+(((((((((((((((((((( EQUILIBRIUM:0.755 ))))))))))))))))))))
+You sink your fangs into a manifested nightmare, injecting just the proper amount of camus.
+Damage dealt: 2410 (poison).
+Your vicious attack cleaves to a nearby enemy.
+Colour fractures into kaleidoscopic chaos across a manifested nightmare.
+Balance used: 1.9s.
+You may eat another bit of irid moss or potash.
+13:08:44:616 [5987] [81] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:08:44:734 [7242] [89] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You effortlessly evade the efforts of a manifested nightmare.
+13:08:44:736 [7242] [89] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:44:827 [7242] [89] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You may eat another plant or mineral.
+13:08:45:420 [7242] [89] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You feel the power of the venom camus flowing through your veins.
+13:08:45:560 [7242] [89] |(676041|78%)|[ [ ago FLU SDF nau ]]
+You eat a plumbum flake.
+Your fever finally breaks, the terrible burning retreating.
+You focus your mind intently on curing your mental maladies.
+You can handle the idea of open spaces again.
+Your intense focus lifts another malady from your mind.
+13:08:45:564 [7242] [86] |(676041|78%)|[ [ FLU nau ]]
+A manifested nightmare screams out in agony, struck by the effects of a vicious venom.
+Your deadly prowess nourishes your body.
+A manifested nightmare's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 20240 (poison).
+Your vicious attack cleaves to a nearby enemy.
+Colour fractures into kaleidoscopic chaos across a manifested nightmare.
+13:08:45:710 [7555] [87] |(676041|63%)|[ [ FLU nau ]]
+
+(LEVI): LAST STAND: 33% and no way out -- shielding, attacks held until 70%.
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Health lost: 2221 (cold).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+You feel... odd. So very odd.
+13:08:46:226 [5334] [87] |(676041|63%)|[ [ REB FLU nau ]]
+(((((((((((((((((((( BALANCE: 1.806 ))))))))))))))))))))
+You sink your fangs into a manifested nightmare, injecting just the proper amount of camus.
+Your deadly prowess nourishes your body.
+Damage dealt: 20240 (poison).
+Your vicious attack cleaves to a nearby enemy.
+Balance used: 1.9s.
+A blessed numbness soothes your skin, before abruptly transforming to a burning tingling.
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 2406 (psychic).
+13:08:46:778 [5647] [87] |(676041|46%)|[ [ REB sen FLU nau ]]
+Overtaken by the memory of Siluria's awakening, Ciell's mind shatters while his body is ripped apart limb by limb.
+13:08:46:780 [5647] [87] |(676041|46%)|[ [ REB sen FLU nau ]]
+Overtaken by the memory of Siluria's awakening, Ciell's mind shatters while his body is ripped apart limb by limb.
+13:08:46:783 [5647] [87] |(676041|46%)|[ [ REB sen FLU nau ]]
+You may eat another plant or mineral.
+13:08:46:975 [5647] [87] |(676041|46%)|[ [ REB sen FLU nau ]]
+[RIFT]: -1 Ferrum. Remaining: 3700.
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+Blood begins to run from your pores as your skin grows painfully hot.
+13:08:47:124 [5647] [87] |(676041|46%)|[ [ REB sen FLU nau ]]
+Health lost: 30 (raw).
+[[ BLEED 30 ]]
+A manifested nightmare screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 2410 (poison).
+Your vicious attack cleaves to a nearby enemy.
+Colour fractures into kaleidoscopic chaos across a manifested nightmare.
+A manifested nightmare grows dull as his kaleidoscopic affliction fades.
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 2526 (psychic).
+13:08:47:681 [5617] [87] |(676041|42%)|[ [ REB sen FLU nau ]]
+You cannot contain the convulsions in your stomach any longer and double over, retching violently.
+Health lost: 2086 (unblockable).
+13:08:47:759 [3531] [87] |(676041|42%)|[ [ REB sen FLU nau ]]
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Health lost: 3353 (cold).
+Your blood seethes as deadly venom infects your system.
+Your immunity shields you from that which would bring you harm.
+You are confused as to the effects of the venom.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your thoughts cloud as a strange sense of displacement overcomes you.
+13:08:47:850 [178] [87] |(676041|42%)|[ [ REB sen FLU MYC nau ]]
+A blessed numbness soothes your skin, before abruptly transforming to a burning tingling.
+Your mind is able to focus once again.
+13:08:47:942 [178] [87] |(676041|42%)|[ [ REB sen FLU MYC nau ]]
+13:08:48:123 [3454] [87] |(676041|42%)|[ [ REB sen FLU MYC nau ]]
+(((((((((((((((((((( BALANCE: 1.855 ))))))))))))))))))))
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 2.29s.
+13:08:48:227 [3454] [87] |(676041|42%)|[ [ REB sen FLU MYC nau ]]
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 2406 (psychic).
+You may eat another plant or mineral.
+13:08:48:633 [3454] [87] |(676041|40%)|[ [ REB MYC sen FLU nau ]]
+You eat a ferrum flake.
+Your stomach becalms itself.
+Blood begins to run from your pores as your skin grows painfully hot.
+13:08:48:717 [3454] [87] |(676041|40%)|[ [ REB MYC sen FLU ]]
+The quicksilver hardens into a supple metallic shell.
+13:08:48:909 [3454] [87] |(676041|40%)|[ [ REB MYC sen FLU ]]
+Time wreaks ruin upon a manifested nightmare, deteriorating before your eyes.
+Damage dealt: 2526 (psychic).
+A manifested nightmare grows dull as his kaleidoscopic affliction fades.
+13:08:49:670 [4238] [87] |(676041|38%)|[ [ REB MYC sen FLU ]]
+A dozen mouths tear open across a manifested nightmare shifting form and unleash a maelstrom of shrieking voices that crashes into you.
+Health lost: 3413 (psychic).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+You feel... odd. So very odd.
+Your immunity shields you from that which would bring you harm.
+13:08:49:871 [2682] [92] |(676041|38%)|[ [ ? hal REB sen FLU mas MYC ]]
+You focus your mind intently on curing your mental maladies.
+Your hallucinations cease to plague you.
+Your intense focus lifts another malady from your mind.
+You no longer enjoy pain.
+13:08:49:874 [2682] [90] |(676041|38%)|[ [ ? REB sen FLU MYC ]]
+You may eat another plant or mineral.
+13:08:50:302 [2682] [89] |(676041|38%)|[ [ ? REB sen FLU MYC ]]
+
+(MNEM): [explore] [swarm] LOW HP -- 17% -- NOT leaving: we already left one room -- what is in this one we kill.
+You eat a ferrum flake.
+The prickling in your skin fades and you feel blessedly cool.
+13:08:50:460 [2682] [89] |(676041|38%)|[ [ ? REB sen MYC ]]
+(((((((((((((((((((( EQUILIBRIUM:2.334 ))))))))))))))))))))
+You may eat another bit of irid moss or potash.
+13:08:50:559 [2682] [89] |(676041|38%)|[ [ ? REB sen MYC ]]
+You may utilise the tree tattoo again.
+13:08:50:561 [2682] [89] |(676041|38%)|[ [ ? REB sen MYC ]]
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:08:50:650 [3937] [97] |(676041|38%)|[ [ ? REB sen MYC PAR ]]
+You begin focusing on driving off attempts to paralyse you.
+13:08:50:705 [3937] [97] |(676041|38%)|[ [ ? REB sen MYC PAR ]]
+A manifested nightmare grows dull as his kaleidoscopic affliction fades.
+13:08:51:634 [3937] [97] |(676041|38%)|[ [ ? REB sen MYC PAR ]]
+The nightmare convulses and a forest of grasping hands erupts from its body, clawing across your torso before dissolving into pale vapour.
+Health lost: 1001 (physical cutting).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your heart skips a beat, then begins to pound.
+You are confused as to the effects of the venom.
+13:08:51:869 [2936] [97] |(676041|38%)|[ [ bld(216) ?? PYR REB sen MYC PAR ]]
+You may eat another plant or mineral.
+13:08:52:013 [2936] [97] |(676041|38%)|[ [ bld(216) ??? PYR REB sen MYC PAR ]]
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You clot your wounds 11 times.
+You are:
+losing the bond with the animal spirits.
+your skin is secreting a vile slime.
+sensitive to pain.
+blind.
+plagued with a corruption of the mind.
+suffering from the blood plague.
+Equilibrium used: 0.57s.
+13:08:52:111 [2936] [91] |(676041|38%)|[ [ PYR REB SEL MYC sen ]]
+You touch the tree of life tattoo.
+Your skin ceases secreting slime.
+A storm of deadly leaves descends upon the locale in a flurry of sylvan wrath, viciously shredding all who stand in opposition.
+Damage dealt: 1426 (physical cutting).
+You feel the barrier that separated you from your animal consciousness has dissipated.
+13:08:52:258 [2936] [91] |(676041|37%)|[ [ PYR MYC sen ]]
+Your mind is able to focus once again.
+13:08:52:260 [2936] [91] |(676041|37%)|[ [ PYR MYC sen ]]
+(((((((((((((((((((( EQUILIBRIUM:0.461 ))))))))))))))))))))
+You cease focusing on driving off attempts to paralyse you.
+13:08:52:658 [5771] [91] |(676041|37%)|[ [ PYR MYC sen ]]
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Health lost: 2925 (cold).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your skin begins to prickle uncomfortably.
+13:08:53:394 [2846] [91] |(676041|37%)|[ [ PYR MYC sen FLU ]]
+You may eat another plant or mineral.
+13:08:53:580 [2846] [91] |(676041|37%)|[ [ PYR MYC sen FLU ]]
+You eat a ferrum flake.
+The prickling in your skin fades and you feel blessedly cool.
+Your body has recovered enough to shrug afflictions once again.
+13:08:53:678 [2846] [91] |(676041|37%)|[ [ PYR MYC sen ]]
+[CURE] 3 afflictions: shrugging
+Focusing inward, you purge your body of afflictions.
+The burning in your veins abruptly fades.
+As if by miracle, you lift another affliction from yourself.
+Your thoughts suddenly crystalise, the insidious whispers falling abruptly silent.
+Equilibrium used: 0.91s.
+13:08:53:771 [2846] [91] |(676041|37%)|[ [ sen ]]
+(((((((((((((((((((( EQUILIBRIUM:1.047 ))))))))))))))))))))
+Foresight alerts you to an imminent assault, and by the moon's will, the attack no longer is.
+13:08:54:944 [2846] [91] |(676041|37%)|[ [ sen ]]
+You may eat another plant or mineral.
+13:08:55:132 [2846] [91] |(676041|37%)|[ [ sen ]]
+You eat an aurum flake.
+The stinging feeling fades.
+13:08:55:276 [2846] [91] |(676041|37%)|[]
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Health lost: 2755 (cold).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+Your immunity shields you from dizziness.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your skin begins to prickle uncomfortably.
+13:08:56:455 [91] [92] |(676041|37%)|[ [ FLU ]]
+You may eat another bit of irid moss or potash.
+13:08:56:551 [91] [92] |(676041|37%)|[ [ FLU ]]
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:08:56:641 [1346] [100] |(676041|37%)|[ [ FLU ]]
+You may eat another plant or mineral.
+13:08:56:757 [1346] [100] |(676041|37%)|[ [ FLU ]]
+
+(MNEM): [explore] [swarm] LOW HP -- 8% -- NOT leaving: we already left one room -- what is in this one we kill.
+You eat a ferrum flake.
+The prickling in your skin fades and you feel blessedly cool.
+13:08:56:986 [1346] [100] |(676041|37%)|[]
+13:08:57:191 [4464] [100] |(676041|37%)|[]
+Cold radiance flares from deep within a manifested nightmare, illuminating countless malformed figures that surge outward and pass straight through you, leaving you chilled to the core.
+Health lost: 2805 (cold).
+Your blood seethes as deadly venom infects your system.
+You are confused as to the effects of the venom.
+You contract a plague most vile.
+Your heart skips a beat, then begins to pound.
+13:08:58:065 [1659] [100] |(676041|37%)|[ [ PYR ]]
+You may eat another plant or mineral.
+13:08:58:482 [1659] [99] |(676041|37%)|[ [ PYR ]]
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+13:08:58:635 [1659] [99] |(676041|37%)|[ [ PYR ]]
+You are not currently enduring attempts to paralyse you.
+13:08:58:694 [1659] [99] |(676041|37%)|[ [ PYR ]]
+
+Leviticus, appears strumming his lute to a tune of your greatness.
+Eager to record your recent hunt in lavish detail and song, Leviticus frantically works his quill.
+
+Leviticus says to you with a grave voice, "Quite the slaughter you had at ! 4.27 experience. 2.40 KPM!"
+
+A dozen mouths tear open across a manifested nightmare shifting form and unleash a maelstrom of shrieking voices that crashes into you.
+Health lost: 1659 (psychic).
+You have been slain by a manifested nightmare.
+(mapper): Speedwalking paused.
+
+(LEVI): Bashing finished. Started at (132 (94.49%) / 2337878g) and bashed for 40.02 minutes.
+[Armour]: Basher disabled -- swapping to 'pvp'
+(MNEM): [explore] [swarm] reset (basher disabled).
+(LEVI): Still in Mnemosyne -- holding the bash curing set through the basher stop.
+[Armour]: Basher disabled -- swapping to 'pvp'
+[Armour]: Already swapping. Please wait.
+(LEVI): DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.
+(MNEM): [explore] slain by a manifested nightmare -- stopping the sweep.
+(MNEM): [explore] off (slain).
+You have lost 1750 experience.
+[RIFT]: +1 Ferrum. Total: 3697.
+The corpse of an acolyte of Life falls out of your inventory.
+The corpse of a priestess of Life falls out of your inventory.
+The corpse of an acolyte of Life falls out of your inventory.
+The corpse of Celepharn, High Priest of Life falls out of your inventory.
+The corpse of a wizened imp mage falls out of your inventory.
+The corpse of a conniving imp guard falls out of your inventory.
+The corpse of a wizened imp mage falls out of your inventory.
+The corpse of a manifested nightmare falls out of your inventory.
+The corpse of a conniving imp guard falls out of your inventory.
+The corpse of a wizened imp mage falls out of your inventory.
+The corpse of a savage hellcat falls out of your inventory.
+The corpse of a wizened imp mage falls out of your inventory.
+The corpse of a manifested nightmare falls out of your inventory.
+The corpse of a conniving imp guard falls out of your inventory.
+The corpse of a savage hellcat falls out of your inventory.
+13:09:00:563 [0] [99] ||[]
+
+- ( def density ) -

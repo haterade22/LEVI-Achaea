@@ -639,6 +639,7 @@ function ataxiaBasher_lastStandWanted(hpp)
   if ataxia.defences and ataxia.defences.shield then return false end
   if not ataxiaBasher_lastStandCritical(hpp) then return false end
   if ataxiaBasher_shieldBreakerHere() then return false end
+  if ataxiaBasher_shieldPassHere() then return false end -- 2026-11-20: hits came through it here
   if lastStandRetreatOpen() then return false end
   local cool = tonumber(ataxiaTemp and ataxiaTemp.lastStandCoolUntil)
   if cool and lastStandNow() < cool then return false end
@@ -648,6 +649,7 @@ end
 local function lastStandEnd(why, cool)
   ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
   ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = nil, nil
+  ataxiaTemp.lastStandUpAt, ataxiaTemp.lastStandPassHits = nil, nil
   ataxiaTemp.lastStandCoolUntil = cool and (lastStandNow() + LAST_STAND_COOLDOWN) or nil
   ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
 end
@@ -663,7 +665,10 @@ function ataxiaBasher_lastStandHolding()
   local hpp = tonumber(ataxia.vitals and ataxia.vitals.hpp) or 0
   local release = tonumber(ataxiaBasher.lastStandRelease) or 70
   local shielded = ataxia.defences and ataxia.defences.shield
-  if shielded then ataxiaTemp.lastStandUp = true end
+  if shielded then
+    ataxiaTemp.lastStandUp = true
+    ataxiaTemp.lastStandUpAt = ataxiaTemp.lastStandUpAt or nowT -- first seen up (see lastStandHit)
+  end
   if hpp >= release then
     lastStandEnd("health back to " .. hpp .. "%")
   elseif (nowT - at) >= LAST_STAND_MAX or (nowT - at) < 0 then
@@ -733,6 +738,78 @@ function ataxiaBasher_onShieldLine(text)
     ataxiaEcho("Learned: " .. best .. " breaks shields -- no last stand against it ('bash laststand forget "
       .. best .. "' to undo).")
   end
+end
+
+-- ============================================================================
+-- HITS THROUGH THE SHIELD END THE STAND (2026-11-20, manifested nightmare)
+-- ============================================================================
+-- The shield rose and the nightmare kept landing: psychic 3413, cutting 1001, cold 2925/2755/2805,
+-- psychic 1659 (the kill), each with its `Health lost:` line and no shield-break line at all, so
+-- `ataxiaBasher_onShieldLine` learned nothing and the shield read "up" to the end. The stand then
+-- held every attack waiting for 70% that ~1,390 HP/s in against ~920 healed could never give, with
+-- the nightmare at 37%. A `Health lost` of a blockable type while the shield is up means the
+-- shield is not stopping this denizen: after SHIELD_PASS_HITS of them the stand ends (with the
+-- cooldown) and the ROOM is remembered, so no new stand and no other `touch shield` is spent here.
+-- `unblockable` (our own retching, Health lost: 2086) and `raw` (bleeding) never count: a shield
+-- does not stop those from anyone. A hit within SHIELD_SETTLE of first seeing the shield up does
+-- not count either: it can be the same packet as the shield line, landed before it rose.
+local SHIELD_PASS_HITS = 2
+local SHIELD_SETTLE = 0.5
+local SHIELD_NEVER_STOPS = { unblockable = true, raw = true }
+
+local function roomNum()
+  local info = gmcp and gmcp.Room and gmcp.Room.Info
+  return info and info.num
+end
+
+-- Is this the room where hits passed our shield? Session memory (ataxiaTemp), forgotten when we
+-- are in another room or the basher is off -- the read clears it, so a stale entry cannot linger.
+function ataxiaBasher_shieldPassHere()
+  ataxiaTemp = ataxiaTemp or {}
+  local room = ataxiaTemp.shieldPassRoom
+  if room == nil then return false end
+  if not (ataxiaBasher and ataxiaBasher.enabled) or roomNum() ~= room then
+    ataxiaTemp.shieldPassRoom = nil
+    return false
+  end
+  return true
+end
+
+-- Called by trigger "Health Lost By Type" for every `Health lost: N (type).` line. Returns a reason
+-- string for every outcome (no silent gates); "ended" when it ended the stand.
+function ataxiaBasher_lastStandHit(amount, dtype)
+  ataxiaTemp = ataxiaTemp or {}
+  if not tonumber(ataxiaTemp.lastStandAt) then return "no last stand" end
+  if not (ataxia.defences and ataxia.defences.shield) then return "our shield is not up" end
+  local kind = tostring(dtype or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if SHIELD_NEVER_STOPS[kind] then return "a shield never stops " .. kind .. " damage" end
+  local nowT = lastStandNow()
+  local upAt = tonumber(ataxiaTemp.lastStandUpAt)
+  if not upAt then
+    ataxiaTemp.lastStandUpAt = nowT
+    return "the shield was only now seen up"
+  end
+  if (nowT - upAt) < SHIELD_SETTLE then return "inside the settle window of the shield" end
+  ataxiaTemp.lastStandPassHits = (ataxiaTemp.lastStandPassHits or 0) + 1
+  if ataxiaTemp.lastStandPassHits < SHIELD_PASS_HITS then
+    return "hit " .. ataxiaTemp.lastStandPassHits .. " of " .. SHIELD_PASS_HITS .. " through the shield"
+  end
+  ataxiaTemp.shieldPassRoom = roomNum()
+  lastStandEnd(kind .. " hits pass the shield; no shield in this room", true)
+  return "ended"
+end
+
+-- Leaving the room forgets it at once (the read above is the backstop). Killed on reload.
+if ataxiaTemp and ataxiaTemp.shieldPassRoomHandler and killAnonymousEventHandler then
+  pcall(killAnonymousEventHandler, ataxiaTemp.shieldPassRoomHandler)
+end
+if registerAnonymousEventHandler then
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.shieldPassRoomHandler = registerAnonymousEventHandler("gmcp.Room.Info", function()
+    if ataxiaTemp.shieldPassRoom ~= nil and roomNum() ~= ataxiaTemp.shieldPassRoom then
+      ataxiaTemp.shieldPassRoom = nil
+    end
+  end)
 end
 
 -- Returns the safe room config for the current area, or nil if none configured

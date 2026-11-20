@@ -52,3 +52,8 @@ patterns:
 if bashStats_recordIncoming then
   bashStats_recordIncoming(tonumber(matches[2]), matches[3])
 end
+-- 2026-11-20 (manifested nightmare): a blockable hit while a last stand's shield is up means the
+-- shield is not stopping this denizen; two of them end the stand (basher/001).
+if ataxiaBasher_lastStandHit then
+  ataxiaBasher_lastStandHit(tonumber(matches[2]), matches[3])
+end

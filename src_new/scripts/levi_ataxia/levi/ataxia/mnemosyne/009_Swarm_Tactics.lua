@@ -520,6 +520,42 @@ end
 
 function S._restoreRetreat() S.retreatSpentAt, S._retreat = nil, nil end
 
+-- RECKLESSNESS HID OUR HEALTH (2026-11-20, manifested nightmare). User: "Once we cure recklessness
+-- and see our health is critical we need to leave." Reckless, the prompt and GMCP read full health,
+-- so the one retreat was judged on numbers that were not real; FITNESS cured it, the first true
+-- reading was 17%, and the swarm answered "we already left one room -- what is in this one we
+-- kill". For RECKLESS_REVEAL_WINDOW seconds after the cure line (trigger "Recklessness Cured"
+-- stamps ataxiaTemp.recklessCuredAt), at critical health by the same two lines the last stand uses
+-- (ataxiaBasher_lastStandCritical: escapeAt % or panicHp), a spent retreat does not refuse ONE more
+-- ground retreat. Pursued, Prey and the U-turn rule still refuse it. Spent by S._spendRecklessReveal.
+S.RECKLESS_REVEAL_WINDOW = S.RECKLESS_REVEAL_WINDOW or 6
+function S._recklessReveal()
+  local at = tonumber(ataxiaTemp and ataxiaTemp.recklessCuredAt)
+  if not at then return false, "no recklessness cure seen" end
+  local since = now() - at
+  if since < 0 or since >= (tonumber(S.RECKLESS_REVEAL_WINDOW) or 6) then
+    return false, "the recklessness cure is " .. string.format("%.1f", since) .. "s old"
+  end
+  if not ataxiaBasher_lastStandCritical then return false, "no critical-health definition loaded" end
+  if not ataxiaBasher_lastStandCritical(hpp()) then return false, "health is not critical" end
+  return true
+end
+
+-- Does the spent retreat refuse a ground retreat now? The one reader of the exemption, so every
+-- escape path agrees (_retreatBlock, the panic tumble, the tick's ladder gate).
+function S._spentRefuses()
+  return S._retreatSpent() and not S._recklessReveal()
+end
+
+-- A ground retreat is starting on the exemption: use it up, and say why we leave.
+function S._spendRecklessReveal()
+  if not (S._retreatSpent() and S._recklessReveal()) then return false end
+  ataxiaTemp.recklessCuredAt = nil
+  S._echo("<indian_red>RECKLESSNESS hid our health<reset> -- " .. hpp()
+    .. "% now; leaving although we already left one room.")
+  return true
+end
+
 -- A retreat that never left must not read as a landing if the sweep walks on later.
 function S._forgetUnlandedRetreat()
   S._noteLanding() -- v4.7.483
@@ -587,7 +623,7 @@ function S._retreatBlock(dirShort)
   if not S._indoors() and S._canHover() then return nil end
   if S._pursued() then return "the swarm follows every retreat -- fighting here" end
   if S._preyTracks() then return "Prey -- every denizen tracks a retreat, so we fight here" end -- v4.7.486
-  if S._retreatSpent() then return "we already left one room -- what is in this one we kill" end -- v4.7.482
+  if S._spentRefuses() then return "we already left one room -- what is in this one we kill" end -- v4.7.482
   local dir = dirShort or S._backDir() or S._escapeLastResort()
   if dir and S._isUTurn(dir) and not S._mayReturn() then
     return "the only way out is back into the room we just fled (going back needs "
@@ -1292,7 +1328,7 @@ function S._maybePanic(hpNow)
   if S.state == "recovering" then return false end
   -- ONE RETREAT (v4.7.482). The death log's first second tumble was this one: 0.5s after an escape
   -- landed in an EMPTY room, and it went back into the room we had just fled.
-  if S._retreatSpent() then return false end
+  if S._spentRefuses() then return false end -- 2026-11-20: unless recklessness hid our health
   if not S._panicHpHit(hp) then return false end
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
@@ -1315,6 +1351,7 @@ function S._maybePanic(hpNow)
   -- Tear down BEFORE queueing the escape: reset() flushes the queue when a tactic was
   -- active, and that flush must never land on top of our tumble.
   S.reset("panic tumble")
+  S._spendRecklessReveal() -- 2026-11-20: a tumble on the reckless exemption uses it up
   S._noteRetreat(M.map and M.map.current) -- v4.7.482: its landing spends the one retreat too
   -- Free-queued, not raw: at panic HP the balance is usually spent mid-round, and a raw
   -- tumble would be rejected. The free queue fires it the instant we're able -- and the
@@ -1840,6 +1877,7 @@ function S._beginEscape(why)
     return false
   end
   S._escapeNo = nil
+  S._spendRecklessReveal() -- 2026-11-20: a ground escape on the reckless exemption uses it up
   S._fled = { room = M.map and M.map.current, at = now() }
   S._noteRetreat(M.map and M.map.current)
   S._escaping = true -- v4.7.378: wherever this lands, we heal there before moving on
@@ -2257,7 +2295,7 @@ function S.onTick()
     -- A SPENT RETREAT HAS NO GROUND LADDER TO RUN (v4.7.482), so the states below decide. An early
     -- return here, the way a followed retreat does it, would skip the branch that heals where an
     -- escape lands. The hover needs no retreat, so outdoors this still runs.
-    local noLadder = S._retreatSpent() and (S._indoors() or not S._canHover())
+    local noLadder = S._spentRefuses() and (S._indoors() or not S._canHover()) -- 2026-11-20 exemption
     if s.escape ~= false and hpp() <= s.escapeAt and not noLadder then
       -- THE SAME BOUND onVitals HAS (v4.7.314). These two paths call _beginEscape for the same
       -- reason and only onVitals was throttled, so this one ran on every tick -- and each pass

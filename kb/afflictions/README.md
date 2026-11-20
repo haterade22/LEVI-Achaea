@@ -131,6 +131,17 @@ that shuts *their* extra cure.
 - **Temporary overrides** use `CURING PRIOAFF`, which writes nothing permanent. Examples: the
   confused + disrupted fix (`curing/004`) and the anti-class swaps
   (`algedonic_defense_1.0/001_Anti_Priorities.lua`).
+- **Recklessness hides our health (OURS, one log, CONFIRMED).** While we are reckless, the prompt AND
+  GMCP `Char.Vitals` read full health and mana, and the game prints no `Health lost:` line for a
+  hit. In the manifested nightmare death a cold radiance hit at 13:08:43:223 has no such line, the
+  prompt read 15696 HP, and real health was about 2743 (17%). FITNESS cured it ("Prudence rules your
+  psyche once again.", 13:08:43:721) and the next prompt read 2743 HP (17%). After the cure every hit has a `Health lost:` line (`kb/raw/logs/2026-11-20_mnemosyne-nightmare-death.txt`). Before this log the only source
+  was the wiki's "think he or she is always on full health" (`kb/classes/jester.md`, WIKI). So an
+  HP-gated safety (last stand, escape, flee) is blind until it is cured. SSC had recklessness
+  predicted ("You have already predicted that you have that affliction.") but cured pacifism (bash
+  set priority 3) before it (priority 6); v4.7.506 raises it with `curing prioaff recklessness`
+  (`ataxia_prioRecklessness`, `004_Aff_gains_losses.lua`:54). What our code does about it:
+  `.claude/projects/mnemosyne/07-explorer.md`, "One retreat, then we fight".
 - **Lock-breaking** uses class cures and the tree when SSC would wait. See the lessons in
   CLAUDE.md ("Silent gates": fitness is blocked by weariness, and a component that defers to
   it must check it can actually run).
