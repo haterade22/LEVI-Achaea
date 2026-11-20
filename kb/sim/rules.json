@@ -4,7 +4,7 @@
  "inputs": {
   ".claude/databases/venoms.yaml": "da9f100670a46530",
   "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
-  "kb/mechanics/clocks.json": "c0f29c89ae73e675",
+  "kb/mechanics/clocks.json": "1d97ad7da81f6d26",
   "kb/sim/rules_hand.json": "9e747d11cedbb72c",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "84500af0cf22efc1",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "a67d445f9502d3a2",
@@ -606,7 +606,7 @@
     1.504,
     1.61
    ],
-   "n": 1478,
+   "n": 1488,
    "note": "not usable (p90-p10 is 0.230, over 0.2): swept p10..p90",
    "source": "kb/mechanics/clocks.json clocks.eat",
    "tag": "MEASURED",
@@ -686,10 +686,10 @@
    "alt": [
     2.33,
     2.43,
-    2.542
+    2.54
    ],
-   "n": 159,
-   "note": "not usable (p90-p10 is 0.212, over 0.2): swept p10..p90",
+   "n": 161,
+   "note": "not usable (p90-p10 is 0.210, over 0.2): swept p10..p90",
    "source": "kb/mechanics/clocks.json clocks.focus",
    "tag": "MEASURED",
    "usable": false,
@@ -698,8 +698,8 @@
     "median": 2.43,
     "min": 2.044,
     "p10": 2.33,
-    "p90": 2.542,
-    "sd": 0.083
+    "p90": 2.54,
+    "sd": 0.082
    }
   },
   "clock.humour": {
@@ -739,17 +739,17 @@
   "clock.moss": {
    "alt": [
     5.8,
-    5.912,
+    5.91,
     6.001
    ],
-   "n": 143,
+   "n": 145,
    "note": "not usable (p90-p10 is 0.201, over 0.2): swept p10..p90",
    "source": "kb/mechanics/clocks.json clocks.moss",
    "tag": "MEASURED",
    "usable": false,
    "value": {
     "max": 6.11,
-    "median": 5.912,
+    "median": 5.91,
     "min": 5.276,
     "p10": 5.8,
     "p90": 6.001,

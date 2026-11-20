@@ -102,15 +102,15 @@ Seconds. A clock that is not usable is swept over the range in the last column.
 | `attack.gap.others.flay` | 1.642 | 0.380 | 1.530 | 2.503 | 64 | no | 1.53 / 1.642 / 2.503 | kb/mechanics/clocks.json stated.opponents FLAY |
 | `attack.gap.others.stare` | 2.037 | 0.468 | 1.874 | 3.074 | 143 | no | 1.874 / 2.037 / 3.074 | kb/mechanics/clocks.json stated.opponents Stare |
 | `clock.dagaz` | 15.095 | 0.105 | 15.002 | 15.272 | 46 | no | 15.002 / 15.095 / 15.272 | kb/mechanics/clocks.json clocks.dagaz |
-| `clock.eat` | 1.504 | 0.090 | 1.380 | 1.610 | 1478 | no | 1.38 / 1.504 / 1.61 | kb/mechanics/clocks.json clocks.eat |
+| `clock.eat` | 1.504 | 0.090 | 1.380 | 1.610 | 1488 | no | 1.38 / 1.504 / 1.61 | kb/mechanics/clocks.json clocks.eat |
 | `clock.eat.Claes` | 1.530 | 0.073 | 1.432 | 1.620 | 338 | yes |  | kb/mechanics/clocks.json clocks.eat.by_logger (Claes, printed) |
 | `clock.eat.Elmer` | 1.492 | 0.075 | 1.401 | 1.593 | 232 | yes |  | kb/mechanics/clocks.json clocks.eat.by_logger (Elmer, line) |
 | `clock.eat.Nikita` | 1.540 | 0.055 | 1.460 | 1.600 | 249 | yes |  | kb/mechanics/clocks.json clocks.eat.by_logger (Nikita, line) |
 | `clock.fitness` | 9.807 | 0.326 | 9.131 | 9.967 | 5 | no | 9.059 / 9.807 / 9.969 | kb/mechanics/clocks.json clocks.fitness |
-| `clock.focus` | 2.430 | 0.083 | 2.330 | 2.542 | 159 | no | 2.33 / 2.43 / 2.542 | kb/mechanics/clocks.json clocks.focus |
+| `clock.focus` | 2.430 | 0.082 | 2.330 | 2.540 | 161 | no | 2.33 / 2.43 / 2.54 | kb/mechanics/clocks.json clocks.focus |
 | `clock.humour` | 1.546 | 0.073 | 1.435 | 1.622 | 41 | yes |  | kb/mechanics/clocks.json clocks.humour |
 | `clock.immunity` | 7.470 | 0.147 | 7.371 | 7.749 | 3 | no | 7.346 / 7.47 / 7.819 | kb/mechanics/clocks.json clocks.immunity |
-| `clock.moss` | 5.912 | 0.078 | 5.800 | 6.001 | 143 | no | 5.8 / 5.912 / 6.001 | kb/mechanics/clocks.json clocks.moss |
+| `clock.moss` | 5.910 | 0.078 | 5.800 | 6.001 | 145 | no | 5.8 / 5.91 / 6.001 | kb/mechanics/clocks.json clocks.moss |
 | `clock.rebounding` | 8.490 | 0.069 | 8.397 | 8.575 | 460 | yes |  | kb/mechanics/clocks.json clocks.rebounding |
 | `clock.restoration` | 4.019 | 0.042 | 3.935 | 4.042 | 30 | yes |  | kb/mechanics/clocks.json clocks.restoration |
 | `clock.salt` | 9.313 | 0.288 | 9.165 | 9.903 | 7 | no | 9.117 / 9.313 / 9.999 | kb/mechanics/clocks.json clocks.salt |
@@ -414,7 +414,7 @@ The package's default priority for a stack (`burning4`) or an affliction afflict
 | File | sha256 (16) |
 |---|---|
 | `kb/sim/rules_hand.json` | `9e747d11cedbb72c` |
-| `kb/mechanics/clocks.json` | `c0f29c89ae73e675` |
+| `kb/mechanics/clocks.json` | `1d97ad7da81f6d26` |
 | `kb/afflictions/afflictions.json` | `1fe2c0394ca42b4b` |
 | `.claude/databases/venoms.yaml` | `da9f100670a46530` |
 | `src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua` | `a67d445f9502d3a2` |
