@@ -1,0 +1,16 @@
+# Source: the live Mudlet buffer read by MCP on 2026-11-21 (Mnemosyne, boon Convocation held, v4.7.509 explore sweep; the user pasted the ready line). Verbatim lines; each line is bracketed by the prompt timestamps before and after it.
+16:51:20:053 .. 16:51:20:674 | You wave your hand over the brazier tattoo and summon an Arcadian archer to you.
+16:51:20:053 .. 16:51:20:674 | The colour is leeched from your brazier tattoo as it is greatly taxed.
+16:52:19:930 .. 16:52:20:933 | Power returns to your brazier tattoo in a muted flash.
+16:52:48:826 .. 16:52:49:406 | You wave your hand over the brazier tattoo and summon an Arcadian sentry to you.
+16:52:48:826 .. 16:52:49:406 | The colour is leeched from your brazier tattoo as it is greatly taxed.
+16:53:48:945 .. 16:53:49:385 | Power returns to your brazier tattoo in a muted flash.
+16:56:41:373 .. 16:56:41:777 | You wave your hand over the brazier tattoo and summon a fairy Minstrel of Sidhe to you.
+16:56:41:373 .. 16:56:41:777 | The colour is leeched from your brazier tattoo as it is greatly taxed.
+16:57:41:848 .. 16:57:42:134 | Power returns to your brazier tattoo in a muted flash.
+16:59:20:666 .. 16:59:21:255 | You wave your hand over the brazier tattoo and summon a fairy Knight of Sidhe to you.
+16:59:20:666 .. 16:59:21:255 | The colour is leeched from your brazier tattoo as it is greatly taxed.
+17:00:21:062 .. 17:00:21:610 | Power returns to your brazier tattoo in a muted flash.
+17:01:12:856 .. 17:01:13:447 | You wave your hand over the brazier tattoo and summon a fairy Lady of Sidhe to you.
+17:01:12:856 .. 17:01:13:447 | The colour is leeched from your brazier tattoo as it is greatly taxed.
+17:02:12:039 .. 17:02:13:142 | Power returns to your brazier tattoo in a muted flash.

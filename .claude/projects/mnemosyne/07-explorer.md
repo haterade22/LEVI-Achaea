@@ -1424,8 +1424,10 @@ idle in an empty room) and re-ticks after 2 s.
   `denizen_attacks_misc_lines/003_Target_Not_Here`. It drops the key and adds it to
   `ataxiaTemp.mnemBrazierBadKeys`, which `_learnBrazierKey` skips until the ripple changes. The send
   stamp is the gate because that line answers every targeted command.
-- **Cooldown stamp** (`mnemBrazierAt`): set by the taxed line (trigger 112), not by the send. It is
-  cleared at run start only, never on a ripple change (the tattoo cooldown is game state).
+- **Cooldown stamp** (`mnemBrazierAt`): set by the taxed line (trigger 112), not by the send. The
+  ready line (trigger 113, `M.onBrazierReady`, v4.7.510) clears it, so the game line ends the
+  cooldown; the 60 s count is the backstop. It is also cleared at run start, never on a ripple change
+  (the tattoo cooldown is game state).
 - Lines and the UNCONFIRMED ones: `kb/mechanics/mnemosyne-affixes.md`, "Boon: Convocation".
 
 

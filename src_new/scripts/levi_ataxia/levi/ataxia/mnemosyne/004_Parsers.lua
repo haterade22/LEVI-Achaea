@@ -1415,6 +1415,14 @@ function M.onBrazierRefused()
   return true
 end
 
+-- "Power returns to your brazier tattoo in a muted flash." (trigger 113, v4.7.510): the game says
+-- the tattoo is ready, so the cooldown ends here, whatever our 60 s count says. Five readings
+-- (OURS, kb/raw/live/2026-11-21_convocation_brazier_ready.txt) put it 59-61 s after the taxed line.
+function M.onBrazierReady()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemBrazierAt = nil
+end
+
 function M.onBrazierTaxed()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.mnemBrazierAt = getEpoch()

@@ -114,7 +114,7 @@ The colour is leeched from your brazier tattoo as it is greatly taxed.
   The keyword was `life`, from "an acolyte of Life" and "an haruspex of Life": the last word of a
   name is not always a keyword. Since v4.7.508 our rule takes the head noun (the name cut at its
   first comma and first " of "), and a refused keyword is dropped for the ripple.
-- UNCONFIRMED: that the head noun is a keyword for every denizen (seen to work for `constable`).
+- UNCONFIRMED: that the head noun is a keyword for every denizen (seen to work for six names).
 - A boss cannot be summoned, even from our own room (OURS, 2026-11-21, Dr. Kortoxian, three tries,
   `kb/raw/live/2026-11-21_convocation_brazier_boss.txt`). The game answers with its ordinary "not
   found" refusal, a different wording each time: `You cannot see that being here.`, `I do not
@@ -122,7 +122,13 @@ The colour is leeched from your brazier tattoo as it is greatly taxed.
   `Equilibrium used: 0.85s.` (OURS). These are among the five lines of our shared trigger
   `denizen_attacks_misc_lines/003_Target_Not_Here`, so the v4.7.508 refusal handler sees each of
   them. Since v4.7.509 our keyword rule never learns the ripple boss's name (`M.run.boss`).
-- UNCONFIRMED (no capture): the "tattoo ready again" line and the refusal while on cooldown.
+- Ready line (OURS, 2026-11-21, five captures, `kb/raw/live/2026-11-21_convocation_brazier_ready.txt`):
+  `Power returns to your brazier tattoo in a muted flash.` The cooldown measured 59 to 61 s from the
+  taxed line each time (the error is the prompt-timestamp bracket, under 1.2 s), so the boon's
+  "1 minutes" holds for us. Our trigger 113 ends the cooldown on this line (v4.7.510).
+- The head-noun keyword worked for five more names in the same captures: `archer` (an Arcadian
+  archer), `sentry`, `minstrel` (a fairy Minstrel of Sidhe), `knight`, `lady`.
+- UNCONFIRMED (no capture): the refusal while on cooldown.
 - Our use: the explorer sends it in an empty room (`M._brazierPick`, 008_Explorer.lua), see
   `.claude/projects/mnemosyne/07-explorer.md`.
 

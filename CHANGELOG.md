@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-11-21 - v4.7.510: Convocation brazier ready line ends the cooldown
+
+The game says when the brazier tattoo is ready again: "Power returns to your brazier tattoo in a muted flash." The new trigger `mnemosyne/113_Brazier_Ready` calls `M.onBrazierReady` (`mnemosyne/004_Parsers.lua`), which clears `ataxiaTemp.mnemBrazierAt`. The game line now ends the cooldown, and our 60 s count stays as the backstop.
+
+Five summons in the live game with v4.7.509 (`kb/raw/live/2026-11-21_convocation_brazier_ready.txt`) measured the cooldown at 59 to 61 s each, and the head-noun keyword worked for all five names (`archer`, `sentry`, `minstrel`, `knight`, `lady`). Tests: `src_new/tests/test_mnem_brazier.lua` (27). Docs: `kb/mechanics/mnemosyne-affixes.md`, `.claude/projects/mnemosyne/07-explorer.md`.
+
 ## 2026-11-21 - v4.7.509: Convocation never learns the boss's keyword
 
 The brazier tattoo cannot summon a boss, even one in our own room. Three tries at Dr. Kortoxian each got the game's ordinary "not found" refusal, in three different wordings, for 0.85 s of equilibrium each (`kb/raw/live/2026-11-21_convocation_brazier_boss.txt`). In that ripple v4.7.507 had learned `kortoxian` as the brazier keyword from the boss, so the sweep would have spent a send on it in the next empty room.

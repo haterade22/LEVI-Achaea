@@ -379,6 +379,34 @@ describe("Convocation never learns the boss's keyword (v4.7.509)", function()
   end)
 end)
 
+-- v4.7.510: the ready line, from kb/raw/live/2026-11-21_convocation_brazier_ready.txt.
+describe("Convocation ready line (v4.7.510)", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local F = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/113_Brazier_Ready.lua"
+  local READY = "Power returns to your brazier tattoo in a muted flash."
+
+  it("the real pattern is the exact whole line", function()
+    local pats = TL.patterns(F)
+    expect(TL.anyMatches(pats, READY)).toBeTrue()
+    expect(TL.anyMatches(pats, "Power returns to your tree tattoo in a muted flash.")).toBeFalse()
+  end)
+
+  it("ends the cooldown before 60 s, and the next empty room sends", function()
+    scenario(function()
+      ataxiaTemp.mnemBrazierKey = "archer"
+      M.onBrazierTaxed()
+      now = now + 30
+      tick()
+      expect(#sent).toBe(0)
+      dofile(F)
+      expect(ataxiaTemp.mnemBrazierAt).toBeNil()
+      MAP.current = 6
+      tick()
+      expect(sent[1]).toBe("touch brazier archer")
+    end)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 ataxia, ataxiaBasher, ataxiaTemp, send, getEpoch = saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.send, saved.getEpoch
 mnemConvocation, yajl, postHTTP, getHTTP = saved.mnemConvocation, saved.yajl, saved.postHTTP, saved.getHTTP
