@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-21 - v4.7.508: Convocation keyword is the head noun, and a refused keyword is dropped
+
+In v4.7.507 the Convocation brazier took the last word of a denizen's name as its keyword. Against "an acolyte of Life" and "an haruspex of Life" that gave `life`. The game refused it ("I do not recognise anything called that here.", `kb/raw/live/2026-11-21_convocation_brazier_unknown_keyword.txt`), and the sweep sent `touch brazier life` again in every room, for 0.85 s of equilibrium each.
+
+- **Head noun.** `brazierKeyword` (`mnemosyne/008_Explorer.lua`) cuts the name at its first comma and its first " of ", then takes the last word: "an acolyte of Life" -> `acolyte`, "Ironbeard, the Magnanimous" -> `ironbeard`, "an elderly constable" -> `constable`.
+- **A refused keyword is dropped.** The brazier send stamps `ataxiaTemp.mnemBrazierSentAt`. The existing trigger `denizen_attacks_misc_lines/003_Target_Not_Here` now also calls `M.onBrazierRefused` (`004_Parsers.lua`). Within 3 s of our send, it drops the key and stores it in `ataxiaTemp.mnemBrazierBadKeys`, so it is not learned again until the ripple changes. The send stamp is the gate because that line answers every targeted command. The taxed line ends the window.
+- Tests: `src_new/tests/test_mnem_brazier.lua` (23). Docs: `kb/mechanics/mnemosyne-affixes.md`, `.claude/projects/mnemosyne/07-explorer.md`.
+
 ## 2026-11-20 - v4.7.507: Convocation boon summons a denizen into an empty room
 
 With the Mnemosyne boon Convocation ("You may now use brazier tattoos on non-boss denizens, but your brazier tattoo incurs a 1 minutes cooldown."), the explore sweep now sends `touch brazier <keyword>` when the tattoo is off cooldown and our room has no denizen. This is the maintainer's rule of 2026-11-20. The summoned denizen comes to us, and the basher fights it here.

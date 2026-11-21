@@ -272,6 +272,82 @@ describe("Convocation triggers (real patterns)", function()
   end)
 end)
 
+-- v4.7.508: the plain last word failed live. Names and lines are from
+-- kb/raw/live/2026-11-21_convocation_brazier_unknown_keyword.txt and
+-- kb/raw/live/2026-11-20_convocation_brazier_already_here.txt.
+describe("Convocation keyword is the head noun (v4.7.508)", function()
+  it("cuts the name at ' of ' and at a comma", function()
+    expect(M._brazierKeyword("an acolyte of Life")).toBe("acolyte")
+    expect(M._brazierKeyword("an haruspex of Life")).toBe("haruspex")
+    expect(M._brazierKeyword("Ironbeard, the Magnanimous")).toBe("ironbeard")
+    expect(M._brazierKeyword("an elderly constable")).toBe("constable")
+  end)
+end)
+
+describe("Convocation refused keyword (v4.7.508)", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local T003 = "src_new/triggers/levi_ataxia/for_levi/leviticus/denizen_attacks_misc_lines/003_Target_Not_Here.lua"
+  local REFUSED = "I do not recognise anything called that here."
+
+  local function sendOnce(key)
+    ataxiaTemp.mnemBrazierKey = key
+    tick()
+    expect(sent[1]).toBe("touch brazier " .. key)
+    sent = {}
+  end
+
+  it("the shared trigger's real pattern matches the captured refusal", function()
+    expect(TL.anyMatches(TL.patterns(T003), REFUSED)).toBeTrue()
+  end)
+
+  it("a refusal right after our send drops the key, and the next room sends nothing", function()
+    scenario(function()
+      sendOnce("life")
+      now = now + 1
+      dofile(T003)
+      expect(ataxiaTemp.mnemBrazierKey).toBeNil()
+      MAP.current = 6
+      tick()
+      expect(#sent).toBe(0)
+    end)
+  end)
+
+  it("a dropped key is not learned again from the same denizen name", function()
+    scenario(function()
+      sendOnce("life")
+      dofile(T003)
+      ataxia.denizensHere = { [11] = "a keeper of life" } -- modelled on 'an acolyte of Life'
+      M._learnBrazierKey()
+      expect(ataxiaTemp.mnemBrazierKey).toBe("keeper")
+      ataxiaTemp.mnemBrazierKey = nil
+      ataxiaTemp.mnemBrazierBadKeys.keeper = true
+      M._learnBrazierKey()
+      expect(ataxiaTemp.mnemBrazierKey).toBeNil()
+    end)
+  end)
+
+  it("the same line more than 3 s after our send, or with no send, changes nothing", function()
+    scenario(function()
+      ataxiaTemp.mnemBrazierKey = "acolyte"
+      expect(M.onBrazierRefused()).toBeFalse()
+      expect(ataxiaTemp.mnemBrazierKey).toBe("acolyte")
+      sendOnce("acolyte")
+      now = now + 4
+      expect(M.onBrazierRefused()).toBeFalse()
+      expect(ataxiaTemp.mnemBrazierKey).toBe("acolyte")
+    end)
+  end)
+
+  it("the taxed line ends the refusal window", function()
+    scenario(function()
+      sendOnce("constable")
+      M.onBrazierTaxed()
+      expect(M.onBrazierRefused()).toBeFalse()
+      expect(ataxiaTemp.mnemBrazierKey).toBe("constable")
+    end)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 ataxia, ataxiaBasher, ataxiaTemp, send, getEpoch = saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.send, saved.getEpoch
 mnemConvocation, yajl, postHTTP, getHTTP = saved.mnemConvocation, saved.yajl, saved.postHTTP, saved.getHTTP

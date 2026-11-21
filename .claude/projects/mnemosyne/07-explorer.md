@@ -1412,9 +1412,16 @@ not already tried in this room (`mnemBrazierTriedRoom`, the stop for a resend lo
 lines are uncaptured); balance and equilibrium. A send is plain `send` (no queue: the basher is
 idle in an empty room) and re-ticks after 2 s.
 
-- **Keyword** (`ataxiaTemp.mnemBrazierKey`): the last word, lower case, of the first non-own denizen
-  seen in a room with denizens (`M._learnBrazierKey`), re-learned from the summon line
-  (`onBrazierSummon`, trigger 111). Cleared at run start, run end and ripple change.
+- **Keyword** (`ataxiaTemp.mnemBrazierKey`): the head noun, lower case, of the first non-own denizen
+  seen in a room with denizens (`M._learnBrazierKey`): the name is cut at its first comma and first
+  " of ", then the last word is taken ("an acolyte of Life" -> `acolyte`; v4.7.508, because the
+  plain last word gave `life` and the game refused it in every room). Re-learned from the summon
+  line (`onBrazierSummon`, trigger 111). Cleared at run start, run end and ripple change.
+- **Refused keyword** (v4.7.508): `I do not recognise anything called that here.` within 3 s of our
+  send (`ataxiaTemp.mnemBrazierSentAt`) calls `M.onBrazierRefused` from the shared trigger
+  `denizen_attacks_misc_lines/003_Target_Not_Here`. It drops the key and adds it to
+  `ataxiaTemp.mnemBrazierBadKeys`, which `_learnBrazierKey` skips until the ripple changes. The send
+  stamp is the gate because that line answers every targeted command.
 - **Cooldown stamp** (`mnemBrazierAt`): set by the taxed line (trigger 112), not by the send. It is
   cleared at run start only, never on a ripple change (the tattoo cooldown is game state).
 - Lines and the UNCONFIRMED ones: `kb/mechanics/mnemosyne-affixes.md`, "Boon: Convocation".

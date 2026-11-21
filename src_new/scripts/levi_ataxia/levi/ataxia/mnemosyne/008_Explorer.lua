@@ -170,11 +170,18 @@ local denizenCount = M._denizenCount
 -- non-own denizen we fought in this ripple ("an elderly constable" -> "constable").
 local BRAZIER_COOLDOWN = 60 -- seconds; the boon text's figure (OURS: not yet timed in a log)
 
--- Last word of a denizen name, lower case, punctuation stripped; nil when none.
+-- The head noun of a denizen name, lower case; nil when none. The name is cut at its first comma
+-- and at its first " of ", then the last word is taken (v4.7.508). The plain last word failed live:
+-- "an acolyte of Life" gave `life`, which the game refused ("I do not recognise anything called
+-- that here."). Now: "an acolyte of Life" -> acolyte, "Ironbeard, the Magnanimous" -> ironbeard,
+-- "an elderly constable" -> constable.
 local function brazierKeyword(name)
   if type(name) ~= "string" then return nil end
+  local head = name:lower()
+  head = head:match("^([^,]*)") or head
+  head = head:match("^(.-)%s+of%s") or head
   local word
-  for w in name:lower():gmatch("[%a][%a'%-]*") do word = w end
+  for w in head:gmatch("[%a][%a'%-]*") do word = w end
   if not word then return nil end
   word = word:gsub("^[%-']+", ""):gsub("[%-']+$", "")
   if word == "" then return nil end
@@ -189,8 +196,9 @@ function M._learnBrazierKey()
   for _, name in pairs(dz) do
     if not isOwnDenizen(name) then
       local k = brazierKeyword(name)
-      if k then
-        ataxiaTemp = ataxiaTemp or {}
+      ataxiaTemp = ataxiaTemp or {}
+      local bad = ataxiaTemp.mnemBrazierBadKeys
+      if k and not (bad and bad[k]) then
         ataxiaTemp.mnemBrazierKey = k
         return
       end
@@ -225,6 +233,8 @@ function M._brazierPick()
   local v = ataxia.vitals
   if not (v and v.bal and v.eq) then return nil, "no balance/equilibrium" end
   ataxiaTemp.mnemBrazierTriedRoom = MAP.current
+  -- The send stamp lets the shared refusal trigger tell OUR brazier from any other command.
+  ataxiaTemp.mnemBrazierSentAt, ataxiaTemp.mnemBrazierSentKey = getEpoch(), key
   return "touch brazier " .. key
 end
 

@@ -155,6 +155,7 @@ end
 function M.onRunStart()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom, ataxiaTemp.mnemBrazierAt = nil, nil, nil
+  ataxiaTemp.mnemBrazierBadKeys, ataxiaTemp.mnemBrazierSentAt = nil, nil
   -- Cleared on the way IN as well as on the confirmed way out, and deliberately ABOVE the
   -- `_auto()` gate: telemetry is off by default, so anything below it never runs for most users
   -- and a run-scoped fact would carry over between dives. A RESUME keeps the baseline -- it is
@@ -307,7 +308,10 @@ function M.onRunEnd()
   mnemRimewrought = false -- ...and tattoos work again (v4.7.333)
   mnemFamine = false -- ...and food is worth what it says again (v4.7.333)
   mnemTantrum = false -- boons gone on a confirmed run-end
-  if ataxiaTemp then ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom = nil, nil end
+  if ataxiaTemp then
+    ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom = nil, nil
+    ataxiaTemp.mnemBrazierBadKeys, ataxiaTemp.mnemBrazierSentAt = nil, nil
+  end
   if M.clearBoonFlags then M.clearBoonFlags() end -- ...and every generically-latched boon
   if ataxiaTemp then
     ataxiaTemp.tantrumRipple = nil
@@ -760,6 +764,7 @@ function M.onRipple(n)
   -- Convocation: the keyword and the tried room are per ripple; mnemBrazierAt is real game state (the
   -- tattoo cooldown) and is NOT cleared here.
   ataxiaTemp.mnemBrazierKey, ataxiaTemp.mnemBrazierTriedRoom = nil, nil
+  ataxiaTemp.mnemBrazierBadKeys, ataxiaTemp.mnemBrazierSentAt = nil, nil
   -- Re-latch owned boon flags. Called from HERE as well as the explorer because onRipple
   -- fires in every mode, whereas the explorer entry points only exist for `mnem explore`
   -- users -- a manual-mode basher would otherwise never get the re-latch at all (review
@@ -1386,9 +1391,34 @@ function M.onBrazierSummon(name)
   end
 end
 
+-- "I do not recognise anything called that here." within 3 s of OUR brazier send: the keyword is
+-- not one the game knows. Drop it and never learn it again this ripple, or the sweep re-sends it in
+-- every room for 0.85 s of equilibrium each (OURS, 2026-11-20: `touch brazier life` in every room).
+-- The line is shared with every targeted command (trigger denizen_attacks_misc_lines/003), so the
+-- send stamp is the gate. Returns true when it was ours.
+local BRAZIER_REFUSE_WINDOW = 3
+function M.onBrazierRefused()
+  local t = ataxiaTemp
+  local at = t and t.mnemBrazierSentAt
+  if not at or (getEpoch() - at) > BRAZIER_REFUSE_WINDOW then return false end
+  local key = t.mnemBrazierSentKey
+  t.mnemBrazierSentAt, t.mnemBrazierSentKey = nil, nil
+  if key then
+    t.mnemBrazierBadKeys = t.mnemBrazierBadKeys or {}
+    t.mnemBrazierBadKeys[key] = true
+    if t.mnemBrazierKey == key then t.mnemBrazierKey = nil end
+  end
+  if M.echo then
+    M.echo("<cyan>Convocation<reset> -- the game does not know '" .. tostring(key)
+      .. "'; dropped until the next ripple.")
+  end
+  return true
+end
+
 function M.onBrazierTaxed()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.mnemBrazierAt = getEpoch()
+  ataxiaTemp.mnemBrazierSentAt, ataxiaTemp.mnemBrazierSentKey = nil, nil
 end
 
 -- Clear them all. Boons are per-RUN, so this belongs with the other run-end resets.

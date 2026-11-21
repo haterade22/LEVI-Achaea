@@ -45,6 +45,12 @@ patterns:
   type: 3
 ]]--
 
+-- Convocation (v4.7.508): a refused `touch brazier <keyword>` prints the third line above. The
+-- handler acts only within 3 s of its own send, so other commands are not affected.
+if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.onBrazierRefused then
+	ataxia.mnemosyne.onBrazierRefused()
+end
+
 if ataxiaBasher and ataxiaBasher.enabled then
 	if type(target) == "number" then
 		bashConsoleEcho("denizen", "Target is gone!")

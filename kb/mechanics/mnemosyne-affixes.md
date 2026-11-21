@@ -107,10 +107,16 @@ The colour is leeched from your brazier tattoo as it is greatly taxed.
   denizen keyword can be a word that is NOT in its name (probably its race). UNCONFIRMED that
   Ironbeard was the match. Our pick never sends with a denizen in the room, so it does not expect
   this line; the one-try-per-room gate covers it if the room list is stale.
-- Known limit of our keyword rule (last word of the name): a named denizen gives a word that may
-  not be a keyword ("Ironbeard, the Magnanimous" -> `magnanimous`). Not yet seen to fail.
-- UNCONFIRMED (no capture): the "tattoo ready again" line, the refusal while on cooldown, the refusal
-  for a keyword with no denizen near, and the refusal for a boss.
+- Refusal for a keyword the game does not know (OURS, 2026-11-21, one capture,
+  `kb/raw/live/2026-11-21_convocation_brazier_unknown_keyword.txt`): `I do not recognise anything
+  called that here.` It costs equilibrium: `Equilibrium used: 0.85s.` (OURS; with the Aldar Diadem
+  x0.85 that is a 1.00 s BASE, by calculation, not from AB). No taxed line follows, so no cooldown.
+  The keyword was `life`, from "an acolyte of Life" and "an haruspex of Life": the last word of a
+  name is not always a keyword. Since v4.7.508 our rule takes the head noun (the name cut at its
+  first comma and first " of "), and a refused keyword is dropped for the ripple.
+- UNCONFIRMED: that the head noun is a keyword for every denizen (seen to work for `constable`).
+- UNCONFIRMED (no capture): the "tattoo ready again" line, the refusal while on cooldown, and the
+  refusal for a boss.
 - Our use: the explorer sends it in an empty room (`M._brazierPick`, 008_Explorer.lua), see
   `.claude/projects/mnemosyne/07-explorer.md`.
 

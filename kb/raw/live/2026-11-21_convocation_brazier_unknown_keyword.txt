@@ -1,0 +1,7 @@
+# Source: user paste 2026-11-21 (Mnemosyne, boon Convocation held, v4.7.507 explore sweep). Verbatim.
+(MNEM): [explore] Convocation -- summoning life
+I do not recognise anything called that here.
+Equilibrium used: 0.85s.
+# Source: the live Mudlet buffer read by MCP on 2026-11-21, the same session. The keyword "life" came from these denizen names. Verbatim lines.
+You have slain an acolyte of Life, retrieving the corpse.
+You have slain an haruspex of Life, retrieving the corpse.
