@@ -1,0 +1,9 @@
+# Source: the live Mudlet buffer read by MCP on 2026-11-21 (Mnemosyne ripple 40, boss ripple: M.run.boss = "Dr. Kortoxian", v4.7.507). The user typed touch brazier at the boss three times; the command echoes are not in the buffer. Verbatim lines, in order, with the room line that the basher QL printed between them.
+You cannot see that being here.
+Equilibrium used: 0.85s.
+Weed-ridden floor tiles. (indoors)
+Dressed in black and holding a doctor's bag, Dr. Kortoxian stands in the shadows.
+I do not recognise anything called that here.
+Equilibrium used: 0.85s.
+You detect nothing here by that name.
+Equilibrium used: 0.85s.

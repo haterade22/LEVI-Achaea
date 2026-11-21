@@ -115,8 +115,14 @@ The colour is leeched from your brazier tattoo as it is greatly taxed.
   name is not always a keyword. Since v4.7.508 our rule takes the head noun (the name cut at its
   first comma and first " of "), and a refused keyword is dropped for the ripple.
 - UNCONFIRMED: that the head noun is a keyword for every denizen (seen to work for `constable`).
-- UNCONFIRMED (no capture): the "tattoo ready again" line, the refusal while on cooldown, and the
-  refusal for a boss.
+- A boss cannot be summoned, even from our own room (OURS, 2026-11-21, Dr. Kortoxian, three tries,
+  `kb/raw/live/2026-11-21_convocation_brazier_boss.txt`). The game answers with its ordinary "not
+  found" refusal, a different wording each time: `You cannot see that being here.`, `I do not
+  recognise anything called that here.`, `You detect nothing here by that name.` Each cost
+  `Equilibrium used: 0.85s.` (OURS). These are among the five lines of our shared trigger
+  `denizen_attacks_misc_lines/003_Target_Not_Here`, so the v4.7.508 refusal handler sees each of
+  them. Since v4.7.509 our keyword rule never learns the ripple boss's name (`M.run.boss`).
+- UNCONFIRMED (no capture): the "tattoo ready again" line and the refusal while on cooldown.
 - Our use: the explorer sends it in an empty room (`M._brazierPick`, 008_Explorer.lua), see
   `.claude/projects/mnemosyne/07-explorer.md`.
 

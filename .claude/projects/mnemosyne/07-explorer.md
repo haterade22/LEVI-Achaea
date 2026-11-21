@@ -1416,7 +1416,9 @@ idle in an empty room) and re-ticks after 2 s.
   seen in a room with denizens (`M._learnBrazierKey`): the name is cut at its first comma and first
   " of ", then the last word is taken ("an acolyte of Life" -> `acolyte`; v4.7.508, because the
   plain last word gave `life` and the game refused it in every room). Re-learned from the summon
-  line (`onBrazierSummon`, trigger 111). Cleared at run start, run end and ripple change.
+  line (`onBrazierSummon`, trigger 111). Cleared at run start, run end and ripple change. The
+  ripple's boss (`M.run.boss`) is skipped (v4.7.509): the brazier cannot take a boss. The check is
+  strict (`M._brazierIsBoss`, false when no boss is known), unlike `M._isBossName` for the chase.
 - **Refused keyword** (v4.7.508): `I do not recognise anything called that here.` within 3 s of our
   send (`ataxiaTemp.mnemBrazierSentAt`) calls `M.onBrazierRefused` from the shared trigger
   `denizen_attacks_misc_lines/003_Target_Not_Here`. It drops the key and adds it to

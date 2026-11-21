@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-21 - v4.7.509: Convocation never learns the boss's keyword
+
+The brazier tattoo cannot summon a boss, even one in our own room. Three tries at Dr. Kortoxian each got the game's ordinary "not found" refusal, in three different wordings, for 0.85 s of equilibrium each (`kb/raw/live/2026-11-21_convocation_brazier_boss.txt`). In that ripple v4.7.507 had learned `kortoxian` as the brazier keyword from the boss, so the sweep would have spent a send on it in the next empty room.
+
+- `M._learnBrazierKey` (`mnemosyne/008_Explorer.lua`) now skips the ripple's boss (`M.run.boss`, from the Objective line). The new check `M._brazierIsBoss` is strict: with no boss known, it skips nothing. `M._isBossName` stays as it is for the boss chase, where an unknown boss is allowed.
+- All three refusal wordings are patterns of the shared trigger `denizen_attacks_misc_lines/003_Target_Not_Here`, so the v4.7.508 handler drops a refused keyword whichever wording the game picks.
+- Tests: `src_new/tests/test_mnem_brazier.lua` (25). Docs: `kb/mechanics/mnemosyne-affixes.md`, `.claude/projects/mnemosyne/07-explorer.md`.
+
 ## 2026-11-21 - v4.7.508: Convocation keyword is the head noun, and a refused keyword is dropped
 
 In v4.7.507 the Convocation brazier took the last word of a denizen's name as its keyword. Against "an acolyte of Life" and "an haruspex of Life" that gave `life`. The game refused it ("I do not recognise anything called that here.", `kb/raw/live/2026-11-21_convocation_brazier_unknown_keyword.txt`), and the sweep sent `touch brazier life` again in every room, for 0.85 s of equilibrium each.

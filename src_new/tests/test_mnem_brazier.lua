@@ -348,6 +348,37 @@ describe("Convocation refused keyword (v4.7.508)", function()
   end)
 end)
 
+-- v4.7.509: the brazier cannot take a boss. Names from kb/raw/live/2026-11-21_convocation_brazier_boss.txt.
+describe("Convocation never learns the boss's keyword (v4.7.509)", function()
+  it("skips the ripple boss and learns the next denizen", function()
+    scenario(function()
+      local run = M.run
+      M.run = { boss = "Dr. Kortoxian" }
+      local ok, err = pcall(function()
+        ataxia.denizensHere = { [1] = "Dr. Kortoxian" }
+        M._learnBrazierKey()
+        expect(ataxiaTemp.mnemBrazierKey).toBeNil()
+        ataxia.denizensHere = { [1] = "Dr. Kortoxian", [2] = "an acolyte of Life" }
+        M._learnBrazierKey()
+        expect(ataxiaTemp.mnemBrazierKey).toBe("acolyte")
+      end)
+      M.run = run
+      if not ok then error(err, 0) end
+    end)
+  end)
+
+  it("with no boss known, a name is learned as before", function()
+    scenario(function()
+      local run = M.run
+      M.run = {}
+      ataxia.denizensHere = { [1] = "Dr. Kortoxian" }
+      M._learnBrazierKey()
+      M.run = run
+      expect(ataxiaTemp.mnemBrazierKey).toBe("kortoxian")
+    end)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 ataxia, ataxiaBasher, ataxiaTemp, send, getEpoch = saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.send, saved.getEpoch
 mnemConvocation, yajl, postHTTP, getHTTP = saved.mnemConvocation, saved.yajl, saved.postHTTP, saved.getHTTP

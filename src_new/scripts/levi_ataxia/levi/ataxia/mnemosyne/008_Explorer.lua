@@ -189,12 +189,24 @@ local function brazierKeyword(name)
 end
 M._brazierKeyword = brazierKeyword
 
--- Remember the keyword of the first non-own denizen in the room.
+-- The ripple's boss (`M.run.boss`, from the Objective line)? STRICT: false when the boss is not
+-- known, unlike M._isBossName, which allows an unknown boss for the chase. The brazier cannot take
+-- a boss: the game answers with a "not found" line (OURS, 2026-11-21, Dr. Kortoxian, three tries,
+-- kb/raw/live/2026-11-21_convocation_brazier_boss.txt), so its keyword is never learned (v4.7.509).
+local function isRippleBoss(name)
+  local boss = M.run and M.run.boss
+  if type(boss) ~= "string" or boss == "" or type(name) ~= "string" or name == "" then return false end
+  local a, b = name:lower(), boss:lower()
+  return a:find(b, 1, true) ~= nil or b:find(a, 1, true) ~= nil
+end
+M._brazierIsBoss = isRippleBoss
+
+-- Remember the keyword of the first non-own, non-boss denizen in the room.
 function M._learnBrazierKey()
   local dz = ataxia.denizensHere
   if type(dz) ~= "table" then return end
   for _, name in pairs(dz) do
-    if not isOwnDenizen(name) then
+    if not isOwnDenizen(name) and not isRippleBoss(name) then
       local k = brazierKeyword(name)
       ataxiaTemp = ataxiaTemp or {}
       local bad = ataxiaTemp.mnemBrazierBadKeys
