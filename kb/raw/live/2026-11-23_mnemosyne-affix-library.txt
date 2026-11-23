@@ -1,0 +1,49 @@
+# Source: the user's live profile, read through the Mudlet MCP on 2026-11-23 (v4.7.509):
+# ataxia.mnemosyne.history.library, "<name>: <description>", sorted. The descriptions are the game's
+# WADE STATUS sentences as our parser stored them (wrapped rows joined with one space).
+Agoraphobic: All rooms are outdoors and taking damage has a chance to call down a lightning storm to assault you.
+Airborne: All denizens gain the ability to fly.
+Alchemical: Denizen attacks cause additional tempered humours.
+Apathetic: You are plagued with indifference and your apathy reduces damage dealt by 20%.
+Blank Mind: All psychic damage you deal is reduced by 33%.
+Blazing: All rooms are on fire.
+Bravado: You are perpetually reckless and unable to benefit from shields, prismatic barriers, or blood barriers.
+Claustrophobic: All rooms are indoors and taking damage has a chance to launch you head-first into the ceiling, leaving you concussed.
+Crushing: Denizen attacks cause additional fractures.
+Deathbound: Defeating a denizen has a high chance to summon forth one or more elite Quisalis assassins to slay you.
+Deathmarked: Defeating a denizen has a high chance to summon an elite Quisalis assassin to slay you.
+Deluge: All rooms are underwater.
+Dreambound: Defeating a denizen has a chance to summon forth a nightmarish spirit from the Dreamrealm.
+Dreamcursed: Defeating a denizen has a high chance to summon forth one or more nightmarish spirits from the Dreamrealm.
+Endless Wrath: All denizens are liable to enter a state of enragement when sufficiently harmed.
+Expansive Lungs: All asphyxiation damage you deal is reduced by 33%.
+Famine: Taking damage has a chance to make you more hungry, and your healing received from elixirs, moss, and potash is reduced by 20%.
+Fireproof: All fire damage you deal is reduced by 33%.
+Grounded: All electric damage you deal is reduced by 33%.
+Haemophiliac: Defeating a denizen causes you to bleed significantly and your mana and willpower costs are increased by 20%.
+Heretical: Defeating a denizen has a high chance to manifest a corrupted priest from the memories of Tenwat.
+Iceblood: Taking damage causes your blood to freeze.
+Iceproof: All cold damage you deal is reduced by 33%.
+Impasse: All denizens will block your movements.
+Khentimen's Enmity: Denizens cause additional Pestilence plague afflictions on their attacks.
+Last Word: Denizens explode on death!
+Meldscorned: Denizens cause additional Shadowmancy afflictions on their attacks.
+Mindworm: Denizen attacks cause you to suffer additional mental afflictions.
+Mysterious: All denizens appear identical within their locations.
+Necromantic: Denizens may revive as mindless thralls.
+Null Magic: All magic damage you deal is reduced by 33%.
+Outcast: You suffer from permanent disloyalty.
+Prey: All denizens are trackers and will chase should you flee.
+Ricketts: Attacking a denizen causes some of your limbs to break.
+Rimewrought: Perpetual ice coats your body, rendering tattoos ineffective, and denizens cause additional freezing on their attacks.
+Sanctioned Wade: You gain a stack of font weaken every 30 seconds.
+Sanguine Restoration: Pools of blood shall heal nearby denizens.
+Snakeblood: All poison damage you deal is reduced by 33%.
+Splinterbark: Your tree tattoo is tainted with fell magic, causing you to bleed and suffer a random malady when touching it.
+Steel Skin: All physical damage dealt is reduced by 33%.
+Suffering of Abbadon: Slaying a denizen has a chance to evoke a memory of the Suffering God and spawn either a thornwall or gravehands in your location.
+Tenderised Flesh: You suffer permanent tenderskin and permanent sensitivity.
+Terraforming: All location environments shall be randomised.
+Torrential: All rooms are underwater and denizen attacks have a chance to remove your waterbreathing defence.
+Tundral: All locations shall labour beneath undying frost.
+Venomous: Your poison resistance is reduced by 25%, and denizen attacks cause additional loki applications.

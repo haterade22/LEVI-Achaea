@@ -9,14 +9,18 @@ code:
   - src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/009_Swarm_Tactics.lua
   - src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua
   - src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/007_History.lua
-last_verified: 2026-11-20
+last_verified: 2026-11-23
 ---
 
 # Mnemosyne affixes that change a fight
 
-A wade's affixes are recorded in the history file (`M.history.affixes`, one row per affix with its
-`run`). `M.hasAffix(name)` (`007_History.lua`:300) matches a SUBSTRING of this run's affix names.
-This page holds the affixes whose effect on a fight we have seen in a log.
+A wade's affixes are recorded in `ataxiaTemp.mnemAffixes` with telemetry on or off (the affix
+registry, `mnemosyne/017_Affix_Registry.lua`, v4.7.511), and with telemetry on also in the history
+file (`M.history.affixes`). `M.runHasAffix(name)` matches a whole name; `M.hasAffix(name)`
+(`007_History.lua`) matches a SUBSTRING. What our code does about each affix is in
+`M.AFFIX_REGISTRY`; the game's sentence for each of the 46 affixes we have seen is in
+`raw/live/2026-11-23_mnemosyne-affix-library.txt`. This page holds the affixes whose effect on a
+fight we have seen in a log.
 
 ## Facts
 
@@ -52,6 +56,34 @@ This page holds the affixes whose effect on a fight we have seen in a log.
 - Stupidity replaced three of our commands with emotes: `You get down on one knee and serenade the
   world.`, `You pick your nose absently.` and `What do you want to eat?`.
 - **Confidence:** CONFIRMED (one log).
+
+### Ricketts: "Attacking a denizen causes some of your limbs to break."
+- In the live buffer of 2026-11-23 (OURS, Monk, ripple about 43,
+  `raw/live/2026-11-23_ricketts-arm-breaks.txt`) a break prints `Your right arm breaks with a loud
+  crack.` In that excerpt both arms broke within 0.2 s, each line after a denizen's bite. So it is
+  not clear whether our attack or theirs makes the break. UNCONFIRMED.
+- With both arms broken the swing is refused: `You cannot do that because both of your arms must
+  be whole and unbound.` Trigger 344 handles it, and a kick-and-uppercut round followed 0.4 s
+  later with one arm still broken (`ra1` on the prompt).
+- **Confidence:** CONFIRMED lines (one log). **Code:** no Ricketts-specific code; the registry
+  row names trigger 344.
+
+### Suffering of Abbadon: a kill can spawn a thornwall or gravehands
+- Sentence: "Slaying a denizen has a chance to evoke a memory of the Suffering God and spawn either a
+  thornwall or gravehands in your location."
+  (`raw/live/2026-11-21_wade-status_ricketts-splinterbark-abbadon.txt`)
+- No spawn line is captured: a search of the last 6,000 lines of the live buffer on 2026-11-23,
+  in a run with this affix, found no "thornwall", "gravehands" or "Suffering God". UNKNOWN: whether
+  a thornwall blocks our exits, and whose side the gravehands take.
+- **Code (v4.7.511):** one of the spawn-on-kill affixes: the explorer waits for 90% HP after a
+  cleared room (`M._spawnHold`).
+
+### Permanent afflictions: Tenderised Flesh and Outcast
+- "You suffer permanent tenderskin and permanent sensitivity." / "You suffer from permanent
+  disloyalty." (`raw/live/2026-11-23_mnemosyne-affix-library.txt`)
+- **Code (v4.7.511):** `M.runPermanentAffs` (`004_Parsers.lua`) reads this run's affix sentences
+  as well as the boons, so `ataxia_permanentAff` names the affix and no cure counts them.
+  INFERRED that the game never cures them (the word "permanent"); not tested in a log.
 
 ### The tash'la pair, for scale
 - Warrior: about 2,400-2,800 per hit (physical blunt); the elbow drop breaks a limb.

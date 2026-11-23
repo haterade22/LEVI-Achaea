@@ -1810,6 +1810,24 @@ function M._exploreTick()
   end
   M.explore._lastWordWait = nil
 
+  -- Spawn-on-kill affixes (registry 017, v4.7.511): Deathmarked, Deathbound, Dreambound,
+  -- Dreamcursed, Heretical, Suffering of Abbadon. A kill can bring an elite assassin, a
+  -- nightmare spirit or a priest into this room, so the room going quiet is the wrong moment to
+  -- walk at half health. Same 90% and 1.5s re-check as the Last Word hold.
+  local spawnHold, spawnAffix = false, nil
+  if M._spawnHold then spawnHold, spawnAffix = M._spawnHold() end
+  if spawnHold then
+    if not M.explore._spawnWait then
+      M.explore._spawnWait = true
+      local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 0
+      M._exploreEcho("<indian_red>" .. tostring(spawnAffix) .. "<reset> -- a kill can spawn an enemy; healing to 90% before moving on"
+        .. " (at " .. hp .. "%).")
+    end
+    M._scheduleTick(1.5)
+    return
+  end
+  M.explore._spawnWait = nil
+
   -- Death's Demise (v4.7.449): cure every fracture before the next fight. Same shape and 1.5s
   -- re-check as the two affix holds above; it stalls out on its own (see M._fractureHold).
   local fracHold, fracWhy = M._fractureHold()

@@ -115,6 +115,11 @@ _recordClaim(name):
 
 ### Affixes — per-run de-dupe + growing library
 
+**Telemetry only.** `M.onEffectsHeader` calls `_recordAffixes` only when `M._inRun()` is true. Since
+v4.7.511 it reads the block in the tower with telemetry off as well, and passes it to the affix
+registry (`017_Affix_Registry.lua`, `ataxiaTemp.mnemAffixes`); combat code reads that set, not this
+history.
+
 `_recordAffixes(list)` handles the "Ongoing effects:" block. Each named affix is recorded **at most once per run** (it scans `M.history.affixes` for a matching `run` + `name` before inserting), and independently seeds the all-time library the first time a name is ever seen:
 
 ```

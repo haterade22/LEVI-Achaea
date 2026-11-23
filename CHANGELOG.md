@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-11-23 - v4.7.511: Mnemosyne affix registry
+
+The user asked, with Ricketts, Splinterbark and Suffering of Abbadon on the wade status: "What happened to us planning for the ongoing effects (affixes?) of the wading?" There was no plan. Since v4.7.288 an affix got code only after it hurt us, and nothing said which affixes of a run had a response. Of the 46 affixes in the user's library, 26 had none.
+
+What changed:
+
+- **`mnemosyne/017_Affix_Registry.lua`** holds `M.AFFIX_REGISTRY`, one row per affix with what our code does about it. Each new affix of a run prints one line: our response, or "no response in our code" with the game's sentence. `mnem affixes` lists the run's affixes the same way.
+- **The run's affixes are read with telemetry off.** `M.onEffectsHeader` (`004_Parsers.lua`) returned on `not M._inRun()`, so a player without a tracker token never had the run's affixes, and `M.hasAffix` was always false. The Prey retreat block and the Monk's Sanguine Restoration Inhibit never ran for them. The set is now `ataxiaTemp.mnemAffixes`, cleared at run start and run end. History and the `/effects` POST stay telemetry-only. `M.hasAffix` and `S._preyTracks` read the new set.
+- **Permanent afflictions from affixes.** Tenderised Flesh ("You suffer permanent tenderskin and permanent sensitivity.") and Outcast ("permanent disloyalty") now count in `ataxia_permanentAff`, so the class cure, the blackout tree and the recovery wait ignore them, as for boons since v4.7.495. `M._permanentAffsFrom` read only the first of "permanent X and permanent Y"; it now reads both.
+- **Spawn-on-kill hold.** With Deathmarked, Deathbound, Dreambound, Dreamcursed, Heretical or Suffering of Abbadon, the explorer waits for 90% HP after a cleared room (`M._spawnHold`, `008_Explorer.lua`), the Last Word figure.
+- **Ricketts** needed no new code. The live buffer of 2026-11-23 (`kb/raw/live/2026-11-23_ricketts-arm-breaks.txt`) shows trigger 344 handling the refused swing, and the next round 0.4 s later.
+
+Tests: `src_new/tests/test_affix_registry.lua` (11); break-backs of the telemetry gate, the "permanent" parse and the cache key each fail a test. Docs: `kb/mechanics/mnemosyne-affixes.md`, `.claude/projects/mnemosyne/` (README, 03, 05, 06, 07), `.claude/AGENTS.md`.
+
 ## 2026-11-21 - v4.7.510: Convocation brazier ready line ends the cooldown
 
 The game says when the brazier tattoo is ready again: "Power returns to your brazier tattoo in a muted flash." The new trigger `mnemosyne/113_Brazier_Ready` calls `M.onBrazierReady` (`mnemosyne/004_Parsers.lua`), which clears `ataxiaTemp.mnemBrazierAt`. The game line now ends the cooldown, and our 60 s count stays as the backstop.

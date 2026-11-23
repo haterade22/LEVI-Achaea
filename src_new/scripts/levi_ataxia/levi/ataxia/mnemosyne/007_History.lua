@@ -300,6 +300,11 @@ end
 function M.hasAffix(name)
   if type(name) ~= "string" or name == "" then return false end
   local want = name:lower()
+  -- The registry's run set (017, v4.7.511) is written with telemetry on or off; the history
+  -- below only with telemetry on.
+  for n in pairs((ataxiaTemp and ataxiaTemp.mnemAffixes) or {}) do
+    if type(n) == "string" and n:lower():find(want, 1, true) then return true end
+  end
   local run = M.history and M.history.run
   for _, a in ipairs((M.history and M.history.affixes) or {}) do
     if a.run == run and type(a.name) == "string" and a.name:lower():find(want, 1, true) then

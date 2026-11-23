@@ -1371,6 +1371,11 @@ first only so its echo wins when both are up.
 |---|---|---|
 | Haemophiliac | `M._haemoHold()` | bleed clotted (`< 50`) **AND** HP >= 90 |
 | Last Word | `M._lastWordHold()` | HP >= 90 only |
+| Spawn on kill (v4.7.511): Deathmarked, Deathbound, Dreambound, Dreamcursed, Heretical, Suffering of Abbadon | `M._spawnHold()` (017) | HP >= 90 only |
+
+The spawn hold comes after the Last Word hold and has the same shape: a kill can bring an elite
+assassin, a nightmare spirit or a priest into the room, so the moment the room goes quiet is the
+wrong moment to walk at half health. The list is the `spawnsOnKill` rows of `M.AFFIX_REGISTRY`.
 
 The difference is the damage's shape, and it matters: haemophiliac damage is a **bleed** that
 SSC clots down (`curing clotat 30`), so standing still is doing work. A Last Word explosion is

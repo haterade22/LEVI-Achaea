@@ -374,6 +374,7 @@ function M.onRunEnd()
   if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   M.restoreTattooKeepup() -- Rimewrought over -> tattoos work again, keep them up again (v4.7.334)
+  if M.affixReset then M.affixReset() end -- the run's affixes end with it (017, v4.7.511)
   if M._inRun() then M.endRun() end
 end
 
@@ -1264,7 +1265,11 @@ end
 -- "Ongoing effects:" (inside the ripple status block). Skip the immediate
 -- divider, collect effect lines, stop on a blank line or the closing divider.
 function M.onEffectsHeader()
-  if not M._inRun() then return end
+  -- v4.7.511: read in the tower with telemetry OFF too. The affix registry (017) needs this
+  -- run's affixes, and before this a player without a tracker token never had them, so
+  -- `M.hasAffix` was always false. History and the POST stay telemetry-only.
+  local tracked = M._inRun()
+  if not tracked and not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
   local skippedDash = false
   M._captureLines({
     timeout = 1.5,
@@ -1282,8 +1287,11 @@ function M.onEffectsHeader()
     onDone = function(lines)
       local list = M._parseNamedBlock(lines)
       if #list > 0 then
-        if M._recordAffixes then M._recordAffixes(list) end -- local history (#6)
-        M.reportEffects(list)
+        if M.onAffixesSeen then M.onAffixesSeen(list) end -- the affix registry (017)
+        if tracked then
+          if M._recordAffixes then M._recordAffixes(list) end -- local history (#6)
+          M.reportEffects(list)
+        end
       end
     end,
   })
@@ -1953,7 +1961,9 @@ function M._permanentAffsFrom(desc)
     for word in clause:gmatch("%a+") do
       if PERM_KNOWN[word] then
         if not seen[word] then seen[word] = true; out[#out + 1] = word end
-      elseif word ~= "and" then
+      -- "permanent tenderskin and permanent sensitivity" (the Tenderised Flesh affix, v4.7.511):
+      -- the first match takes the whole clause, so a second "permanent" must not end it.
+      elseif word ~= "and" and word ~= "permanent" then
         break
       end
     end
@@ -1970,6 +1980,7 @@ function M.runPermanentAffs()
   local h = M.history
   if not h or type(h.claims) ~= "table" then return {} end
   local key = tostring(h.run) .. ":" .. #h.claims .. ":" .. tostring(M._boonLibGen or 0)
+    .. ":" .. tostring(ataxiaTemp and ataxiaTemp.mnemAffixGen or 0)
   if permCache.key == key then return permCache.map end
   local out = {}
   for _, c in ipairs(h.claims) do
@@ -1983,6 +1994,10 @@ function M.runPermanentAffs()
       end
       for _, aff in ipairs(M._permanentAffsFrom(desc)) do out[aff] = out[aff] or boon end
     end
+  end
+  -- An affix's permanent affliction (Tenderised Flesh, Outcast; v4.7.511, registry 017).
+  if M.runAffixPermanentAffs then
+    for aff, affix in pairs(M.runAffixPermanentAffs()) do out[aff] = out[aff] or affix end
   end
   for aff in pairs(M.runImmunities()) do out[aff] = nil end
   -- Say each new one once per run, so the skipped tree and cure are not a mystery.
@@ -2000,7 +2015,8 @@ function M.runPermanentAffs()
   return out
 end
 
--- The boon that makes `aff` permanent for us, or nil. Nil outside the tower: boons end with the run.
+-- The boon or affix that makes `aff` permanent for us, or nil. Nil outside the tower: both end
+-- with the run.
 function ataxia_permanentAff(aff)
   if type(aff) ~= "string" then return nil end
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return nil end

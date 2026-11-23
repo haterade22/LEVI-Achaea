@@ -364,6 +364,10 @@ WADE STATUS block at runtime (`_recordAffixes` -> `M.history.library`), so every
 be captured with its own sentence the first time it appears — the value of the list below is
 knowing what is *coming*, and at what depth, before it does.
 
+**Since v4.7.511** the affix registry (`017_Affix_Registry.lua`, `M.AFFIX_REGISTRY`) says, for each
+affix of a run, what our code does about it or that it has no response. An affix with no row prints
+"no response in our code" with its sentence the first ripple it appears.
+
 ### New affixes, with the ripple they first appear at
 
 | Ripple | Affix | Ripple | Affix |

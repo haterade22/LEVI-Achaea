@@ -17,6 +17,7 @@ This is distinct from the basher's Mnemosyne handling: the basher treats Mnemosy
 | `mnemosyne/005_Ripple_Map.lua` | Per-ripple room graph (data model + movement/room hooks) |
 | `mnemosyne/006_Ripple_Map_Window.lua` | Draggable grid widget, render, click-to-walk |
 | `mnemosyne/007_History.lua` | Local per-run history + reports (boons/affixes/library) |
+| `mnemosyne/017_Affix_Registry.lua` | `M.AFFIX_REGISTRY` (what our code does about each affix), the run's affixes with telemetry off, the spawn-on-kill hold, affix permanent afflictions (v4.7.511) |
 | `mnemosyne/008_Explorer.lua` | Auto-sweep the 4×4 (drives the basher in manual mode); pauses at the boon screen with the basher left on, auto-resumes on `GO!` |
 
 Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers live in `src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/` (`001`–`016`, incl. `011_Ice_Slip` and `016_Run_Pause`); aliases in `src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/` (`001`–`002`).

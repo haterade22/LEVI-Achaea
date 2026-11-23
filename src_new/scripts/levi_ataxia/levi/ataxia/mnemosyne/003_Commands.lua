@@ -97,7 +97,7 @@ function M.help()
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
     { "mnem boons", "This run's claimed boons (local history)" },
     { "mnem boonfill", "BOON CONTEMPLATE boons with no description, then every other boon, stalest first" },
-    { "mnem affixes", "This run's active affixes (ongoing effects)" },
+    { "mnem affixes", "This run's affixes, each with our response or \"no response\"" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name, effect or category)" },
     { "mnem advise", "Score the last boon offer against what you hold (defence first) and recommend one" },
@@ -468,7 +468,8 @@ function M.command(rest)
       M.boonFill(arg ~= "" and arg or nil)
     end
   elseif cmd == "affixes" then
-    M.reportAffixes()
+    -- v4.7.511: each affix with our response (registry 017); the history list needs telemetry.
+    if M.reportAffixRegistry then M.reportAffixRegistry() else M.reportAffixes() end
   elseif cmd == "library" then
     M.reportLibrary()
   elseif cmd == "boondb" or cmd == "db" then

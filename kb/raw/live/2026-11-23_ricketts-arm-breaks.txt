@@ -1,0 +1,27 @@
+# Source: the user's live Mudlet main buffer, read through the MCP on 2026-11-23 (lines 107741-107766; Monk, Mnemosyne ripple ~43, affixes Ricketts, Splinterbark, Suffering of Abbadon). Verbatim.
+Leaping at you with savage fury, a muscular ormyrr bites deeply into your flesh with his sharp teeth.
+Health lost: 1056 (physical cutting).
+Your right arm breaks with a loud crack.
+Leaping at you with savage fury, an ormyrr scout bites deeply into your flesh with his sharp teeth.
+Health lost: 785 (physical cutting).
+Your left arm breaks with a loud crack.
+11:11:23:373 [18300] [74] |(683780|72%)|[ [ bld(199) BLI ra1 H2 la1 ]]  
+You clot your wounds 10 times.
+You cannot do that because both of your arms must be whole and unbound.
+(LEVI): Both arms broken -- weapon attack refused; battlerage and pet still ride.
+11:11:23:462 [18300] [69] |(683780|72%)|[ [ BLI ra1 H2 la1 ]]  
+11:11:23:467 [18300] [69] |(683780|72%)|[ [ BLI ra1 H2 la1 ]]  
+Your head feels stronger and healthier.
+You have recovered balance on your left arm.
+11:11:23:648 [18300] [69] |(683780|72%)|[ [ BLI la1 amn ra1 ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+11:11:23:764 [19911] [77] |(683780|72%)|[ [ BLI ra1 ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.159 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You pump out at a muscular ormyrr with a powerful side kick.
+You connect!
+Damage dealt: 636 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).

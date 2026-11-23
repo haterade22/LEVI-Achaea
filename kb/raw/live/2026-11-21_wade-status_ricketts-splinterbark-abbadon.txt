@@ -1,0 +1,16 @@
+# Source: user paste 2026-11-21 (WADE STATUS, ripple 43). Verbatim.
+You wade 43 ripples deep into the tides of memory:
+--------------------------------------------------------------------------------
+Remaining lives:              2
+Rerolls:                      0
+Wave progress:                0%
+Objective:                    defeat 1 waves of enemies (0/1)
+Reward:                       a fulgent eddy
+Denizen levels increased by:  330
+Denizen speed increased by:   8
+Ongoing effects:
+--------------------------------------------------------------------------------
+Suffering of Abbadon:    Slaying a denizen has a chance to evoke a memory of the Suffering God and spawn either a thornwall or gravehands in your location.
+Splinterbark:            Your tree tattoo is tainted with fell magic, causing you to bleed and suffer a random malady when touching it.
+Ricketts:                Attacking a denizen causes some of your limbs to break.
+--------------------------------------------------------------------------------

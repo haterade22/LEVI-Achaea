@@ -609,6 +609,9 @@ end
 -- The affix name is matched whole: `M.hasAffix` matches a substring.
 function S._preyTracks()
   if S._shedsPursuers() then return false end
+  -- v4.7.511: through the registry (017), which also sees the affix with telemetry off. The
+  -- history scan stays as the fallback, so a missing 017 does not switch Prey off in silence.
+  if M.runHasAffix then return M.runHasAffix("Prey") end
   local h = M.history
   local run = h and h.run
   for _, a in ipairs((h and h.affixes) or {}) do

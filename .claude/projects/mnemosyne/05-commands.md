@@ -144,7 +144,7 @@ capture is contending for at the same instant.
 | Command | Effect |
 |---------|--------|
 | `mnem boons` | `M.reportBoons()` — this run's claimed boons (rarity, echoes, ripple, description) |
-| `mnem affixes` | `M.reportAffixes()` — this run's active affixes (ongoing effects) |
+| `mnem affixes` | `M.reportAffixRegistry()` (017, v4.7.511) — this run's affixes, each with our response from `M.AFFIX_REGISTRY` or "no response in our code" |
 | `mnem library` | `M.reportLibrary()` — the all-time affix catalogue |
 | `mnem boonfill unknown` | Names BOON CONTEMPLATE refused. **Only a name we never saw offered lands here** (v4.7.328): a refusal for a name the game printed on the screen means the screen closed -- you claimed before the chain reached it -- and is not recorded. Says once how many entries the v4.7.328 repair cleared |
 | `mnem advise` | The boon ADVISOR on demand (v4.7.327; it also prints by itself after every offer screen's contemplates): each option with category, rarity, combo/echo, what it does in short and red flags, scored against what you hold -- defence first -- a `locks out:` line per option (v4.7.468: every boon taking it rules out, from either side of the pair across the whole catalogue -- red = held, yellow = also offered; `nothing` once contemplated, `unknown (not contemplated)` before), and a RECOMMEND line with the reason and what the pick locks out; a reroll hint when every option is weak and one is left. Never claims |

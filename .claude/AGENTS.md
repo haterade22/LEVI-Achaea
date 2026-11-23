@@ -1440,3 +1440,14 @@ an HP-gated safety needs a "my health reading is not trustworthy" state. While w
 affliction that hides health, cure it first. Facts: `kb/afflictions/README.md`, section 5.
 
 ---
+
+### A record that only telemetry writes blinds the combat code (v4.7.511)
+
+`M.onEffectsHeader` returned on `not M._inRun()`, and `_inRun()` is false without a tracker token,
+which is the default install. So `M.history.affixes` was empty for those players, `M.hasAffix` was
+always false, and the Prey retreat block and the Monk's Sanguine Restoration Inhibit never ran. A
+test that writes `M.history.affixes` by hand cannot see this. **Rule:** state that combat code reads
+is written with telemetry off; gate only the POST and the telemetry history. Grep `_inRun()` and
+`_auto()` in a handler before a combat reader depends on what it writes.
+
+---

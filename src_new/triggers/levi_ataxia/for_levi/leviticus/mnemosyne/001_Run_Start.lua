@@ -95,6 +95,8 @@ mnemHomebound = false  -- boons reset each run
 mnemHammerAndNail = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemLastWord = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
+-- The affix registry's run set (017, v4.7.511): re-read from the next WADE STATUS.
+if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.affixReset then ataxia.mnemosyne.affixReset() end
 mnemBravado = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemRimewrought = false -- ...and so does Rimewrought (v4.7.333: tattoos work again)
 mnemFamine = false   -- ...and Famine (v4.7.333: hunger goes back to its own slow clock)
