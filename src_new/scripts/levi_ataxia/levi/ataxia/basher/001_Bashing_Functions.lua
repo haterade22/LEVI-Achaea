@@ -205,7 +205,7 @@ function ataxiaBasher_attack()
     -- In no-flee areas (e.g. Mnemosyne) keep attacking through the shield instead
     -- of waiting for HP recovery — the shield drops on the next attack.
     -- v4.7.486: except during a last stand, which holds until health is back.
-    local canAttackShielded = ataxia.vitals.hpp >= 70
+    local canAttackShielded = (ataxiaBasher_safeHpp() or 0) >= 70 -- minus the numbness debt (v4.7.512)
       or (ataxiaBasher_isNoFleeArea() and not ataxiaBasher_lastStandHolding())
     if canAttackShielded and ataxiaBasher_bashingFuncs[class] then
       ataxiaBasher_assembleAttack()
@@ -403,6 +403,20 @@ local function windowSum(samples, cutoff)
   return total, oldest
 end
 
+-- THE HEALTH THE SAFETIES READ (v4.7.512). While numbness is up our health does not move and
+-- every hit is owed (basher/016_Numb_Debt.lua): the safeties below read health MINUS that debt,
+-- so they act before the game collects it. With no debt both are the plain readings. 0 and nil
+-- keep their meaning ("unknown"), which is why the two fall back and never invent a value.
+function ataxiaBasher_safeHp()
+  if ataxia_effHp then return ataxia_effHp() end
+  return tonumber(ataxia.vitals and ataxia.vitals.hp)
+end
+
+function ataxiaBasher_safeHpp()
+  if ataxia_effHpp then return ataxia_effHpp() end
+  return tonumber(ataxia.vitals and ataxia.vitals.hpp)
+end
+
 -- Incoming HP per second over the last ataxiaBasher_dmgWindowSec, from whichever feed reports
 -- MORE. The gross feed is the honest one, but it only exists where the game prints the
 -- damage-type line; the net-delta feed is the floor that keeps the watchdog working elsewhere.
@@ -455,7 +469,7 @@ end
 function ataxiaBasher_isDamageRateExtreme()
   local rate = ataxiaBasher_incomingRate()
   if rate > 0 then
-    local hp = tonumber(ataxia.vitals.hp) or 0
+    local hp = ataxiaBasher_safeHp() or 0
     local ttl = tonumber(ataxiaBasher.dangerTTL) or 6
     if hp > 0 and (hp / rate) <= ttl then return true end
   end
@@ -471,7 +485,7 @@ end
 function ataxiaBasher_secondsToLive()
   local rate = ataxiaBasher_incomingRate()
   if rate <= 0 then return nil end
-  local hp = tonumber(ataxia.vitals.hp) or 0
+  local hp = ataxiaBasher_safeHp() or 0
   if hp <= 0 then return nil end
   return hp / rate
 end
@@ -510,8 +524,10 @@ end
 function ataxiaBasher_dangerLevel()
   if ataxiaTemp.bashFlee then return "wait" end
 
-  local hpp = ataxia.vitals.hpp or 0
+  -- Health minus the numbness debt (v4.7.512). 0 is still "unknown": the debt never makes a 0.
+  local hpp = ataxiaBasher_safeHpp() or 0
   if hpp == 0 then return "wait" end
+  local debtNote = (ataxia_numbDebtNote and ataxia_numbDebtNote()) or ""
 
   if ataxia.afflictions.aeon or ataxia.afflictions.paralysis or ataxia.afflictions.peace then
     return "wait"
@@ -535,7 +551,7 @@ function ataxiaBasher_dangerLevel()
       local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
       if S and S.disengage then
         local ok = false
-        pcall(function() ok = S.disengage(spiking and "incoming damage" or ("HP " .. hpp .. "%")) end)
+        pcall(function() ok = S.disengage((spiking and "incoming damage" or ("HP " .. hpp .. "%")) .. debtNote) end)
         if ok then return "wait" end
       end
     end
@@ -547,7 +563,7 @@ function ataxiaBasher_dangerLevel()
     -- denizen is on the area target list, i.e. the normal case. It now gates only the shielding.
     if spiking then
       if ataxiaBasher_canShield and ataxiaBasher_canShield() and not ataxia.defences.shield then
-        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding.")
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding." .. debtNote)
         return "shield"
       end
       -- Throttled: this is evaluated on the attack path, so an unthrottled echo prints for
@@ -555,7 +571,7 @@ function ataxiaBasher_dangerLevel()
       local nowT = (getEpoch and getEpoch()) or 0
       if (nowT - (tonumber(ataxiaTemp.dangerEchoAt) or 0)) >= 5 then
         ataxiaTemp.dangerEchoAt = nowT
-        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.")
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on." .. debtNote)
       end
     end
   else
@@ -563,7 +579,7 @@ function ataxiaBasher_dangerLevel()
     if hpp <= fleePct then return "flee" end
 
     if ataxiaBasher_isDamageRateExtreme() then
-      ataxiaEcho("DANGER: Extreme incoming damage rate detected! Fleeing.")
+      ataxiaEcho("DANGER: Extreme incoming damage rate detected! Fleeing." .. debtNote)
       return "flee"
     end
   end
@@ -608,7 +624,7 @@ function ataxiaBasher_lastStandCritical(hpp)
   local pct = tonumber(cfg.escapeAt) or 35
   if (tonumber(hpp) or 100) <= pct then return true end
   local floor = tonumber(cfg.panicHp) or 0
-  local raw = tonumber(ataxia.vitals and ataxia.vitals.hp)
+  local raw = ataxiaBasher_safeHp() -- minus the numbness debt (v4.7.512)
   return floor > 0 and raw ~= nil and raw > 0 and raw <= floor
 end
 
@@ -662,7 +678,9 @@ function ataxiaBasher_lastStandHolding()
   local at = tonumber(ataxiaTemp.lastStandAt)
   if not at then return false end
   local nowT = lastStandNow()
-  local hpp = tonumber(ataxia.vitals and ataxia.vitals.hpp) or 0
+  -- The same reading that started the stand (v4.7.512): a stand started on health minus the
+  -- numbness debt and released on plain health would start and end on every round.
+  local hpp = ataxiaBasher_safeHpp() or 0
   local release = tonumber(ataxiaBasher.lastStandRelease) or 70
   local shielded = ataxia.defences and ataxia.defences.shield
   if shielded then
@@ -1179,7 +1197,7 @@ function ataxiaBasher_checkFleeRecovery()
   -- Wait for 100% HP before returning to the combat room
   local recoveryPct = 100
 
-  if (ataxia.vitals.hpp or 0) >= recoveryPct then
+  if (ataxiaBasher_safeHpp() or 0) >= recoveryPct then -- minus the numbness debt (v4.7.512)
     ataxiaTemp.bashFlee = false
     ataxiaBasher.paused = false
     if ataxiaTemp.fleeCircuitBreaker then

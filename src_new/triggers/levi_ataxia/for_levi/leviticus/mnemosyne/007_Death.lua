@@ -32,14 +32,26 @@ patterns:
   type: 1
 ]]--
 
--- Only report if a Mnemosyne run is in progress (M._inRun). If the event's own
--- death line differs from Achaea's generic slain message, add its pattern here.
-if ataxia.mnemosyne._inRun() then
-  ataxia.mnemosyne.reportDeath(matches[2])
+local killer = matches[2]
+
+local function realDeath()
+  -- Only report if a Mnemosyne run is in progress (M._inRun). If the event's own
+  -- death line differs from Achaea's generic slain message, add its pattern here.
+  if ataxia.mnemosyne._inRun() then
+    ataxia.mnemosyne.reportDeath(killer)
+  end
+
+  -- Stop the auto-explorer when slain -- independent of telemetry (the sweep runs
+  -- off ataxiaBasher.inMnemosyne, not the tracked run). No-op if not sweeping.
+  if ataxia.mnemosyne.exploreOnDeath then
+    ataxia.mnemosyne.exploreOnDeath(killer)
+  end
 end
 
--- Stop the auto-explorer when slain -- independent of telemetry (the sweep runs
--- off ataxiaBasher.inMnemosyne, not the tracked run). No-op if not sweeping.
-if ataxia.mnemosyne.exploreOnDeath then
-  ataxia.mnemosyne.exploreOnDeath(matches[2])
+-- WRATH AND RIGHTEOUSNESS (v4.7.512): with the boon ready, this line may be its save and not a
+-- death. The swarm holds both steps until the state shows which (009, S.deathHold); a save
+-- records no death and the sweep goes on.
+local S = ataxia.mnemosyne.swarm
+if not (S and S.deathHold and S.deathHold("mnemosyne", realDeath)) then
+  realDeath()
 end

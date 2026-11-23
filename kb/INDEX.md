@@ -25,6 +25,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 ## Defences
 - [defences/README.md](defences/README.md): the game's 279 defence names, and our names that do not match
 - [defences/epitomise.md](defences/epitomise.md): EPITOMISE, the "preternatural grace" miss line, and its up/down lines
+- [defences/numbness.md](defences/numbness.md): NUMB (Kaido): all damage deferred about 10 s, then one blow 40% smaller; its five lines, the 2-3 s recovery, our 28 measured cycles
 
 ## Mechanics
 - [mechanics/foundations.md](mechanics/foundations.md): START HERE for fights. How a fight works, from all logs: clocks, stated against observed costs, kill routes as conditions true together, timed effects, and the claims that were refuted
@@ -76,6 +77,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/live/curing-priority-defence-list_bash_2026-10-10.txt | Defence priorities, bash set | 2026-10-10 |
 | raw/live/curing-priority-list_normal_2026-10-10.txt (+ defence list, curingset list, curing status) | Your live SSC state | 2026-10-10 |
 | raw/live/def_all-defences_2026-10-10.txt | The game's defence names | 2026-10-10 |
+| raw/live/kaido-numbness-cycles_2026-11-23.txt | Two whole NUMB cycles (up, absorbed hits, fade, ready) and one fade with the refusal line, from the live buffer | 2026-11-23 |
 | raw/help/13.7_healing-and-curing.txt, 13.9_body-part-damage.txt | HELP 13.7, 13.9 | 2026-10-10 |
 | raw/help/4.6_equilibrium-and-balance.txt, 4.6.1_queueing.txt | HELP 4.6, 4.6.1 | 2026-10-10 |
 | raw/ab/survival_diagnose_1380.txt | AB Diagnose | 2026-10-10 |

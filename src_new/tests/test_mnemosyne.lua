@@ -10499,3 +10499,116 @@ describe("run and ripple boundaries", function()
     expect(ataxiaTemp.gravehandsRetried).toBeNil()
   end)
 end)
+
+-- =====================================================================================
+-- v4.7.512, user 2026-11-23: "We should numb before entering a room, to save time. Waiting for a
+-- denizen to be in room and then numbing gives them like 1 to 2 attacks to tank."
+-- =====================================================================================
+describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", function()
+  local M = ataxia.mnemosyne
+  local mock = require("mock_mudlet")
+
+  -- `st.answer` is what the keeper says (basher/002: "numb; " or nil); `st.asked` counts its calls,
+  -- because a call arms the keeper's 5 s hold and must not happen for a door that gets no numb.
+  local function with(fn)
+    local realSend, realSwarm, realTick = send, M.swarm, M._exploreTick
+    local realKeeper, realTemp = ataxiaBasher_senselessFlurryNumb, ataxiaTemp
+    local realCur, realRooms = M.map.current, M.map.rooms
+    local st = { sent = {}, asked = 0, answer = "numb; " }
+    local ok, err = pcall(function()
+      send = function(c) st.sent[#st.sent + 1] = c end
+      M.swarm = { moveLocked = function() return false end }
+      M._exploreTick = function() end
+      ataxiaBasher_senselessFlurryNumb = function() st.asked = st.asked + 1; return st.answer end
+      ataxiaTemp = {}
+      M.map.current = 300
+      M.map.rooms = { [300] = { edges = { north = 299 } } } -- we came in from the north
+      M.explore.on = true
+      M.explore.failed = {}
+      fn(st)
+    end)
+    if M._explMoveT then killTimer(M._explMoveT); M._explMoveT = nil end
+    M.explore.on, M.explore.moving, M.explore.tacticalMove = false, false, false
+    send, M.swarm, M._exploreTick = realSend, realSwarm, realTick
+    ataxiaBasher_senselessFlurryNumb, ataxiaTemp = realKeeper, realTemp
+    M.map.current, M.map.rooms = realCur, realRooms
+    if not ok then error(err, 0) end
+  end
+
+  it("numbs in the cleared room, and the move is its own queue entry", function()
+    with(function(st)
+      M._exploreMove("s")
+      expect(#st.sent).toBe(2)
+      expect(st.sent[1]).toBe("queue addclear free stand;numb")
+      expect(st.sent[2]).toBe("queue add free s")
+      expect(mock.active_timers[M._explMoveT].delay).toBe(8) -- 5 + 3 for the numb's equilibrium
+    end)
+  end)
+
+  -- Review, v4.7.512: the move waits about 2.5 s in the queue. A denizen that walks in makes
+  -- the basher attack, which wipes it; the timeout must not then walk us out of the fight.
+  it("a denizen that came in while the move waited: no re-send, the room is decided again", function()
+    with(function(st)
+      local realHas, ticks = M._roomHasDenizens, 0
+      local ok, err = pcall(function()
+        M._exploreTick = function() ticks = ticks + 1 end
+        M._roomHasDenizens = function() return true end
+        M._exploreMove("s")
+        M._explMoveOnTimeout()
+        expect(#st.sent).toBe(2)          -- the numb and the move; nothing re-sent
+        expect(M.explore.moving).toBeFalse()
+        expect(ticks).toBe(1)
+        expect(next(M.explore.failed)).toBeNil()
+        -- with the room still empty the stalled move is re-sent as before
+        M._roomHasDenizens = function() return false end
+        M._exploreMove("s")
+        M._explMoveOnTimeout()
+        expect(st.sent[#st.sent]).toBe("queue addclear free stand;s")
+      end)
+      M._roomHasDenizens = realHas
+      if not ok then error(err, 0) end
+    end)
+  end)
+
+  it("a walked door gets no numb, and the keeper is not asked", function()
+    with(function(st)
+      M._exploreMove("n")
+      expect(#st.sent).toBe(1)
+      expect(st.sent[1]).toBe("queue addclear free stand;n")
+      expect(st.asked).toBe(0)
+      expect(mock.active_timers[M._explMoveT].delay).toBe(5)
+    end)
+  end)
+
+  it("the keeper's no is a plain move", function()
+    with(function(st)
+      st.answer = nil
+      M._exploreMove("s")
+      expect(#st.sent).toBe(1)
+      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      expect(st.asked).toBe(1)
+    end)
+  end)
+
+  it("a retry of the move does not numb again", function()
+    with(function(st)
+      M._exploreMove("s", true)
+      expect(#st.sent).toBe(1)
+      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      expect(st.asked).toBe(0)
+    end)
+  end)
+
+  it("no numb for a room the glance named as lava, or for a swarm-tactics move", function()
+    with(function(st)
+      ataxiaTemp.mnemLavaPlan = { room = 300, dir = "south" }
+      M._exploreMove("s")
+      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      ataxiaTemp.mnemLavaPlan = nil
+      M.explore.tacticalMove = true
+      M._exploreMove("s")
+      expect(st.sent[2]).toBe("queue addclear free stand;s")
+      expect(st.asked).toBe(0)
+    end)
+  end)
+end)

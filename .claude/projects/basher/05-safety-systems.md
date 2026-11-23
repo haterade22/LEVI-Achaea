@@ -440,11 +440,63 @@ cloak refuses while prone, and has a 50% chance to eat the charge for nothing.
 | Max attacks/sec | 5 | No |
 
 **Vitals-pinning effects vs the safety ladder (v4.7.124):** the Senseless Flurry numb
-keeper is CROWD-GATED because numbness defers damage — HP pins while it is up, which
-silently blinds every HP-based safety (the damage-rate watchdog records nothing, danger
-levels never trip, the swarm escape ladder's vitals watchdog reads a flat line) until
-the deferred lump lands as one −40% blow. In a swarm-threshold room that lump can
-exceed max HP. The keeper therefore only numbs in thin rooms (< swarm threshold, no
-tactic running), where the lump is survivable and the next prompt's hp-delta trips the
-rate-shield normally. General rule: any effect that pins or fakes vitals must be gated
-away from exactly the situations these safeties exist for.
+keeper is CROWD-GATED because numbness defers damage — HP pins while it is up, and until
+v4.7.512 that blinded every HP-based safety until the deferred lump landed as one −40%
+blow. In a swarm-threshold room that lump can exceed max HP. The keeper therefore only
+numbs in thin rooms (< swarm threshold, no tactic running). The gate stays after v4.7.512,
+because the debt below is an estimate. General rule: any effect that pins or fakes vitals
+must be gated away from exactly the situations these safeties exist for, or its hidden
+cost must be counted where the safeties read.
+
+## The numbness debt (v4.7.512)
+
+`basher/016_Numb_Debt.lua`. The game facts and their source: `kb/defences/numbness.md`.
+
+**The problem, from the log of 2026-11-23.** Numbness defers every hit for about ten seconds
+and then takes the total, 40% smaller, in one prompt (seen: up to 11,036 of 20,061 health). The
+blow has no `Health lost:` line, so only the net-delta feed saw it, and that feed read 8,591
+health in one prompt as a RATE: 8,591 over the 3 s floor is 2,864 a second, 4 s to live,
+`DANGER: Extreme incoming damage`. Outside a no-flee area that is a flee, caused by damage ten
+seconds old. And for those ten seconds every safety read full health.
+
+**The model.** Each absorbed hit is owed. The debt is session state on `ataxiaTemp.numb`
+(`{ upAt, hits, debt, owed, paid, unknown, fadedAt }`).
+
+| Game line (trigger) | Call | Effect |
+|---|---|---|
+| up line (`highlighting/060`) | `ataxia_numbRaised(true)` | opens a cycle; starts the NUMB recovery |
+| absorbed hit (`highlighting/075`) | `ataxia_numbAbsorbed()` | `hits + 1`; adds one estimate to the debt and gives it to `ataxiaBasher_recordIncoming`; opens a cycle when no up line was seen |
+| `Health lost: N (type).` | `ataxia_numbNoteTyped(n, type)` from `bashStats_recordIncoming` | a typed hit (not `raw`) is a reading for the estimate; inside a cycle it gives back what its fall of health paid |
+| fall of health (Char.Vitals) | `ataxia_numbNoteDrop(n, from, to)` from `update_stuff/004` | pays the debt; returns the part the debt does not explain, and only that goes to `ataxiaBasher_recordDamage` |
+| fade line (`highlighting/074`) | `ataxia_numbFaded()` | closes the cycle, learns the blow per hit, echoes `NUMB WORE OFF: -N HP (a -> b, p% of max) from H absorbed hits. Estimate was E.` |
+| ready / refusal lines (`highlighting/076`) | `ataxia_numbReady()` / `ataxia_numbRefused()` | end or start the recovery that `ataxia_numbCooling()` reports to the keeper |
+
+**The estimate of one absorbed hit** (`ataxia_numbHitEstimate`): the LARGER of 0.6 x the mean of
+our last 12 typed hits and the last blow divided by its absorbed hits, each at most 120 s old.
+Too small a debt is the unsafe direction. With neither reading the hit is `unknown`: it adds no
+debt, the echo and the alarm text say so, and the blow that pays for it goes to the net feed
+whole (the behaviour before v4.7.512).
+
+**The readers.** `ataxia_effHp()` / `ataxia_effHpp()` are health minus the debt (1 at least,
+because 0 means "unknown" to every reader; never above the plain reading).
+`ataxiaBasher_safeHp()` / `ataxiaBasher_safeHpp()` wrap them, and these read them:
+`ataxiaBasher_isDamageRateExtreme`, `ataxiaBasher_secondsToLive`, `ataxiaBasher_dangerLevel`,
+`ataxiaBasher_lastStandCritical`, `ataxiaBasher_lastStandHolding`, the shielded-attack check and
+the flee recovery check (`basher/001`); the swarm's `hpp()` and `hppFresh()`, `S._panicHpHit` and
+`S._dyingFast` (`mnemosyne/009`). One reader keeps the game's own number: the Righteous Fire
+detector looks for a jump in health, and a debt that ends would look like one. An alarm that
+fires beside a prompt at full health names its reason: `[numb debt ~8200 HP]`.
+
+**Order.** The debt is paid on the fall of health, not on the fade line. In the logged cycle
+Char.Vitals came first and the danger level was read between the two; a debt still standing
+then would count the same damage twice. When the fade line comes first, the debt stands until
+the fall of health arrives (1 s at most). "Has the blow landed?" is answered by the cycle's own
+payments: yes when its falls of health paid half of the estimate. A bleeding tick pays almost
+nothing, so it is not taken for the blow; the blow reported is the largest fall of the cycle.
+
+**Bounded stops.** A cycle with no fade line ends 12 s after its up line (the longest seen was
+10.03 s). A fade with no fall of health settles after 1 s and says so. The recovery ends 14 s
+after the up line if the ready line never comes.
+
+**Not covered.** The debt is not shown on the prompt. `bashStats` does not count the blow as
+damage taken. The Legend Deck's numbness opens a cycle only from its first absorbed hit.

@@ -128,7 +128,19 @@ end
 
 -- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
 -- Saves the room we died in so we can move back one room to heal up safely.
-function ataxiaBasher_onDeath()
+--
+-- `verified` is the literal `true` from a caller that knows the death is real (the starburst
+-- trigger, or the swarm's hold when it gives up). Any other value -- the event name that the
+-- "player death" event passes, or nothing -- can be held: with the Wrath and Righteousness boon
+-- ready, a slain line may be the boon's save, and turning the basher off there leaves us standing
+-- among the other denizens (v4.7.512; mnemosyne/009, S.deathHold).
+function ataxiaBasher_onDeath(verified)
+  if verified ~= true then
+    local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+    if S and S.deathHold and S.deathHold("basher", function() ataxiaBasher_onDeath(true) end) then
+      return
+    end
+  end
   -- The mount belief is session scratch and survives death; afterwards we honestly do not know
   -- (v4.7.351, deep review). ABOVE the early return: that is true whether or not we were bashing.
   if ataxiaBasher_mountForget then ataxiaBasher_mountForget("died") end

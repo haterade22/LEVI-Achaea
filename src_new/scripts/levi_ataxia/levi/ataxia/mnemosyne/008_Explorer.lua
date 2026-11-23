@@ -1297,6 +1297,43 @@ function M._glanceResolve(why)
   if MAP and MAP.current == g.room and M._scheduleTick then M._scheduleTick(0.1) end
 end
 
+-- ---------------------------------------------------------------------------
+-- SENSELESS FLURRY: NUMB BEFORE THE DOOR (v4.7.512)
+-- ---------------------------------------------------------------------------
+-- User, 2026-11-23: "We should numb before entering a room, to save time. Waiting for a denizen
+-- to be in room and then numbing gives them like 1 to 2 attacks to tank. When we should've done
+-- it in the room prior."
+--
+-- The log behind it: arrival 11:24:20.9, NUMB 11:24:21.06 ("Equilibrium used: 2.55s"), first
+-- combo 11:24:22.96. The combo needs the equilibrium that NUMB took, so for 2 s the denizen hit
+-- us and we did not hit it. The 2.55 s must be paid somewhere; paid in the room we have cleared,
+-- nothing hits us while we pay, and the first combo goes out on arrival.
+--
+-- WHICH DOORS. A door we have never walked: the room behind it is not cleared, so it is the one
+-- that can hold a denizen. That is the same test the glance recon uses (M._glanceWanted). The
+-- user's other idea, "glance to see if denizen is in next room", needs the glanced prose parsed
+-- for denizens, and this file reads only two facts from it (lava, and "There are N greater
+-- elementals here."); a room named as lava is passed through, not fought in, so it gets no numb.
+-- A walked door leads back through rooms we cleared; a swarm-tactics move is a retreat.
+--
+-- The keeper decides the rest (ataxiaBasher_senselessFlurryNumb, basher/002): the boon, a Kaido
+-- stance or Rain form, numbness down, its recovery over, and its 5 s attempt-hold -- which this
+-- call arms, so the first round in the new room does not send a second NUMB.
+local PRE_NUMB_WAIT = 3 -- s; NUMB is 3.00 s of equilibrium BASE, 2.55 s OURS (the diadem)
+
+function M._preNumb(dir)
+  if not ataxiaBasher_senselessFlurryNumb then return false end
+  if M.explore.tacticalMove then return false end
+  local cur = MAP and MAP.current
+  local nd = MAP and MAP.normDir and MAP.normDir(dir)
+  if not (cur and nd) then return false end
+  local r0 = MAP.rooms and MAP.rooms[cur]
+  if r0 and r0.edges and r0.edges[nd] then return false end -- walked: that room is cleared
+  local plan = ataxiaTemp and ataxiaTemp.mnemLavaPlan
+  if plan and plan.room == cur and plan.dir == nd then return false end -- lava: pass through
+  return ataxiaBasher_senselessFlurryNumb() ~= nil
+end
+
 function M._exploreMove(dir, isRetry)
   -- Never move while a tumble is in flight (v4.7.243): a walk between "You begin to tumble"
   -- and "You tumble out of the room." cancels it. The swarm's own machinery re-decides once
@@ -1339,7 +1376,18 @@ function M._exploreMove(dir, isRetry)
     pre = pre .. "activate hermit" .. sep
     M._exploreEcho("<cyan>Seclusion<reset> -- hermit activated in the holding room.")
   end
-  send("queue addclear free stand" .. sep .. pre .. dir)
+  -- SENSELESS FLURRY: NUMB BEFORE THE DOOR (v4.7.512, see M._preNumb). NUMB takes the equilibrium
+  -- and a move needs it ("You are recovering equilibrium and cannot move yet."), so the move is
+  -- its OWN queue entry: the game runs it when the equilibrium is back. One entry "numb;<dir>"
+  -- would send the move at once, lose it, and wait for the move timeout.
+  local numbFirst = (not isRetry) and pre == "" and M._preNumb(dir)
+  if numbFirst then
+    M._exploreEcho("<cyan>Senseless Flurry<reset> -- numb first, then <cyan>" .. dir .. "<reset>.")
+    send("queue addclear free stand" .. sep .. "numb")
+    send("queue add free " .. dir)
+  else
+    send("queue addclear free stand" .. sep .. pre .. dir)
+  end
   -- Arm the dead reckoning for exactly this one step (v4.7.251). Under dementia several room
   -- events arrive inside one move's window; without arming, each advanced the position again.
   if MAP.drArm and MAP.drActive and MAP.drActive() then MAP.drArm(dir) end
@@ -1348,6 +1396,16 @@ function M._exploreMove(dir, isRetry)
   M._explMoveOnTimeout = function()
     M._explMoveT = nil
     if not (M.explore.on and M.explore.moving) then return end
+    -- A MOVE THAT WAITED BEHIND A NUMB (v4.7.512, review). It sat in the queue for the numb's
+    -- equilibrium; a denizen that walked in meanwhile made the basher attack, and that round's
+    -- `queue addclearfull` took the move out. Re-sending it now would wipe the attack and walk
+    -- away from the fight, so the room is decided again instead: the tick sees the denizen.
+    if numbFirst and MAP and MAP.current == M.explore.fromRoom
+       and M._roomHasDenizens and M._roomHasDenizens() then
+      M.explore.moving = false
+      M._exploreEcho("<yellow>a denizen came in while the move waited for the numb<reset> -- fighting here.")
+      return M._exploreTick()
+    end
     -- Still in the room we left -> the move didn't take.
     if MAP and MAP.current == M.explore.fromRoom and M.explore.fromRoom then
       if (M.explore.tries or 0) < MOVE_RETRIES then
@@ -1372,7 +1430,9 @@ function M._exploreMove(dir, isRetry)
     end
     M._exploreTick()
   end
-  M._explMoveT = tempTimer(MOVE_TIMEOUT, M._explMoveOnTimeout)
+  -- The numb's equilibrium is part of this move: without the extra time the timeout would
+  -- re-send a move that is only waiting, and spend the one retry.
+  M._explMoveT = tempTimer(MOVE_TIMEOUT + (numbFirst and PRE_NUMB_WAIT or 0), M._explMoveOnTimeout)
 end
 
 -- Arm the in-flight machinery for a SWARM-TACTICS move whose actual send rides the

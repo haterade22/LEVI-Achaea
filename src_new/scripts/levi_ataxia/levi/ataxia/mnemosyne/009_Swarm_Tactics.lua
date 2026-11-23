@@ -202,18 +202,39 @@ function S._indoors()
   return false
 end
 
-local function hpp()
+-- HEALTH MINUS THE NUMBNESS DEBT (v4.7.512). Every rung of the ladder reads these two, so the
+-- swarm acts on the health we will have when numbness wears off (basher/016_Numb_Debt.lua), and
+-- an echo of "LOW HP (45%)" beside a prompt at full health means exactly that. `hppRaw` is the
+-- game's own number, for the one reader that must see it: the Righteous Fire detector, which
+-- looks for a JUMP in health and would read a debt that expires as one.
+local function hppRaw()
   return (ataxia and ataxia.vitals and tonumber(ataxia.vitals.hpp)) or 100
+end
+
+local function hpp()
+  return (ataxia_effHpp and ataxia_effHpp()) or hppRaw()
 end
 
 -- Fresh HP% straight from the GMCP payload. The vitals handler below fires on the
 -- same event that UPDATES ataxia.vitals -- registration order could hand hpp() the
 -- PREVIOUS prompt's value, and the emergency path can't afford a stale read.
-local function hppFresh()
+local function hppRawFresh()
   local v = gmcp and gmcp.Char and gmcp.Char.Vitals
   local hp, max = tonumber(v and v.hp), tonumber(v and v.maxhp)
   if hp and max and max > 0 then return math.floor(hp / max * 100) end
-  return hpp()
+  return hppRaw()
+end
+
+local function hppFresh()
+  local v = gmcp and gmcp.Char and gmcp.Char.Vitals
+  local hp, max = tonumber(v and v.hp), tonumber(v and v.maxhp)
+  if not (hp and max and max > 0) then return hpp() end
+  local pct = math.floor(hp / max * 100)
+  local debt = (ataxia_numbDebt and ataxia_numbDebt()) or 0
+  if debt <= 0 or hp <= 0 then return pct end
+  local eff = math.floor((hp - debt) / max * 100)
+  if eff < 1 then eff = 1 end -- 0 is the blackout sentinel; a debt as large as our health is 1
+  return eff
 end
 
 -- "Fully healed" for the recovery hover = aff-free too (user spec): broken limbs ARE
@@ -1271,7 +1292,7 @@ function S._panicHpHit(hp)
   if hp <= (tonumber(s.panicAt) or 40) then return true end
   local floor = tonumber(s.panicHp) or 0
   if floor <= 0 then return false end
-  local raw = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
+  local raw = (ataxia_effHp and ataxia_effHp()) or tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
   -- A missing or blackout reading must never fake a panic: 0 here means "unknown", and
   -- the percentage branch above is already the general safety net.
   if not raw or raw <= 0 then return false end
@@ -1775,7 +1796,7 @@ function S._dyingFast()
   if ataxiaBasher_isDamageRateExtreme and ataxiaBasher_isDamageRateExtreme() then return true end
   local floor = tonumber(S._cfg().panicHp) or 0
   if floor <= 0 then return false end
-  local raw = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
+  local raw = (ataxia_effHp and ataxia_effHp()) or tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
   -- A missing or blackout reading is "unknown", never "dying" -- the same rule _panicHpHit uses.
   if not raw or raw <= 0 then return false end
   return raw <= floor
@@ -2531,12 +2552,26 @@ end
 --   "When you would die, the power of Righteous Fire will allow you to restore yourself to full
 --    health and instantly slay the non-boss denizen that defeated you. This effect carries a
 --    cooldown of 1 hours."
--- User: "When we have this and die, we should escape the room. and def up."
+-- User, v4.7.372: "When we have this and die, we should escape the room. and def up."
+-- User, 2026-11-23 (v4.7.512), which REPLACES the escape: "with boon wrath and righteousness and
+-- we die, we need to continue to attack if more than one denizen in there. We usually turn off
+-- all systems."
 --
--- The boon saved us; the room that nearly killed us is still there, and the next death is real for
--- an hour. So: re-raise the current defence profile (systemDefup -- the `defup` alias's own path)
--- and DISENGAGE. The fight's pursuit memory and the disengage cooldown are cleared first: they
--- belong to the fight that just killed us, and this exit must not be refused by them.
+-- The boon saved us at full health and slew the denizen that did it. So: re-raise the current
+-- defence profile (systemDefup -- the `defup` alias's own path) and FIGHT ON. The basher stays on
+-- and takes the next denizen; with none left the sweep goes on. The fight's pursuit memory and the
+-- disengage cooldown are cleared and the one retreat is given back: the next death is real for an
+-- hour, and the ladder must be free to leave if this room turns bad again.
+--
+-- "We usually turn off all systems" is the death path: "You have been slain by" (triggers 407 and
+-- mnemosyne/007) disables the basher, clears the queue and stops the sweep. Whether the game
+-- prints that line at a save is NOT KNOWN (no save is captured). So a death signal that comes
+-- while the boon can save us is HELD for RF_VERIFY seconds (S.deathHold) and judged by the state
+-- we can see: ALIVE in the room we were slain in, it was the save and nothing is turned off;
+-- no health, or another room, is a real death, and the held handlers run then. Not "at full
+-- health": by then we have fought for RF_VERIFY seconds, and a save judged at 93% was a death
+-- (review, v4.7.512). The hold is session state on ataxiaTemp: `S` is saved to disk, and a hold
+-- that came back from a save had no timer and held every later death for ever (same review).
 --
 -- NO PROC LINE IS CAPTURED YET, so the detector reads the prompt: holding the boon, off its hour,
 -- denizens in the room, health jumping by RF_JUMP points or more to RF_FULL% or more in one prompt.
@@ -2547,18 +2582,105 @@ end
 S.RF_JUMP = 45
 S.RF_FULL = 95
 S.RF_COOLDOWN = 3600
+S.RF_VERIFY = 1.5 -- seconds a death signal waits for proof that it was the boon's save
+
+local function rfSince() return now() - (tonumber(S._rfAt) or -1e9) end
+
+local function dropDeathHold()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.rfDeathHold = nil
+  if ataxiaTemp.rfDeathHoldT then pcall(killTimer, ataxiaTemp.rfDeathHoldT); ataxiaTemp.rfDeathHoldT = nil end
+end
+
+-- The live hold, or nil. A hold older than its timer allows is one whose timer was lost.
+local function deathHoldNow()
+  local h = ataxiaTemp and ataxiaTemp.rfDeathHold
+  if h and (now() - (tonumber(h.at) or 0)) > S.RF_VERIFY * 2 then
+    dropDeathHold()
+    return nil
+  end
+  return h
+end
+
+local function roomNow()
+  return (M.map and M.map.current) or (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num)
+end
 
 function S.onRighteousFire(how)
   S._rfAt = now()
+  dropDeathHold() -- the save is proven: a held death handler must never run
+  local left = (M._denizenCount and M._denizenCount()) or 0
   S._echo("<gold>RIGHTEOUS FIRE<reset> -- saved from death" .. (how and (" (" .. how .. ")") or "")
-    .. "; defences up and leaving the room.")
+    .. "; defences up, " .. (left > 0 and (left .. " denizen(s) here -- fighting on.")
+                                       or "the room is clear -- going on."))
   local d = ataxia and ataxia.settings and ataxia.settings.defences
   if systemDefup and d and type(d.current) == "string" and d.current ~= "" then
     pcall(systemDefup, d.current)
   end
   S.pursuedAt, S._lastDisengageAt = nil, nil
-  S._restoreRetreat() -- v4.7.482: a full heal, and this exit is the boon's whole point
-  return S.disengage("Righteous Fire")
+  S._restoreRetreat() -- v4.7.482: a full heal gives the one retreat back
+  if left > 0 and ataxiaBasher_attack then pcall(ataxiaBasher_attack) end
+  return true
+end
+
+-- Can the boon still save us? Its hour is counted from the last save we saw.
+function S._rfReady()
+  if not mnemWrathRighteousness then return false end
+  return rfSince() >= S.RF_COOLDOWN
+end
+
+-- A death signal ("You have been slain by"). Returns true when the caller must NOT act now:
+-- `fn` is kept, and runs only when the death proves real. One hold serves every caller; `key`
+-- names the caller so that the same handler is not kept twice.
+function S.deathHold(key, fn)
+  -- The slain line of a save we ALREADY saw (its jump in health came first, in Char.Vitals):
+  -- nothing to judge and nothing to run later. Only while we are alive -- a death inside those
+  -- seconds is real, and it shows as no health.
+  if mnemWrathRighteousness and rfSince() <= S.RF_VERIFY * 2 and hppRawFresh() > 0 then return true end
+  if not S._rfReady() then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local h = deathHoldNow()
+  if not h then
+    h = { at = now(), room = roomNow(), fns = {}, order = {} }
+    ataxiaTemp.rfDeathHold = h
+    if ataxiaTemp.rfDeathHoldT then pcall(killTimer, ataxiaTemp.rfDeathHoldT) end
+    ataxiaTemp.rfDeathHoldT = tempTimer(S.RF_VERIFY, function()
+      ataxiaTemp.rfDeathHoldT = nil
+      S._resolveDeathHold()
+    end)
+    S._echo("<gold>slain line with Wrath and Righteousness ready<reset> -- " .. S.RF_VERIFY
+      .. "s to see if it was the save; nothing is turned off yet.")
+  end
+  if not h.fns[key] then h.order[#h.order + 1] = key end
+  h.fns[key] = fn
+  return true
+end
+
+-- A death that is certainly real (our starburst tattoo): run the held handlers now.
+function S.deathIsReal(why)
+  local h = deathHoldNow()
+  if not h then return false end
+  dropDeathHold()
+  S._echo("<indian_red>the death is real<reset> (" .. tostring(why) .. ") -- stopping.")
+  for _, key in ipairs(h.order) do pcall(h.fns[key]) end
+  return true
+end
+
+-- RF_VERIFY seconds after the death signal: the save, or a real death?
+function S._resolveDeathHold()
+  local h = deathHoldNow()
+  if not h then return nil end
+  local hp = hppRawFresh()
+  local room = roomNow()
+  if hp > 0 and room == h.room then
+    dropDeathHold()
+    if rfSince() > S.RF_VERIFY * 2 then
+      S.onRighteousFire("slain line, then alive at " .. hp .. "% in the same room")
+    end
+    return true
+  end
+  S.deathIsReal(hp .. "% health" .. (room ~= h.room and ", room changed" or ""))
+  return false
 end
 
 function S._checkRighteousFire(hp)
@@ -2576,7 +2698,7 @@ function S.onVitals()
   if not S._enabled() then return end
   S._checkPursuit()  -- v4.7.370
   S._resendWhenFree() -- v4.7.370
-  if S._checkRighteousFire(hppFresh()) then return end -- v4.7.372
+  if S._checkRighteousFire(hppRawFresh()) then return end -- v4.7.372; the game's own number (v4.7.512)
   if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
   local s = S._cfg()
   local hp = hppFresh()

@@ -118,6 +118,9 @@ function bashStats_recordIncoming(amount, dtype)
   -- per prompt, which healing masks: a prompt that takes 2000 and sips 1500 records 500, and a
   -- net-positive prompt records nothing at all. This line is the damage BEFORE any of that.
   if ataxiaBasher_recordIncoming then ataxiaBasher_recordIncoming(amount) end
+  -- The size of a hit that numbness did not absorb is the estimate for the next one that it
+  -- does absorb (basher/016, v4.7.512).
+  if ataxia_numbNoteTyped then ataxia_numbNoteTyped(amount, dtype) end
   -- Alchemist in the tower: re-imbue the robes when the worst four types change (class_things/004).
   if ataxia_robesCheck then ataxia_robesCheck() end
 end

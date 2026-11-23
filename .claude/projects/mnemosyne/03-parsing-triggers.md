@@ -14,7 +14,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 004 | Boons Offered | `flickers of power that may aide you` | `onBoonsOffered()` | `_inRun` |
 | 005 | Countdown | `^0$` | `onCountdownZero()` | `_inRun` |
 | 006 | Go | `^GO!$` | `onGo()` | `_auto` OR `ataxiaBasher.inMnemosyne` |
-| 007 | Death | `^You have been slain by (.+?)\.?$` | `reportDeath(matches[2])` | inline `_inRun` check in trigger body |
+| 007 | Death | `^You have been slain by (.+?)\.?$` | `reportDeath(matches[2])` and `exploreOnDeath`; held by `S.deathHold` while Wrath and Righteousness can save us (v4.7.512, `07-explorer.md`) | inline `_inRun` check in trigger body |
 | 008 | Objective | `^Objective:\s+(.+)$` | `onObjective(matches[2])` | `_inRun` |
 | 009 | Run End | `^The Mnemosyne releases its hold` | `onRunEnd()` → `endRun()` | `_inRun` |
 | 016 | Run Pause | `^You whisper to the Mnemosyne and beseech that it grow still for a time\.$` | `onRunPause()` | none (flag set unconditionally) |

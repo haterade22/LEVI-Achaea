@@ -3591,8 +3591,10 @@ end)
 -- =====================================================================================
 -- v4.7.372, user: "When we have this and die, we should escape the room. and def up."
 -- Wrath and Righteousness restores us to full health instead of dying, once an hour.
-describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
+describe("Wrath and Righteousness: def up and fight on (v4.7.372, changed v4.7.512)", function()
   local realDefup, realDefs, defups
+  local realAttack, attacks
+  local mock = require("mock_mudlet")
   local function setup(n)
     fixture(n or 4)
     send = function(cmd) table.insert(sent, cmd) end -- see the v4.7.370 note: a leaked `send`
@@ -3603,10 +3605,20 @@ describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
     realDefup, realDefs = systemDefup, ataxia.settings.defences
     systemDefup = function(p) defups[#defups + 1] = p end
     ataxia.settings.defences = { current = "bash" }
+    realAttack, attacks = ataxiaBasher_attack, 0
+    ataxiaBasher_attack = function() attacks = attacks + 1 end
+    ataxiaTemp.rfDeathHold, ataxiaTemp.rfDeathHoldT = nil, nil
   end
   local function teardown()
     systemDefup, ataxia.settings.defences = realDefup, realDefs
+    ataxiaBasher_attack = realAttack
     mnemWrathRighteousness = nil
+    ataxiaTemp.rfDeathHold, ataxiaTemp.rfDeathHoldT = nil, nil
+  end
+  local function leaps()
+    local n = 0
+    for _, c in ipairs(sent) do if c:find("leap", 1, true) then n = n + 1 end end
+    return n
   end
   local function run(fn)
     local ok, err = pcall(fn)
@@ -3614,16 +3626,27 @@ describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
     if not ok then error(err, 0) end
   end
 
-  it("a near-death restore defs up and disengages", function()
+  -- v4.7.512, user 2026-11-23: "we need to continue to attack if more than one denizen in there."
+  -- Until then the save defed up and LEFT the room (v4.7.372).
+  it("a near-death restore defs up and fights on: no retreat, and the basher attacks", function()
     setup()
     run(function()
       S._prevHp = 20
       expect(S._checkRighteousFire(100)).toBeTrue()
       expect(defups[1]).toBe("bash")
-      expect(S.state).toBe("pulling")
-      local left = false
-      for _, c in ipairs(sent) do if c:find("leap s", 1, true) then left = true end end
-      expect(left).toBeTrue()
+      expect(S.state).toBe("idle")
+      expect(leaps()).toBe(0)
+      expect(attacks).toBe(1)
+    end)
+  end)
+
+  it("with the room clear after the save it sends no attack", function()
+    setup()
+    run(function()
+      mobs = 0
+      expect(S.onRighteousFire("test")).toBeTrue()
+      expect(attacks).toBe(0)
+      expect(leaps()).toBe(0)
     end)
   end)
 
@@ -3665,14 +3688,16 @@ describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
     end)
   end)
 
-  it("leaves even from a swarm that has been following us", function()
+  it("forgets the pursuit and the disengage cooldown of the fight that killed us", function()
     setup()
     run(function()
       S.pursuedAt = clock
       S._lastDisengageAt = clock
       S._prevHp = 20
       S._checkRighteousFire(100)
-      expect(S.state).toBe("pulling")
+      expect(S.pursuedAt).toBeNil()
+      expect(S._lastDisengageAt).toBeNil()
+      expect(S.state).toBe("idle")
     end)
   end)
 
@@ -3683,7 +3708,263 @@ describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
       gmcp.Char = { Vitals = { hp = "10000", maxhp = "10000" } }
       S.onVitals()
       expect(defups[1]).toBe("bash")
-      expect(S.state).toBe("pulling")
+      expect(attacks).toBe(1)
+      expect(S.state).toBe("idle")
+    end)
+  end)
+
+  -- The detector looks for a JUMP in health. Health minus a numbness debt (basher/016) is what
+  -- the ladder reads since v4.7.512, and a debt that ends would look like that jump.
+  it("the detector reads the game's own health, the ladder reads health minus the numbness debt", function()
+    setup()
+    run(function()
+      local realDebt, realEff, realVitals = ataxia_numbDebt, ataxia_effHpp, ataxia.vitals
+      local ok, err = pcall(function()
+        ataxia.vitals = { hpp = 100, hp = 10000, maxhp = 10000 }
+        expect(S._panicHpHit()).toBeFalse()
+        ataxia_numbDebt = function() return 7000, 0 end
+        ataxia_effHpp = function() return 30 end
+        expect(S._panicHpHit()).toBeTrue()          -- 30% is under panicAt
+        S._prevHp = 20
+        gmcp.Char = { Vitals = { hp = "10000", maxhp = "10000" } }
+        S.onVitals()
+        expect(attacks).toBe(1)                     -- the save is seen at the game's 100%
+      end)
+      ataxia_numbDebt, ataxia_effHpp, ataxia.vitals = realDebt, realEff, realVitals
+      if not ok then error(err, 0) end
+    end)
+  end)
+
+  it("the starburst trigger ends a hold and calls the death handler as a real death", function()
+    setup()
+    local realOnDeath = ataxiaBasher_onDeath
+    run(function()
+      local held, args = 0, {}
+      local ok, err = pcall(function()
+        ataxiaBasher_onDeath = function(v) args[#args + 1] = v end
+        S.deathHold("mnemosyne", function() held = held + 1 end)
+        dofile("src_new/triggers/levi_ataxia/for_levi/leviticus/406_Own_Starburst.lua")
+        expect(held).toBe(1)
+        expect(#args).toBe(1)
+        expect(args[1]).toBe(true)
+      end)
+      ataxiaBasher_onDeath = realOnDeath
+      if not ok then error(err, 0) end
+    end)
+  end)
+
+  -- THE DEATH SIGNAL THAT MAY BE THE SAVE (v4.7.512). "You have been slain by" turns the basher
+  -- and the sweep off; with the boon ready that line is held and judged by health and room.
+  it("a slain line with the boon ready is held; alive in the same room nothing stops", function()
+    setup()
+    run(function()
+      local ran = 0
+      expect(S.deathHold("basher", function() ran = ran + 1 end)).toBeTrue()
+      expect(ran).toBe(0)
+      -- 60%, not full: we have fought on for the 1.5 s of the hold (review, v4.7.512)
+      gmcp.Char = { Vitals = { hp = "6000", maxhp = "10000" } }
+      expect(S._resolveDeathHold()).toBeTrue()
+      expect(ran).toBe(0)
+      expect(S._rfAt).toBe(clock)       -- the hour of the boon starts here
+      expect(defups[1]).toBe("bash")
+      expect(attacks).toBe(1)
+    end)
+  end)
+
+  it("the hold is settled by its timer", function()
+    setup()
+    run(function()
+      local ran = 0
+      S.deathHold("basher", function() ran = ran + 1 end)
+      expect(mock.active_timers[ataxiaTemp.rfDeathHoldT].delay).toBe(1.5)
+      gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+      mock.fire_timers()
+      expect(ran).toBe(1)
+      expect(ataxiaTemp.rfDeathHold).toBeNil()
+    end)
+  end)
+
+  it("a real death runs each held handler once: no health", function()
+    setup()
+    run(function()
+      local basher, mnem = 0, 0
+      S.deathHold("basher", function() basher = basher + 1 end)
+      S.deathHold("basher", function() basher = basher + 1 end) -- trigger 407 and the event
+      S.deathHold("mnemosyne", function() mnem = mnem + 1 end)
+      gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+      expect(S._resolveDeathHold()).toBeFalse()
+      expect(basher).toBe(1)
+      expect(mnem).toBe(1)
+      expect(S._rfAt).toBeNil()
+      expect(attacks).toBe(0)
+    end)
+  end)
+
+  it("a real death: full health, but in another room", function()
+    setup()
+    run(function()
+      local ran = 0
+      S.deathHold("basher", function() ran = ran + 1 end)
+      gmcp.Char = { Vitals = { hp = "10000", maxhp = "10000" } }
+      MAP.current = 100
+      expect(S._resolveDeathHold()).toBeFalse()
+      expect(ran).toBe(1)
+    end)
+  end)
+
+  it("no hold without the boon, or inside its hour", function()
+    setup()
+    run(function()
+      mnemWrathRighteousness = nil
+      expect(S.deathHold("basher", function() end)).toBeFalse()
+      mnemWrathRighteousness = true
+      S._rfAt = clock - 100
+      expect(S.deathHold("basher", function() end)).toBeFalse()
+      expect(ataxiaTemp.rfDeathHold).toBeNil()
+    end)
+  end)
+
+  -- Review, v4.7.512: this line used to open a second hold, judged 1.5 s later on "95% health";
+  -- a hit in those seconds turned the save into a death and everything went off.
+  it("the slain line of a save we already saw does nothing: no hold, no handler, ever", function()
+    setup()
+    run(function()
+      S._prevHp = 20
+      gmcp.Char = { Vitals = { hp = "10000", maxhp = "10000" } }
+      expect(S._checkRighteousFire(100)).toBeTrue() -- the jump in health came first
+      clock = clock + 1
+      local ran = 0
+      gmcp.Char = { Vitals = { hp = "7000", maxhp = "10000" } } -- hit since the save
+      expect(S.deathHold("basher", function() ran = ran + 1 end)).toBeTrue()
+      expect(ataxiaTemp.rfDeathHold).toBeNil()
+      expect(ataxiaTemp.rfDeathHoldT).toBeNil()
+      mock.fire_timers()
+      expect(ran).toBe(0)
+      expect(#defups).toBe(1)
+      expect(attacks).toBe(1)
+    end)
+  end)
+
+  it("a death in the seconds after a save is real: no health, so it is not swallowed", function()
+    setup()
+    run(function()
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeTrue()
+      clock = clock + 1
+      gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+      expect(S.deathHold("basher", function() end)).toBeFalse() -- the boon is spent: act now
+    end)
+  end)
+
+  -- Review, v4.7.512: the hold was kept on S, which is saved to disk. It came back from a save
+  -- with no timer and no functions, and then held every death for ever.
+  it("the hold is session state, and a hold that lost its timer is replaced, not reused", function()
+    setup()
+    run(function()
+      S.deathHold("basher", function() end)
+      expect(S._deathHold).toBeNil()
+      local first = ataxiaTemp.rfDeathHold
+      expect(type(first)).toBe("table")
+      mock.active_timers = {}            -- the timer is lost (a reload)
+      ataxiaTemp.rfDeathHoldT = nil
+      clock = clock + 4
+      local ran = 0
+      expect(S.deathHold("basher", function() ran = ran + 1 end)).toBeTrue()
+      expect(ataxiaTemp.rfDeathHold ~= first).toBeTrue()
+      expect(mock.active_timers[ataxiaTemp.rfDeathHoldT].delay).toBe(1.5)
+      gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+      mock.fire_timers()
+      expect(ran).toBe(1)                -- a real death still stops the systems
+    end)
+  end)
+
+  it("the jump in health proves the save: a held handler never runs", function()
+    setup()
+    run(function()
+      local ran = 0
+      S.deathHold("basher", function() ran = ran + 1 end)
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeTrue()
+      expect(ataxiaTemp.rfDeathHold).toBeNil()
+      expect(ataxiaTemp.rfDeathHoldT).toBeNil()
+      expect(S._resolveDeathHold()).toBeNil()
+      expect(ran).toBe(0)
+    end)
+  end)
+
+  it("a starburst is a real death: the held handlers run at once", function()
+    setup()
+    run(function()
+      local ran = 0
+      S.deathHold("basher", function() ran = ran + 1 end)
+      expect(S.deathIsReal("starburst")).toBeTrue()
+      expect(ran).toBe(1)
+      expect(S.deathIsReal("starburst")).toBeFalse() -- nothing is held now
+    end)
+  end)
+
+  -- The real ataxiaBasher_onDeath, cut from its file (the file registers event handlers at load).
+  it("the basher's death handler waits for the hold, then stops the basher on a real death", function()
+    setup()
+    local realOnDeath, realSafe, realEnabled = ataxiaBasher_onDeath, ataxiaBasher_getAreaSafeRoom, ataxiaBasher.enabled
+    local realMmp, realRaise, realEcho = mmp, raiseEvent, ataxiaEcho
+    run(function()
+      local ok, err = pcall(function()
+        raiseEvent = function() end -- "basher disabled" has listeners in other files' state
+        ataxiaEcho = function() end
+        local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/genrunning/001_Bashing_API.lua")
+        local src = f:read("*a"); f:close()
+        local body = src:match("(function ataxiaBasher_onDeath%(verified%).-\nend)\n")
+        expect(body ~= nil).toBeTrue()
+        assert((loadstring or load)(body))()
+        ataxiaBasher_getAreaSafeRoom = function() return nil end
+        mmp = nil
+        ataxiaBasher.enabled = true
+        ataxiaBasher_onDeath("player death")  -- the event passes its name: not `true`, so held
+        expect(ataxiaBasher.enabled).toBeTrue()
+        expect(count("cq all")).toBe(0)
+        gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+        S._resolveDeathHold()
+        expect(ataxiaBasher.enabled).toBeFalse()
+        expect(count("cq all")).toBe(1)
+        -- and a caller that knows the death is real is never held
+        ataxiaBasher.enabled = true
+        ataxiaTemp.rfDeathHold = nil
+        ataxiaBasher_onDeath(true)
+        expect(ataxiaBasher.enabled).toBeFalse()
+        expect(ataxiaTemp.rfDeathHold).toBeNil()
+      end)
+      ataxiaBasher_onDeath, ataxiaBasher_getAreaSafeRoom, ataxiaBasher.enabled = realOnDeath, realSafe, realEnabled
+      mmp, raiseEvent, ataxiaEcho = realMmp, realRaise, realEcho
+      if not ok then error(err, 0) end
+    end)
+  end)
+
+  it("the Mnemosyne slain trigger holds the death report and the sweep stop", function()
+    setup()
+    local realReport, realStop, realInRun, realMatches = M.reportDeath, M.exploreOnDeath, M._inRun, matches
+    run(function()
+      local reports, stops = 0, 0
+      local ok, err = pcall(function()
+        M._inRun = function() return true end
+        M.reportDeath = function() reports = reports + 1 end
+        M.exploreOnDeath = function() stops = stops + 1 end
+        matches = { "You have been slain by an ormyrr guard.", "an ormyrr guard" }
+        dofile("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/007_Death.lua")
+        expect(reports).toBe(0)
+        expect(stops).toBe(0)
+        gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+        S._resolveDeathHold()
+        expect(reports).toBe(1)
+        expect(stops).toBe(1)
+        -- without the boon the trigger acts at once, as before
+        mnemWrathRighteousness = nil
+        dofile("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/007_Death.lua")
+        expect(reports).toBe(2)
+        expect(stops).toBe(2)
+      end)
+      M.reportDeath, M.exploreOnDeath, M._inRun, matches = realReport, realStop, realInRun, realMatches
+      if not ok then error(err, 0) end
     end)
   end)
 end)
@@ -4513,12 +4794,19 @@ describe("v4.7.482 -- one retreat, then we fight", function()
     expect(S._retreatSpent()).toBeFalse()
   end)
 
-  it("Righteous Fire gives it back and leaves", function()
+  it("Righteous Fire gives it back and stays to fight (v4.7.512)", function()
     fixture(3)
     indoors()
     S.retreatSpentAt = clock
-    S.onRighteousFire("test")
-    expect(count("leap s")).toBe(1)
+    local realAttack = ataxiaBasher_attack
+    ataxiaBasher_attack = function() end
+    local ok, err = pcall(function()
+      S.onRighteousFire("test")
+      expect(S._retreatSpent()).toBeFalse()
+      expect(count("leap s")).toBe(0)
+    end)
+    ataxiaBasher_attack = realAttack
+    if not ok then error(err, 0) end
   end)
 
   it("the sky is not a retreat: outdoors, the hover still flies", function()

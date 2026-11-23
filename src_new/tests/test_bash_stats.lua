@@ -201,5 +201,24 @@ describe("bashStats_topIncoming -- what is actually hurting us", function()
   end)
 end)
 
+-- v4.7.512: a typed hit is the reading for the next hit that numbness absorbs (basher/016).
+describe("incoming damage feeds the numbness estimate", function()
+  it("gives each line's amount and its lower-case type", function()
+    reset()
+    local realNote, got = ataxia_numbNoteTyped, {}
+    ataxia_numbNoteTyped = function(amount, dtype) got[#got + 1] = { amount, dtype } end
+    local ok, err = pcall(function()
+      bashStats_recordIncoming(1488, "Physical Cutting")
+      bashStats_recordIncoming(19, "raw")
+      expect(#got).toBe(2)
+      expect(got[1][1]).toBe(1488)
+      expect(got[1][2]).toBe("physical cutting")
+      expect(got[2][2]).toBe("raw")
+    end)
+    ataxia_numbNoteTyped = realNote
+    if not ok then error(err, 0) end
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch

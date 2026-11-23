@@ -118,9 +118,17 @@ function ataxia_Vitals_Update()
 	ataxia.vitals.oldhealth = ataxia.vitals.hp
 	ataxia.vitals.hp = tonumber(gmcp.Char.Vitals.hp)
 		if ataxia.vitals.hp < ataxia.vitals.oldhealth then
-			-- Track damage rate for flee system
-			if ataxiaBasher.enabled and ataxiaBasher_recordDamage then
-				ataxiaBasher_recordDamage(ataxia.vitals.oldhealth - ataxia.vitals.hp)
+			-- Track damage rate for flee system.
+			-- A fall of health that pays a numbness debt is damage the watchdog already has
+			-- (basher/016, v4.7.512): only the part the debt does not explain is new. pcall,
+			-- because this handler is the always-live path and must survive that file.
+			local drop = ataxia.vitals.oldhealth - ataxia.vitals.hp
+			if ataxia_numbNoteDrop then
+				local ok, rest = pcall(ataxia_numbNoteDrop, drop, ataxia.vitals.oldhealth, ataxia.vitals.hp)
+				if ok and tonumber(rest) then drop = tonumber(rest) end
+			end
+			if drop > 0 and ataxiaBasher.enabled and ataxiaBasher_recordDamage then
+				ataxiaBasher_recordDamage(drop)
 			end
 			if ataxiaBasher.enabled and not denizenAttack then
 				enableTrigger("Denizen Attack Find")

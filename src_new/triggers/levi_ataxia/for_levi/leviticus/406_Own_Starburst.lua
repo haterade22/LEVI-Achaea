@@ -37,4 +37,8 @@ patterns:
 
 -- We just died and starburst resurrected. Fire the death handler immediately
 -- to shut down the basher before the next prompt can dispatch another attack.
-ataxiaBasher_onDeath()
+-- A starburst is a death that happened: nothing held for the Wrath and Righteousness save
+-- (v4.7.512; mnemosyne/009, S.deathHold) waits any longer, and this call is not held.
+local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+if S and S.deathIsReal then S.deathIsReal("starburst") end
+ataxiaBasher_onDeath(true)

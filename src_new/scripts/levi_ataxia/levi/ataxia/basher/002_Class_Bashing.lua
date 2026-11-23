@@ -2751,6 +2751,10 @@ function ataxiaBasher_senselessFlurryNumb()
   if not mnemSenselessFlurry then return nil end
   if not ataxiaBasher_monkKaidoReady() then return nil end
   if ataxia.defences and ataxia.defences.numbness then return nil end
+  -- THE RECOVERY (v4.7.512): for 2-3 s after numbness fades the game refuses NUMB ("You may not
+  -- numb again so soon."). A send then wastes the round's rider and arms the 5 s hold below, so
+  -- the next numb came 5 s after the fade, not 2-3 (basher/016, ataxia_numbCooling).
+  if ataxia_numbCooling and ataxia_numbCooling() then return nil end
   -- CROWD GATE (review HIGH): while numb is up HP does not move, so EVERY HP-based
   -- safety goes blind -- the damage-rate watchdog records nothing, danger levels
   -- never trip, and the swarm escape ladder (HP-gated) stays silent -- then the
@@ -2759,6 +2763,9 @@ function ataxiaBasher_senselessFlurryNumb()
   -- where the lump is survivable and the next prompt's huge hp-delta trips the
   -- rate-shield normally; in swarm-threshold crowds (or mid-tactic) live HP data
   -- is worth more than 30% balance.
+  -- SINCE v4.7.512 the safeties are no longer blind: basher/016_Numb_Debt.lua counts each
+  -- absorbed hit and they read health minus that debt. The debt is an ESTIMATE (the game prints
+  -- no figure), so this gate stays for the rooms where an estimate is not good enough.
   local M = ataxia.mnemosyne
   local n = (M and M._denizenCount and M._denizenCount()) or 0
   local thr = (M and M.swarm and M.swarm.threshold and M.swarm.threshold()) or 3

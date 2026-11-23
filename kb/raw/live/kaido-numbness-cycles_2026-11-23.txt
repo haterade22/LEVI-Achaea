@@ -1,0 +1,792 @@
+You have recovered balance on your right arm.
+You grit your teeth and will your pain out of existence.
+Equilibrium used: 2.55s.
+You may eat another plant or mineral.
+11:14:55:483 [20041] [72] |(683815)|[ [ BLI ]]  
+11:14:55:619 [20041] [72] |(683815)|[ [ BLI ]]  
+11:14:55:973 [20041] [72] |(683815)|[ [ BLI ]]  
+Prowling in with surprising grace, an ormyrr guard enters from the east.
+11:14:56:880 [20041] [72] |(683815)|[ [ BLI ]]  
+Inhaling deeply, an ormyrr priest belches forth a noxious, green flame that cooks your flesh.
+You smile as the blow falls painlessly on you.
+11:14:56:882 [20041] [72] |(683815)|[ [ BLI burning (1) ]]  
+Whirling his bardiche in a lazy arc overhead, an ormyrr guard moves forward with fluid grace in spite of his ponderous 
+bulk to slice deeply into an unprotected patch of your flesh.
+You smile as the blow falls painlessly on you.
+11:14:56:883 [20041] [72] |(683815)|[ [ bld(165) BLI burning (1) ]]  
+You clot your wounds 9 times.
+11:14:56:931 [20041] [67] |(683815)|[ [ BLI ]]  
+11:14:57:034 [20041] [67] |(683815)|[ [ BLI ]]  
+(((((((((((((((((((( EQUILIBRIUM:2.609 ))))))))))))))))))))
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+An ormyrr priest's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 4345 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 400 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 365 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1680 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 365 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 400 (unblockable).
+11:14:57:517 [20041] [72] |(683815)|[ [ BLI ]]  
+11:14:57:661 [20041] [72] |(683815)|[ [ BLI ]]  
+11:14:58:043 [20041] [72] |(683815)|[ [ BLI ]]  
+11:14:58:133 [20041] [92] |(683815)|[ [ BLI ]]  
+You may eat another bit of irid moss or potash.
+11:14:58:399 [20041] [92] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 200 (psychic).
+11:14:58:524 [20041] [92] |(683815)|[ [ BLI ]]  
+11:14:58:620 [20041] [92] |(683815)|[ [ BLI ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.496 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 2288 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 446 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 1539 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 7136 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 384 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 446 (unblockable).
+11:14:59:013 [20041] [100] |(683815)|[ [ BLI ]]  
+Whirling his bardiche in a lazy arc overhead, an ormyrr guard moves forward with fluid grace in spite of his ponderous 
+bulk to slice deeply into an unprotected patch of your flesh.
+You smile as the blow falls painlessly on you.
+Rasping out a guttural string of syllables, an ormyrr priest points a talon at you, and your heart stutters in response,
+sending a sharp pain through your chest.
+You smile as the blow falls painlessly on you.
+Your hearing is suddenly restored.
+11:14:59:015 [20041] [100] |(683815)|[ [ bld(144) BLI hleech ]]  
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+You clot your wounds 8 times.
+11:14:59:068 [20041] [95] |(683815)|[ [ BLI ]]  
+11:14:59:159 [20041] [95] |(683815)|[ [ BLI ]]  
+You stare straight ahead and concentrate on a distant focal point.
+11:14:59:160 [20041] [95] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 200 (psychic).
+11:14:59:581 [20041] [95] |(683815)|[ [ BLI ]]  
+11:14:59:743 [20041] [95] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 200 (psychic).
+11:15:00:521 [20041] [95] |(683815)|[ [ BLI ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.615 ))))))))))))))))))))
+You may eat another plant or mineral.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 572 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1784 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 769 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1784 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 384 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 425 (unblockable).
+11:15:00:640 [20041] [100] |(683815)|[ [ BLI ]]  
+11:15:00:727 [20041] [100] |(683815)|[ [ BLI ]]  
+You eat a calamine crystal.
+11:15:00:810 [20041] [100] |(683815)|[ [ BLI ]]  
+Inhaling deeply, an ormyrr guard belches forth a noxious, green flame that cooks your flesh.
+You smile as the blow falls painlessly on you.
+Beckoning to the earth, an ormyrr priest calls forth a plume of lava that consumes and burns you.
+You smile as the blow falls painlessly on you.
+The fires consuming your flesh begin to crackle with greater intensity.
+11:15:01:172 [20041] [100] |(683815)|[ [ BLI burning (2) ]]  
+11:15:01:321 [20041] [100] |(683815)|[ [ BLI burning (2) ]]  
+The fires consuming you diminish somewhat.
+11:15:01:409 [20041] [100] |(683815)|[ [ BLI burning (1) ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 210 (psychic).
+11:15:01:543 [20041] [100] |(683815)|[ [ BLI burning (1) ]]  
+11:15:01:682 [20041] [100] |(683815)|[ [ BLI burning (1) ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.461 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 545 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 425 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 366 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 446 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 366 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 892 (unblockable).
+11:15:02:198 [20041] [100] |(683815)|[ [ BLI burning (1) ]]  
+You may eat another plant or mineral.
+11:15:02:355 [20041] [100] |(683815)|[ [ BLI burning (1) ]]  
+11:15:02:937 [20041] [100] |(683815)|[ [ BLI ]]  
+You may utilise the tree tattoo again.
+11:15:03:067 [20041] [100] |(683815)|[ [ BLI ]]  
+Inhaling deeply, an ormyrr guard belches forth a noxious, green flame that cooks your flesh.
+You smile as the blow falls painlessly on you.
+An ormyrr priest flings a handful of metallic dust at you. The fine particulates infiltrate your lungs, cutting them to 
+bloody ribbons within your chest.
+You smile as the blow falls painlessly on you.
+11:15:03:217 [20041] [100] |(683815)|[ [ BLI AST burning (1) ]]  
+11:15:03:414 [20041] [100] |(683815)|[ [ BLI AST burning (1) ]]  
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.574 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 572 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+An ormyrr guard's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 1784 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 472 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 547 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 3780 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 521 (unblockable).
+11:15:03:834 [20041] [100] |(683815)|[ [ BLI ]]  
+11:15:03:986 [20041] [100] |(683815)|[ [ BLI ]]  
+11:15:04:497 [20041] [100] |(683815)|[ [ BLI ]]  
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+You cry out in agony as the effects of your numbness fade away and you feel your wounds once more.
+11:15:04:590 [11450] [100] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 103 (psychic).
+11:15:04:597 [11450] [100] |(683815)|[ [ BLI ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+11:15:04:601 [16921] [100] |(683815)|[ [ BLI ]]  
+11:15:04:751 [16921] [100] |(683815)|[ [ BLI ]]  
+You may eat another plant or mineral.
+11:15:04:839 [16921] [100] |(683815)|[ [ BLI ]]  
+The world about you falls silent as the deafness trance sinks upon you.
+11:15:05:075 [16921] [100] |(683815)|[ [ BLI ]]  
+11:15:05:303 [16921] [100] |(683815)|[ [ BLI ]]  
+Whirling his bardiche in a lazy arc overhead, an ormyrr guard moves forward with fluid grace in spite of his ponderous 
+bulk to slice deeply into an unprotected patch of your flesh.
+Health lost: 1754 (physical cutting).
+Inhaling deeply, an ormyrr priest belches forth a noxious, green flame that cooks your flesh.
+Health lost: 1415 (fire).
+11:15:05:305 [13752] [100] |(683815)|[ [ bld(128) BLI burning (1) ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.534 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You call upon your Kai training and transmute your mana into pure health.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 10681 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+Balance used: 2.3s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 897 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 448 (physical blunt).
+An ormyrr priest stumbles suddenly, their movements becoming awkward and uncoordinated.
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 4120 (unblockable).
+11:15:05:427 [17472] [72] |(683815)|[ [ bld(128) BLI burning (1) ]]  
+You clot your wounds 7 times.
+11:15:05:430 [17472] [68] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 93 (psychic).
+11:15:05:546 [19759] [77] |(683815)|[ [ BLI ]]  
+11:15:05:648 [19759] [77] |(683815)|[ [ BLI ]]  
+11:15:06:526 [19759] [77] |(683815)|[ [ BLI ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 93 (psychic).
+11:15:06:624 [19759] [77] |(683815)|[ [ BLI ]]  
+Inhaling deeply, an ormyrr guard belches forth a noxious, green flame that cooks your flesh.
+Health lost: 1232 (fire).
+Beckoning to the earth, an ormyrr priest calls forth a plume of lava that consumes and burns you.
+Health lost: 3170 (fire).
+The fires consuming your flesh begin to crackle with greater intensity.
+11:15:07:241 [15557] [75] |(683815)|[ [ BLI burning (2) ]]  
+11:15:07:377 [15557] [75] |(683815)|[ [ BLI burning (2) ]]  
+The fires consuming you diminish somewhat.
+11:15:07:380 [15557] [75] |(683815)|[ [ BLI burning (1) ]]  
+You have recovered enough to numb your body once again.
+11:15:07:571 [15557] [75] |(683815)|[ [ BLI burning (1) ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 93 (psychic).
+11:15:07:577 [15557] [75] |(683815)|[ [ BLI burning (1) ]]  
+You touch the tree of life tattoo.
+You have recovered balance on your left arm.
+11:15:07:580 [15557] [75] |(683815)|[ [ BLI ]]  
+11:15:07:746 [15557] [75] |(683815)|[ [ BLI ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.32 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You call upon your Kai training and transmute your mana into pure health.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 667 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+Balance used: 2.3s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 448 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1030 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 7183 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+11:15:07:752 [19535] [34] |(683815)|[ [ BLI ]]  
+11:15:08:480 [19535] [34] |(683815)|[ [ BLI ]]  
+11:15:09:104 [19535] [57] |(683815)|[ [ BLI ]]  
+11:15:09:203 [19535] [57] |(683815)|[ [ BLI ]]  
+An ormyrr guard connects the blunt end of his weapon with your forehead. The impact leaves your vision blurred.
+Health lost: 1409 (physical blunt).
+The massive trauma to your head has damaged your skull and brain considerably.
+An ormyrr priest flings a handful of metallic dust at you. The fine particulates infiltrate your lungs, cutting them to 
+bloody ribbons within your chest.
+Health lost: 2087 (asphyxiation).
+11:15:09:297 [16039] [57] |(683815)|[ [ BLI AST H2 diz ]]  
+An ormyrr priest steadies and their motions become precise once again.
+11:15:09:547 [16039] [57] |(683815)|[ [ BLI AST H2 diz ]]  
+11:15:09:701 [16039] [57] |(683815)|[ [ BLI stun AST H2 diz ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.605 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+11:15:09:933 [16039] [57] |(683815)|[ [ BLI stun AST H2 diz ]]  
+You are no longer stunned.
+11:15:10:158 [16039] [57] |(683815)|[ [ BLI AST H2 diz ]]  
+You call upon your Kai training and transmute your mana into pure health.
+11:15:10:317 [18210] [30] |(683815)|[ [ BLI AST H2 diz ]]  
+You grit your teeth and will your pain out of existence.
+Equilibrium used: 2.55s.
+11:15:10:319 [18210] [30] |(683815)|[ [ BLI AST H2 diz ]]  
+-----
+You call upon your Kai training and transmute your mana into pure health.
+You grit your teeth and will your pain out of existence.
+Equilibrium used: 2.55s.
+An ormyrr guard slashes at your neck with his bardiche, very nearly lopping off your head.
+You smile as the blow falls painlessly on you.
+11:18:20:333 [17229] [29] |(676802|70%)|[ [ bld(162) laceratedthroat slashedthroat H2 ]]  
+Your head feels stronger and healthier.
+The flow of blood slows as the gaping wound in your throat partially mends.
+The bleeding gash in your throat closes up completely.
+11:18:20:396 [17229] [29] |(676802|70%)|[ [ bld(162) ]]  
+11:18:20:489 [17229] [29] |(676802|70%)|[ [ bld(162) ]]  
+Beckoning to the earth, an ormyrr priest calls forth a plume of lava that consumes and burns you.
+You smile as the blow falls painlessly on you.
+11:18:20:821 [17229] [29] |(676802|70%)|[ [ bld(162) burning (1) ]]  
+11:18:20:986 [17229] [29] |(676802|70%)|[ [ bld(162) burning (1) ]]  
+11:18:21:468 [17229] [29] |(676802|70%)|[ [ bld(162) burning (1) ]]  
+11:18:21:561 [19530] [58] |(676802|70%)|[ [ bld(162) ]]  
+You clot your wounds 9 times.
+11:18:21:716 [19530] [53] |(676802|70%)|[]  
+Your mind is able to focus once again.
+11:18:21:822 [19530] [53] |(676802|70%)|[]  
+11:18:21:964 [19530] [53] |(676802|70%)|[]  
+Whirling his bardiche in a lazy arc overhead, an ormyrr guard moves forward with fluid grace in spite of his ponderous 
+bulk to slice deeply into an unprotected patch of your flesh.
+You smile as the blow falls painlessly on you.
+11:18:22:364 [19530] [53] |(676802|70%)|[ [ bld(151) ]]  
+11:18:22:521 [19530] [53] |(676802|70%)|[ [ bld(151) ]]  
+You clot your wounds 8 times.
+11:18:22:524 [19530] [49] |(676802|70%)|[]  
+(((((((((((((((((((( EQUILIBRIUM:2.552 ))))))))))))))))))))
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 667 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+An ormyrr guard's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 2060 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 428 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 448 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+11:18:22:664 [19530] [49] |(676802|68%)|[]  
+An ormyrr priest flings a handful of metallic dust at you. The fine particulates infiltrate your lungs, cutting them to 
+bloody ribbons within your chest.
+You smile as the blow falls painlessly on you.
+11:18:22:890 [19530] [49] |(676802|68%)|[ [ AST ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 141 (psychic).
+11:18:22:941 [19530] [49] |(676802|68%)|[ [ AST ]]  
+11:18:23:026 [19530] [49] |(676802|68%)|[ [ AST ]]  
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+11:18:23:112 [19530] [49] |(676802|68%)|[]  
+You may eat another bit of irid moss or potash.
+11:18:23:843 [19530] [49] |(676802|68%)|[]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 141 (psychic).
+11:18:23:999 [19530] [49] |(676802|68%)|[]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+11:18:24:081 [20163] [57] |(676802|68%)|[]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.535 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 636 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 7183 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+An ormyrr guard grows visibly enraged and begins to fight with increased desperation.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 1795 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+11:18:24:195 [20163] [67] |(676802|55%)|[]  
+11:18:24:341 [20163] [66] |(676802|55%)|[]  
+An ormyrr guard slashes at your neck with his bardiche, very nearly lopping off your head.
+You smile as the blow falls painlessly on you.
+11:18:24:471 [20163] [66] |(676802|55%)|[ [ bld(182) laceratedthroat slashedthroat ]]  
+You clot your wounds 10 times.
+11:18:24:576 [20163] [61] |(676802|55%)|[ [ laceratedthroat slashedthroat ]]  
+You may eat another plant or mineral.
+11:18:24:578 [20163] [61] |(676802|55%)|[ [ laceratedthroat slashedthroat ]]  
+11:18:24:741 [20163] [61] |(676802|55%)|[ [ laceratedthroat slashedthroat ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 135 (psychic).
+11:18:24:900 [20163] [62] |(676802|55%)|[ [ laceratedthroat slashedthroat ]]  
+Inhaling deeply, an ormyrr priest belches forth a noxious, green flame that cooks your flesh.
+You smile as the blow falls painlessly on you.
+11:18:25:049 [20163] [62] |(676802|55%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+11:18:25:138 [20163] [62] |(676802|55%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+An ormyrr guard slashes at your neck with his bardiche, very nearly lopping off your head.
+You smile as the blow falls painlessly on you.
+11:18:25:502 [20163] [62] |(676802|55%)|[ [ bld(177) laceratedthroat slashedthroat BLI burning (1) ]]  
+You clot your wounds 9 times.
+11:18:25:581 [20163] [58] |(676802|55%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+11:18:25:675 [20163] [58] |(676802|55%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.511 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Damage dealt: 667 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 448 (physical blunt).
+An ormyrr priest stumbles suddenly, their movements becoming awkward and uncoordinated.
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 428 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 491 (unblockable).
+11:18:25:772 [20163] [58] |(676802|54%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+Time wreaks ruin upon an ormyrr guard, deteriorating before your eyes.
+Damage dealt: 135 (psychic).
+11:18:25:921 [20163] [58] |(676802|54%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+11:18:26:015 [20163] [58] |(676802|54%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+11:18:26:102 [20163] [71] |(676802|54%)|[ [ laceratedthroat slashedthroat BLI burning (1) ]]  
+An ormyrr guard connects the blunt end of his weapon with your forehead. The impact leaves your vision blurred.
+You smile as the blow falls painlessly on you.
+The massive trauma to your head has damaged your skull and brain considerably.
+11:18:26:505 [20163] [71] |(676802|54%)|[ [ laceratedthroat BLI slashedthroat diz H2 burning (1) ]]  
+11:18:26:658 [20163] [71] |(676802|54%)|[ [ laceratedthroat diz BLI slashedthroat stun H2 burning (1) ]]  
+An ormyrr priest flails about clumsily.
+(BR): CLUMSY paying off -- An ormyrr priest wasted an attack
+11:18:27:009 [20163] [71] |(676802|54%)|[ [ laceratedthroat diz BLI slashedthroat stun H2 burning (1) ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.369 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+11:18:27:236 [20163] [71] |(676802|54%)|[ [ laceratedthroat diz BLI slashedthroat stun H2 burning (1) ]]  
+You are no longer stunned.
+11:18:27:331 [20163] [71] |(676802|54%)|[ [ laceratedthroat diz BLI slashedthroat H2 burning (1) ]]  
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+An ormyrr priest's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 10681 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Damage dealt: 428 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 1795 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 4120 (unblockable).
+11:18:27:491 [20163] [81] |(676802|37%)|[ [ laceratedthroat diz BLI slashedthroat H2 burning (1) ]]  
+You focus your mind intently on curing your mental maladies.
+You are no longer dizzy.
+11:18:27:494 [20163] [79] |(676802|37%)|[ [ laceratedthroat BLI slashedthroat H2 burning (1) ]]  
+11:18:27:496 [20163] [79] |(676802|37%)|[ [ laceratedthroat BLI slashedthroat H2 burning (1) ]]  
+11:18:27:504 [20163] [79] |(676802|37%)|[ [ laceratedthroat BLI slashedthroat H2 burning (1) ]]  
+An ormyrr guard connects the blunt end of his weapon with your forehead. The impact leaves your vision blurred.
+You smile as the blow falls painlessly on you.
+The massive trauma to your head has damaged your skull and brain considerably.
+11:18:27:564 [20163] [79] |(676802|37%)|[ [ laceratedthroat diz BLI slashedthroat H2 burning (1) ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 708 (psychic).
+11:18:27:925 [20163] [79] |(676802|36%)|[ [ laceratedthroat diz BLI slashedthroat H2 burning (1) ]]  
+11:18:28:060 [20163] [79] |(676802|36%)|[ [ laceratedthroat diz BLI slashedthroat stun H2 burning (1) ]]  
+You are no longer stunned.
+11:18:28:430 [20163] [78] |(676802|36%)|[ [ slashedthroat amn laceratedthroat BLI diz H2 burning (1) ]]  
+11:18:28:478 [20163] [78] |(676802|36%)|[ [ slashedthroat laceratedthroat BLI diz H2 burning (1) ]]  
+11:18:28:569 [20163] [78] |(676802|36%)|[ [ slashedthroat laceratedthroat BLI diz H2 burning (1) ]]  
+11:18:28:578 [20163] [78] |(676802|36%)|[ [ slashedthroat laceratedthroat BLI diz H2 burning (1) ]]  
+An ormyrr guard connects the blunt end of his weapon with your forehead. The impact leaves your vision blurred.
+You smile as the blow falls painlessly on you.
+The massive trauma to your head has damaged your skull and brain considerably.
+11:18:28:580 [20163] [78] |(676802|36%)|[ [ slashedthroat laceratedthroat BLI diz H2 burning (1) ]]  
+Your head feels stronger and healthier.
+The flow of blood slows as the gaping wound in your throat partially mends.
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.464 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 708 (psychic).
+11:18:28:964 [20163] [78] |(676802|35%)|[ [ slashedthroat BLI stun diz burning (1) ]]  
+Beckoning to the earth, an ormyrr priest calls forth a plume of lava that consumes and burns you.
+You smile as the blow falls painlessly on you.
+The fires consuming your flesh begin to crackle with greater intensity.
+11:18:29:018 [20163] [78] |(676802|35%)|[ [ slashedthroat BLI stun diz burning (2) ]]  
+11:18:29:115 [20163] [78] |(676802|35%)|[ [ slashedthroat BLI stun diz burning (2) ]]  
+You are no longer stunned.
+11:18:29:509 [20163] [78] |(676802|35%)|[ [ slashedthroat BLI diz burning (2) ]]  
+The fires consuming you diminish somewhat.
+You eat a plumbum flake.
+You are no longer dizzy.
+11:18:29:513 [20163] [78] |(676802|35%)|[ [ slashedthroat BLI burning (1) ]]  
+An ormyrr guard slashes at your neck with his bardiche, very nearly lopping off your head.
+You smile as the blow falls painlessly on you.
+11:18:29:516 [20163] [78] |(676802|35%)|[ [ bld(290) slashedthroat laceratedthroat BLI burning (1) ]]  
+Health lost: 290 (raw).
+[[ BLEED 290 ]]
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 2670 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 2060 (unblockable).
+Balance used: 1.6s.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 897 (physical blunt).
+An ormyrr priest stumbles suddenly, their movements becoming awkward and uncoordinated.
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 8821 (unblockable).
+A figurine of the suffering Maya grows warm to the touch.
+You have slain an ormyrr guard, retrieving the corpse.
+You have gained 589 experience.
+A large pile of sovereigns spills from the corpse, flying into your hands before they can reach the ground.
+Your kill infuses your bones with vigour and vitality, your mind and body refreshed for the next hunt.
+Your triumph instills you with greater reserves of health.
+You launch a powerful uppercut at an ormyrr priest.
+You connect!
+The coalescence of power suffusing you empowers your blow.
+Damage dealt: 7946 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+An ormyrr priest grows visibly enraged and begins to fight with increased desperation.
+11:18:29:724 [20163] [88] |(676802)|[ [ bld(281) slashedthroat laceratedthroat BLI burning (1) ]]  
+11:18:29:725 [20163] [88] |(676802)|[ [ bld(281) slashedthroat laceratedthroat BLI burning (1) ]]  
+11:18:29:731 [20163] [88] |(676802)|[ [ bld(281) slashedthroat laceratedthroat BLI burning (1) ]]  
+You clot your wounds 15 times.
+11:18:29:732 [20163] [80] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+Your mind is able to focus once again.
+11:18:29:951 [20163] [80] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+
+(MNEM): [explore] [swarm] DYING FAST -- 45% and ~2.4s to live at this rate -- NOT leaving: Prey -- every denizen tracks 
+a retreat, so we fight here.
+You cry out in agony as the effects of your numbness fade away and you feel your wounds once more.
+11:18:29:955 [9127] [80] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 743 (psychic).
+You can use Spinningbackfist again.
+Flames lick around you - you are on fire!
+Health lost: 96 (fire).
+11:18:30:071 [9031] [80] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+You may eat another bit of irid moss or potash.
+11:18:30:073 [9031] [80] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+11:18:30:165 [10644] [88] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+11:18:30:177 [10644] [88] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+11:18:30:545 [10644] [88] |(676802)|[ [ slashedthroat laceratedthroat BLI burning (1) ]]  
+11:18:30:819 [13903] [88] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+Time wreaks ruin upon an ormyrr priest, deteriorating before your eyes.
+Damage dealt: 708 (psychic).
+11:18:30:983 [13903] [88] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+An ormyrr priest flings a handful of metallic dust at you. The fine particulates infiltrate your lungs, cutting them to 
+bloody ribbons within your chest.
+Health lost: 2159 (asphyxiation).
+11:18:31:066 [11944] [87] |(676802)|[ [ slashedthroat laceratedthroat BLI AST ]]  
+You may eat another plant or mineral.
+11:18:31:178 [11944] [87] |(676802)|[ [ slashedthroat laceratedthroat BLI AST ]]  
+11:18:31:181 [11944] [87] |(676802)|[ [ slashedthroat laceratedthroat BLI AST ]]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.536 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You open a dragonskin pack.
+You put 296 gold sovereigns in a dragonskin pack.
+You close a dragonskin pack.
+You call upon your Kai training and transmute your mana into pure health.
+11:18:31:261 [16520] [28] |(676802)|[ [ slashedthroat laceratedthroat BLI AST ]]  
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+11:18:31:354 [16520] [28] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+You pump out at an ormyrr priest with a powerful side kick.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 15333 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+A figurine of the suffering Maya grows warm to the touch.
+You have slain an ormyrr priest, retrieving the corpse.
+You have gained 589 experience.
+A large pile of sovereigns spills from the corpse, flying into your hands before they can reach the ground.
+Your kill infuses your bones with vigour and vitality, your mind and body refreshed for the next hunt.
+Your triumph instills you with greater reserves of health.
+Balance used: 2.3s.
+You detect nothing here by that name.
+You cannot see that being here.
+11:18:31:494 [16923] [33] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+11:18:31:495 [16923] [33] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+
+(MNEM): [explore] Last Word -- denizens explode on death; healing to 90% before moving on (at 83%).
+Darkened slave caves. (indoors)
+The ground is slick with ice.
+You see exits leading east and southeast.
+11:18:31:717 [16923] [33] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+You may eat another plant or mineral.
+11:18:32:772 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+
+(LEVI): [V3] States reset
+You have recovered enough to numb your body once again.
+11:18:32:938 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+You may utilise the tree tattoo again.
+11:18:33:372 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+(((((((((((((((((((( BALANCE: 2.254 ))))))))))))))))))))
+You put 262 gold sovereigns in a luxurious black top hat.
+11:18:33:750 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+Equilibrium used: 0.42s.
+Glancing to the east, you see:
+Darkened slave caves. (indoors)
+The ground is slick with ice.
+You see exits leading northeast and west.
+11:18:33:845 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+
+(MNEM): [explore] room clear -> moving e.
+You limp slowly east, your blistered skin weeping fluid.
+11:18:34:095 [19224] [41] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.348 ))))))))))))))))))))
+11:18:35:063 [20165] [54] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+Darkened slave caves. (indoors)
+The ground is slick with ice.
+You see exits leading northeast and west.
+As you over extend, some of your blisters rip open, blood and pus oozing from the wounds.
+Health lost: 573 (fire).
+11:18:35:515 [19592] [54] |(676802)|[ [ slashedthroat laceratedthroat BLI ]]  
+The flow of blood slows as the gaping wound in your throat partially mends.
+The bleeding gash in your throat closes up completely.
+11:18:35:845 [19592] [54] |(676802)|[ [ BLI ]]  
+Equilibrium used: 0.42s.
+Glancing to the northeast, you see:
+Shifting dunes. (indoors)
+The ground is slick with ice. Voluminous robes obfuscate the appearance of an ormyrr priest.
+You see exits leading north, southwest, and northwest.
+11:18:36:071 [19592] [54] |(676802)|[ [ BLI ]]  
+You may eat another bit of irid moss or potash.
+11:18:36:073 [19592] [54] |(676802)|[ [ BLI ]]  
+
+(MNEM): [explore] room clear -> moving ne.
+You eat a potash crystal.
+You feel your health and mana replenished.
+You limp slowly northeast, your blistered skin weeping fluid.
+11:18:36:307 [20167] [62] |(676802)|[ [ BLI ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.347 ))))))))))))))))))))
+Shifting dunes. (indoors)
+The ground is slick with ice. Voluminous robes obfuscate the appearance of an ormyrr priest.
+You see exits leading north, southwest, and northwest.
+As you over extend, some of your blisters rip open, blood and pus oozing from the wounds.
+Health lost: 573 (fire).
+11:18:37:752 [19594] [62] |(676802)|[ [ BLI ]] 
+(LEVI): Now targeting: 678042
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset 
+You swing the culling blade in a great arc, black energy leaping from the blade.
+The energy rips into an ormyrr priest in a detonation of power.
+The coalescence of power suffusing you empowers your blow.
+Damage dealt: 30185 (unblockable).
+Your vicious attack cleaves to a nearby enemy.
+11:18:37:910 [19594] [62] |(678042|62%)|[ [ BLI ]]  
+Inhaling deeply, an ormyrr priest belches forth a noxious, green flame that cooks your flesh.
+Health lost: 1581 (fire).
+11:18:37:913 [18013] [62] |(678042|62%)|[ [ BLI burning (1) ]]  
+You grit your teeth and will your pain out of existence.
+Equilibrium used: 2.55s.
+11:18:37:915 [18013] [62] |(678042|62%)|[ [ BLI burning (1) ]]  
+-----
+Damage dealt: 703 (psychic).
+You cry out in agony as the effects of your numbness fade away and you feel your wounds once more.
+11:33:18:012 [17821] [99] |(648799|24%)|[]  
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.547 ))))))))))))))))))))
+You may eat another plant or mineral.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You pump out at a savage hellcat with a powerful side kick.
+You connect!
+Damage dealt: 894 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+Balance used: 2.3s.
+You launch a powerful uppercut at a savage hellcat.
+You connect!
+Your deadly prowess nourishes your body.
+Your mind is bolstered as your enemies break.
+Damage dealt: 17611 (physical blunt).
+Your vicious attack cleaves to a nearby enemy.
+A figurine of the suffering Maya grows warm to the touch.
+You have slain a savage hellcat, retrieving the corpse.
+You have gained 434 experience.
+A large pile of sovereigns spills from the corpse, flying into your hands before they can reach the ground.
+Your kill infuses your bones with vigour and vitality, your mind and body refreshed for the next hunt.
+Your triumph instills you with greater reserves of health.
+You cannot see that being here.
+11:33:18:113 [18225] [100] |(648799)|[]  
+11:33:18:189 [18225] [100] |(648799)|[]  
+Echoes of statue-lined hall. (indoors)
+You see exits leading north and east.
+11:33:18:273 [18225] [100] |(648799)|[]  
+
+(MNEM): [explore] glance e gave nothing (no exits line within 1s) -- moving anyway.
+(MNEM): [explore] room clear -> moving e.
+
+(LEVI): [V3] States reset
+You have recovered balance on your left arm.
+11:33:20:276 [20245] [99] |(648799)|[]  
+(((((((((((((((((((( BALANCE: 2.199 ))))))))))))))))))))
+You call upon your Kai training and transmute your mana into pure health.
+You may not numb again so soon.
+I do not recognise anything called that here.
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+You cannot see that being here.
+Echoes of statue-lined hall. (indoors)
+You see exits leading north and east.
+11:33:20:439 [20245] [71] |(648799)|[]  
+11:33:20:536 [20245] [95] |(648799)|[]  
+You have recovered enough to numb your body once again.
+11:33:20:973 [20245] [95] |(648799)|[]  
+
+(LEVI): [V3] States reset
+Health lost: 15 (raw).
+[[ BLEED 15 ]]
+Echoes of a webbed staircase. (indoors)
+Straight-backed and stiff, a conniving imp guard stands at attention here.
+You see exits leading east and west.
+11:33:24:506 [20230] [96] |(648799)|[] 
+(LEVI): Now targeting: 620808
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset 
+You open a dragonskin pack.
+11:33:24:663 [20230] [96] |(620808|100%)|[]  
+You put 296 gold sovereigns in a dragonskin pack.
+11:33:24:664 [20230] [96] |(620808|100%)|[]  
+You close a dragonskin pack.
+11:33:24:665 [20230] [96] |(620808|100%)|[]  
+A conniving imp guard brandishes his blade and quickly slashes it into your side.
+Health lost: 948 (physical cutting).
+11:33:24:667 [19282] [96] |(620808|100%)|[]  
+You grit your teeth and will your pain out of existence.
+Equilibrium used: 2.55s.
+11:33:24:668 [19282] [96] |(620808|100%)|[]  

@@ -611,6 +611,49 @@ describe("skata (alias shikudo/006)", function()
   end)
 end)
 
+-- v4.7.512: the handler asks the numbness debt (basher/016) how much of a fall of health is new
+-- damage, and gives only that to the basher's net-damage feed.
+describe("a fall of health and the numbness debt (update_stuff/004)", function()
+  local function tick(hp)
+    gmcp = { Char = {
+      Vitals = { hp = tostring(hp), maxhp = "20061", mp = "4000", maxmp = "4000", ep = "1000", maxep = "1000",
+        wp = "1000", maxwp = "1000", nl = "10", bal = "1", eq = "1", charstats = { "Bleed: 0" } },
+      Status = { class = "Monk" },
+    } }
+    ataxiaTemp.class = "Monk"
+    ataxiagui_updateVitals = function() end
+    ataxia_Vitals_Update()
+  end
+
+  it("records the part the debt does not explain; an error there records the whole fall", function()
+    local rec, asked = {}, {}
+    ataxia = { vitals = {}, settings = {} }
+    ataxiaTemp = {}
+    ataxiaBasher = { enabled = true }
+    ataxiaBasher_recordDamage = function(n) rec[#rec + 1] = n end
+    ataxia_numbNoteDrop = function(amount, from, to) asked[#asked + 1] = { amount, from, to }; return 1391 end
+    tick(20041)                       -- the first tick fills ataxia.vitals: no fall
+    expect(#asked).toBe(0)
+    tick(11450)                       -- the logged blow: 20041 -> 11450
+    expect(#asked).toBe(1)
+    expect(asked[1][1]).toBe(8591)
+    expect(asked[1][2]).toBe(20041)
+    expect(asked[1][3]).toBe(11450)
+    expect(#rec).toBe(1)
+    expect(rec[1]).toBe(1391)
+    ataxia_numbNoteDrop = function() error("boom") end
+    tick(10000)
+    expect(rec[2]).toBe(1450)
+    expect(ataxia.vitals.hp).toBe(10000) -- the always-live handler went on
+    ataxia_numbNoteDrop = function() return 0 end -- the debt explains all of it
+    tick(9000)
+    expect(#rec).toBe(2)
+    ataxia_numbNoteDrop = nil                     -- the file is absent: as before v4.7.512
+    tick(8000)
+    expect(rec[3]).toBe(1000)
+  end)
+end)
+
 -- Restore the shared Lua state.
 for k in pairs(_G) do
   if before[k] == nil then _G[k] = nil end

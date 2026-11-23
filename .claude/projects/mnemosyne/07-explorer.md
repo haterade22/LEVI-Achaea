@@ -894,15 +894,65 @@ said "LOW HP (100%)" for a damage-rate escape.
   `funnelRoom ~= swarmRoom`.
 - **Reason.** onVitals hands `_beginEscape` "DYING FAST (n%)" or "LOW HP (n%)" from `hppFresh`.
 
-### Wrath and Righteousness: def up and leave (v4.7.372)
+### Wrath and Righteousness: def up and fight on (v4.7.372, changed v4.7.512)
 
 "When you would die, the power of Righteous Fire will allow you to restore yourself to full health and
-instantly slay the non-boss denizen that defeated you" (1h cooldown). User: escape the room and def
-up. `S.onRighteousFire(how)` -> `systemDefup(ataxia.settings.defences.current)` and `S.disengage`,
-with `S.pursuedAt` and `S._lastDisengageAt` cleared so the exit is not refused by the fight that just
-killed us. Detected by `S._checkRighteousFire(hp)` at the top of `S.onVitals` until the proc line is
-captured: `mnemWrathRighteousness`, `RF_COOLDOWN` 3600s since the last, denizens present, and health
-up by `RF_JUMP` (45) points to `RF_FULL` (95%) or more in one prompt.
+instantly slay the non-boss denizen that defeated you" (1h cooldown).
+
+**The user's rule, 2026-11-23, replaces "escape the room" (v4.7.372):** "with boon wrath and
+righteousness and we die, we need to continue to attack if more than one denizen in there. We usually
+turn off all systems." So `S.onRighteousFire(how)` -> `systemDefup(ataxia.settings.defences.current)`,
+then `ataxiaBasher_attack()` when a denizen is still here. It does not disengage. `S.pursuedAt` and
+`S._lastDisengageAt` are cleared and the one retreat is given back, so the ladder is free if the room
+turns bad again: the next death is real for an hour.
+
+**Detection (no save line is captured yet).** `S._checkRighteousFire(hp)` at the top of `S.onVitals`:
+`mnemWrathRighteousness`, `RF_COOLDOWN` 3600s since the last, denizens present, and health up by
+`RF_JUMP` (45) points to `RF_FULL` (95%) or more in one prompt. It reads the game's own health
+(`hppRawFresh`), not health minus the numbness debt.
+
+**The death signal that may be the save (`S.deathHold`).** "You have been slain by" turns everything
+off: `ataxiaBasher_onDeath` (triggers 407, the "player death" event) disables the basher and clears the
+queue, and trigger `mnemosyne/007` reports the death and stops the sweep. Whether the game prints that
+line at a save is NOT KNOWN. So while the boon can save us (`S._rfReady()`: the
+boon is held and its hour is over), each of those handlers asks `S.deathHold(key, fn)` first and waits. After `RF_VERIFY` (1.5 s)
+`S._resolveDeathHold()` judges by the state: ALIVE in the room we were slain in is the save (nothing is
+turned off, and `S.onRighteousFire` runs if the detector has not run it); no health, or another room, is
+a real death, and the held handlers run then. Not "at full health": we fight on during the hold. The
+slain line of a save the detector already saw (in the last 3 s, and we are alive) is dropped with no
+hold. The hold is session state (`ataxiaTemp.rfDeathHold`, `rfDeathHoldT`), because `S` is saved to
+disk; a hold older than 3 s has lost its timer and is given up. A starburst (trigger 406) is a real death at once
+(`S.deathIsReal`), and calls `ataxiaBasher_onDeath(true)`, which is never held.
+
+**Open:** the save's own line; whether a slain line prints; what a boss kill does (the boon slays only a
+non-boss); the boon "can echo (max 8)", and the code counts one save an hour.
+
+### Senseless Flurry: numb before a never-walked door (v4.7.512)
+
+User, 2026-11-23: "We should numb before entering a room, to save time. Waiting for a denizen to be in
+room and then numbing gives them like 1 to 2 attacks to tank."
+
+`M._exploreMove` asks `M._preNumb(dir)`. On a yes it sends two queue entries:
+`queue addclear free stand;numb`, then `queue add free <dir>`. NUMB takes the equilibrium and a move
+needs it, so one entry `numb;<dir>` would lose the move. The move timeout is 5 + `PRE_NUMB_WAIT` (3) s.
+If that timeout finds us in the same room WITH a denizen, the move is not re-sent: a denizen walked in
+while the move waited, the basher's round wiped the move, and a re-send would walk us out of the fight.
+The room is decided again by the tick.
+
+`M._preNumb` says yes when all of these hold: the door was never walked from this room (the same test
+as the glance recon; a walked door leads to a cleared room); the glance did not name the room as lava
+(`ataxiaTemp.mnemLavaPlan`); the move is not a swarm-tactics move, not a retry, and carries no raido or
+hermit; and the keeper `ataxiaBasher_senselessFlurryNumb()` returns a numb (the boon, a Kaido stance or
+Rain form, numbness down, its recovery over, the crowd gate, the 5 s attempt-hold, which this call arms).
+
+**Why not "glance to see if a denizen is there"** (the user's other idea): the glance recon reads two
+facts from the glanced prose, lava and "There are N greater elementals here."; it does not read
+denizens from it. A never-walked door is the test that needs no new parser.
+
+**Not covered:** numbness that is still up from the last fight is not renewed before the move (whether
+NUMB can be sent while it is up is not known), so it can fade early in the next room. A denizen that
+walks in during the wait and does NOT make the basher attack before the equilibrium returns is left
+behind by the move, as with any move.
 
 ### The movement lock (v4.7.243)
 

@@ -1791,12 +1791,29 @@ You grit your teeth and will your pain out of existence.
 ```
 
 Highlighted **turquoise bold** (`triggers/highlighting/060_Numb.lua`). AB Numbness (Kaido 894):
-self, 3.00s equilibrium, defers 40% of incoming damage into one later blow.
+self, 3.00s equilibrium BASE (2.55s OURS). It defers ALL incoming damage into one later blow, 40%
+smaller. (This page said "defers 40%" until v4.7.512. That was wrong.) The measured facts and the
+other four lines are in `kb/defences/numbness.md`.
 
 **Read it as a warning, not a buff notice.** While numb is up the HP number stops tracking the
-fight, which blinds the rate watchdog, the danger levels and the escape ladder until the deferred
-lump lands -- the reason `ataxiaBasher_senselessFlurryNumb` refuses at or above the swarm threshold
-and while any swarm tactic is running. Fires for Tekura as well as Rain-form Shikudo (v4.7.297).
+fight -- the reason `ataxiaBasher_senselessFlurryNumb` refuses at or above the swarm threshold and
+while any swarm tactic is running. Fires for Tekura as well as Rain-form Shikudo (v4.7.297).
+
+**How NUMB is played since v4.7.512:**
+
+- **It lasts 9 to 10 s, then 2 to 3 s of recovery.** A NUMB sent in the recovery prints "You may
+  not numb again so soon." The keeper waits for "You have recovered enough to numb your body once
+  again." (`ataxia_numbCooling`); before, its 5 s attempt-hold put the next numb 5 s after the fade.
+- **The fade is highlighted `orange_red` and echoed** with the size of the blow:
+  `NUMB WORE OFF: -8591 HP (20041 -> 11450, 42% of max) from 8 absorbed hits. Estimate was 7200.`
+- **The hits are counted while it is up** (the numbness debt, `basher/016_Numb_Debt.lua`), and the
+  basher and the swarm act on health minus that debt: `.claude/projects/basher/05-safety-systems.md`.
+- **In the tower it goes up BEFORE a never-walked door** (user, 2026-11-23). NUMB takes the
+  equilibrium that the first combo needs: sent on arrival, the denizen had about 2 s of free
+  attacks (log: arrival 11:24:20.9, NUMB 11:24:21.06, first combo 11:24:22.96). The explorer now
+  sends `numb` in the cleared room and the move as a second queue entry (`M._preNumb`,
+  `.claude/projects/mnemosyne/07-explorer.md`).
+- **Each NUMB in a fight still costs about one combo**, for the same reason. Not changed.
 
 
 ## DEAF / BLIND self-senses -- the keeper is a TIMER, not a reply (v4.7.315)

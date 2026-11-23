@@ -353,6 +353,21 @@ describe("ataxiaBasher_monkBashing2 -- Senseless Flurry numb keeper", function()
     expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
   end)
 
+  -- v4.7.512: "You may not numb again so soon." for 2-3 s after the fade (basher/016).
+  it("skips numb while its recovery runs, and numbs when it is over", function()
+    numbReset()
+    local realCooling, cooling = ataxia_numbCooling, true
+    ataxia_numbCooling = function() return cooling end
+    local ok, err = pcall(function()
+      expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+      expect(ataxiaTemp.numbAttempted).toBeNil() -- a refused send must not arm the 5 s hold
+      cooling = false
+      expect(has(ataxiaBasher_monkBashing2(), "numb; ")).toBeTrue()
+    end)
+    ataxia_numbCooling = realCooling
+    if not ok then error(err, 0) end
+  end)
+
   it("attempt-hold stops respam while the numb channel is in flight", function()
     numbReset()
     expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeTrue()
