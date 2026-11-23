@@ -640,6 +640,25 @@ describe("the last stand (v4.7.486)", function()
     done()
   end)
 
+  it("prints the swarm's refusal reason, not 'no way out' (v4.7.513, Seasone death 2026-11-23)", function()
+    fresh()
+    ataxia.mnemosyne = { swarm = {
+      _cfg = function() return { escapeAt = 35 } end,
+      _enabled = function() return false end,
+      disengage = function() return false, "the explorer is off" end,
+    } }
+    local said, realEcho = {}, ataxiaEcho
+    ataxiaEcho = function(m) said[#said + 1] = m end
+    ataxiaTemp.disengageNoWhy, ataxiaTemp.disengageNoAt = nil, nil
+    ataxia.vitals.hpp = 20
+    local ok, err = pcall(ataxiaBasher_dangerLevel)
+    ataxiaEcho = realEcho
+    done()
+    if not ok then error(err, 0) end
+    local all = table.concat(said, " | ")
+    expect(all:find("cannot leave this room -- the explorer is off", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("keeps attacking above the critical line", function()
     fresh()
     ataxia.vitals.hpp = 50

@@ -82,10 +82,20 @@ for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPe
 	ataxiaTemp[k] = nil
 end
 
--- A SWARM ESCAPE OR PULL: park the move and re-send it the moment both legs work again (v4.7.378,
--- the entanglement rule of v4.7.370). Only acts when the swarm has a move waiting; it disarms the
--- explorer's timeout itself, so the generic release below then finds nothing in flight.
+-- A SWARM TUMBLE ON ITS WAY (v4.7.513). We send `stand;tumble <dir>`, and on bad legs this line is
+-- the STAND's refusal: it prints before "You begin to tumble". The tumble needs no legs (ABADMIN
+-- Tumbling: "Requires legs: 0"; the user), so it goes on. Parking it here and re-sending would
+-- send a second tumble, and a second tumble cancels the first (v4.7.243).
 local M = ataxia and ataxia.mnemosyne
+if M and M.swarm and M.swarm.tumbleSentRecently and M.swarm.tumbleSentRecently() then
+	if M.echo then M.echo("<grey>legs broken -- the stand was refused; the tumble goes on.<reset>") end
+	return
+end
+
+-- A SWARM ESCAPE OR PULL (a leap or a step was refused): park the move and re-send it (v4.7.378,
+-- the entanglement rule of v4.7.370). Only acts when the swarm has a move waiting; it disarms the
+-- explorer's timeout itself, so the generic release below then finds nothing in flight. The re-send
+-- goes through S._tacticalGo, which TUMBLES on bad legs (v4.7.513) -- it no longer waits for a mend.
 if M and M.swarm and M.swarm.onMoveRefusedBound then
 	pcall(M.swarm.onMoveRefusedBound, "both legs broken")
 end

@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-11-23 - v4.7.513: Escape by tumble on broken legs, and say why a disengage is refused
+
+From two deaths to Seasone the Industrious in Mnemosyne (Eastern Ithmia, 2026-11-23). User: "If they break both our legs, or we are prone, etc, we need to cure that with a priority and then leave, tumble, etc. You can tumble with broken legs".
+
+**1. Both legs broken no longer stops the ground escape.** v4.7.378 read "Both of your legs must be free and unhindered to do that." as "no leap and no tumble" and parked every ground escape until a leg mended. In the first death the swarm printed "LOW HP -- 23%, but both legs are broken -- leaving the moment they are mended." and we died 4 s later. The tumble needs no legs: ABADMIN Tumbling #1393 says "Requires legs: 0", the user says so, and our 2026-11-09 log shows a tumble start while prone with a broken leg (`kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt`, 12:52:30). So no cure is needed before the tumble, and the swarm does not wait for one.
+
+- The five both-legs gates in `009_Swarm_Tactics.lua` are gone (`_escapeRouteReady`, `_beginEscape`, the tick's emergency branch, `onVitals`, `_resendWhenFree`). Any bad leg makes the escape a tumble (`S.moveVerb`). With both legs out, the Terror shed step and the pull step-out tumble too.
+- Trigger `345_Broken_Legs_Block` no longer parks a swarm tumble. We send `stand;tumble <dir>`, and the leg line is then the STAND's refusal, printed before "You begin to tumble". Each swarm tumble stamps `ataxiaTemp.swarmTumbleSentAt`; the trigger reads `S.tumbleSentRecently()`. A refused leap or step is still parked, and is re-sent on the next prompt as a tumble.
+
+**2. A refused disengage says why.** In the second death the explorer was off: it turns itself off on a death ("[explore] off (slain)"), and the fight was re-engaged by hand. `S._enabled()` needs the explorer on, so `S.disengage` refused at its first line with no message, and the basher printed "no way out, fighting on". `S.disengage` now returns `false, why` for each refusal, and `ataxiaBasher_dangerLevel` prints "DANGER: cannot leave this room -- <why>." The escape itself still needs the explorer on.
+
+Tests: 7 new or changed in `test_swarm_tactics.lua` and `test_basher_noflee.lua`; each fails on the v4.7.512 code. The game fact is in `kb/afflictions/limb-damage.md` ("Moving on bad legs").
+
 ## 2026-11-23 - v4.7.512: NUMB wear-off is shown and counted, numb before the door, Wrath and Righteousness fights on
 
 Three requests from the user's Monk run of 2026-11-23. The game facts are in `kb/defences/numbness.md`, measured from 28 NUMB cycles of that session (`kb/raw/live/kaido-numbness-cycles_2026-11-23.txt`).

@@ -3466,13 +3466,13 @@ describe("v4.7.448 -- one leg out: tactical moves tumble", function()
     expect(timeouts[1]).toBe(S.TUMBLE_ARM)
   end)
 
-  it("both legs out still waits -- no move is sent", function()
+  it("both legs out tumbles at once (v4.7.513: the tumble needs no legs)", function()
     fixture(4)
     gmcp.Room.Info.details = { "indoors" }
     ataxia.afflictions = { brokenrightleg = true, brokenleftleg = true }
     lowHp(3000)
     S.onVitals()
-    expect(count("queue addclear free stand;tumble s")).toBe(0)
+    expect(count("queue addclear free stand;tumble s")).toBe(1)
     expect(count("queue addclear free stand;leap s")).toBe(0)
   end)
 end)
@@ -4114,17 +4114,26 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
   end)
 
   -- 4. both legs broken
-  it("both legs broken: say so, no stamp, leave the moment one is mended", function()
+  -- v4.7.513: the tumble needs no legs (ABADMIN Tumbling #1393 "Requires legs: 0"; the user).
+  -- v4.7.378 waited here for a mend, and the Seasone death (2026-11-23) died in that wait.
+  it("both legs broken: tumble out at once, no wait for a mend", function()
     fixture(4)
     gmcp.Room.Info.details = { "indoors" }
     ataxia.afflictions = { brokenleftleg = true, brokenrightleg = true }
     gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
     local out = said(function() S.onVitals() end)
     expect(cnt("leap")).toBe(0)
-    expect(S._lastEmergencyAt).toBeNil()
-    expect(out:find("both legs are broken", 1, true) ~= nil).toBeTrue()
-    ataxia.afflictions = { brokenleftleg = true } -- one leg: the leap is refused, so tumble (v4.7.448)
-    S.onVitals()
+    expect(cnt("tumble s")).toBe(1)
+    expect(out:find("both legs are broken", 1, true)).toBeNil()
+  end)
+
+  it("both legs broken: disengage tumbles, it does not refuse", function()
+    escapeOut()
+    ataxia.afflictions = { brokenleftleg = true, mangledrightleg = true }
+    S._lastDisengageAt = nil
+    local ok, why = S.disengage("test")
+    expect(why).toBeNil()
+    expect(ok).toBeTrue()
     expect(cnt("tumble s")).toBe(1)
   end)
 
@@ -4137,15 +4146,35 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
     expect(S.flying).toBeTrue()
   end)
 
-  it("a leap refused for broken legs is parked and re-sent when they mend", function()
+  it("a leap refused for broken legs is re-sent at once as a tumble (v4.7.513)", function()
     escapeOut()
     ataxia.afflictions = { brokenleftleg = true, brokenrightleg = true }
     S.onMoveRefusedBound("both legs broken")
     S.onVitals()
-    expect(cnt("leap s")).toBe(1)
-    ataxia.afflictions = { brokenrightleg = true }
-    S.onVitals()
-    expect(cnt("tumble s")).toBe(1) -- one leg mended: re-sent as a tumble (v4.7.448)
+    expect(cnt("leap s")).toBe(1)   -- the leap that the game refused
+    expect(cnt("tumble s")).toBe(1) -- re-sent on the next prompt, both legs still out
+  end)
+
+  it("the leg-refusal line does not park a swarm tumble on its way (v4.7.513)", function()
+    -- kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt 12:52:30: the stand's refusal, then the tumble
+    local real, why = S.onMoveRefusedBound, nil
+    S.onMoveRefusedBound = function(w) why = w end
+    ataxia.afflictions = { brokenleftleg = true, damagedrightleg = true }
+    ataxiaTemp.swarmTumbleSentAt = clock
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/345_Broken_Legs_Block.lua")
+    S.onMoveRefusedBound = real
+    ataxiaTemp.swarmTumbleSentAt = nil
+    if not ok then error(err, 0) end
+    expect(why).toBeNil()
+  end)
+
+  it("disengage names its refusal: the explorer is off (Seasone death, 2026-11-23)", function()
+    escapeOut()
+    M.explore.on = false
+    local ok, why = S.disengage("test")
+    M.explore.on = true
+    expect(ok).toBeFalse()
+    expect(why).toBe("the explorer is off")
   end)
 
   it("the leg-refusal trigger tells the swarm when both legs are out", function()

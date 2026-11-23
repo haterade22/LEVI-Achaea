@@ -467,10 +467,13 @@ function S._noteRetreat(from)
   S._retreat = { from = from, at = now() }
 end
 
--- BOTH LEGS BROKEN (v4.7.378). "Both of your legs must be free and unhindered to do that." -- the
--- leap is refused, and so is the tumble: no ground escape can happen. Like being bound, but only
--- for the ground (the hover does not need legs). One leg: a WALK goes through, a LEAP does not
--- (v4.7.448), so S.moveVerb tumbles -- see S._oneLegOut.
+-- BOTH LEGS BROKEN. "Both of your legs must be free and unhindered to do that." refuses the STAND
+-- and the LEAP. It does NOT refuse the TUMBLE (v4.7.513, user: "You can tumble with broken legs";
+-- ABADMIN Tumbling #1393: "Requires legs: 0"; kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt
+-- 12:52:30: `rl1 prone`, the stand refused, then "You begin to tumble agilely to the north.").
+-- v4.7.378 parked every ground escape until a leg mended; the Seasone death (2026-11-23) waited
+-- on that park at 23% HP and died. Any leg out now TUMBLES -- S.moveVerb via S._oneLegOut.
+-- One leg: a WALK goes through, a LEAP does not (v4.7.448).
 local function legOut(side)
   local a = ataxia and ataxia.afflictions
   if not a then return false end
@@ -485,6 +488,20 @@ function S._legsOut() return legOut("left") and legOut("right") end
 -- stand and the leap ("Both of your legs must be free and unhindered to do that." twice), and the
 -- escape was lost while the python re-webbed us. User: "tumble at that point". S.moveVerb tumbles.
 function S._oneLegOut() return legOut("left") or legOut("right") end
+
+-- A TUMBLE WE SENT (v4.7.513). We send `stand;tumble <dir>`. On bad legs the STAND prints "Both of
+-- your legs must be free and unhindered to do that." BEFORE "You begin to tumble", so trigger 345
+-- cannot tell from the line alone whether the move was refused. It asks this: a tumble sent in the
+-- last S.TUMBLE_ARM seconds is still on its way, and the refusal was the stand's.
+function S._noteTumbleSent(cmd)
+  if type(cmd) == "string" and cmd:find("tumble ", 1, true) then ataxiaTemp.swarmTumbleSentAt = now() end
+end
+function S.tumbleSentRecently()
+  local at = tonumber(ataxiaTemp and ataxiaTemp.swarmTumbleSentAt)
+  if not at then return false end
+  local since = now() - at
+  return since >= 0 and since < (tonumber(S.TUMBLE_ARM) or 8)
+end
 
 -- On every prompt and tick: did the retreat we made shake them?
 function S._checkPursuit()
@@ -694,7 +711,7 @@ function S._resendWhenFree()
     S._pendingFree = nil
     return
   end
-  if S._bound() or S._legsOut() then return end -- v4.7.378: legs as well as bindings
+  if S._bound() then return end -- legs do not wait (v4.7.513): _tacticalGo tumbles on bad legs
   S._pendingFree = nil
   local cur = M.map and M.map.current
   if cur ~= p.room then return end -- the move happened some other way
@@ -791,7 +808,7 @@ function S.moveVerb(dirShort)
   -- (user, v4.7.346).
   if MAP and MAP.current and S.icyRooms and S.icyRooms[MAP.current] then return "tumble" end
   -- ONE LEG OUT: tumble (v4.7.448, user). The leap is refused on one broken leg. Same place as the
-  -- ice, for the same reasons. Both legs out never gets here: S._legsOut() parks the move.
+  -- ice, for the same reasons. Both legs out tumbles too (v4.7.513): the tumble needs no legs.
   if S._oneLegOut() then return "tumble" end
   if mounted then return "mountjump" end
   local class = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
@@ -835,6 +852,7 @@ function S._tacticalGo(dirShort, why)
   -- construction, but do not merge the two paths later without re-reading this.
   if not (M.roomLava and M.roomLava()) then send("cq all") end
   send("queue addclear free stand" .. sep .. verb .. " " .. dirShort)
+  S._noteTumbleSent(verb .. " " .. dirShort)
   -- Record it so "You cannot do that while mounted." can re-issue this exact move as a mountjump
   -- (basher/013). A tactical move that is silently refused is the ladder stalling at crash HP.
   -- Not a tumble: it goes through from the saddle, and it is not a jump to recover.
@@ -888,9 +906,11 @@ function S._escapeSuffix(sep)
   -- until balance returns rather than being rejected, exactly like the point is.
   -- TERROR OF THE SKIES (v4.7.447): a plain step-out already sheds every non-boss pursuer, so it
   -- outranks the Roll Hide tumble (falls through to the plain step, or the icy tumble below).
-  if mnemRollHide and not S._terrorSheds() then return sep .. "tumble " .. S.backShort end
+  if mnemRollHide and not S._terrorSheds() then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
   -- An icy swarm room: tumble the step-out too (v4.7.370).
-  if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then return sep .. "tumble " .. S.backShort end
+  if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
+  -- Both legs out: the plain step is refused, the tumble is not (v4.7.513).
+  if S._legsOut() then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
   return sep .. S.backShort
 end
 
@@ -1195,7 +1215,8 @@ end
 function S._shedCmd(dir)
   local cur = M.map and M.map.current
   local icy = cur and S.icyRooms and S.icyRooms[cur]
-  if S._terrorSheds() and not icy then return dir end
+  -- Both legs out: a plain step is refused, so tumble (v4.7.513).
+  if S._terrorSheds() and not icy and not S._legsOut() then return dir end
   return "tumble " .. dir
 end
 
@@ -1391,6 +1412,7 @@ function S._maybePanic(hpNow)
   S.escapeOn("panic tumble") -- v4.7.243: stop swinging until we are out
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sep .. cmd)
+  S._noteTumbleSent(cmd)
   -- HEAL WHERE WE LANDED, then go back in (user, 2026-08-06: "the denizens wont follow so we
   -- can use this to our advantage to heal up and then do hit and run tactics").
   --
@@ -1654,6 +1676,7 @@ function S._tumbleRetry(why)
   -- Free-queued and stand-first, exactly as the panic sends it: the two things that cancel a
   -- tumble are prone and a lost balance, and this covers both.
   send("queue addclear free stand" .. sep .. "tumble " .. ataxiaTemp.tumbleDir)
+  S._noteTumbleSent("tumble ") -- v4.7.513
   S._echo("<indian_red>" .. (why or "tumble did not land") .. "<reset> -- retry "
     .. tries .. "/" .. S.TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
   if S._tumbleT then pcall(killTimer, S._tumbleT) end
@@ -1698,6 +1721,7 @@ end
 function S.onTumbleDone()
   if S._tumbleT then pcall(killTimer, S._tumbleT); S._tumbleT = nil end
   if ataxiaTemp then
+    ataxiaTemp.swarmTumbleSentAt = nil -- v4.7.513: no tumble on its way any more
     -- Stamp only when a tumble was actually being tracked, so S.reset()'s unconditional call
     -- cannot fake an arrival and open a settle window over a room we never left.
     if ataxiaTemp.tumbleDir then S.tumbleResolvedAt = now() end
@@ -1829,10 +1853,19 @@ end
 -- even possible. On a no-route room that is a destructive no-op repeated on every prompt.
 -- Same principle as the arming fix below: do not tear down what you have until you know you can
 -- replace it.
+-- The reason S._escapeRouteReady() said no, in its own order (v4.7.513).
+function S._routeWhyNot()
+  if S._bound() then return "bound" end
+  if not S._indoors() and S._canHover() then return S.moveLocked() and "a tumble is in flight" or nil end
+  local block = S._retreatBlock()
+  if block then return type(block) == "string" and block or "a retreat is blocked" end
+  if S._backDir() or S._escapeLastResort() ~= nil then return nil end
+  return "no route out"
+end
+
 function S._escapeRouteReady()
   if S._bound() then return false end -- bound: no fly AND no leap (deep review, v4.7.321)
   if not S._indoors() and S._canHover() then return not S.moveLocked() end
-  if S._legsOut() then return false end -- v4.7.378: no leap, no tumble
   if S._retreatBlock() then return false end -- v4.7.370: followed, or a U-turn we are not fit for
   if S._backDir() then return true end
   return S._escapeLastResort() ~= nil
@@ -1877,8 +1910,7 @@ function S._beginEscape(why)
     S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- <cyan>flying to recover<reset> (land at " .. s.recoverAt .. "%).")
     return true
   end
-  -- Both legs broken: no leap and no tumble (v4.7.378). Arm and announce nothing.
-  if S._legsOut() then S._escapeNo = "both legs broken"; return false end
+  -- Both legs broken: the move below is a TUMBLE (S.moveVerb), which needs no legs (v4.7.513).
   local shortBack, longBack, shortFwd = S._backDir()
   local lastResort = false
   if not shortBack then
@@ -1977,11 +2009,23 @@ end
 -- False means the caller must handle it: disabled, on cooldown, bound, the one retreat already
 -- spent (v4.7.482), or indoors with no route back -- and a caller that read the pattern
 -- as lethal should treat that as its last chance to spend an emergency cure.
+-- Returns true, or false plus the REASON it refused (v4.7.513, "Silent gates"). The basher prints
+-- the reason: the Seasone death (2026-11-23) printed "no way out" when the swarm was only OFF.
+function S._enabledWhyNot()
+  if S._cfg().enabled ~= true then return "swarm tactics are off" end
+  if not (M.explore ~= nil and M.explore.on == true) then return "the explorer is off" end
+  if not (ataxiaBasher ~= nil and ataxiaBasher.enabled == true) then return "the basher is off" end
+  if ataxiaBasher.manual ~= true then return "the basher is not in manual-movement mode" end
+  return nil
+end
+
 function S.disengage(reason)
-  if not S._enabled() then return false end
+  if not S._enabled() then return false, (S._enabledWhyNot() or "swarm tactics are not enabled") end
   if S.state == "recovering" then return true end -- already out and healing; nothing to do
-  if S._lastDisengageAt and (now() - S._lastDisengageAt) < DISENGAGE_COOLDOWN then return false end
-  if S._bound() then return false end -- v4.7.321 review: bound -- neither fly nor leap will take
+  if S._lastDisengageAt and (now() - S._lastDisengageAt) < DISENGAGE_COOLDOWN then
+    return false, "a disengage started " .. string.format("%.1f", now() - S._lastDisengageAt) .. "s ago"
+  end
+  if S._bound() then return false, "bound" end -- v4.7.321 review: bound -- neither fly nor leap will take
   if S.flying then
     -- Mid-kite: convert in place. A land/fly churn here would put us on the ground for a
     -- round, which is the one thing a disengage exists to avoid.
@@ -1997,12 +2041,14 @@ function S.disengage(reason)
   -- ASK BEFORE DESTROYING (v4.7.314). S.reset sends `cq all` and drops the running tactic; doing
   -- that and THEN discovering there is no route leaves us worse off than before, once per prompt
   -- for as long as the caller keeps reading the fight as lethal.
-  if not S._escapeRouteReady() then return false end
+  if not S._escapeRouteReady() then return false, S._routeWhyNot() end
   if S.state ~= "idle" then S.reset(reason or "disengage") end
   -- Stamp only on success: an indoor room with no validated route back returns false, and
   -- that attempt must not burn the cooldown that a later, movable moment depends on.
   if not S._beginEscape("<indian_red>DISENGAGE<reset>"
-      .. (reason and (" (" .. reason .. ")") or "") .. " -- breaking off") then return false end
+      .. (reason and (" (" .. reason .. ")") or "") .. " -- breaking off") then
+    return false, (S._escapeNo or "no route out")
+  end
   S._lastDisengageAt = now()
   S._echo("<indian_red>DISENGAGE<reset>" .. (reason and (" (" .. reason .. ")") or "")
     .. " -- breaking off rather than trading.")
@@ -2330,8 +2376,7 @@ function S.onTick()
       end
       -- Bound: no stamp, so the first free moment acts at once (v4.7.370). onVitals says so.
       if S._bound() then return false end     -- bound: nothing to do but cure and fight
-      -- v4.7.378: both legs broken is the same for a ground escape
-      if S._legsOut() and (S._indoors() or not S._canHover()) then return false end
+      -- Both legs broken does NOT block the ground escape: it tumbles (v4.7.513).
       S._lastEmergencyAt = now()
       if S._escapeOwns() then return true end -- v4.7.321 review: an escape is already in flight
       if S.flying then
@@ -2750,12 +2795,9 @@ function S.onVitals()
     S._sayOnce("bound", head .. ", but <grey>bound<reset> -- leaving the moment we are free.")
     return
   end
-  -- BOTH LEGS BROKEN (v4.7.378): the same wait, for a ground escape -- no stamp, so the first prompt
-  -- with a leg mended acts at once. The hover needs no legs, so outdoors it still flies.
-  if S._legsOut() and (S._indoors() or not S._canHover()) then
-    S._sayOnce("legs", head .. ", but <grey>both legs are broken<reset> -- leaving the moment they are mended.")
-    return
-  end
+  -- BOTH LEGS BROKEN: no wait (v4.7.513). v4.7.378 waited here for a leg to mend; the tumble
+  -- needs no legs, and the wait killed us (Seasone, 2026-11-23: "LOW HP -- 23%, but both legs
+  -- are broken -- leaving the moment they are mended.", slain 4 s later).
   S._lastEmergencyAt = now()
   if wantPanic and S._maybePanic(hp) then
     if M._disarmMove then M._disarmMove() end -- a stale in-flight move must not gate the aftermath

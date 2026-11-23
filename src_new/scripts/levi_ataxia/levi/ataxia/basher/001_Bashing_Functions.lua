@@ -547,12 +547,22 @@ function ataxiaBasher_dangerLevel()
     -- deliberately fall through to the shield/attack tail rather than returning "wait".
     local fleePct = ataxiaBasher.fleeThresholdPct or 25
     local spiking = ataxiaBasher_isDamageRateExtreme()
+    local noWay = "no swarm tactics loaded"
     if hpp <= fleePct or spiking then
       local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
       if S and S.disengage then
-        local ok = false
-        pcall(function() ok = S.disengage((spiking and "incoming damage" or ("HP " .. hpp .. "%")) .. debtNote) end)
+        local ok, why = false, nil
+        pcall(function() ok, why = S.disengage((spiking and "incoming damage" or ("HP " .. hpp .. "%")) .. debtNote) end)
         if ok then return "wait" end
+        -- SAY WHY (v4.7.513, "Silent gates"). The Seasone death (2026-11-23) printed "no way out"
+        -- while the real reason was "the explorer is off". Throttled: this runs on every attack.
+        noWay = why or "the swarm refused with no reason"
+        local nowT = (getEpoch and getEpoch()) or 0
+        if noWay ~= ataxiaTemp.disengageNoWhy
+            or (nowT - (tonumber(ataxiaTemp.disengageNoAt) or 0)) >= 5 then
+          ataxiaTemp.disengageNoWhy, ataxiaTemp.disengageNoAt = noWay, nowT
+          ataxiaEcho("DANGER: cannot leave this room -- " .. noWay .. "." .. debtNote)
+        end
       end
     end
     -- THE LAST STAND (v4.7.486): no way out and one or two rounds from death -- shield and heal.
@@ -571,7 +581,7 @@ function ataxiaBasher_dangerLevel()
       local nowT = (getEpoch and getEpoch()) or 0
       if (nowT - (tonumber(ataxiaTemp.dangerEchoAt) or 0)) >= 5 then
         ataxiaTemp.dangerEchoAt = nowT
-        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on." .. debtNote)
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- not leaving (" .. noWay .. "), fighting on." .. debtNote)
       end
     end
   else

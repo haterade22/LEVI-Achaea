@@ -873,7 +873,7 @@ was not curing held `_mayReturn`; only "cured" or `RECOVER_MAX` (60s) could end 
 - 008 `_exploreTick`: a consumed tick with `M.swarm.state ~= "idle"` re-arms the watchdog (not while
   paused).
 
-### After an escape, and when the legs give out (v4.7.378)
+### After an escape, and when the legs give out (v4.7.378, legs changed v4.7.513)
 
 From a Monk death: the sweep walked on after an escape (twice, at 71%, blind, chased), the last
 resort picked doors alphabetically into uncleared rooms, a pull overwrote the unjudged pursuit record,
@@ -887,11 +887,22 @@ said "LOW HP (100%)" for a damage-rate escape.
   unexplored (`exitDest` -> `MAP.rooms[dest].visited`). `_panicDir` takes the lowest rank, sorted
   order breaking ties; `S._exitRankLabel` names it in the escape line.
 - **Pursuit record.** `S._noteRetreat` returns early while the current record has `landedAt`.
-- **Legs.** `S._legsOut()`: broken/damaged/mangled, both sides. Blocks ground escapes in
-  `_beginEscape`, `_escapeRouteReady`, the tick's low-HP branch and onVitals (no stamp, one line).
-  Trigger 345 -> `S.onMoveRefusedBound("both legs broken")`; `S._resendWhenFree` waits on bindings
-  and legs. A last resort sets `S.funnelRoom = nil`; the pulling branch requires
-  `funnelRoom ~= swarmRoom`.
+- **Legs (changed v4.7.513).** `S._legsOut()`: broken/damaged/mangled, both sides. It no longer
+  blocks a ground escape: the TUMBLE needs no legs (`kb/afflictions/limb-damage.md`, "Moving on bad
+  legs"). v4.7.378 waited for a mend, and the Seasone death (2026-11-23) died in that wait at 23%.
+  Any bad leg makes `S.moveVerb` return `tumble`; both legs out also make the Terror shed step
+  (`S._shedCmd`) and the pull step-out (`S._escapeSuffix`) tumble. Each swarm tumble send stamps
+  `ataxiaTemp.swarmTumbleSentAt` (`S._noteTumbleSent`; cleared by `S.onTumbleDone`). Trigger 345
+  reads `S.tumbleSentRecently()`: the leg line then is the STAND's refusal in front of the tumble,
+  so it does not park the move. Otherwise 345 -> `S.onMoveRefusedBound("both legs broken")`, and
+  `S._resendWhenFree` re-sends on the next prompt (it waits only on bindings) as a tumble.
+  A last resort sets `S.funnelRoom = nil`; the pulling branch requires `funnelRoom ~= swarmRoom`.
+- **Refusal reasons (v4.7.513).** `S.disengage` returns `false, why`: `S._enabledWhyNot()` ("the
+  explorer is off", ...), the cooldown, "bound", `S._routeWhyNot()` (the reason of
+  `_escapeRouteReady`), or `S._escapeNo`. `ataxiaBasher_dangerLevel` prints "DANGER: cannot leave
+  this room -- <why>." (5 s throttle per reason) and names it in the spike line. Before, it printed
+  "no way out" when the swarm was only off: the explorer turns itself off on a death, so a manual
+  re-engage ran with no escape at all.
 - **Reason.** onVitals hands `_beginEscape` "DYING FAST (n%)" or "LOW HP (n%)" from `hppFresh`.
 
 ### Wrath and Righteousness: def up and fight on (v4.7.372, changed v4.7.512)
