@@ -1,4 +1,4 @@
-# artefact power show hand_to_hand  (2026-11-13T22:00:27Z)
+# artefact power show hand_to_hand  (2026-11-24T23:22:45Z)
 The hand_to_hand artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

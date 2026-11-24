@@ -1,4 +1,4 @@
-# artefact power show fire_mastery  (2026-11-13T22:00:23Z)
+# artefact power show fire_mastery  (2026-11-24T23:22:41Z)
 The fire_mastery artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

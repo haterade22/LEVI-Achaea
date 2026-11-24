@@ -1,4 +1,4 @@
-# artefact power show insidious_gaze  (2026-11-13T22:00:30Z)
+# artefact power show insidious_gaze  (2026-11-24T23:22:47Z)
 The insidious_gaze artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

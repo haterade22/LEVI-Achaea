@@ -1,4 +1,4 @@
-# artefact power show magic_damage  (2026-11-13T22:00:34Z)
+# artefact power show magic_damage  (2026-11-24T23:22:52Z)
 The magic_damage artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

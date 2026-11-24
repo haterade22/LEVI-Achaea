@@ -1,4 +1,4 @@
-# artefact power show magic_defence  (2026-11-13T22:00:35Z)
+# artefact power show magic_defence  (2026-11-24T23:22:52Z)
 The magic_defence artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

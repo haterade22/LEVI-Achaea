@@ -68,11 +68,17 @@ The level-1 item and its size are from `docs/artefacts-reference.md` (HELP-based
 ## Code
 - `ataxia_eqFactor` (`033_Artefacts.lua`:227) and every other reader in 033 read only OUR list.
   Our list holds each of the 12 powers at level 2 or 3, so our factors do not change.
-- The racial row at the bottom of ARTEFACT POWER LIST OWNED is not captured. Our capture of
-  2026-11-13 is older than the change, and for us the row should not appear (we own better).
-  `ataxia_parseArtefactPowerRow` (033:125-130) takes a row only with a numeric id and a power
-  key of letters and `_`. What it does with the racial row, for a player who sees one, is
-  UNVERIFIED: [CONFLICTS #85](../CONFLICTS.md).
+- **The racial row, captured (OURS, `kbcapture artefacts` 2026-11-24T23:21Z,
+  `raw/live/artefact_power_list_owned.txt`).** It is the last row of the list, with `-` for the id:
+  `-             Racial bonus                        health_sip             1`.
+  The game shows it although we own `health_sip` at level 3. So the row appears for every
+  player, and it is no proof that the bonus applies; the post says an owned equal or better
+  power wins.
+- `ataxia_parseArtefactPowerRow` (033:125-130) needs a numeric id, so it returns nil for this row
+  (tested on the live profile, 2026-11-24), and the save said "Artefact powers saved: 74", not 75.
+  For us that is right. For a player whose race power is not owned (a Grook with no faster_eq
+  artefact), `ataxia_eqFactor` leaves out the racial x0.93: [CONFLICTS #85](../CONFLICTS.md).
 
 ## Conflicts
-Open: [CONFLICTS #85](../CONFLICTS.md). The racial row's text, and what our parser does with it.
+Open: [CONFLICTS #85](../CONFLICTS.md). Should the parser count the racial row when no owned
+artefact has that power?

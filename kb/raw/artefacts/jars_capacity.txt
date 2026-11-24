@@ -1,4 +1,4 @@
-# artefact power show jars_capacity  (2026-11-13T22:00:31Z)
+# artefact power show jars_capacity  (2026-11-24T23:22:49Z)
 The jars_capacity artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

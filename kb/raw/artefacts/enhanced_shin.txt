@@ -1,4 +1,4 @@
-# artefact power show enhanced_shin  (2026-11-13T22:00:19Z)
+# artefact power show enhanced_shin  (2026-11-24T23:22:36Z)
 The enhanced_shin artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

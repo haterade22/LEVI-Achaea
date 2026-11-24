@@ -1,4 +1,4 @@
-# artefact power show trapmaster  (2026-11-13T22:00:52Z)
+# artefact power show trapmaster  (2026-11-24T23:23:09Z)
 The trapmaster artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

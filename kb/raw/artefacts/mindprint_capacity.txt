@@ -1,4 +1,4 @@
-# artefact power show mindprint_capacity  (2026-11-13T22:00:37Z)
+# artefact power show mindprint_capacity  (2026-11-24T23:22:54Z)
 The mindprint_capacity artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

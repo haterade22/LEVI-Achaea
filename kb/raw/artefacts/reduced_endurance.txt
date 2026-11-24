@@ -1,4 +1,4 @@
-# artefact power show reduced_endurance  (2026-11-13T22:00:41Z)
+# artefact power show reduced_endurance  (2026-11-24T23:22:59Z)
 The reduced_endurance artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

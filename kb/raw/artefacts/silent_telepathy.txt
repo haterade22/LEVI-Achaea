@@ -1,4 +1,4 @@
-# artefact power show silent_telepathy  (2026-11-13T22:00:45Z)
+# artefact power show silent_telepathy  (2026-11-24T23:23:02Z)
 The silent_telepathy artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

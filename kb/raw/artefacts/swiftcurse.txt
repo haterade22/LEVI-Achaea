@@ -1,4 +1,4 @@
-# artefact power show swiftcurse  (2026-11-13T22:00:49Z)
+# artefact power show swiftcurse  (2026-11-24T23:23:07Z)
 The swiftcurse artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

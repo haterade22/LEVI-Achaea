@@ -1,4 +1,4 @@
-# artefact power show pure_song  (2026-11-13T22:00:39Z)
+# artefact power show pure_song  (2026-11-24T23:22:57Z)
 The pure_song artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

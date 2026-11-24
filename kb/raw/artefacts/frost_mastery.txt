@@ -1,4 +1,4 @@
-# artefact power show frost_mastery  (2026-11-13T22:00:25Z)
+# artefact power show frost_mastery  (2026-11-24T23:22:43Z)
 The frost_mastery artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

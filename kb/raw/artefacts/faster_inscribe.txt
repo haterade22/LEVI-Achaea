@@ -1,4 +1,4 @@
-# artefact power show faster_inscribe  (2026-11-13T22:00:22Z)
+# artefact power show faster_inscribe  (2026-11-24T23:22:40Z)
 The faster_inscribe artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

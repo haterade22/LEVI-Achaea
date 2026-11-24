@@ -1,4 +1,4 @@
-# artefact power show monk_switch  (2026-11-13T22:00:38Z)
+# artefact power show monk_switch  (2026-11-24T23:22:56Z)
 The monk_switch artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

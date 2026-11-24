@@ -1,4 +1,4 @@
-# artefact power show mine_capacity  (2026-11-13T22:00:37Z)
+# artefact power show mine_capacity  (2026-11-24T23:22:55Z)
 The mine_capacity artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

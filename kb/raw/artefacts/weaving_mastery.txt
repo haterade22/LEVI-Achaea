@@ -1,4 +1,4 @@
-# artefact power show weaving_mastery  (2026-11-13T22:00:56Z)
+# artefact power show weaving_mastery  (2026-11-24T23:23:13Z)
 The weaving_mastery artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

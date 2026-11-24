@@ -1,4 +1,4 @@
-# artefact power show bomb_duplication  (2026-11-13T22:00:11Z)
+# artefact power show bomb_duplication  (2026-11-24T23:22:28Z)
 The bomb_duplication artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

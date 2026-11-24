@@ -1,4 +1,4 @@
-# artefact power show willpower_regen  (2026-11-13T22:00:57Z)
+# artefact power show willpower_regen  (2026-11-24T23:23:14Z)
 The willpower_regen artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

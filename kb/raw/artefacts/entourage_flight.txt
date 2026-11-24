@@ -1,4 +1,4 @@
-# artefact power show entourage_flight  (2026-11-13T22:00:19Z)
+# artefact power show entourage_flight  (2026-11-24T23:22:37Z)
 The entourage_flight artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

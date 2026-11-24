@@ -1,4 +1,4 @@
-# artefact power show intelligence  (2026-11-13T22:00:31Z)
+# artefact power show intelligence  (2026-11-24T23:22:48Z)
 The intelligence artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

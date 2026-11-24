@@ -1,4 +1,4 @@
-# artefact power show desert_sorcerer  (2026-11-13T22:00:16Z)
+# artefact power show desert_sorcerer  (2026-11-24T23:22:34Z)
 The desert_sorcerer artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

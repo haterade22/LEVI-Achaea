@@ -1,4 +1,4 @@
-# artefact power show totems  (2026-11-13T22:00:51Z)
+# artefact power show totems  (2026-11-24T23:23:09Z)
 The totems artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

@@ -1,4 +1,4 @@
-# artefact power show leap  (2026-11-13T22:00:33Z)
+# artefact power show leap  (2026-11-24T23:22:50Z)
 The leap artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

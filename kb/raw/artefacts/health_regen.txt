@@ -1,4 +1,4 @@
-# artefact power show health_regen  (2026-11-13T22:00:28Z)
+# artefact power show health_regen  (2026-11-24T23:22:46Z)
 The health_regen artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

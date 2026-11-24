@@ -1,4 +1,4 @@
-# artefact power show reserves  (2026-11-13T22:00:42Z)
+# artefact power show reserves  (2026-11-24T23:23:00Z)
 The reserves artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

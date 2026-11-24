@@ -1,4 +1,4 @@
-# artefact power show fluid_expansion  (2026-11-13T22:00:24Z)
+# artefact power show fluid_expansion  (2026-11-24T23:22:42Z)
 The fluid_expansion artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

@@ -1,4 +1,4 @@
-# artefact power show tekura_accuracy  (2026-11-13T22:00:51Z)
+# artefact power show tekura_accuracy  (2026-11-24T23:23:08Z)
 The tekura_accuracy artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

@@ -1,4 +1,4 @@
-# artefact power show faster_eq  (2026-11-13T22:00:21Z)
+# artefact power show faster_eq  (2026-11-24T23:22:39Z)
 The faster_eq artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

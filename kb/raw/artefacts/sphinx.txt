@@ -1,4 +1,4 @@
-# artefact power show sphinx  (2026-11-13T22:00:46Z)
+# artefact power show sphinx  (2026-11-24T23:23:03Z)
 The sphinx artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

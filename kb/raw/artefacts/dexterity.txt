@@ -1,4 +1,4 @@
-# artefact power show dexterity  (2026-11-13T22:00:17Z)
+# artefact power show dexterity  (2026-11-24T23:22:34Z)
 The dexterity artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

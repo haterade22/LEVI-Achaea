@@ -1,4 +1,4 @@
-# artefact power show class_switch_reduction  (2026-11-13T22:00:13Z)
+# artefact power show class_switch_reduction  (2026-11-24T23:22:30Z)
 The class_switch_reduction artefact power:
 --------------------------------------------------------------------------------
 Levels:                  3

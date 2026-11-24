@@ -1,4 +1,4 @@
-# artefact power show quickmount  (2026-11-13T22:00:40Z)
+# artefact power show quickmount  (2026-11-24T23:22:58Z)
 The quickmount artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

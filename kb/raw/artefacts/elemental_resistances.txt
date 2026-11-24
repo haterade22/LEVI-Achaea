@@ -1,4 +1,4 @@
-# artefact power show elemental_resistances  (2026-11-13T22:00:17Z)
+# artefact power show elemental_resistances  (2026-11-24T23:22:35Z)
 The elemental_resistances artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

@@ -1,4 +1,4 @@
-# artefact power show mana_regen  (2026-11-13T22:00:35Z)
+# artefact power show mana_regen  (2026-11-24T23:22:53Z)
 The mana_regen artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

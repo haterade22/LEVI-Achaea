@@ -1,4 +1,4 @@
-# artefact power show endurance_regen  (2026-11-13T22:00:18Z)
+# artefact power show endurance_regen  (2026-11-24T23:22:36Z)
 The endurance_regen artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

@@ -1,4 +1,4 @@
-# artefact power show rift_expand  (2026-11-13T22:00:43Z)
+# artefact power show rift_expand  (2026-11-24T23:23:01Z)
 The rift_expand artefact power:
 --------------------------------------------------------------------------------
 Levels:                  2

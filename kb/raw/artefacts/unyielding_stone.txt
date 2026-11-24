@@ -1,4 +1,4 @@
-# artefact power show unyielding_stone  (2026-11-13T22:00:54Z)
+# artefact power show unyielding_stone  (2026-11-24T23:23:12Z)
 The unyielding_stone artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None

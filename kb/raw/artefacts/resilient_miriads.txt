@@ -1,4 +1,4 @@
-# artefact power show resilient_miriads  (2026-11-13T22:00:43Z)
+# artefact power show resilient_miriads  (2026-11-24T23:23:00Z)
 The resilient_miriads artefact power:
 --------------------------------------------------------------------------------
 Levels:                  None
