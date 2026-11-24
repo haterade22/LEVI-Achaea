@@ -565,7 +565,7 @@ function S._restoreRetreat() S.retreatSpentAt, S._retreat = nil, nil end
 -- kill". For RECKLESS_REVEAL_WINDOW seconds after the cure line (trigger "Recklessness Cured"
 -- stamps ataxiaTemp.recklessCuredAt), at critical health by the same two lines the last stand uses
 -- (ataxiaBasher_lastStandCritical: escapeAt % or panicHp), a spent retreat does not refuse ONE more
--- ground retreat. Pursued, Prey and the U-turn rule still refuse it. Spent by S._spendRecklessReveal.
+-- ground retreat. Pursued, Prey and the U-turn rule still refuse it. Spent by S._spendExemption.
 S.RECKLESS_REVEAL_WINDOW = S.RECKLESS_REVEAL_WINDOW or 6
 function S._recklessReveal()
   local at = tonumber(ataxiaTemp and ataxiaTemp.recklessCuredAt)
@@ -579,18 +579,82 @@ function S._recklessReveal()
   return true
 end
 
--- Does the spent retreat refuse a ground retreat now? The one reader of the exemption, so every
--- escape path agrees (_retreatBlock, the panic tumble, the tick's ladder gate).
-function S._spentRefuses()
-  return S._retreatSpent() and not S._recklessReveal()
+-- THE NEXT HIT KILLS US (v4.7.514, the oryx death 2026-11-24). An ochre-necked oryx's charge is
+-- one attack of two `Health lost:` lines: 1020 + 2502 = 3522 at 10:09:06, and 1328 + 2879 = 4207
+-- at 10:09:22, into 4207 health. Between them our health sat below one charge for most of 12 s
+-- while the swarm said "NOT leaving: we already left one room -- what is in this one we kill" and
+-- the danger path "the only way out is back into the room we just fled". When the biggest single
+-- attack taken in THIS room within LETHAL_HIT_MEMORY is at least our health (minus the numbness
+-- debt), staying is death on the next one, so the spent retreat does not refuse, and neither does
+-- the U-turn rule (the room we fled is not certain death; this one is). Pursued and Prey still
+-- refuse: there the retreat takes the killer with us. The record: ataxiaBasher_biggestHitHere
+-- (basher/001), fed by trigger "Health Lost By Type". Returns true and the reason, or false and why not.
+S.LETHAL_HIT_MEMORY = S.LETHAL_HIT_MEMORY or 30
+function S._lethalHit()
+  if not ataxiaBasher_biggestHitHere then return false, "no hit record loaded" end
+  local big, age = ataxiaBasher_biggestHitHere(tonumber(S.LETHAL_HIT_MEMORY) or 30)
+  if not big then return false, age end
+  local hp = (ataxiaBasher_safeHp and ataxiaBasher_safeHp())
+    or tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
+  if not hp or hp <= 0 then return false, "health unknown" end
+  if big < hp then
+    return false, "the biggest hit here (" .. big .. ") is below our health (" .. hp .. ")"
+  end
+  return true, "one attack here took " .. big .. " (" .. string.format("%.0f", tonumber(age) or 0)
+    .. "s ago) and we have " .. hp
 end
 
--- A ground retreat is starting on the exemption: use it up, and say why we leave.
-function S._spendRecklessReveal()
-  if not (S._retreatSpent() and S._recklessReveal()) then return false end
-  ataxiaTemp.recklessCuredAt = nil
-  S._echo("<indian_red>RECKLESSNESS hid our health<reset> -- " .. hpp()
-    .. "% now; leaving although we already left one room.")
+-- NOTHING WE SWING LANDS (v4.7.514, the same death). Both arms broken: "Both arms broken -- weapon
+-- attack refused; battlerage and pet still ride." at 10:09:11.7, and the swarm still answered
+-- "what is in this one we kill". The game's refusal line, with both arms still out, is the test
+-- (ataxiaBasher_weaponRefused, basher/001), so a class whose attack needs no arms is not forced
+-- out. It lifts the spent retreat only: the U-turn rule still asks for 85% and cured.
+function S._armsOut()
+  if not ataxiaBasher_weaponRefused then return false, "no weapon-refusal reader loaded" end
+  return ataxiaBasher_weaponRefused()
+end
+
+-- Why the spent retreat does not refuse right now, or nil: "reckless", "lethal" or "arms", and a
+-- reason. The one reader of the exemptions, so every escape path agrees (_spentRefuses, and through
+-- it _retreatBlock, the panic tumble and the tick's ladder gate).
+function S._spentExemption()
+  if S._recklessReveal() then return "reckless", "recklessness hid our health" end
+  local lethal, lwhy = S._lethalHit()
+  if lethal then return "lethal", lwhy end
+  local arms = S._armsOut()
+  if arms then return "arms", "both arms out -- the weapon attack is refused" end
+  return nil
+end
+
+-- Does the spent retreat refuse a ground retreat now?
+function S._spentRefuses()
+  return S._retreatSpent() and S._spentExemption() == nil
+end
+
+-- A ground retreat toward `dir` is starting: if it goes on an exemption, say why (and use up the
+-- reckless one, which is good once). True when an exemption carried it.
+function S._spendExemption(dir)
+  local uturn = dir and S._isUTurn(dir) and not S._mayReturn()
+  if uturn then
+    local lethal, why = S._lethalHit()
+    if not lethal then return false end
+    S._echo("<indian_red>LETHAL HIT<reset> -- " .. why .. "; going back into the room we fled.")
+    return true
+  end
+  if not S._retreatSpent() then return false end
+  local kind, why = S._spentExemption()
+  if kind == "reckless" then
+    ataxiaTemp.recklessCuredAt = nil
+    S._echo("<indian_red>RECKLESSNESS hid our health<reset> -- " .. hpp()
+      .. "% now; leaving although we already left one room.")
+  elseif kind == "lethal" then
+    S._echo("<indian_red>LETHAL HIT<reset> -- " .. why .. "; leaving although we already left one room.")
+  elseif kind == "arms" then
+    S._echo("<indian_red>BOTH ARMS OUT<reset> -- the weapon attack is refused, so nothing here dies; "
+      .. "leaving although we already left one room.")
+  else
+    return false
+  end
   return true
 end
 
@@ -666,7 +730,7 @@ function S._retreatBlock(dirShort)
   if S._preyTracks() then return "Prey -- every denizen tracks a retreat, so we fight here" end -- v4.7.486
   if S._spentRefuses() then return "we already left one room -- what is in this one we kill" end -- v4.7.482
   local dir = dirShort or S._backDir() or S._escapeLastResort()
-  if dir and S._isUTurn(dir) and not S._mayReturn() then
+  if dir and S._isUTurn(dir) and not S._mayReturn() and not S._lethalHit() then -- v4.7.514
     return "the only way out is back into the room we just fled (going back needs "
       .. (tonumber(S._cfg().returnAt) or 85) .. "% and cured)"
   end
@@ -1396,7 +1460,7 @@ function S._maybePanic(hpNow)
   -- Tear down BEFORE queueing the escape: reset() flushes the queue when a tactic was
   -- active, and that flush must never land on top of our tumble.
   S.reset("panic tumble")
-  S._spendRecklessReveal() -- 2026-11-20: a tumble on the reckless exemption uses it up
+  S._spendExemption(dir) -- 2026-11-20 / v4.7.514: a tumble on an exemption says why (reckless: used up)
   S._noteRetreat(M.map and M.map.current) -- v4.7.482: its landing spends the one retreat too
   -- Free-queued, not raw: at panic HP the balance is usually spent mid-round, and a raw
   -- tumble would be rejected. The free queue fires it the instant we're able -- and the
@@ -1933,7 +1997,7 @@ function S._beginEscape(why)
     return false
   end
   S._escapeNo = nil
-  S._spendRecklessReveal() -- 2026-11-20: a ground escape on the reckless exemption uses it up
+  S._spendExemption(shortBack) -- 2026-11-20 / v4.7.514: an escape on an exemption says why
   S._fled = { room = M.map and M.map.current, at = now() }
   S._noteRetreat(M.map and M.map.current)
   S._escaping = true -- v4.7.378: wherever this lands, we heal there before moving on
@@ -2792,7 +2856,15 @@ function S.onVitals()
   -- BOUND: wait for it WITHOUT the cooldown stamp, so the first free prompt leaves at once
   -- (v4.7.370, user: "retry the command when we are free").
   if S._bound() then
-    S._sayOnce("bound", head .. ", but <grey>bound<reset> -- leaving the moment we are free.")
+    -- THE PROMISE MUST BE TRUE (v4.7.514). The oryx death printed "bound -- leaving the moment we
+    -- are free" at 10:09:04.6, and the free prompt at 10:09:08.3 said "NOT leaving: we already left
+    -- one room". Ask the same side-effect-free reader the free prompt asks, and say its answer now.
+    local block = S._retreatBlock()
+    if block then
+      S._sayOnce("bound", head .. ", <grey>bound<reset> -- and free we still stay: " .. block .. ".")
+    else
+      S._sayOnce("bound", head .. ", but <grey>bound<reset> -- leaving the moment we are free.")
+    end
     return
   end
   -- BOTH LEGS BROKEN: no wait (v4.7.513). v4.7.378 waited here for a leg to mend; the tumble

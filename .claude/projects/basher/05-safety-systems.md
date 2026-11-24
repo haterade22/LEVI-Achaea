@@ -18,7 +18,8 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
      │    └─ refused (no route back)  → fall through: fighting in place is the answer
      ├─ LAST STAND (v4.7.486): critical + no retreat + no known
      │    shield-breaker or shield-pass here → "shield", attacks held until 70%
-     │    (ends early if hits pass the shield, v4.7.506)
+     │    (ends early if hits pass the shield, v4.7.506, unless the shield
+     │    blocked another denizen here in the last 10 s, v4.7.514)
      ├─ damage spike + can shield       → "shield" (one-cycle guard, keep attacking)
      └─ else                            → skip both flee checks below
 5. hpp ≤ fleeThresholdPct (25%)?        → "flee"
@@ -42,7 +43,7 @@ it made the whole branch unreachable.
 
 `ataxiaBasher_lastStand(hpp)` (`basher/001`:687) decides the round in step 4, after the disengage
 (001:536-543). It returns `"shield"`, `"wait"` (build no round) or nil (no last stand). A new stand
-starts when `ataxiaBasher_lastStandWanted(hpp)` (001:635, no side effects) is true.
+starts when `ataxiaBasher_lastStandWanted(hpp)` (001:667, no side effects) is true.
 
 From a death (2026-11-10, `kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`): Prey
 made both tash'la follow our one retreat, the retreat back was refused, and `canShield()` was
@@ -53,7 +54,7 @@ false, so from 28% to 15% health the only action was another attack. Sips and po
 - a no-flee area, `ataxiaBasher.lastStand ~= false` (`bash laststand on|off`), no Bravado, no Rimewrought;
 - no shield up yet, and no cooldown (`ataxiaTemp.lastStandCoolUntil`, 10 s after a stand that gave up or whose shield broke);
 - critical health: HP% at or below the swarm's `escapeAt` (35), or raw HP at or below its `panicHp`
-  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:605);
+  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:637);
 - no denizen in the room on `ataxiaBasher.shieldBreakers`;
 - the swarm cannot take us out: it is off, or `S._escapeRouteReady()` is false, and no recovery or
   tumble is under way.
@@ -61,7 +62,7 @@ false, so from 28% to 15% health the only action was another attack. Sips and po
 **It ignores `canShield()` on purpose.** That function assumes every target-list denizen breaks
 shields; the last stand finds out. Trigger "Shield Broken By Denizen"
 (`denizen_attacks_misc_lines/029`, substring `your magical shield`) calls
-`ataxiaBasher_onShieldLine` (001:716): a line that starts with the name of a denizen in the room
+`ataxiaBasher_onShieldLine` (001:758): a line that starts with the name of a denizen in the room
 adds that name, lowercased, to the saved `ataxiaBasher.shieldBreakers`. Our own lines (`You...`),
 rebounds and players are ignored. One sample line exists: "A small brown lemming rips apart your
 magical shield defence with its claws." A tash'la raze line is not yet known.
@@ -82,9 +83,9 @@ Two elementals hit 1,400-3,334 cold plus 950-1,070 blunt (the shadow line) a rou
   again. After `LAST_STAND_TRIES` (2) sends with no shield, the stand ends ("the shield did not go
   up after 2 tries") with the 10 s cooldown, and the basher attacks.
 - While the shield is up: `"wait"`. In a no-flee area the attack loop also keeps the HP>=70 gate
-  while `ataxiaBasher_lastStandHolding()` (001:658) is true (001:209).
+  while `ataxiaBasher_lastStandHolding()` (001:694) is true (001:209).
 
-`ataxiaBasher_lastStandHolding()` (001:660) ends the stand at `ataxiaBasher.lastStandRelease` (70%,
+`ataxiaBasher_lastStandHolding()` (001:694) ends the stand at `ataxiaBasher.lastStandRelease` (70%,
 `bash laststand release <pct>`), after `LAST_STAND_MAX` (30 s), when a shield it SAW up is down
 (broken; 10 s cooldown), or when hits pass the shield (below). Each end prints
 `LAST STAND over (<why>) -- attacking.`. The state is `ataxiaTemp.lastStandAt`, `lastStandSentAt`,
@@ -98,15 +99,23 @@ printed no shield-break line, so `ataxiaBasher_onShieldLine` learned nothing, th
 to the end, and the stand held every attack waiting for 70% (about 1,390 HP/s in, about 920 healed;
 `kb/mechanics/mnemosyne-affixes.md`, "The manifested nightmare"). The line that proves a shield
 fails is a `Health lost:` line while it is up. Trigger 351 calls `ataxiaBasher_lastStandHit`
-(001:780) for each one:
+(001:818) for each one:
 
 - Only a blockable type counts. `unblockable` and `raw` never do (a shield stops neither, from
   anyone). A hit within 0.5 s of first seeing the shield up does not count: it can share a packet
   with the shield line.
 - The second counting hit ends the stand ("<type> hits pass the shield") with the 10 s cooldown
   and stores the room in `ataxiaTemp.shieldPassRoom`.
-- `ataxiaBasher_shieldPassHere` (001:767) reads that room. While it holds, `lastStandWanted`
-  (001:635) starts no stand and `ataxiaBasher_canShield` (`can(x)/002`:20) refuses every shield, so
+- **Unless the shield is still blocking someone (v4.7.514).** The shield is per denizen: in the oryx
+  death (2026-11-24) the oryx's charge passed it while the rattlesnake "hurls itself against your
+  shield in a futile attempt to harm you.", and ending the stand let the rattlesnake's trips land.
+  Trigger `denizen_attacks_misc_lines/030` (`^(.+) hurls itself against your shield`) calls
+  `ataxiaBasher_onShieldBlocked` (001:877), which stamps `ataxiaTemp.lastStandBlockedAt`, the room
+  and the denizen while a stand runs with the shield up. If that stamp is under 10 s old and in
+  this room, the pass hits do not end the stand (001:844): it prints "LAST STAND holds: ..." once.
+  The cap, the release health and a broken shield still end it.
+- `ataxiaBasher_shieldPassHere` (001:805) reads that room. While it holds, `lastStandWanted`
+  (001:667) starts no stand and `ataxiaBasher_canShield` (`can(x)/002`:20) refuses every shield, so
   the spike and shield-threshold branches of `dangerLevel` stop shielding there too. The room is
   forgotten on a room change (a `gmcp.Room.Info` handler, with the read as a backstop) and when the
   basher is off. Session state, never saved.
@@ -164,7 +173,8 @@ leaving genuinely sustained damage untouched — its samples really do span the 
 `S.onVitals`, so it printed whenever the condition held rather than when we acted — dozens of
 duplicate lines per fight. It now prints only after the cooldown gate passes and only when the
 *rate* (not the HP threshold) triggered the escape. The no-flee `DANGER: … fighting on` echo is
-throttled to 5s, because it is evaluated on the attack path and otherwise printed every round
+(since v4.7.514) "both arms out -- the weapon attack is refused" instead while `ataxiaBasher_weaponRefused()`
+holds, and it is throttled to 5s, because it is evaluated on the attack path and otherwise printed every round
 of a fight we had already decided to stand and fight. **An alarm nobody can read past is not an
 alarm.**
 

@@ -386,6 +386,8 @@ function ataxiaBasher_recordIncoming(amount)
   if not (ataxiaBasher and ataxiaBasher.enabled) then return end
   local nowT = getEpoch()
   table.insert(ataxiaBasher_incSamples, {nowT, amount})
+  -- The same hit, grouped into attacks per room (v4.7.514, ataxiaBasher_noteAttackHit below).
+  if ataxiaBasher_noteAttackHit then ataxiaBasher_noteAttackHit(amount, nowT) end
   local cutoff = nowT - ataxiaBasher_dmgWindowSec
   while #ataxiaBasher_incSamples > 0 and ataxiaBasher_incSamples[1][1] < cutoff do
     table.remove(ataxiaBasher_incSamples, 1)
@@ -581,7 +583,11 @@ function ataxiaBasher_dangerLevel()
       local nowT = (getEpoch and getEpoch()) or 0
       if (nowT - (tonumber(ataxiaTemp.dangerEchoAt) or 0)) >= 5 then
         ataxiaTemp.dangerEchoAt = nowT
-        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- not leaving (" .. noWay .. "), fighting on." .. debtNote)
+        -- v4.7.514 (the oryx death): with the weapon refused for both arms, "fighting on" was false.
+        local armsOut = ataxiaBasher_weaponRefused and ataxiaBasher_weaponRefused()
+        local doing = armsOut and "both arms out -- the weapon attack is refused, only battlerage and pet ride"
+          or "fighting on"
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- not leaving (" .. noWay .. "), " .. doing .. "." .. debtNote)
       end
     end
   else
@@ -676,6 +682,8 @@ local function lastStandEnd(why, cool)
   ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
   ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = nil, nil
   ataxiaTemp.lastStandUpAt, ataxiaTemp.lastStandPassHits = nil, nil
+  ataxiaTemp.lastStandBlockedAt, ataxiaTemp.lastStandBlockedRoom = nil, nil -- v4.7.514
+  ataxiaTemp.lastStandBlockedBy, ataxiaTemp.lastStandBlockSaid = nil, nil
   ataxiaTemp.lastStandCoolUntil = cool and (lastStandNow() + LAST_STAND_COOLDOWN) or nil
   ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
 end
@@ -736,6 +744,7 @@ function ataxiaBasher_lastStand(hpp)
   if not ataxiaBasher_lastStandWanted(hpp) then return nil end
   ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nowT, nowT
   ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = 1, nil
+  ataxiaTemp.lastStandBlockedAt, ataxiaTemp.lastStandBlockSaid = nil, nil -- v4.7.514: this stand's own
   ataxiaTemp.lastStandFlush = true
   ataxiaEcho("LAST STAND: " .. tostring(hpp) .. "% and no way out -- shielding, attacks held until "
     .. (tonumber(ataxiaBasher.lastStandRelease) or 70) .. "%.")
@@ -784,6 +793,7 @@ end
 local SHIELD_PASS_HITS = 2
 local SHIELD_SETTLE = 0.5
 local SHIELD_NEVER_STOPS = { unblockable = true, raw = true }
+local SHIELD_BLOCK_WINDOW = 10 -- seconds a blocked attack keeps the shield "useful here" (v4.7.514)
 
 local function roomNum()
   local info = gmcp and gmcp.Room and gmcp.Room.Info
@@ -822,6 +832,25 @@ function ataxiaBasher_lastStandHit(amount, dtype)
   if ataxiaTemp.lastStandPassHits < SHIELD_PASS_HITS then
     return "hit " .. ataxiaTemp.lastStandPassHits .. " of " .. SHIELD_PASS_HITS .. " through the shield"
   end
+  -- THE SHIELD IS PER MOB (v4.7.514). The oryx death (2026-11-24): an ochre-necked oryx's charge
+  -- passed the shield (1020 + 1207 physical cutting), while the diamond-back rattlesnake in the same
+  -- room "hurls itself against your shield in a futile attempt to harm you." Two pass hits ended
+  -- the stand, our next attack dropped the shield, and the rattlesnake's trips then landed 1586,
+  -- 1254 and 1406. A shield that blocked an attack in this room within SHIELD_BLOCK_WINDOW is still
+  -- doing work, so pass hits do not end the stand (the cap, the release health and a broken shield
+  -- still do). Stamped by ataxiaBasher_onShieldBlocked (trigger "Shield Blocked By Denizen").
+  local bAt = tonumber(ataxiaTemp.lastStandBlockedAt)
+  local bSince = bAt and (nowT - bAt)
+  if bSince and bSince >= 0 and bSince < SHIELD_BLOCK_WINDOW and ataxiaTemp.lastStandBlockedRoom == roomNum() then
+    local why = kind .. " hits pass the shield, but it blocked "
+      .. tostring(ataxiaTemp.lastStandBlockedBy or "a denizen") .. " here "
+      .. string.format("%.1f", bSince) .. "s ago -- the stand holds"
+    if not ataxiaTemp.lastStandBlockSaid then
+      ataxiaTemp.lastStandBlockSaid = true
+      ataxiaEcho("LAST STAND holds: " .. why .. ".")
+    end
+    return why
+  end
   ataxiaTemp.shieldPassRoom = roomNum()
   lastStandEnd(kind .. " hits pass the shield; no shield in this room", true)
   return "ended"
@@ -838,6 +867,91 @@ if registerAnonymousEventHandler then
       ataxiaTemp.shieldPassRoom = nil
     end
   end)
+end
+
+-- A DENIZEN'S ATTACK THAT OUR SHIELD STOPPED (v4.7.514). Called by trigger "Shield Blocked By
+-- Denizen" on "<denizen> hurls itself against your shield in a futile attempt to harm you." (the
+-- line follows `touch shield` in kb/raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt).
+-- Only a running last stand with the shield up records it: ataxiaBasher_lastStandHit reads it.
+-- Returns a reason for every outcome (no silent gates).
+function ataxiaBasher_onShieldBlocked(who)
+  ataxiaTemp = ataxiaTemp or {}
+  if not tonumber(ataxiaTemp.lastStandAt) then return "no last stand" end
+  if not (ataxia.defences and ataxia.defences.shield) then return "our shield is not up" end
+  ataxiaTemp.lastStandBlockedAt = lastStandNow()
+  ataxiaTemp.lastStandBlockedRoom = roomNum()
+  ataxiaTemp.lastStandBlockedBy = (type(who) == "string" and who ~= "") and who:lower() or nil
+  return "blocked"
+end
+
+-- ============================================================================
+-- THE BIGGEST SINGLE ATTACK IN THIS ROOM (v4.7.514, the oryx death 2026-11-24)
+-- ============================================================================
+-- One attack of an ochre-necked oryx printed two `Health lost:` lines, 1328 (physical cutting) and
+-- 2879 (unblockable): 4207 into 4207 health, and we were slain. Its first charge, 16 s earlier, was
+-- 1020 + 2502 = 3522, and for most of the 12 s between them our health was below that. The rate
+-- watchdog averages over 3-5 s and so cannot say "the next hit kills us". This record can: every
+-- `Health lost:` line (ataxiaBasher_recordIncoming) joins the attack before it when it lands within
+-- ATTACK_GAP of it in the same room (the lines of one attack arrive in one packet), else starts a
+-- new one. Two denizens that hit in the same packet read as one attack: that errs toward leaving.
+-- Session state on ataxiaTemp; attacks older than ATTACK_MEMORY are dropped.
+local ATTACK_GAP = 0.25
+local ATTACK_MEMORY = 60
+
+function ataxiaBasher_noteAttackHit(amount, nowT)
+  amount = tonumber(amount) or 0
+  if amount <= 0 then return end
+  ataxiaTemp = ataxiaTemp or {}
+  nowT = tonumber(nowT) or lastStandNow()
+  local list = ataxiaTemp.attackHits
+  if type(list) ~= "table" then list = {}; ataxiaTemp.attackHits = list end
+  local room = roomNum()
+  local last = list[#list]
+  local gap = last and (nowT - last.last)
+  if last and last.room == room and gap >= 0 and gap <= ATTACK_GAP then
+    last.sum, last.last = last.sum + amount, nowT
+  else
+    list[#list + 1] = { at = nowT, last = nowT, sum = amount, room = room }
+  end
+  while #list > 0 and (nowT - list[1].last) > ATTACK_MEMORY do table.remove(list, 1) end
+end
+
+-- The biggest attack taken in THIS room in the last `window` seconds: its size and age, or nil and
+-- the reason there is none.
+function ataxiaBasher_biggestHitHere(window)
+  ataxiaTemp = ataxiaTemp or {}
+  local list = ataxiaTemp.attackHits
+  if type(list) ~= "table" or #list == 0 then return nil, "no hit recorded" end
+  window = tonumber(window) or 30
+  local nowT, room = lastStandNow(), roomNum()
+  local best, age
+  for _, h in ipairs(list) do
+    local since = nowT - h.last
+    if h.room == room and since >= 0 and since < window and (not best or h.sum > best) then
+      best, age = h.sum, since
+    end
+  end
+  if not best then return nil, "no hit in this room in " .. window .. "s" end
+  return best, age
+end
+
+-- OUR WEAPON ATTACK IS REFUSED (v4.7.514). Trigger "Broken Arms" stamps ataxiaTemp.armsRefusedAt on
+-- the game's refusal ("You cannot do that because both of your arms must be whole and unbound.").
+-- That line is the authority that our round cannot land; ataxia_selfArmsOut (self_limb_tracking/002)
+-- says the arms are still out now. A class with an arm-free attack (Psion's Psionics, Pariah's
+-- VIRULENCE) never sends the refused swing, so it never gets the line and is not counted here.
+-- Returns true, or false and the reason.
+local WEAPON_REFUSED_MEMORY = 10
+function ataxiaBasher_weaponRefused()
+  local at = tonumber(ataxiaTemp and ataxiaTemp.armsRefusedAt)
+  if not at then return false, "no weapon refusal seen" end
+  local since = lastStandNow() - at
+  if since < 0 or since >= WEAPON_REFUSED_MEMORY then
+    return false, "the last weapon refusal is " .. string.format("%.1f", since) .. "s old"
+  end
+  if not ataxia_selfArmsOut then return false, "no arm reader loaded" end
+  if not ataxia_selfArmsOut() then return false, "an arm is usable again" end
+  return true
 end
 
 -- Returns the safe room config for the current area, or nil if none configured

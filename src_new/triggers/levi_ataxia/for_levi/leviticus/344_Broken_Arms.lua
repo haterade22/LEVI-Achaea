@@ -58,6 +58,12 @@ patterns:
     not necessarily lost -- collide/onslaught need no arms. Only the weapon swing dies.
 ]]--
 
+-- v4.7.514: the game says our weapon round cannot land. The swarm's one-retreat rule reads this
+-- (with ataxia_selfArmsOut) through ataxiaBasher_weaponRefused (basher/001): "what is in this room
+-- we kill" is false when nothing we swing lands. Session state.
+ataxiaTemp = ataxiaTemp or {}
+ataxiaTemp.armsRefusedAt = (getEpoch and getEpoch()) or 0
+
 -- Drop the in-flight replay on every owned rotation: the queued round was refused.
 for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPending"}) do
 	ataxiaTemp[k] = nil

@@ -1430,6 +1430,16 @@ up. `ataxiaBasher_lastStandHit` (`basher/001`) counts two blockable ones, ends t
 shields in that room. **Rule:** a defence that the game confirms up is not confirmed to work. Look
 for the line that proves it fails, and do not wait for a line the game may never send.
 
+### A defence judged on one attacker is judged on the wrong unit (v4.7.514)
+v4.7.506 ended the last stand on two hits through the shield. In the oryx death (2026-11-24) those
+hits were the oryx's, while the shield was blocking the rattlesnake ("hurls itself against your
+shield in a futile attempt"); ending the stand dropped the shield and the rattlesnake's trips
+landed. The same death had the one-retreat rule hold us below one oryx charge, and the swarm's
+"leaving the moment we are free" promise contradicted by the free prompt. **Rule:** weigh a
+defence's failure against its successes in the same room, per attacker; and an echo that promises
+a later action asks the same reader that later action asks (`ataxiaBasher_lastStandHit`,
+`S._retreatBlock`, `S._spentExemption`).
+
 ### Vitals read full under recklessness, so every HP gate is blind (v4.7.506)
 The same death: the prompt and GMCP read 15696 HP while real health was about 2743, and the game
 printed no `Health lost:` lines. The stand, the escape ladder and the flee check all read those

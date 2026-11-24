@@ -992,4 +992,129 @@ describe("2026-11-20 -- hits through the shield end the last stand", function()
       expect(ataxiaBasher_dangerLevel()).toBe("shield")
     end)
   end)
+
+  -- v4.7.514, the oryx death (2026-11-24): the rattlesnake was blocked by the shield while the oryx's
+  -- charge (physical cutting) passed it; two pass hits ended the stand, our attack dropped the shield
+  -- and the rattlesnake's trips then landed. The block line goes through the REAL trigger 030. Lines:
+  -- the rattlesnake one is the maintainer's quote of that log (not yet filed); its shape is
+  -- kb/raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt ("A gossamer
+  -- butterfly hurls itself against your shield in a futile attempt to harm you.").
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local BLOCK_TRIGGER = "src_new/triggers/levi_ataxia/for_levi/leviticus/denizen_attacks_misc_lines/030_Shield_Blocked_By_Denizen.lua"
+  local function blockedLine(line)
+    local pats = TL.patterns(BLOCK_TRIGGER)
+    expect(TL.anyMatches(pats, line)).toBeTrue()
+    expect(TL.anyMatches(pats, TL.wrap(line, 119)[1])).toBeTrue() -- the first server row alone
+    matches = { line, line:match("^(.+) hurls itself against your shield") }
+    dofile(BLOCK_TRIGGER)
+  end
+
+  it("v4.7.514: a shield that blocks one denizen here holds the stand through another's pass hits", function()
+    run(function()
+      standWithShield()
+      ataxiaBasher_lastStandHolding()
+      clock = 1003.5
+      blockedLine("A diamond-back rattlesnake hurls itself against your shield in a futile attempt to harm you.")
+      expect(ataxiaTemp.lastStandBlockedAt).toBe(1003.5)
+      healthLost("Health lost: 1020 (physical cutting).")   -- the oryx charge, pass hit 1
+      clock = 1005
+      healthLost("Health lost: 1207 (physical cutting).")   -- pass hit 2: ended the stand in the log
+      expect(ataxiaTemp.lastStandAt).toBe(1000)
+      expect(ataxiaTemp.shieldPassRoom).toBeNil()
+      expect(ataxiaBasher_lastStandHit(1207, "physical cutting")).toBe(
+        "physical cutting hits pass the shield, but it blocked a diamond-back rattlesnake here 1.5s ago -- the stand holds")
+      clock = 1014                                           -- the block is 10.5 s old
+      healthLost("Health lost: 1328 (physical cutting).")
+      expect(ataxiaTemp.lastStandAt).toBeNil()
+      expect(ataxiaTemp.shieldPassRoom).toBe(4242)
+    end)
+  end)
+
+  it("v4.7.514: a block in another room, or with no stand, does not count", function()
+    run(function()
+      expect(ataxiaBasher_onShieldBlocked("a diamond-back rattlesnake")).toBe("no last stand")
+      standWithShield()
+      ataxiaBasher_lastStandHolding()
+      clock = 1003.5
+      gmcp.Room.Info.num = 4243
+      blockedLine("A gossamer butterfly hurls itself against your shield in a futile attempt to harm you.")
+      gmcp.Room.Info.num = 4242
+      healthLost("Health lost: 1020 (physical cutting).")
+      clock = 1005
+      healthLost("Health lost: 1207 (physical cutting).")
+      expect(ataxiaTemp.lastStandAt).toBeNil()
+    end)
+  end)
+
+  -- The Health lost amounts and types are the maintainer's quote of the oryx log (not yet filed);
+  -- the line shape is kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt:31.
+  it("v4.7.514: one attack is the sum of its Health lost lines, per room, for a while", function()
+    run(function()
+      bashStats_recordIncoming = function(a) ataxiaBasher_recordIncoming(a) end -- the tally is not under test
+      ataxiaTemp.attackHits = nil
+      expect(ataxiaBasher_biggestHitHere(30)).toBeNil()
+      healthLost("Health lost: 1020 (physical cutting).")   -- 10:09:06, the first charge
+      healthLost("Health lost: 2502 (unblockable).")
+      expect(ataxiaBasher_biggestHitHere(30)).toBe(3522)
+      clock = 1004
+      healthLost("Health lost: 1586 (physical blunt).")     -- a rattlesnake trip, its own attack
+      expect(ataxiaBasher_biggestHitHere(30)).toBe(3522)
+      clock = 1016
+      healthLost("Health lost: 1328 (physical cutting).")   -- 10:09:22, the killing charge
+      healthLost("Health lost: 2879 (unblockable).")
+      expect(ataxiaBasher_biggestHitHere(30)).toBe(4207)
+      gmcp.Room.Info.num = 4243                              -- another room: none of those
+      expect(ataxiaBasher_biggestHitHere(30)).toBeNil()
+      gmcp.Room.Info.num = 4242
+      clock = 1050                                           -- 34 s after the last one
+      expect(ataxiaBasher_biggestHitHere(30)).toBeNil()
+      ataxiaTemp.attackHits = nil
+    end)
+  end)
+
+  -- "Both arms broken -- weapon attack refused" (10:09:11.7 in the oryx log) through the REAL trigger
+  -- 344 and its pattern; the arm test is the real ataxia_selfArmsOut.
+  it("v4.7.514: the weapon refusal with both arms out says the weapon cannot land", function()
+    -- The limb file resets globals that later files (test_bashing_parry) set up: put every global
+    -- back as it was, whatever this case does.
+    local snap = {}
+    for k, v in pairs(_G) do snap[k] = v end
+    local okAll, errAll = pcall(run, function()
+      local okL, errL = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/self_limb_tracking/002_Track_The_Damage.lua")
+      if not okL then error(tostring(errL)) end
+      local ARMS = "src_new/triggers/levi_ataxia/for_levi/leviticus/344_Broken_Arms.lua"
+      expect(TL.anyMatches(TL.patterns(ARMS),
+        "You cannot do that because both of your arms must be whole and unbound.")).toBeTrue()
+      ataxiaTemp.armsRefusedAt = nil
+      expect(ataxiaBasher_weaponRefused()).toBeFalse()
+      ataxia.afflictions = { brokenleftarm = true, brokenrightarm = true }
+      dofile(ARMS)
+      expect(ataxiaBasher_weaponRefused()).toBeTrue()
+      ataxia.afflictions = { brokenleftarm = true }          -- one arm mended
+      local ok2, why = ataxiaBasher_weaponRefused()
+      expect(ok2).toBeFalse()
+      expect(why).toBe("an arm is usable again")
+      ataxia.afflictions = { brokenleftarm = true, brokenrightarm = true }
+      clock = clock + 10
+      expect(ataxiaBasher_weaponRefused()).toBeFalse()
+      -- The danger path's line no longer says "fighting on" while it is so.
+      clock = clock - 10
+      local said, realEcho = {}, ataxiaEcho
+      ataxiaEcho = function(m) said[#said + 1] = tostring(m) end
+      local realX = ataxiaBasher_isDamageRateExtreme
+      ataxiaBasher_isDamageRateExtreme = function() return true end
+      ataxia.vitals.hpp = 60
+      ataxiaTemp.dangerEchoAt = nil
+      local okD, errD = pcall(ataxiaBasher_dangerLevel)
+      ataxiaEcho, ataxiaBasher_isDamageRateExtreme = realEcho, realX
+      ataxiaTemp.armsRefusedAt = nil
+      if not okD then error(errD, 0) end
+      local text = table.concat(said, "\n")
+      expect(text:find("both arms out -- the weapon attack is refused", 1, true) ~= nil).toBeTrue()
+      expect(text:find("fighting on", 1, true) == nil).toBeTrue()
+    end)
+    for k in pairs(_G) do if snap[k] == nil then _G[k] = nil end end
+    for k, v in pairs(snap) do if _G[k] ~= v then _G[k] = v end end
+    if not okAll then error(errAll, 0) end
+  end)
 end)

@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-11-24 - v4.7.514: Leave before a lethal hit; a shield that blocks one mob holds the stand; no fight-on with both arms out
+
+From a death in Mnemosyne explore mode (swarm tactics, 2026-11-24). The room held an ochre-necked oryx and a diamond-back rattlesnake, with exits ne and se. Our one retreat was spent, and the only door led back into the room we had fled. The oryx's charge is one attack of two `Health lost:` lines: 1020 (physical cutting) + 2502 (unblockable) = 3522 at 10:09:06, and 1328 + 2879 = 4207 at 10:09:22, which killed us from 4207 health. Between those two charges our health was below one charge for most of 12 s (2598, 3447, 3997, 2347, 717). The swarm printed "bound -- leaving the moment we are free." and then, once we were free, "NOT leaving: we already left one room -- what is in this one we kill." The basher printed "the only way out is back into the room we just fled" and "fighting on" while both arms were broken ("Both arms broken -- weapon attack refused"). The last stand ended on the oryx's pass hits ("physical cutting hits pass the shield") while the shield was blocking the rattlesnake ("A diamond-back rattlesnake hurls itself against your shield in a futile attempt to harm you."), and the rattlesnake's trips landed once the shield fell (1586, 1254, 1406). The maintainer approved all three fixes.
+
+**1. A lethal hit lifts the spent retreat and the U-turn rule.** `ataxiaBasher_recordIncoming` (basher/001) now also feeds `ataxiaBasher_noteAttackHit`. That function groups `Health lost:` lines that land within 0.25 s of each other in the same room into one attack (`ataxiaTemp.attackHits`, 60 s memory). `ataxiaBasher_biggestHitHere(window)` returns the largest attack in this room. When that attack, within `S.LETHAL_HIT_MEMORY` (30 s), is at least our health (`ataxiaBasher_safeHp`, which subtracts the numbness debt), `S._lethalHit` (mnemosyne/009) is true. The spent retreat then does not refuse, and `S._retreatBlock` does not refuse the U-turn either, because the room we fled is not certain death and this one is. Pursued and Prey still refuse. No new trigger: the record reads the existing "Health Lost By Type" feed. Two denizens that hit in the same packet count as one attack, which errs toward leaving.
+
+**The bound line tells the truth.** While we are bound, `onVitals` asks `S._retreatBlock()` (the same reader the free prompt uses). It then prints either "bound -- and free we still stay: <reason>." or "bound -- leaving the moment we are free."
+
+**2. A shield that blocks one denizen holds the stand.** The new trigger `denizen_attacks_misc_lines/030_Shield_Blocked_By_Denizen` (`^(.+) hurls itself against your shield`) calls `ataxiaBasher_onShieldBlocked`, which stamps the time, the room and the denizen while a last stand runs with the shield up. When the pass hits reach their limit in `ataxiaBasher_lastStandHit`, and the shield has blocked an attack in this room within the last 10 s, the stand holds. It says "LAST STAND holds: <type> hits pass the shield, but it blocked <denizen> here Ns ago -- the stand holds." once per stand. The 30 s cap, the 70% release and a broken shield still end it. "Your shield completely absorbs the damage." is not used: in `kb/` that line belongs to a Shield of Absorption (`kb/combat/shikudo.md`), not to `touch shield`.
+
+**3. No "fight on" with both arms out.** Trigger `344_Broken_Arms` (the game's "You cannot do that because both of your arms must be whole and unbound.") now stamps `ataxiaTemp.armsRefusedAt`. `ataxiaBasher_weaponRefused()` is true for 10 s after that line while `ataxia_selfArmsOut()` still says both arms are out. Then `S._armsOut` lifts the spent retreat ("BOTH ARMS OUT -- the weapon attack is refused, so nothing here dies; leaving although we already left one room."). It does not lift the U-turn rule, Pursued or Prey. The basher's no-flee danger echo says "both arms out -- the weapon attack is refused, only battlerage and pet ride" instead of "fighting on". A class whose attack needs no arms (Psion Psionics, Pariah VIRULENCE) never sends the refused swing, so it never gets the line and is not forced out.
+
+**One reader.** `S._spentExemption()` returns "reckless", "lethal" or "arms" with a reason. `S._spentRefuses()` reads it, and through it so do `_retreatBlock`, the panic tumble and the tick's ladder gate. `S._spendExemption(dir)` replaces `S._spendRecklessReveal` and prints why a ground retreat starts on an exemption. It still uses up the reckless reveal once.
+
+Tests: `test_swarm_tactics.lua`, "v4.7.514 -- a lethal hit or a refused weapon lifts the spent retreat" (5 cases). `test_basher_noflee.lua`, four v4.7.514 cases in "hits through the shield end the last stand": the real triggers 030, 344 and 351. Each fix was broken back and its test failed.
+
+Not fixed: the escape announced `ne` and the tumble went `se` (10:09:18.4 / 10:09:19.93). The cause was not found.
+
+---
+
 ## 2026-11-23 - v4.7.513: Escape by tumble on broken legs, and say why a disengage is refused
 
 From two deaths to Seasone the Industrious in Mnemosyne (Eastern Ithmia, 2026-11-23). User: "If they break both our legs, or we are prone, etc, we need to cure that with a priority and then leave, tumble, etc. You can tumble with broken legs".

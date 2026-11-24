@@ -5173,7 +5173,7 @@ describe("2026-11-20 -- a recklessness cure at critical health lifts the one-ret
       hurt(17)
       cureLine()
       expect(S._retreatBlock("w")).toBeNil()
-      expect(S._spendRecklessReveal()).toBeTrue()
+      expect(S._spendExemption("w")).toBeTrue()
       expect(S._retreatBlock("w")).toBe("we already left one room -- what is in this one we kill")
     end)
   end)
@@ -5231,6 +5231,153 @@ describe("2026-11-20 -- a recklessness cure at critical health lifts the one-ret
       expect(said:find("RECKLESSNESS hid our health", 1, true) ~= nil).toBeTrue()
       expect(count("leap w")).toBe(1)
       expect(ataxiaTemp.swarmPullDir).toBeNil()
+    end)
+  end)
+end)
+
+-- v4.7.514, the oryx death (2026-11-24). An ochre-necked oryx and a diamond-back rattlesnake; the
+-- one retreat was spent and the only door led back into the room we fled. The oryx's charge was one
+-- attack of 1020 + 2502 = 3522 at 10:09:06 and 1328 + 2879 = 4207 at 10:09:22, which killed us from
+-- 4207. Between them: "LOW HP -- 24% -- NOT leaving: we already left one room -- what is in this one
+-- we kill." and "Both arms broken -- weapon attack refused". The hit record and the weapon refusal
+-- live in basher/001 and are tested there with their real triggers (test_basher_noflee); here only
+-- their answers matter, so both are stand-ins that are restored after each case.
+describe("v4.7.514 -- a lethal hit or a refused weapon lifts the spent retreat", function()
+  local real = {}
+  local biggest, refused
+  local function install()
+    real.big, real.ref, real.safe = ataxiaBasher_biggestHitHere, ataxiaBasher_weaponRefused, ataxiaBasher_safeHp
+    real.crit = ataxiaBasher_lastStandCritical
+    biggest, refused = nil, false
+    ataxiaBasher_biggestHitHere = function()
+      if biggest then return biggest, 2 end
+      return nil, "no hit recorded"
+    end
+    ataxiaBasher_weaponRefused = function()
+      if refused then return true end
+      return false, "no weapon refusal seen"
+    end
+    ataxiaBasher_safeHp = function() return tonumber(ataxia.vitals and ataxia.vitals.hp) end
+    ataxiaBasher_lastStandCritical = function() return false end -- no reckless reveal here
+  end
+  local function hurt(pct, hp)                               -- max health 16986, as in the log
+    gmcp.Char = { Vitals = { hp = tostring(hp), maxhp = "16986" } }
+    ataxia.vitals = { hpp = pct, hp = hp, maxhp = 16986 }
+  end
+  -- Room 200, fled from 100: the only door (s) is the U-turn, and the one retreat is spent.
+  local function oryxRoom()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt, S._lastPanicAt = nil, nil
+    S._fled = { room = 100, at = clock }
+    S.retreatSpentAt = clock
+    S.state = "idle"
+  end
+  -- Room 100 with a second door west to a cleared room 50 (no U-turn), the retreat spent.
+  local function spentWithDoor()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt, S._lastPanicAt = nil, nil
+    MAP.rooms[100].exits.west = 50
+    MAP.rooms[50] = { visited = true, exits = { east = 100 } }
+    MAP.current = 100
+    M.explore.fromRoom, M.explore.fromDir = 50, "e"
+    S.retreatSpentAt = clock
+    S.state = "idle"
+  end
+  local function run(fn)
+    install()
+    local ok, err = pcall(fn)
+    ataxiaBasher_biggestHitHere, ataxiaBasher_weaponRefused = real.big, real.ref
+    ataxiaBasher_safeHp, ataxiaBasher_lastStandCritical = real.safe, real.crit
+    MAP.rooms[50] = nil
+    if MAP.rooms[100] then MAP.rooms[100].exits.west = nil end
+    S._fled, S.pursuedAt = nil, nil
+    if not ok then error(err, 0) end
+  end
+  local SPENT = "we already left one room -- what is in this one we kill"
+
+  it("replays the death: health below the oryx's charge leaves, back through the fled door", function()
+    run(function()
+      oryxRoom()
+      biggest = 3522                                         -- the 10:09:06 charge
+      hurt(24, 4100)                                         -- 10:09:08.3, above one charge
+      expect(S._retreatBlock("s")).toBe(SPENT)
+      hurt(15, 2598)                                         -- 10:09:10, below it
+      expect(S._spentRefuses()).toBeFalse()
+      expect(S._retreatBlock("s")).toBeNil()                 -- the U-turn is lifted too
+      sent = {}
+      local said = capture(function() S.onVitals() end)
+      expect(said:find("LETHAL HIT", 1, true) ~= nil).toBeTrue()
+      expect(count("leap s")).toBe(1)
+    end)
+  end)
+
+  it("a hit at exactly our health counts; a swarm that follows and Prey still refuse", function()
+    run(function()
+      oryxRoom()
+      biggest = 4207
+      hurt(24, 4207)
+      expect(S._retreatBlock("s")).toBeNil()
+      S.pursuedAt = clock
+      expect(S._retreatBlock("s")).toBe("the swarm follows every retreat -- fighting here")
+      S.pursuedAt = nil
+      local realAffix = M.runHasAffix
+      M.runHasAffix = function(n) return n == "Prey" end
+      local okp, errp = pcall(function()
+        expect(S._retreatBlock("s")).toBe("Prey -- every denizen tracks a retreat, so we fight here")
+      end)
+      M.runHasAffix = realAffix
+      if not okp then error(errp, 0) end
+    end)
+  end)
+
+  it("bound: the line says we stay when free, unless the next hit kills us", function()
+    run(function()
+      oryxRoom()
+      ataxia.afflictions = { transfixation = true }
+      hurt(24, 4100)
+      biggest = 3522
+      S._said = nil
+      local said = capture(function() S.onVitals() end)
+      expect(said:find("free we still stay: " .. SPENT, 1, true) ~= nil).toBeTrue()
+      expect(said:find("leaving the moment we are free", 1, true) == nil).toBeTrue()
+      hurt(15, 2598)
+      S._said = nil
+      said = capture(function() S.onVitals() end)
+      expect(said:find("leaving the moment we are free", 1, true) ~= nil).toBeTrue()
+      ataxia.afflictions = {}                                -- free: we go
+      sent = {}
+      S._lastEmergencyAt = nil
+      S.onVitals()
+      expect(count("leap s")).toBe(1)
+    end)
+  end)
+
+  it("both arms out lifts the spent retreat, says so, and leaves by the other door", function()
+    run(function()
+      spentWithDoor()
+      hurt(30, 3000)
+      expect(S._retreatBlock("w")).toBe(SPENT)
+      refused = true
+      expect(S._retreatBlock("w")).toBeNil()
+      sent = {}
+      local said = capture(function() S.onVitals() end)
+      expect(said:find("BOTH ARMS OUT", 1, true) ~= nil).toBeTrue()
+      expect(count("leap w")).toBe(1)
+    end)
+  end)
+
+  it("both arms out does not lift the U-turn; a lethal hit does", function()
+    run(function()
+      oryxRoom()
+      hurt(30, 3000)
+      refused = true
+      expect(S._retreatBlock("s"):find("the only way out is back", 1, true) ~= nil).toBeTrue()
+      biggest = 3522
+      expect(S._retreatBlock("s")).toBeNil()
     end)
   end)
 end)
