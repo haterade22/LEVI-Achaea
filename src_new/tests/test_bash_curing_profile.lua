@@ -376,11 +376,12 @@ describe("bash curing profile -- the defence list follows the switch", function(
     expect(rest[2]).toBe("curing priority defence deathsight 25 mindseye 25 toughness 25")
   end))
 
-  it("no profile still resets the set's own list", run(function()
+  it("no profile sends nothing and says why", run(function()
     ataxia.settings.defences.current = ""
-    expect(ataxia_reapplyDefencePriorities()).toBe(0)
-    expect(mock.sent_commands[1]).toBe("curing priority defence list reset")
-    expect(#mock.sent_commands).toBe(1)
+    local n, why = ataxia_reapplyDefencePriorities()
+    expect(n).toBeNil()
+    expect(why).toBe("no defup profile")
+    expect(#mock.sent_commands).toBe(0)
   end))
 end)
 

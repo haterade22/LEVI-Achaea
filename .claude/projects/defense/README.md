@@ -83,7 +83,7 @@ and lets the hold re-probe.
 
 SSC keeps a defence list in EACH curingset. A `curingset switch` therefore brings back whatever that set was last told, which can be another class's list. On 2026-11-24 a Blademaster stopped the basher after a wade: the bash profile switched to `normal`, which still held a Serpent list, and SSC sent `lipread`, `weaving` and `scales` on every prompt ("I'm sorry, I don't know what ..."). Before v4.7.520 only `classDetect.switchCuringset` re-applied our list.
 
-`ataxia_reapplyDefencePriorities(bashing)` (`deffing/001_Defence_API.lua`) sends `curing priority defence list reset`, then writes the steady state that `gotDef` leaves for the current profile: a keepup defence at 25; a defup defence at 25 while the basher runs, or while it is not up yet. It skips what `isDefenceForCurrentClass` rejects and what the game refuses a priority for (`ataxia_defenceTakesPriority`). With no profile it still resets the list. Its callers:
+`ataxia_reapplyDefencePriorities(bashing)` (`deffing/001_Defence_API.lua`) sends `curing priority defence list reset`, then writes the steady state that `gotDef` leaves for the current profile: a keepup defence at 25; a defup defence at 25 while the basher runs, or while it is not up yet. It skips what `isDefenceForCurrentClass` rejects and what the game refuses a priority for (`ataxia_defenceTakesPriority`). With no profile it sends nothing (`defup none` sent its own reset; a reset at each switch would take the throttle slot of the switch's priority read). Its callers:
 
 | Switch | Site | `bashing` |
 |---|---|---|

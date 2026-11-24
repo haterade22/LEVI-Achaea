@@ -46,17 +46,18 @@ end
 -- The list written is the steady state that gotDef leaves: a keepup defence at 25; a defup defence
 -- at 25 while the basher runs (gotDef resets none then) or while it is not up yet (gotDef resets it
 -- when it comes up). The old re-apply put the whole defup list at 25, so SSC kept every defup
--- defence after a switch. With no profile the list is still reset: an empty list is our order too.
+-- defence after a switch. With no profile it sends nothing, as before: `defup none` sent its own
+-- reset, and a reset at each switch would take the throttle slot of the switch's priority read.
 -- `bashing` overrides ataxiaBasher.enabled: the bash profile's release passes false, because the
 -- PvP set it returns to must not keep the whole defup list when no basher stop follows.
 -- Returns the number of defences written, or nil and a reason.
 function ataxia_reapplyDefencePriorities(bashing)
 	local d = ataxia and ataxia.settings and ataxia.settings.defences
 	if not d then return nil, "no defence settings" end
-	ataxia_sendCuringPriority("curing priority defence list reset", false)
 	local cur = d.current
 	local defup = d.defup and cur and cur ~= "" and d.defup[cur]
-	if not defup then return 0 end
+	if not defup then return nil, "no defup profile" end
+	ataxia_sendCuringPriority("curing priority defence list reset", false)
 	local keep = (d.keepup and d.keepup[cur]) or {}
 	if bashing == nil then bashing = (ataxiaBasher and ataxiaBasher.enabled) == true end
 	local up = ataxia.defences or {}
