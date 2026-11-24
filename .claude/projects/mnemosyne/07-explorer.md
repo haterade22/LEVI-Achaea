@@ -952,7 +952,12 @@ then `ataxiaBasher_attack()` when a denizen is still here. It does not disengage
 `S._lastDisengageAt` are cleared and the one retreat is given back, so the ladder is free if the room
 turns bad again: the next death is real for an hour.
 
-**Detection (no save line is captured yet).** `S._checkRighteousFire(hp)` at the top of `S.onVitals`:
+**Detection.** The save's own line is CONFIRMED (the maintainer's paste, 2026-11-24,
+`kb/raw/live/mnemosyne-righteous-fire-save_2026-11-24.txt`): "Fire surges about you, restoring you from
+death's cold brink and bringing holy wrath down upon <name> in a brilliant conflagration." Trigger
+`mnemosyne/115` (v4.7.518) matches its early phrase and calls `S.onRighteousFire("the fire line")`, which
+drops a held death at once; it skips a save that the health jump ran in the last 3 s. The backstop is
+`S._checkRighteousFire(hp)` at the top of `S.onVitals`:
 `mnemWrathRighteousness`, `RF_COOLDOWN` 3600s since the last, denizens present, and health up by
 `RF_JUMP` (45) points to `RF_FULL` (95%) or more in one prompt. It reads the game's own health
 (`hppRawFresh`), not health minus the numbness debt.
@@ -970,7 +975,7 @@ hold. The hold is session state (`ataxiaTemp.rfDeathHold`, `rfDeathHoldT`), beca
 disk; a hold older than 3 s has lost its timer and is given up. A starburst (trigger 406) is a real death at once
 (`S.deathIsReal`), and calls `ataxiaBasher_onDeath(true)`, which is never held.
 
-**Open:** the save's own line; whether a slain line prints; what a boss kill does (the boon slays only a
+**Open:** the order of the fire line and the slain line, and whether a slain line prints at all; what a boss kill does (the boon slays only a
 non-boss); the boon "can echo (max 8)", and the code counts one save an hour.
 
 ### Senseless Flurry: numb before a never-walked door (v4.7.512)

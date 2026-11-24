@@ -15,6 +15,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 005 | Countdown | `^0$` | `onCountdownZero()` | `_inRun` |
 | 006 | Go | `^GO!$` | `onGo()` | `_auto` OR `ataxiaBasher.inMnemosyne` |
 | 007 | Death | `^You have been slain by (.+?)\.?$` | `reportDeath(matches[2])` and `exploreOnDeath`; held by `S.deathHold` while Wrath and Righteousness can save us (v4.7.512, `07-explorer.md`) | inline `_inRun` check in trigger body |
+| 115 | Righteous Fire Save | `^Fire surges about you, restoring you from death's cold brink` | `S.onRighteousFire("the fire line")`: the Wrath and Righteousness save is proven, a held death is dropped (v4.7.518) | skipped when the health jump ran it in the last 3 s |
 | 008 | Objective | `^Objective:\s+(.+)$` | `onObjective(matches[2])` | `_inRun` |
 | 009 | Run End | `^The Mnemosyne releases its hold` | `onRunEnd()` → `endRun()` | `_inRun` |
 | 016 | Run Pause | `^You whisper to the Mnemosyne and beseech that it grow still for a time\.$` | `onRunPause()` | none (flag set unconditionally) |

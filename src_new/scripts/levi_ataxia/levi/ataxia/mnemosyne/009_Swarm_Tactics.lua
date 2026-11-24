@@ -2918,12 +2918,13 @@ end
 -- (review, v4.7.512). The hold is session state on ataxiaTemp: `S` is saved to disk, and a hold
 -- that came back from a save had no timer and held every later death for ever (same review).
 --
--- NO PROC LINE IS CAPTURED YET, so the detector reads the prompt: holding the boon, off its hour,
+-- THE PROC LINE (v4.7.518, the maintainer's paste 2026-11-24): trigger mnemosyne/115 matches "Fire
+-- surges about you, restoring you from death's cold brink" and calls S.onRighteousFire. This
+-- detector stays the backstop. It reads the prompt: holding the boon, off its hour,
 -- denizens in the room, health jumping by RF_JUMP points or more to RF_FULL% or more in one prompt.
 -- A lethal hit can land and the restore apply before the next prompt, so the "before" reading is
 -- not required to be low -- only far below full. Heals that size do not otherwise happen mid-fight;
--- the full restores we do know of (Homebound's raido) move us out of the room first. When the
--- game's own line is pasted, a trigger calls S.onRighteousFire directly and this stays a backstop.
+-- the full restores we do know of (Homebound's raido) move us out of the room first.
 S.RF_JUMP = 45
 S.RF_FULL = 95
 S.RF_COOLDOWN = 3600

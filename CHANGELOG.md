@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-11-24 - v4.7.518: The Righteous Fire save line is read, and the Dragoncurse call works
+
+**What.** Trigger `mnemosyne/115` reads the Wrath and Righteousness save line, "Fire surges about you,
+restoring you from death's cold brink and bringing holy wrath down upon <name> in a brilliant
+conflagration." It calls `S.onRighteousFire("the fire line")`: a held death is dropped at once, the
+defences go up and the basher fights on. Trigger 555 (Dragoncurse) now tells the party
+"<target>: <curse>" when the curse strikes.
+
+**Why.** The maintainer pasted the save line (filed as
+`kb/raw/live/mnemosyne-righteous-fire-save_2026-11-24.txt`). Until now the save was found only from a
+jump in health at the next prompt, and a slain line was held 1.5 s to judge it; the game's line
+outranks that guess. The Dragoncurse call never ran: its timer text had an unbalanced quote, read
+`matches` when the timer fired (by then another line's), and gave the PvE guard the curse, not the target.
+
+**How.** 115 matches the line's early phrase (`check_wrap` passes) and skips a save that the health
+jump already ran in the last 3 s; the jump detector stays the backstop. 555 captures the curse, the
+target and the seconds when the line fires and sends from a closure. Tests:
+`test_rf_line_dragoncurse.lua` (7), each fix broken back.
+
 ## 2026-11-24 - v4.7.517: Every automatic party call follows pvecalls in PvE
 
 v4.7.516 gated only the target, battlerage and block calls. The maintainer: "put the other PvE party calls under pvecalls too". Every `pt` send that a trigger, script, timer or offence routine makes now asks `ataxia_partyCallAllowed(<the target it names>)` (`ataxia/016`): a PvE call (denizen id target, or the basher running) goes out only with `pvecalls` on; a call that names a player while the basher is off is PvP and is sent as before. A suppressed call is silent. Message text is unchanged.

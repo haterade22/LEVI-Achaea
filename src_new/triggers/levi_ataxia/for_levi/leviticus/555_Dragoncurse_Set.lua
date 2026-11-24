@@ -42,4 +42,10 @@ if isTargeted(matches[3]) then
 	ataxiaTemp.dragoncurse = matches[2]
 end
 
-if ataxia_partyCallAllowed(matches[2]) then tempTimer(matches[4],[[send("pt " ..matches[2]..": "..matches[3]")]]) end
+-- When the curse strikes, tell the party: "<target>: <curse>". Fixed in v4.7.518: the timer text had an
+-- unbalanced quote, so it never ran; it also read `matches` when the timer fired (by then another
+-- line's), and the PvE guard was given the curse, not the target. Capture both now, use a closure.
+local curse, who, secs = matches[2], matches[3], tonumber(matches[4])
+if secs and ataxia_partyCallAllowed(who) then
+  tempTimer(secs, function() send("pt " .. who .. ": " .. curse) end)
+end
