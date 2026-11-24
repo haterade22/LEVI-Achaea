@@ -566,8 +566,7 @@ function M.onDenizenFled(dir, lineText)
   ataxiaTemp.bossChases = (tonumber(ataxiaTemp.bossChases) or 0) + 1
   ataxiaTemp.bossPanicAt = nil -- consumed: one departure per panic
   local short = MAP.shortDir(MAP.normDir(dir))
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. short)
+  M._queueMove({ "stand", short }) -- one entry (v4.7.515)
   M._tacticalArm(short) -- a lost chase times out without condemning a real exit
   M._exploreEcho("<gold>" .. tostring(ataxiaTemp.bossPanicName or "the boss")
     .. " fled<reset> -- following <cyan>" .. short .. "<reset> ("
@@ -964,8 +963,7 @@ function M.onLava(lineText)
     return
   end
 
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. dir)
+  M._queueMove({ "stand", dir }) -- one entry (v4.7.515)
   M._tacticalArm(dir) -- so a lost move times out without condemning a real exit
   if first then
     M._exploreEcho("<indian_red>BOILING LAVA<reset> (5890/tick, unblockable) -- leaving by <cyan>"
@@ -1334,6 +1332,17 @@ function M._preNumb(dir)
   return ataxiaBasher_senselessFlurryNumb() ~= nil
 end
 
+-- SEND A MOVE AS ONE QUEUE ENTRY (v4.7.515). `cmds` is a list such as { "stand", "n" }. It goes
+-- out as `setalias lvmove stand/n` and `queue addclear free lvmove` (ataxia_queueChain,
+-- ataxia/003), so the step waits on the server for balance and equilibrium instead of going out
+-- raw. Without the helper it goes the old way, raw. Returns true when it went by alias.
+function M._queueMove(cmds)
+  if ataxia_queueChain then return (ataxia_queueChain("free", "lvmove", cmds)) end
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free " .. table.concat(cmds, sep))
+  return false
+end
+
 function M._exploreMove(dir, isRetry)
   -- Never move while a tumble is in flight (v4.7.243): a walk between "You begin to tumble"
   -- and "You tumble out of the room." cancels it. The swarm's own machinery re-decides once
@@ -1383,10 +1392,16 @@ function M._exploreMove(dir, isRetry)
   local numbFirst = (not isRetry) and pre == "" and M._preNumb(dir)
   if numbFirst then
     M._exploreEcho("<cyan>Senseless Flurry<reset> -- numb first, then <cyan>" .. dir .. "<reset>.")
-    send("queue addclear free stand" .. sep .. "numb")
+    M._queueMove({ "stand", "numb" }) -- one entry (v4.7.515)
     send("queue add free " .. dir)
   else
-    send("queue addclear free stand" .. sep .. pre .. dir)
+    -- ONE ENTRY (v4.7.515): `stand;<dir>` queued only the stand and sent the step raw, which the
+    -- game refused off equilibrium ("You are recovering equilibrium and cannot move yet.",
+    -- kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt rows 124-125).
+    local cmds = { "stand" }
+    for piece in pre:gmatch("[^" .. (sep:gsub("%p", "%%%0")) .. "]+") do cmds[#cmds + 1] = piece end
+    cmds[#cmds + 1] = dir
+    M._queueMove(cmds)
   end
   -- Arm the dead reckoning for exactly this one step (v4.7.251). Under dementia several room
   -- events arrive inside one move's window; without arming, each advanced the position again.
@@ -1546,7 +1561,7 @@ end
 -- "The ground seems to tilt and you fall with a thump." (trigger mnemosyne/109, v4.7.426). DIZZINESS
 -- fails the move, knocks us prone and takes balance -- and it can be uncurable (Poindexter: "permanent
 -- dizziness"), so the falls repeat all run. The exit is fine: re-send the stand+move like the ice slip,
--- on the free queue, which waits for the balance the fall took. NEVER condemn the exit, not even at the
+-- on the free queue, which waits for the balance the fall took (one `lvmove` entry since v4.7.515). NEVER condemn the exit, not even at the
 -- cap -- a fall is a property of us, and a condemned real door can strand the sweep. Its own counter,
 -- so a dizzy room on ice does not spend the ice budget twice.
 function M.onDizzyFall()
@@ -1606,11 +1621,10 @@ function M.onWallBlocked()
   end
   local nd = (MAP.normDir and MAP.normDir(M.explore.fromDir)) or M.explore.fromDir
   local short = (MAP.shortDir and MAP.shortDir(nd)) or M.explore.fromDir
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- MOUNTJUMP while mounted (v4.7.345): the leap is refused from the saddle, and a refused
   -- wall-crossing here spends an ice-slip and then condemns a REAL exit. basher/013 owns which.
   local verb = (ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap")) or "leap"
-  send("queue addclear free stand" .. sep .. verb .. " " .. short)
+  M._queueMove({ "stand", verb .. " " .. short }) -- one entry (v4.7.515)
   if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(short, verb) end
   M._exploreEcho("<grey>a wall blocks the way -- <cyan>" ..
     (verb == "mountjump" and "mountjumping" or "leaping") .. " it<reset>.")

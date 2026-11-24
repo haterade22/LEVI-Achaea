@@ -16,7 +16,25 @@ function getEpoch() return clock end
 -- breaks whoever runs after us.
 local _mockSend = send
 local sent = {}
-function send(cmd) table.insert(sent, cmd) end
+-- A move goes out as `setalias lvmove <body>` + `queue addclear free lvmove` (v4.7.515). The
+-- recorders below write the queue line WITH the body the server will run, from the real helper's
+-- own record, so an assertion names the whole move: "queue addclear free lvmove <stand/leap n>".
+-- The `setalias lvmove ...` row itself is not recorded (nil), so a count of a move counts it once;
+-- the tests of the helper's own sends ("an escape move is one queue entry") record raw.
+local function moveNorm(cmd)
+  if type(cmd) == "string" and cmd:find("^setalias lvmove ") then return nil end
+  if type(cmd) == "string" and cmd == "queue addclear free lvmove" then
+    local a = ataxiaTemp and ataxiaTemp.chainAlias and ataxiaTemp.chainAlias.lvmove
+    return "queue addclear free lvmove <" .. tostring(a and a.text) .. ">"
+  end
+  return cmd
+end
+-- A decorated attack ends in the raw queue line; show it with the alias body it runs.
+local function withAlias(cmd)
+  local a = ataxiaTemp and ataxiaTemp.chainAlias and ataxiaTemp.chainAlias.lvmove
+  return (cmd:gsub("queue addclear free lvmove$", "lvmove <" .. tostring(a and a.text) .. ">"))
+end
+function send(cmd) table.insert(sent, moveNorm(cmd)) end
 local armed = {}
 local scheduled = {}
 
@@ -96,6 +114,13 @@ if not ataxia_bashCuringPrios then
   if not okp then error("Failed to load bash curing profile") end
 end
 
+-- The movement chain alias (ataxia_queueChain, ataxia/003, v4.7.515) is the real one, loaded here
+-- rather than left to whichever file ran first: without it 009 sends its old raw fallback.
+do
+  local okq, errq = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/003_Queueing_Related.lua")
+  if not okq then error("Failed to load queueing: " .. tostring(errq)) end
+end
+
 local file = "src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/009_Swarm_Tactics.lua"
 local ok, err = pcall(dofile, file)
 if not ok then error("Failed to load swarm tactics file: " .. tostring(err)) end
@@ -124,6 +149,7 @@ local function fixture(count)
   S._rp = nil -- v4.7.389: the recovery watch is keyed to recoverStarted, which the clock rewind reuses
   S._diagAt = nil -- v4.7.390: same clock
   S._meltRoom, S._meltTries = nil, nil
+  if S._stopMoveWatch then S._stopMoveWatch("fixture") end -- v4.7.515: the watch is per-test
   -- v4.7.321: the hover/escape clocks. A stamp left by an earlier test sits in this test's FUTURE
   -- once the clock rewinds, and reads as fresh evidence (a flightUpAt >= recoverStarted is "up").
   S.flightUpAt, S.hoverSeenUpAt, S._escapeStartedAt, S._strayLandAt = nil, nil, nil, nil
@@ -229,8 +255,8 @@ describe("swarm decorate (pull consumption)", function()
     fixture(3)
     S.onTick() -- arms the pull
     found_target = true
-    local cmd = S.decorate("infuse fire; drawslash t sternum", ";")
-    expect(cmd).toBe("infuse fire; drawslash t sternum;s")
+    local cmd = withAlias(S.decorate("infuse fire; drawslash t sternum", ";"))
+    expect(cmd).toBe("infuse fire; drawslash t sternum;lvmove <stand/s>")
     expect(ataxiaTemp.swarmPullDir).toBe(nil) -- one-shot consumed
     expect(ataxiaTemp.swarmHold).toBeTrue()
     expect(found_target).toBeFalse()
@@ -318,7 +344,7 @@ describe("swarm funnel phase", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("reenter")
     expect(armed[#armed]).toBe("n") -- forward = original entry direction
-    expect(sent[#sent]).toBe("queue addclear free stand;leap n") -- tactical moves always LEAP (wall-safe)
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/leap n>") -- tactical moves always LEAP (wall-safe)
   end)
   it("resets if we somehow end up in a third room", function()
     pullAndArrive()
@@ -357,8 +383,8 @@ describe("swarm stage 2 — icewall (indoors)", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("pulling")
     expect(S.mode).toBe("wall")
-    local cmd = S.decorate("attack", ";")
-    expect(cmd).toBe("attack;point bracers417868 south;leap s")
+    local cmd = withAlias(S.decorate("attack", ";"))
+    expect(cmd).toBe("attack;lvmove <stand/point bracers417868 south/leap s>")
   end)
 
   it("holds through the longer wall window", function()
@@ -379,7 +405,7 @@ describe("swarm stage 2 — icewall (indoors)", function()
     clock = clock + 20 -- past WALL_WINDOW
     S.onTick()
     expect(S.state).toBe("reenter")
-    expect(sent[#sent]).toBe("queue addclear free stand;leap n")
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/leap n>")
     expect(S.wallRaised[200]).toBe("south") -- wall memory (the walled edge) survives the cycle
   end)
 
@@ -387,12 +413,12 @@ describe("swarm stage 2 — icewall (indoors)", function()
     fixture(3)
     gmcp.Room.Info.details = { "indoors" }
     S.onTick()
-    expect(S.decorate("attack", ";")).toBe("attack;point bracers417868 south;leap s")
+    expect(withAlias(S.decorate("attack", ";"))).toBe("attack;lvmove <stand/point bracers417868 south/leap s>")
     MAP.current = 100; mobs = 0; S.onTick()  -- funnel
     clock = clock + 20; S.onTick()           -- reenter (leap back in)
     MAP.current = 200; mobs = 3
     S.onTick()                                -- re-assess: pull #2, wall still up
-    expect(S.decorate("attack", ";")).toBe("attack;leap s") -- no point: eq-only escape
+    expect(withAlias(S.decorate("attack", ";"))).toBe("attack;lvmove <stand/leap s>") -- no point: eq-only escape
   end)
 
   it("melts the wall once the room is done: hold armed, cleared only on CONFIRMATION", function()
@@ -626,7 +652,7 @@ describe("swarm stage 2 — fly-kite (outdoors)", function()
   it("takes off when the swarm follows outdoors", function()
     swarmFollowed()
     expect(S.flying).toBeTrue()
-    expect(sent[#sent]).toBe("queue addclear free stand;fly")
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/fly>")
   end)
 
   it("wraps every attack in land/fly while flying", function()
@@ -662,7 +688,7 @@ describe("swarm stage 2 — fly-kite (outdoors)", function()
 end)
 
 describe("swarm stage 2 — Roll Hide panic", function()
-  local TUMBLE = "queue addclear free stand;tumble w"
+  local TUMBLE = "queue addclear free lvmove <stand/tumble w>"
 
   local function findCmd(needle)
     for i, c in ipairs(sent) do if c == needle then return i end end
@@ -684,7 +710,7 @@ describe("swarm stage 2 — Roll Hide panic", function()
     -- heal there first. This is a deliberate behaviour change, not a test bent to pass.
     expect(S.state).toBe("recovering")
     expect(S.recoverGround).toBeTrue()
-    expect(findCmd("queue addclear free stand;tumble s") ~= nil).toBeTrue()
+    expect(findCmd("queue addclear free lvmove <stand/tumble s>") ~= nil).toBeTrue()
     -- The hold must guard the queued tumble from the next attack's addclearfull.
     expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
@@ -762,7 +788,7 @@ describe("swarm low-HP escape ladder", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
     expect(S.flying).toBeTrue()
-    expect(findCmd("queue addclear free stand;fly") ~= nil).toBeTrue()
+    expect(findCmd("queue addclear free lvmove <stand/fly>") ~= nil).toBeTrue()
     expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
 
@@ -860,7 +886,7 @@ describe("swarm low-HP escape ladder", function()
     expect(ataxiaTemp.swarmPullDir).toBe(nil) -- plain retreat, no swing decorator
     -- LEAP, not walk: the retreat may cross our OWN standing icewall (review
     -- CRITICAL -- a walk silently fails there and the escape ladder livelocks).
-    expect(sent[#sent]).toBe("queue addclear free stand;leap s")
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/leap s>")
   end)
 
   it("leaves shield-in-place as the fallback indoors with no route", function()
@@ -879,8 +905,8 @@ describe("swarm low-HP escape ladder", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("pulling") -- the grounded retreat branch, outdoors
     expect(S.flying).toBe(nil)
-    expect(findCmd("queue addclear free stand;fly")).toBe(nil)
-    expect(sent[#sent]).toBe("queue addclear free stand;leap s")
+    expect(findCmd("queue addclear free lvmove <stand/fly>")).toBe(nil)
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/leap s>")
     mnemDeluge = false
   end)
 
@@ -890,13 +916,13 @@ describe("swarm low-HP escape ladder", function()
     MAP.current = 100; mobs = 0; S.onTick()
     mobs = 3; S.onTick() -- kiting
     local flyCount = 0
-    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then flyCount = flyCount + 1 end end
+    for _, c in ipairs(sent) do if c == "queue addclear free lvmove <stand/fly>" then flyCount = flyCount + 1 end end
     ataxia.vitals = { hpp = 30 }
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
     expect(S.flying).toBeTrue()
     local flyCount2 = 0
-    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then flyCount2 = flyCount2 + 1 end end
+    for _, c in ipairs(sent) do if c == "queue addclear free lvmove <stand/fly>" then flyCount2 = flyCount2 + 1 end end
     expect(flyCount2).toBe(flyCount) -- no second fly sent
   end)
 
@@ -1024,7 +1050,7 @@ describe("vitals-driven emergency wake-up", function()
     expect(S.flying).toBeTrue()
     expect(disarmed > 0).toBeTrue() -- explorer move machinery released, no condemn
     expect(findCmd("cq all") ~= nil).toBeTrue() -- the queued pull chain is dead
-    expect(findCmd("queue addclear free stand;fly") ~= nil).toBeTrue()
+    expect(findCmd("queue addclear free lvmove <stand/fly>") ~= nil).toBeTrue()
     expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
 
@@ -1212,7 +1238,7 @@ end)
 describe("flight confirmation for the recovery hover", function()
   local function flyCount()
     local n = 0
-    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then n = n + 1 end end
+    for _, c in ipairs(sent) do if c == "queue addclear free lvmove <stand/fly>" then n = n + 1 end end
     return n
   end
 
@@ -1314,7 +1340,7 @@ describe("tumble confirmation and retry", function()
     S._tumbleCheck()               -- still in room 200: the tumble was cancelled
     expect(tumbles()).toBe(1)
     expect(ataxiaTemp.tumbleTries).toBe(1)
-    expect(sent[#sent]).toBe("queue addclear free stand;tumble n")
+    expect(sent[#sent]).toBe("queue addclear free lvmove <stand/tumble n>")
   end)
 
   -- `stand` in front matters: prone is one of the two things that cancels a tumble, so a bare
@@ -1476,14 +1502,14 @@ describe("which jump -- Bard backflips, everyone leaps", function()
     fixture(1); ataxiaBasher.inMnemosyne = true
     asBard()
     S._tacticalGo("s", nil)
-    expect(lastJump()).toBe("queue addclear free stand;backflip s")
+    expect(lastJump()).toBe("queue addclear free lvmove <stand/backflip s>")
   end)
 
   it("leaves every other class on leap", function()
     fixture(1); ataxiaBasher.inMnemosyne = true
     gmcp.Char = { Status = { class = "Runewarden" } }
     S._tacticalGo("s", nil)
-    expect(lastJump()).toBe("queue addclear free stand;leap s")
+    expect(lastJump()).toBe("queue addclear free lvmove <stand/leap s>")
   end)
 
   -- The safeguard. Several of this module's jumps exist to clear our OWN icewall, and
@@ -1533,7 +1559,7 @@ describe("mounted: every jump in this module becomes a mountjump", function()
   end
   local function lastJump()
     for i = #sent, 1, -1 do
-      if sent[i]:find("stand;", 1, true) then return sent[i] end
+      if sent[i]:find("lvmove <stand/", 1, true) then return sent[i] end
     end
   end
 
@@ -1556,7 +1582,7 @@ describe("mounted: every jump in this module becomes a mountjump", function()
     fixture(1); ataxiaBasher.inMnemosyne = true
     ataxiaBasher_mountedSet(true)
     S._tacticalGo("s", nil)
-    expect(lastJump()).toBe("queue addclear free stand;mountjump s")
+    expect(lastJump()).toBe("queue addclear free lvmove <stand/mountjump s>")
     expect(ataxiaTemp.lastJump.dir).toBe("s")
     expect(ataxiaTemp.lastJump.verb).toBe("mountjump")
   end)
@@ -1564,7 +1590,7 @@ describe("mounted: every jump in this module becomes a mountjump", function()
   it("...and is still a plain leap on foot", function()
     fixture(1); ataxiaBasher.inMnemosyne = true
     S._tacticalGo("s", nil)
-    expect(lastJump()).toBe("queue addclear free stand;leap s")
+    expect(lastJump()).toBe("queue addclear free lvmove <stand/leap s>")
     expect(ataxiaTemp.lastJump.verb).toBe("leap") -- recorded either way: that is what recovers it
   end)
 
@@ -1622,8 +1648,8 @@ describe("Terror of the Skies -- leaving sheds the swarm", function()
     S._lastPanicAt = nil
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
-    expect(has("queue addclear free stand;s")).toBeTrue()
-    expect(has("queue addclear free stand;tumble s")).toBeFalse()
+    expect(has("queue addclear free lvmove <stand/s>")).toBeTrue()
+    expect(has("queue addclear free lvmove <stand/tumble s>")).toBeFalse()
   end)
 
   it("lands first when flying, then steps (the recovery is on the ground)", function()
@@ -1641,7 +1667,7 @@ describe("Terror of the Skies -- leaving sheds the swarm", function()
     local landAt, stepAt
     for i, c in ipairs(sent) do
       if c == "land" and not landAt then landAt = i end
-      if c == "queue addclear free stand;w" then stepAt = i end
+      if c == "queue addclear free lvmove <stand/w>" then stepAt = i end
     end
     expect(landAt ~= nil and stepAt ~= nil).toBeTrue()
     expect(landAt < stepAt).toBeTrue()
@@ -1651,7 +1677,7 @@ describe("Terror of the Skies -- leaving sheds the swarm", function()
     fixture(3)
     mnemTerrorSkies = true; mnemRollHide = true
     S.onTick()
-    expect(S.decorate("attack", ";")).toBe("attack;s")
+    expect(withAlias(S.decorate("attack", ";"))).toBe("attack;lvmove <stand/s>")
   end)
 
   it("takes the plain pull indoors instead of walling", function()
@@ -1718,8 +1744,8 @@ describe("Roll Hide replaces the icewall", function()
     fixture(3)
     mnemRollHide = true
     S.onTick()
-    local cmd = S.decorate("attack", ";")
-    expect(cmd).toBe("attack;tumble s")
+    local cmd = withAlias(S.decorate("attack", ";"))
+    expect(cmd).toBe("attack;lvmove <stand/tumble s>")
     mnemRollHide = false
   end)
 
@@ -1727,7 +1753,7 @@ describe("Roll Hide replaces the icewall", function()
     fixture(3)
     mnemRollHide = false
     S.onTick()
-    expect(S.decorate("attack", ";")).toBe("attack;s")
+    expect(withAlias(S.decorate("attack", ";"))).toBe("attack;lvmove <stand/s>")
   end)
 
   it("leaves the wall-mode suffix alone -- a raised wall still needs leaping", function()
@@ -1736,7 +1762,7 @@ describe("Roll Hide replaces the icewall", function()
     cfg.swarm.icewall = true
     mnemRollHide = false
     S.onTick() -- enters wall mode and raises the wall
-    local cmd = S.decorate("attack", ";")
+    local cmd = withAlias(S.decorate("attack", ";"))
     expect(cmd:find("point ", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("leap s", 1, true) ~= nil).toBeTrue()
   end)
@@ -1879,7 +1905,7 @@ describe("forced disengage (tactical, not HP-driven)", function()
     expect(S.state).toBe("pulling")
     -- Free-queued, never raw: at the moment we decide to leave the balance is normally
     -- spent mid-round, and a raw leap would simply be rejected.
-    expect(lastLeap()).toBe("queue addclear free stand;leap s")
+    expect(lastLeap()).toBe("queue addclear free lvmove <stand/leap s>")
   end)
 
   it("does not need low HP -- that is the whole point", function()
@@ -2329,7 +2355,7 @@ describe("the recovery hover checks its own premise", function()
   -- captures locally -- and restores even if its body throws.
   local function capture(fn)
     local got, real = {}, send
-    send = function(cmd) got[#got + 1] = cmd end
+    send = function(cmd) got[#got + 1] = moveNorm(cmd) end
     local ok, err = pcall(fn)
     send = real
     if not ok then error(err, 0) end
@@ -2339,7 +2365,7 @@ describe("the recovery hover checks its own premise", function()
     for i, c in ipairs(cmds) do if c == want then return i end end
     return nil
   end
-  local FLY = "queue addclear free stand;fly"
+  local FLY = "queue addclear free lvmove <stand/fly>"
   -- Start a hover, SEE it airborne with an empty sky (the evidence the checks key on), and step
   -- past the takeoff settle.
   local function hovering()
@@ -3008,7 +3034,7 @@ describe("a reset in lava does not flush the escape", function()
     local realLava, realSend = M.roomLava, send
     local cmds = {}
     M.roomLava = function() return true end
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     S.reset("boon screen")
     send, M.roomLava = realSend, realLava
     local flushed = false
@@ -3022,7 +3048,7 @@ describe("a reset in lava does not flush the escape", function()
     local realLava, realSend = M.roomLava, send
     local cmds = {}
     M.roomLava = function() return false end
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     S.state = "pulling"
     S.reset("boon screen")
     send, M.roomLava = realSend, realLava
@@ -3109,7 +3135,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
 
     local realSend = send
     local cmds = {}
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     local said = capture(function() expect(S._beginEscape("test")).toBeTrue() end)
     send = realSend
 
@@ -3117,7 +3143,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
     expect(S.mode).toBe("escape") -- NOT "pull": there is no verified way back in
     local movedEast, saidDowngrade = false, false
     for _, c in ipairs(cmds) do
-      if c:find("stand", 1, true) and c:sub(-2) == " e" then movedEast = true end
+      if c:find("stand", 1, true) and c:sub(-3) == " e>" then movedEast = true end
     end
     for _, m in ipairs(said) do
       if m:find("NO VALIDATED ROUTE", 1, true) then saidDowngrade = true end
@@ -3148,7 +3174,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
     S.state = "funnel"
     local realSend = send
     local cmds = {}
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
 
     expect(S.disengage("no route")).toBeFalse()
     send = realSend
@@ -3166,7 +3192,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
     -- reliable this late in the run (another test leaves the global `send` replaced).
     local realSend = send
     local cmds = {}
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     S._tacticalGo("s", "test")
     send = realSend
     expect(cmds[1]).toBe("cq all")
@@ -3185,7 +3211,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
 
     local realSend = send
     local cmds = {}
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     for _ = 1, 6 do S.onTick() end -- six ticks inside one cooldown window
     send = realSend
 
@@ -3203,7 +3229,7 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
     fixture(1)
     local realSend, realLava = send, M.roomLava
     local cmds = {}
-    send = function(c) table.insert(cmds, c) end
+    send = function(c) table.insert(cmds, moveNorm(c)) end
     M.roomLava = function() return true end
     S._tacticalGo("s", "test")
     send, M.roomLava = realSend, realLava
@@ -3223,7 +3249,7 @@ end)
 -- An earlier test in this file replaces the global `send` and does not put it back (a known leak),
 -- so by here it no longer records into `sent`. Re-install the recorder for this block; the file's
 -- tail restores the mock's own `send` as before.
-send = function(cmd) table.insert(sent, cmd) end
+send = function(cmd) table.insert(sent, moveNorm(cmd)) end
 local function lowHp(hp) gmcp.Char = { Vitals = { hp = tostring(hp), maxhp = "10000" } } end
 local function count(pat)
   local n = 0
@@ -3415,7 +3441,7 @@ describe("v4.7.370 -- ice: tactical moves out of an icy room tumble", function()
     local ok, err = pcall(S.onVitals)
     M._tacticalArm, ataxiaBasher_jumpSent = realArm, realJump
     if not ok then error(err, 0) end
-    expect(count("queue addclear free stand;tumble s")).toBe(1)
+    expect(count("queue addclear free lvmove <stand/tumble s>")).toBe(1)
     expect(timeouts[1]).toBe(S.TUMBLE_ARM)
     expect(jumps).toBe(0)
   end)
@@ -3424,7 +3450,7 @@ describe("v4.7.370 -- ice: tactical moves out of an icy room tumble", function()
     iced()
     S.onTick()
     expect(S.mode).toBe("pull")               -- indoors, but the wall would be crossed by a jump
-    local cmd = S.decorate("attack", ";")
+    local cmd = withAlias(S.decorate("attack", ";"))
     expect(cmd:find("tumble s", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("point", 1, true)).toBeNil()
   end)
@@ -3462,7 +3488,7 @@ describe("v4.7.448 -- one leg out: tactical moves tumble", function()
     local ok, err = pcall(S.onVitals)
     M._tacticalArm = realArm
     if not ok then error(err, 0) end
-    expect(count("queue addclear free stand;tumble s")).toBe(1)
+    expect(count("queue addclear free lvmove <stand/tumble s>")).toBe(1)
     expect(timeouts[1]).toBe(S.TUMBLE_ARM)
   end)
 
@@ -3472,8 +3498,8 @@ describe("v4.7.448 -- one leg out: tactical moves tumble", function()
     ataxia.afflictions = { brokenrightleg = true, brokenleftleg = true }
     lowHp(3000)
     S.onVitals()
-    expect(count("queue addclear free stand;tumble s")).toBe(1)
-    expect(count("queue addclear free stand;leap s")).toBe(0)
+    expect(count("queue addclear free lvmove <stand/tumble s>")).toBe(1)
+    expect(count("queue addclear free lvmove <stand/leap s>")).toBe(0)
   end)
 end)
 
@@ -3597,7 +3623,7 @@ describe("Wrath and Righteousness: def up and fight on (v4.7.372, changed v4.7.5
   local mock = require("mock_mudlet")
   local function setup(n)
     fixture(n or 4)
-    send = function(cmd) table.insert(sent, cmd) end -- see the v4.7.370 note: a leaked `send`
+    send = function(cmd) table.insert(sent, moveNorm(cmd)) end -- see the v4.7.370 note: a leaked `send`
     gmcp.Room.Info.details = { "indoors" }
     mnemWrathRighteousness = true
     S._rfAt, S._prevHp = nil, nil
@@ -3975,7 +4001,7 @@ end)
 -- overwrote an unjudged pursuit record; a leap refused for broken legs left a false "funnel" and
 -- 8s of "escape under way"; and the retreat line said "LOW HP (100%)" for a damage-rate escape.
 describe("v4.7.378 -- after an escape, and when the legs give out", function()
-  send = function(cmd) table.insert(sent, cmd) end -- the leaked `send` (see v4.7.370)
+  send = function(cmd) table.insert(sent, moveNorm(cmd)) end -- the leaked `send` (see v4.7.370)
   local function cnt(pat)
     local n = 0
     for _, c in ipairs(sent) do if c:find(pat, 1, true) then n = n + 1 end end
@@ -4220,7 +4246,7 @@ describe("Seclusion -- the hermit fling at the panic floor", function()
   local function setup(hp)
     fixture(3)
     out, moves = {}, {}
-    send = function(c) table.insert(out, c) end
+    send = function(c) table.insert(out, moveNorm(c)) end
     M._exploreMove = function(d) table.insert(moves, d) end
     mnemSeclusion, mnemRollHide = true, false
     M._hermitRipple = true
@@ -5379,6 +5405,280 @@ describe("v4.7.514 -- a lethal hit or a refused weapon lifts the spent retreat",
       biggest = 3522
       expect(S._retreatBlock("s")).toBeNil()
     end)
+  end)
+end)
+
+-- =====================================================================================
+-- v4.7.515 -- the malagma death (2026-11-24, profile v4.7.513). A swarm escape never left the
+-- room for 8.7 s. Three `stand;leap ne` sends, no game answer on screen, "the escape already under
+-- way has it" while nothing was under way, and a retry only at the explorer's 5 s move timeout.
+-- (1) the move is ONE queue entry (alias lvmove), (2) a lost move is re-sent a second after we
+-- could move, (3) the refusals the gags delete are said in our words.
+describe("v4.7.515 -- an escape move is one queue entry, found lost in a second, refusals shown", function()
+  local mock = require("mock_mudlet")
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local T114 = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/114_Escape_Move_Answer.lua"
+  local T800 = "src_new/triggers/levi_ataxia/for_levi/leviticus/800_Gag_Round_Alias.lua"
+
+  -- Run fn with Mudlet's own splitting `send` (the mock splits `;` as Host::send does) and return
+  -- what reached the "game", one row per command.
+  local function wire(fn)
+    local realSend = send
+    send = _mockSend
+    mock.sent_commands = {}
+    local ok, err = pcall(fn)
+    send = realSend
+    if not ok then error(err, 0) end
+    local rows = {}
+    for i, c in ipairs(mock.sent_commands) do rows[i] = c end
+    return rows
+  end
+  local function said(fn)
+    local out, realEcho = {}, S._echo
+    S._echo = function(m) out[#out + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    S._echo = realEcho
+    if not ok then error(err, 0) end
+    return table.concat(out, "\n")
+  end
+  local function vitals(bal, eq) gmcp.Char = { Vitals = { hp = "3000", maxhp = "12100", bal = bal, eq = eq } } end
+  local function moves(rows)
+    local n = 0
+    for _, c in ipairs(rows) do if c == "queue addclear free lvmove" then n = n + 1 end end
+    return n
+  end
+
+  -- FIX 1 ------------------------------------------------------------------------------------
+  it("the tactical move reaches the game as an alias and ONE queue line, no raw jump", function()
+    fixture(3)
+    local rows = wire(function() S._tacticalGo("ne", nil) end)
+    expect(rows[1]).toBe("cq all")
+    expect(rows[2]).toBe("setalias lvmove stand/leap ne")
+    expect(rows[3]).toBe("queue addclear free lvmove")
+    expect(#rows).toBe(3)
+    for _, c in ipairs(rows) do expect(c == "leap ne").toBeFalse() end -- never raw
+  end)
+
+  it("in lava the move still goes by alias, with no flush", function()
+    fixture(3)
+    local realLava = M.roomLava
+    M.roomLava = function() return true end
+    local ok, err = pcall(function()
+      local rows = wire(function() S._tacticalGo("s", nil) end)
+      expect(rows[1]).toBe("setalias lvmove stand/leap s")
+      expect(rows[2]).toBe("queue addclear free lvmove")
+    end)
+    M.roomLava = realLava
+    if not ok then error(err, 0) end
+  end)
+
+  it("the pull's wall + leap ride the attack as ONE entry queued AFTER the attack's addclearfull", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    S.onTick()
+    expect(S.mode).toBe("wall")
+    local rows = wire(function()
+      local cmd = S.decorate("garrote malagma;whip malagma", ";")
+      send("queue addclearfull freestand stand;" .. cmd) -- what ataxiaBasher_assembleAttack sends
+    end)
+    expect(rows[1]).toBe("setalias lvmove stand/point bracers417868 south/leap s")
+    expect(rows[2]).toBe("queue addclearfull freestand stand")
+    expect(rows[3]).toBe("garrote malagma")
+    expect(rows[4]).toBe("whip malagma")
+    expect(rows[5]).toBe("queue addclear free lvmove") -- after the wipe, so the wipe cannot take it
+    expect(#rows).toBe(5)
+  end)
+
+  it("the helper: one entry, a raw fallback with its reason, and the round shim leaves it alone", function()
+    local rows = wire(function() expect(ataxia_queueChain("free", "lvmove", { "stand", "tumble w" })).toBeTrue() end)
+    expect(table.concat(rows, " | ")).toBe("setalias lvmove stand/tumble w | queue addclear free lvmove")
+    local ok, why
+    rows = wire(function() ok, why = ataxia_queueChain("free", "lvmove", { "stand", "say a/b" }) end)
+    expect(ok).toBeFalse()
+    expect(why).toBe("a command holds / % or {")
+    expect(rows[1]).toBe("queue addclear free stand") -- the old split, said by its caller
+    expect(ataxia_queueChain("free", "lvfree", { "stand", "n" })).toBeFalse() -- not a chain name
+    -- A slowed Monk round (ataxia/003) must not put our alias NAME inside lvfree.
+    local saved = { ataxia.settings.roundDelivery, ataxia.retardation, retardDropDetectionTimer,
+                    gmcp.Char, ataxiaBasher.enabled }
+    ataxia.settings.roundDelivery = { monk = "alias" }
+    ataxia.retardation, retardDropDetectionTimer = true, 1
+    gmcp.Char = { Status = { class = "Monk" } }
+    ataxiaBasher.enabled = false
+    local out = ataxia_roundDeliver("queue addclear free lvmove")
+    ataxia.settings.roundDelivery, ataxia.retardation, retardDropDetectionTimer, gmcp.Char,
+      ataxiaBasher.enabled = saved[1], saved[2], saved[3], saved[4], saved[5]
+    expect(out).toBe("queue addclear free lvmove")
+  end)
+
+  it("trigger 800 gags the game's echo of the lvmove alias", function()
+    expect(TL.anyMatches(TL.patterns(T800), 'Alias "lvmove" will now execute: "stand/leap ne"')).toBeTrue()
+  end)
+
+  -- FIX 2 ------------------------------------------------------------------------------------
+  -- The malagma timeline: the escape goes out off balance, a stun comes and goes, and the move
+  -- has not started. The old code found it only at the 5 s move timeout (29.39 in the log).
+  it("replays the malagma escape: re-sent ~1 s after we could move, not at the 5 s timeout", function()
+    fixture(3)
+    vitals("0", "1")                                   -- 24.92: the escape, off balance
+    local rows = wire(function() S._tacticalGo("ne", "DYING FAST (72%) -- retreating to recover") end)
+    expect(moves(rows)).toBe(1)
+    clock = clock + 0.2; vitals("1", "1"); ataxia.afflictions.stun = true -- 25.13: stunned
+    expect((S._checkMoveWatch())).toBe("waiting")
+    expect(select(2, S._checkMoveWatch())).toBe("stunned")
+    clock = clock + 0.6; ataxia.afflictions.stun = nil -- 25.73: no longer stunned
+    expect((S._checkMoveWatch())).toBe("pending")
+    clock = clock + 0.5
+    expect((S._checkMoveWatch())).toBe("pending")      -- able 0.5 s: still its grace
+    clock = clock + 0.6                                -- 26.83: able 1.1 s, nothing moved
+    local msg
+    rows = wire(function() msg = said(function() expect((S._checkMoveWatch())).toBe("resent") end) end)
+    expect(moves(rows)).toBe(1)
+    expect(rows[2]).toBe("setalias lvmove stand/leap ne")
+    expect(msg:find("escape move lost", 1, true) ~= nil).toBeTrue()
+    expect(msg:find("re-sending 1/2", 1, true) ~= nil).toBeTrue()
+    expect(S._moveWatch.resends).toBe(1)               -- the count carried into the new watch
+    gmcp.Char = nil
+  end)
+
+  it("arrival ends the watch: nothing is re-sent after we left", function()
+    fixture(3)
+    vitals("1", "1")
+    S._tacticalGo("s", nil)
+    MAP.current = 100
+    S.escapeCheckRoom()
+    expect(S._moveWatch).toBeNil()
+    expect(S._moveWatchEnd).toBe("arrived")
+    clock = clock + 5
+    expect(moves(wire(function() S._checkMoveWatch() end))).toBe(0)
+    gmcp.Char = nil
+  end)
+
+  it("a started tumble owns the move; reset and 'basher disabled' stop the watch", function()
+    fixture(3)
+    vitals("1", "1")
+    S._tacticalGo("s", nil)
+    ataxiaTemp.tumbleDir = "s"
+    expect((S._checkMoveWatch())).toBe("moved")
+    expect(S._moveWatch).toBeNil()
+    ataxiaTemp.tumbleDir = nil
+    S._tacticalGo("s", nil)
+    S.reset("test")
+    expect(S._moveWatch).toBeNil()
+    S._tacticalGo("s", nil)
+    S.state = "idle"                                   -- the tactic is already over
+    local fired = 0
+    for _, h in pairs(mock.named_handlers["basher disabled"] or {}) do
+      if type(h) == "function" then h("basher disabled"); fired = fired + 1 end
+    end
+    expect(fired > 0).toBeTrue()
+    expect(S._moveWatch).toBeNil()
+    gmcp.Char = nil
+  end)
+
+  it("bounded: after MOVE_RESENDS the move is LOST and no longer owns the ladder", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 20 }
+    expect(S.onTick()).toBeTrue()                      -- the low-HP retreat
+    expect(S.state).toBe("pulling")
+    expect(S._escapeOwns()).toBeTrue()
+    vitals("1", "1")
+    local total = 0
+    for _ = 1, 5 do
+      clock = clock + 0.1; S._checkMoveWatch()         -- able starts
+      clock = clock + 1.1
+      local st = S._checkMoveWatch()
+      if st == "resent" then total = total + 1 end
+    end
+    expect(total).toBe(S.MOVE_RESENDS)
+    expect((S._escapeMoveState())).toBe("lost")
+    expect(S._escapeOwns()).toBeFalse()                -- inside ESCAPE_OWN, but it owns nothing
+    gmcp.Char = nil
+  end)
+
+  it("the 'under way' line says what the move is doing, and a lost move says LOST", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 20 }
+    local realRate, realTTL = ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+    ataxiaBasher_secondsToLive = function() return 3.0 end
+    local ok, err = pcall(function()
+      expect(S.onTick()).toBeTrue()
+      clock = clock + 3
+      gmcp.Char = { Vitals = { hp = "6600", maxhp = "12100", bal = "1", eq = "1" } }
+      ataxia.afflictions.stun = true
+      local msg = said(function() S.onVitals() end)
+      expect(msg:find("the escape already under way has it (waiting: stunned)", 1, true) ~= nil).toBeTrue()
+      ataxia.afflictions.stun = nil
+      S._moveWatch.resends = S.MOVE_RESENDS             -- the re-sends are spent
+      S._checkMoveWatch(); clock = clock + 1.1; S._checkMoveWatch()
+      S._said = nil
+      clock = clock + 2.1
+      msg = said(function() S.onVitals() end)
+      expect(msg:find("under way has it", 1, true)).toBeNil()
+      expect(msg:find("escape move is LOST", 1, true) ~= nil).toBeTrue()
+    end)
+    ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive = realRate, realTTL
+    gmcp.Char = nil
+    if not ok then error(err, 0) end
+  end)
+
+  -- FIX 3 ------------------------------------------------------------------------------------
+  it("trigger 114 matches each answer the gags delete, and calls the swarm", function()
+    local pats = TL.patterns(T114)
+    for _, l in ipairs({ "You must regain balance first.", "You must regain equilibrium first.",
+        "You are recovering equilibrium and cannot move yet.",
+        "[System]: Running queued free command: LVMOVE", "[System]: Added LVMOVE to your free queue.",
+        "leap ne was added to your balance queue." }) do
+      expect(TL.anyMatches(pats, l)).toBeTrue()
+    end
+    expect(TL.anyMatches(pats, "[System]: Running queued free command: LVFREE")).toBeFalse()
+    local real, got = S.onMoveLine, nil
+    S.onMoveLine = function(t) got = t end
+    local realLine = line
+    line = "You must regain equilibrium first."
+    local ok, err = pcall(dofile, T114)
+    S.onMoveLine, line = real, realLine
+    if not ok then error(err, 0) end
+    expect(got).toBe("You must regain equilibrium first.")
+  end)
+
+  it("a refusal of the watched move is said in our words and re-sent 0.3 s after we can move", function()
+    fixture(3)
+    vitals("1", "0")
+    S._tacticalGo("ne", nil)
+    mock.active_timers = {}
+    expect(S.onMoveLine("You must regain equilibrium first.")).toBeTrue()
+    local msg = said(function() mock.fire_timers() end)
+    expect(msg:find("escape move refused", 1, true) ~= nil).toBeTrue()
+    expect(msg:find("must regain equilibrium", 1, true) ~= nil).toBeTrue()
+    vitals("1", "1")
+    expect((S._checkMoveWatch())).toBe("pending")
+    clock = clock + 0.35
+    local rows = wire(function() said(function() expect((S._checkMoveWatch())).toBe("resent") end) end)
+    expect(moves(rows)).toBe(1)
+    gmcp.Char = nil
+  end)
+
+  it("a held piece is waiting, not lost; the run line is said; nothing is claimed with no watch", function()
+    fixture(3)
+    vitals("1", "1")
+    S._tacticalGo("ne", nil)
+    expect(S.onMoveLine("You must regain balance first.")).toBeTrue()
+    expect(S.onMoveLine("leap ne was added to your balance queue.")).toBeTrue()
+    expect(S._moveWatch.held).toBe("balance")
+    clock = clock + 0.5
+    expect((S._checkMoveWatch())).toBe("pending")       -- held: the full second, not 0.3
+    mock.active_timers = {}
+    expect(S.onMoveLine("[System]: Running queued free command: LVMOVE")).toBeTrue()
+    local msg = said(function() mock.fire_timers() end)
+    expect(msg:find("escape move fired from the free queue", 1, true) ~= nil).toBeTrue()
+    expect(S.onMoveLine("garrote x was added to your balance queue.")).toBeFalse()
+    S.reset("test")
+    expect(S.onMoveLine("You must regain balance first.")).toBeFalse()
+    gmcp.Char = nil
   end)
 end)
 

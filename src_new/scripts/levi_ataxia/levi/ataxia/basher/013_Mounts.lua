@@ -306,6 +306,15 @@ local function recoveryHeld()
   return nil
 end
 
+-- The re-sent jump is ONE queue entry (v4.7.515): `setalias lvmove stand/<verb> <dir>`, then
+-- `queue addclear free lvmove` (ataxia_queueChain, ataxia/003). A raw `stand;<verb> <dir>` queued
+-- only the stand and sent the jump at once, into a refusal the gags deleted.
+local function queueJump(cmds)
+  if ataxia_queueChain then return ataxia_queueChain("free", "lvmove", cmds) end
+  local sp = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free " .. table.concat(cmds, sp))
+end
+
 function ataxiaBasher_jumpRefusedMounted()
   ataxiaBasher_mountedSet(true, "the game refused a jump")
   ataxiaTemp = ataxiaTemp or {}
@@ -318,8 +327,7 @@ function ataxiaBasher_jumpRefusedMounted()
   local here = roomNow()
   if rec.room and here and rec.room ~= here then return false end -- it landed after all
   if recoveryHeld() then return false end -- a tumble or lava owns the move (v4.7.351)
-  local sp = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sp .. "mountjump " .. rec.dir)
+  queueJump({ "stand", "mountjump " .. rec.dir })
   ataxiaBasher_jumpSent(rec.dir, "mountjump")
   if ataxiaEcho then
     ataxiaEcho("Jump refused while mounted -- re-sent as <white>mountjump " .. rec.dir .. "<reset>.")
@@ -352,8 +360,7 @@ function ataxiaBasher_jumpRefusedOnFoot()
   local here = roomNow()
   if rec.room and here and rec.room ~= here then return false end
   if recoveryHeld() then return false end
-  local sp = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sp .. "leap " .. rec.dir)
+  queueJump({ "stand", "leap " .. rec.dir })
   ataxiaBasher_jumpSent(rec.dir, "leap")
   if ataxiaEcho then
     ataxiaEcho("Mountjump refused -- no mount under us; re-sent as <white>leap " .. rec.dir .. "<reset>.")

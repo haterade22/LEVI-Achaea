@@ -153,7 +153,7 @@ trait filter, so ASSESS never reaches an alias without its trait:
 | `stand` goes first and once; nothing else moves | A `free` entry has no upright condition, so it can fire while prone. The offence still owns the spender's place |
 | `queue addclear freestand stand;x;y` becomes `queue addclear free lvfree` | A `freestand` entry cannot fire while prone, so that chain would wait for ever |
 | `full` with a `stand` stays raw | `free` would lose the class balance condition |
-| Passes through unchanged: `/`, `%`, `{`; a command ending in a direction (`stand;n`, `stand;tumble sw`); `queue add`, `insert`, `prepend`; a custom type such as `eb!p!w!t`; one command; text over 138 characters | 138 is a cautious cap. The longest alias text in our logs is 142 (`2026-10-11_shikudo-vs-runewarden-snb_attacker.txt` rows 1319, 1364, 1400). The 250-character probe is still open |
+| Passes through unchanged: `/`, `%`, `{`; a command ending in a direction (`stand;n`, `stand;tumble sw`); a queue line that names our chain alias (`lvmove`); `queue add`, `insert`, `prepend`; a custom type such as `eb!p!w!t`; one command; text over 138 characters | Movement was left out of the shim by scope (v4.7.470): no log gave a game reason. Since v4.7.515 the movers send their own alias, `lvmove` ([below](#movement-is-one-queue-entry-lvmove-v47515)). 138 is a cautious cap. The longest alias text in our logs is 142 (`2026-10-11_shikudo-vs-runewarden-snb_attacker.txt` rows 1319, 1364, 1400). The 250-character probe is still open |
 | A chain with `touch shield`, `curseward` or `reject <name>` stays raw | The next attack press rewrites the alias, and the game reads it when it fires, so a defensive key in that slot would run only if recovery came before that press. Raw, it goes at once or the auto-queue holds it. So `ts` and `cwd` send what they send with the flag off |
 | A chain with `mind blackout` stays raw | It must run before the combo it hides, and that combo goes by `queue add`, raw. In an alias, the two would wait in different queues |
 | `touch tentacle` ends the round; the next press sends the attack | It spends equilibrium, so the game holds each later command in the alias, past `queue addclear`. The chase lasts about 2.3 s (trigger 640) |
@@ -162,7 +162,7 @@ trait filter, so ASSESS never reaches an alias without its trait:
 | A line that replaces the round clears an alias waiting in ANOTHER queue (`clearqueue <type>`) | ADDCLEAR clears only its own queue, so that alias would still fire. A run line does not mark the queue empty, because it cannot say which press it answers: a newer round may wait there. The cost is one extra `clearqueue` when the queue type changes |
 
 **Names:** `lv<type>` for `eq`, `bal`, `eqbal`, `class`, `free`, `freestand`, `full`. The longest, `lvfreestand`, is 11 of the
-game's 12 characters. Trigger 800 gags exactly these, so a test alias such as `lvprobe` still shows.
+game's 12 characters. The movement alias is `lvmove` (v4.7.515). Trigger 800 gags exactly these, so a test alias such as `lvprobe` still shows.
 
 **The gag is `deleteLine()`, not `deleteFull()`.** All 371 echoes of `pk` in our logs have a prompt right after them, but that
 prompt can close other output too: `Your lungs have recovered enough...`, then the echo, then one prompt
@@ -224,6 +224,34 @@ both and runs them first at the next recovery, in the same millisecond, and the 
 up for 1.08 to 2.58 s in 5 (all in `ours/2026-10-27_112717_Tabethys.log`). `You drive out the invasive attempt to afflict you with paralysis.` does not prove what endure does: 4 of its 6 rows came with
 endure down. So no log shows that endure helps, or that the pair hurts. The pairs make up all 10 `was added` rows of `102138_Tabethys` on [scoreboard.md](scoreboard.md), so read that bar with this in mind.
 
+## Movement is one queue entry: `lvmove` (v4.7.515)
+
+**Every move our code sends is one free-queue entry by server alias.** `ataxia_queueChain("free", "lvmove", { "stand", "leap ne" })`
+(`ataxia/003_Queueing_Related.lua`) sends `setalias lvmove stand/leap ne`, then `queue addclear free lvmove`. Callers: the
+swarm's escapes (`S._queueMove`, `mnemosyne/009`), the explorer's steps, chase, lava escape and wall leap (`M._queueMove`,
+`mnemosyne/008`), and the refused-jump re-sends (`basher/013`). The pull's wall and leap ride the attack: `S.decorate` sets the
+alias and appends one raw `queue addclear free lvmove` to the attack chain, which Mudlet sends after the attack's own
+`queue addclearfull`.
+
+**Why.** The old `queue addclear free stand;leap ne` queued only `stand`; the leap went out raw. MEASURED in one capture: a raw
+sweep step drew "You are recovering equilibrium and cannot move yet." (`raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt`
+rows 124-125), and the room changed 0.35 s later, at the equilibrium's return (the auto-queue's `[System]` line is gagged, so
+which queue held it does not show). The malagma death of 2026-11-24 (no capture filed in `kb/raw`; the maintainer's analysis
+quotes the screen lines): three `stand;leap ne` sends in 8.7 s with no game line on screen, stuns in between, and a cleared
+queue (`cq all`) before each re-send. The auto-queue holds a refused raw command on the balance or equilibrium queue, which does
+not wait for a stun. `free` waits for balance, equilibrium, unbound, not paralysed and not stunned.
+
+**What the screen hides.** `006_GAG` and `clean-up/002` delete "You must regain balance first." and "You must regain equilibrium
+first."; `006_GAG` deletes every line that contains `[System]` (so `Added ... to your ... queue` and `Running queued ...` never
+show); `001` and `007` delete "... was added to your balance/equilibrium queue." While a swarm move is watched, trigger
+`mnemosyne/114` says these in the swarm's words and re-sends a lost move ([07-explorer.md](../../.claude/projects/mnemosyne/07-explorer.md),
+"A lost escape move is found in a second").
+
+**Not seen yet (UNVERIFIED).** No capture holds a move inside a server alias. Two things follow from the documented alias
+behaviour and are not measured: that a refused move piece inside the alias is HELD like a refused attack (rows 2685 and 428-433
+above show it for `mind crush` and `wield`/`combo`), and that the move costs the same. `free` waits for balance too, so a leap
+that needs only equilibrium now also waits for balance; whether LEAP needs balance is not captured.
+
 ## Retardation: only the last command happens
 
 MEASURED, 8 runs, 24.2 s, an inference from rows, and no HELP file states it (`ours/2026-11-03_081009_Froedine.log`).
@@ -275,7 +303,8 @@ on these lines, and must not treat the exit as a wall.
 Dizziness can be uncurable (the Mnemosyne boon Poindexter gives "permanent dizziness"), so the fall
 can happen on any step of a run. The explorer handles it in `M.onDizzyFall()`
 (`src_new/scripts/.../mnemosyne/008_Explorer.lua`, trigger `mnemosyne/109`, v4.7.426): it re-sends
-`stand;<dir>` on the free queue, which waits for the balance, and never condemns the exit.
+the move and never condemns the exit. Since v4.7.515 the re-send is the one entry `lvmove` = `stand/<dir>`, so the
+step waits for the balance. Before, it was `stand;<dir>`: only the stand was queued, and the step went out raw at once.
 
 ## A tumble's landing: the GMCP came before the text (2026-11-09)
 

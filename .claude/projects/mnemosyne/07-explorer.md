@@ -30,14 +30,16 @@ _roomHasDenizens():
 
 ## Movement command
 
-Every step is one send:
+Every step is ONE queue entry, by the server alias `lvmove` (v4.7.515, `M._queueMove`,
+`008_Explorer.lua`, which calls `ataxia_queueChain` in `ataxia/003_Queueing_Related.lua`):
 
 ```lua
-local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-send("queue addclear free stand" .. sep .. dir)
+M._queueMove({ "stand", dir })
+-- on the wire:  setalias lvmove stand/<dir>
+--               queue addclear free lvmove
 ```
 
-`queue addclear free` is the only routing that works in the unmapped tower (the same free-queue the movement aliases and click-to-walk use). It **stands first** because you are frequently prone right after a fight and a bare `free <dir>` would silently fail; the queue runs `stand` then `<dir>` one per balance.
+`queue addclear free` is the only routing that works in the unmapped tower. It **stands first** because you are frequently prone right after a fight. The game reads the alias body when the entry fires, so the stand AND the step wait on the server for what `free` waits for: balance, equilibrium, unbound, not paralysed, not stunned. Until v4.7.515 this was `send("queue addclear free stand;<dir>")`, and Mudlet splits `;`: only `stand` was queued and the step went out raw, into "You are recovering equilibrium and cannot move yet." when equilibrium was down (`kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt` rows 124-125; the gag triggers delete the game's refusals and every `[System]` queue line). Every mover uses the same alias: the swarm's escapes (`S._queueMove`, 009), the chase, the lava escape, the wall leap, and the mount re-sends (`basher/013`). The Homebound and Seclusion prefixes ride inside it. The Senseless Flurry numb is `lvmove` = `stand/numb`, with the step as its own `queue add free <dir>` (v4.7.512's rule). The ripple map still sees the direction: the `setalias` line ends in it (`005_Ripple_Map.lua`, `sysDataSendRequest`). Trigger 800 gags the game's `Alias "lvmove" will now execute:` echo.
 
 ## State machine
 
@@ -88,7 +90,7 @@ and, after `MOVE_RETRIES`, condemned a real exit; a tactical retreat was handed 
 knocks us prone and TAKES balance (user, 2026-10-15), and the dizziness can be uncurable (Poindexter:
 "permanent dizziness"). Before this, the timeout re-sent once and then condemned a real exit. Trigger
 `mnemosyne/109_Dizzy_Fall` calls `M.onDizzyFall()`, the ice-slip shape: a sweep move is re-sent
-(`stand;<dir>` on the free queue, which waits for the balance) and its timeout is re-armed for
+(`stand/<dir>` as the `lvmove` entry on the free queue, which waits for the balance; before v4.7.515 only the stand waited) and its timeout is re-armed for
 `MOVE_TIMEOUT + DIZZY_GRACE` (8s); a tactical move is handed to `S.onMoveFailed()`, which re-sends the
 swarm's own verb. Its own counter `explore.dizzyFalls` (reset with `iceSlips`) is capped at
 `MAX_DIZZY_FALLS` (12), and the cap only re-decides the step: **a dizzy fall never condemns the
@@ -355,9 +357,14 @@ this tick). Stage 1 = the **pull & funnel** loop:
   progress refunds the budget (hit-and-run continuation, v4.7.117 below) — then the room
   is fought in place.
 - **Indoors route** (`swarm.icewall`, default on): the first escape suffix is
-  `;point <bracersId> <LONG back>;leap <back>` — swing, WALL the door we came through, LEAP
-  over our own wall, all one queue entry (order preserved; a split send could wall the wrong
-  edge from the wrong room). Hold behind the wall with the longer `WALL_WINDOW`. **The wall
+  `point <bracersId> <LONG back>`, `leap <back>` — swing, WALL the door we came through, LEAP
+  over our own wall. **Since v4.7.515 that is truly one queue entry:** `S.decorate` sets
+  `lvmove` = `stand/point .../leap <back>` and appends one raw `queue addclear free lvmove` to the
+  attack, so Mudlet sends it after the attack's `queue addclearfull` and the free entry fires at
+  the next balance and equilibrium. Before, the suffix was `;point ...;leap <back>` on the attack:
+  Mudlet split it, and the point and leap went out raw behind a swing that had just taken the
+  balance (the malagma death: the swing ran and no point or leap line appeared). `S.wallRaised` is
+  still set at send time: no capture holds the game's line for our own wall going up. Hold behind the wall with the longer `WALL_WINDOW`. **The wall
   STAYS UP across cycles** (v4.7.119, user-confirmed: chitin-greaves LEAP clears our own
   wall in BOTH directions): re-entry is a single eq-gated `leap <fwd>` — no melt, no walk —
   and while `S.wallRaised[room]` is set, follow-up escapes go **leap-only** (skip the
@@ -372,12 +379,12 @@ this tick). Stage 1 = the **pull & funnel** loop:
   `wallRaised` stores the walled edge's LONG dir (the panic tumble avoids it) and is wiped
   only on a GENUINE ripple change (`S._wallsRipple`) — a mid-ripple `mnem explore off/on`
   restart keeps it (review MEDIUM: walls are physical). ALL tactical moves LEAP
-  (`_tacticalGo` sends `stand;<jump> <dir>` — see *Which jump* below; review CRITICAL: the indoor low-HP retreat
+  (`_tacticalGo` sends `cq all` and the `lvmove` entry `stand/<jump> <dir>` — see *Which jump* below; review CRITICAL: the indoor low-HP retreat
   crosses the walled funnel edge — a plain walk livelocked the anti-death ladder).
 
 **Wall-leap navigation** (`M.onWallBlocked`, trigger 025, v4.7.119, user-directed): "A
 wall blocks your way." / "A wall bars your path." during an in-flight explorer move —
-ANY wall, ours or an affix's — replaces the walk with `stand;leap <dir>`. The exit is
+ANY wall, ours or an affix's — replaces the walk with the `lvmove` entry `stand/leap <dir>`. The exit is
 real, so it is never condemned; the already-armed move timer keeps watching (its
 walk-retry just earns another wall line → another leap), and the ice-slip budget bounds
 it. The legacy `766_Wall` manual-walk branches are gated off while exploring — they
@@ -634,7 +641,7 @@ the swarm room; `_backDir` re-validates against the exit graph) so the reassess 
 the MODE flag (optimistic); `S.flightConfirmed` is the last confirmed physical state, fed
 by trigger `022_Flight_Lines` ("The ring of shining metal carries you up into the skies."
 / "You land easily, back on the ground again."). The recovery hover re-sends
-`queue addclear free stand;fly` each 2s tick until confirmed — grounded-but-gated is the
+the `lvmove` entry `stand/fly` each 2s tick until confirmed — grounded-but-gated is the
 worst of both worlds. Since v4.7.321 the re-send also stops once gmcp names the room
 "Flying above" -- only the ring's line is captured, so every other fly source used to re-send
 on every tick of a hover that was already up -- and a fly with no airborne evidence at all ends
@@ -779,6 +786,34 @@ Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit
 
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).
 
+
+### A lost escape move is found in a second; its refusals show (v4.7.515)
+
+From the malagma death (2026-11-24): the escape sent `stand;leap ne` three times in 8.7 s, no game
+line answered on screen, onVitals printed "the escape already under way has it" while nothing was
+under way, and only the explorer's 5 s move timeout noticed ("pull move lost -- retry 1").
+
+- **The watch** (`S._watchMove`, `S._checkMoveWatch`, `009_Swarm_Tactics.lua`). Every swarm move
+  starts one: `_tacticalGo`, the pull's decorated suffix and its no-swing fallback, the wall
+  re-entry leap, the panic tumble. Every 0.25 s it asks `S._moveAble()` (gmcp `Char.Vitals` bal and
+  eq, the stun, sleep, `S._bound()`). Able for `S.MOVE_LOST_AFTER` (1.0 s) with no room change and
+  no tumble begun: the move is lost, and the watch re-sends it (the sender's own function, so
+  `_tacticalGo` picks the verb again), at most `S.MOVE_RESENDS` (2) times, with "escape move lost
+  -- <cause>; re-sending n/2 <dir>." Then it is "lost": `S._escapeOwns()` stops holding the
+  ladder, and onVitals prints "the escape move is LOST (...); acting again."
+- **The "under way" line says what is true**: "(waiting: stunned)", "(pending: able for 0.4s)",
+  "(moving: the tumble is under way)" (`S._escapeMoveState`).
+- **Stops**: arrival (`S.escapeCheckRoom`, and the look itself), a tumble starting (the tumble chain
+  owns it), `S.reset` (death, leaving the tower, the boon screen), "basher disabled",
+  `S.MOVE_WATCH_MAX` (12 s). Not `M._disarmMove`: the panic path disarms right after its tumble.
+- **The answers the gags delete** (trigger `mnemosyne/114_Escape_Move_Answer`, `S.onMoveLine`).
+  `006_GAG` and `clean-up/002` delete "You must regain balance/equilibrium first.", `006_GAG` deletes
+  every `[System]` line, `001`/`007` delete the holds. 114 deletes nothing; while a move is watched
+  the swarm says them in its own words on `tempTimer(0)`: refused (the re-send then waits only
+  `S.MOVE_REFUSED_GRACE`, 0.3 s, once we are able), held by the game for a recovery (waiting, not
+  lost), queued, fired. With no watch it is silent.
+- **Not seen in game yet**: a move inside a server alias. `free` waits for balance AND equilibrium,
+  so a leap that needs only equilibrium now also waits for balance.
 
 ### Greater elementals one at a time (v4.7.431)
 

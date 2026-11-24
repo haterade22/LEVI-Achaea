@@ -42,10 +42,13 @@ patterns:
   type: 2
 - pattern: 'Alias "lvfull" will now execute: '
   type: 2
+- pattern: 'Alias "lvmove" will now execute: '
+  type: 2
 ]]--
 
 -- The game's echo of each round rewrite (`setalias lvfree a/b/c`, ataxia/003). The names are the ones
--- in ataxia_ROUND_TYPES, one by one, so a test alias such as `lvprobe` still shows.
+-- in ataxia_ROUND_TYPES, one by one, so a test alias such as `lvprobe` still shows. `lvmove` is the
+-- movement chain alias (ataxia_CHAIN_ALIASES, ataxia/003, v4.7.515).
 --
 -- A plain `deleteLine()`, NOT `deleteFull()`, for the reason trigger 056 gives. `deleteFull` also
 -- deletes the next line if it is a prompt, and here that prompt can belong to the round. All 371 echoes

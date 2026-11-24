@@ -894,7 +894,6 @@ function S._tacticalGo(dirShort, why)
   -- A tumble takes ~4s to land; the default 5s move timeout would call it lost mid-roll. The
   -- tumble's own lifecycle (misc_alerts/003-005 -> S.onTumbleStart/Done/Canceled) owns it.
   M._tacticalArm(dirShort, verb == "tumble" and (tonumber(S.TUMBLE_ARM) or 8) or nil)
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- JUMP, never walk (review CRITICAL): a tactical retreat can cross our OWN
   -- standing icewall -- the indoor low-HP escape retreats through the walled
   -- funnel edge, where a plain walk silently fails and the anti-death ladder
@@ -914,9 +913,16 @@ function S._tacticalGo(dirShort, why)
   -- escape RIDES the attack (S.decorate -> S._onPullSent), so flushing would destroy the very
   -- swing carrying the step-out -- a pull never reaches _tacticalGo, so that is satisfied by
   -- construction, but do not merge the two paths later without re-reading this.
+  --
+  -- ONE QUEUE ENTRY (v4.7.515). `stand;<verb> <dir>` was split by Mudlet: only `stand` was queued
+  -- and the jump went out raw, into a refusal the gags deleted (the malagma death, 2026-11-24:
+  -- three sends, no answer on screen, slain at 2.35 s into the tumble that finally went). Now the
+  -- move is the alias `lvmove` (ataxia_queueChain, ataxia/003), and the watch below re-sends it if
+  -- it has not started a second after we could move.
   if not (M.roomLava and M.roomLava()) then send("cq all") end
-  send("queue addclear free stand" .. sep .. verb .. " " .. dirShort)
+  S._queueMove({ "stand", verb .. " " .. dirShort })
   S._noteTumbleSent(verb .. " " .. dirShort)
+  S._watchMove(dirShort, function() S._tacticalGo(dirShort) end)
   -- Record it so "You cannot do that while mounted." can re-issue this exact move as a mountjump
   -- (basher/013). A tactical move that is silently refused is the ladder stalling at crash HP.
   -- Not a tumble: it goes through from the saddle, and it is not a jump to recover.
@@ -924,12 +930,18 @@ function S._tacticalGo(dirShort, why)
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
 
--- The escape suffix appended to the decorated attack, by mode:
---   pull:  ";<backdir>"                          -- plain step out
---   wall:  ";point <bracers> <LONG back>;leap <back>" -- raise the icewall on the exit
+-- The escape that rides the decorated attack, by mode:
+--   pull:  "<backdir>"                           -- plain step out
+--   wall:  "point <bracers> <LONG back>", "leap <back>" -- raise the icewall on the exit
 --          we came through, then LEAP over our own wall (chitin greaves; the manual
---          ragepull alias proves leap-over-own-wall works). One queue entry keeps the
---          order: swing -> wall -> leap, all on the same balance.
+--          ragepull alias proves leap-over-own-wall works).
+-- DELIVERY (v4.7.515). These used to be appended raw, "<attack>;point ...;leap <back>", and
+-- Mudlet splits `;`: the point and the leap went out at once, behind an attack that had just
+-- taken the balance, into refusals the gags deleted. The malagma death shows the swing and then
+-- no point line and no leap line at all. S.decorate now sets them as the alias `lvmove` (with
+-- `stand` first) and appends one raw `queue addclear free lvmove` AFTER the attack: the
+-- attack's `queue addclearfull` runs first and cannot wipe it, and the free entry fires at the
+-- next balance and equilibrium -- swing, then wall, then leap.
 -- The wall PERSISTS across cycles (user-confirmed: LEAP clears our own wall in both
 -- directions, so re-entry never melts it) -- follow-up escapes skip the point and go
 -- leap-only, which fires a full balance-round sooner (point waits for balance, leap
@@ -937,7 +949,9 @@ end
 -- unwalled pull -- acceptable: denizens walk through icewalls anyway without
 -- Maklak's Promise. S.wallRaised[room] tracks it, optimistic at send time; cleared
 -- by the end-of-room melt (onTick) and each new ripple.
-function S._escapeSuffix(sep)
+-- The escape's commands, in order, with no `stand` (callers put it first). Same side effects as
+-- always: the wall memory, the jump ledger, the tumble note.
+function S._escapeCmds()
   local s = S._cfg()
   if S.mode == "wall" then
     S.wallRaised = S.wallRaised or {}
@@ -947,35 +961,236 @@ function S._escapeSuffix(sep)
       -- not -- so on foot the verb must stay exactly what it was.
       local verb = ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap") or "leap"
       if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.backShort, verb) end
-      return sep .. verb .. " " .. S.backShort
+      return { verb .. " " .. S.backShort }
     end
     if S.swarmRoom then
       -- Remember WHICH edge is walled (the LONG back dir): the panic tumble
       -- avoids it, and the memory only wipes on a genuine ripple boundary.
+      -- STILL OPTIMISTIC (v4.7.515 checked): no capture holds the game's line for OUR wall going up
+      -- (`point <bracers> <dir>`; kb/raw has only a Magi's "summons an icewall"), so there is no
+      -- confirm line to wait for.
       S.wallRaised[S.swarmRoom] = S.backLong
       S._wallsRipple = (M.run and tonumber(M.run.ripple)) or 0
     end
     local verb = ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap") or "leap" -- v4.7.345
     if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.backShort, verb) end
-    return sep .. "point " .. s.bracersId .. " " .. S.backLong .. sep .. verb .. " " .. S.backShort
+    return { "point " .. s.bracersId .. " " .. S.backLong, verb .. " " .. S.backShort }
   end
   -- ROLL HIDE: tumble instead of stepping (v4.7.223). A plain step-out is what lets the swarm
   -- follow us into the funnel room -- the whole reason the funnel branch and the fly-kite
   -- exist. Tumbling sheds them, so the pull stops being "move the fight" and becomes "end the
   -- fight", and the follower-handling branches simply never fire.
   --
-  -- Safe inside the single queue entry, for the reason the wall chain already proves: the
-  -- entry's commands do NOT all run on one balance -- `point` fires on the next balance and
-  -- `leap` on equilibrium, draining across ~7s. So a balance-gated tumble is HELD by the queue
-  -- until balance returns rather than being rejected, exactly like the point is.
+  -- Safe inside the single queue entry: a balance-gated tumble in the alias is HELD by the game
+  -- until balance returns rather than lost (kb/mechanics/balance-and-queueing.md, "An off-balance
+  -- spender inside an alias is refused and then HELD").
   -- TERROR OF THE SKIES (v4.7.447): a plain step-out already sheds every non-boss pursuer, so it
   -- outranks the Roll Hide tumble (falls through to the plain step, or the icy tumble below).
-  if mnemRollHide and not S._terrorSheds() then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
+  if mnemRollHide and not S._terrorSheds() then S._noteTumbleSent("tumble "); return { "tumble " .. S.backShort } end
   -- An icy swarm room: tumble the step-out too (v4.7.370).
-  if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
+  if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then S._noteTumbleSent("tumble "); return { "tumble " .. S.backShort } end
   -- Both legs out: the plain step is refused, the tumble is not (v4.7.513).
-  if S._legsOut() then S._noteTumbleSent("tumble "); return sep .. "tumble " .. S.backShort end
-  return sep .. S.backShort
+  if S._legsOut() then S._noteTumbleSent("tumble "); return { "tumble " .. S.backShort } end
+  return { S.backShort }
+end
+
+-- The old string form, ";<cmd>;<cmd>", for readers that still want it.
+function S._escapeSuffix(sep)
+  sep = sep or ";"
+  return sep .. table.concat(S._escapeCmds(), sep)
+end
+
+-- SEND A MOVE AS ONE QUEUE ENTRY (v4.7.515): `setalias lvmove a/b`, `queue addclear free lvmove`
+-- (ataxia_queueChain, ataxia/003). `cmds` is a list. Returns true when it went by alias. Without the
+-- helper (a partial load) it goes out the old way, raw, and says so.
+function S._queueMove(cmds)
+  if ataxia_queueChain then
+    local ok, why = ataxia_queueChain("free", "lvmove", cmds)
+    if not ok and why then S._echo("<grey>move sent raw (" .. tostring(why) .. ").") end
+    return ok
+  end
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free " .. table.concat(cmds, sep))
+  S._echo("<grey>move sent raw (ataxia_queueChain is not loaded).")
+  return false
+end
+
+-- ---------------------------------------------------------------------------
+-- A LOST MOVE IS FOUND IN A SECOND, NOT FIVE (v4.7.515)
+-- ---------------------------------------------------------------------------
+-- The malagma death (2026-11-24): the low-HP escape sent `stand;leap ne` at 24.92; stuns came
+-- and went (no longer stunned at 25.73 and 26.86), and the only thing that noticed the move had
+-- not gone was the explorer's 5 s move timeout, at 29.39 ("pull move lost -- retry 1"). In the
+-- meantime onVitals said "the escape already under way has it" while nothing was under way.
+--
+-- So every tactical move we send is WATCHED. When we have balance AND equilibrium and are not
+-- stunned, asleep or bound (S._moveAble), the free-queued move fires at once; if it has not
+-- started S.MOVE_LOST_AFTER seconds after we became able -- no room change, no tumble begun --
+-- it is lost, and the watch re-sends it, at most S.MOVE_RESENDS times, saying why. A refusal of
+-- the move that the game did not hold (S.onMoveLine) shortens the wait to S.MOVE_REFUSED_GRACE.
+--
+-- Started by every swarm send site (S._watchMove), stopped by arrival (S.escapeCheckRoom and the
+-- look itself), a tumble starting, S.reset (death, leaving the tower, the boon screen), "basher
+-- disabled", and its own S.MOVE_WATCH_MAX. Not by M._disarmMove: the panic path disarms the
+-- explorer right after its tumble is sent. Session state on S: a reload starts clean.
+S.MOVE_LOST_AFTER = 1.0    -- able this long and the move has not started: it is lost
+S.MOVE_REFUSED_GRACE = 0.3 -- after a refusal the game did not hold, once we are able
+S.MOVE_RESENDS = 2         -- re-sends per move; then the ladder may act (S._escapeMoveState)
+S.MOVE_WATCH_TICK = 0.25   -- how often the watch looks
+S.MOVE_WATCH_MAX = 12      -- a watch never outlives this many seconds from its last send
+if S._moveWatchT then pcall(killTimer, S._moveWatchT) end
+S._moveWatch, S._moveWatchT = nil, nil -- reload-safe: no watch survives a reload
+
+-- Can a free-queued move fire now? true, or false and what holds it. The free queue waits for
+-- exactly these: balance, equilibrium, not bound, not paralysed, not stunned (HELP 4.6.1).
+function S._moveAble()
+  local v = gmcp and gmcp.Char and gmcp.Char.Vitals
+  if type(v) ~= "table" or v.bal == nil or v.eq == nil then return false, "no balance reading" end
+  if tostring(v.bal) ~= "1" then return false, "off balance" end
+  if tostring(v.eq) ~= "1" then return false, "off equilibrium" end
+  local a = ataxia and ataxia.afflictions or {}
+  if a.stun then return false, "stunned" end
+  if a.unconsciousness or a.sleeping or a.asleep then return false, "asleep" end
+  if S._bound() then return false, "bound" end
+  return true
+end
+
+local function armMoveWatchTimer()
+  if S._moveWatchT then pcall(killTimer, S._moveWatchT) end
+  S._moveWatchT = tempTimer(tonumber(S.MOVE_WATCH_TICK) or 0.25, function()
+    S._moveWatchT = nil
+    if not S._moveWatch then return end
+    S._checkMoveWatch()
+    if S._moveWatch then armMoveWatchTimer() end
+  end)
+end
+
+-- Watch the move just sent from this room toward `dir`. `resend` sends it again.
+function S._watchMove(dir, resend)
+  local carry = tonumber(S._moveResendCarry) or 0
+  S._moveResendCarry = nil
+  S._moveWatch = { dir = dir, room = M.map and M.map.current, sentAt = now(),
+                   resend = resend, resends = carry }
+  armMoveWatchTimer()
+end
+
+-- The guarded stop. `why` is kept in S._moveWatchEnd (the last reason a watch ended).
+function S._stopMoveWatch(why)
+  if S._moveWatchT then pcall(killTimer, S._moveWatchT); S._moveWatchT = nil end
+  if S._moveWatch then S._moveWatchEnd = why or "stopped" end
+  S._moveWatch = nil
+end
+
+-- One look. Returns the state and its reason:
+--   "moved"   the room changed or a tumble began (the watch ends)
+--   "waiting" we cannot move yet (off balance, stunned, bound...): the queue holds it
+--   "pending" we can move, and the move has had less than its grace to start
+--   "resent"  it had not started: sent again
+--   "lost"    it had not started after the last re-send
+--   nil       no move is watched
+function S._checkMoveWatch()
+  local w = S._moveWatch
+  if not w then return nil, "no move is watched" end
+  local t = now()
+  local cur = M.map and M.map.current
+  if cur ~= w.room then S._stopMoveWatch("arrived"); return "moved", "we left the room" end
+  if S.moveLocked() then S._stopMoveWatch("tumbling"); return "moved", "the tumble is under way" end
+  if (t - w.sentAt) > (tonumber(S.MOVE_WATCH_MAX) or 12) then
+    S._stopMoveWatch("expired")
+    return nil, "no move is watched"
+  end
+  if w.lost then return "lost", w.lost end
+  local able, why = S._moveAble()
+  if not able then
+    w.ableAt = nil
+    return "waiting", why
+  end
+  w.ableAt = w.ableAt or t
+  local grace = (w.refused and not w.held) and (tonumber(S.MOVE_REFUSED_GRACE) or 0.3)
+    or (tonumber(S.MOVE_LOST_AFTER) or 1.0)
+  local since = t - w.ableAt
+  if since < grace then return "pending", string.format("able for %.1fs", since) end
+  local cause = w.refused and ("refused: must regain " .. w.refused)
+    or string.format("not started %.1fs after we could move", since)
+  local cap = tonumber(S.MOVE_RESENDS) or 2
+  if w.resends >= cap then
+    w.lost = cause .. ", after " .. w.resends .. " re-sends"
+    S._echo("<indian_red>escape move lost<reset> -- " .. w.lost .. "; the ladder may act.")
+    return "lost", w.lost
+  end
+  local n = w.resends + 1
+  S._echo("<indian_red>escape move lost<reset> -- " .. cause .. "; re-sending " .. n .. "/" .. cap
+    .. " <cyan>" .. tostring(w.dir) .. "<reset>.")
+  S._moveResendCarry = n
+  local ok, err = pcall(w.resend)
+  S._moveResendCarry = nil
+  if not ok then S._echo("<grey>re-send failed: " .. tostring(err)) end
+  if S._moveWatch == w then -- the re-send did not start its own watch: this one carries on
+    w.resends, w.sentAt, w.ableAt, w.refused, w.held = n, t, nil, nil, nil
+  end
+  return "resent", cause
+end
+
+-- Is the escape we started really under way? "moving", "waiting" or "pending" with a reason, or
+-- "lost" with what is wrong. nil when no move is watched (it landed, or nothing was sent).
+function S._escapeMoveState()
+  if S.moveLocked() then return "moving", "the tumble is under way" end
+  local st, why = S._checkMoveWatch()
+  if st == "resent" then return "pending", "re-sent: " .. tostring(why) end
+  return st, why
+end
+
+-- THE GAME'S ANSWERS TO A WATCHED MOVE (trigger mnemosyne/114). Every one of these lines is
+-- deleted by a gag (006 and clean-up/002 the refusals, 006 every `[System]` line, 001 and 007 the
+-- holds), so the swarm says them in its own words while a move is watched, and at no other time.
+-- Printed on tempTimer(0): a print inside the pass of a deleted line can land on the wrong row
+-- (bug pattern "deleteLine() + echo + send()", 2026-11-02).
+local MOVE_REFUSALS = {
+  ["You must regain balance first."] = "balance",
+  ["You must regain equilibrium first."] = "equilibrium",
+  ["You are recovering equilibrium and cannot move yet."] = "equilibrium",
+}
+local function sayLater(msg)
+  if tempTimer then tempTimer(0, function() S._echo(msg) end) else S._echo(msg) end
+end
+
+-- Returns true when the line was about the watched move.
+function S.onMoveLine(text)
+  local w = S._moveWatch
+  if not w or type(text) ~= "string" then return false end
+  local kind = MOVE_REFUSALS[text]
+  if kind then
+    w.refused, w.held, w.ableAt = kind, nil, nil
+    if w.saidRefused ~= kind then
+      w.saidRefused = kind
+      sayLater("<indian_red>escape move refused<reset>: must regain " .. kind
+        .. " -- re-sending the moment we can move.")
+    end
+    return true
+  end
+  local q = text:match("^%[System%]: Running queued (%a+) command: LVMOVE")
+  if q then
+    w.ranAt = now()
+    sayLater("<grey>escape move fired from the " .. q:lower() .. " queue.")
+    return true
+  end
+  q = text:match("^%[System%]: Added LVMOVE to your (%a+) queue")
+  if q then
+    sayLater("<grey>escape move queued on " .. q:lower() .. " (it waits for balance, equilibrium, unbound, unstunned).")
+    return true
+  end
+  -- The game HELD a refused piece of the alias for a recovery: it waits, it is not lost.
+  local held, hq = text:match("^(.-) was added to your (.-) queue%.$")
+  if held then
+    local low = held:lower()
+    local d = tostring(w.dir or ""):lower()
+    if low == "stand" or (d ~= "" and (low == d or low:sub(-(#d + 1)) == " " .. d)) then
+      w.held = hq
+      sayLater("<grey>escape move held by the game for " .. hq .. " (" .. low .. ").")
+      return true
+    end
+  end
+  return false
 end
 
 function S._beginPull(shortBack, longBack, shortFwd, count, mode)
@@ -1012,7 +1227,6 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
     if S.state == "pulling" and ataxiaTemp.swarmPullDir then
       -- No swing came (shielded branch / no target / hard aff) -- escape without the hit.
       ataxiaTemp.swarmPullDir = nil
-      local sep = (ataxia.settings and ataxia.settings.separator) or ";"
       -- ORDER MATTERS (v4.7.262). The arm ran BEFORE the bail, so a tumble in flight left
       -- explore.fromRoom/fromDir describing a move that was never transmitted, and
       -- explore.moving set with a timeout armed. The tumble then landed somewhere that is NOT
@@ -1024,7 +1238,10 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
       if S.moveLocked() then return end -- v4.7.243: never cancel a live tumble
       if M._tacticalArm then M._tacticalArm(S.backShort) end
       S.escapeOn("pull, no swing") -- v4.7.243: this branch armed nothing at all before
-      send("queue addclear free stand" .. S._escapeSuffix(sep))
+      local cmds = S._escapeCmds()
+      table.insert(cmds, 1, "stand")
+      S._queueMove(cmds)
+      S._watchMove(S.backShort, function() S._tacticalGo(S.backShort) end)
       S._echo("no swing came; escaping plain -> <cyan>" .. S.backShort .. "<reset>.")
     end
   end)
@@ -1073,8 +1290,22 @@ function S.decorate(command, sep)
   if ataxiaTemp.swarmPullDir and S.state == "pulling"
      and M.map and M.map.current == S.swarmRoom then -- a forced move mid-arm would make the backdir bogus
     ataxiaTemp.swarmPullDir = nil
-    local decorated = command .. S._escapeSuffix(sep)
+    sep = sep or ";"
+    -- ONE ENTRY AFTER THE ATTACK (v4.7.515, see S._escapeCmds). The alias goes out now; the queue
+    -- line rides the attack's chain as its last piece, so it is sent after the attack's own
+    -- `queue addclearfull`. Without the helper, or for a chain that cannot be an alias, the old
+    -- raw suffix.
+    local cmds = S._escapeCmds()
+    local decorated
+    local aliased = ataxia_setChainAlias and ataxia_setChainAlias("lvmove", { "stand", unpack(cmds) })
+    if aliased then
+      decorated = command .. sep .. "queue addclear free lvmove"
+    else
+      decorated = command .. sep .. table.concat(cmds, sep)
+      S._echo("<grey>pull escape sent raw (no chain alias).")
+    end
     S._onPullSent()
+    S._watchMove(S.backShort, function() S._tacticalGo(S.backShort) end)
     return decorated
   end
   if S.flying and S.state == "funnel"
@@ -1223,12 +1454,13 @@ function S._beginReenter()
     if S.moveLocked() then return true end -- v4.7.243
     S.escapeOn() -- v4.7.243: hold the swing until the leap has actually landed us back in
     M._tacticalArm(S.fwdShort)
-    local sep = (ataxia.settings and ataxia.settings.separator) or ";"
     -- MOUNTJUMP from the saddle (v4.7.345). Deliberately NOT S.moveVerb: this jump crosses the
     -- wall we raised ourselves, where leap is the confirmed ability and the backflip is not -- so
     -- on foot the verb stays exactly what it was.
     local verb = (ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap")) or "leap"
-    send("queue addclear free stand" .. sep .. verb .. " " .. S.fwdShort)
+    S._queueMove({ "stand", verb .. " " .. S.fwdShort }) -- one entry (v4.7.515)
+    local fwd = S.fwdShort
+    S._watchMove(fwd, function() S._tacticalGo(fwd) end)
     if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.fwdShort, verb) end
     S._echo("trickle over (peak followers: " .. followers .. ") -- "
       .. (verb == "mountjump" and "mountjumping" or "leaping")
@@ -1474,9 +1706,12 @@ function S._maybePanic(hpNow)
     ataxiaTemp.swarmHold = nil
   end)
   S.escapeOn("panic tumble") -- v4.7.243: stop swinging until we are out
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. cmd)
+  S._queueMove({ "stand", cmd }) -- one entry (v4.7.515)
   S._noteTumbleSent(cmd)
+  S._watchMove(dir, function()
+    S._queueMove({ "stand", cmd })
+    S._noteTumbleSent(cmd)
+  end)
   -- HEAL WHERE WE LANDED, then go back in (user, 2026-08-06: "the denizens wont follow so we
   -- can use this to our advantage to heal up and then do hit and run tactics").
   --
@@ -1565,8 +1800,7 @@ function S._maybeSeclusion(hpNow)
       S._echo("<indian_red>SECLUSION<reset> -- the hermit fling never landed; spent for this ripple.")
     end
   end)
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. "fling hermit at ground")
+  S._queueMove({ "stand", "fling hermit at ground" }) -- one entry (v4.7.515)
   S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- <gold>SECLUSION<reset>: flinging the hermit home"
     .. " (cure all, 200% health), then straight back down.")
   return true
@@ -1701,6 +1935,9 @@ end
 
 -- Called from the arrival path: the room number changing is the only real proof we left.
 function S.escapeCheckRoom()
+  -- The move watch ends on arrival (v4.7.515), escape mode or not.
+  local w = S._moveWatch
+  if w and M.map and M.map.current ~= w.room then S._stopMoveWatch("arrived") end
   if not (ataxiaTemp and ataxiaTemp.escapeMode) then return end
   local cur = M.map and M.map.current
   if cur and ataxiaTemp.escapeRoom and cur ~= ataxiaTemp.escapeRoom then
@@ -1736,10 +1973,9 @@ function S._tumbleRetry(why)
     return S.onTumbleDone()
   end
   ataxiaTemp.tumbleTries = tries
-  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- Free-queued and stand-first, exactly as the panic sends it: the two things that cancel a
-  -- tumble are prone and a lost balance, and this covers both.
-  send("queue addclear free stand" .. sep .. "tumble " .. ataxiaTemp.tumbleDir)
+  -- tumble are prone and a lost balance, and this covers both. One entry (v4.7.515).
+  S._queueMove({ "stand", "tumble " .. ataxiaTemp.tumbleDir })
   S._noteTumbleSent("tumble ") -- v4.7.513
   S._echo("<indian_red>" .. (why or "tumble did not land") .. "<reset> -- retry "
     .. tries .. "/" .. S.TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
@@ -1961,12 +2197,11 @@ function S._beginEscape(why)
     -- flightConfirmed from a hover that ended without the land line counted as "up" before this
     -- fly had even executed.
     S.flightConfirmed, S.hoverSeenUpAt = nil, nil
-    local sep = (ataxia.settings and ataxia.settings.separator) or ";"
     -- TAKE THE BALANCE WITH US -- the v4.7.314 rule for `_tacticalGo`, never applied here. FLY needs
     -- balance, and an attack already committed on the standard queue takes it first, delaying the
     -- takeoff by a whole balance. Skipped in lava (the queued lava escape must survive).
     if not (M.roomLava and M.roomLava()) then send("cq all") end
-    send("queue addclear free stand" .. sep .. "fly")
+    S._queueMove({ "stand", "fly" }) -- one entry (v4.7.515): a raw `fly` was the same split
     S._armRecoverHold()
     -- The hover loop is SELF-ticking; without this kick the next evaluation would
     -- wait on an outside event -- the exact starvation that killed the Pinnacle run.
@@ -2126,7 +2361,10 @@ function S._escapeOwns()
   if not at then return false end
   if S.state ~= "pulling" and S.state ~= "funnel" then return false end
   local since = now() - at
-  return since >= 0 and since < (tonumber(S.ESCAPE_OWN) or 8)
+  if not (since >= 0 and since < (tonumber(S.ESCAPE_OWN) or 8)) then return false end
+  -- A move the watch has given up on owns nothing (v4.7.515): the ladder may act again.
+  if S._escapeMoveState and S._escapeMoveState() == "lost" then return false end
+  return true
 end
 
 -- THE RECOVERY WATCH (v4.7.389). Called on every recovering tick (RECOVER_TICK, 2s), below the
@@ -2414,8 +2652,7 @@ function S.onTick()
     -- line is captured (022), so on every other fly source this used to re-send
     -- `fly` every tick of a hover that was already airborne.
     if S.flying and not S.flightConfirmed and not S._gmcpFlying() then
-      local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-      send("queue addclear free stand" .. sep .. "fly")
+      S._queueMove({ "stand", "fly" }) -- v4.7.515
     end
     S._armRecoverHold()
     if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
@@ -2482,8 +2719,7 @@ function S.onTick()
         -- The swarm followed us outdoors: fly-kite. The decorator turns every attack
         -- into land;<attack>;fly -- we touch ground only for the swing.
         S.flying = true
-        local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-        send("queue addclear free stand" .. sep .. "fly")
+        S._queueMove({ "stand", "fly" }) -- v4.7.515
         S._echo("<indian_red>the swarm followed (" .. n .. ")<reset> outdoors -- <cyan>FLY-KITE<reset> (land/hit/fly each balance).")
       elseif S.flying and n < S.threshold() then
         -- Thinned out: come down and finish the stragglers grounded.
@@ -2884,10 +3120,20 @@ function S.onVitals()
   -- it immediate. Bounded by S.ESCAPE_OWN so a stuck escape cannot wedge the ladder.
   if S._escapeOwns() then
     if byRate then
+      -- THE CLAIM MUST BE TRUE (v4.7.515). The malagma death printed "the escape already under way
+      -- has it" at 26.86 while nothing was under way. Say what the move is doing.
+      local st, why = S._escapeMoveState()
       S._sayOnce("owns", head .. (S._pendingFree and " -- the escape is parked until we can move."
+        or (st and (" -- the escape already under way has it (" .. st .. ": " .. tostring(why) .. ")."))
         or " -- the escape already under way has it."))
     end
     return
+  end
+  do
+    local st, why = S._escapeMoveState()
+    if st == "lost" then
+      S._sayOnce("lostmove", head .. " -- the escape move is LOST (" .. tostring(why) .. "); acting again.")
+    end
   end
   if S.flying then return S._convertToHover(hp) end
   -- Followed, or the only door is a U-turn we are not fit for: fight here -- and ask BEFORE the
@@ -3144,6 +3390,7 @@ function S.reset(reason)
   S._escaping = nil     -- v4.7.378
   S.hoverSeenUpAt = nil -- v4.7.321: per-hover evidence
   S._pullRetries = nil
+  S._stopMoveWatch("reset") -- v4.7.515: the watch belongs to the tactic
   if S.onTumbleDone then S.onTumbleDone() end
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
   S.backShort, S.backLong, S.fwdShort = nil, nil, nil
@@ -3317,6 +3564,7 @@ end)
 if S._bashOffH then pcall(killAnonymousEventHandler, S._bashOffH) end
 S._bashOffH = registerAnonymousEventHandler("basher disabled", function()
   if S.state ~= "idle" then S.reset("basher disabled") end
+  S._stopMoveWatch("basher disabled") -- v4.7.515: also when the tactic was already idle
 end)
 
 -- Reload: timers are gone; state must not survive half-alive.

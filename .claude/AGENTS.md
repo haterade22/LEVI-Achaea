@@ -1461,3 +1461,15 @@ is written with telemetry off; gate only the POST and the telemetry history. Gre
 `_auto()` in a handler before a combat reader depends on what it writes.
 
 ---
+
+### A raw split move whose refusal is gagged is a silent escape failure (v4.7.515)
+
+The malagma death (2026-11-24): `queue addclear free stand;leap ne` queued only `stand` (Mudlet
+splits `;`), so the leap went out raw, was refused off balance or held where a stun could eat it,
+and every answer was deleted by a gag (`006_GAG` takes every `[System]` line and both "must regain"
+refusals). Three sends in 8.7 s, nothing on screen, "the escape already under way has it", and the
+5 s move timeout as the only detector. **Rule:** a command that must happen goes as ONE queue entry
+(`ataxia_queueChain`, alias `lvmove`); anything that waits on it watches for its start with a short,
+able-aware deadline (`S._checkMoveWatch`), never only a long timeout; and a gag must not be the only
+reader of a refusal of our own critical command (`mnemosyne/114` says it while a move is watched).
+Before you call a send "lost", count the answers a gag deleted.

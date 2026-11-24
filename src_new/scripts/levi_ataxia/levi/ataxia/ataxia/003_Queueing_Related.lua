@@ -183,9 +183,10 @@ ataxia_ROUND_TYPES = { eq = true, bal = true, eqbal = true, class = true, free =
 -- is still open, so a longer round stays on the raw path.
 local ROUND_MAX_TEXT = 138
 
--- A command that ends in one of these moves us. Movement chains stay raw: `stand;<dir>` must reach
--- the game the way the explorer and the chase send it. A target named "N" also passes through,
--- which only costs that round the old delivery.
+-- A command that ends in one of these moves us. The round shim leaves such a chain alone: it was
+-- scoped to offence rounds (v4.7.470), and the movers own their delivery. Since v4.7.515 they send
+-- it as their own alias, `lvmove`, through ataxia_queueChain below. A target named "N" also passes
+-- through, which only costs that round the old delivery.
 local ROUND_MOVES = {}
 for _, d in ipairs({ "n", "e", "s", "w", "ne", "nw", "se", "sw", "u", "d", "in", "out", "north", "east", "south",
   "west", "northeast", "northwest", "southeast", "southwest", "up", "down" }) do
@@ -295,6 +296,9 @@ end
 -- counts the round as run. A tentacle or a transition is not the attack the offence planned.
 local function roundPlan(qtype, payload)
   if not ataxia_ROUND_TYPES[qtype] or payload:find("[/%%{]") then return nil end
+  -- A chain alias of ours (`queue addclear free lvmove`, below) is already one entry. A slowed
+  -- round would otherwise put the alias NAME inside lvfree.
+  if ataxia_CHAIN_ALIASES and ataxia_CHAIN_ALIASES[payload:lower():match("^%s*(%S+)%s*$") or ""] then return nil end
   local sep = ataxia.settings.separator
   if type(sep) == "string" and sep ~= "" and sep ~= ";" then
     payload = payload:gsub((sep:gsub("%p", "%%%0")), ";")
@@ -460,4 +464,88 @@ function ataxia_roundCommand(arg)
   ataxiaEcho("Round delivery: " .. (chosen == "alias" and "<green>alias" or "<white>raw") .. "<NavajoWhite>"
     .. (chosen == "alias" and ataxia_roundMode() == "raw" and " (raw while the basher is on)" or "")
     .. ". Change it: <white>aconfig rounds alias|raw<NavajoWhite>. Alias has one group fight behind it so far.")
+end
+
+-- ---------------------------------------------------------------------------------------------
+-- A CHAIN AS ONE QUEUE ENTRY, BY SERVER ALIAS (v4.7.515). For movement: the swarm's escapes, the
+-- explorer's steps, the mount re-sends.
+--
+-- Mudlet splits `;`, so send("queue addclear free stand;leap ne") queued only `stand`, and `leap ne`
+-- went out raw at once. Off balance or equilibrium the game refused it ("You must regain balance
+-- first.", gagged by 006 and clean-up/002) and its auto-queue held it on the balance queue, which does
+-- not wait for a stun, and which `cq all` empties. The malagma death (2026-11-24, v4.7.513): three
+-- `stand;leap ne` sends in 8.7 s, and no game line answered any of them on screen. The frost elemental
+-- capture shows the raw step refused: "(MNEM): [explore] room clear -> moving s." then "You are
+-- recovering equilibrium and cannot move yet." (kb/raw/live/mnemosyne-frost-elemental-laststand_
+-- 2026-11-11.txt rows 124-125).
+--
+-- So the chain goes into an alias, `setalias lvmove stand/leap ne`, and the queue gets the alias NAME,
+-- `queue addclear free lvmove`. The game reads the body when the entry fires (the round shim above,
+-- kb/mechanics/balance-and-queueing.md), so the whole move waits for what `free` waits for: balance,
+-- equilibrium, not bound, not paralysed, not stunned. `stand` stays inside, so a prone escape works.
+--
+-- The alias is set on every call, not only when its text changed: a move is rare, and a body the
+-- server never took (a dropped link) must not be trusted. The game echoes each set
+-- (`Alias "lvmove" will now execute: ...`); trigger 800 gags it.
+--
+-- The names. At most 12 characters (HELP ALIASES), and none of the round shim's `lv<type>` names.
+ataxia_CHAIN_ALIASES = { lvmove = true }
+
+-- Split a chain into its commands: a table as given, or a string on `;` and the player's separator.
+local function chainPieces(cmds)
+  local out = {}
+  if type(cmds) == "table" then
+    for _, c in ipairs(cmds) do
+      if type(c) == "string" then
+        c = c:match("^%s*(.-)%s*$")
+        if c ~= "" then out[#out + 1] = c end
+      end
+    end
+    return out
+  end
+  if type(cmds) ~= "string" then return out end
+  local sep = ataxia and ataxia.settings and ataxia.settings.separator
+  if type(sep) == "string" and sep ~= "" and sep ~= ";" then
+    cmds = cmds:gsub((sep:gsub("%p", "%%%0")), ";")
+  end
+  for c in cmds:gmatch("[^;]+") do
+    c = c:match("^%s*(.-)%s*$")
+    if c ~= "" then out[#out + 1] = c end
+  end
+  return out
+end
+
+-- Set alias `name` to the chain. Returns the alias text, or nil and the reason it cannot be one:
+-- `/` would split a command inside the alias, and `%`, `{` are the game's own alias syntax.
+function ataxia_setChainAlias(name, cmds)
+  if type(name) ~= "string" or not ataxia_CHAIN_ALIASES[name] then return nil, "not a chain alias name" end
+  local pieces = chainPieces(cmds)
+  if #pieces == 0 then return nil, "no commands" end
+  for _, p in ipairs(pieces) do
+    if p:find("[/%%{]") then return nil, "a command holds / % or {" end
+  end
+  local text = table.concat(pieces, "/")
+  if #text > ROUND_MAX_TEXT then return nil, "longer than " .. ROUND_MAX_TEXT .. " characters" end
+  send("setalias " .. name .. " " .. text)
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.chainAlias = ataxiaTemp.chainAlias or {}
+  ataxiaTemp.chainAlias[name] = { text = text, at = getEpoch() }
+  return text
+end
+
+-- Queue the chain as ONE entry: `setalias <name> a/b/c`, then `queue addclear <qtype> <name>`.
+-- Returns true. When the chain cannot be an alias it goes out the old way, raw, and this returns
+-- false and the reason, so the caller can say so.
+function ataxia_queueChain(qtype, name, cmds)
+  qtype = type(qtype) == "string" and qtype:lower() or "free"
+  local text, why = ataxia_setChainAlias(name, cmds)
+  if text then
+    send("queue addclear " .. qtype .. " " .. name)
+    return true
+  end
+  local pieces = chainPieces(cmds)
+  if #pieces == 0 then return false, why end
+  local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear " .. qtype .. " " .. table.concat(pieces, sep))
+  return false, why
 end

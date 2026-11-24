@@ -28,6 +28,11 @@ local NOW = 5000
 local realEpoch = getEpoch
 getEpoch = function() return NOW end
 
+-- The re-sent jump is one queue entry by the chain alias (v4.7.515): load the real helper.
+do
+  local okq, errq = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/003_Queueing_Related.lua")
+  if not okq then error("failed to load queueing: " .. tostring(errq)) end
+end
 local ok, err = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/013_Mounts.lua")
 if not ok then error("failed to load the mounts module: " .. tostring(err)) end
 
@@ -98,7 +103,7 @@ describe("\"You cannot do that while mounted.\"", function()
     local did = ataxiaBasher_jumpRefusedMounted()
     expect(did).toBeTrue()
     expect(ataxiaBasher_isMounted()).toBeTrue()
-    expect(sentAll():find("queue addclear free stand | mountjump s", 1, true) ~= nil).toBeTrue()
+    expect(sentAll():find("setalias lvmove stand/mountjump s | queue addclear free lvmove", 1, true) ~= nil).toBeTrue()
   end)
 
   it("re-sends the SAME direction -- the escape is still waiting on that arrival", function()
@@ -253,7 +258,7 @@ describe("\"You have no mount on which to jump.\"", function()
     ataxiaBasher_jumpSent("s", "mountjump")
     expect(ataxiaBasher_jumpRefusedOnFoot()).toBeTrue()
     expect(ataxiaBasher_isMounted()).toBeFalse()
-    expect(sentAll():find("queue addclear free stand | leap s", 1, true) ~= nil).toBeTrue()
+    expect(sentAll():find("setalias lvmove stand/leap s | queue addclear free lvmove", 1, true) ~= nil).toBeTrue()
   end)
 
   it("leaves a LEAP record alone -- that refusal cannot be about it", function()

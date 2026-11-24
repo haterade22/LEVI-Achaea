@@ -33,6 +33,31 @@ dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/003_Commands.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/005_Ripple_Map.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/007_History.lua")
+-- The movement chain alias (v4.7.515): the real helper, not whichever file loaded it first.
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/ataxia/003_Queueing_Related.lua")
+-- A move is TWO sends on the wire: `setalias lvmove <body>` and `queue addclear free lvmove`. These
+-- tests are about the explorer's decisions, so a seam folds the pair into ONE recorded row,
+-- "queue addclear free lvmove <body>", after checking that the real helper sent exactly that pair.
+-- The wire format itself is tested in test_swarm_tactics.lua ("an escape move is one queue entry").
+-- Restored at the end of this file.
+local REAL_QUEUE_CHAIN = ataxia_queueChain
+ataxia_queueChain = function(qtype, name, cmds)
+  local outer, rows = send, {}
+  send = function(c) rows[#rows + 1] = c end
+  local ok, r1, r2 = pcall(REAL_QUEUE_CHAIN, qtype, name, cmds)
+  send = outer
+  if not ok then error(r1, 0) end
+  if r1 then
+    local body = rows[1] and rows[1]:match("^setalias " .. name .. " (.+)$")
+    if not body or rows[2] ~= ("queue addclear " .. qtype .. " " .. name) or #rows ~= 2 then
+      error("ataxia_queueChain sent " .. table.concat(rows, " | "), 0)
+    end
+    send("queue addclear " .. qtype .. " " .. name .. " <" .. body .. ">")
+  else
+    for _, c in ipairs(rows) do send(c) end
+  end
+  return r1, r2
+end
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/008_Explorer.lua")
 
 local M = ataxia.mnemosyne
@@ -4455,7 +4480,7 @@ describe("dizzy fall during explore (v4.7.426)", function()
       M.onDizzyFall()
       expect(#st.sent).toBe(2)
       expect(st.sent[2]:find("stand", 1, true) ~= nil).toBeTrue()
-      expect(st.sent[2]:sub(-2)).toBe(";s")
+      expect(st.sent[2]:sub(-3)).toBe("/s>")
       expect(M.explore.tries).toBe(1)
       expect(M.explore.moving).toBeTrue()
       expect(M.explore.dizzyFalls).toBe(1)
@@ -4575,8 +4600,8 @@ describe("Seclusion -- the hermit goes up with the descent", function()
       M._exploreMove("down")
       M._exploreMove("down")
     end)
-    expect(out[1]).toBe("queue addclear free stand;activate hermit;down")
-    expect(out[2]).toBe("queue addclear free stand;down")
+    expect(out[1]).toBe("queue addclear free lvmove <stand/activate hermit/down>")
+    expect(out[2]).toBe("queue addclear free lvmove <stand/down>")
     expect(M._hermitRipple).toBeTrue()
     mnemSeclusion, M._hermitRipple = false, nil
   end)
@@ -4584,21 +4609,21 @@ describe("Seclusion -- the hermit goes up with the descent", function()
   it("never on a planar move", function()
     mnemSeclusion, M._hermitRipple = true, nil
     local out = capture(function() M._exploreMove("s") end)
-    expect(out[1]).toBe("queue addclear free stand;s")
+    expect(out[1]).toBe("queue addclear free lvmove <stand/s>")
     mnemSeclusion, M._hermitRipple = false, nil
   end)
 
   it("stacks with the Homebound raido", function()
     mnemSeclusion, mnemHomebound, M._hermitRipple, M._raidoRipple = true, true, nil, nil
     local out = capture(function() M._exploreMove("down") end)
-    expect(out[1]).toBe("queue addclear free stand;sketch raido on ground;activate hermit;down")
+    expect(out[1]).toBe("queue addclear free lvmove <stand/sketch raido on ground/activate hermit/down>")
     mnemSeclusion, mnemHomebound, M._hermitRipple, M._raidoRipple = false, false, nil, nil
   end)
 
   it("does nothing without the boon", function()
     mnemSeclusion, M._hermitRipple = false, nil
     local out = capture(function() M._exploreMove("down") end)
-    expect(out[1]).toBe("queue addclear free stand;down")
+    expect(out[1]).toBe("queue addclear free lvmove <stand/down>")
     expect(M._hermitRipple).toBeNil()
   end)
 end)
@@ -4999,7 +5024,7 @@ describe("boiling lava", function()
     M.onLava()
     local cmd = moved()
     expect(cmd ~= nil).toBeTrue()
-    expect(cmd:match("stand;(%a+)$")).toBe("nw")
+    expect(cmd:match("stand/(%a+)>$")).toBe("nw")
     restore()
   end)
 
@@ -5836,7 +5861,7 @@ describe("lava marks only what the map witnessed", function()
     M.onLava(TICK)
     local seen = 0
     for _, c in ipairs(sentCmds) do
-      local d = c:find("stand", 1, true) and c:match("stand;(%a+)$")
+      local d = c:find("stand", 1, true) and c:match("stand/(%a+)>$")
       if d then seen = seen + 1; expect(d).toBe("n") end
     end
     expect(seen > 1).toBeTrue() -- proves more than one tick actually queued a move
@@ -8631,7 +8656,7 @@ describe("glance recon before a never-walked door", function()
     expect(M.explore.glance.done).toBeTrue()
     expect(ataxiaTemp.mnemLavaPlan).toBeNil()   -- no lava line: nothing to plan
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()           -- now it walks (short dir on the wire)
+    expect(has("lvmove <stand/s")).toBeTrue()           -- now it walks (short dir on the wire)
   end)
 
   it("plans the forward door when the glance shows lava", function()
@@ -8646,7 +8671,7 @@ describe("glance recon before a never-walked door", function()
     expect(plan.dir).toBe("south")
     expect(plan.fwd).toBe("east")               -- (north is back; it sorts after east anyway -- see the sort-first test)
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()           -- STILL enters -- the user's rule
+    expect(has("lvmove <stand/s")).toBeTrue()           -- STILL enters -- the user's rule
   end)
 
   it("a dead-end lava room yields an empty plan, and is still entered", function()
@@ -8657,7 +8682,7 @@ describe("glance recon before a never-walked door", function()
     MAP.onExitsLine("You see a single exit leading north.")
     expect(ataxiaTemp.mnemLavaPlan.fwd).toBeNil()
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   it("onLava fires the PLANNED door on the splash, and spends the plan", function()
@@ -8672,7 +8697,7 @@ describe("glance recon before a never-walked door", function()
     M.explore.moving = false
     sent = {}
     M.onLava("You splash into boiling lava!")
-    expect(has("stand;e")).toBeTrue()           -- the planned door, not "n" (back)
+    expect(has("lvmove <stand/e")).toBeTrue()           -- the planned door, not "n" (back)
     expect(ataxiaTemp.mnemLavaPlan).toBeNil()   -- spent
   end)
 
@@ -8696,7 +8721,7 @@ describe("glance recon before a never-walked door", function()
     timers[1].f()                               -- GLANCE_TIMEOUT fires
     expect(M.explore.glance.done).toBeTrue()
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   -- A BACKTRACK step is over a door we already walked; it needs no recon. (The sweep's own
@@ -8709,7 +8734,7 @@ describe("glance recon before a never-walked door", function()
     sent = {}
     M._exploreTick()                            -- backtrack toward 2 via the walked east door
     expect(has("glance")).toBeFalse()
-    expect(has("stand;e")).toBeTrue()
+    expect(has("lvmove <stand/e")).toBeTrue()
   end)
 
   -- Deep review (v4.7.318): the description line prints for OUR room too (arrival, LOOK, the
@@ -8762,7 +8787,7 @@ describe("glance recon before a never-walked door", function()
     sent = {}
     M._exploreTick()                            -- gate: stale -> resolve -> proceed
     expect(M.explore.glance.done).toBeTrue()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   -- Mutation review (q): a foreign block must not resolve OUR glance.
@@ -8797,8 +8822,8 @@ describe("glance recon before a never-walked door", function()
     M.explore.moving = false
     sent = {}
     M.onLava("You splash into boiling lava!")
-    expect(has("stand;e")).toBeTrue()
-    expect(has("stand;w")).toBeFalse()
+    expect(has("lvmove <stand/e")).toBeTrue()
+    expect(has("lvmove <stand/w")).toBeFalse()
   end)
 
   -- Mutation review (t): a planned door the room does not actually have is dropped.
@@ -8809,8 +8834,8 @@ describe("glance recon before a never-walked door", function()
     M.explore.moving = false
     sent = {}
     M.onLava("You splash into boiling lava!")
-    expect(has("stand;e")).toBeFalse()
-    expect(has("stand;w")).toBeTrue()
+    expect(has("lvmove <stand/e")).toBeFalse()
+    expect(has("lvmove <stand/w")).toBeTrue()
     expect(ataxiaTemp.mnemLavaPlan).toBeNil()   -- spent either way
   end)
 
@@ -8824,8 +8849,8 @@ describe("glance recon before a never-walked door", function()
     M.explore.moving = false
     sent = {}
     M.onLava("You splash into boiling lava!")
-    expect(has("stand;e")).toBeFalse()
-    expect(has("stand;w")).toBeTrue()
+    expect(has("lvmove <stand/e")).toBeFalse()
+    expect(has("lvmove <stand/w")).toBeTrue()
   end)
 
   -- Deep review (HIGH, probe-confirmed): the plan was gated on `first` (episode timing), so a
@@ -8846,9 +8871,9 @@ describe("glance recon before a never-walked door", function()
     M.explore.moving = false
     sent = {}
     M.onLava("You splash into boiling lava!")
-    expect(has("stand;e")).toBeTrue()           -- the plan
-    expect(has("stand;w")).toBeFalse()          -- not the chooser
-    expect(has("stand;n")).toBeFalse()          -- not room 9's remembered door
+    expect(has("lvmove <stand/e")).toBeTrue()           -- the plan
+    expect(has("lvmove <stand/w")).toBeFalse()          -- not the chooser
+    expect(has("lvmove <stand/n")).toBeFalse()          -- not room 9's remembered door
   end)
 
   it("the remembered door is only for the SAME room's struggle ticks", function()
@@ -8864,8 +8889,8 @@ describe("glance recon before a never-walked door", function()
     expect(has("stand")).toBeFalse()
     M.onLava(tick)                              -- the second is adopted (entry line missed)
     -- first=false, anchor (9) ~= cur (2) -> room 9's remembered "n" must NOT be inherited -> derive
-    expect(has("stand;e")).toBeTrue()           -- forward beats back
-    expect(has("stand;n")).toBeFalse()
+    expect(has("lvmove <stand/e")).toBeTrue()           -- forward beats back
+    expect(has("lvmove <stand/n")).toBeFalse()
   end)
 
   -- Mutation review (v): the no-exits branch publishes too.
@@ -8878,7 +8903,7 @@ describe("glance recon before a never-walked door", function()
     expect(M.explore.glance.done).toBeTrue()
     expect(ataxiaTemp.mnemLavaPlan.fwd).toBeNil()
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   -- Mutation review (w, x): lifecycle clears.
@@ -8931,7 +8956,7 @@ describe("glance recon before a never-walked door", function()
     M._exploreTick()
     ataxia.defences.blindness = nil
     expect(has("glance")).toBeFalse()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   it("glances while blind when mindseye is up (v4.7.432: the same view as sighted)", function()
@@ -8940,7 +8965,7 @@ describe("glance recon before a never-walked door", function()
     M._exploreTick()
     ataxia.defences.blindness, ataxia.defences.mindseye = nil, nil
     expect(has("glance south")).toBeTrue()
-    expect(has("stand;s")).toBeFalse()
+    expect(has("lvmove <stand/s")).toBeFalse()
   end)
 
   -- The status line was DEFINED in the first cut of this change and called from nowhere -- a
@@ -8977,7 +9002,7 @@ describe("glance recon before a never-walked door", function()
     ataxia.settings.reporting.glance = false
     M._exploreTick()
     expect(has("glance")).toBeFalse()
-    expect(has("stand;s")).toBeTrue()
+    expect(has("lvmove <stand/s")).toBeTrue()
   end)
 
   -- v4.7.431: one greater elemental at a time. Two greaters of one kind print as ONE sentence in
@@ -9037,7 +9062,7 @@ describe("glance recon before a never-walked door", function()
     expect(why).toBe("greater")
     sent = {}
     M._exploreTick()
-    expect(has("stand;s")).toBeTrue()                -- already looked: it walks, no second glance
+    expect(has("lvmove <stand/s")).toBeTrue()                -- already looked: it walks, no second glance
   end)
 
   it("an expired record earns a fresh glance; a look with one greater clears it", function()
@@ -9070,8 +9095,15 @@ describe("the send capture ignores look verbs", function()
     expect(MAP._lastMoveDir).toBeNil()
     raiseEvent("sysDataSendRequest", "squint east")
     expect(MAP._lastMoveDir).toBeNil()
-    raiseEvent("sysDataSendRequest", "queue addclear free stand;south")
+    raiseEvent("sysDataSendRequest", "queue addclear free stand;south") -- the old raw form
     expect(MAP._lastMoveDir).toBe("south")
+    MAP._lastMoveDir = nil
+    -- The chain alias (v4.7.515): the `setalias` row carries the direction, and the queue row
+    -- that names the alias leaves it alone.
+    raiseEvent("sysDataSendRequest", "setalias lvmove stand/leap ne")
+    expect(MAP._lastMoveDir).toBe("northeast")
+    raiseEvent("sysDataSendRequest", "queue addclear free lvmove")
+    expect(MAP._lastMoveDir).toBe("northeast")
     MAP._lastMoveDir = nil
   end)
 end)
@@ -10539,7 +10571,7 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
     with(function(st)
       M._exploreMove("s")
       expect(#st.sent).toBe(2)
-      expect(st.sent[1]).toBe("queue addclear free stand;numb")
+      expect(st.sent[1]).toBe("queue addclear free lvmove <stand/numb>")
       expect(st.sent[2]).toBe("queue add free s")
       expect(mock.active_timers[M._explMoveT].delay).toBe(8) -- 5 + 3 for the numb's equilibrium
     end)
@@ -10563,7 +10595,7 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
         M._roomHasDenizens = function() return false end
         M._exploreMove("s")
         M._explMoveOnTimeout()
-        expect(st.sent[#st.sent]).toBe("queue addclear free stand;s")
+        expect(st.sent[#st.sent]).toBe("queue addclear free lvmove <stand/s>")
       end)
       M._roomHasDenizens = realHas
       if not ok then error(err, 0) end
@@ -10574,7 +10606,7 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
     with(function(st)
       M._exploreMove("n")
       expect(#st.sent).toBe(1)
-      expect(st.sent[1]).toBe("queue addclear free stand;n")
+      expect(st.sent[1]).toBe("queue addclear free lvmove <stand/n>")
       expect(st.asked).toBe(0)
       expect(mock.active_timers[M._explMoveT].delay).toBe(5)
     end)
@@ -10585,7 +10617,7 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
       st.answer = nil
       M._exploreMove("s")
       expect(#st.sent).toBe(1)
-      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      expect(st.sent[1]).toBe("queue addclear free lvmove <stand/s>")
       expect(st.asked).toBe(1)
     end)
   end)
@@ -10594,7 +10626,7 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
     with(function(st)
       M._exploreMove("s", true)
       expect(#st.sent).toBe(1)
-      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      expect(st.sent[1]).toBe("queue addclear free lvmove <stand/s>")
       expect(st.asked).toBe(0)
     end)
   end)
@@ -10603,12 +10635,15 @@ describe("Senseless Flurry: numb before a never-walked door (v4.7.512)", functio
     with(function(st)
       ataxiaTemp.mnemLavaPlan = { room = 300, dir = "south" }
       M._exploreMove("s")
-      expect(st.sent[1]).toBe("queue addclear free stand;s")
+      expect(st.sent[1]).toBe("queue addclear free lvmove <stand/s>")
       ataxiaTemp.mnemLavaPlan = nil
       M.explore.tacticalMove = true
       M._exploreMove("s")
-      expect(st.sent[2]).toBe("queue addclear free stand;s")
+      expect(st.sent[2]).toBe("queue addclear free lvmove <stand/s>")
       expect(st.asked).toBe(0)
     end)
   end)
 end)
+
+-- The seam above replaced the global helper: put the real one back for the files that follow.
+ataxia_queueChain = REAL_QUEUE_CHAIN
