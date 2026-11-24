@@ -42,7 +42,7 @@ if isTargeted(matches[2]) then
 	
 	if ataxiaTemp.curse ~= "breach" and ataxiaTemp.curse ~= "bleed" then
 		tarAffed(ataxiaTemp.curse)
-    if partyrelay and not ataxia.afflictions.aeon then  send("pt "..target..": "..ataxiaTemp.curse) end
+    if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon then  send("pt "..target..": "..ataxiaTemp.curse) end
 	else
 		erAff("curseward")
 	end

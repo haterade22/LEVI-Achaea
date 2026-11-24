@@ -44,6 +44,6 @@ if isTargeted(matches[2]) then
   impatiencemind = true
   tempTimer(3, [[impatiencemind = false]])
   if partyrelay then
-    send("pt "..matches[2]..": impatience",false)
+    if ataxia_partyCallAllowed(matches[2]) then send("pt "..matches[2]..": impatience",false) end
   end
 end

@@ -104,15 +104,19 @@
   - RIFTLOCK mode: Counter to RESTORE ability (anorexia + slickness + addiction lock)
   - Reads afflictions through `infernalDWC.hasAff()` (`haveAff`, the V3 tracker)
 
-### Party calls (target, battlerage, block, kill) - v4.7.516
+### Party calls (every automatic call) - v4.7.516, widened v4.7.517
 
 - **PvE calls are off.** `ataxia_partyCallAllowed(target)` (`ataxia/016_Targeting_Functions.lua`) returns
   `allowed, reason`. PvE = the target is a denizen id (`tonumber(target)` is not nil) or `ataxiaBasher.enabled`. In PvE it is
   true only with `ataxia.settings.pvePartyCalls == true` (saved; nil = off, so existing saves need no migration). PvP: always true.
+  `ataxia_partyCallAllowed(nil)` tests the basher alone (a call that names no target).
+- **The rule for new code:** every `pt` send that fires on its own (trigger, script, timer, offence routine) is written
+  `if ataxia_partyCallAllowed(<the target it names, or nil>) then send("pt ...") end`. Since v4.7.517 that is every such send:
+  target, battlerage, block, affliction, parry, tumble, lock, SLC, Deliverance, runie pile-on, truelock, snipe, Fiend, party enter/leave,
+  enemies and priority lists, fullsense (317 lines in 223 files). A suppressed call is silent.
 - **Switch:** alias `pvecalls` (toggle), `pvecalls on`, `pvecalls off` (`combat_aliases/019_PvE_Party_Calls.lua`).
-- **Guarded sends:** the target calls (`016` three sites, `combat_aliases/002_Targeting`, `genrunning/002_search_targets`, mage `006_Target_Priority`),
-  every battlerage call (`triggers/leviticus/332` x9, `333` x1) and the block call (trigger `805_Block_Exit_Call`: "You move over to block the
-  northeast exit." sends `pt Blocking Northeast`; no target, so only the basher counts as PvE). `tcal` is still the separate target-call switch.
-- **Always sent (PvP):** `pt Slain <Name>` from `401_Target_Has_Died` for our own kill of an adventurer ("You have slain Tabethys.").
-  A mob kill ("... retrieving the corpse.") does not match; another player's kill is not called.
+- **Block call:** trigger `805_Block_Exit_Call`: "You move over to block the northeast exit." sends `pt Blocking Northeast`; no target, so only the basher counts as PvE. `tcal` is still the separate target-call switch.
+- **Never gated (the player typed the announce, or PvP only):** aliases `037_CHASE`, `052_GO_TO_TARGET`, `088_Composition`, `089_FURY`,
+  `003_Target_Calling` messages, `locate_relay` aliases and their relay output, the chat-window send (`013_Chat_Cmd_Prompt`), and
+  `pt Slain <Name>` from `401_Target_Has_Died` (our own kill of an adventurer; a mob kill does not match; another's kill is not called).
 - Test: `src_new/tests/test_pve_party_calls.lua`. The block line is the maintainer's paste of 2026-11-24 (no `kb/` page covers blocking).

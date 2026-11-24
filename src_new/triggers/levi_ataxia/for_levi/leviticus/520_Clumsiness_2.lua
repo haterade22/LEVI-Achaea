@@ -51,5 +51,5 @@ if isTargeted(person) then
 	end
 end
 if partyrelay and not ataxia.afflictions.aeon then
-send("pt " ..target.. ": clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": clumsiness") end
 end

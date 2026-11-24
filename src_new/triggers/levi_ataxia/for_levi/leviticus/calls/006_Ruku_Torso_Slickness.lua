@@ -42,5 +42,5 @@ patterns:
 selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..matches[2].. " [RUKU: Slickness]")
  
-send("pt " ..matches[2].. ": slickness")
+if ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": slickness") end
 tarAffed("slickness")

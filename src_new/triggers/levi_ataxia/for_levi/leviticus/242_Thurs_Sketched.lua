@@ -36,5 +36,5 @@ patterns:
   type: 3
 ]]--
 
-if partyrelay then send("pt Sketched Thurisaz for " ..target.. " get ready for SHIELD BREAK")
+if partyrelay and ataxia_partyCallAllowed(target) then send("pt Sketched Thurisaz for " ..target.. " get ready for SHIELD BREAK")
 end

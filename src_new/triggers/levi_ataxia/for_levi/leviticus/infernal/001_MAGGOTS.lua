@@ -42,6 +42,6 @@ if isTargeted(matches[2]) then
   -- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
   if tarAffedConfirmed then tarAffedConfirmed(matches[3]) end
    confirmAffV2(matches[3])
- if partyrelay then send("pt "..target..": "..matches[3])
+ if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..matches[3])
       end
 end

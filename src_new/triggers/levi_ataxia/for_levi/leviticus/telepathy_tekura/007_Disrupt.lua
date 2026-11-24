@@ -45,6 +45,6 @@ if isTargeted(matches[2]) then
   -- was not restarted by a re-disrupt, so the first one's clock erased the second.
   ataxia_tarAffTimed("disrupted", 10)
   if partyrelay then
-    send("pt disrupt on "..matches[2],false)
+    if ataxia_partyCallAllowed(matches[2]) then send("pt disrupt on "..matches[2],false) end
   end  
 end

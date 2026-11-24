@@ -42,7 +42,7 @@ if target == matches[2] then
   if wieldweapons == "morningstars" then
       if not tAffs.unblind then
         tarAffed("unblind")
-        if partyrelay then send("pt "..target..": unblind") end
+        if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": unblind") end
       end
       if tAffs.prone then
        tarAffed("unblind")
@@ -54,8 +54,8 @@ if target == matches[2] then
         ataxiaTemp.fractures.skullfractures = math.min(7, ataxiaTemp.fractures.skullfractures + 1)
          twohanded_headHit()
         end
-         if partyrelay and not ataxia.afflictions.aeon  then send("pt "..target..": prone") end
-         if partyrelay and not ataxia.afflictions.aeon  then send("pt "..target..": unblind " ..ataxiaTemp.fractures.skullfractures.. " skullfractures") end
+         if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon  then send("pt "..target..": prone") end
+         if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon  then send("pt "..target..": unblind " ..ataxiaTemp.fractures.skullfractures.. " skullfractures") end
       end
   end
 end

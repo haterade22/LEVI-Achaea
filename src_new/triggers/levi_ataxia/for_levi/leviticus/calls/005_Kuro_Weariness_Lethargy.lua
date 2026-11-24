@@ -43,9 +43,9 @@ selectCurrentLine() fg("a_yellow") bg("black")
 replace("" ..matches[3].. " [KURO: Weariness | Lethargic]")
  
 if tAffs.weariness then
-        	send("pt " ..matches[3].. ": lethargy")
+        	if ataxia_partyCallAllowed(matches[3]) then send("pt " ..matches[3].. ": lethargy") end
 			tarAffed("lethargy")
 elseif not tAffs.weariness then
-  			send("pt " ..matches[3].. ": weariness")
+  			if ataxia_partyCallAllowed(matches[3]) then send("pt " ..matches[3].. ": weariness") end
 			tarAffed("weariness")
 end

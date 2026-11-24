@@ -36,5 +36,5 @@ patterns:
 ]]--
 
 if partyrelay and not ataxia.afflictions.aeon then
-send("pt {" ..matches[2].. "}: [" ..matches[3].."]")
+if ataxia_partyCallAllowed(matches[2]) then send("pt {" ..matches[2].. "}: [" ..matches[3].."]") end
 end

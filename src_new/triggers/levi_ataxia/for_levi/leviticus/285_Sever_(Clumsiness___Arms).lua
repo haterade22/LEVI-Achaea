@@ -37,15 +37,15 @@ patterns:
 
 
 if tprepare == "disruption" then
-send("pt " ..target..": Clumsiness Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness Paralysis") end
 elseif tprepare == "laceration" then
-send("pt " ..target..": Clumsiness Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness Haemophilia") end
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Clumsiness Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness Clumsiness") end
 elseif tprepare == "rattle" then
-send("pt " ..target..": Clumsiness Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness Epilepsy") end
 elseif tprepare == "vapours" then
-send("pt " ..target..": Clumsiness Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness Asthma") end
 else
-send("pt " ..target..": Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Clumsiness") end
 end

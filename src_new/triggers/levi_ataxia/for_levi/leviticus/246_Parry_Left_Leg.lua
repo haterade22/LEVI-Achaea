@@ -40,7 +40,7 @@ patterns:
 tparrying = "left leg"
 
 
-send("pt " ..target..": Parrying " ..tparrying)
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Parrying " ..tparrying) end
 Deadeyes1 = nil
 
 

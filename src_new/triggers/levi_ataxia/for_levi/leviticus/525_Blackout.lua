@@ -51,7 +51,7 @@ if isTargeted(person) then
 			-- belongs here. It used to go out after every lightsteal, standing or not, on anyone,
 			-- naming the global target instead of the person struck.
 			if partyrelay and not ataxia.afflictions.aeon then
-				send("pt "..person..": blackout")
+				if ataxia_partyCallAllowed(person) then send("pt "..person..": blackout") end
 			end
 		end
 		send("contemplate "..target,false)

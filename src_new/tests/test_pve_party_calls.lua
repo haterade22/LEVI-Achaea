@@ -150,6 +150,48 @@ local okRun, err = pcall(function()
       reset(78823, true, true); block("You move over to block the northeast exit.")
       expect(sent[1]).toBe("pt Blocking Northeast")
     end)
+    -- v4.7.517: every automatic call follows the same rule. Each case runs the real trigger body.
+    local function ptSent()
+      local out = {}
+      for _, s in ipairs(sent) do if s:match("^pt ") then out[#out + 1] = s end end
+      return out
+    end
+    tarAffed = function() end
+    ataxiaNDB = { players = { Saibel = { city = "Mhaldor" }, ["78823"] = { city = "Mhaldor" } } }
+
+    local CASES = {
+      { name = "197 parry call", file = "197_Morningstar_Parry_Left_Leg.lua",
+        m = function(t) return { "x", t } end, say = "pt %s: PARRYING left leg" },
+      { name = "230 smash low call", file = "230_Smash_low.lua",
+        m = function(t) return { "x", t, t } end, say = "pt %s: clumsiness" },
+      { name = "277 flying call", file = "277_Fly.lua",
+        m = function(t) return { "x", t } end, say = "pt %s: Flying!" },
+    }
+    for _, c in ipairs(CASES) do
+      local fn = body(T .. c.file)
+      local function run(tgt, basher, switch)
+        reset(tgt, basher, switch)
+        matches = c.m(tgt)
+        fn()
+        return ptSent()
+      end
+      it(c.name .. ": a denizen id is silent, a player is called, the switch turns it on", function()
+        expect(#run("78823")).toBe(0)
+        expect(#run("Saibel", true)).toBe(0)
+        expect(run("Saibel")[1]).toBe(c.say:format("Saibel"))
+        expect(run("78823", false, true)[1]).toBe(c.say:format("78823"))
+      end)
+    end
+
+    it("128 party enter: names no target, so only the basher silences it", function()
+      local fn = body(T .. "128_PARTY_ENTER.lua")
+      reset("Saibel", true); matches = { "x", "Bob" }; fn()
+      expect(#ptSent()).toBe(0)
+      reset("Saibel", true, true); matches = { "x", "Bob" }; fn()
+      expect(ptSent()[1]).toBe("pt Bob has ENTERED my area !!!")
+      reset(78823); matches = { "x", "Bob" }; fn()
+      expect(ptSent()[1]).toBe("pt Bob has ENTERED my area !!!")
+    end)
   end)
 end)
 

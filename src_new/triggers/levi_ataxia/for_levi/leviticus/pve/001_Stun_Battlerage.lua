@@ -35,7 +35,7 @@ patterns:
   type: 1
 ]]--
 
-send("pt I just gave battlerage STUN to " ..matches[2])
+if ataxia_partyCallAllowed(matches[2]) then send("pt I just gave battlerage STUN to " ..matches[2]) end
 
 selectString(line, 1)
 setBold(true)

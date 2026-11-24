@@ -43,6 +43,6 @@ if isTargeted(matches[2]) then
   selectCurrentLine() fg("a_yellow") bg("black")
   replace("" ..matches[2].. " [SPINKICK]")
   if partyrelay and not ataxia.afflictions.aeon then
-    send("pt " ..matches[2].. ": Spinkicked! A lot of Damage")
+    if ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": Spinkicked! A lot of Damage") end
   end
 end

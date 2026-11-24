@@ -51,4 +51,4 @@ if isTargeted(person) then
 	end
 end
 
-send("pt " ..target.. ": weariness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": weariness") end

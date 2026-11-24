@@ -41,6 +41,6 @@ patterns:
 if isTargeted(matches[2]) then
 		tarAffed("hallucinations")
   if not ataxia.afflictions.aeon and partyrelay then
-  send("pt " ..target..": hallucinations")
+  if ataxia_partyCallAllowed(target) then send("pt " ..target..": hallucinations") end
 end
 end

@@ -138,7 +138,7 @@ function dslPartyRelay(affStr)
     local parts = {}
     if ataxiaTemp.pendingPtAff then table.insert(parts, ataxiaTemp.pendingPtAff) end
     table.insert(parts, affStr)
-    send("pt " .. target .. ": " .. table.concat(parts, " "))
+    if ataxia_partyCallAllowed(target) then send("pt " .. target .. ": " .. table.concat(parts, " ")) end
     ataxiaTemp.pendingPtAff = nil
   end
 end

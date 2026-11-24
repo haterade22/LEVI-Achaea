@@ -58,5 +58,5 @@ if isTargeted(person) then
 end
 
 if partyrelay and not ataxia.afflictions.aeon then
-send("pt " ..target.. ": asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": asthma") end
 end

@@ -41,7 +41,7 @@ patterns:
 
 if isTargeted(matches[2]) then
 	tarAffed("sensitivity")
-     if partyrelay then send("pt "..target..": sensitivity")
+     if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": sensitivity")
       end
 end
 

@@ -64,7 +64,7 @@ if gmcp.Char.Status.class == "Runewarden" then
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()
-       if partyrelay then send("pt "..target..": "..affstruck)
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
       end
     end
   end
@@ -78,7 +78,7 @@ if gmcp.Char.Status.class == "Infernal" then
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()
-       if partyrelay then send("pt "..target..": "..affstruck)
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
          end
 		    end
 	   end

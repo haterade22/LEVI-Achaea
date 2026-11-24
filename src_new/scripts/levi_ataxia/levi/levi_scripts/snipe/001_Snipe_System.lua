@@ -182,7 +182,7 @@ function snipe.onSuccess(hitTarget)
 
     -- Party callout
     if partyrelay and not ataxia.afflictions.aeon then
-        send("pt Shot " .. tgt .. " " .. dirStr)
+        if ataxia_partyCallAllowed(tgt) then send("pt Shot " .. tgt .. " " .. dirStr) end
     end
 
     snipe.abort()

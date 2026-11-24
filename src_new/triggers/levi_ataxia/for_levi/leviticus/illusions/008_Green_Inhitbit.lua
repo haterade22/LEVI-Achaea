@@ -37,6 +37,6 @@ patterns:
   type: 0
 ]]--
 
-send("pt Inhibt delivered to the fat slut " ..matches[2]..  " It will not heal!")
+if ataxia_partyCallAllowed(matches[2]) then send("pt Inhibt delivered to the fat slut " ..matches[2]..  " It will not heal!") end
 
 

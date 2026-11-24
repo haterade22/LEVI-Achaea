@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-24 - v4.7.517: Every automatic party call follows pvecalls in PvE
+
+v4.7.516 gated only the target, battlerage and block calls. The maintainer: "put the other PvE party calls under pvecalls too". Every `pt` send that a trigger, script, timer or offence routine makes now asks `ataxia_partyCallAllowed(<the target it names>)` (`ataxia/016`): a PvE call (denizen id target, or the basher running) goes out only with `pvecalls` on; a call that names a player while the basher is off is PvP and is sent as before. A suppressed call is silent. Message text is unchanged.
+
+**Guarded: 317 send lines in 223 files** (on top of the 16 of v4.7.516). Affliction, parry, tumble, fly, shield-down and limb calls in about 210 triggers under `triggers/leviticus` (venom and tekura and shaman and snb and staffcast folders, Smash/Puncture/Sever, the 197-208 and 245-253 parry triggers, Deliverance), `017_Affliction_Management`, `can(x)/003_Lock_breakers` (lock calls), `self_limb_tracking/004` (SLC), `003_Queueing_Related` (Deliverance), DWB runie pile-on, shaman truelock, magi offence, shikudo ledger, snipe, enemies and priority lists, Fiend, breathrain and litany warnings, fullsense relay (three prompt triggers), Doublestab, the dragon curse timer. The target they name is passed (`target`, `matches[2]`, `matches[3]`, `person`); where a call names no target (party enter and leave 128/129, Fiend, lock call, SLC, warnings, fullsense) the basher test alone decides.
+
+**Left alone on purpose (the player typed the announce):** aliases `037_CHASE`, `052_GO_TO_TARGET`, `088_Composition`, `089_FURY`, `003_Target_Calling` (its on/off message), `locate_relay/001_Locate_City` and `002_Locate_Enemies` with the locate relay output that follows them (`locate_relay/001_Locate_System`, `002_Locate_World`), the chat window send in `013_Chat_Cmd_Prompt` (the player typing in the party window), and `pt Slain` in `401` (PvP only). `telepathy/001_MIND_UNLOCK` is guarded.
+
+**Tests:** `test_pve_party_calls.lua` runs the real triggers 197, 230, 277 and 128 in PvE (silent), with the switch on, and in PvP (sent); each guard was removed in turn and a test failed.
+
+Known, not changed: `555_Dragoncurse_Set` builds its timer text with an unbalanced `")` so the delayed call never ran; it is now guarded too.
+
 ## 2026-11-24 - v4.7.516: No target or battlerage calls to party chat in PvE unless switched on; a block calls its direction to party; a kill of an adventurer calls to party
 
 Live party channel while bashing: `Target: 78823.`, `Target: 621879.`, `Battlerage - Amnesia given to 621589.` (a denizen id is the target). The maintainer asked for these to be off in PvE, with an alias.

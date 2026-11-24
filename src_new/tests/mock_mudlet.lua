@@ -382,5 +382,7 @@ function ataxia_facingClass()
 end
 
 function ataxia_shieldWaitsForLockBreak() return false end
+-- The real rule lives in ataxia/016 (test_pve_party_calls.lua loads it). Elsewhere every party call is allowed.
+function ataxia_partyCallAllowed() return true, "mock" end
 
 return M

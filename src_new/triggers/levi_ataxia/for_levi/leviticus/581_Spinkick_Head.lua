@@ -60,8 +60,8 @@ if  (ataxiaTemp.shikCombo or {}).attackone == "ruku" and (ataxiaTemp.shikCombo o
 relaydoubleruku = true else relaydoubleruku = false  end
 
 
-if partyrelay and relaydoublekuro then  send("pt "..target..": weariness lethargy")
-elseif partyrelay and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
+if partyrelay and ataxia_partyCallAllowed(target) and relaydoublekuro then  send("pt "..target..": weariness lethargy")
+elseif partyrelay and ataxia_partyCallAllowed(target) and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
 
 
 end

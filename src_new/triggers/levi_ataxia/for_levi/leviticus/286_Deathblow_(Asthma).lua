@@ -39,16 +39,16 @@ patterns:
 
 if partyrelay and not ataxia.afflictions.aeon then
 if tprepare == "disruption" then
-send("pt " ..target..": Asthma Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma Paralysis") end
 elseif tprepare == "laceration" then
-send("pt " ..target..": Asthma Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma Haemophilia") end
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Asthma Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma Clumsiness") end
 elseif tprepare == "rattle" then
-send("pt " ..target..": Asthma Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma Epilepsy") end
 elseif tprepare == "vapours" then
-send("pt " ..target..": Asthma Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma Asthma") end
 else
-send("pt " ..target..": Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Asthma") end
 end
 end

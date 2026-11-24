@@ -45,4 +45,4 @@ patterns:
   type: 1
 ]]--
 
-send("pt Ashtan destroyed monolith. Dropping Monolith;get 50 monolith from pack;drop monolith")
+if ataxia_partyCallAllowed(nil) then send("pt Ashtan destroyed monolith. Dropping Monolith;get 50 monolith from pack;drop monolith") end

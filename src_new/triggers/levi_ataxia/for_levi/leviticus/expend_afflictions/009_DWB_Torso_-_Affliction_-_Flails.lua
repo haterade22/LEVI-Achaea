@@ -40,7 +40,7 @@ patterns:
 
 if not tAffs.asthma then
   tarAffed("asthma")
-   if partyrelay then send("pt "..target..": asthma") end
+   if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": asthma") end
 
 end
 

@@ -44,5 +44,5 @@ if isTargeted(matches[2]) then
   selectCurrentLine() fg("a_yellow") bg("black")
   replace("" ..matches[2].. " [PRONE]")
   tarAffed("prone")
-  if partyrelay then send("pt " ..matches[2].. ": prone") end
+  if partyrelay and ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": prone") end
 end

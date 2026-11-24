@@ -36,5 +36,5 @@ patterns:
 ]]--
 
 if partyrelay and not ataxia.afflictions.aeon then 
-send("pt BREATHSTREAMED "..matches[2].." "..breathstreamdirection)
+if ataxia_partyCallAllowed(matches[2]) then send("pt BREATHSTREAMED "..matches[2].." "..breathstreamdirection) end
 end

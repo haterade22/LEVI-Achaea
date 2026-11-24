@@ -55,4 +55,4 @@ else
     ataxiaTemp.fractures.crackedribs = math.min(7, ataxiaTemp.fractures.crackedribs + 1)
     twohanded_torsoHit()
 end
-if partyrelay then send("pt "..target..": "..ataxiaTemp.fractures.crackedribs.. " crackedribs") end
+if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..ataxiaTemp.fractures.crackedribs.. " crackedribs") end

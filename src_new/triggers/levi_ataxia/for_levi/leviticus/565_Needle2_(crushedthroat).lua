@@ -57,7 +57,7 @@ if isTargeted(person) then
     tarAffed("crushedthroat")
     moveCursorEnd()
     lastLimbAttack = "shikNeedle"
-  if partyrelay then send("pt "..target..": crushedthroat")
+  if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": crushedthroat")
       end
 end
  

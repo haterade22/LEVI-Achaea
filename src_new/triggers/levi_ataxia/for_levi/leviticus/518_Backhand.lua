@@ -52,5 +52,5 @@ if isTargeted(person) then
 end
 
 
-send("pt " ..target.. ": stupidity dizziness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": stupidity dizziness") end
 

@@ -44,6 +44,6 @@ if isTargeted(matches[2]) then
   battered = true
   tempTimer(15, [[battered = false]])
   if partyrelay then
-    send("pt "..matches[2]..": stupidity epilepsy dizziness")
+    if ataxia_partyCallAllowed(matches[2]) then send("pt "..matches[2]..": stupidity epilepsy dizziness") end
   end
 end

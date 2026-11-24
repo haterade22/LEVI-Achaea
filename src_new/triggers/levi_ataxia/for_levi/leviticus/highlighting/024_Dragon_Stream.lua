@@ -40,4 +40,4 @@ setBold(true)
 fg("DodgerBlue")
 deselect()
 resetFormat()
-send("pt " ..matches[2].. ": BREATHSTREAMED " ..dsdir) 
+if ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": BREATHSTREAMED " ..dsdir) end

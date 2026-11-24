@@ -44,4 +44,4 @@ if matches[2] == target then
   
    end
 
-   send("pt " ..target.. ": stupidity")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": stupidity") end

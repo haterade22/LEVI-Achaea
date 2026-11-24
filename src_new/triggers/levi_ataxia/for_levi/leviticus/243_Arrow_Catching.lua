@@ -36,5 +36,5 @@ patterns:
   type: 1
 ]]--
 
-if partyrelay then send("pt " ..target.. " is ARROWCATCHING!!!")
+if partyrelay and ataxia_partyCallAllowed(target) then send("pt " ..target.. " is ARROWCATCHING!!!")
 end

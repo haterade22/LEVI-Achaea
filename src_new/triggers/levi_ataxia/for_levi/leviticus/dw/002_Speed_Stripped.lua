@@ -37,4 +37,4 @@ patterns:
 
 tspeed = false
 tempTimer(5, [[tspeed = true]])
-send("pt " ..target.. ": SPEED STRIPPED")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": SPEED STRIPPED") end

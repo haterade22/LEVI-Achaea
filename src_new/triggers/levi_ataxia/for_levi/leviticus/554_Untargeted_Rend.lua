@@ -43,6 +43,6 @@ if isTargeted(matches[2]) then
    local affstruck = envenomList[1]
 
 	table.remove(envenomList, 1)
-  if partyrelay then send("pt "..target..": "..affstruck)
+  if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
   end
 end

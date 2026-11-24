@@ -43,8 +43,8 @@ if isTargeted(matches[2]) then
 	tarAffed("justice")
 	tarAffed("retribution")
 	local venomName = (envenomList and envenomList[1]) or "unknown"
-	if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " retribution justice") end
-	if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution justice") end
+	if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " retribution justice") end
+	if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution justice") end
 end
 
 		

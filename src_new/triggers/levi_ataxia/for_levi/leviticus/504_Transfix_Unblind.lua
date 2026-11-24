@@ -37,7 +37,7 @@ patterns:
   type: 1
 ]]--
 
-send("pt " ..target..": Unblind")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unblind") end
 
 erAff("unblind")
 

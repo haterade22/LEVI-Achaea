@@ -43,4 +43,4 @@ patterns:
 
 tparrying = "head"
 ataxiaTemp.parriedLimb = "head"
-send("pt " ..target.. ": PARRYING " ..tparrying)
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": PARRYING " ..tparrying) end

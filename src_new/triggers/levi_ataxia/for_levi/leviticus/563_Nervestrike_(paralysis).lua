@@ -57,7 +57,7 @@ if isTargeted(person) then
   tarAffed("paralysis")
   moveCursorEnd()
   lastLimbAttack = "shikNervestrike"
- if partyrelay then send("pt "..target..": paralysis")
+ if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": paralysis")
       end
 end
 if  (ataxiaTemp.shikCombo or {}).attackone == "kuro" and (ataxiaTemp.shikCombo or {}).attacktwo == "kuro" then
@@ -66,8 +66,8 @@ if  (ataxiaTemp.shikCombo or {}).attackone == "ruku" and (ataxiaTemp.shikCombo o
 relaydoubleruku = true else relaydoubleruku = false  end
 
 
-if partyrelay and relaydoublekuro then  send("pt "..target..": weariness lethargy")
-elseif partyrelay and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
+if partyrelay and ataxia_partyCallAllowed(target) and relaydoublekuro then  send("pt "..target..": weariness lethargy")
+elseif partyrelay and ataxia_partyCallAllowed(target) and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
 
 
 end

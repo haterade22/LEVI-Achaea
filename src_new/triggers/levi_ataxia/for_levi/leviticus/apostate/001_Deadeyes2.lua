@@ -77,5 +77,5 @@ erAff("curseward")
 if matches[2] == "sleep" and tAffs.hypersomnia and tarInsomnia == true then tarInsomnia = tempTimer(10, [[tarInsomnia = true; tarInsomnia = false]]) end
 
 
-if partyrelay and not ataxia.afflictions.aeon and matches[2] ~= "sicken" then send("pt "..target..": "..matches[2]) elseif partyrelay and not ataxia.afflictions.aeon and matches[2] == "sicken" then send("pt "..target..": manaleech")
+if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon and matches[2] ~= "sicken" then send("pt "..target..": "..matches[2]) elseif partyrelay and not ataxia.afflictions.aeon and matches[2] == "sicken" then send("pt "..target..": manaleech")
       end

@@ -58,7 +58,7 @@ if isTargeted(matches[2]) then
 	dir_left = "fly"
 	erAff("paralysis")
 	erAff("vertigo")
-  send("pt " ..target.. ": Flying!")
+  if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": Flying!") end
   if gmcp.Char.Status.class == "Runewarden" and rtiwaz == true then
     send("queue addclear free empower tiwaz " ..target)
   else

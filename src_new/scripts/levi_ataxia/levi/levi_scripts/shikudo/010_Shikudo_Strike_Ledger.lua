@@ -247,7 +247,7 @@ function shikudoLedger.rukuArm(side)
   cur.recorded = true
   local clumsy = haveAff("clumsiness")
   if partyrelay then
-    send("pt " .. target .. ": " .. (clumsy and "healthleech clumsiness" or "clumsiness"))
+    if ataxia_partyCallAllowed(target) then send("pt " .. target .. ": " .. (clumsy and "healthleech clumsiness" or "clumsiness")) end
   end
   if clumsy then
     tarAffed("healthleech")

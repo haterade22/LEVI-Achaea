@@ -45,5 +45,5 @@ if isTargeted(matches[2]) then
   selectCurrentLine() fg("a_yellow") bg("black")
   replace("" ..matches[2].. " [Jinzuku: Addiction]")
   tarAffed("addiction")
-  if partyrelay then send("pt " ..matches[2].. ": addiction") end
+  if partyrelay and ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": addiction") end
 end

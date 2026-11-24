@@ -135,7 +135,7 @@ magi.offense.weAreMagi = weAreMagi
 function magi.offense.ptRelay(msg)
   if not weAreMagi() then return end
   if magi.offense.state.partyrelay and partyrelay and not ataxia.afflictions.aeon then
-    send("pt " .. msg, false)
+    if ataxia_partyCallAllowed(nil) then send("pt " .. msg, false) end
   end
 end
 

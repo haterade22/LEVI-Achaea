@@ -97,7 +97,7 @@ local function handlePartyCallout(limb, threshold)
 	if threshold == "critical" then
 		if not reactions.partyCalloutSent[limb] then
 			if partyrelay and (not ataxia or not ataxia.afflictions or not ataxia.afflictions.aeon) then
-				send("pt [SLC] My " .. limb .. " is 1 hit from break!")
+				if ataxia_partyCallAllowed(nil) then send("pt [SLC] My " .. limb .. " is 1 hit from break!") end
 				reactions.partyCalloutSent[limb] = true
 			end
 		end

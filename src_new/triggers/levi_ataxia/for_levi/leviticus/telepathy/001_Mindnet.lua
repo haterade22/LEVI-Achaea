@@ -62,7 +62,7 @@ local area = gmcp.Room.Info.area
 
 -- Who the party hears about: ataxia_mindnetTellParty (Raid Mode Things)
 if ataxia_mindnetTellParty(matches[2], area) then
-  send("pt "..matches[2].." "..(matches[3] == "entered" and "IN!" or "OUT!"))
+  if ataxia_partyCallAllowed(matches[2]) then send("pt "..matches[2].." "..(matches[3] == "entered" and "IN!" or "OUT!")) end
 end
 
 -- Check if raid mode is enabled

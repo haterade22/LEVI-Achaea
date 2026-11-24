@@ -47,7 +47,7 @@ if isTargeted(matches[4]) then
     tarAffed(ataxiaTemp.jinxone)
   elseif ataxiaTemp.jinxone ~= "bleed" and ataxiaTemp.jinxtwo ~= "bleed" then
     tarAffed(ataxiaTemp.jinxone, ataxiaTemp.jinxtwo)
-   if partyrelay then send("pt "..target..": "..ataxiaTemp.jinxone.." "..ataxiaTemp.jinxtwo) end
+   if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..ataxiaTemp.jinxone.." "..ataxiaTemp.jinxtwo) end
   end
 	
 	if ataxiaTemp.jinxone ~= "breach" and not tzantzacurse and ataxiaTemp.jinxone ~= "tzantza" and ataxiaTemp.jinxtwo ~= "tzantza" then

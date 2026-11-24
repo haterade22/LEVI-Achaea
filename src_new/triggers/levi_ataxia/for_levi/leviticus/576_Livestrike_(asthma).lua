@@ -59,7 +59,7 @@ if isTargeted(person) then
     lastLimbAttack = "shikLivestrike"
 
 end
-  if partyrelay then send("pt "..target..": asthma")
+  if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": asthma")
       end
 
 local damage = tonumber(multimatches[3][2])

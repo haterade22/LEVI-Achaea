@@ -42,5 +42,5 @@ patterns:
 
 if isTargeted(matches[2]) then
 	tarAffed("aeon")
-  send("pt "..target:upper().." AEONED!")
+  if ataxia_partyCallAllowed(target) then send("pt "..target:upper().." AEONED!") end
 end

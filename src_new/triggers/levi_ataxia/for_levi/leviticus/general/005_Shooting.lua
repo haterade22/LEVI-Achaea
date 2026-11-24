@@ -37,4 +37,4 @@ patterns:
   type: 3
 ]]--
 
-send("pt LoS at " ..matches[2].. " - Direct Hit") 
+if ataxia_partyCallAllowed(matches[2]) then send("pt LoS at " ..matches[2].. " - Direct Hit") end

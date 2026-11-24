@@ -62,8 +62,8 @@ if isTargeted(person) then
     lastLimbAttack = "shikHiru"
 
 end
-if partyrelay and tAffs.prone then send("pt "..target..": dizziness confusion")
-elseif partyrelay and not tAffs.prone then send("pt "..target..": dizziness")
+if partyrelay and ataxia_partyCallAllowed(target) and tAffs.prone then send("pt "..target..": dizziness confusion")
+elseif partyrelay and ataxia_partyCallAllowed(target) and not tAffs.prone then send("pt "..target..": dizziness")
       end
 local damage = tonumber(multimatches[3][2])
    ataxiaTables.limbData.shikHiru = damage

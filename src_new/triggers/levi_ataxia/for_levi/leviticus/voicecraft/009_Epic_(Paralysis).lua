@@ -46,4 +46,4 @@ if matches[2] == target then
   
    end
 
-   send("pt " ..target.. ": paralysis")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": paralysis") end

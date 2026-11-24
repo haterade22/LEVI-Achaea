@@ -44,20 +44,20 @@ if isTargeted(matches[2]) then
 
     if not haveAff("depression") then
         tarAffed("depression")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " depression")
-        elseif partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop depression") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " depression")
+        elseif partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop depression") end
     elseif not haveAff("nausea") then
         tarAffed("nausea")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " nausea")
-        elseif partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop nausea") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " nausea")
+        elseif partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop nausea") end
     elseif not haveAff("hypochondria") then
         tarAffed("hypochondria")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " hypochondria")
-        elseif partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop hypochondria") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " hypochondria")
+        elseif partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop hypochondria") end
     else
         tarAffed("depression", "anorexia", "masochism")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " depression anorexia masochism")
-        elseif partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop depression anorexia masochism") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " depression anorexia masochism")
+        elseif partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop depression anorexia masochism") end
     end
 end
 

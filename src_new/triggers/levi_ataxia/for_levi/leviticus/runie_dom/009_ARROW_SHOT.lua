@@ -36,5 +36,5 @@ patterns:
   type: 1
 ]]--
 
-send("pt SHOT "..matches[2])
+if ataxia_partyCallAllowed(matches[2]) then send("pt SHOT "..matches[2]) end
 aimed = false

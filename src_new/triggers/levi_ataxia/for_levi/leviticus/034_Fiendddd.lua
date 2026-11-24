@@ -35,5 +35,5 @@ patterns:
   type: 3
 ]]--
 
-send("pt It summoned FIEND")
-send("pt It summoned FIEND")
+if ataxia_partyCallAllowed(nil) then send("pt It summoned FIEND") end
+if ataxia_partyCallAllowed(nil) then send("pt It summoned FIEND") end

@@ -47,6 +47,6 @@ if isTargeted(matches[2]) then
   tarAffed("anorexia")
   tarAffed("stuttering")
   if partyrelay then
-    send("pt " ..matches[2].. ": anorexia stuttering" .. (haveAff("prone") and " (stunned)" or ""))
+    if ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": anorexia stuttering" .. (haveAff("prone") and " (stunned)" or "")) end
   end
 end

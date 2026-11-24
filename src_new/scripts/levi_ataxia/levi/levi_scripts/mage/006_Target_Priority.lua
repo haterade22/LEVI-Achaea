@@ -172,7 +172,7 @@ function tprio.pt()
     ataxiaEcho("Priority list is empty, nothing to announce.")
     return
   end
-  send("pt Targets: " .. table.concat(tprio.list, ", "))
+  if ataxia_partyCallAllowed(nil) then send("pt Targets: " .. table.concat(tprio.list, ", ")) end
 end
 
 ---------------------------------------------------

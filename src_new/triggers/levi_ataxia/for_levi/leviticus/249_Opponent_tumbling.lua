@@ -41,7 +41,7 @@ if matches[2]:upper() == target:upper() then
 end
 
 if matches[2] == target then
-  if partyrelay then send("pt " ..target.. ": tumbling " ..matches[3])
+  if partyrelay and ataxia_partyCallAllowed(target) then send("pt " ..target.. ": tumbling " ..matches[3])
   end
 end 
 

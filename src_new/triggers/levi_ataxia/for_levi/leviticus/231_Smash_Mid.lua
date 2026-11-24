@@ -39,5 +39,5 @@ patterns:
 
 tarAffed("paralysis")
 
-send("pt " ..target..": paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": paralysis") end
 

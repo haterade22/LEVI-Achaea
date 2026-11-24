@@ -45,5 +45,5 @@ if matches[2] == target then
   
    end
 
-   send("pt " ..target.. ": epilepsy")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": epilepsy") end
 

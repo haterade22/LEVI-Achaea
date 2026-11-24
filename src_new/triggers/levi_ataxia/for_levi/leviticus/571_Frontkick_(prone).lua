@@ -60,7 +60,7 @@ if isTargeted(person) then
     tarAffed("prone")
     moveCursorEnd()
       lastLimbAttack = "shikFrontkick"
- if partyrelay then send("pt "..target..": prone")
+ if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": prone")
       end
 if  (ataxiaTemp.shikCombo or {}).attackone == "kuro" and (ataxiaTemp.shikCombo or {}).attacktwo == "kuro" then
 relaydoublekuro = true else relaydoublekuro = false  end
@@ -68,8 +68,8 @@ if  (ataxiaTemp.shikCombo or {}).attackone == "ruku" and (ataxiaTemp.shikCombo o
 relaydoubleruku = true else relaydoubleruku = false  end
 
 
-if partyrelay and relaydoublekuro then  send("pt "..target..": weariness lethargy")
-elseif partyrelay and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
+if partyrelay and ataxia_partyCallAllowed(target) and relaydoublekuro then  send("pt "..target..": weariness lethargy")
+elseif partyrelay and ataxia_partyCallAllowed(target) and relaydoubleruku then  send("pt "..target..": clumsiness healthleech")
 
 
 end

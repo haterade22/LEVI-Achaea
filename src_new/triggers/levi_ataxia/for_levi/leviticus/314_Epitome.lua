@@ -45,7 +45,7 @@ resetFormat()
 ataxia_boxEcho("EPITOMISE - " .. epitomiser:upper() .. " - SWITCH TARGETS (6s)", "NavajoWhite:a_darkmagenta")
 
 -- Alert party
-send("pt " .. epitomiser .. " used EPITOMISE - switch targets for 6 seconds!")
+if ataxia_partyCallAllowed(target) then send("pt " .. epitomiser .. " used EPITOMISE - switch targets for 6 seconds!") end
 
 -- Set timer for when Epitomise ends
 if ataxiaTemp.epitomiseTimer then

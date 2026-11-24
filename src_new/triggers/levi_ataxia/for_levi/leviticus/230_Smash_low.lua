@@ -40,5 +40,5 @@ patterns:
 tarAffed("clumsiness")
 
 
-send("pt " ..target..": clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": clumsiness") end
 

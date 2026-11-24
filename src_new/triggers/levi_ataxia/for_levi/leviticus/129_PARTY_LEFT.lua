@@ -35,4 +35,4 @@ patterns:
   type: 1
 ]]--
 
-send("pt "..matches[2].." has LEFT my area !!!")
+if ataxia_partyCallAllowed(nil) then send("pt "..matches[2].." has LEFT my area !!!") end

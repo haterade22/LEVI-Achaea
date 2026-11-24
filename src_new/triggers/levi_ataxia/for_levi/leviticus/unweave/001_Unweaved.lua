@@ -53,39 +53,39 @@ end
 
 
 if pprepare == "disruption" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavemind Paralysis") end
 elseif  pprepare == "laceration" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavemind Haemophilia") end
 elseif  pprepare == "dazzle" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavemind Clumsiness") end
 elseif  pprepare == "rattle" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavemind Epilepsy") end
 elseif  pprepare == "vapours" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavemind Asthma") end
 end
 
 if  pprepare == "disruption" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavespirit Paralysis") end
 elseif  pprepare == "laceration" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavespirit Haemophilia") end
 elseif  pprepare == "dazzle" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavespirit Clumsiness") end
 elseif  pprepare == "rattle" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavespirit Epilepsy") end
 elseif  pprepare == "vapours" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavespirit Asthma") end
 end
 
 if  pprepare == "disruption" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavebody Paralysis") end
 elseif  pprepare == "laceration" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavebody Haemophilia") end
 elseif  pprepare == "dazzle" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavebody Clumsiness") end
 elseif  pprepare == "rattle" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavebody Epilepsy") end
 elseif  pprepare == "vapours" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Unweavebody Asthma") end
 end
 
 

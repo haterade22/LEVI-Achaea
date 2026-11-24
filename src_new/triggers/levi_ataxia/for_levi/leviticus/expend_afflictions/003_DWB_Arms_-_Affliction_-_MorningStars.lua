@@ -43,7 +43,7 @@ if target == matches[3] then
     if matches[2] == "right" then
       if not tAffs.weariness then
         tarAffed("weariness")
-      if partyrelay then send("pt "..target..": weariness") end
+      if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": weariness") end
    
       elseif tAffs.weariness then
        
@@ -55,12 +55,12 @@ if target == matches[3] then
          ataxiaTemp.fractures.wristfractures =  ataxiaTemp.fractures.wristfractures + 1
          twohanded_armsHit()
         end
-      if partyrelay then send("pt "..target..": weariness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+      if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": weariness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
       end
     elseif matches[2] == "left" then
       if not tAffs.clumsiness then
         tarAffed("clumsiness")
-      if partyrelay then send("pt "..target..": clumsiness") end
+      if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": clumsiness") end
        
       elseif tAffs.clumsiness then
     
@@ -71,7 +71,7 @@ if target == matches[3] then
           ataxiaTemp.fractures.wristfractures =  ataxiaTemp.fractures.wristfractures + 1
           twohanded_armsHit()
         end
-          if partyrelay then send("pt "..target..": clumsiness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+          if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": clumsiness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
       end 
     end
   end

@@ -46,6 +46,6 @@ if matches[2] == target then
 
    end
 
-   send("pt " ..target.. ": impatience")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": impatience") end
 
 --end

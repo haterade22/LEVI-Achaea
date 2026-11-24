@@ -94,7 +94,7 @@ if partyrelay then
   if deadeye_timer then killTimer(deadeye_timer) end
   deadeye_timer = tempTimer(0, function()
     if deadeye_buffer and #deadeye_buffer > 0 then
-      send("pt " .. target .. ": " .. table.concat(deadeye_buffer, " "))
+      if ataxia_partyCallAllowed(target) then send("pt " .. target .. ": " .. table.concat(deadeye_buffer, " ")) end
       deadeye_buffer = {}
     end
     deadeye_timer = nil

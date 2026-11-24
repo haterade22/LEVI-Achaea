@@ -29,6 +29,6 @@ function SetPriorityTargets(targetlist)
     end
   end
   
-  send("pt Priority target list: "..reportstring)
+  if ataxia_partyCallAllowed(target) then send("pt Priority target list: "..reportstring) end
   
 end

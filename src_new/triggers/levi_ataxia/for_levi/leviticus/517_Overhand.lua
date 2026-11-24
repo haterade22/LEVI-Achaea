@@ -61,8 +61,8 @@ if isTargeted(person) then
 end
 
 if tAffs.prone then
-send("pt " ..target.. ": impatience")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": impatience") end
 else 
-send("pt " ..target.. ": prone stupidity")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": prone stupidity") end
 end
 

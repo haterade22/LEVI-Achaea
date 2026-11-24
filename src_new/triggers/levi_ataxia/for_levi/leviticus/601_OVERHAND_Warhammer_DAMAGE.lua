@@ -58,7 +58,7 @@ if isTargeted(person) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])
      local affstruck = envenomList[1]
-       if partyrelay then send("pt "..target..": "..affstruck)
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
       end
 			table.remove(envenomList, 1)
 			moveCursorEnd()

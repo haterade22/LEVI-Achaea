@@ -41,6 +41,6 @@ patterns:
 if isTargeted(matches[2]) then
 		tarAffed("weariness")
   if not ataxia.afflictions.aeon and partyrelay then
-  send("pt " ..target..": weariness")
+  if ataxia_partyCallAllowed(target) then send("pt " ..target..": weariness") end
 end
 end

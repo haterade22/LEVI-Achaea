@@ -44,16 +44,16 @@ if isTargeted(matches[2]) then
 
     if not haveAff("parasite") then
         tarAffed("parasite")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " parasite") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop parasite") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " parasite") end
+        if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop parasite") end
     elseif not haveAff("healthleech") then
         tarAffed("healthleech")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " healthleech") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop healthleech") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " healthleech") end
+        if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop healthleech") end
     elseif not haveAff("manaleech") then
         tarAffed("manaleech")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " manaleech") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop manaleech") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " manaleech") end
+        if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop manaleech") end
     else
         -- All three rungs were already up, so this application was the leach
         -- CAPSTONE -- the strike that claims the shadow (478 confirms it).

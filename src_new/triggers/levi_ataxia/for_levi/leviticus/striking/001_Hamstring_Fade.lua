@@ -45,6 +45,6 @@ if isTargeted(matches[2]) then
 	ataxia_tarAffFaded("hamstring")
 
 if not ataxia.afflictions.aeon and partyrelay then
-  send("pt " ..target..": Hamstring faded")
+  if ataxia_partyCallAllowed(target) then send("pt " ..target..": Hamstring faded") end
 end
 end

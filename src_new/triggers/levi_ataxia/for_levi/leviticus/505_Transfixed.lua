@@ -37,7 +37,7 @@ patterns:
   type: 1
 ]]--
 
-send("pt " ..target..": Transfixed")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Transfixed") end
 tarAffed("transfix")
 
 if gmcp.Char.Status.class == "Magi" then

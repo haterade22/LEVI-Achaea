@@ -46,7 +46,7 @@ Deadeyes1 = nil
 svenom1 = ""
 
 tparrying = "right leg"
-send("pt " ..target.. ": PARRYING " ..tparrying)
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": PARRYING " ..tparrying) end
 erAff("nausea")
 tAffs.nausea = false
 

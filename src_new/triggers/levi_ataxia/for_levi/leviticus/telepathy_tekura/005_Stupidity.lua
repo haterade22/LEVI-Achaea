@@ -46,6 +46,6 @@ if isTargeted(matches[2]) then
 	-- NOTHING and Mind Stupidity was invisible to the tracker.
 	tarAffed("stupidity")
   if ataxia.settings.raid.enabled then
-    send("pt stupidity on "..matches[2],false)
+    if ataxia_partyCallAllowed(matches[2]) then send("pt stupidity on "..matches[2],false) end
   end
 end

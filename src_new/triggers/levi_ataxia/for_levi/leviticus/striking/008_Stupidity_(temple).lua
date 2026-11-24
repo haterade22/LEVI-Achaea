@@ -45,6 +45,6 @@ if isTargeted(matches[2]) then
   local brokenHead = tAffs and (tAffs.damagedhead or tAffs.mangledhead)
   if brokenHead then tarAffed("dizziness") end
 if not ataxia.afflictions.aeon and partyrelay then
-  send("pt " ..target..": stupidity" .. (brokenHead and " dizziness" or ""))
+  if ataxia_partyCallAllowed(target) then send("pt " ..target..": stupidity" .. (brokenHead and " dizziness" or "")) end
 end
 end

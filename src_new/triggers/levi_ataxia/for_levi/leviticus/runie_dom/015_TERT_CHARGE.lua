@@ -46,7 +46,7 @@ if not ataxiaTemp.ignoreShield then
 if matches[2] == "inguz" then tarAffed("paralysis")
 elseif matches[2] == "sleizak" then
 tarAffed("weariness")
-send("pt " ..target.. ": nausea")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": nausea") end
 if not wearicheck then wearicheck = true
 wearicheck = tempTimer(4, [[ wearicheck = nil ]])
 

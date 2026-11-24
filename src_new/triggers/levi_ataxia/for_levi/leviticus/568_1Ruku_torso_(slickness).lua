@@ -61,7 +61,7 @@ if isTargeted(person) then
       
       if
 partyrelay then
-  send("pt "..target..": slickness")
+  if ataxia_partyCallAllowed(target) then send("pt "..target..": slickness") end
    end 
      
     end

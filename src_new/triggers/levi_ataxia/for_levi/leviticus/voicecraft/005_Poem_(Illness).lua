@@ -45,4 +45,4 @@ if matches[2] == target then
   
    end
 
-send("pt " ..target.. ": illness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": illness") end

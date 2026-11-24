@@ -48,7 +48,7 @@ if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then
 			moveCursorEnd()
 			break
 		end
-       if partyrelay then send("pt "..target..": "..smashAffs[i])
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..smashAffs[i])
       end
 	end
 end

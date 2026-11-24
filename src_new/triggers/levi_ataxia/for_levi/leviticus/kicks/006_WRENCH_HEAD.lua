@@ -53,7 +53,7 @@ if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then
    end
 
 	moveCursorEnd()
-   if partyrelay then send("pt "..target..": epilepsy")
+   if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": epilepsy")
       end
 end
 ataxiaTemp.ignoreShield = nil

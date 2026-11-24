@@ -58,7 +58,7 @@ if isTargeted(person) then
     tarAffed("addiction")
     moveCursorEnd()
     lastLimbAttack = "shikJinzuku"
-if partyrelay and not ataxia.afflictions.aeon then send("pt "..target..": addiction")
+if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon then send("pt "..target..": addiction")
       end
 end
 

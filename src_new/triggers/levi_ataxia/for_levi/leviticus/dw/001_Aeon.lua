@@ -43,4 +43,4 @@ dwaeon = false
   deselect()
   resetFormat()
   
-send("pt " ..target.. ": AEONED, hit that fucker with asthma!")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": AEONED, hit that fucker with asthma!") end

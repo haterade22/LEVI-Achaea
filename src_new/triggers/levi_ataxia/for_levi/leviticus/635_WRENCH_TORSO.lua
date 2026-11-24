@@ -41,6 +41,6 @@ if isTargeted(matches[2]) then
 	tarAffed("prone")
 	confirmAffV2("prone")
 
-	if partyrelay then send("pt "..target..": bruisedribs")
+	if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": bruisedribs")
 	end
 end

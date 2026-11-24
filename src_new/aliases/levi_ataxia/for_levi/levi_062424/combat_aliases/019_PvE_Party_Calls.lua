@@ -13,8 +13,8 @@ command: ''
 packageName: ''
 ]]--
 
--- `pvecalls` toggles, `pvecalls on|off` sets (v4.7.516). Whether our TARGET and BATTLERAGE calls
--- (and the block call) go to party chat while we hunt denizens. Off by default; PvP is not affected.
+-- `pvecalls` toggles, `pvecalls on|off` sets (v4.7.516). Whether our automatic party calls
+-- (target, battlerage, block, affliction, parry, ... every one, v4.7.517) go to party chat while we hunt denizens. Off by default; PvP is not affected.
 -- Saved as ataxia.settings.pvePartyCalls (nil = off). The rule: ataxia_partyCallAllowed (ataxia/016).
 ataxia.settings = ataxia.settings or {}
 local want = matches[2]
@@ -27,7 +27,7 @@ else
 end
 if ataxia_saveSettings then ataxia_saveSettings() end
 if ataxia.settings.pvePartyCalls then
-	ataxiaEcho("PvE party calls ON: target, battlerage and block calls go to party while bashing.")
+	ataxiaEcho("PvE party calls ON: automatic party calls go to party while bashing.")
 else
-	ataxiaEcho("PvE party calls OFF: no target, battlerage or block calls to party while bashing. PvP is unchanged.")
+	ataxiaEcho("PvE party calls OFF: no automatic party calls while bashing. PvP is unchanged.")
 end

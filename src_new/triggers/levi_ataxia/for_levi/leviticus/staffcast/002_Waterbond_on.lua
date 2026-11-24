@@ -74,7 +74,7 @@ local function bind(who)
   end
   tempTimer(bondFor, [[twaterbond = false]])
   ataxia_tarAffTimed("waterbond", bondFor)
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Waterbond") end
+  if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon then send("pt " ..target.. ": Waterbond") end
 end
 
 -- `text` is the sentence so far. Act once it names who is bound; otherwise read the next row (at

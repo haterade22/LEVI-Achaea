@@ -42,6 +42,6 @@ patterns:
 if isTargeted(matches[2]) then
 	tarAffed("impatience")
   if ataxia.settings.raid.enabled then
-    send("pt "..matches[2]..": impatience",false)
+    if ataxia_partyCallAllowed(matches[2]) then send("pt "..matches[2]..": impatience",false) end
   end
 end

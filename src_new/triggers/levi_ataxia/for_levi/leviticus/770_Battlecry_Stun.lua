@@ -37,4 +37,4 @@ patterns:
 selectCurrentLine() fg("a_yellow") bg("black")
 replace(matches[2] .. " [STUNNED+PRONE]")
 tarAffed("prone", "stun")
-send("pt " .. matches[2] .. ": Stunned Proned")
+if ataxia_partyCallAllowed(matches[2]) then send("pt " .. matches[2] .. ": Stunned Proned") end

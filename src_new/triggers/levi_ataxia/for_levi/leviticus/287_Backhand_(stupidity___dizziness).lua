@@ -36,17 +36,17 @@ patterns:
 ]]--
 
 if tprepare == "disruption" then
-send("pt " ..target..": Stupidity Dizziness Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness Paralysis") end
 elseif tprepare == "laceration" then
-send("pt " ..target..": Stupidity Dizziness Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness Haemophilia") end
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Stupidity Dizziness Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness Clumsiness") end
 elseif tprepare == "rattle" then
-send("pt " ..target..": Stupidity Dizziness Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness Epilepsy") end
 elseif tprepare == "vapours" then
-send("pt " ..target..": Stupidity Dizziness Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness Asthma") end
 else
-send("pt " ..target..": Stupidity Dizziness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Stupidity Dizziness") end
 end
 
 

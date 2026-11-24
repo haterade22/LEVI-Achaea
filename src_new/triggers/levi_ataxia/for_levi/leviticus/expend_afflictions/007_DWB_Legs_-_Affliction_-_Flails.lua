@@ -40,7 +40,7 @@ patterns:
 
 if not tAffs.clumsiness then
   tarAffed("clumsiness")
-   if partyrelay then send("pt "..target..": clumsiness") end
+   if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": clumsiness") end
    
 end
 

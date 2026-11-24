@@ -44,6 +44,6 @@ end
 
 ataxiaTemp.bloodlet = true
 tarAffed("haemophilia")
-if partyrelay then  send("pt "..target..": haemophilia") end
+if partyrelay and ataxia_partyCallAllowed(target) then  send("pt "..target..": haemophilia") end
 
 cecho(" <white>[<red>"..(tAffs.bleed or 0).."<white>]")

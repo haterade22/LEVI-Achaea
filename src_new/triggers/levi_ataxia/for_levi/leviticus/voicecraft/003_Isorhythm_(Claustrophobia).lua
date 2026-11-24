@@ -45,5 +45,5 @@ if matches[2] == target then
   
    end
 
-send("pt " ..target.. ": claustrophobia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": claustrophobia") end
 

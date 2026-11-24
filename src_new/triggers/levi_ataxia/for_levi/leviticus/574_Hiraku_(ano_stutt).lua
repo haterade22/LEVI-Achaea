@@ -61,7 +61,7 @@ if isTargeted(person) then
     lastLimbAttack = "shikHiraku"
 
 end
-if partyrelay then send("pt "..target..": anorexia stuttering")
+if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": anorexia stuttering")
       end
 local damage = tonumber(multimatches[3][2])
    ataxiaTables.limbData.shikHiraku = damage

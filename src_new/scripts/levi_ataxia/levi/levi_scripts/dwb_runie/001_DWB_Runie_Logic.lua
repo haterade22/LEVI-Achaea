@@ -631,7 +631,7 @@ function dwbRunie.buildGroupAttack()
 
   -- Execute: same as torso but with party callout
   if partyrelay and not ataxia.afflictions.aeon then
-    send("pt " .. target .. " PRONE + TORSO BROKEN - PILE ON")
+    if ataxia_partyCallAllowed(target) then send("pt " .. target .. " PRONE + TORSO BROKEN - PILE ON") end
   end
 
   -- Assault or morningstar pressure

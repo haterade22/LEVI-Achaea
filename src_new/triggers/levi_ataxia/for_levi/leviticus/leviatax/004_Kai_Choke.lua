@@ -82,5 +82,5 @@ ataxiaTemp.kaiChokeSaidAt = nowT
 if type(target) == "string" and shikudoDmg and shikudoDmg.chokeCast then shikudoDmg.chokeCast(target) end
 
 if partyrelay and target and not ataxia.afflictions.aeon and type(target) ~= "number" then
-  send("pt Kai Choked " ..target)
+  if ataxia_partyCallAllowed(target) then send("pt Kai Choked " ..target) end
 end

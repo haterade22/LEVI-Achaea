@@ -53,6 +53,6 @@ if isTargeted(matches[2]) then
   if landed then
     tarAffed("crushedthroat")
     tneedle = 100
-    if partyrelay then send("pt " ..matches[2].. ": Crushed Throat") end
+    if partyrelay and ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. ": Crushed Throat") end
   end
 end

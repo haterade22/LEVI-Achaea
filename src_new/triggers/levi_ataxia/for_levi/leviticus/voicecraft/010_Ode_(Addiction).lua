@@ -45,4 +45,4 @@ if matches[2] == target then
 
    end
 
-   send("pt " ..target.. ": addiction")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target.. ": addiction") end

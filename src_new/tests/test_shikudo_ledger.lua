@@ -155,6 +155,7 @@ local function world(opts)
     haveAff = function(a) return has[a] == true end,
     send = function(c) w.sent[#w.sent + 1] = c end,
     ataxia_isClass = function(c) return c:lower() == (opts.class or "monk") end,
+    ataxia_partyCallAllowed = function() return true end,
     getEpoch = function() return w.clock end,
     tempLineTrigger = function(from, n, fn) w.tails[#w.tails + 1] = { from = from, n = n, fn = fn } end,
     ataxiaEcho = function(s) w.echoes[#w.echoes + 1] = s end,

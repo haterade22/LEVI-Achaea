@@ -42,4 +42,4 @@ patterns:
 tarAffed("weariness")
 tarAffed("nausea")
 
-send("pt " ..target..": weariness nausea")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": weariness nausea") end

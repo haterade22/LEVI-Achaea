@@ -69,7 +69,7 @@ if isTargeted(person) then
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()
-       if partyrelay then send("pt "..target..": "..affstruck)
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
       end
     end
   end
@@ -83,7 +83,7 @@ if isTargeted(person) then
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()
-       if partyrelay then send("pt "..target..": "..affstruck)
+       if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
          end
 		    end
 	   end

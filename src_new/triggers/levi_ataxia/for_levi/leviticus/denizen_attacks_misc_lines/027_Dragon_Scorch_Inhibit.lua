@@ -67,7 +67,7 @@ if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxia
 end
 
 if ataxia and ataxia.settings and ataxia.settings.raid and ataxia.settings.raid.enabled then
-	send("pt " .. matches[2] .. ": inhibit", false)
+	if ataxia_partyCallAllowed(matches[2]) then send("pt " .. matches[2] .. ": inhibit", false) end
 end
 
 -- medium_sea_green, matching trigger 024: the same effect on the same denizen state should read

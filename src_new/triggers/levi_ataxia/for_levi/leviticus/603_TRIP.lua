@@ -40,6 +40,6 @@ patterns:
 
 if isTargeted(matches[2]) then
 	tarAffed("prone")
-     if partyrelay then send("pt "..target..": prone")
+     if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": prone")
       end
 end

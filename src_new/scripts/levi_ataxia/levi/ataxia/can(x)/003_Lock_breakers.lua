@@ -254,7 +254,7 @@ function ataxia_lockPartyCall()
 	for _, a in ipairs(LOCK_CALL_AFFS) do
 		if affed(a) then have[#have + 1] = a end
 	end
-	send("pt " .. LOCK_CALL_NAMES[stage] .. ": " .. table.concat(have, ", "), false)
+	if ataxia_partyCallAllowed(nil) then send("pt " .. LOCK_CALL_NAMES[stage] .. ": " .. table.concat(have, ", "), false) end
 end
 
 

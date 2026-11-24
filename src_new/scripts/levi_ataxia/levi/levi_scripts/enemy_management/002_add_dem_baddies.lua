@@ -32,5 +32,5 @@ function SetAndReportEnemies()
     enemystring = enemystring .. d .. ", "
     send("enemy "..d)
   end
-  send("pt Enemies"..enemystring)
+  if ataxia_partyCallAllowed(nil) then send("pt Enemies"..enemystring) end
 end

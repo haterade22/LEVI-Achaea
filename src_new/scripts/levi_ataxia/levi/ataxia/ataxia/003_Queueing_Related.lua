@@ -22,8 +22,8 @@ function combatQueue()
   --Deliverance
   if tdeliverance == true then
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt "..target.. ": Has Deliverance - DO NOT HIT - Need NEW Target")
-      send("pt "..target.. ": Has Deliverance - DO NOT HIT - Need NEW Target")
+      if ataxia_partyCallAllowed(target) then send("pt "..target.. ": Has Deliverance - DO NOT HIT - Need NEW Target") end
+      if ataxia_partyCallAllowed(target) then send("pt "..target.. ": Has Deliverance - DO NOT HIT - Need NEW Target") end
     end
   send("cq all")
   ataxiaEcho("TARGET HAS DELIVERANCE - PICKING NEW TARGET")

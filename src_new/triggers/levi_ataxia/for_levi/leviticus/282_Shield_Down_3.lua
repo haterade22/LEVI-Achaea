@@ -39,5 +39,5 @@ patterns:
 
 targshield = false
 erAff("shield")
-send("pt " ..target..": SHIELD DOWN")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": SHIELD DOWN") end
 

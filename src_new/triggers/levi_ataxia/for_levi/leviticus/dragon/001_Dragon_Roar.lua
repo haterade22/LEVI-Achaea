@@ -40,6 +40,6 @@ patterns:
 
 if not ataxia.afflictions.aeon then
   if partyrelay then
-   send("pt " ..target..": ROARED")
+   if ataxia_partyCallAllowed(target) then send("pt " ..target..": ROARED") end
   end
 end

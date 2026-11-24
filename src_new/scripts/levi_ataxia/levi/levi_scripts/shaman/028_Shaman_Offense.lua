@@ -696,7 +696,7 @@ function shamanOffense.buildAttack()
     if strategy == "finish" then
         -- Party callout
         if shamanOffense.config.partyRelay and partyrelay and not (ataxia and ataxia.afflictions and ataxia.afflictions.aeon) then
-            send("pt TRUELOCK on " .. target .. " -- EXECUTE", false)
+            if ataxia_partyCallAllowed(target) then send("pt TRUELOCK on " .. target .. " -- EXECUTE", false) end
         end
         -- Jinx sleep for prone, or plague + mana damage
         if ataxiaTemp and ataxiaTemp.canJinx then

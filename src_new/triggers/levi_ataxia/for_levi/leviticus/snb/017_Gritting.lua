@@ -52,7 +52,7 @@ if isTargeted(person) then
 	ataxiaTemp.ignoreShield = false
 	
     lastLimbAttack = "snbSlice"
-      if partyrelay then send("pt "..target..": "..affstruck)
+      if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": "..affstruck)
       end
 	
 end

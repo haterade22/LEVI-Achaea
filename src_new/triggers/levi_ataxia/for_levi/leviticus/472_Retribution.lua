@@ -44,11 +44,11 @@ if isTargeted(matches[2]) then
 
     if not haveAff("justice") then
         tarAffed("justice")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " justice") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop justice") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " justice") end
+        if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop justice") end
     else
         tarAffed("retribution")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " retribution") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution") end
+        if partyrelay and ataxia_partyCallAllowed(target) and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " retribution") end
+        if partyrelay and ataxia_partyCallAllowed(target) and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution") end
     end
 end

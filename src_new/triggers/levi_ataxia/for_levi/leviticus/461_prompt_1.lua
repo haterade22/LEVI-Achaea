@@ -66,6 +66,6 @@ for location, people in pairs(fullSensePeople) do
 end
 ataxiaPromptSub()
 
-if ataxia_raidMode("fullsense") then
+if ataxia_raidMode("fullsense") and ataxia_partyCallAllowed(nil) then
   send(pstring)
 end

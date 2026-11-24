@@ -38,17 +38,17 @@ patterns:
 
 
 if tprepare == "disruption" then
-send("pt " ..target..": Nausea Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea Paralysis") end
 elseif tprepare == "laceration" then
-send("pt " ..target..": Nausea Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea Haemophilia") end
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Nausea Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea Clumsiness") end
 elseif tprepare == "rattle" then
-send("pt " ..target..": Nausea Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea Epilepsy") end
 elseif tprepare == "vapours" then
-send("pt " ..target..": Nausea Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea Asthma") end
 else
-send("pt " ..target..": Nausea")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Nausea") end
 end
 
 

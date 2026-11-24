@@ -48,5 +48,5 @@ if isTargeted(matches[2]) then
   replace("" ..matches[2].. (prone and " [Hiru: Dizziness | Confusion]" or " [Hiru: Dizziness]"))
   tarAffed("dizziness")
   if prone then tarAffed("confusion") end
-  if partyrelay then send("pt " ..matches[2].. (prone and ": dizziness confusion" or ": dizziness")) end
+  if partyrelay and ataxia_partyCallAllowed(matches[2]) then send("pt " ..matches[2].. (prone and ": dizziness confusion" or ": dizziness")) end
 end

@@ -39,15 +39,15 @@ patterns:
 
 
 if tprepare == "disruption" then
-send("pt " ..target..": Weariness Paralysis")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness Paralysis") end
 elseif tprepare == "laceration" then
-send("pt " ..target..": Weariness Haemophilia")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness Haemophilia") end
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Weariness Clumsiness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness Clumsiness") end
 elseif tprepare == "rattle" then
-send("pt " ..target..": Weariness Epilepsy")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness Epilepsy") end
 elseif tprepare == "vapours" then
-send("pt " ..target..": Weariness Asthma")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness Asthma") end
 else
-send("pt " ..target..": Weariness")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": Weariness") end
 end

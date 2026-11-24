@@ -111,7 +111,7 @@ if isTargeted(person) then
       local ptMsg = target..":"
       if aff1 then ptMsg = ptMsg .. " " .. aff1 end
       if aff2 then ptMsg = ptMsg .. " " .. aff2 end
-      send("pt " .. ptMsg)
+      if ataxia_partyCallAllowed(target) then send("pt " .. ptMsg) end
     end
 	end
 end

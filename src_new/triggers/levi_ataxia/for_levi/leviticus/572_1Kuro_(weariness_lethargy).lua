@@ -58,9 +58,9 @@ if isTargeted(person) then
 
 
  if partyrelay and not haveAff("weariness") then
-  send("pt "..target..": weariness")
+  if ataxia_partyCallAllowed(target) then send("pt "..target..": weariness") end
   elseif
-partyrelay and  haveAff("weariness") then send("pt "..target..": lethargy weariness")
+partyrelay and ataxia_partyCallAllowed(target) and  haveAff("weariness") then send("pt "..target..": lethargy weariness")
 
    end 
    

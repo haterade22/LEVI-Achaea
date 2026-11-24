@@ -44,7 +44,7 @@ if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then
 		moveCursor(0, getLineNumber())
 		ataxia_tarAffTimed("blackout")  -- 4s (game); the old 3.5s timer was never cancelled by a repeat
 		moveCursorEnd()
-      if partyrelay and not ataxia.afflictions.aeon then send("pt "..target..": blackout")
+      if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon then send("pt "..target..": blackout")
       end
 	end
 end

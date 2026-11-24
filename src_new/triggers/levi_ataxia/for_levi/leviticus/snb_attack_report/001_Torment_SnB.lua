@@ -42,5 +42,5 @@ patterns:
 ]]--
 
 tarAffed("healthleech")
- if partyrelay then send("pt "..target..": healthleech") 
+ if partyrelay and ataxia_partyCallAllowed(target) then send("pt "..target..": healthleech")
     end

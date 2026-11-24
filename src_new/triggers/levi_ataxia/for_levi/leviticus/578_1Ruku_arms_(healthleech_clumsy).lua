@@ -54,9 +54,9 @@ if isTargeted(person) then
   erAff("shield")
   ignoreThirdPerson = true
     if partyrelay and not haveAff("clumsiness") then
-  send("pt "..target..": clumsiness")
+  if ataxia_partyCallAllowed(target) then send("pt "..target..": clumsiness") end
    elseif
-partyrelay and haveAff("clumsiness") then send("pt "..target..": healthleech clumsiness")
+partyrelay and ataxia_partyCallAllowed(target) and haveAff("clumsiness") then send("pt "..target..": healthleech clumsiness")
    end 
 
         if haveAff("clumsiness") then

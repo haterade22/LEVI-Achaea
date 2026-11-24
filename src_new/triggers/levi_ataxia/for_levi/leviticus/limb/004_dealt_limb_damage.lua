@@ -43,7 +43,7 @@ lb.addHit(matches.name, matches.limb, tonumber(matches.amount))
 -- (ataxia_relayLimbHits, misc_scripts/031); unset, it is off for a Monk and on for every other
 -- class, as before (v4.7.456).
 if partyrelay and not ataxia.afflictions.aeon and (not ataxia_relayLimbHits or ataxia_relayLimbHits()) then
-send("pt Hit " ..matches.name.." "..matches.limb.. " for "..matches.amount.."%")
+if ataxia_partyCallAllowed(matches.name) then send("pt Hit " ..matches.name.." "..matches.limb.. " for "..matches.amount.."%") end
 end
 
 -- Two Handed Runewarden: remember this hit's damage per weapon AND battlefury focus (speed hits

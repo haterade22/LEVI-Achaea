@@ -40,6 +40,6 @@ if isTargeted(matches[2]) then
 	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
 	if tarAffedConfirmed then tarAffedConfirmed("impatience") end
   if ataxia.settings.raid.enabled then
-    send("pt "..matches[2]..": impatience",false)
+    if ataxia_partyCallAllowed(matches[2]) then send("pt "..matches[2]..": impatience",false) end
   end
 end

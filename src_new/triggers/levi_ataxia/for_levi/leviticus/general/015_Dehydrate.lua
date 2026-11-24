@@ -67,7 +67,7 @@ if target == matches[2] then
   if not haveAff("nausea") and haveAff("weariness") then
     tarAffed("nausea")
   end
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness nausea") end
+  if partyrelay and ataxia_partyCallAllowed(target) and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness nausea") end
 end
 
 

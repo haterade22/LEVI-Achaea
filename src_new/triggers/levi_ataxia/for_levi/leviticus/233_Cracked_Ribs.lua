@@ -41,5 +41,5 @@ patterns:
 tarAffed("paralysis")
 tarAffed("sensitivity")
 if partyrelay and not ataxia.afflictions.aeon then
-send("pt " ..target..": paralysis sensitivity")
+if ataxia_partyCallAllowed(target) then send("pt " ..target..": paralysis sensitivity") end
 end
