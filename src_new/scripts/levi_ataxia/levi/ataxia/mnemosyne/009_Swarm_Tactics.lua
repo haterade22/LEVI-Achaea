@@ -3090,6 +3090,20 @@ function S.onVitals()
   local head = "<indian_red>" .. (byRate and "DYING FAST" or "LOW HP") .. "<reset> -- " .. hp .. "%"
     .. (byRate and (" and ~" .. string.format("%.1f",
       (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0) .. "s to live at this rate") or "")
+  -- A ROOM OF SHIELD-SAFE DENIZENS (v4.7.519, the maintainer: "...so we know when to touch shield
+  -- instead of running"). When every denizen here has only ever hit the shield, the shield stops
+  -- all of it, and a retreat costs a balance and the room. The basher raises it and holds the stand
+  -- to the return gate (basher/001, ataxiaBasher_safeStandBegin). One unknown or unsafe denizen, or
+  -- any refusal, and the ladder below runs unchanged. Ahead of the bound wait: a stand already
+  -- holding owns the moment, and a refused touch ends the stand after two tries.
+  if ataxiaBasher_safeStandBegin then
+    local okCall, ok, okWhy = pcall(ataxiaBasher_safeStandBegin, hp,
+      (byRate and "DYING FAST" or "LOW HP") .. " at " .. hp .. "%")
+    if okCall and ok then
+      S._sayOnce("shieldsafe", head .. " -- NOT leaving: " .. tostring(okWhy) .. ".")
+      return
+    end
+  end
   -- BOUND: wait for it WITHOUT the cooldown stamp, so the first free prompt leaves at once
   -- (v4.7.370, user: "retry the command when we are free").
   if S._bound() then

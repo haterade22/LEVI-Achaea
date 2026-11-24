@@ -537,6 +537,12 @@ function ataxiaBasher_dangerLevel()
 
   ataxiaBasher_initThresholds()
 
+  -- A ROOM OF SHIELD-SAFE DENIZENS (v4.7.519): shield and hold instead of leaving, in every area.
+  -- Before both flee arms, so neither the disengage nor `executeFlee` runs while such a stand holds.
+  ataxiaBasher_noteShieldState()
+  local safeStand = ataxiaBasher_safeStand(hpp)
+  if safeStand then return safeStand end
+
   if ataxiaBasher_isNoFleeArea(gmcp.Room.Info.area) then
     -- No-flee area (World Tree, Mnemosyne): never run from the AREA -- but leaving the ROOM is
     -- both possible and the whole point of the swarm ladder.
@@ -684,6 +690,7 @@ local function lastStandEnd(why, cool)
   ataxiaTemp.lastStandUpAt, ataxiaTemp.lastStandPassHits = nil, nil
   ataxiaTemp.lastStandBlockedAt, ataxiaTemp.lastStandBlockedRoom = nil, nil -- v4.7.514
   ataxiaTemp.lastStandBlockedBy, ataxiaTemp.lastStandBlockSaid = nil, nil
+  ataxiaTemp.lastStandSafe, ataxiaTemp.lastStandSafeSaid = nil, nil -- v4.7.519
   ataxiaTemp.lastStandCoolUntil = cool and (lastStandNow() + LAST_STAND_COOLDOWN) or nil
   ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
 end
@@ -704,6 +711,40 @@ function ataxiaBasher_lastStandHolding()
   if shielded then
     ataxiaTemp.lastStandUp = true
     ataxiaTemp.lastStandUpAt = ataxiaTemp.lastStandUpAt or nowT -- first seen up (see lastStandHit)
+  end
+  -- IN A SHIELD-SAFE ROOM THE STAND HOLDS TO THE RECOVERY GATE (v4.7.519). The log of 2026-11-24:
+  -- a savage boar and a fearsome lion hit only the shield for 6 s, the stand let go at 72%, and
+  -- our attack dropped the shield. While every denizen here is shield-safe and no hit passed the
+  -- shield in this stand, the release is the explorer's return gate (85% and cured), the cap is
+  -- SHIELD_SAFE.STAND_MAX, and a broken shield still ends it. Otherwise the old rules below.
+  local safe, safeWhy = ataxiaBasher_standSafeHold()
+  if not safe and ataxiaTemp.lastStandSafe then
+    -- The stand that REPLACED a retreat: an unsafe denizen came in (or a hit passed). Hand the
+    -- round back to the ladder if it can leave; else this is an ordinary last stand from now on.
+    ataxiaTemp.lastStandSafe = nil
+    if not ataxiaBasher_isNoFleeArea() or lastStandRetreatOpen() then
+      lastStandEnd(tostring(safeWhy) .. " -- back to the escape ladder")
+      return false
+    end
+  end
+  if safe then
+    local ready, gate = ataxiaBasher_shieldSafeRecovered()
+    local cap = tonumber(ataxiaBasher_SHIELD_SAFE.STAND_MAX) or LAST_STAND_MAX
+    if ready then
+      lastStandEnd("recovered in a shield-safe room: " .. gate)
+    elseif (nowT - at) >= cap or (nowT - at) < 0 then
+      lastStandEnd("held " .. cap .. "s in a shield-safe room")
+    elseif ataxiaTemp.lastStandUp and not shielded then
+      lastStandEnd("the shield is down", true)
+    else
+      if hpp >= release and not ataxiaTemp.lastStandSafeSaid then
+        ataxiaTemp.lastStandSafeSaid = true
+        ataxiaEcho("LAST STAND holds past " .. release .. "%: every denizen here is shield-safe ("
+          .. tostring(safeWhy) .. ") -- attacks held until " .. gate .. ".")
+      end
+      return true
+    end
+    return false
   end
   if hpp >= release then
     lastStandEnd("health back to " .. hpp .. "%")
@@ -768,6 +809,8 @@ function ataxiaBasher_onShieldLine(text)
     end
   end
   if not best then return end
+  -- v4.7.519: the shield record too, so the denizen is never shield-safe (defined below).
+  if ataxiaBasher_noteShieldBroke then ataxiaBasher_noteShieldBroke(best, "a shield-break line") end
   ataxiaBasher.shieldBreakers = ataxiaBasher.shieldBreakers or {}
   local first = ataxiaBasher.shieldBreakers[best] == nil
   ataxiaBasher.shieldBreakers[best] = os.time()
@@ -829,6 +872,16 @@ function ataxiaBasher_lastStandHit(amount, dtype)
   end
   if (nowT - upAt) < SHIELD_SETTLE then return "inside the settle window of the shield" end
   ataxiaTemp.lastStandPassHits = (ataxiaTemp.lastStandPassHits or 0) + 1
+  -- v4.7.519: a stand that REPLACED a retreat (a shield-safe room) ends on the first hit through
+  -- the shield when the ladder can still leave; the room is barred like any shield-pass room.
+  if ataxiaTemp.lastStandSafe then
+    ataxiaTemp.lastStandSafe = nil
+    if not ataxiaBasher_isNoFleeArea() or lastStandRetreatOpen() then
+      ataxiaTemp.shieldPassRoom = roomNum()
+      lastStandEnd("a " .. kind .. " hit passed the shield in a shield-safe room -- back to the escape ladder", true)
+      return "ended"
+    end
+  end
   if ataxiaTemp.lastStandPassHits < SHIELD_PASS_HITS then
     return "hit " .. ataxiaTemp.lastStandPassHits .. " of " .. SHIELD_PASS_HITS .. " through the shield"
   end
@@ -872,16 +925,305 @@ end
 -- A DENIZEN'S ATTACK THAT OUR SHIELD STOPPED (v4.7.514). Called by trigger "Shield Blocked By
 -- Denizen" on "<denizen> hurls itself against your shield in a futile attempt to harm you." (the
 -- line follows `touch shield` in kb/raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt).
--- Only a running last stand with the shield up records it: ataxiaBasher_lastStandHit reads it.
--- Returns a reason for every outcome (no silent gates).
+-- Since v4.7.519 every such line is learned into the saved shield record first (the line itself
+-- proves the shield up and this denizen stopped), stand or not. Only a running last stand with the
+-- shield up stamps the room for ataxiaBasher_lastStandHit. Returns a reason for every outcome.
 function ataxiaBasher_onShieldBlocked(who)
   ataxiaTemp = ataxiaTemp or {}
-  if not tonumber(ataxiaTemp.lastStandAt) then return "no last stand" end
-  if not (ataxia.defences and ataxia.defences.shield) then return "our shield is not up" end
+  local learned = ataxiaBasher_noteShieldBlock(who)
+  ataxiaTemp.shieldUpSeenAt = ataxiaTemp.shieldUpSeenAt or lastStandNow()
+  if not tonumber(ataxiaTemp.lastStandAt) then return "no last stand (" .. learned .. ")" end
+  if not (ataxia.defences and ataxia.defences.shield) then return "our shield is not up (" .. learned .. ")" end
   ataxiaTemp.lastStandBlockedAt = lastStandNow()
   ataxiaTemp.lastStandBlockedRoom = roomNum()
   ataxiaTemp.lastStandBlockedBy = (type(who) == "string" and who ~= "") and who:lower() or nil
   return "blocked"
+end
+
+-- ============================================================================
+-- SHIELD-SAFE DENIZENS (v4.7.519)
+-- ============================================================================
+-- The maintainer (2026-11-24): "there are some mobs who cannot break shields... this has to be
+-- tracked so we know when to touch shield instead of running". The log
+-- (kb/raw/live/mnemosyne-shield-safe-mobs_2026-11-24.txt): a savage boar and a fearsome lion hurled
+-- themselves against our shield for 6 s and did nothing; the stand let go at 72% and our attack
+-- dropped the shield.
+--
+-- THE RECORD, saved with ataxiaBasher: ataxiaBasher.shieldRecord[key] = { blocked = n, broke = n }.
+-- `key` is ataxiaBasher_mobKey(name): lower case, trimmed, one leading "a ", "an " or "the " cut,
+-- so the trigger's "A savage boar" and the room list's "a savage boar" are one key. A missing table
+-- or entry reads as zero, so the new key needs no migration.
+--   blocked  +1 per "<denizen> hurls itself against your shield" (trigger 030, ataxiaBasher_onShieldBlocked)
+--   broke    +1 per shield-break line naming it (trigger 029, ataxiaBasher_onShieldLine), or per
+--            blockable `Health lost:` with our shield up that can be laid on it (ataxiaBasher_shieldHit)
+-- SHIELD-SAFE: blocked >= MIN_BLOCKED and broke <= MAX_BROKE, and not on the old shieldBreakers list.
+ataxiaBasher_SHIELD_SAFE = {
+  MIN_BLOCKED = 2,  -- blocked attacks before a denizen is trusted
+  MAX_BROKE = 0,    -- one proven hit through the shield and it is never safe
+  STAND_MAX = 120,  -- seconds a stand in a shield-safe room may hold (LAST_STAND_MAX is 30)
+  RECOVER_PCT = 85, -- the release health when the swarm is not loaded (its returnAt otherwise)
+  LOOK_BACK = 4,    -- buffer lines read back from a `Health lost:` line to find its attack line
+}
+local SHIELD_SAFE = ataxiaBasher_SHIELD_SAFE
+
+function ataxiaBasher_mobKey(name)
+  if type(name) ~= "string" then return nil end
+  local k = name:lower():gsub("^%s+", ""):gsub("%s+$", ""):gsub("%.$", "")
+  k = k:gsub("^an? ", "", 1):gsub("^the ", "", 1)
+  if k == "" then return nil end
+  return k
+end
+
+local function shieldRec(key)
+  if type(ataxiaBasher.shieldRecord) ~= "table" then ataxiaBasher.shieldRecord = {} end
+  local r = ataxiaBasher.shieldRecord[key]
+  if type(r) ~= "table" then r = {}; ataxiaBasher.shieldRecord[key] = r end
+  r.blocked, r.broke = tonumber(r.blocked) or 0, tonumber(r.broke) or 0
+  return r
+end
+
+-- Is this denizen shield-safe? true and a note, or false and the reason.
+function ataxiaBasher_shieldSafe(name)
+  local key = ataxiaBasher_mobKey(name)
+  if not key then return false, "a denizen with no name" end
+  for b in pairs(type(ataxiaBasher.shieldBreakers) == "table" and ataxiaBasher.shieldBreakers or {}) do
+    if ataxiaBasher_mobKey(b) == key then return false, key .. " broke the shield before" end
+  end
+  local r = type(ataxiaBasher.shieldRecord) == "table" and ataxiaBasher.shieldRecord[key]
+  local blocked = (type(r) == "table" and tonumber(r.blocked)) or 0
+  local broke = (type(r) == "table" and tonumber(r.broke)) or 0
+  if broke > SHIELD_SAFE.MAX_BROKE then return false, key .. " hurt us through the shield (" .. broke .. "x)" end
+  if blocked < SHIELD_SAFE.MIN_BLOCKED then
+    return false, key .. " is not known shield-safe (" .. blocked .. " of " .. SHIELD_SAFE.MIN_BLOCKED .. " blocks seen)"
+  end
+  return true, key
+end
+
+local function isOwn(name)
+  local ok, r = pcall(ataxiaBasher_isOwnDenizen, name)
+  return ok and r == true
+end
+
+-- The hostile denizens here, one entry per key: { key = , tail = last word }.
+local function denizenKeysHere()
+  local out, seen = {}, {}
+  local dz = ataxia and ataxia.denizensHere
+  if type(dz) ~= "table" then return out end
+  for _, name in pairs(dz) do
+    local key = type(name) == "string" and not isOwn(name) and ataxiaBasher_mobKey(name)
+    if key and not seen[key] then
+      seen[key] = true
+      out[#out + 1] = { key = key, tail = key:match("(%a+)$") }
+    end
+  end
+  table.sort(out, function(a, b) return a.key < b.key end)
+  return out
+end
+
+-- Is EVERY hostile denizen here shield-safe? true and their names, or false and the reason.
+function ataxiaBasher_shieldSafeRoom()
+  local here = denizenKeysHere()
+  if #here == 0 then return false, "no denizen here" end
+  if ataxiaBasher_shieldPassHere() then return false, "hits passed the shield in this room" end
+  local names = {}
+  for _, d in ipairs(here) do
+    local ok, why = ataxiaBasher_shieldSafe(d.key)
+    if not ok then return false, why end
+    names[#names + 1] = d.key
+  end
+  return true, table.concat(names, ", ")
+end
+
+-- Does the running stand hold to the recovery gate? Not after a hit passed the shield in it.
+function ataxiaBasher_standSafeHold()
+  if (tonumber(ataxiaTemp and ataxiaTemp.lastStandPassHits) or 0) > 0 then
+    return false, "a hit passed the shield in this stand"
+  end
+  return ataxiaBasher_shieldSafeRoom()
+end
+
+-- The recovery gate of a shield-safe stand: the explorer's return gate (S._mayReturn: returnAt,
+-- 85, and cured) when the swarm is loaded, else RECOVER_PCT. Returns ready, and the gate in words.
+function ataxiaBasher_shieldSafeRecovered()
+  local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+  if S and S._mayReturn and S._cfg then
+    local okC, cfg = pcall(S._cfg)
+    local pct = tonumber(okC and type(cfg) == "table" and cfg.returnAt) or 85
+    local ok, r = pcall(S._mayReturn)
+    if ok then return r == true, pct .. "% and cured" end
+  end
+  local pct = tonumber(SHIELD_SAFE.RECOVER_PCT) or 85
+  return (ataxiaBasher_safeHpp() or 0) >= pct, pct .. "%"
+end
+
+function ataxiaBasher_noteShieldBlock(who)
+  local key = ataxiaBasher_mobKey(who)
+  if not key then return "no denizen name" end
+  local was = ataxiaBasher_shieldSafe(key)
+  local r = shieldRec(key)
+  r.blocked = r.blocked + 1
+  if not was and ataxiaBasher_shieldSafe(key) then
+    ataxiaEcho("Learned: " .. key .. " cannot break the shield (" .. r.blocked
+      .. " blocked, none through) -- a room of such denizens gets the shield instead of a retreat.")
+  end
+  return key .. " blocked " .. r.blocked .. "x"
+end
+
+function ataxiaBasher_noteShieldBroke(who, how)
+  local key = ataxiaBasher_mobKey(who)
+  if not key then return "no denizen name" end
+  local r = shieldRec(key)
+  r.broke = r.broke + 1
+  if r.broke == 1 then
+    ataxiaEcho("Learned: " .. key .. " hurts us through the shield (" .. tostring(how or "?")
+      .. ") -- never shield-safe ('bash laststand forget " .. key .. "' to undo).")
+  end
+  return key .. " broke " .. r.broke .. "x"
+end
+
+-- When was our shield first seen up? Stamped on each danger check and by the block line; cleared
+-- when it reads down. A hit inside SHIELD_SETTLE of that stamp can share the packet of the shield.
+function ataxiaBasher_noteShieldState()
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxia.defences and ataxia.defences.shield then
+    ataxiaTemp.shieldUpSeenAt = ataxiaTemp.shieldUpSeenAt or lastStandNow()
+  else
+    ataxiaTemp.shieldUpSeenAt = nil
+  end
+end
+
+-- The nearest line above the current one that is not a `Health lost:` line (one attack can print
+-- two of them) and not blank: the attack line. nil when the buffer cannot be read.
+local function attackLineBefore()
+  if not (getLines and getLineNumber) then return nil end
+  local okN, n = pcall(getLineNumber)
+  n = okN and tonumber(n)
+  if not n then return nil end
+  local from = math.max(0, n - (tonumber(SHIELD_SAFE.LOOK_BACK) or 4))
+  local ok, lines = pcall(getLines, from, n)
+  if not ok or type(lines) ~= "table" then return nil end
+  for i = #lines, 1, -1 do
+    local t = lines[i]
+    if type(t) == "string" and t:find("%S") and not t:find("^%s*Health lost:") then return t end
+  end
+  return nil
+end
+
+local function namesIn(text, d)
+  if text:find(d.key, 1, true) then return true end
+  local tail = d.tail
+  if not tail or #tail < 4 then return false end
+  return text:find("%f[%a]" .. tail .. "%f[%A]") ~= nil
+end
+
+-- Who landed this hit? The attack line before it names exactly one denizen of the room (its whole
+-- name, or the last word of it: "The nightmare convulses..."), or the room holds one denizen.
+-- Anything else lays it on no one, and says so: blaming every denizen in the room would mark a
+-- denizen the shield stopped (the oryx death: the rattlesnake was blocked while the oryx passed).
+function ataxiaBasher_shieldHitWho(prev)
+  local here = denizenKeysHere()
+  if #here == 0 then return nil, "no denizen in the room" end
+  local text = prev
+  if text == nil then text = attackLineBefore() end
+  if type(text) == "string" and text ~= "" then
+    local low, found = text:lower(), {}
+    for _, d in ipairs(here) do
+      if namesIn(low, d) then found[#found + 1] = d.key end
+    end
+    if #found == 1 then return found[1], "its line came before the hit" end
+    if #found > 1 then return nil, "the line before the hit names " .. #found .. " denizens" end
+  end
+  if #here == 1 then return here[1].key, "the only denizen in the room" end
+  return nil, #here .. " denizens here and the line before the hit names none of them"
+end
+
+-- Called by trigger "Health Lost By Type" for every `Health lost: N (type).` line, stand or not.
+-- A blockable hit with our shield up and settled is a hit THROUGH the shield: lay it on a denizen
+-- (ataxiaBasher_shieldHitWho) as `broke`. Returns a reason for every outcome. `prev` is for tests.
+function ataxiaBasher_shieldHit(amount, dtype, prev)
+  ataxiaTemp = ataxiaTemp or {}
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return "the basher is off" end
+  if not (ataxia.defences and ataxia.defences.shield) then
+    ataxiaTemp.shieldUpSeenAt = nil
+    return "our shield is not up"
+  end
+  if (tonumber(amount) or 0) <= 0 then return "no damage" end
+  local kind = tostring(dtype or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if SHIELD_NEVER_STOPS[kind] then return "a shield never stops " .. kind .. " damage" end
+  local nowT = lastStandNow()
+  local upAt = tonumber(ataxiaTemp.shieldUpSeenAt)
+  if not upAt or nowT < upAt then
+    ataxiaTemp.shieldUpSeenAt = nowT
+    return "the shield was only now seen up"
+  end
+  if (nowT - upAt) < SHIELD_SETTLE then return "inside the settle window of the shield" end
+  local who, how = ataxiaBasher_shieldHitWho(prev)
+  if not who then return "a hit through the shield laid on no one: " .. how end
+  return ataxiaBasher_noteShieldBroke(who, kind .. " hit through the shield, " .. how)
+end
+
+-- THE SHIELD INSTEAD OF THE RETREAT. Start a last stand that REPLACES a retreat: every denizen
+-- here is shield-safe and the shield can go up. Called by the escape ladder (mnemosyne/009,
+-- S.onVitals) and by ataxiaBasher_safeStand (the basher's danger check). Sends `cq all` (not in
+-- lava) and `touch shield` itself, because the ladder's caller builds no round. Returns true and
+-- what it did, or false and why not; the caller's retreat runs unchanged on false.
+function ataxiaBasher_safeStandBegin(hpp, cause)
+  ataxiaTemp = ataxiaTemp or {}
+  if tonumber(ataxiaTemp.lastStandAt) then
+    if ataxiaTemp.lastStandSafe or ataxiaBasher_standSafeHold() then
+      return true, "the last stand in this shield-safe room holds"
+    end
+    return false, "an ordinary last stand is on"
+  end
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return false, "the basher is off" end
+  if ataxiaBasher.lastStand == false then return false, "the last stand is off (bash laststand on)" end
+  if ataxiaBasher_bravado() then return false, "Bravado: a shield does nothing" end
+  if ataxiaBasher_tattoosDead() then return false, "Rimewrought: the tattoos do nothing" end
+  local aff = ataxia.afflictions or {}
+  if aff.paralysis or aff.aeon then return false, "paralysed or in aeon: no tattoo now" end
+  local nowT = lastStandNow()
+  local cool = tonumber(ataxiaTemp.lastStandCoolUntil)
+  if cool and nowT < cool then return false, "a last stand gave up " .. string.format("%.1f", LAST_STAND_COOLDOWN - (cool - nowT)) .. "s ago" end
+  local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+  if S and (S.state == "recovering" or (S.moveLocked and S.moveLocked())
+      or (S._escapeOwns and S._escapeOwns())) then
+    return false, "a retreat is already under way"
+  end
+  local safe, names = ataxiaBasher_shieldSafeRoom()
+  if not safe then return false, names end
+  ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nowT, nowT
+  ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = 1, nil
+  ataxiaTemp.lastStandUpAt, ataxiaTemp.lastStandPassHits = nil, nil
+  ataxiaTemp.lastStandBlockedAt, ataxiaTemp.lastStandBlockSaid = nil, nil
+  ataxiaTemp.lastStandSafe, ataxiaTemp.lastStandSafeSaid = true, nil
+  ataxiaTemp.lastStandFlush = nil
+  local _, gate = ataxiaBasher_shieldSafeRecovered()
+  if not (ataxia.defences and ataxia.defences.shield) then
+    local mnem = ataxia.mnemosyne
+    if not (mnem and mnem.roomLava and mnem.roomLava()) then send("cq all") end
+    send("queue addclear freestand touch shield")
+  end
+  ataxiaEcho("SHIELD-SAFE ROOM: " .. tostring(cause or ("HP " .. tostring(hpp) .. "%")) .. " -- " .. names
+    .. " never got through the shield; shielding instead of leaving, attacks held until " .. gate .. ".")
+  return true, "every denizen here is shield-safe (" .. names .. ") -- shielding instead"
+end
+
+-- The basher's danger check asks this first (dangerLevel). A stand that replaced a retreat, or any
+-- stand in a shield-safe room, decides the round (ataxiaBasher_lastStand). With no stand, where the
+-- danger check would leave (HP at fleeThresholdPct, or the damage watchdog), a shield-safe room
+-- starts one. Returns "shield", "wait" or nil (carry on with the old checks).
+function ataxiaBasher_safeStand(hpp)
+  ataxiaTemp = ataxiaTemp or {}
+  if tonumber(ataxiaTemp.lastStandAt) then
+    if ataxiaTemp.lastStandSafe or ataxiaBasher_standSafeHold() then return ataxiaBasher_lastStand(hpp) end
+    return nil
+  end
+  local fleePct = tonumber(ataxiaBasher.fleeThresholdPct) or 25
+  local spiking = ataxiaBasher_isDamageRateExtreme and ataxiaBasher_isDamageRateExtreme()
+  if not ((tonumber(hpp) or 100) <= fleePct or spiking) then return nil end
+  local ok = ataxiaBasher_safeStandBegin(hpp, (spiking and "incoming damage" or ("HP " .. tostring(hpp) .. "%")))
+  if ok then return "wait" end -- the shield is sent; build no round
+  return nil
 end
 
 -- ============================================================================

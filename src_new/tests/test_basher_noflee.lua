@@ -618,6 +618,7 @@ describe("the last stand (v4.7.486)", function()
     ataxiaBasher_canShield = function() return false end -- the tower case: denizens on the list
     ataxiaBasher.inMnemosyne = true
     ataxiaBasher.lastStand, ataxiaBasher.lastStandRelease, ataxiaBasher.shieldBreakers = nil, nil, nil
+    ataxiaBasher.shieldRecord = nil -- v4.7.519: the saved shield record
     ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
     ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = nil, nil
     ataxiaTemp.lastStandCoolUntil, ataxiaTemp.lastStandFlush = nil, nil
@@ -863,6 +864,7 @@ describe("2026-11-20 -- hits through the shield end the last stand", function()
     ataxiaBasher.enabled = true
     ataxiaBasher.inMnemosyne = true
     ataxiaBasher.lastStand, ataxiaBasher.lastStandRelease, ataxiaBasher.shieldBreakers = nil, nil, nil
+    ataxiaBasher.shieldRecord = nil -- v4.7.519: the saved shield record
     for _, k in ipairs({ "lastStandAt", "lastStandSentAt", "lastStandSends", "lastStandUp",
       "lastStandUpAt", "lastStandPassHits", "lastStandCoolUntil", "lastStandFlush", "shieldPassRoom" }) do
       ataxiaTemp[k] = nil
@@ -880,6 +882,7 @@ describe("2026-11-20 -- hits through the shield end the last stand", function()
     ataxiaBasher.enabled = nil
     gmcp.Room.Info.num = nil
     ataxiaTemp.shieldPassRoom = nil
+    ataxiaBasher.shieldRecord = nil -- v4.7.519: no learned denizen outlives this file
   end
   local function healthLost(line)
     local n, t = line:match("^Health lost: (%d+) %(([^)]+)%)%.?$")
@@ -1032,7 +1035,9 @@ describe("2026-11-20 -- hits through the shield end the last stand", function()
 
   it("v4.7.514: a block in another room, or with no stand, does not count", function()
     run(function()
-      expect(ataxiaBasher_onShieldBlocked("a diamond-back rattlesnake")).toBe("no last stand")
+      -- v4.7.519: the block is learned into the shield record even with no stand
+      expect(ataxiaBasher_onShieldBlocked("a diamond-back rattlesnake")).toBe(
+        "no last stand (diamond-back rattlesnake blocked 1x)")
       standWithShield()
       ataxiaBasher_lastStandHolding()
       clock = 1003.5

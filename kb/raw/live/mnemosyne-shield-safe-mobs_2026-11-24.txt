@@ -1,0 +1,21 @@
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+14:28:42:627 [1762] [88] |(617458|63%)|[ [ ? par ]]
+You eat a potash crystal.
+14:28:43:016 [2668] [96] |(617458|63%)|[ [ ? par ]]
+A savage boar hurls itself against your shield in a futile attempt to harm you.
+14:28:43:576 [2668] [96] |(617458|63%)|[ [ ? ]]
+(LEVI): DANGER: cannot leave this room -- Prey -- every denizen tracks a retreat, so we fight here.
+A fearsome lion hurls itself against your shield in a futile attempt to harm you.
+(MNEM): [explore] [swarm] LOW HP -- 23% -- NOT leaving: Prey -- every denizen tracks a retreat, so we fight here.
+A savage boar hurls itself against your shield in a futile attempt to harm you.
+14:28:46:357 [6739] [100] ...
+A fearsome lion hurls itself against your shield in a futile attempt to harm you.
+14:28:47:120 [7305] ...
+A savage boar hurls itself against your shield in a futile attempt to harm you.
+14:28:49:288 [8211] (after a potash)
+(LEVI): LAST STAND over (health back to 72%) -- attacking.
+A fearsome lion hurls itself against your shield in a futile attempt to harm you.
+A savage boar hurls itself against your shield in a futile attempt to harm you.
+Your action causes the nearly invisible magical shield around you to fade away.
+You slip behind a savage boar and garrote him with your whip.

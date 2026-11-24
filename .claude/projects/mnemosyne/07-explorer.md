@@ -1109,12 +1109,38 @@ lines: `kb/mechanics/mnemosyne-affixes.md`.
 - **The last stand** lives in the basher (`ataxiaBasher_lastStand`, basher/001:687): in a
   no-flee area, at `escapeAt` or `panicHp`, with `S._escapeRouteReady()` false, it sends
   `cq all` and `touch shield` even though `canShield()` says no, and holds every round from that
-  send until 70% health (v4.7.490; before it, the next attack round deleted the queued shield).
+  send until 70% health (v4.7.490; before it, the next attack round deleted the queued shield;
+  since v4.7.519, in a room of shield-safe denizens, until 85% and cured).
   Two sends with no shield end it, with a 10 s cooldown. A
   denizen that breaks the shield is learned and never trusted again. Full rules:
   `.claude/projects/basher/05-safety-systems.md`, "The last stand".
 
 Not built (the user's choice, 2026-11-10): recording blood-pool rooms and keeping retreats out of them.
+
+### A room of shield-safe denizens gets the shield, not the retreat (v4.7.519)
+
+The maintainer (2026-11-24): "there are some mobs who cannot break shields... this has to be tracked
+so we know when to touch shield instead of running". In the log
+(`kb/raw/live/mnemosyne-shield-safe-mobs_2026-11-24.txt`) a savage boar and a fearsome lion only ever
+hit our shield, and the stand let go at 72%.
+
+- **The ladder asks first.** `S.onVitals` (009:3099), once it wants an escape or a panic (HP at
+  `escapeAt`, `panicHp`, or the damage watchdog) and past the emergency cooldown, calls
+  `ataxiaBasher_safeStandBegin(hp, cause)` (basher/001:1170) under `pcall`, ahead of the bound wait,
+  the Roll Hide panic and the retreat. On true (every hostile denizen here is shield-safe and the
+  shield can go up) it prints `<LOW HP|DYING FAST> -- <hp>% -- NOT leaving: every denizen here is
+  shield-safe (<names>) -- shielding instead.` once per 5 s (`S._sayOnce("shieldsafe")`) and returns:
+  nothing is reset and no move is sent. On false, or an error, the ladder runs exactly as before.
+- **The basher holds it.** The stand is the basher's last stand with `ataxiaTemp.lastStandSafe`: it
+  holds every round until the explorer's return gate (`S._mayReturn()`: `returnAt` 85% and cured), up
+  to 120 s, and ends at once (back to this ladder) when an unsafe denizen comes in or a hit passes the
+  shield while a retreat is open. Rules, the saved record and its limits:
+  `.claude/projects/basher/05-safety-systems.md`, "Shield-safe denizens".
+- Under Prey nothing changes in the ladder (the retreat is refused anyway); the old last stand now
+  holds to the same return gate when the room is shield-safe, instead of letting go at 70%.
+
+Tests: `test_swarm_tactics.lua`, "the low-HP ladder asks for a shield-safe stand before it retreats"
+(a spy for the basher function); the real function in `test_shield_safe.lua`.
 
 ### Boiling lava - the only unconditional "leave now" (v4.7.254, hardened v4.7.256)
 

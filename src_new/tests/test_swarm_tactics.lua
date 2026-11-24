@@ -5682,6 +5682,60 @@ describe("v4.7.515 -- an escape move is one queue entry, found lost in a second,
   end)
 end)
 
+-- v4.7.519: a room of shield-safe denizens gets the shield instead of the retreat. The real
+-- ataxiaBasher_safeStandBegin is tested in test_shield_safe.lua; here a spy stands in for it, so this
+-- file tests only the ladder's side: it asks first, and on "yes" it leaves nothing in motion.
+describe("v4.7.519 -- the low-HP ladder asks for a shield-safe stand before it retreats", function()
+  local function said(fn)
+    local out, realEcho = {}, S._echo
+    S._echo = function(m) out[#out + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    S._echo = realEcho
+    if not ok then error(err, 0) end
+    return table.concat(out, " | ")
+  end
+  local function findLeap()
+    for _, c in ipairs(sent) do if c == "queue addclear free lvmove <stand/leap s>" then return true end end
+    return false
+  end
+  local function withSpy(ok, why, fn)
+    local real = ataxiaBasher_safeStandBegin
+    local calls = {}
+    ataxiaBasher_safeStandBegin = function(hp, cause) calls[#calls + 1] = { hp = hp, cause = cause }; return ok, why end
+    local good, err = pcall(fn, calls)
+    ataxiaBasher_safeStandBegin = real
+    gmcp.Room.Info.details = {}
+    gmcp.Char = nil
+    if not good then error(err, 0) end
+  end
+
+  it("a shield-safe room: no retreat, and the line says why", function()
+    withSpy(true, "every denizen here is shield-safe (savage boar) -- shielding instead", function(calls)
+      fixture(2)
+      gmcp.Room.Info.details = { "indoors" }
+      gmcp.Char = { Vitals = { hp = "2600", maxhp = "11400" } }
+      local msg = said(function() S.onVitals() end)
+      expect(#calls).toBe(1)
+      expect(calls[1].hp).toBe(22) -- 2600 of 11400, floored
+      expect(S.state).toBe("idle")
+      expect(findLeap()).toBeFalse()
+      expect(msg:find("NOT leaving: every denizen here is shield-safe (savage boar)", 1, true) ~= nil).toBeTrue()
+    end)
+  end)
+
+  it("any refusal: the retreat runs as before", function()
+    withSpy(false, "fearsome lion is not known shield-safe (0 of 2 blocks seen)", function(calls)
+      fixture(2)
+      gmcp.Room.Info.details = { "indoors" }
+      gmcp.Char = { Vitals = { hp = "2600", maxhp = "11400" } }
+      S.onVitals()
+      expect(#calls).toBe(1)
+      expect(S.state).toBe("pulling")
+      expect(findLeap()).toBeTrue()
+    end)
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

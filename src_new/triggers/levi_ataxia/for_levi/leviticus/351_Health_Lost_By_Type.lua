@@ -57,3 +57,8 @@ end
 if ataxiaBasher_lastStandHit then
   ataxiaBasher_lastStandHit(tonumber(matches[2]), matches[3])
 end
+-- v4.7.519: any blockable hit with our shield up (stand or not) is laid on the denizen whose attack
+-- line came just before it, so that denizen is never shield-safe (basher/001, ataxiaBasher_shieldHit).
+if ataxiaBasher_shieldHit then
+  ataxiaBasher_shieldHit(tonumber(matches[2]), matches[3])
+end

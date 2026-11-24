@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-11-24 - v4.7.519: Mobs that cannot break the shield are learned, and a room of them gets the shield instead of a retreat
+
+**What.** The basher keeps a saved record per denizen name, `ataxiaBasher.shieldRecord[<name>] =
+{ blocked, broke }`. `blocked` counts each "<denizen> hurls itself against your shield in a futile
+attempt to harm you." line (trigger 030), stand or not; `broke` counts a shield-break line naming it
+(029) or a blockable `Health lost:` with our shield up that its attack line just before can be laid on
+(351). A denizen with 2 blocks and none through is shield-safe. When the escape ladder (`S.onVitals`)
+or the danger check (`ataxiaBasher_dangerLevel`, any area) would retreat or flee and every hostile
+denizen in the room is shield-safe, the basher touches the shield and holds a last stand instead
+("SHIELD-SAFE ROOM: ..."). In a shield-safe room any last stand holds past 70% to the explorer's
+return gate (85% and cured; 120 s cap). `bash laststand` lists the record; `forget` clears it.
+
+**Why.** The maintainer: "there are some mobs who cannot break shields... this has to be tracked so
+we know when to touch shield instead of running". In the log (filed as
+`kb/raw/live/mnemosyne-shield-safe-mobs_2026-11-24.txt`) a savage boar and a fearsome lion hit only the
+shield for 6 s, the stand let go at 72%, and our attack dropped the shield.
+
+**How.** `basher/001`, section "SHIELD-SAFE DENIZENS": `ataxiaBasher_mobKey` (lower case, one leading
+a/an/the cut), `ataxiaBasher_shieldSafe` / `ataxiaBasher_shieldSafeRoom`, `ataxiaBasher_shieldHit` and
+`ataxiaBasher_shieldHitWho` (a hit is laid on one denizen only: the one its attack line names, or the
+only one in the room; never on the whole room), `ataxiaBasher_safeStandBegin` (sends `cq all` and
+`touch shield`, refuses with a reason), `ataxiaBasher_safeStand` (step 3b of `dangerLevel`), and the
+safe hold in `ataxiaBasher_lastStandHolding`. An unsafe denizen walking in or a hit through the shield
+brings the old rules back at once. A missing record reads as empty, so no migration. Tests:
+`test_shield_safe.lua` (11, the log replayed through the real triggers 030, 029 and 351) and two in
+`test_swarm_tactics.lua`; each part broken back. Rules: `.claude/projects/basher/05-safety-systems.md`,
+"Shield-safe denizens".
+
 ## 2026-11-24 - v4.7.518: The Righteous Fire save line is read, and the Dragoncurse call works
 
 **What.** Trigger `mnemosyne/115` reads the Wrath and Righteousness save line, "Fire surges about you,

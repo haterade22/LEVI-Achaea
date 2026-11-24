@@ -1440,6 +1440,14 @@ defence's failure against its successes in the same room, per attacker; and an e
 a later action asks the same reader that later action asks (`ataxiaBasher_lastStandHit`,
 `S._retreatBlock`, `S._spentExemption`).
 
+### A defence that works is evidence too: learn whom it stops (v4.7.519)
+v4.7.486-514 learned only failures: a shield-break line, hits through the shield. In the 2026-11-24
+log (`kb/raw/live/mnemosyne-shield-safe-mobs_2026-11-24.txt`) a boar and a lion hit only the shield
+for 6 s, and the stand still let go at 70% and our attack dropped it. **Rule:** count the game's
+success line per attacker too (`ataxiaBasher.shieldRecord`, saved), and let a proven-harmless room
+change the decision (shield, not retreat; hold to the recovery gate). Never lay one attacker's
+failure on the whole room: one wrong mark bars a denizen for good (`ataxiaBasher_shieldHitWho`).
+
 ### Vitals read full under recklessness, so every HP gate is blind (v4.7.506)
 The same death: the prompt and GMCP read 15696 HP while real health was about 2743, and the game
 printed no `Health lost:` lines. The stand, the escape ladder and the flee check all read those
