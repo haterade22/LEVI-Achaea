@@ -4,6 +4,8 @@ Comprehensive reference of all available artefacts in Achaea, compiled from offi
 
 **Note About Stacking**: Artefact effects for similar artefacts don't combine or stack. The best item rules.
 
+**Racial level-1 powers (since 2026-11-24)**: each race has one power below at level 1 for free; an owned artefact of that power wins. The race table and the rules: [`kb/changes/2026-11-24_racial-artefact-bonuses.md`](../kb/changes/2026-11-24_racial-artefact-bonuses.md).
+
 ---
 
 ## 19.10.2 Offensive Artefacts

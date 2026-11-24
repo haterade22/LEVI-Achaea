@@ -1,0 +1,43 @@
+Hi folks!
+
+As part of our ongoing strategy toward lowering barrier of entry for new players, each race now carries natural talent equal to the power of a level 1 artefact.
+
+For example: a human adventurer without any artefacts will now benefit as though they owned a Mayan ring.
+
+If you already own an arefact power your race would gain, your artefact applies with priority, so a level 2 or higher artefact remains an upgrade.
+
+The racial bonuses are:
+
+Human - Health sip
+Siren - Intelligence
+Grook - Faster equilibrium
+Tash'la - Reserves
+Dwarf - Constitution
+Tsol'aa - Mana regeneration
+Rajamala - Dexterity
+Fayad - Mana sip
+Troll - Strength
+Satyr - Health regeneration
+Mhun - Endurance regeneration
+Xoran - Magic damage
+
+Horkval and Atavians already have racial abilities which have been improved to be on par with artifact equivalents:
+
+Horkval - Your racial leap now recovers as quickly as a leap with chitin greaves.
+Atavian - Your wings now perform equivalently to a ring of flying.
+Wingless Atavians will instead get the benefit of a fishscale tunic and gain underwater breathing.
+
+If you do not have a equivalent or better power, you can see your racial bonus at the bottom of ARTEFACT POWER LIST OWNED.
+
+A few things to note:
+
+The racial bonus is fixed at level 1 and cannot be upgraded. To go beyond it, you will need the level 2 or 3 artefact.
+This has to be this way due to the extremely messy situation that would arise across multiclassing and race changing and such.
+The racial bonus does not carry over to Dragon or Elemental Lord.
+This change is primarily aimed at helping onboard new players.
+Like artefacts, racial bonuses do not apply during honourable duels.
+Changes to your stats may take up to a minute to show after you log in.
+
+Anyone who has recently purchased a L1 artefact that is now invalidated by their character race can file an ISSUE for a refund. Likewise, any Atavians or Horkvals who own rings or greaves can also request a refund on these but please see point #2 above!
+
+Enjoy!

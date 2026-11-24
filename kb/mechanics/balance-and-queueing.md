@@ -37,6 +37,8 @@ instead of repeating them. A timing on any page names its source: BASE (AB or wi
 | Nimble (trait) | balance; size not known | ours (`kb/combat/shikudo.md`:740) | no balance reading shows it yet: our combos print "Balance used: 2.1s" x115 and "1.9s" x13, as other monks' do | OPEN |
 | quick-witted (trait) | equilibrium; size not known | **not ours**: `trait select quick-witted` was refused, "You have no free trait slots" (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`:9, refused at :19) | `ataxia_eqFactor` names it but does not count it | OPEN |
 
+**Another player's floor (since 2026-11-24).** Each race now has one artefact power at level 1 for free. A Grook has at least `faster_eq` level 1 (x0.93) with no artefacts; honourable duels have none. The race table: [`changes/2026-11-24_racial-artefact-bonuses.md`](../changes/2026-11-24_racial-artefact-bonuses.md).
+
 **Our equilibrium readings** (ours unless named):
 
 | Ability | Base | Ours, not Rain | Ours, Rain | Source |

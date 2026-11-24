@@ -23,6 +23,8 @@ no size, so another source must confirm one ("The game's power records", below).
 | rapid_resonation, symphonic_master, swift_runes, faster_mindlock | haematite, insignia, runestone, Intellect Crown | -- | docs only (`.claude/classes/<class>.md`) |
 | the rest | | -- | not modelled (`A.EFFECTS` in 033 names each) |
 
+Since 2026-11-24 each race has one power at level 1 for free ([`kb/changes/2026-11-24_racial-artefact-bonuses.md`](../kb/changes/2026-11-24_racial-artefact-bonuses.md)). We own all 12 racial powers at level 2 or 3, so no racial row applies to us. What the parser does with a racial row is open (`kb/CONFLICTS.md` #85).
+
 ---
 
 ## Combat - Core Stats & Balance
