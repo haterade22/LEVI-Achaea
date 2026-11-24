@@ -48,7 +48,7 @@ bashStats.attacks = bashStats.attacks + 1
 if gmcp.Char.Status.class == "Shaman" then
 battleRage_Timers.special2 = tempTimer(20, [[battleRage_Timers.special2 = nil]])
   if not ataxia.afflictions.aeon then
-    if partyrelay then
+    if partyrelay and ataxia_partyCallAllowed(target) then
       send("pt Battlerage - Recklessness given to " ..target)
     end
   end

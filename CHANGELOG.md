@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-11-24 - v4.7.516: No target or battlerage calls to party chat in PvE unless switched on; a block calls its direction to party; a kill of an adventurer calls to party
+
+Live party channel while bashing: `Target: 78823.`, `Target: 621879.`, `Battlerage - Amnesia given to 621589.` (a denizen id is the target). The maintainer asked for these to be off in PvE, with an alias.
+
+**1. PvE calls are off.** New `ataxia_partyCallAllowed(target)` (`ataxia/016`): PvE = the target is a denizen id or the basher runs; then a call goes out only when `ataxia.settings.pvePartyCalls == true`. Saved setting, nil = off, so no migration. Guarded: the three `pt Target` sites in `016`, `combat_aliases/002_Targeting`, `genrunning/002_search_targets`, mage `006_Target_Priority`, the nine battlerage calls in trigger 332 and the one in 333. A suppressed call is silent. PvP calls are unchanged.
+
+**2. The alias.** `pvecalls` toggles, `pvecalls on` and `pvecalls off` set it, and it echoes the new state (`combat_aliases/019_PvE_Party_Calls`).
+
+**3. A block calls its direction.** New trigger `805_Block_Exit_Call`: "You move over to block the northeast exit." sends `pt Blocking Northeast`. Rule: always in PvP or with no basher; while the basher runs it follows the PvE switch (there is no target to test).
+
+**4. A kill of an adventurer calls to party.** `401_Target_Has_Died` sends `pt Slain <Name>` for "You have slain Tabethys." only, whether or not it was our target. Another player's kill and a mob kill ("..., retrieving the corpse.") send nothing. An adventurer kill is PvP, so no PvE switch applies.
+
+**Tests:** `test_pve_party_calls.lua` runs the real 016 helper and `switchTarget`, triggers 332, 401 and 805; each guard was removed in turn and a test failed.
+
+
 ## 2026-11-24 - v4.7.515: An escape move is one queued command, a lost move is re-sent within a second, and its refusals show
 
 From a death in Mnemosyne explore mode (swarm tactics, 2026-11-24, profile v4.7.513, three malagmas, exits ne and e). The swarm escape never left the room for 8.7 s. At 22.73 the pull printed "hit once, WALL the door and leap it (1/3)"; the swing ran ("Balance used: 1.6s.") and no point line and no leap line ever appeared. At 24.92 the damage watchdog printed "DYING FAST (72%) -- retreating to recover ... -> ne." and `_tacticalGo` sent `cq all` and `queue addclear free stand;leap ne`. Stuns came and went ("You are no longer stunned." at 25.73 and 26.86). At 26.86 the swarm printed "the escape already under way has it" while nothing was under way. At 29.39 the explorer's 5 s move timeout printed "pull move lost -- retry 1 -> ne." No game line answered any of the three `stand;leap ne` sends on screen. Both legs broke at 33.49, the tumble began at 33.63, and we were slain 2.35 s into it. The maintainer approved all three fixes.

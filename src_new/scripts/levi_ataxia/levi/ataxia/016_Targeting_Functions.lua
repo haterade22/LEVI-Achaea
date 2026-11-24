@@ -32,6 +32,20 @@ packageName: ''
 -- timers kept running, and their code writes to the global tBals, so the old target's 13 s tree
 -- timer (trigger 389) marked the NEW target's tree up early and cleared its timer id. Two sites
 -- also dropped salve and passive, so "not tBals.salve" read true. One helper, one shape.
+-- PARTY CALLS IN PVE (2026-11-24, v4.7.516). Our TARGET and BATTLERAGE calls to party chat are for
+-- PvP. In PvE they only spam the channel ("Target: 78823"), so they are off unless the player
+-- switched them on (`pvecalls`, saved as ataxia.settings.pvePartyCalls; nil = off, so no migration).
+-- PvE = the target is a denizen (a numeric id) or the basher is running. Returns allowed, reason.
+-- ataxia_partyCallAllowed(nil) tests the basher alone (a call that names no target).
+function ataxia_partyCallAllowed(tgt)
+	local pve = tonumber(tgt) ~= nil or (ataxiaBasher ~= nil and ataxiaBasher.enabled == true)
+	if not pve then return true, "pvp" end
+	if ataxia and ataxia.settings and ataxia.settings.pvePartyCalls == true then
+		return true, "pve calls switched on"
+	end
+	return false, "pve party calls are off (pvecalls)"
+end
+
 function ataxia_resetTargetBals()
 	if tBals and tBals.timers then
 		for _, id in pairs(tBals.timers) do killTimer(id) end
@@ -135,7 +149,7 @@ function switchTarget(who)
     lightbind = false
 
 
-    if target_calling then send("pt Target: "..target) end
+    if target_calling and ataxia_partyCallAllowed(target) then send("pt Target: "..target) end
 
     targetresetafflictionslevi()
     ataxia_resetTargetBals()
@@ -319,7 +333,7 @@ function switchtargetnext()
 	if possible_targets then
   expandAlias("t "..possible_targets[1])
   found_target = true
-    if partyrelay and not ataxia.afflictions.aeon then
+    if partyrelay and not ataxia.afflictions.aeon and ataxia_partyCallAllowed(target) then
       send("pt TARGET LEFT ROOM, now switching to "..target)
     end
   end
@@ -349,7 +363,7 @@ function switchtarget()
 	
   expandAlias("t "..possible_targets[1])
   found_target = true
-      send("pt SWITCHING TARGET to "..target)
+      if ataxia_partyCallAllowed(target) then send("pt SWITCHING TARGET to "..target) end
   end
   
   

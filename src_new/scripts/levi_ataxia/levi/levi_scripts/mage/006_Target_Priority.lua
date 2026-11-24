@@ -299,7 +299,7 @@ function tprio.switchTo(name)
   end
 
   -- Party announce (quiet, no local echo)
-  send("pt Target: " .. normalized, false)
+  if ataxia_partyCallAllowed(normalized) then send("pt Target: " .. normalized, false) end
 end
 
 ---------------------------------------------------

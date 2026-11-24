@@ -37,7 +37,7 @@ tar_lower = tempTrigger(target:lower(), [[
   resetFormat()
 ]])
 engaged = false
-if partyrelay then send("pt target: "..target) end
+if partyrelay and ataxia_partyCallAllowed(target) then send("pt target: "..target) end
 partyrelay = true
 
 

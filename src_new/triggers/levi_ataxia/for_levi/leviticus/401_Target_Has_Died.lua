@@ -41,6 +41,14 @@ patterns:
 ]]--
 
 local name = matches[2]
+
+-- v4.7.516: our own kill of an adventurer is called to the party, "Slain Tabethys", whether or not it
+-- was our target. Only the first pattern ("You have slain <one word>."): another player's kill is not
+-- ours to call, and a mob line ("You have slain a rat, retrieving the corpse.") has more words, so
+-- the pattern does not match it. An adventurer kill is PvP, so there is no PvE switch.
+if matches[1] and matches[1]:sub(1, 15) == "You have slain " then
+	send("pt Slain " .. name, false)
+end
 local space = math.floor((13-string.len(name))/2)
 
 if type(target) == "string" then

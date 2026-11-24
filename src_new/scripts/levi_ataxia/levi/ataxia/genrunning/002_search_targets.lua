@@ -123,7 +123,7 @@ function search_targets()
 						ataxiaBasher_setServerTarget(target)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Now targeting: "..target)
-              send("pt Target: " ..target)
+              if ataxia_partyCallAllowed(target) then send("pt Target: " ..target) end
 						end
 						raiseEvent("changed target")
 						--if speedWalkCounter > 0 and not mmp.paused then mmp.pause("on") end
