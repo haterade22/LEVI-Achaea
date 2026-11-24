@@ -104,8 +104,15 @@ and runs on recovery. `CONFIG SHOWQUEUEALERTS ON|OFF` toggles the queue messages
 `QUEUE ADD c!p!tu <cmd>` (class balance, not paralysed, not stunned, standing) and
 `QUEUE ADD eb!w!p!t <cmd>` (the same as `free`).
 
-**`freestand` needs you STANDING** (CLAUDE.md, Blademaster): an entry that cannot fire while you
-are prone waits until the next `addclear` replaces it.
+**`freestand` needs you STANDING. CONFIRMED live (OURS, 2026-11-24, `raw/live/shield-touch-prone_2026-11-24.txt`):**
+sitting, `queue addclear freestand touch shield` was added and held for 9.5 s; a `free` entry of the same
+command ran at once and was refused "You must be standing first."; after `stand` ("You stand up.") the held
+`freestand` entry ran on the same tick ("[System]: Running queued freestand command: TOUCH SHIELD"). So a
+`freestand` entry waits while you are down, until you stand or the next `addclear` of that type replaces it,
+and nothing stands you for it: a `stand` must be queued or sent too. TOUCH SHIELD itself needs you standing
+([../afflictions/limb-damage.md](../afflictions/limb-damage.md), "Moving on bad legs"). **`queue clear` is
+not valid syntax:** it prints "Unknown queue specified." and clears nothing (same file); use `cq all` or
+`clearqueue <type>`.
 
 ## A `;` chain is not one queue entry (2026-11-01, CONFLICTS #53)
 

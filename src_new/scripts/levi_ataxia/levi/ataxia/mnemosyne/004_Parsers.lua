@@ -1110,14 +1110,28 @@ function M._phialLockResponse()
   -- Rimewrought the shield tattoo is inert, and the lock is the worst moment to spend a command
   -- on nothing).
   local shielded = ataxia and ataxia.defences and ataxia.defences.shield
+  -- PRONE (v4.7.521): a raw `touch shield` is refused ("You must be standing first.",
+  -- kb/raw/live/shield-touch-prone_2026-11-24.txt), so the basher's helper queues it as a freestand
+  -- entry with a stand ahead of it, after the `cq all` below (or refuses, on a bad leg).
+  local proneShield = false
+  local pv = a.prone
+  local prone = pv ~= nil and pv ~= false and not (type(pv) == "number" and pv <= 0)
   if not a.paralysis and not shielded and not mnemRimewrought then
-    parts[#parts + 1] = "touch shield"
+    if prone and ataxiaBasher_queueShield then
+      proneShield = true
+    else
+      parts[#parts + 1] = "touch shield"
+    end
   end
-  if #parts == 0 then return false end
+  if #parts == 0 and not proneShield then return false end
 
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- `cq all` first: whatever is queued was decided before the lock existed.
-  send("cq all" .. sep .. table.concat(parts, sep))
+  send("cq all" .. (#parts > 0 and (sep .. table.concat(parts, sep)) or ""))
+  if proneShield then
+    local okShield, whyShield = ataxiaBasher_queueShield(false)
+    parts[#parts + 1] = okShield and "stand + touch shield" or ("no shield: " .. tostring(whyShield))
+  end
   if not M._quiet() then
     M.echo("<indian_red>FULL PHIAL LOCK<reset> (IMP SLI AST ANO) -- attack held, <cyan>"
       .. table.concat(parts, "<reset> + <cyan>") .. "<reset>.")

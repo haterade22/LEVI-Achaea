@@ -34,7 +34,14 @@ body part can be parried for no damage. Aiming at body parts needs TARGETTING (W
 | STAND | Refused: "Both of your legs must be free and unhindered to do that." | Refused (same line) | (needs the stand) | CONFIRMED: Mystor's logs (10 of 10, one leg), `kb/CONFLICTS.md` row 99 |
 | Walk | Goes through | Not captured | Needs the stand first | One leg: CONFIRMED (same logs) |
 | LEAP | Refused (same line) | Refused (same line) | Refused | CONFIRMED: our death log, v4.7.448 |
+| TOUCH SHIELD | Standing: not captured (ABADMIN #1476: "Requires legs: 0") | Standing: not captured | Refused: "You must be standing first." A `freestand` entry is held until you stand | Prone: CONFIRMED live, OURS, `kb/raw/live/shield-touch-prone_2026-11-24.txt` (sitting). The ABADMIN record (`kb/raw/abadmin/tattoos_shield_1476.txt`) lists no standing check: its "Pre checks:" is empty, so its flags are data, not proof |
 | TUMBLE | Goes through | Goes through | Goes through | ABADMIN Tumbling #1393 "Requires legs: 0" (`kb/raw/abadmin/survival_tumbling_1393.txt`); the user, 2026-11-23: "You can tumble with broken legs"; OURS, prone with `rl1`: `kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt` 12:52:30 (the stand refused, then "You begin to tumble agilely to the north.") |
+
+**Prone on a bad leg, no shield can go up:** TOUCH SHIELD needs the stand, and the stand is refused on
+any damaged, broken or mangled leg (rows above; reasoned from the two CONFIRMED rows, not captured as one
+sequence). The basher therefore starts no last stand in that state and lets the retreat (the tumble) run
+(`.claude/projects/basher/README.md`, the last stand, v4.7.521). Prone on sound legs, it queues
+`queue prepend eqbal stand` after the shield (`ataxiaBasher_queueShield`, `basher/001_Bashing_Functions.lua`).
 
 TUMBLE is refused when paralysed or entangled (ABADMIN: "Useable entangled: No", "Useable
 paralysed: No"), and a move made during the tumble aborts it. So on bad legs or prone, the way out

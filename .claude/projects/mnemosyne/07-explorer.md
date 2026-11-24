@@ -1106,12 +1106,14 @@ lines: `kb/mechanics/mnemosyne-affixes.md`.
   then answers "Prey -- every denizen tracks a retreat, so we fight here", so the ground escape, the
   disengage and both low-HP ladders stay in the room, with nothing torn down (the v4.7.314 rule).
   The outdoor hover is not a ground retreat and still flies. Pulls are not affected.
-- **The last stand** lives in the basher (`ataxiaBasher_lastStand`, basher/001:687): in a
+- **The last stand** lives in the basher (`ataxiaBasher_lastStand`, basher/001:850): in a
   no-flee area, at `escapeAt` or `panicHp`, with `S._escapeRouteReady()` false, it sends
-  `cq all` and `touch shield` even though `canShield()` says no, and holds every round from that
+  `cq all` and `touch shield` (and, when prone, a queued stand: TOUCH SHIELD needs us standing,
+  v4.7.521) even though `canShield()` says no, and holds every round from that
   send until 70% health (v4.7.490; before it, the next attack round deleted the queued shield;
   since v4.7.519, in a room of shield-safe denizens, until 85% and cured).
-  Two sends with no shield end it, with a 10 s cooldown. A
+  Two sends with no shield end it, with a 10 s cooldown. Prone on a bad leg no stand starts, and
+  one whose shield is not up ends, because the stand is refused (v4.7.521). A
   denizen that breaks the shield is learned and never trusted again. Full rules:
   `.claude/projects/basher/05-safety-systems.md`, "The last stand".
 
@@ -1126,11 +1128,13 @@ hit our shield, and the stand let go at 72%.
 
 - **The ladder asks first.** `S.onVitals` (009:3099), once it wants an escape or a panic (HP at
   `escapeAt`, `panicHp`, or the damage watchdog) and past the emergency cooldown, calls
-  `ataxiaBasher_safeStandBegin(hp, cause)` (basher/001:1170) under `pcall`, ahead of the bound wait,
+  `ataxiaBasher_safeStandBegin(hp, cause)` (basher/001:1265) under `pcall`, ahead of the bound wait,
   the Roll Hide panic and the retreat. On true (every hostile denizen here is shield-safe and the
   shield can go up) it prints `<LOW HP|DYING FAST> -- <hp>% -- NOT leaving: every denizen here is
   shield-safe (<names>) -- shielding instead.` once per 5 s (`S._sayOnce("shieldsafe")`) and returns:
   nothing is reset and no move is sent. On false, or an error, the ladder runs exactly as before.
+  Prone on a bad leg it returns false ("prone on a bad leg: the stand is refused, so no shield"),
+  and ends a shield-safe stand whose shield is not up, so the ladder tumbles (v4.7.521).
 - **The basher holds it.** The stand is the basher's last stand with `ataxiaTemp.lastStandSafe`: it
   holds every round until the explorer's return gate (`S._mayReturn()`: `returnAt` 85% and cured), up
   to 120 s, and ends at once (back to this ladder) when an unsafe denizen comes in or a hit passes the

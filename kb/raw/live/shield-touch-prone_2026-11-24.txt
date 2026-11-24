@@ -1,0 +1,37 @@
+Source: OURS (Leviticus), live probe through the Mudlet MCP, 2026-11-24, Outside the Grotto
+(the Daoric Plains), alone, basher off, full health. Lines are verbatim game output with the
+probe's epoch stamps; ">>" marks a command the probe sent. Unrelated lines (artefact power
+listings from a capture running at the same time, curing lines) are removed.
+
+Question: can TOUCH SHIELD run while prone, and does a `freestand` queue entry wait?
+
+1795562580.51 >> sit
+1795562582.02 >> queue addclear freestand touch shield
+1795562582.06 [System]: Queued freestand commands cleared.
+1795562582.06 [System]: Added TOUCH SHIELD to your freestand queue.
+1795562585.52 >> queue list
+1795562585.56 *******************************[ Queued Commands ]*******************************
+1795562585.56 #   Queue                Command
+1795562585.57 ---------------------------------------------------------------------------------
+1795562585.57 1)  freestand            touch shield
+1795562585.57 ---------------------------------------------------------------------------------
+1795562586.52 >> queue clear
+1795562586.57 Unknown queue specified.
+1795562587.52 >> queue addclear free touch shield
+1795562587.56 [System]: Queued free commands cleared.
+1795562587.56 [System]: Added TOUCH SHIELD to your free queue.
+1795562587.56 [System]: Running queued free command: TOUCH SHIELD
+1795562587.56 You must be standing first.
+1795562591.52 >> stand
+1795562591.60 You stand up.
+1795562591.60 [System]: Running queued freestand command: TOUCH SHIELD
+1795562591.60 You touch the tattoo and a nearly invisible magical shield forms around you.
+1795562591.60 Equilibrium used: 3.40s.
+
+Notes:
+- The game answered "sit" with "You may not emote here at this time." before the freestand
+  entry was added, yet the entry did not run for 9.5 s, the free entry was refused with
+  "You must be standing first.", and STAND printed "You stand up." So we were sitting.
+- The freestand entry was still held after "queue clear" (that syntax is not valid:
+  "Unknown queue specified.") and ran on the same tick as the stand.
+- Equilibrium used 3.40 s = the ABADMIN 4.00 s base (tattoos_shield_1476) x 0.85 (Aldar Diadem).

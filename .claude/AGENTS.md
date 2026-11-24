@@ -83,6 +83,11 @@
   through `ataxiaBasher_attack`, never `assembleAttack` -- the gates (swarm hold, danger level,
   player-flee) live in the former, and a swarm pull chain is one queue entry that any
   `addclearfull` would wipe.
+  **A flush also deletes the prerequisites other code queued (v4.7.521).** The prone handler queued
+  ONE `queue prepend eqbal stand`; the last stand's `cq all` deleted it, and the `freestand` shield
+  then waited for a stand that never came (two tries, the stand gave up at critical health;
+  `kb/raw/live/shield-touch-prone_2026-11-24.txt`). Whoever clears the queue re-queues what its own
+  command needs, after the clear: `ataxiaBasher_queueShield` sends the stand itself.
 
 - **A `;` chain is NOT one queue entry (corrected 2026-11-01).** Mudlet splits `;` before sending, so
   `queue addclearfull stand;<a>;<b>` queues only `stand`; `<a>` and `<b>` go raw and the game's

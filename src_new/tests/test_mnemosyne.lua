@@ -2219,6 +2219,32 @@ describe("Seasone tree reserve", function()
     ataxiaBasher = nil
   end)
 
+  -- v4.7.521: prone, a raw `touch shield` is refused ("You must be standing first.",
+  -- kb/raw/live/shield-touch-prone_2026-11-24.txt). The shield goes to the basher's helper, which
+  -- queues it with a stand ahead of it, AFTER the `cq all` (here a recording stub: the helper's own
+  -- sends are pinned in test_prone_shield.lua).
+  it("prone on the FULL lock: the tree in the chain, the shield through the stand helper", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 90 }
+    ataxia.defences = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true, prone = true }
+    local realHelper = ataxiaBasher_queueShield
+    ataxiaBasher_queueShield = function(flush)
+      send("helper flush=" .. tostring(flush))
+      return true, "prone: a stand is queued ahead of the shield"
+    end
+    local ok, err = pcall(captureSend, function(captured)
+      expect(M._phialLockResponse()).toBeTrue()
+      expect(captured[1]).toBe("cq all;touch tree")
+      expect(captured[2]).toBe("helper flush=false")
+      expect(#captured).toBe(2)
+    end)
+    ataxiaBasher_queueShield = realHelper
+    ataxiaBasher = nil
+    if not ok then error(err, 0) end
+  end)
+
   it("does nothing until ALL FOUR are up", function()
     bossReset()
     ataxiaTemp = {}

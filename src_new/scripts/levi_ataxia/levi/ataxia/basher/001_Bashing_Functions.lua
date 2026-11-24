@@ -187,13 +187,15 @@ function ataxiaBasher_attack()
   if danger == "shield" and not ataxiaBasher_bravado() and not ataxiaBasher_tattoosDead() then
     -- v4.7.490: a last stand first clears the queue, so a bite or a swing the server already holds
     -- cannot run before the shield and drop it (never in lava: onLava's queued escape lives there).
-    if ataxiaTemp.lastStandFlush then
-      ataxiaTemp.lastStandFlush = nil
-      local mnem = ataxia.mnemosyne
-      if not (mnem and mnem.roomLava and mnem.roomLava()) then send("cq all") end
-    end
-    send("queue addclear freestand touch shield")
-    return
+    -- v4.7.521: one helper sends it, and when prone it queues the stand after the `cq all`.
+    local flush = ataxiaTemp.lastStandFlush
+    ataxiaTemp.lastStandFlush = nil
+    local okShield, whyShield = ataxiaBasher_queueShield(flush)
+    if okShield then return end
+    -- Prone on a bad leg: no shield can rise (the stand is refused). Say so and fall through to the
+    -- attack, as under Bravado. A last stand never gets here in that state (ataxiaBasher_lastStand
+    -- ends or refuses it first); this is the spike guard's one-cycle shield.
+    ataxiaBasher_shieldRefusedSay(whyShield)
   end
 
   -- danger == "attack"
@@ -241,6 +243,82 @@ end
 -- doing nothing, because it costs the action AND leaves us believing we are covered.
 function ataxiaBasher_tattoosDead()
   return mnemRimewrought == true
+end
+
+-- ============================================================================
+-- TOUCH SHIELD NEEDS US STANDING (v4.7.521)
+-- ============================================================================
+-- Live probe, OURS, 2026-11-24 (kb/raw/live/shield-touch-prone_2026-11-24.txt): sitting, a
+-- `queue addclear freestand touch shield` entry is HELD and does not run; a `free` entry runs and is
+-- refused "You must be standing first."; after "You stand up." the held freestand entry runs on the
+-- same tick and the shield forms. So `freestand` is the right queue, and something must stand us.
+-- The prone handler (ataxia/004_Aff_gains_losses.lua) queues ONE `queue prepend eqbal stand` when
+-- prone lands, but the last stand's `cq all` deletes it, and the shield then waited for a stand
+-- that never came: two tries, the stand gave up, seconds lost at critical health.
+--
+-- With a damaged, broken or mangled leg the STAND itself is refused ("Both of your legs must be
+-- free and unhindered to do that.", kb/afflictions/limb-damage.md, "Moving on bad legs"), so prone
+-- on a bad leg means no shield at all: the answer is the retreat (the swarm tumbles, v4.7.513).
+
+local function shieldAffOn(k)
+  local v = ataxia and ataxia.afflictions and ataxia.afflictions[k]
+  if v == nil or v == false then return false end
+  if type(v) == "number" then return v > 0 end
+  return true
+end
+
+local function shieldLegOut()
+  -- The swarm's reader is the one the tumble decision uses (mnemosyne/009, S._oneLegOut); the
+  -- local read below is the same three keys per side, for when the swarm script is not loaded.
+  local S = ataxia and ataxia.mnemosyne and ataxia.mnemosyne.swarm
+  if S and type(S._oneLegOut) == "function" then
+    local ok, out = pcall(S._oneLegOut)
+    if ok then return out == true end
+  end
+  for _, side in ipairs({ "left", "right" }) do
+    for _, kind in ipairs({ "broken", "damaged", "mangled" }) do
+      if shieldAffOn(kind .. side .. "leg") then return true end
+    end
+  end
+  return false
+end
+
+-- Prone on a bad leg: the reason no shield can go up, or nil.
+function ataxiaBasher_proneNoShield()
+  if not shieldAffOn("prone") then return nil end
+  if not shieldLegOut() then return nil end
+  return "prone on a bad leg: the stand is refused, so no shield"
+end
+
+-- THE ONE SEND OF A BASHER SHIELD. `flush` sends `cq all` first (never in lava: onLava's queued
+-- escape lives in the queue). Then the shield as a `freestand` entry, and, when prone, a separate
+-- `queue prepend eqbal stand` AFTER the `cq all`, so the clear cannot delete it. Two entries, never
+-- a `;` chain (Mudlet splits it) and never a shared `lv*` alias (a later press rewrites the alias
+-- before the entry runs). Returns true and what it sent, or false and why nothing was sent.
+function ataxiaBasher_queueShield(flush)
+  local why = ataxiaBasher_proneNoShield()
+  if why then return false, why end
+  if flush then
+    local mnem = ataxia.mnemosyne
+    if not (mnem and mnem.roomLava and mnem.roomLava()) then send("cq all") end
+  end
+  send("queue addclear freestand touch shield")
+  if shieldAffOn("prone") then
+    send("queue prepend eqbal stand")
+    return true, "prone: a stand is queued ahead of the shield"
+  end
+  return true, "the shield is queued"
+end
+
+-- Throttled echo for a refused shield (this runs on the attack path, every prompt). Global: the
+-- attack function above this point calls it.
+function ataxiaBasher_shieldRefusedSay(why)
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or 0
+  if why ~= ataxiaTemp.shieldRefusedWhy or (nowT - (tonumber(ataxiaTemp.shieldRefusedAt) or 0)) >= 5 then
+    ataxiaTemp.shieldRefusedWhy, ataxiaTemp.shieldRefusedAt = why, nowT
+    ataxiaEcho("NO SHIELD: " .. tostring(why) .. ".")
+  end
 end
 
 -- CONTROL-FIRST DENIZENS (v4.7.198, user-directed: "a manifested nightmare -- when facing
@@ -681,6 +759,9 @@ function ataxiaBasher_lastStandWanted(hpp)
   if lastStandRetreatOpen() then return false end
   local cool = tonumber(ataxiaTemp and ataxiaTemp.lastStandCoolUntil)
   if cool and lastStandNow() < cool then return false end
+  -- v4.7.521: last, so its reason is said only when a stand would otherwise start.
+  local legs = ataxiaBasher_proneNoShield()
+  if legs then return false, legs end
   return true
 end
 
@@ -771,6 +852,16 @@ function ataxiaBasher_lastStand(hpp)
   local nowT = lastStandNow()
   if ataxiaTemp.lastStandAt and ataxiaBasher_lastStandHolding() then
     if ataxia.defences and ataxia.defences.shield then return "wait" end
+    -- PRONE ON A BAD LEG WITH NO SHIELD UP (v4.7.521): the stand is refused, so the resend cannot
+    -- work and the resend window would hold the attacks for nothing. End the stand (no cooldown:
+    -- once a leg mends or we are up, a new stand may start at once) so the danger check and the
+    -- swarm's ladder can move us -- the tumble needs no legs (v4.7.513). A shield that is already
+    -- up is kept: being knocked down does not drop it, so that stand holds.
+    local legs = ataxiaBasher_proneNoShield()
+    if legs then
+      lastStandEnd(legs)
+      return nil
+    end
     local since = nowT - (tonumber(ataxiaTemp.lastStandSentAt) or 0)
     if since >= 0 and since < LAST_STAND_RESEND then return "wait" end
     if (ataxiaTemp.lastStandSends or 0) >= LAST_STAND_TRIES then
@@ -782,7 +873,11 @@ function ataxiaBasher_lastStand(hpp)
     ataxiaTemp.lastStandFlush = true
     return "shield"
   end
-  if not ataxiaBasher_lastStandWanted(hpp) then return nil end
+  local wanted, notWhy = ataxiaBasher_lastStandWanted(hpp)
+  if not wanted then
+    if notWhy then ataxiaBasher_shieldRefusedSay("no last stand -- " .. notWhy) end
+    return nil
+  end
   ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nowT, nowT
   ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = 1, nil
   ataxiaTemp.lastStandBlockedAt, ataxiaTemp.lastStandBlockSaid = nil, nil -- v4.7.514: this stand's own
@@ -1171,6 +1266,13 @@ function ataxiaBasher_safeStandBegin(hpp, cause)
   ataxiaTemp = ataxiaTemp or {}
   if tonumber(ataxiaTemp.lastStandAt) then
     if ataxiaTemp.lastStandSafe or ataxiaBasher_standSafeHold() then
+      -- v4.7.521: a stand whose shield is not up, while we lie on a bad leg, can never raise it.
+      -- End it, so this caller (the swarm's ladder) tumbles out instead of trusting it.
+      local legs = not (ataxia.defences and ataxia.defences.shield) and ataxiaBasher_proneNoShield()
+      if legs then
+        lastStandEnd(legs .. " -- back to the escape ladder")
+        return false, legs
+      end
       return true, "the last stand in this shield-safe room holds"
     end
     return false, "an ordinary last stand is on"
@@ -1179,6 +1281,8 @@ function ataxiaBasher_safeStandBegin(hpp, cause)
   if ataxiaBasher.lastStand == false then return false, "the last stand is off (bash laststand on)" end
   if ataxiaBasher_bravado() then return false, "Bravado: a shield does nothing" end
   if ataxiaBasher_tattoosDead() then return false, "Rimewrought: the tattoos do nothing" end
+  local legs = ataxiaBasher_proneNoShield() -- v4.7.521
+  if legs then return false, legs end
   local aff = ataxia.afflictions or {}
   if aff.paralysis or aff.aeon then return false, "paralysed or in aeon: no tattoo now" end
   local nowT = lastStandNow()
@@ -1199,9 +1303,7 @@ function ataxiaBasher_safeStandBegin(hpp, cause)
   ataxiaTemp.lastStandFlush = nil
   local _, gate = ataxiaBasher_shieldSafeRecovered()
   if not (ataxia.defences and ataxia.defences.shield) then
-    local mnem = ataxia.mnemosyne
-    if not (mnem and mnem.roomLava and mnem.roomLava()) then send("cq all") end
-    send("queue addclear freestand touch shield")
+    ataxiaBasher_queueShield(true) -- `cq all` (not in lava), the shield, and a stand when prone
   end
   ataxiaEcho("SHIELD-SAFE ROOM: " .. tostring(cause or ("HP " .. tostring(hpp) .. "%")) .. " -- " .. names
     .. " never got through the shield; shielding instead of leaving, attacks held until " .. gate .. ".")
@@ -1619,8 +1721,14 @@ function ataxiaBasher_executeFlee()
     if ataxiaBasher_tattoosDead() then
       ataxiaEcho("FLEE: Can't move (afflicted) and tattoos are dead (Rimewrought) -- waiting for cures.")
     else
-      ataxiaEcho("FLEE: Can't move (afflicted). Shielding and waiting for cures.")
-      send("touch shield")
+      -- v4.7.521: through the helper, so a prone body is stood first (a plain send is refused,
+      -- "You must be standing first."). `cq all` went above; the stand is queued after it.
+      local okShield, whyShield = ataxiaBasher_queueShield(false)
+      if okShield then
+        ataxiaEcho("FLEE: Can't move (afflicted). Shielding and waiting for cures.")
+      else
+        ataxiaEcho("FLEE: Can't move (afflicted), and no shield: " .. tostring(whyShield) .. ". Waiting for cures.")
+      end
     end
     return
   end
@@ -1646,8 +1754,12 @@ function ataxiaBasher_executeFlee()
     if ataxiaBasher_tattoosDead() then
       ataxiaEcho("FLEE: No escape route, and tattoos are dead (Rimewrought) -- nothing to shield with.")
     else
-      ataxiaEcho("FLEE: No escape route. Shielding.")
-      send("touch shield")
+      local okShield, whyShield = ataxiaBasher_queueShield(false) -- v4.7.521: stands us when prone
+      if okShield then
+        ataxiaEcho("FLEE: No escape route. Shielding.")
+      else
+        ataxiaEcho("FLEE: No escape route, and no shield: " .. tostring(whyShield) .. ".")
+      end
     end
   end
 end
@@ -1713,7 +1825,11 @@ function ataxiaBasher_checkPlayerFlee()
       ataxiaBasher.paused = true
       expandAlias("mstop")
       send("cq all")
-      if not ataxiaBasher_tattoosDead() then send("touch shield") end -- inert under Rimewrought
+      -- inert under Rimewrought; v4.7.521: the helper stands us first when prone
+      if not ataxiaBasher_tattoosDead() then
+        local okShield, whyShield = ataxiaBasher_queueShield(false)
+        if not okShield then ataxiaEcho("No shield: " .. tostring(whyShield) .. ".") end
+      end
       ataxiaEcho("Hostile player detected: " .. player .. "! Fleeing and disabling basher.")
       return true
     end

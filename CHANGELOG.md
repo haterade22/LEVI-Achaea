@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-11-24 - v4.7.521: The last stand stands us up before the shield, and starts no stand on a bad leg while prone
+
+**What.** Every basher shield now goes through one helper, `ataxiaBasher_queueShield(flush)`: an
+optional `cq all` (never in lava), then `queue addclear freestand touch shield`, then, when prone, a
+separate `queue prepend eqbal stand` after both. Prone on a damaged, broken or mangled leg the helper
+sends nothing and says why ("prone on a bad leg: the stand is refused, so no shield"): no new last
+stand or shield-safe stand starts, a stand whose shield is not up ends on its next round (no cooldown)
+so the swarm's ladder can tumble, and a stand whose shield is already up keeps holding. The flee
+shields (`executeFlee`, both sends), the hostile-player shield and, when prone, the full phial lock's
+shield use the same helper.
+
+**Why.** Live probe (OURS, `kb/raw/live/shield-touch-prone_2026-11-24.txt`): while down, a `freestand`
+TOUCH SHIELD is held, a `free` one is refused "You must be standing first.", and after "You stand up."
+the held entry runs on the same tick. The prone handler queues ONE stand when prone lands, and the last
+stand's `cq all` deleted it, so the shield waited for a stand that never came: two tries, then the
+stand gave up, with seconds lost at critical health. On a bad leg the STAND itself is refused
+(`kb/afflictions/limb-damage.md`, "Moving on bad legs"), so no shield is possible and the tumble is the
+answer (v4.7.513).
+
+**How.** `basher/001`, section "TOUCH SHIELD NEEDS US STANDING": `ataxiaBasher_proneNoShield` (the leg
+read is the swarm's `S._oneLegOut` when loaded, else the same keys), `ataxiaBasher_queueShield`,
+`ataxiaBasher_shieldRefusedSay` (throttled reason); guards in `ataxiaBasher_lastStandWanted` (now also
+returns the reason), `ataxiaBasher_lastStand` and `ataxiaBasher_safeStandBegin`;
+`mnemosyne/004_Parsers.lua` `M._phialLockResponse`. Two queue entries on purpose: Mudlet splits a `;`
+chain, and a shared `lv*` alias can be rewritten before the entry runs. Tests: `test_prone_shield.lua`
+(13) and one in `test_mnemosyne.lua`; each fix broken back. Rules:
+`.claude/projects/basher/05-safety-systems.md`, "The shield needs us standing".
+
+---
 ## 2026-11-24 - v4.7.520: Every curingset switch resets the SSC defence list and writes ours
 
 **What.** A new `ataxia_reapplyDefencePriorities(bashing)` (`deffing/001_Defence_API.lua`) sends
