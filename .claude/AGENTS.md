@@ -1481,3 +1481,13 @@ refusals). Three sends in 8.7 s, nothing on screen, "the escape already under wa
 able-aware deadline (`S._checkMoveWatch`), never only a long timeout; and a gag must not be the only
 reader of a refusal of our own critical command (`mnemosyne/114` says it while a move is watched).
 Before you call a send "lost", count the answers a gag deleted.
+
+### A curingset switch brings back that set's own defence list (v4.7.520)
+
+2026-11-24: a Blademaster stopped the basher after a wade. The bash profile switched to `normal`,
+which still held a Serpent defence list, and SSC sent `lipread`, `weaving` and `scales` on every
+prompt. SSC keeps a defence list per curingset, and only `classDetect.switchCuringset` re-applied
+ours: the bash profile on and off, `classDetect.resetToNormal` and the login switch did not. Five
+sites send `curingset switch`; one was fixed and four were missed. **Rule:** every switch ends with
+`ataxia_reapplyDefencePriorities` (`deffing/001`). Before you add a switch, `grep -rn "curingset
+switch" src_new` and count the sites. Detail: `.claude/projects/defense/README.md`.

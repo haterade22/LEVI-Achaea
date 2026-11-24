@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-11-24 - v4.7.520: Every curingset switch resets the SSC defence list and writes ours
+
+**What.** A new `ataxia_reapplyDefencePriorities(bashing)` (`deffing/001_Defence_API.lua`) sends
+`curing priority defence list reset`, then writes the current profile's steady state: a keepup
+defence at 25; a defup defence at 25 while the basher runs or while it is not up yet. It now runs
+after every `curingset switch`: the bash profile on (`bashing = true`) and off (`false`), the class
+detect switch and its reset to `normal` (both through `switchSend`), and the login switch to
+`normal`. `classDetect.reapplyDefencePriorities` calls it.
+
+**Why.** SSC keeps a defence list in each curingset. On 2026-11-24 a Blademaster stopped the basher
+after a wade; the bash profile switched to `normal`, which still held a Serpent list, and SSC sent
+`lipread`, `weaving` and `scales` on every prompt ("I'm sorry, I don't know what ..."). Only the class
+detect switch re-applied our list. At login each class branch sends its defup before the switch to
+`normal`, so the defup went into the old set. The old re-apply also wrote the whole defup list at
+25, so SSC kept every defup defence up after a switch; `gotDef` resets a non-keepup defence only when
+it comes up.
+
+**How.** Tests in `test_bash_curing_profile.lua` and `test_group_fight.lua`; each fails with its
+call removed. Docs: `.claude/projects/defense/README.md`, `.claude/AGENTS.md`.
+
 ## 2026-11-24 - v4.7.519: Mobs that cannot break the shield are learned, and a room of them gets the shield instead of a retreat
 
 **What.** The basher keeps a saved record per denizen name, `ataxiaBasher.shieldRecord[<name>] =

@@ -374,6 +374,9 @@ function ataxia_bashProfileOn()
   -- Stops a default-table send still on its timers (ataxia_sendDefaultPrios).
   ataxiaPrioGen = (ataxiaPrioGen or 0) + 1
   send("curingset switch " .. s.setname)
+  -- The bash set is a clone, so it carries the defence list of whichever set it was cloned from.
+  -- Written as for a running basher: the tower arms the profile before the basher starts.
+  if ataxia_reapplyDefencePriorities then ataxia_reapplyDefencePriorities(true) end
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. s.setname .. "<reset> (PvE: limbs first, mental spray parked).") end
 end
 
@@ -384,6 +387,10 @@ function ataxia_bashProfileOff()
   send("curingset switch " .. (s.restoreTo or "normal"))
   -- A login during the hunt left the set unknown, and this send names it.
   if ataxia_prioBashReleased then ataxia_prioBashReleased(s.restoreTo or "normal") end
+  -- v4.7.520: `normal` still held a Serpent defence list after a Blademaster wade, and SSC sent
+  -- lipread, weaving and scales on every prompt. The set we return to gets our list, written as
+  -- for a stopped basher: "mnemosyne left" can release the profile while the basher still runs.
+  if ataxia_reapplyDefencePriorities then ataxia_reapplyDefencePriorities(false) end
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. (s.restoreTo or "normal") .. "<reset> (PvP priorities restored).") end
 end
 

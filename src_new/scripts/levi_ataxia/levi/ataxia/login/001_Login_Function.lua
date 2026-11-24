@@ -23,6 +23,9 @@ function ataxia_loginCuringsetNormal()
   local bash = ataxia.settings and ataxia.settings.bashcuring
   if bash and bash.active then bash.restoreTo = "normal" end
   send("curingset switch normal")
+  -- Each branch sends its defup BEFORE this switch, so those priorities went into the old set and
+  -- normal kept its own list (v4.7.520). defupFailsafe resets the non-keepup ones at 60 s, as before.
+  if ataxia_reapplyDefencePriorities then ataxia_reapplyDefencePriorities() end
 end
 
 function levilogin()

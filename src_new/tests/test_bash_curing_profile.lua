@@ -311,6 +311,79 @@ describe("bash curing profile -- switching", function()
   end)
 end)
 
+-- 2026-11-24: a Blademaster stopped the basher after a wade; `normal` still held a Serpent defence
+-- list and SSC sent lipread, weaving and scales on every prompt. v4.7.520 re-applies our list.
+describe("bash curing profile -- the defence list follows the switch", function()
+  local saved = {}
+  local NAMES = { "isDefenceForCurrentClass", "ataxia_defenceTakesPriority", "ataxiaBasher", "classDetect" }
+  local function setup()
+    for _, n in ipairs(NAMES) do saved[n] = _G[n] end
+    saved.defences, saved.settingsDefences = ataxia.defences, ataxia.settings.defences
+    assert(pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/deffing/001_Defence_API.lua"),
+      "Failed to load the defence API")
+    mock.reset()
+    ataxia.prioThrottle.commands, ataxia.prioThrottle.sentThisSecond = {}, 0
+    isDefenceForCurrentClass = function() return true end
+    ataxia_defenceTakesPriority = function(d) return d ~= "avoid" end
+    ataxiaBasher = { enabled = false }
+    classDetect = nil
+    ataxia.settings.bashcuring = {
+      enabled = true, installed = true, setname = "bash", restoreTo = "normal", active = false,
+    }
+    ataxia.settings.defences = { current = "bm",
+      defup = { bm = { deathsight = true, toughness = true, avoid = true } },
+      keepup = { bm = { mindseye = true } } }
+    ataxia.defences = { deathsight = true }
+  end
+  local function teardown()
+    for _, n in ipairs(NAMES) do _G[n] = saved[n] end
+    ataxia.defences, ataxia.settings.defences = saved.defences, saved.settingsDefences
+  end
+
+  -- setup, the body, then teardown even when an expect fails.
+  local function run(body)
+    return function()
+      setup()
+      local ok, err = pcall(body)
+      teardown()
+      if not ok then error(err, 0) end
+    end
+  end
+
+  local function after(cmd)
+    for i, c in ipairs(mock.sent_commands) do
+      if c == cmd then return { unpack(mock.sent_commands, i + 1) } end
+    end
+  end
+
+  it("the release resets the list and writes our steady state", run(function()
+    ataxia_bashProfileOn()
+    mock.reset()
+    ataxia.prioThrottle.commands, ataxia.prioThrottle.sentThisSecond = {}, 0
+    ataxiaBasher.enabled = true -- "mnemosyne left" can come while the basher still runs
+    ataxia_bashProfileOff()
+    local rest = after("curingset switch normal")
+    expect(rest == nil).toBe(false)
+    expect(rest[1]).toBe("curing priority defence list reset")
+    -- deathsight is up and not kept: gotDef already reset it, so it stays off. avoid takes none.
+    expect(rest[2]).toBe("curing priority defence mindseye 25 toughness 25")
+  end))
+
+  it("the bash set gets the whole defup list", run(function()
+    ataxia_bashProfileOn()
+    local rest = after("curingset switch bash")
+    expect(rest[1]).toBe("curing priority defence list reset")
+    expect(rest[2]).toBe("curing priority defence deathsight 25 mindseye 25 toughness 25")
+  end))
+
+  it("no profile still resets the set's own list", run(function()
+    ataxia.settings.defences.current = ""
+    expect(ataxia_reapplyDefencePriorities()).toBe(0)
+    expect(mock.sent_commands[1]).toBe("curing priority defence list reset")
+    expect(#mock.sent_commands).toBe(1)
+  end))
+end)
+
 describe("bash curing profile -- held for the whole Mnemosyne wade", function()
   local function reset(inTower)
     mock.reset()

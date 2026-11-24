@@ -107,6 +107,9 @@ describe("the curing set in a party", function()
     classDetect = nil
     dofile(ENGINE)
     dofile(DEFFING)
+    -- The defence list after a switch is built there (v4.7.520).
+    dofile(LEVI .. "ataxia/deffing/001_Defence_API.lua")
+    ataxiaBasher = { enabled = false }
     classDetect.config.apiLookupEnabled = false
   end
   local function fresh(channels)
@@ -218,6 +221,25 @@ describe("the curing set in a party", function()
       for _, def in ipairs({ "avoid", "shikudoform", "starburst" }) do
         expect(line():find(def, 1, true)).toBeNil()
       end
+    end)
+
+    -- v4.7.520: resetToNormal switched with no re-apply, so normal kept another class's list.
+    it("the reset to normal re-applies the list", function()
+      fresh({ ct = "Mhaldor" })
+      classDetect.state.currentCuringset = "serpent"
+      classDetect.resetToNormal()
+      expect(sent[1]).toBe("curingset switch normal")
+      expect(has(sent, "curing priority defence list reset")).toBeTrue()
+      expect(line():find("vitality 25", 1, true) ~= nil).toBeTrue()
+    end)
+
+    it("a defence that is up and not kept is not raised again", function()
+      fresh({ ct = "Mhaldor" })
+      ataxia.settings.defences.keepup.shi = {}
+      ataxia.defences = { vitality = true }
+      classDetect.onTargetChanged()
+      expect(has(sent, "curing priority defence list reset")).toBeTrue()
+      expect(line()).toBeNil()
     end)
 
     it("a defup leaves them out too", function()

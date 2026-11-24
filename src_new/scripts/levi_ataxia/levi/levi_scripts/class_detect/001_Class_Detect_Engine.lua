@@ -218,24 +218,13 @@ end
 -- DEFENCE PRIORITY RE-APPLICATION
 --------------------------------------------------------------------------------
 
+-- Reset the curingset's embedded defence list, then re-apply ours. Without the reset, SSC keeps
+-- trying the curingset's own defence entries (e.g., toughness/shin/weathering from a shikudo
+-- curingset on an Apostate). The list itself is built in deffing/001 (v4.7.520), which every
+-- curingset switch calls; this name stays for its callers.
 function classDetect.reapplyDefencePriorities()
-  if not ataxia or not ataxia.settings or not ataxia.settings.defences then return end
-  local cur = ataxia.settings.defences.current
-  if not cur or cur == "" then return end
-  local defup = ataxia.settings.defences.defup
-  if not defup or not defup[cur] then return end
-
-  -- Reset the curingset's embedded defence list first, then re-apply ours.
-  -- Without the reset, SSC keeps trying the curingset's own defence entries
-  -- (e.g., toughness/shin/weathering from a shikudo curingset on an Apostate).
-  ataxia_sendCuringPriority("curing priority defence list reset", false)
-  local command = "curing priority defence "
-  for def in pairs(defup[cur]) do
-    if isDefenceForCurrentClass(def) and ataxia_defenceTakesPriority(def) then
-      command = command .. def .. " 25 "
-    end
-  end
-  ataxia_sendCuringPriority(command, false)
+  if ataxia_reapplyDefencePriorities then return ataxia_reapplyDefencePriorities() end
+  return nil, "ataxia_reapplyDefencePriorities is not loaded"
 end
 
 --------------------------------------------------------------------------------
@@ -275,6 +264,8 @@ local function switchSend(setName)
   else
     send("curingset switch " .. setName, false)
   end
+  -- The new set brings its own defence list (v4.7.520: resetToNormal sent no re-apply before).
+  classDetect.reapplyDefencePriorities()
 end
 
 function classDetect.switchCuringset(className)
@@ -289,13 +280,9 @@ function classDetect.switchCuringset(className)
   if (now - classDetect.state.lastSwitchTime) < (classDetect.config.debounceMs / 1000) then return end
 
   classDetect.state.lastSwitchTime = now
+  -- switchSend re-applies our defence priorities: curingsets carry their own SSC defence list,
+  -- which may include abilities the player doesn't have.
   switchSend(setName)
-
-  -- Re-apply player's own defence priorities after curingset switch.
-  -- Curingsets carry their own SSC defence list which may include abilities
-  -- the player doesn't have. This re-sends the correct priorities from the
-  -- player's active defence profile (e.g., "shi", "apoo", "bm").
-  classDetect.reapplyDefencePriorities()
 
   if classDetect.config.echoSwitches then
     classDetect.echo("Switched curingset to: <white>" .. setName .. "<plum> (vs <yellow>" .. className .. "<plum>)")

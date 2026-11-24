@@ -79,6 +79,21 @@ a GMCP not tracking the defence, which will therefore never Remove it: the write
 nothing can clear, i.e. the v4.7.280 livelock from the opposite direction. It warns once per session
 and lets the hold re-probe.
 
+### The SSC defence list follows every curingset switch (v4.7.520)
+
+SSC keeps a defence list in EACH curingset. A `curingset switch` therefore brings back whatever that set was last told, which can be another class's list. On 2026-11-24 a Blademaster stopped the basher after a wade: the bash profile switched to `normal`, which still held a Serpent list, and SSC sent `lipread`, `weaving` and `scales` on every prompt ("I'm sorry, I don't know what ..."). Before v4.7.520 only `classDetect.switchCuringset` re-applied our list.
+
+`ataxia_reapplyDefencePriorities(bashing)` (`deffing/001_Defence_API.lua`) sends `curing priority defence list reset`, then writes the steady state that `gotDef` leaves for the current profile: a keepup defence at 25; a defup defence at 25 while the basher runs, or while it is not up yet. It skips what `isDefenceForCurrentClass` rejects and what the game refuses a priority for (`ataxia_defenceTakesPriority`). With no profile it still resets the list. Its callers:
+
+| Switch | Site | `bashing` |
+|---|---|---|
+| Bash profile on | `ataxia/008_Bash_Curing_Profile.lua`, `ataxia_bashProfileOn` | `true` (the tower arms the profile before the basher starts) |
+| Bash profile off | same file, `ataxia_bashProfileOff` | `false` ("mnemosyne left" can release it while the basher still runs) |
+| Class detect switch and reset to normal | `class_detect/001`, `switchSend` | `ataxiaBasher.enabled` |
+| Login | `login/001`, `ataxia_loginCuringsetNormal` (each class branch sends its defup BEFORE this switch) | `ataxiaBasher.enabled` |
+
+The bash install (`bashInstallWrite`) returns to the set it came from, so it does not re-apply. The old re-apply wrote the whole defup list at 25, so after a switch SSC kept every defup defence up, not only the keepup ones. Tests: `test_bash_curing_profile.lua` ("the defence list follows the switch") and `test_group_fight.lua` ("the defence list").
+
 ### Defence API (`ataxia.defense`)
 The defense system tracks active defenses and manages automatic rekeeping.
 
