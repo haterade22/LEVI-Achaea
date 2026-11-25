@@ -85,8 +85,10 @@ M.AFFIX_REGISTRY = {
   ["Dreambound"] = { spawnsOnKill = true, does = "explorer waits for 90% HP after a room (017 M._spawnHold)" },
   ["Dreamcursed"] = { spawnsOnKill = true, does = "explorer waits for 90% HP after a room (017 M._spawnHold)" },
   ["Heretical"] = { spawnsOnKill = true, does = "explorer waits for 90% HP after a room (017 M._spawnHold)" },
-  -- The thornwall or gravehands lines are not captured yet; only the pacing hold applies.
-  ["Suffering of Abbadon"] = { spawnsOnKill = true, does = "explorer waits for 90% HP after a room (017 M._spawnHold); thornwall lines not captured" },
+  -- A thornwall bars one exit and cuts for about 975 health when you go through it; gravehands
+  -- grab you when you leave and take 1.0s of balance (kb/mechanics/mnemosyne-affixes.md). The
+  -- maintainer chose to record them only (2026-11-25), so only the pacing hold applies.
+  ["Suffering of Abbadon"] = { spawnsOnKill = true, does = "explorer waits for 90% HP after a room (017 M._spawnHold); thornwall and gravehands are recorded, not handled" },
 }
 
 local SPAWN_HOLD_HP = 90 -- the Last Word / Haemophiliac figure (user, 2026-08-02)

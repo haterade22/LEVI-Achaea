@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-11-25 - v4.7.525: The Suffering of Abbadon registry text names the captured lines
+
+**What.** The `does` text of "Suffering of Abbadon" in `M.AFFIX_REGISTRY`
+(`mnemosyne/017_Affix_Registry.lua`) said "thornwall lines not captured". It now says
+"thornwall and gravehands are recorded, not handled", and the comment above it gives the two
+facts: a thornwall bars one exit and cuts for about 975 health when you go through it; gravehands
+grab you when you leave and take 1.0 s of balance.
+
+**Why.** The lines were captured on 2026-11-25 (`kb/raw/live/mnemosyne-abbadon-thornwall-gravehands_2026-11-25.txt`,
+filed in `kb/mechanics/mnemosyne-affixes.md`). The maintainer chose to record them only, so no
+behaviour changes: the explorer's 90% spawn hold is still the only thing our code does for this affix.
+
+**How.** Text only: one comment and one `does` string.
+
 ## 2026-11-24 - v4.7.524: A shield queued while prone holds the attack rounds until it rises
 
 **What.** When `ataxiaBasher_queueShield` queues a shield while prone (the `freestand` shield and
