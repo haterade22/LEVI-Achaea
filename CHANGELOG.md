@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-11-24 - v4.7.524: A shield queued while prone holds the attack rounds until it rises
+
+**What.** When `ataxiaBasher_queueShield` queues a shield while prone (the `freestand` shield and
+`queue prepend eqbal stand`), it starts one bounded hold (`ataxia_proneShieldHoldStart`,
+`ataxia/003_Queueing_Related.lua`, state on `ataxiaTemp.proneShieldHold`). While it runs, the send
+wrapper (`misc_scripts/031_Traits.lua`) drops every `queue addclearfull` line and every
+`queue addclear freestand|eqbal` line, says why (once per 2 s), and lets through our own two
+entries, `cq all` / `clearqueue`, `queue addclear free`, moves and every non-queue line.
+`ataxiaBasher_attack` returns before its attack while the hold runs. The hold ends when the shield
+forms (trigger `022_SHIELDED`, or `ataxia.defences.shield`), on a bad leg while prone, on a move,
+1.5 s after we stand with no shield (its entry is gone), after 9 s, or with `lua ataxia_proneShieldHoldEnd("manual")`, and each end prints its reason.
+
+**Why.** Every attack round clears the queue: `addclearfull` removes both entries,
+`addclear freestand` the shield and `addclear eqbal` the stand (HELP 4.6.1). So the next attack
+press, from the basher or any PvP offence, deleted the shield before we stood, and it never rose.
+The last stand already held its own rounds; the spike guard, the flee paths, the phial lock and the
+self limb counter's auto-shield (which fires in PvP) did not.
+
+**How.** One gate in the send wrapper, so the 29 literal `send("queue addclearfull ...")` sites (7 of
+them the wall leaps of trigger 766, which pass as moves), 79 `queue addclear freestand` and 8
+`queue addclear eqbal` ones need no change each (counted with `git grep` over `src_new`, tests and
+comments left out). The bound: a
+full balance (5.00 s, the longest common BASE balance) and then a full shield equilibrium of ours
+(3.40 s) is 8.4 s, so 9 s; a re-sent shield does not stretch it. Tests: `test_prone_shield_hold.lua`
+(14), through the real wrapper, hold, basher and trigger 022. Docs:
+`.claude/projects/basher/05-safety-systems.md`, `.claude/projects/defense/README.md`,
+`.claude/AGENTS.md`.
+
+---
+
 ## 2026-11-24 - v4.7.523: The self limb counter's auto-shield stands us up first when prone
 
 **What.** Prone, `handleAutoShield` (`self_limb_tracking/004_Defensive_Reactions.lua`) now calls

@@ -198,6 +198,15 @@ function ataxiaBasher_attack()
     ataxiaBasher_shieldRefusedSay(whyShield)
   end
 
+  -- v4.7.524: a prone shield waits in the queue behind a stand (ataxiaBasher_queueShield). The send
+  -- wrapper would drop this round anyway; returning here also keeps the round's own bookkeeping (rage
+  -- replays, stamps) from recording a send that never happened. After the flee and shield arms, so
+  -- neither is held.
+  if ataxia_proneShieldHolding and ataxia_proneShieldHolding() then
+    if ataxia_proneShieldHeldSay then ataxia_proneShieldHeldSay("the basher's attack round") end
+    return
+  end
+
   -- danger == "attack"
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 
@@ -305,6 +314,9 @@ function ataxiaBasher_queueShield(flush)
   send("queue addclear freestand touch shield")
   if shieldAffOn("prone") then
     send("queue prepend eqbal stand")
+    -- v4.7.524: the next attack round's `queue addclearfull` would delete both entries, so hold the
+    -- rounds until the shield is up (ataxia/003, ataxia_proneShieldHoldStart; the send wrapper gates).
+    if ataxia_proneShieldHoldStart then ataxia_proneShieldHoldStart("prone: a stand is queued ahead of the shield") end
     return true, "prone: a stand is queued ahead of the shield"
   end
   return true, "the shield is queued"

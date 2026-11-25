@@ -46,9 +46,9 @@ it made the whole branch unreachable.
 
 ### The last stand (v4.7.486, rebuilt v4.7.490)
 
-`ataxiaBasher_lastStand(hpp)` (`basher/001`:769) decides the round in step 4, after the disengage
-(001:638-655). It returns `"shield"`, `"wait"` (build no round) or nil (no last stand). A new stand
-starts when `ataxiaBasher_lastStandWanted(hpp)` (001:751, no side effects) is true.
+`ataxiaBasher_lastStand(hpp)` (`basher/001`:781) decides the round in step 4, after the disengage
+(001:650-667). It returns `"shield"`, `"wait"` (build no round) or nil (no last stand). A new stand
+starts when `ataxiaBasher_lastStandWanted(hpp)` (001:763, no side effects) is true.
 
 From a death (2026-11-10, `kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`): Prey
 made both tash'la follow our one retreat, the retreat back was refused, and `canShield()` was
@@ -59,18 +59,18 @@ false, so from 28% to 15% health the only action was another attack. Sips and po
 - a no-flee area, `ataxiaBasher.lastStand ~= false` (`bash laststand on|off`), no Bravado, no Rimewrought;
 - no shield up yet, and no cooldown (`ataxiaTemp.lastStandCoolUntil`, 10 s after a stand that gave up or whose shield broke);
 - critical health: HP% at or below the swarm's `escapeAt` (35), or raw HP at or below its `panicHp`
-  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:721);
+  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:733);
 - no denizen in the room on `ataxiaBasher.shieldBreakers`;
 - the swarm cannot take us out: it is off, or `S._escapeRouteReady()` is false, and no recovery or
   tumble is under way;
-- not prone on a bad leg (v4.7.521, `ataxiaBasher_proneNoShield`, 001:287): checked last, and its
+- not prone on a bad leg (v4.7.521, `ataxiaBasher_proneNoShield`, 001:296): checked last, and its
   reason is printed ("NO SHIELD: no last stand -- prone on a bad leg: the stand is refused, so no
   shield."), because then no shield can go up (see "The shield needs us standing", below).
 
 **It ignores `canShield()` on purpose.** That function assumes every target-list denizen breaks
 shields; the last stand finds out. Trigger "Shield Broken By Denizen"
 (`denizen_attacks_misc_lines/029`, substring `your magical shield`) calls
-`ataxiaBasher_onShieldLine` (001:894): a line that starts with the name of a denizen in the room
+`ataxiaBasher_onShieldLine` (001:906): a line that starts with the name of a denizen in the room
 adds that name, lowercased, to the saved `ataxiaBasher.shieldBreakers`. Our own lines (`You...`),
 rebounds and players are ignored. One sample line exists: "A small brown lemming rips apart your
 magical shield defence with its claws." A tash'la raze line is not yet known.
@@ -85,7 +85,7 @@ Two elementals hit 1,400-3,334 cold plus 950-1,070 blunt (the shadow line) a rou
 
 - From the first send until the stand ends, every round is `"shield"` or `"wait"`, never `"attack"`.
 - A send clears the queue first: `ataxiaTemp.lastStandFlush` makes the shield branch of
-  `ataxiaBasher_attack` (001:187-200) pass `flush` to `ataxiaBasher_queueShield` (001:298), which
+  `ataxiaBasher_attack` (001:187-200) pass `flush` to `ataxiaBasher_queueShield` (001:307), which
   sends `cq all` before `queue addclear freestand touch shield`, and, when prone,
   `queue prepend eqbal stand` after both (v4.7.521). Not in lava, where `onLava`'s queued escape
   lives in the queue.
@@ -93,9 +93,9 @@ Two elementals hit 1,400-3,334 cold plus 950-1,070 blunt (the shadow line) a rou
   again. After `LAST_STAND_TRIES` (2) sends with no shield, the stand ends ("the shield did not go
   up after 2 tries") with the 10 s cooldown, and the basher attacks.
 - While the shield is up: `"wait"`. In a no-flee area the attack loop also keeps the HP>=70 gate
-  while `ataxiaBasher_lastStandHolding()` (001:782) is true (001:211).
+  while `ataxiaBasher_lastStandHolding()` (001:794) is true (001:220).
 
-`ataxiaBasher_lastStandHolding()` (001:782) ends the stand at `ataxiaBasher.lastStandRelease` (70%,
+`ataxiaBasher_lastStandHolding()` (001:794) ends the stand at `ataxiaBasher.lastStandRelease` (70%,
 `bash laststand release <pct>`), after `LAST_STAND_MAX` (30 s), when a shield it SAW up is down
 (broken; 10 s cooldown), or when hits pass the shield (below). Each end prints
 `LAST STAND over (<why>) -- attacking.`. The state is `ataxiaTemp.lastStandAt`, `lastStandSentAt`,
@@ -110,7 +110,7 @@ printed no shield-break line, so `ataxiaBasher_onShieldLine` learned nothing, th
 to the end, and the stand held every attack waiting for 70% (about 1,390 HP/s in, about 920 healed;
 `kb/mechanics/mnemosyne-affixes.md`, "The manifested nightmare"). The line that proves a shield
 fails is a `Health lost:` line while it is up. Trigger 351 calls `ataxiaBasher_lastStandHit`
-(001:956) for each one:
+(001:968) for each one:
 
 - Only a blockable type counts. `unblockable` and `raw` never do (a shield stops neither, from
   anyone). A hit within 0.5 s of first seeing the shield up does not count: it can share a packet
@@ -121,12 +121,12 @@ fails is a `Health lost:` line while it is up. Trigger 351 calls `ataxiaBasher_l
   death (2026-11-24) the oryx's charge passed it while the rattlesnake "hurls itself against your
   shield in a futile attempt to harm you.", and ending the stand let the rattlesnake's trips land.
   Trigger `denizen_attacks_misc_lines/030` (`^(.+) hurls itself against your shield`) calls
-  `ataxiaBasher_onShieldBlocked` (001:1026), which stamps `ataxiaTemp.lastStandBlockedAt`, the room
+  `ataxiaBasher_onShieldBlocked` (001:1038), which stamps `ataxiaTemp.lastStandBlockedAt`, the room
   and the denizen while a stand runs with the shield up. If that stamp is under 10 s old and in
-  this room, the pass hits do not end the stand (001:992): it prints "LAST STAND holds: ..." once.
+  this room, the pass hits do not end the stand (001:1004): it prints "LAST STAND holds: ..." once.
   The cap, the release health and a broken shield still end it.
-- `ataxiaBasher_shieldPassHere` (001:943) reads that room. While it holds, `lastStandWanted`
-  (001:751) starts no stand and `ataxiaBasher_canShield` (`can(x)/002`:20) refuses every shield, so
+- `ataxiaBasher_shieldPassHere` (001:955) reads that room. While it holds, `lastStandWanted`
+  (001:763) starts no stand and `ataxiaBasher_canShield` (`can(x)/002`:20) refuses every shield, so
   the spike and shield-threshold branches of `dangerLevel` stop shielding there too. The room is
   forgotten on a room change (a `gmcp.Room.Info` handler, with the read as a backstop) and when the
   basher is off. Session state, never saved.
@@ -139,25 +139,46 @@ Tests: `test_basher_noflee.lua`, the shield-pass cases.
 on the same tick. The prone handler (`ataxia/004_Aff_gains_losses.lua`, `aff == "prone"`) queues ONE
 `queue prepend eqbal stand` when prone lands; the stand's `cq all` deleted it, so the shield waited
 for a stand that never came, and after two tries the stand gave up at critical health. Now every
-basher shield goes through `ataxiaBasher_queueShield(flush)` (001:298): an optional `cq all` (not in
+basher shield goes through `ataxiaBasher_queueShield(flush)` (001:307): an optional `cq all` (not in
 lava), then `queue addclear freestand touch shield`, then, when `ataxia.afflictions.prone`, a
 separate `queue prepend eqbal stand`. Two entries on purpose: a `;` chain is split by Mudlet, and a
 shared `lv*` alias (`ataxia_queueChain`) can be rewritten by another press before the entry runs.
 Its callers: the shield branch of `ataxiaBasher_attack` (the last stand and the spike guard), its
-resend, `ataxiaBasher_safeStandBegin` (001:1265), `ataxiaBasher_executeFlee` (both shield sends,
-001:1703) and `ataxiaBasher_checkPlayerFlee` (001:1817); the full phial lock
+resend, `ataxiaBasher_safeStandBegin` (001:1277), `ataxiaBasher_executeFlee` (both shield sends,
+001:1715) and `ataxiaBasher_checkPlayerFlee` (001:1829); the full phial lock
 (`mnemosyne/004_Parsers.lua`, `M._phialLockResponse`) calls it only when prone.
 
 Prone on a bad leg (any damaged, broken or mangled leg: the swarm's `S._oneLegOut`, or the same
 three keys per side when the swarm is not loaded) the stand is refused, so the helper sends nothing
-and returns the reason. Then: no new last stand starts (`lastStandWanted`, 001:763); a stand already
-on whose shield is not up ENDS on its next round (001:860, no cooldown, so a stand may start again
+and returns the reason. Then: no new last stand starts (`lastStandWanted`, 001:775); a stand already
+on whose shield is not up ENDS on its next round (001:872, no cooldown, so a stand may start again
 once we are up) and `safeStandBegin` ends a shield-safe one and returns false, so the swarm's ladder
 tumbles instead (the tumble needs no legs, v4.7.513). Holding would only keep the attacks and the
 ladder parked behind a shield that cannot rise. A stand whose shield is already up keeps holding:
 being knocked down does not drop the shield. The spike guard's one-cycle shield says why
 ("NO SHIELD: ...", throttled to 5 s) and falls through to the attack, as under Bravado. Tests:
 `test_prone_shield.lua`.
+
+**The prone shield holds the attack rounds (v4.7.524).** The two entries wait in the server queue
+until we stand, and a `queue addclearfull` round removes both; a `queue addclear freestand` round
+removes the shield and a `queue addclear eqbal` round the stand (HELP 4.6.1). The last stand alone
+was safe (its rounds are `"shield"` or `"wait"`, never `"attack"`), but the other callers (the spike
+guard, `executeFlee`, `checkPlayerFlee`, the phial lock, the self limb counter's auto-shield, which
+fires in PvP) left the next attack press free to delete the shield. So when the helper queues the
+stand, it starts `ataxia_proneShieldHoldStart` (`ataxia/003_Queueing_Related.lua`:592, state on
+`ataxiaTemp.proneShieldHold`). The gate is the send wrapper (`misc_scripts/031_Traits.lua`:242,
+`ataxia_proneShieldFilter`, 003:663), which every offence's line passes: it drops such a round and
+says so ("SHIELD HOLD: ... held", once per 2 s). `ataxiaBasher_attack` also returns before the
+attack (001:205), so the round's own bookkeeping records no send. It lets through our own two
+entries, `cq all` / `clearqueue` (the flee, Maran and escape paths), `queue addclear free ...`, and a
+move (a last word that is a direction, `leap`/`mountjump`/`tumble`/`jump`/`climb`/`swim`, or
+`lvmove`), which ends the hold. The hold ends when the shield forms (trigger `022_SHIELDED`'s line,
+or `ataxia.defences.shield`), on a bad leg while prone, 1.5 s after we stand with no shield (the held
+entry runs on the tick of the stand, so a shield still missing then is gone), after 9 s, or with
+`lua ataxia_proneShieldHoldEnd("manual")`; each end prints its reason. The 9 s: the stand waits for
+a full balance (5.00 s is the longest common BASE balance in `kb/classes/abilities.json`), and a
+re-sent shield then for a full shield equilibrium of ours (3.40 s); 5.0 + 3.4 = 8.4. A re-sent
+shield does not stretch a running hold. Tests: `test_prone_shield_hold.lua`.
 
 Open: whether tash'la raze a shield; what the hold does against a pool that heals the denizens
 while we wait (Sanguine Restoration). Tests: `test_basher_noflee.lua`, "the last stand".
@@ -169,40 +190,40 @@ so we know when to touch shield instead of running". The log
 (`kb/raw/live/mnemosyne-shield-safe-mobs_2026-11-24.txt`, a Prey room): a savage boar and a fearsome
 lion "hurls itself against your shield in a futile attempt to harm you." seven times in 6 s and did
 nothing; the stand let go at 72% ("LAST STAND over (health back to 72%) -- attacking.") and the
-attack dropped the shield. Code: `basher/001`, section "SHIELD-SAFE DENIZENS" (001:1038-1329).
+attack dropped the shield. Code: `basher/001`, section "SHIELD-SAFE DENIZENS" (001:1050-1341).
 
 **The record (saved).** `ataxiaBasher.shieldRecord[key] = { blocked = n, broke = n }`, saved with
 `ataxiaBasher` (the `basher` row of `.claude/projects/persistence/README.md`). A missing table or
 entry reads as zero, so the new key needs no migration. `key` is `ataxiaBasher_mobKey(name)`
-(001:1064): lower case, trimmed, a final period and one leading `a `, `an ` or `the ` cut, so the
+(001:1076): lower case, trimmed, a final period and one leading `a `, `an ` or `the ` cut, so the
 trigger's "A savage boar" and the room list's "a savage boar" are both `savage boar`.
 
 - `blocked` +1 per line of trigger `denizen_attacks_misc_lines/030` (`^(.+) hurls itself against your
-  shield`), stand or not: `ataxiaBasher_onShieldBlocked` (001:1026) calls `ataxiaBasher_noteShieldBlock`
-  (001:1154) first. The line itself proves the shield up, so it does not ask `ataxia.defences.shield`.
+  shield`), stand or not: `ataxiaBasher_onShieldBlocked` (001:1038) calls `ataxiaBasher_noteShieldBlock`
+  (001:1166) first. The line itself proves the shield up, so it does not ask `ataxia.defences.shield`.
   The trigger's folder runs only while the basher runs (genrunning/003), which is when the record is in
   scope; shield lines outside the basher are not recorded.
-- `broke` +1 (`ataxiaBasher_noteShieldBroke`, 001:1167) for a shield-break line that starts with the
+- `broke` +1 (`ataxiaBasher_noteShieldBroke`, 001:1179) for a shield-break line that starts with the
   denizen's name (trigger 029, `ataxiaBasher_onShieldLine`, which also still fills the old
   `ataxiaBasher.shieldBreakers`), or for a hit THROUGH the shield: trigger 351 calls
-  `ataxiaBasher_shieldHit` (001:1238) on every `Health lost:` line while the basher runs. It counts when
+  `ataxiaBasher_shieldHit` (001:1250) on every `Health lost:` line while the basher runs. It counts when
   the shield is up, the type is blockable (not `unblockable` or `raw`), and the shield was first seen
   up at least 0.5 s earlier (`ataxiaTemp.shieldUpSeenAt`, stamped by every danger check through
-  `ataxiaBasher_noteShieldState` (001:1181) and by the block line). `ataxiaBasher_shieldHitWho`
-  (001:1218) lays it on a denizen: the nearest line above that is not a `Health lost:` line (read with
+  `ataxiaBasher_noteShieldState` (001:1193) and by the block line). `ataxiaBasher_shieldHitWho`
+  (001:1230) lays it on a denizen: the nearest line above that is not a `Health lost:` line (read with
   `getLines`, 4 lines back) names exactly one hostile denizen of the room, by its whole key or by its
   last word of 4+ letters ("The nightmare convulses..."); or the room holds one hostile denizen.
   Anything else lays it on no one and returns the reason. **Never on every denizen in the room**: in
   the oryx death the rattlesnake was blocked while the oryx passed, and one wrong `broke` bars a
   denizen for good.
-- **SHIELD-SAFE** (`ataxiaBasher_shieldSafe`, 001:1081): `blocked >= ataxiaBasher_SHIELD_SAFE.MIN_BLOCKED`
+- **SHIELD-SAFE** (`ataxiaBasher_shieldSafe`, 001:1093): `blocked >= ataxiaBasher_SHIELD_SAFE.MIN_BLOCKED`
   (2), `broke <= MAX_BROKE` (0), and no `shieldBreakers` entry with the same key. A room is shield-safe
-  (`ataxiaBasher_shieldSafeRoom`, 001:1119) when it holds at least one hostile denizen (own denizens
+  (`ataxiaBasher_shieldSafeRoom`, 001:1131) when it holds at least one hostile denizen (own denizens
   left out, `ataxiaBasher_isOwnDenizen`), every one is shield-safe, and it is not the shield-pass room.
 - `bash laststand` lists the record ("blocked/through", SAFE marked); `forget <name>` and `forget all`
   clear it along with the breaker list.
 
-**The shield instead of the retreat.** `ataxiaBasher_safeStandBegin(hpp, cause)` (001:1265) starts a
+**The shield instead of the retreat.** `ataxiaBasher_safeStandBegin(hpp, cause)` (001:1277) starts a
 stand that REPLACES a retreat (`ataxiaTemp.lastStandSafe = true`): it sends `cq all` (not in lava) and
 `queue addclear freestand touch shield` itself (nothing if the shield is already up), and prints
 `SHIELD-SAFE ROOM: <cause> -- <names> never got through the shield; shielding instead of leaving,
@@ -212,23 +233,23 @@ is in flight or its escape owns the moment; or the room is not shield-safe. Two 
 
 - the swarm's low-HP ladder, `S.onVitals` (`mnemosyne/009`:3099), before the bound wait, the Roll Hide
   panic and the retreat (`.claude/projects/mnemosyne/07-explorer.md`);
-- the danger check, step 3b above: `ataxiaBasher_safeStand(hpp)` (001:1317, called at 001:621) where
+- the danger check, step 3b above: `ataxiaBasher_safeStand(hpp)` (001:1329, called at 001:633) where
   `dangerLevel` would disengage or flee (HP at `fleeThresholdPct`, or the damage watchdog), in every area.
 
 On any refusal the old ladder and the old danger check run unchanged. The resend after 3 s and the
 give-up after 2 sends are the last stand's (`ataxiaBasher_lastStand`).
 
-**The release in a shield-safe room.** `ataxiaBasher_lastStandHolding` (001:801) asks
-`ataxiaBasher_standSafeHold()` (001:1133): the room is shield-safe and no hit passed the shield in this
+**The release in a shield-safe room.** `ataxiaBasher_lastStandHolding` (001:813) asks
+`ataxiaBasher_standSafeHold()` (001:1145): the room is shield-safe and no hit passed the shield in this
 stand. While that holds, ANY last stand (also the old one that started because no retreat was left,
 the log's case) does not end at 70%. It ends at the recovery gate (`ataxiaBasher_shieldSafeRecovered`,
-001:1142: the swarm's `S._mayReturn()`, `returnAt` 85% and cured; without the swarm, `RECOVER_PCT`
+001:1154: the swarm's `S._mayReturn()`, `returnAt` 85% and cured; without the swarm, `RECOVER_PCT`
 85%), at `STAND_MAX` (120 s, not 30), or when the shield is seen down. It prints once "LAST STAND holds
 past 70%: every denizen here is shield-safe (...) -- attacks held until 85% and cured.". When the room
 stops being safe (an unknown or unsafe denizen comes in) the old rules apply at once: a stand that
 replaced a retreat ends ("... -- back to the escape ladder") when the ladder can leave, else it becomes
 an ordinary stand. A blockable hit through the shield in a stand that replaced a retreat ends it at
-once, with the cooldown and the shield-pass room, when the ladder can leave (001:972).
+once, with the cooldown and the shield-pass room, when the ladder can leave (001:984).
 
 Limits: a hit whose attack line names no room denizen, in a room of two or more, marks no one (the
 stand still ends or loses its safe hold). The shield-up stamp is refreshed only by danger checks, block
@@ -499,7 +520,7 @@ kills it outright (`008:643`). Nothing errors and nothing warns; the run simply 
 ripple that was never cleared.
 
 `ataxiaBasher.notOwnDenizens` is the exemption list and it **wins**: it is scanned first in
-`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:847-870`), so the pet
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:859-882`), so the pet
 ("a daemonic hyena") stays protected while the mob is targetable again. Seeded by backfill
 rather than as a default (existing saves already carry the bare keyword), and managed with
 `bash notmine [add|rem] <name>`. Narrowing the seeded keyword to `daemonic hyena` was
@@ -525,7 +546,7 @@ paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, 
 - Requires: Maran card charge available
 - Command: `ldeck draw maran`
 - Cooldown: 65 seconds (the barrier lasts 60)
-- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:1163-1168`): when
+- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:1175-1180`): when
   `inMnemosyne` and `mnemLdeck.enabled`, the tower card layer owns Maran along with five
   other cards. This path `return`s and forfeits the whole attack cycle, the card layer rides
   the assembled round instead — running both would double-draw a 2-charge card.

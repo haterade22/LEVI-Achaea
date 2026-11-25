@@ -35,6 +35,8 @@ patterns:
   type: 3
 ]]--
 
+-- v4.7.524: the game's line ends the prone shield hold (ataxia/003) before GMCP adds the defence.
+if ataxia_proneShieldHoldEnd then ataxia_proneShieldHoldEnd("the shield formed") end
 shield_now = false
 myinstantcath = false
 preventriftlock = false

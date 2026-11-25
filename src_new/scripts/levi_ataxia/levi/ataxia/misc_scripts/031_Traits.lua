@@ -237,6 +237,10 @@ if type(send) == "function" then
   send = function(cmd, ...)
     local out = ataxia_traitFilter(cmd)
     if out == "" then return true end
+    -- The prone shield hold (ataxia/003, v4.7.524): while a stand and a shield wait in the queue, a
+    -- round that would clear them is dropped here, the one place every offence's line passes.
+    if ataxia_proneShieldFilter then out = ataxia_proneShieldFilter(out) end
+    if out == "" then return true end
     -- Round delivery (ataxia/003). With the flag off, this returns `out` unchanged.
     if ataxia_roundDeliver then out = ataxia_roundDeliver(out) end
     if out == "" then return true end

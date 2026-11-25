@@ -549,3 +549,145 @@ function ataxia_queueChain(qtype, name, cmds)
   send("queue addclear " .. qtype .. " " .. table.concat(pieces, sep))
   return false, why
 end
+
+-- ---------------------------------------------------------------------------------------------
+-- THE PRONE SHIELD HOLD (v4.7.524). Prone, ataxiaBasher_queueShield (basher/001) leaves two entries in
+-- the server queue: `queue addclear freestand touch shield`, held until we stand, and `queue prepend
+-- eqbal stand`. A `queue addclearfull` round removes BOTH; a `queue addclear freestand` round removes the
+-- shield and a `queue addclear eqbal` round the stand (HELP 4.6.1, kb/raw/help/4.6.1_queueing.txt). The
+-- basher, the PvP offences and the self limb counter's auto-shield (which fires in PvP too) all press
+-- such rounds, so the next press deleted the shield and it never rose (.claude/AGENTS.md, "Anything
+-- queued that is NOT an attack must hold the dispatcher").
+--
+-- THE CHOKEPOINT is the send wrapper (misc_scripts/031): every line goes through it, so one gate covers
+-- the basher's rounds and every offence that sends its own queue line. While the hold runs, it drops a
+-- line that would clear one of the two entries, and says why (throttled). It lets through: our own two
+-- entries, a move (leaving outranks the shield, and the move ends the hold), `cq all` / `clearqueue`
+-- (the flee, Maran and escape paths send those on purpose), `queue addclear free ...` (a different
+-- queue) and every line that is not a queue line (curing is SSC, not the queue).
+--
+-- THE BOUND, 9 s (BASE and OURS). The hold must outlast what it guards (.claude/AGENTS.md, "A retry window
+-- must outlast the action it guards"). The stand waits for balance AND equilibrium (the eqbal queue): a
+-- full balance is 4.00 s for 70 abilities and 5.00 s for 15 more (BASE, kb/classes/abilities.json; 5 s
+-- is the longest common one). The shield then needs equilibrium; when the shield we re-send was just
+-- stripped, that is a full shield equilibrium of our own, 3.40 s (OURS, kb/mechanics/balance-and-queueing.md,
+-- "Our equilibrium readings"). Taken one after the other: 5.0 + 3.4 = 8.4 s, so 9 s. A line read after
+-- the bound ends the hold, so a lost shield costs at most 9 s of rounds.
+--
+-- THE ENDS, each with a reason: the shield formed (trigger 022, "You touch the tattoo and a nearly
+-- invisible magical shield forms around you.", or `ataxia.defences.shield`), prone on a bad leg (the
+-- stand is refused: ataxiaBasher_proneNoShield), the bound, a move that replaced the queue, or a manual
+-- `lua ataxia_proneShieldHoldEnd("manual")`. State lives on ataxiaTemp (saved tables never hold it).
+ataxia_PRONE_SHIELD_HOLD_SECS = 9
+ataxia_PRONE_SHIELD_UP_GRACE = 1.5 -- seconds standing with no shield before the hold ends
+local PRONE_HOLD_SAY_GAP = 2 -- seconds between two "round held" lines
+
+local function proneHoldNow() return (getEpoch and getEpoch()) or os.time() end
+
+local function proneHoldSay(text)
+  if ataxiaEcho then ataxiaEcho(text) end
+end
+
+-- Start (or keep) the hold. A hold already running keeps its start, so repeated shield sends (the last
+-- stand re-sends every few seconds) cannot stretch it past the bound.
+function ataxia_proneShieldHoldStart(why)
+  ataxiaTemp = ataxiaTemp or {}
+  local h = ataxiaTemp.proneShieldHold
+  local now = proneHoldNow()
+  if h and now - h.at < ataxia_PRONE_SHIELD_HOLD_SECS then return false end
+  ataxiaTemp.proneShieldHold = { at = now, saidAt = nil }
+  proneHoldSay("SHIELD HOLD: " .. tostring(why or "prone: a stand is queued ahead of the shield")
+    .. "; attack rounds wait up to " .. ataxia_PRONE_SHIELD_HOLD_SECS .. " s, so none clears it.")
+  return true
+end
+
+-- End the hold, with its reason. Guarded both ways: ending a hold that is not running is silent
+-- (.claude/AGENTS.md, "A guarded start with an unguarded stop is not a pair").
+function ataxia_proneShieldHoldEnd(why)
+  local h = ataxiaTemp and ataxiaTemp.proneShieldHold
+  if not h then return false end
+  ataxiaTemp.proneShieldHold = nil
+  proneHoldSay("SHIELD HOLD ends: " .. tostring(why or "stopped") .. ".")
+  return true
+end
+
+-- Is the hold running? Checks each end that can be read here, so a deadline needs no timer.
+function ataxia_proneShieldHolding()
+  local h = ataxiaTemp and ataxiaTemp.proneShieldHold
+  if not h then return false end
+  if ataxia and ataxia.defences and ataxia.defences.shield then
+    ataxia_proneShieldHoldEnd("the shield is up")
+    return false
+  end
+  local bad = ataxiaBasher_proneNoShield and ataxiaBasher_proneNoShield()
+  if bad then
+    ataxia_proneShieldHoldEnd(bad)
+    return false
+  end
+  local now = proneHoldNow()
+  -- Up again with no shield: the held freestand entry runs on the tick we stand (OURS, live probe,
+  -- kb/raw/live/shield-touch-prone_2026-11-24.txt), so a shield still missing 1.5 s after the stand means
+  -- its entry is gone (a `cq all`, a refusal). Holding the rounds longer only costs attacks.
+  local prone = ataxia and ataxia.afflictions and ataxia.afflictions.prone
+  if type(prone) == "number" then prone = prone > 0 end
+  if prone then
+    h.upAt = nil
+  elseif not h.upAt then
+    h.upAt = now
+  elseif now - h.upAt >= ataxia_PRONE_SHIELD_UP_GRACE then
+    ataxia_proneShieldHoldEnd("standing, and no shield " .. ataxia_PRONE_SHIELD_UP_GRACE .. " s after the stand")
+    return false
+  end
+  local age = now - h.at
+  if age >= ataxia_PRONE_SHIELD_HOLD_SECS then
+    ataxia_proneShieldHoldEnd(ataxia_PRONE_SHIELD_HOLD_SECS .. " s passed without the shield")
+    return false
+  end
+  return true, ataxia_PRONE_SHIELD_HOLD_SECS - age
+end
+
+-- One throttled line for a held round. `what` names the round.
+function ataxia_proneShieldHeldSay(what)
+  local h = ataxiaTemp and ataxiaTemp.proneShieldHold
+  if not h then return end
+  local now = proneHoldNow()
+  if h.saidAt and now - h.saidAt < PRONE_HOLD_SAY_GAP then return end
+  h.saidAt = now
+  proneHoldSay(string.format("SHIELD HOLD: %s held, the queued stand and shield wait (%.1f s left).",
+    tostring(what or "an attack round"), ataxia_PRONE_SHIELD_HOLD_SECS - (now - h.at)))
+end
+
+-- The queues whose ADDCLEAR removes one of our two entries.
+local PRONE_HOLD_CLEARS = { freestand = true, eqbal = true }
+-- A first word that moves us, beside a last word that is a direction (ROUND_MOVES above).
+local PRONE_HOLD_MOVERS = { leap = true, mountjump = true, tumble = true, jump = true, climb = true, swim = true }
+
+local function proneHoldIsMove(payload)
+  local low = payload:lower()
+  if ataxia_CHAIN_ALIASES and ataxia_CHAIN_ALIASES[low:match("^%s*(%S+)%s*$") or ""] then return true end
+  local sep = ataxia and ataxia.settings and ataxia.settings.separator
+  if type(sep) == "string" and sep ~= "" and sep ~= ";" then low = low:gsub((sep:gsub("%p", "%%%0")), ";") end
+  for piece in low:gmatch("[^;]+") do
+    local first, last = piece:match("^%s*(%S+)"), piece:match("(%S+)%s*$")
+    if (first and PRONE_HOLD_MOVERS[first]) or (last and ROUND_MOVES[last]) then return true end
+  end
+  return false
+end
+
+-- The send wrapper's hook (misc_scripts/031). Returns the line to send, or "" for a held one.
+function ataxia_proneShieldFilter(cmd)
+  if type(cmd) ~= "string" or not (ataxiaTemp and ataxiaTemp.proneShieldHold) then return cmd end
+  local verb, qtype, payload = cmd:match("^%s*[Qq][Uu][Ee][Uu][Ee]%s+(%a+)%s+([%w!]+)%s+(.+)$")
+  if not verb then return cmd end
+  verb, qtype = verb:lower(), qtype:lower()
+  if not (verb == "addclearfull" or (verb == "addclear" and PRONE_HOLD_CLEARS[qtype])) then return cmd end
+  local body = payload:lower():match("^%s*(.-)%s*$")
+  if body == "touch shield" or body == "stand" then return cmd end -- our own two entries
+  if not ataxia_proneShieldHolding() then return cmd end
+  if proneHoldIsMove(payload) then
+    ataxia_proneShieldHoldEnd("a move replaced the queue (leaving outranks the shield)")
+    return cmd
+  end
+  ataxia_proneShieldHeldSay("`queue " .. verb .. " " .. qtype .. "`")
+  return ""
+end

@@ -484,6 +484,11 @@ attack dispatcher and loses. This has now caused two deaths and one silently-bro
 The fix is always the same shape: one queued line for ordering, plus a bounded hold on
 `ataxiaBasher_attack` (gate it THERE, not only in `tryAttack` -- several triggers call
 `attack()` directly). **When a queued action "mysteriously" does not happen, check this first.**
+When the guarded entry must survive PvP offences too, gate the send wrapper (`misc_scripts/031`),
+the one place every line passes: v4.7.524's prone shield (a `freestand` shield + `queue prepend
+eqbal stand`) was deleted by the next press of any class, and `ataxia_proneShieldFilter` now drops
+rounds that clear those queues until the shield forms or 9 s pass (`queue addclear freestand|eqbal`
+clears them as surely as `addclearfull`).
 
 ### "Nothing followed" is not "we are ready" (v4.7.242)
 
