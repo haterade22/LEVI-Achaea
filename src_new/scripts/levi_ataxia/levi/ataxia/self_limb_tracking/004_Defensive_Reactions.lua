@@ -78,7 +78,24 @@ local function handleAutoShield(limb, threshold)
 	if ataxia and ataxia.defences and ataxia.defences.shield then return end
 	if ataxia and ataxia.afflictions and ataxia.afflictions.aeon then return end
 
-	send("touch shield")
+	-- v4.7.523: TOUCH SHIELD needs us standing (OURS, kb/raw/live/shield-touch-prone_2026-11-24.txt:
+	-- prone, a plain touch is refused "You must be standing first."). Standing, the plain send is
+	-- unchanged. Prone, the basher's shield helper (basher/001, ataxiaBasher_queueShield) queues the
+	-- shield as a `freestand` entry and a separate `queue prepend eqbal stand` ahead of it. No `cq all`
+	-- here (flush = false): this reaction must not wipe the offence's queue. Prone on a bad leg the
+	-- stand is refused, so the helper sends nothing; then the cooldown does NOT start, so the next
+	-- critical threshold can try again once we are up.
+	local prone = ataxia and ataxia.afflictions and ataxia.afflictions.prone
+	if type(prone) == "number" then prone = prone > 0 end
+	if prone and type(ataxiaBasher_queueShield) == "function" then
+		local ok, why = ataxiaBasher_queueShield(false)
+		if not ok then
+			cecho("\n<yellow>[SLC]<reset> No auto-shield: " .. tostring(why) .. ".")
+			return
+		end
+	else
+		send("touch shield")
+	end
 	reactions.shieldCooldown = true
 	tempTimer(cfg.shieldCooldown, function()
 		selfLimbDamage.reactions.shieldCooldown = false

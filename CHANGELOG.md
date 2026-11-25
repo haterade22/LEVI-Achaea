@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-11-24 - v4.7.523: The self limb counter's auto-shield stands us up first when prone
+
+**What.** Prone, `handleAutoShield` (`self_limb_tracking/004_Defensive_Reactions.lua`) now calls
+`ataxiaBasher_queueShield(false)`: the shield as a `freestand` entry and a separate
+`queue prepend eqbal stand`, with no `cq all`. Standing, it still sends a plain `touch shield`.
+Prone on a bad leg it sends nothing, echoes the reason, and does not start the shield cooldown.
+
+**Why.** TOUCH SHIELD needs us standing. Prone, a plain touch is refused ("You must be standing
+first.", `kb/raw/live/shield-touch-prone_2026-11-24.txt`), and the cooldown started anyway, so the
+reaction spent its one try on nothing. With a bad leg the stand itself is refused, so a try then is
+wasted too.
+
+**How.** No `cq all`: this reaction must not wipe the offence's queue. Tests: 4 new in
+`test_slc_auto_shield.lua` (9 in all); with the old send, the two prone tests fail. Doc:
+`.claude/projects/defense/README.md`, the SLC section.
+
+---
+
 ## 2026-11-24 - v4.7.522: The self limb counter's auto-shield skips a shield that is already up
 
 **What.** `handleAutoShield` (`self_limb_tracking/004_Defensive_Reactions.lua`) now reads the
