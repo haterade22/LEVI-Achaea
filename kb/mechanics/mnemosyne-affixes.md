@@ -72,9 +72,24 @@ fight we have seen in a log.
 - Sentence: "Slaying a denizen has a chance to evoke a memory of the Suffering God and spawn either a
   thornwall or gravehands in your location."
   (`raw/live/2026-11-21_wade-status_ricketts-splinterbark-abbadon.txt`)
-- No spawn line is captured: a search of the last 6,000 lines of the live buffer on 2026-11-23,
-  in a run with this affix, found no "thornwall", "gravehands" or "Suffering God". UNKNOWN: whether
-  a thornwall blocks our exits, and whose side the gravehands take.
+- **The lines, OURS** (`raw/live/mnemosyne-abbadon-thornwall-gravehands_2026-11-25.txt`, the
+  maintainer's paste from an earlier run; the paste does not name the affix, so the link to Abbadon
+  is ASSUMED). No line that announces the spawn itself is in the paste; a search on 2026-11-23 of
+  the last 6,000 lines of the live buffer in an Abbadon run also found none.
+  - **Thornwall.** The room line: "A large wall of thorns stands here, barring passage to the
+    south." It does NOT block a move: the explorer moved north, and "The vicious thorns rake you as
+    you push through the thornwall." followed, with "Health lost: 975 (physical cutting)." and
+    bleeding (`bld(102)` on the prompt, then "You clot your wounds 6 times."). One reading: 975
+    health, about 5% of our 20,031. CONFIRMED (one log).
+  - **Gravehands takes the denizens' side: it hits us.** "The hands of the grave grasp at your
+    ankles and throw you off balance." with "Balance used: 1.0s." It fired when we tried to leave
+    (the swarm's wall leap, "leaping our wall back in -> sw"), which matches the Apostate ability:
+    hands "grab at the ankles of any who try to leave the location" (`classes/apostate.md`,
+    Gravehands; the same line in Mystor's fights, `combat/fights/2026-10-11_mystor_*`). The swarm's
+    escape move then waited on the `free` queue and fired once balance was back ("escape move fired
+    from the free queue."). CONFIRMED (one log).
+  - No code reads these lines (no match for them in `src_new`, 2026-11-25). The maintainer,
+    2026-11-25: record only, no behaviour change.
 - **Code (v4.7.511):** one of the spawn-on-kill affixes: the explorer waits for 90% HP after a
   cleared room (`M._spawnHold`).
 

@@ -1,0 +1,30 @@
+Source: OURS (Leviticus), the maintainer's paste, 2026-11-25, from an earlier session's Mnemosyne
+run. Title as pasted: "Gravehands and thorns". Two excerpts, unedited. The affix is assumed to be
+Suffering of Abbadon ("spawn either a thornwall or gravehands in your location",
+raw/live/2026-11-21_wade-status_ricketts-splinterbark-abbadon.txt); the paste does not name it.
+
+--- excerpt 1: gravehands ---
+(MNEM): [explore] [swarm] trickle over (peak followers: 0) -- leaping our wall back in -> sw.
+10:49:05:307 [20256] [100] |(652379|79%)|[]
+The hands of the grave grasp at your ankles and throw you off balance.
+Balance used: 1.0s.
+10:49:05:393 [20256] [100] |(652379|79%)|[]
+
+(MNEM): [explore] [swarm] escape move queued on free (it waits for balance, equilibrium, unbound, unstunned).
+(MNEM): [explore] [swarm] escape move fired from the free queue.
+(((((((((((((((((((( BALANCE: 0.875 ))))))))))))))))))))
+
+--- excerpt 2: thornwall ---
+(MNEM): [explore] room clear -> moving n.
+10:47:56:251 [20031] [99] |(662128)|[ [ ? ]]
+Cramped mine corridor. (indoors)
+A large wall of thorns stands here, barring passage to the south.
+You see exits leading east and south.
+The vicious thorns rake you as you push through the thornwall.
+Health lost: 975 (physical cutting).
+10:47:56:356 [19056] [99] |(662128)|[ [ bld(102) ? ]]
+You clot your wounds 6 times.
+10:47:56:363 [19056] [97] |(662128)|[ [ ? ]]
+
+(MNEM): [explore] room clear -> moving e.
+10:47:56:971 [19056] [97] |(662128)|[ [ ? ]]
