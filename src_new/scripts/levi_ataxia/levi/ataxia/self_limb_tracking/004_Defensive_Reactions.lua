@@ -71,11 +71,12 @@ local function handleAutoShield(limb, threshold)
 	local reactions = selfLimbDamage.reactions
 	if reactions.shieldCooldown then return end
 
-	-- Don't shield if already shielded or under aeon
-	if ataxia and ataxia.afflictions then
-		if ataxia.afflictions.shield then return end
-		if ataxia.afflictions.aeon then return end
-	end
+	-- Don't shield if already shielded or under aeon.
+	-- v4.7.522: the shield is a DEFENCE (ataxia.defences.shield, from GMCP Char.Defences), not an
+	-- affliction. This read `ataxia.afflictions.shield`, which nothing ever sets, so the guard never
+	-- fired and every critical limb sent `touch shield` over a shield that was already up.
+	if ataxia and ataxia.defences and ataxia.defences.shield then return end
+	if ataxia and ataxia.afflictions and ataxia.afflictions.aeon then return end
 
 	send("touch shield")
 	reactions.shieldCooldown = true

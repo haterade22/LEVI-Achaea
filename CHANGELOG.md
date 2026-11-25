@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-11-24 - v4.7.522: The self limb counter's auto-shield skips a shield that is already up
+
+**What.** `handleAutoShield` (`self_limb_tracking/004_Defensive_Reactions.lua`) now reads the
+shield from `ataxia.defences.shield`. The aeon check is unchanged.
+
+**Why.** The guard read `ataxia.afflictions.shield`. The shield is a defence, and no code sets that
+affliction key, so the guard never fired: each critical limb sent `touch shield` over a shield that
+was already up, and spent equilibrium on nothing.
+
+**How.** One line. Test: `test_slc_auto_shield.lua` (5 tests, through the real event handler); with
+the old line, "shield already up" fails. Doc: `.claude/projects/defense/README.md`, the SLC section.
+
+---
+
 ## 2026-11-24 - v4.7.521: The last stand stands us up before the shield, and starts no stand on a bad leg while prone
 
 **What.** Every basher shield now goes through one helper, `ataxiaBasher_queueShield(flush)`: an
