@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-11-27 - v4.7.527: Treaty run takes rawstone from the rift
+
+What: the `treaties` run now sends `outr 1 rawstone` for the Stoneback treaty, not `outr 1 stone`. Why: the user gave the rift syntax (`outr 1 rawstone`, `outr 1 charcoal`); v4.7.526 guessed `stone`, so the Stoneback step would have stopped at its 60 s limit. How: `ataxiaTreaty.COMMODITY` in `mage/007_Treaty_Run.lua`, the test in `src_new/tests/test_magi_treaty.lua`, and `.claude/classes/magi.md`.
+
+---
+
 ## 2026-11-27 - v4.7.526: Magi treaty run; Evocation of Fire hellfumes
 
 **Magi treaty run.** What: the alias `treaties` renews the Ashbeast and Stoneback treaties in one go: it walks to our workshop (room 33671) unless we are there, takes one charcoal and one block of stone from the rift (`outr 1 charcoal`, `outr 1 stone`), sends `treaty form <name>` when equilibrium and balance are up, waits for the game's completion line, and stops after Stoneback. `treaties stop` ends it. Why: the treaties lapse and the user renewed them by hand each time. How: `mage/007_Treaty_Run.lua` (state on `ataxiaTemp.treatyRun`; a 90 s walk limit and a 60 s limit per treaty; every exit echoes a reason and kills its handlers and timers; it refuses to start while autobash runs), two aliases (`mage/005`, `006`), and one trigger per treaty (`magi_offense_tracking/017`, `018`) because the two captured end lines differ. Raw evidence: `kb/raw/live/treaty_ashbeast_2026-11-27.txt`, `treaty_stoneback_2026-11-27.txt`. The rift commodity names (`charcoal`, `stone`) are not verified against the live rift: they are one table at the top of the script. Test: `src_new/tests/test_magi_treaty.lua`.

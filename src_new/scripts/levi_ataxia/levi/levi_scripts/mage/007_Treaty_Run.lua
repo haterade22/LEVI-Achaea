@@ -26,7 +26,7 @@ ataxiaTreaty = ataxiaTreaty or {}
 -- Edit the rift commodity names here if the rift names them otherwise.
 ataxiaTreaty.WORKSHOP = 33671
 ataxiaTreaty.ORDER = { "ashbeast", "stoneback" }
-ataxiaTreaty.COMMODITY = { ashbeast = "charcoal", stoneback = "stone" }
+ataxiaTreaty.COMMODITY = { ashbeast = "charcoal", stoneback = "rawstone" }
 ataxiaTreaty.WALK_TIMEOUT = 90      -- seconds to reach the workshop
 ataxiaTreaty.FORM_TIMEOUT = 60      -- seconds per treaty, from the OUTR to the completion line
 ataxiaTreaty.POLL = 0.5             -- seconds between eq/balance checks
