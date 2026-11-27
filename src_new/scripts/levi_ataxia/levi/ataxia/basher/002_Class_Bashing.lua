@@ -2541,6 +2541,37 @@ function ataxiaBasher_magiQuake(sp)
   return "cast quake"..sp
 end
 
+-- STORMHAMMER AT 3+ DENIZENS IN THE TOWER (user, 2026-11-27: "use stormhammer if 3 or more denizens
+-- are in the room in wading"). CAST STORMHAMMER AT <t> [AND <t> [AND <t>]] (ABADMIN 741: adventurers
+-- and denizens, BASE 6.00 s eq, 1200 mana). The old branch in magiBashing needs the saved toggle
+-- `abshuse` AND stormhammerTargets, which holds only denizens named in targetList[areaKey]; this one
+-- takes its targets straight from ataxia.denizensHere (non-own only), and in the tower it does not
+-- need the toggle. "In the tower" is ataxiaBasher.inMnemosyne (the wade lifecycle's flag, the one
+-- ataxiaBasher_areaKey and ataxiaBasher_isNoFleeArea read; basher/001), NOT M._inRun(), which also
+-- needs the reporting token. Targets: up to 3 ids, the current `target` first, the rest by id.
+function ataxiaBasher_magiTowerStormhammer(sp)
+  if not (ataxiaBasher.inMnemosyne) then return "" end
+  if ataxiaBasher.shielded then return "" end
+  local own = ataxiaBasher_isOwnDenizen
+  local ids, tid = {}, tonumber(target)
+  for id, name in pairs(ataxia.denizensHere or {}) do
+    local n = tonumber(id)
+    if n and not (own and own(name)) then ids[#ids + 1] = n end
+  end
+  if #ids < (tonumber(ataxiaBasher.towerStormAt) or 3) then return "" end
+  table.sort(ids, function(a, b)
+    if (a == tid) ~= (b == tid) then return a == tid end
+    return a < b
+  end)
+  local ataxiaVitals = ataxia.vitals or {}
+  local mp, maxmp = tonumber(ataxiaVitals.mp) or 0, tonumber(ataxiaVitals.maxmp) or 0
+  local floor = maxmp * (((ataxia.settings.sipping or {}).manause or 30) / 100)
+  if mp - 1200 < floor then return "" end
+  local list = {}
+  for i = 1, math.min(3, #ids) do list[i] = tostring(ids[i]) end
+  return "cast stormhammer at "..table.concat(list, " and ")..sp
+end
+
 function ataxiaBasher_magiBashing()
    local command, sp = "", ataxia.settings.separator
    local brage = ataxiaBasher_assembleBattlerage()
@@ -2573,6 +2604,10 @@ function ataxiaBasher_magiBashing()
       command = brage..sp.."cast hellfumes"
    elseif ataxiaBasher_magiQuake(sp) ~= "" then
       command = brage..sp.."cast quake"
+   elseif ataxiaBasher_magiTowerStormhammer(sp) ~= "" then
+      -- In the tower the user wants stormhammer at 3+ denizens. The 30 s procs above still come
+      -- first, because each is ready only once per 30 s; every other round this is the cast.
+      command = brage..sp..ataxiaBasher_magiTowerStormhammer("")
    elseif ataxiaBasher_winterDeepfreeze(sp) ~= "" then
       -- Winter's Heart boon: DEEPFREEZE hits every denizen in the room for cold. Same eq
       -- slot as horripilation/elemental surge, and it outranks Kkractle only in that it is

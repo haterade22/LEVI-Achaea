@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-27 - v4.7.529: Magi casts stormhammer at 3+ denizens in the tower
+
+**What.** In the Mnemosyne tower the Magi basher now casts `cast stormhammer at A and B and C` whenever 3 or more non-own denizens are in the room, not shielded, with mana for it (1200 above the `manause` floor). The `abshuse` toggle is not needed there. Order: erode, Master of Four, Hellfumes, Quake, tower stormhammer, deepfreeze, surge, the old stormhammer branch, horripilation.
+
+**Why.** User, 2026-11-27: use stormhammer at 3+ denizens while wading. The old branch needed the toggle and `stormhammerTargets`, which holds only denizens named in the saved target list for the area key, and the surge and deepfreeze branches came first.
+
+**How.** `ataxiaBasher_magiTowerStormhammer` in `basher/002` (tower = `ataxiaBasher.inMnemosyne`); targets from `ataxia.denizensHere`, current target first, at most 3. Outside the tower nothing changes. Test: `src_new/tests/test_magi_tower_storm.lua`.
+
 ## 2026-11-27 - v4.7.528: Evocation of Earth quake; Master of Four simultaneity
 
 **What.** Two more Magi Mnemosyne boons drive the bashing round. With "Master of Four" (simultaneity deals four elemental bursts to every denizen, once per 30 s) the Magi casts `simultaneity` at 2+ denizens when 30 s have passed and 1000 mana still leaves the `manause` floor. With "Evocation of Earth" (quake deals blunt damage and stuns every denizen 3 s, once per 30 s) it casts `cast quake` at 2+ denizens. Order after the shield strip: Master of Four, Hellfumes, Quake, then deepfreeze and the rest. While autobash runs, the simultaneity trigger no longer queues `fortify all` and `bind all` (two more eq actions every 30 s); outside bashing nothing changes.
