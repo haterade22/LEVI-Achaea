@@ -1,0 +1,16 @@
+Boon: Evocation of Fire
+Your elementalism hellfumes ability now deals fire damage to all denizens in your location and afflicts them with inhibit for 5 seconds. This can only occur once every 30 seconds.
+
+AB (user paste 2026-11-27): Hellfumes (Elementalism), ABADMIN ID 724.
+Syntax: CAST HELLFUMES
+Required channels: air and earth
+Works on: Room
+Cooldown: 4.00 seconds of equilibrium (BASE)
+Mana: 200
+
+Captured (user log 2026-11-27):
+You coax an absolutely foul-smelling cloud of air from the bowels of the earth.
+Equilibrium used: 3.12s.
+Elemental Fire manifests in a searing plume of Kkractle's wrath, scorching all around you in deadly smoke.
+Damage dealt: 6612 (fire).
+Damage dealt: 66 (poison).

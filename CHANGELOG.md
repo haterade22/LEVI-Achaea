@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-11-27 - v4.7.526: Magi treaty run; Evocation of Fire hellfumes
+
+**Magi treaty run.** What: the alias `treaties` renews the Ashbeast and Stoneback treaties in one go: it walks to our workshop (room 33671) unless we are there, takes one charcoal and one block of stone from the rift (`outr 1 charcoal`, `outr 1 stone`), sends `treaty form <name>` when equilibrium and balance are up, waits for the game's completion line, and stops after Stoneback. `treaties stop` ends it. Why: the treaties lapse and the user renewed them by hand each time. How: `mage/007_Treaty_Run.lua` (state on `ataxiaTemp.treatyRun`; a 90 s walk limit and a 60 s limit per treaty; every exit echoes a reason and kills its handlers and timers; it refuses to start while autobash runs), two aliases (`mage/005`, `006`), and one trigger per treaty (`magi_offense_tracking/017`, `018`) because the two captured end lines differ. Raw evidence: `kb/raw/live/treaty_ashbeast_2026-11-27.txt`, `treaty_stoneback_2026-11-27.txt`. The rift commodity names (`charcoal`, `stone`) are not verified against the live rift: they are one table at the top of the script. Test: `src_new/tests/test_magi_treaty.lua`.
+
+**Evocation of Fire hellfumes.** What: with the Mnemosyne boon "Evocation of Fire" (hellfumes hits every denizen with fire and inhibit, once per 30 s), the Magi basher casts `cast hellfumes` each time that proc is ready and the room holds 2 or more denizens. Why: one cast did 6612 fire damage to each denizen in the user's log, and the every-round fillers (deepfreeze, elemental surge) do less. How: `M.BOON_FLAGS` latches `mnemEvocationFire` (`mnemosyne/004_Parsers.lua`); `ataxiaBasher_magiHellfumes` and a new branch in `ataxiaBasher_magiBashing` (`basher/002`) after the shield strip and before deepfreeze; the 30 s clock is stamped on the game's proc line (`magi_offense_tracking/020`) and the cast line (`019`), not at build time, because the round is rebuilt every prompt and queued with `addclearfull`. A cast with no proc after it holds the next one for 10 s. The code opens no elemental channels for Magi: air and earth must already be open. Raw evidence: `kb/raw/live/hellfumes_evocation_2026-11-27.txt`. Test: `src_new/tests/test_magi_hellfumes.lua`.
+
 ## 2026-11-25 - v4.7.525: The Suffering of Abbadon registry text names the captured lines
 
 **What.** The `does` text of "Suffering of Abbadon" in `M.AFFIX_REGISTRY`

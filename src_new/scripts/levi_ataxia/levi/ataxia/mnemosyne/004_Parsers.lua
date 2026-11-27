@@ -1377,6 +1377,7 @@ M.BOON_FLAGS = {
   ["Krenindalan Storm"]    = "dragonKrenindalan",     -- breathstorm once per room (basher/002)
   ["Terror of the Skies"]  = "mnemTerrorSkies",       -- leaving sheds non-boss pursuers (009)
   ["Death's Demise"]       = "mnemDeathsDemise",      -- v4.7.449: the sweep cures fractures before moving on (008)
+  ["Evocation of Fire"]    = "mnemEvocationFire",     -- v4.7.526: Magi casts hellfumes at 2+ denizens, once per 30 s (basher/002)
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.

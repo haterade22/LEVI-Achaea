@@ -2480,6 +2480,31 @@ function ataxiaBasher_winterDeepfreeze(sp)
   return "cast deepfreeze"..sp
 end
 
+-- Evocation of Fire (Mnemosyne boon): "Your elementalism hellfumes ability now deals fire damage to
+-- all denizens in your location and afflicts them with inhibit for 5 seconds. This can only occur
+-- once every 30 seconds." CAST HELLFUMES (Elementalism, ABADMIN 724: channels air and earth, room,
+-- BASE 4.00 s eq, ours 3.12 s observed; kb/raw/live/hellfumes_evocation_2026-11-27.txt).
+-- Cast it each time the 30 s proc is ready and the room has a crowd. The two clocks are stamped
+-- ON THE GAME'S LINES (triggers magi_offense_tracking/019 and 020), not here: the round is rebuilt
+-- every prompt and queued with addclearfull, so a stamp made at build time would make the next
+-- rebuild replace the queued cast.
+function ataxiaBasher_magiHellfumes(sp)
+  if not mnemEvocationFire then return "" end
+  if ataxiaBasher.shielded then return "" end -- break the shield first
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < (tonumber(ataxiaBasher.hellfumesAt) or 2) then return "" end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  local t = ataxiaTemp or {}
+  local procAt, castAt = tonumber(t.evocationFireAt) or 0, tonumber(t.hellfumesCastAt) or 0
+  if nowT - procAt < 30 then return "" end
+  -- NO-PROC HOLD: a cast landed after the last proc and gave no proc, so our 30 s clock was wrong
+  -- (the boon's own clock is still running). Do not cast again until 10 s after that cast, or
+  -- every round would spend 4 s of equilibrium on a cast that does nothing extra.
+  if castAt > procAt and nowT - castAt < 10 then return "" end
+  return "cast hellfumes"..sp
+end
+
 function ataxiaBasher_magiBashing()
    local command, sp = "", ataxia.settings.separator
    local brage = ataxiaBasher_assembleBattlerage()
@@ -2499,6 +2524,12 @@ function ataxiaBasher_magiBashing()
       -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise
       -- (matches blademasterBashing's raze..sp..brage order).
       command = "cast erode at "..target..sp..brage
+   elseif ataxiaBasher_magiHellfumes(sp) ~= "" then
+      -- Evocation of Fire boon: HELLFUMES deals fire (6612 in the capture) to every denizen in the
+      -- room plus inhibit, but only once per 30 s, so it outranks deepfreeze and elemental surge,
+      -- which are every-round fillers: cast it the moment the proc is ready, fall back to them
+      -- while it is not (the helper returns "" then). Crowd-gated inside the helper.
+      command = brage..sp.."cast hellfumes"
    elseif ataxiaBasher_winterDeepfreeze(sp) ~= "" then
       -- Winter's Heart boon: DEEPFREEZE hits every denizen in the room for cold. Same eq
       -- slot as horripilation/elemental surge, and it outranks Kkractle only in that it is
