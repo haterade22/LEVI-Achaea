@@ -18,8 +18,9 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
      denizen shield-safe → shield sent, "wait" (no disengage, no flee)
 4. No-flee area (World Tree/Mnemosyne)?
      ├─ MAGI KITE (v4.7.530): a Magi in the tower below escapeAt
-     │    → "attack" (the round is the kite's hit; its steps hold the
-     │    dispatcher by ataxiaTemp.magiKiteHold). See
+     │    → "attack" (the round is the kite's hit; its steps, and outdoors
+     │    its fly and land (v4.7.531), hold the dispatcher by
+     │    ataxiaTemp.magiKiteHold). See
      │    ../mnemosyne/08-magi-kite.md
      ├─ hpp ≤ fleePct OR damage spike:
      │    ├─ swarm.disengage() worked → "wait"  (spend the round LEAVING THE ROOM)

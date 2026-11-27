@@ -3372,7 +3372,8 @@ end
 -- evidence we may be up (land) rather than never having left (cq all the queued fly).
 -- v4.7.321: also stamps WHEN, so the hover can tell this takeoff from an earlier one.
 function S.onFlightUp() S.flightConfirmed = true; S.flightUpAt = now() end
-function S.onFlightDown() S.flightConfirmed = nil end
+-- v4.7.531: the land line is stamped too, so the Magi kite (018) can tell its own landing from gmcp.
+function S.onFlightDown() S.flightConfirmed = nil; S.flightDownAt = now() end
 
 -- "You send a lash of fire to strike the icewall to the <dir>, and it quickly
 -- melts." (trigger 026): a melt LANDED in this room -- ours or a manual one;

@@ -53,3 +53,10 @@ if type(target) == "number" and ataxiaBasher.enabled then
 end
 
 ataxia.vitals.sipbal = false
+-- THE HEALTH SIP, STAMPED (v4.7.531). The Magi kite (mnemosyne/018) lands from its fly after one
+-- health sip in the air ("Fly, sip health, eat cure, land", user 2026-11-27). Only the health line:
+-- the mana line is a sip as well, but it heals nothing.
+if line == "The elixir heals and soothes you." then
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.healthSipAt = getEpoch and getEpoch() or os.time()
+end

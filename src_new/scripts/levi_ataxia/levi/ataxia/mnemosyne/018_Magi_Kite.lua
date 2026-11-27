@@ -13,13 +13,15 @@ packageName: ''
 
 --[[
     ============================================================================
-    THE MAGI KITE (v4.7.530): cast, step out, come back
+    THE MAGI KITE (v4.7.530; the fly out v4.7.531): cast, get out, come back
     ============================================================================
     User, 2026-11-27: "Cooldown Abilities via Boons > Stormhammer if not in danger (health) > Run if
     in danger (health) > hit and run with stormhammer". Hit and run is "Cast, step out, return":
     cast, step to a near room, come back when equilibrium is up, cast again. Danger is the escape
     line the tower retreat already uses (`mnem swarm escapeat`, S._cfg().escapeAt, default 35%).
     And: "stormhammer only for denizens 3 plus, not 1 or 2. Staffcast is better usage there."
+    And (v4.7.531): "both flying and moving rooms should hit and run. Fly, sip health, eat cure,
+    land, hit, fly, sip, land, etc". So OUTDOORS, when flight is possible, the "out" is a FLY.
 
     WHO: a Magi (gmcp class), in the tower (ataxiaBasher.inMnemosyne), with the swarm module able to
     move (S._enabled: explorer on, basher on, manual movement). Nobody else: every entry point asks
@@ -41,8 +43,29 @@ packageName: ''
             it is the new fight room (they followed: the user's rule, hit them there the same way).
             An empty one: if going back is safe (K.healthPermits), step back in, held the same way.
       back  landed in the fight room again: the cast phase.
-    The step-out is stamped on the game's line, never when the round is built or the key is pressed
-    (.claude/AGENTS.md, "Stamp on the confirmation line").
+    THE FLY OUT (v4.7.531), chosen at each cast line when K.flyWhyNot() is nil: outdoors
+    (S._indoors), flight allowed (S._canFly: no Deluge, no ripple latch S.grounded, not bound), the
+    air worth being in (S._canHover: not ablaze), and no fly refused earlier in this kite:
+      up    `cq all`, then one queue entry `stand/fly` (S._queueMove), held like a step. Airborne
+            only on the game's evidence: gmcp "Flying above" (S._gmcpFlying) or the ring's line
+            (022 -> S.onFlightUp, stamped after this fly). Re-sent once able for K.FLY_RESEND (an
+            eaten command). No evidence by S.FLY_CONFIRM_MAX (10 s), or flight became impossible:
+            REFUSED -- `cq all`, no more flying this kite, and the step out instead (or a stop).
+      air   up. A ground denizen cannot reach us (live 2026-07-26: "While airborne, melee cannot
+            reach us", .claude/projects/mnemosyne/07-explorer.md). SSC sips and eats on its own;
+            the kite sends neither. LAND when balance and equilibrium are back (S._moveAble), at
+            least one eat clock up (K.EAT_WINDOW) AND a health sip seen since takeoff
+            (ataxiaTemp.healthSipAt, balances/002) or one sip clock up (K.SIP_WINDOW), and landing
+            is safe (K.healthPermits). Not safe, or still not ready at K.AIR_MAX: the swarm's
+            recovery hover takes the flight (S._convertToHover), which lands at recoverAt and cured.
+            Company in the sky (a flyer) or knocked down: no flying this ripple (S.grounded).
+      down  `land` sent directly (we hold balance and equilibrium; nothing queued can be wiped), re-
+            sent every K.LAND_RESEND. Landed on the land line (S.flightDownAt) or gmcp's room name
+            without "Flying above". Then the cast phase. Not landed by K.MOVE_MAX: the hover owns it.
+    Every stop while up lands us (or hands the flight to the hover); a stop with the fly still queued
+    sends `cq all` so it cannot lift us after the kite is gone.
+    The step-out and the fly are stamped on the game's line, never when the round is built or the key
+    is pressed (.claude/AGENTS.md, "Stamp on the confirmation line").
 
     THE END: in the cast phase, health back to `returnAt` (85%) and cured (S._mayReturn) -- the bar
     the U-turn rule and the ground recovery use for going back into a room we fled, and the kite
@@ -79,6 +102,14 @@ K.COOL = 10        -- after a failure stop, the ladder has the room for this lon
 K.HIT_MEMORY = 30  -- the lethal-hit window (S.LETHAL_HIT_MEMORY)
 K.TICK = 0.5       -- the kite's own clock while it runs (a quiet room sends no prompts)
 K.AWAY_MAX = 20    -- seconds we may wait in the near room for balance and equilibrium before healing there
+-- The fly out (v4.7.531). The two cure clocks are the medians of ALL LOGS (mostly other players;
+-- kb/mechanics/foundations.md, "Sip" 4.40 and "Eat" 1.50). Cure clocks are not equilibrium, so the
+-- Diadem factor does not apply; ours are not measured separately.
+K.FLY_RESEND = 2   -- able (balance, equilibrium) this long and still not up: queue the fly again (the hover's 2 s tick)
+K.EAT_WINDOW = 1.5 -- up at least one eat clock before we land
+K.SIP_WINDOW = 4.4 -- with no health sip seen, up at least one sip clock before we land
+K.AIR_MAX = 20     -- up this long without being able to land: the recovery hover has the flight
+K.LAND_RESEND = 1.5 -- `land` again while gmcp still says we are up
 
 ataxiaTemp = ataxiaTemp or {}
 -- Reload-safety: timers do not survive a reload, so no kite does either.
@@ -185,6 +216,59 @@ function K.healthPermits()
   return true
 end
 
+-- Can the "out" be a FLY (v4.7.531)? nil when it can, else why not. The swarm's own gates, so the
+-- kite and the hover never disagree about the sky: indoors (S._indoors), Deluge, the ripple latch
+-- S.grounded (a dragger or a flyer lives here), bound (S._canFly), an ablaze room whose air burns
+-- (S._canHover), and a fly already refused in this kite (k.noFly: a refusal costs a whole
+-- S.FLY_CONFIRM_MAX on the ground, so it is not paid twice in one kite).
+function K.flyWhyNot(k)
+  local sw = S()
+  if not sw then return "the swarm module is not loaded" end
+  if sw._indoors and sw._indoors() then return "indoors" end
+  if k and k.noFly then return "a fly was refused earlier in this kite" end
+  if sw._canFly and not sw._canFly() then
+    if mnemDeluge then return "Deluge: every room is underwater" end
+    if sw.grounded then return "something on this ripple takes flyers out of the sky" end
+    return "bound"
+  end
+  if sw._canHover and not sw._canHover() then return "the room is ablaze (the air burns)" end
+  return nil
+end
+
+-- " (no fly: <why>)" outdoors, nothing indoors (indoors the step out is simply the kite).
+local function noFlyNote(why)
+  if not why or why == "indoors" then return "" end
+  return " (no fly: " .. tostring(why) .. ")"
+end
+
+-- THE GAME'S EVIDENCE OF FLIGHT (v4.7.531), never the key press. Up: gmcp names the room "Flying
+-- above <room>" (S._gmcpFlying), or the ring's line came after this fly was queued and no land line
+-- since (022 -> S.onFlightUp stamps S.flightUpAt; S.onFlightDown clears S.flightConfirmed).
+local function airborne(k)
+  local sw = S()
+  if sw._gmcpFlying and sw._gmcpFlying() then return true end
+  local up = tonumber(sw.flightUpAt)
+  return sw.flightConfirmed == true and up ~= nil and up >= (tonumber(k.flyAt) or 0)
+end
+
+-- Down: the land line since `since`, or gmcp names a room without "Flying above". Not under
+-- dementia, where the room name is an invention (mnemosyne/005), and not when gmcp names no room.
+local function gmcpSaysGround()
+  local sw = S()
+  local name = gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.name
+  if type(name) ~= "string" then return false end
+  if M.map and M.map.drActive and M.map.drActive() then return false end
+  return not (sw._gmcpFlying and sw._gmcpFlying())
+end
+local function landedSince(since)
+  local sw = S()
+  local down = tonumber(sw.flightDownAt)
+  if down and down >= (tonumber(since) or 0) then return true end
+  return gmcpSaysGround()
+end
+
+local FLIGHT = { up = true, air = true, down = true }
+
 -- ---------------------------------------------------------------------------
 -- Should a kite start now? Side-effect-free. Returns true, or false, the reason and whether the
 -- reason is worth saying (a context gate that is false for every other class, or above the line,
@@ -222,8 +306,12 @@ function K.wanted(hp)
   if sw._lethalHit then lethal, lwhy = sw._lethalHit() end
   if lethal then return false, "LETHAL: " .. tostring(lwhy) .. " -- no cast here, the ladder leaves now", true end
   if denizens() == 0 then return false, "no denizen here", true end
-  local dir, dwhy = K.outDir()
-  if not dir then return false, dwhy or "no exit", true end
+  -- A way out: the sky (v4.7.531), else a cleared room next door.
+  local nofly = K.flyWhyNot()
+  if nofly then
+    local dir, dwhy = K.outDir()
+    if not dir then return false, (dwhy or "no exit") .. noFlyNote(nofly), true end
+  end
   return true
 end
 
@@ -250,8 +338,9 @@ function K.start(hp)
   ataxiaTemp.magiKite = { phase = "cast", fight = cur(), at = t, phaseAt = t, arrivedAt = t - K.SETTLE,
                           follows = 0, cycles = 0, misses = 0 }
   armTick()
+  local how = K.flyWhyNot() and "cast, step out, come back" or "cast, fly, heal, land"
   echo("<indian_red>MAGI KITE<reset> -- " .. hpNow(hp) .. "% (line " .. (tonumber(s.escapeAt) or 35)
-    .. "%): cast, step out, come back. Stormhammer at 3+ denizens, the staffcast at 1-2. Ends at "
+    .. "%): " .. how .. ". Stormhammer at 3+ denizens, the staffcast at 1-2. Ends at "
     .. (tonumber(s.returnAt) or 85) .. "% and cured.")
   return true
 end
@@ -276,6 +365,7 @@ end
 
 -- opts.cool: a failure; the ladder has the room for K.COOL (or opts.coolFor) seconds.
 -- opts.recover: heal here first (S._recoverHere), the ground recovery the ladder lands in.
+-- opts.hover: we are up and must stay up; the swarm's recovery hover takes the flight (v4.7.531).
 function K.stop(why, opts)
   local k = st()
   if not k then return false end
@@ -290,13 +380,32 @@ function K.stop(why, opts)
     if M._disarmMove then M._disarmMove() end
     if not (M.roomLava and M.roomLava()) then send("cq all") end
   end
+  -- NEVER LEFT FLYING WITH NOTHING TO LAND US (v4.7.531). Up (or any evidence of it): land, or
+  -- hand the flight to the recovery hover, which lands at its own end. The fly still queued: take
+  -- it back, or it lifts us after nobody tracks the flight.
+  local handed = false
+  if sw and (FLIGHT[k.phase] or (sw._gmcpFlying and sw._gmcpFlying())) then
+    local up = k.phase == "air" or k.phase == "down" or (sw._gmcpFlying and sw._gmcpFlying())
+      or (k.flyAt and airborne(k))
+    if up and opts.hover and sw.state == "idle" and sw._enabled and sw._enabled() and sw._convertToHover then
+      sw.flying = true -- the swarm's mode flag: every `land` in 009 keys on it
+      sw._convertToHover(hpNow())
+      handed = true
+    elseif up then
+      send("land")
+      if M.explore then M.explore.settling = true end -- a landing settles, never decides (v4.7.125)
+    elseif k.phase == "up" and not (M.roomLava and M.roomLava()) then
+      send("cq all")
+    end
+  end
   if opts.cool then
     ataxiaTemp.magiKiteCoolUntil = now() + (tonumber(opts.coolFor) or K.COOL)
     ataxiaTemp.magiKiteCoolWhy = why
   end
   ataxiaTemp.magiKiteLastStop = why
-  echo("<grey>MAGI KITE ends<reset> -- " .. tostring(why) .. " (" .. k.cycles .. " cycle(s)).")
-  if opts.recover and sw and sw._recoverHere then sw._recoverHere("kite: " .. tostring(why)) end
+  echo("<grey>MAGI KITE ends<reset> -- " .. tostring(why) .. " (" .. k.cycles .. " cycle(s))"
+    .. (handed and "; the hover holds the air" or "") .. ".")
+  if opts.recover and not handed and sw and sw._recoverHere then sw._recoverHere("kite: " .. tostring(why)) end
   return true
 end
 
@@ -329,20 +438,74 @@ local function go(dir, phase, why)
   echo(why .. " -> <cyan>" .. verb .. " " .. dir .. "<reset>.")
 end
 
+-- THE FLY (v4.7.531). One queue entry, `stand/fly`, the way the hover sends it (S._queueMove: a raw
+-- `stand;fly` would queue only the stand, .claude/AGENTS.md "chain is NOT one queue entry"), after
+-- `cq all` so nothing queued behind the cast takes the balance first, and the dispatcher held so the
+-- next round's `queue addclearfull` cannot delete it. It goes when the cast's equilibrium is back.
+local function flyUp(why)
+  local k, sw = st(), S()
+  local t = now()
+  if not (M.roomLava and M.roomLava()) then send("cq all") end
+  ataxiaTemp.magiKiteHold = t
+  sw._queueMove({ "stand", "fly" })
+  k.phase, k.phaseAt, k.flyAt, k.flySentAt, k.ableAt = "up", t, t, t, nil
+  k.upAt, k.gUpSeen, k.from = nil, nil, cur()
+  echo(why .. " -> <cyan>fly<reset>.")
+end
+
+-- THE LAND. Sent directly, not queued: we land only with balance and equilibrium (K.landReady), so
+-- it goes at once whether or not LAND costs either (not captured: kb/mechanics/launched-into-sky.md,
+-- "Open"), and a queued land is what an attack's `queue addclearfull` deletes.
+local function landNow(k, why)
+  local t = now()
+  send("land")
+  k.phase, k.phaseAt, k.landSentAt = "down", t, t
+  ataxiaTemp.magiKiteHold = t
+  echo(why .. " -> <cyan>land<reset>.")
+  return true
+end
+
+-- Ready to come down? Balance and equilibrium back and nothing binds us (S._moveAble), at least one
+-- eat clock up, and a health sip seen since takeoff or one sip clock up. "Fly, sip health, eat cure,
+-- land" (user): one sip and one eat per cycle, not a hover to full health. SSC does the sipping and
+-- eating; the kite only waits for the windows. The sip is the game's line (balances/002 stamps
+-- ataxiaTemp.healthSipAt); with no sip (SSC above its sip line, or no sip balance) the clock bounds it.
+function K.landReady(k, t)
+  local sw = S()
+  t = t or now()
+  if sw._moveAble then
+    local ok, why = sw._moveAble()
+    if not ok then return false, why end
+  end
+  local upFor = t - (tonumber(k.upAt) or t)
+  if upFor < K.EAT_WINDOW then return false, "one eat clock not yet up" end
+  local sip = tonumber(ataxiaTemp.healthSipAt)
+  local sipped = sip ~= nil and sip >= (tonumber(k.upAt) or t)
+  if not sipped and upFor < K.SIP_WINDOW then return false, "no health sip yet" end
+  return true, sipped and "sipped" or "one sip clock up"
+end
+
 -- THE GAME'S CAST LINE (triggers magi_offense_tracking/022 stormhammer, 023 staffcast). `kind` is
 -- which one. Only in the cast phase, in the fight room: any other stormhammer is not the kite's.
+-- Outdoors with flight possible the out is a fly (v4.7.531); otherwise the step to a cleared room.
 function K.onCast(kind)
   ataxiaTemp.magiKiteCastAt = now()
   local k = st()
   if not k or k.phase ~= "cast" or cur() ~= k.fight then return false end
   k.misses, k.eqSpentAt = 0, nil
   k.cycles = k.cycles + 1
+  local label = tostring(kind or "cast") .. " is out (cycle " .. k.cycles .. ")"
+  local nofly = K.flyWhyNot(k)
+  if not nofly then
+    flyUp(label .. " -- flying up")
+    return true
+  end
   local dir, why = K.outDir()
   if not dir then
-    K.stop(why or "no exit", { cool = true })
+    K.stop((why or "no exit") .. noFlyNote(nofly), { cool = true })
     return false
   end
-  go(dir, "out", tostring(kind or "cast") .. " is out (cycle " .. k.cycles .. ") -- stepping out")
+  go(dir, "out", label .. " -- stepping out" .. noFlyNote(nofly))
   return true
 end
 
@@ -506,6 +669,112 @@ function K.step(hp)
     return true
   end
 
+  -- THE FLY OUT (v4.7.531). Same room throughout: flying renames the gmcp room, nothing else
+  -- (.claude/projects/mnemosyne/07-explorer.md, "same room otherwise").
+  if FLIGHT[k.phase] and here ~= k.fight then
+    K.stop("moved off the fight room by something else while flying", { cool = true })
+    return false
+  end
+
+  if k.phase == "up" then
+    ataxiaTemp.magiKiteHold = t
+    if airborne(k) then
+      k.phase, k.upAt, k.phaseAt = "air", t, t
+      if sw._gmcpFlying and sw._gmcpFlying() then k.gUpSeen = true end
+      echo("airborne -- SSC sips and eats; landing when balance and equilibrium are back.")
+      return true
+    end
+    -- REFUSED: flight became impossible (bound, dragged, a flyer latched the ripple), or no
+    -- airborne evidence in the hover's own budget. The queued fly is taken back, this kite flies no
+    -- more, and the out is the step to a cleared room -- or the kite stops and says why.
+    local nofly = K.flyWhyNot(k)
+    local budget = tonumber(sw.FLY_CONFIRM_MAX) or 10
+    if nofly or (t - (tonumber(k.flyAt) or t)) > budget then
+      local why = nofly or ("no airborne evidence " .. budget .. "s after the fly was queued")
+      if not (M.roomLava and M.roomLava()) then send("cq all") end
+      k.noFly = true
+      local dir = K.outDir()
+      if dir then
+        go(dir, "out", "the fly never took (" .. why .. ") -- stepping out instead")
+        return true
+      end
+      K.stop("the fly never took (" .. why .. ") and there is no cleared room next door", { cool = true })
+      return false
+    end
+    -- An eaten fly (stupidity replaces queued commands): queue it again once we have been able to
+    -- go for K.FLY_RESEND, so the re-send never races the first fly's own takeoff line.
+    local able = sw._moveAble and sw._moveAble()
+    if able then
+      k.ableAt = k.ableAt or t
+      if (t - k.ableAt) >= K.FLY_RESEND and (t - (tonumber(k.flySentAt) or 0)) >= K.FLY_RESEND then
+        sw._queueMove({ "stand", "fly" })
+        k.flySentAt = t
+      end
+    else
+      k.ableAt = nil
+    end
+    return true
+  end
+
+  if k.phase == "air" then
+    ataxiaTemp.magiKiteHold = t -- refreshed while we are up
+    local gUp = sw._gmcpFlying and sw._gmcpFlying()
+    if gUp then k.gUpSeen = true end
+    local upFor = t - (tonumber(k.upAt) or t)
+    if upFor >= K.SETTLE then
+      -- Knocked, dragged or dropped out of the sky: seen up, and gmcp names the ground now. We are
+      -- on the floor of the fight room: that is the cast phase. The cause lives on this ripple
+      -- (the hover's rule, S._hoverCompromised): no flying for the rest of it.
+      if k.gUpSeen and gmcpSaysGround() then
+        sw.grounded = true
+        k.phase, k.arrivedAt, k.phaseAt = "cast", t, t
+        ataxiaTemp.magiKiteHold = nil
+        echo("<indian_red>knocked out of the sky<reset> -- in the fight on foot; no flying this ripple.")
+        return true
+      end
+      -- Company in the sky: while up, Char.Items lists the SKY (v4.7.125), so a denizen here is a
+      -- flyer, and the air is no safer than the ground. Land and step out from now on.
+      if gUp and denizens() > 0 then
+        sw.grounded = true
+        return landNow(k, "<indian_red>company in the air<reset> -- no flying this ripple")
+      end
+    end
+    local ready, rwhy = K.landReady(k, t)
+    if not ready then
+      if upFor > K.AIR_MAX then
+        K.stop("still up after " .. K.AIR_MAX .. "s (" .. tostring(rwhy) .. ")", { hover = true })
+        return false
+      end
+      return true
+    end
+    local safe, swhy = K.healthPermits()
+    if not safe then
+      K.stop("landing is not safe: " .. tostring(swhy), { hover = true })
+      return false
+    end
+    return landNow(k, "balance and equilibrium back, " .. tostring(rwhy))
+  end
+
+  if k.phase == "down" then
+    ataxiaTemp.magiKiteHold = t
+    if landedSince(k.phaseAt) then
+      -- On the ground in the fight room. The denizen list is the sky's until the room re-pushes,
+      -- so the cast phase's settle runs from now (v4.7.125: a landing settles, never decides).
+      k.phase, k.arrivedAt, k.phaseAt = "cast", t, t
+      ataxiaTemp.magiKiteHold = nil
+      return true
+    end
+    if (t - (tonumber(k.phaseAt) or t)) > K.MOVE_MAX then
+      K.stop("the land never took in " .. K.MOVE_MAX .. "s", { hover = true })
+      return false
+    end
+    if (t - (tonumber(k.landSentAt) or 0)) >= K.LAND_RESEND then
+      send("land")
+      k.landSentAt = t
+    end
+    return true
+  end
+
   K.stop("an unknown phase (" .. tostring(k.phase) .. ")")
   return false
 end
@@ -516,6 +785,7 @@ function K.status()
   if k then
     return "kiting: phase " .. tostring(k.phase) .. ", fight room " .. tostring(k.fight)
       .. ", " .. k.cycles .. " cycle(s), " .. k.follows .. " follow(s), " .. k.misses .. " missed line(s)"
+      .. ", out by " .. (K.flyWhyNot(k) and ("a step" .. noFlyNote(K.flyWhyNot(k))) or "a fly")
   end
   return "not kiting" .. (ataxiaTemp.magiKiteWhyNot and (" (" .. ataxiaTemp.magiKiteWhyNot .. ")") or "")
     .. (ataxiaTemp.magiKiteLastStop and ("; last stop: " .. ataxiaTemp.magiKiteLastStop) or "")

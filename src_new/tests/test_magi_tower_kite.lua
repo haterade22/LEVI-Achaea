@@ -158,8 +158,35 @@ local function world(n, hp)
   mnemWintersHeart, magiKkractle, mnemRollHide, mnemTerrorSkies = false, false, false, false
   prey = false
   target = 101
+  gmcp.Room.Info.name = nil
+  S.grounded, S.flying, S.flightConfirmed, S.flightUpAt, S.flightDownAt = nil, nil, nil, nil, nil
+  mnemDeluge = nil
   mobs(n or 3)
   setHp(hp or 30)
+end
+
+-- Outdoors (v4.7.531): no "indoors" in the room details, a named room.
+local GROUND = "A windswept plain"
+local function outdoors()
+  gmcp.Room.Info.details = {}
+  gmcp.Room.Info.name = GROUND
+end
+-- Up: gmcp renames the room, and Char.Items lists the sky (empty).
+local function goUp() gmcp.Room.Info.name = "Flying above " .. GROUND; mobs(0) end
+-- Down: the ground's name and its denizens.
+local function goDown(n) gmcp.Room.Info.name = GROUND; mobs(n or 3) end
+local function sentExact(cmd)
+  for _, c in ipairs(sent) do if c == cmd then return true end end
+  return false
+end
+local SIP_FILE = "src_new/triggers/levi_ataxia/for_levi/leviticus/balances/002_Sip_Used.lua"
+local function sip()
+  local t = target
+  target = nil -- the trigger's basher echo is not what is tested here
+  line = "The elixir heals and soothes you." -- Mudlet's global for the matched line
+  local hit = deliver(SIP_FILE, line)
+  target, line = t, nil
+  return hit
 end
 
 -- Land in a room: the map moves, the next room's denizens are `n`.
@@ -393,6 +420,213 @@ describe("the stops, each with its reason", function()
     S.onVitals()
     expect(K.active()).toBe(false)
     expect(S.state).toBe("pulling") -- the ladder, as for any class
+  end)
+end)
+
+describe("outdoors the out is a fly: cast, fly, sip, land, cast (v4.7.531)", function()
+  it("the whole cycle, each phase on the game's evidence", function()
+    world(3, 30); outdoors()
+    S.onVitals()
+    expect(K.active()).toBe(true)
+    expect(echoed("cast, fly, heal, land")).toBe(true)
+    sent = {}
+    expect(deliver(STORM_FILE, STORM_LINE)).toBe(true)
+    expect(ataxiaTemp.magiKite.phase).toBe("up")
+    expect(sentHas("cq all")).toBe(true)
+    expect(sentHas("setalias lvmove stand/fly")).toBe(true)
+    expect(sentHas("leap")).toBe(false)
+    ataxiaBasher_attack()
+    expect(assembled).toBe(0) -- held: no round can delete the queued fly
+    -- the key press is not the takeoff: still on the ground, still "up"
+    K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("up")
+    goUp(); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("air")
+    -- up, equilibrium not back: no land
+    sent = {}
+    clock = clock + 2; gmcp.Char.Vitals.eq = "0"; K.step()
+    expect(sentExact("land")).toBe(false)
+    -- equilibrium back, but no sip yet and under one sip clock: still up
+    gmcp.Char.Vitals.eq = "1"; K.step()
+    expect(sentExact("land")).toBe(false)
+    expect(ataxiaTemp.magiKite.phase).toBe("air")
+    -- SSC's health sip (the real trigger): land
+    expect(sip()).toBe(true)
+    K.step()
+    expect(sentExact("land")).toBe(true)
+    expect(ataxiaTemp.magiKite.phase).toBe("down")
+    ataxiaBasher_attack()
+    expect(assembled).toBe(0)
+    goDown(3); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("cast")
+    expect(ataxiaTemp.magiKiteHold).toBeNil()
+    expect(ataxiaBasher_magiBashing()).toBe("BRAGE;cast stormhammer at 101 and 102 and 103")
+    deliver(STORM_FILE, STORM_LINE)
+    expect(ataxiaTemp.magiKite.phase).toBe("up")
+    expect(ataxiaTemp.magiKite.cycles).toBe(2)
+  end)
+  it("the ring's line counts as up; the land line counts as down", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    clock = clock + 5
+    S.onFlightUp(); mobs(0); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("air")
+    clock = clock + 5; K.step() -- one sip clock up with no sip: land
+    expect(ataxiaTemp.magiKite.phase).toBe("down")
+    clock = clock + 0.5
+    gmcp.Room.Info.name = nil -- gmcp names no room: only the line can say we are down
+    K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("down")
+    S.onFlightDown(); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("cast")
+  end)
+  it("no sip at all: land after one sip clock, not at full health", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    sent = {}
+    clock = clock + 4; K.step()
+    expect(sentExact("land")).toBe(false)
+    clock = clock + 0.5; K.step()
+    expect(sentExact("land")).toBe(true)
+  end)
+  it("a land that does not take is sent again", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    clock = clock + 5; K.step()
+    sent = {}
+    clock = clock + 1.6; K.step()
+    expect(sentExact("land")).toBe(true)
+    expect(ataxiaTemp.magiKite.phase).toBe("down")
+  end)
+end)
+
+describe("the fly refused, and the stops while flying", function()
+  it("no airborne evidence in 10 s: the fly is taken back and the kite steps out instead", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    sent = {}
+    clock = clock + 11; K.step()
+    expect(sentHas("cq all")).toBe(true)
+    expect(ataxiaTemp.magiKite.phase).toBe("out")
+    expect(sentHas("setalias lvmove stand/leap s")).toBe(true)
+    expect(echoed("the fly never took")).toBe(true)
+    -- the next cycle does not try the sky again
+    land(100, 0); K.step(); clock = clock + 1.6; K.step()
+    land(200, 3); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("cast")
+    deliver(STORM_FILE, STORM_LINE)
+    expect(ataxiaTemp.magiKite.phase).toBe("out")
+  end)
+  it("webbed while the fly waits: the step out at once", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    ataxia.afflictions.webbed = true
+    K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("out")
+    expect(echoed("bound")).toBe(true)
+  end)
+  it("refused with no cleared room next door: the kite stops and says why", function()
+    world(3, 30); outdoors()
+    MAP.rooms[100].visited = false
+    S.onVitals()
+    expect(K.active()).toBe(true) -- the sky needs no exit
+    deliver(STORM_FILE, STORM_LINE)
+    clock = clock + 11; K.step()
+    expect(K.active()).toBe(false)
+    expect(echoed("MAGI KITE ends")).toBe(true)
+    expect(echoed("no cleared room next door")).toBe(true)
+  end)
+  it("Deluge outdoors: the step out, and the echo says why not the sky", function()
+    world(3, 30); outdoors(); mnemDeluge = true
+    S.onVitals()
+    expect(echoed("cast, step out, come back")).toBe(true)
+    deliver(STORM_FILE, STORM_LINE)
+    expect(ataxiaTemp.magiKite.phase).toBe("out")
+    expect(echoed("no fly: Deluge")).toBe(true)
+    mnemDeluge = nil
+  end)
+  it("a swarm reset while up lands us", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    sent = {}
+    S.onRipple()
+    expect(K.active()).toBe(false)
+    expect(sentExact("land")).toBe(true)
+    expect(echoed("MAGI KITE ends")).toBe(true)
+  end)
+  it("leaving the tower while up lands us", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    sent = {}
+    ataxiaBasher.inMnemosyne = false
+    K.step()
+    expect(K.active()).toBe(false)
+    expect(sentExact("land")).toBe(true)
+  end)
+  it("a stop with the fly still queued takes it back and sends no land", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    sent = {}
+    S.onRipple()
+    expect(K.active()).toBe(false)
+    expect(sentHas("cq all")).toBe(true)
+    expect(sentExact("land")).toBe(false)
+  end)
+  it("landing into a lethal hit: we stay up, and the recovery hover takes the flight", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    ataxiaTemp.attackHits = { { room = 7200, sum = 9000, last = clock } }
+    sent = {}
+    clock = clock + 5; K.step()
+    expect(K.active()).toBe(false)
+    expect(sentExact("land")).toBe(false)
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBe(true)
+    expect(echoed("the hover holds the air")).toBe(true)
+  end)
+  it("company in the sky: land, and no flying for the rest of the ripple", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    sent = {}
+    clock = clock + 1.6; mobs(1, 500); K.step()
+    expect(sentExact("land")).toBe(true)
+    expect(S.grounded).toBe(true)
+    goDown(3); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("cast")
+    deliver(STORM_FILE, STORM_LINE)
+    expect(ataxiaTemp.magiKite.phase).toBe("out")
+  end)
+  it("knocked out of the sky: the cast phase on foot, no flying this ripple", function()
+    world(3, 30); outdoors(); S.onVitals()
+    deliver(STORM_FILE, STORM_LINE)
+    goUp(); K.step()
+    clock = clock + 1.6; goDown(3); K.step()
+    expect(ataxiaTemp.magiKite.phase).toBe("cast")
+    expect(ataxiaTemp.magiKiteHold).toBeNil()
+    expect(S.grounded).toBe(true)
+  end)
+end)
+
+describe("the fly out touches nobody else", function()
+  it("another class outdoors at 30% gets the swarm's hover, not the kite", function()
+    world(3, 30); outdoors()
+    gmcp.Char.Status.class = "Runewarden"
+    S.onVitals()
+    expect(K.active()).toBe(false)
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBe(true)
+  end)
+  it("a Magi outdoors above the line: no kite, no fly", function()
+    world(3, 50); outdoors()
+    S.onVitals()
+    expect(K.active()).toBe(false)
+    expect(sentHas("fly")).toBe(false)
   end)
 end)
 

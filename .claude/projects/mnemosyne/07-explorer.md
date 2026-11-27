@@ -1068,7 +1068,7 @@ Every ground retreat now reads one latch, `S.retreatSpentAt`.
 | What happens to a denizen in the landing room? | The normal basher fights it. |
 | What gives it back? | The room is empty and `S._mayReturn()` holds (85% and cured), a recovery ends (healed, stalled or capped), a fit re-entry starts (`_beginReenter`), Righteous Fire, a reload (`S._restoreRetreat`). `S.onRipple` clears it for a new ripple or an explorer restart. |
 
-**A Magi kites instead (v4.7.530).** Below the escape line a Magi in the tower does not take the ladder's one retreat: it casts, steps out on the cast line and comes back (`mnemosyne/018`). The kite neither reads nor spends this latch; the pursuit, Prey, lethal and last-stand rules still stop it. See [08-magi-kite.md](08-magi-kite.md).
+**A Magi kites instead (v4.7.530).** Below the escape line a Magi in the tower does not take the ladder's one retreat: it casts, steps out on the cast line (outdoors it flies up instead, v4.7.531) and comes back (`mnemosyne/018`). The kite neither reads nor spends this latch; the pursuit, Prey, lethal and last-stand rules still stop it. See [08-magi-kite.md](08-magi-kite.md).
 
 If the landing room empties and we are not fit, `S._recoverHere` heals there before the sweep moves on. Otherwise the sweep walks into the next room hurt, with no retreat left.
 
