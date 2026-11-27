@@ -2505,6 +2505,42 @@ function ataxiaBasher_magiHellfumes(sp)
   return "cast hellfumes"..sp
 end
 
+-- Master of Four (Mnemosyne boon): "Casting simultaneity deals four elemental bursts of damage to
+-- all denizens in your location as fire, cold, electric, and blunt damage. There is a 30 seconds
+-- cooldown before this effect can occur again." SIMULTANEITY: Self, BASE 4.00 s eq (ours 3.27 s),
+-- 1000 mana (kb/raw/live/evocation_earth_master_of_four_2026-11-27.txt). No proc line is captured:
+-- the CAST line is the clock, stamped by triggers general/012_Fortify (ataxiaTemp.simultaneityCastAt).
+-- Mana: never spend past the `manause` floor (the pattern of ataxiaBasher_monkMindCrush).
+function ataxiaBasher_magiMasterOfFour(sp)
+  if not mnemMasterOfFour then return "" end
+  if ataxiaBasher.shielded then return "" end
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < (tonumber(ataxiaBasher.masterOfFourAt) or 2) then return "" end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if nowT - (tonumber((ataxiaTemp or {}).simultaneityCastAt) or 0) < 30 then return "" end
+  local mp, maxmp = tonumber(ataxia.vitals.mp) or 0, tonumber(ataxia.vitals.maxmp) or 0
+  local floor = maxmp * (((ataxia.settings.sipping or {}).manause or 30) / 100)
+  if mp - 1000 < floor then return "" end
+  return "simultaneity"..sp
+end
+
+-- Evocation of Earth (Mnemosyne boon): "Your elementalism quake ability now deals blunt damage to
+-- all denizens in your location and stuns them for 3 seconds when cast. This can only occur once
+-- every 30 seconds." CAST QUAKE: channel earth, Room, BASE 3.20 s eq, 250 mana. No proc line is
+-- captured: the cast line "Calling upon Garash, you summon a quake to sunder the ground beneath
+-- your feet." is the clock (trigger magi_offense_tracking/021 -> ataxiaTemp.quakeCastAt).
+function ataxiaBasher_magiQuake(sp)
+  if not mnemEvocationEarth then return "" end
+  if ataxiaBasher.shielded then return "" end
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < (tonumber(ataxiaBasher.quakeAt) or 2) then return "" end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if nowT - (tonumber((ataxiaTemp or {}).quakeCastAt) or 0) < 30 then return "" end
+  return "cast quake"..sp
+end
+
 function ataxiaBasher_magiBashing()
    local command, sp = "", ataxia.settings.separator
    local brage = ataxiaBasher_assembleBattlerage()
@@ -2524,12 +2560,19 @@ function ataxiaBasher_magiBashing()
       -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise
       -- (matches blademasterBashing's raze..sp..brage order).
       command = "cast erode at "..target..sp..brage
+   elseif ataxiaBasher_magiMasterOfFour(sp) ~= "" then
+      -- The three boon procs below are all once per 30 s and outrank the every-round fillers.
+      -- Master of Four is four bursts of damage (fire, cold, electric, blunt), Hellfumes is fire
+      -- plus inhibit, Quake is blunt plus stun: the order matters only when two are ready at once.
+      command = brage..sp.."simultaneity"
    elseif ataxiaBasher_magiHellfumes(sp) ~= "" then
       -- Evocation of Fire boon: HELLFUMES deals fire (6612 in the capture) to every denizen in the
       -- room plus inhibit, but only once per 30 s, so it outranks deepfreeze and elemental surge,
       -- which are every-round fillers: cast it the moment the proc is ready, fall back to them
       -- while it is not (the helper returns "" then). Crowd-gated inside the helper.
       command = brage..sp.."cast hellfumes"
+   elseif ataxiaBasher_magiQuake(sp) ~= "" then
+      command = brage..sp.."cast quake"
    elseif ataxiaBasher_winterDeepfreeze(sp) ~= "" then
       -- Winter's Heart boon: DEEPFREEZE hits every denizen in the room for cold. Same eq
       -- slot as horripilation/elemental surge, and it outranks Kkractle only in that it is

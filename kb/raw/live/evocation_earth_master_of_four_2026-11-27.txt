@@ -1,0 +1,27 @@
+Boon: Evocation of Earth
+Your elementalism quake ability now deals blunt damage to all denizens in your location and stuns them for 3 seconds when cast. This can only occur once every 30 seconds.
+
+Boon: Master of Four
+Casting simultaneity deals four elemental bursts of damage to all denizens in your location as fire, cold, electric, and blunt damage. There is a 30 seconds cooldown before this effect can occur again.
+
+Simultaneity (Elementalism)  ABADMIN ID: 731
+Known: Yes
+Syntax: SIMULTANEITY
+Works on/against: Self
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1000 mana
+Details: Using this fine ability, you will simultaneously open channels to the Air, Water, Earth, and Fire realms.
+
+Quake (Elementalism)  ABADMIN ID: 2039
+Known: Yes
+Syntax: CAST QUAKE
+Required Channels: earth
+Works on/against: Room
+Cooldown: 3.20 seconds of equilibrium
+Resource: 250 mana
+Details: By summoning forth a minor earthquake, you are able to drain away any water that may be flooding your location.
+
+Quake cast line (user log 2026-11-27):
+Calling upon Garash, you summon a quake to sunder the ground beneath your feet.
+The next line appears only when the room is flooded:
+The water flooding the location rapidly drains away into the cracks in the ground.

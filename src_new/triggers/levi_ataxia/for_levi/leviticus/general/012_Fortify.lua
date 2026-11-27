@@ -39,5 +39,12 @@ patterns:
 if ataxia and ataxia.defences then
   ataxia.defences["simultaneity"] = true
 end
-send ("queue add eqbal fortify all")
-send ("queue add eqbal bind all")
+-- Master of Four clock: the cast line is the stamp (basher/002 ataxiaBasher_magiMasterOfFour).
+ataxiaTemp = ataxiaTemp or {}
+ataxiaTemp.simultaneityCastAt = getEpoch()
+-- While autobash runs, do not queue fortify/bind: Master of Four casts simultaneity every 30 s,
+-- and these would add two more eq actions each time. Outside bashing nothing changes.
+if not (ataxiaBasher and ataxiaBasher.enabled) then
+  send ("queue add eqbal fortify all")
+  send ("queue add eqbal bind all")
+end

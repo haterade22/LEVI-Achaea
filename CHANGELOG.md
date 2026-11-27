@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-11-27 - v4.7.528: Evocation of Earth quake; Master of Four simultaneity
+
+**What.** Two more Magi Mnemosyne boons drive the bashing round. With "Master of Four" (simultaneity deals four elemental bursts to every denizen, once per 30 s) the Magi casts `simultaneity` at 2+ denizens when 30 s have passed and 1000 mana still leaves the `manause` floor. With "Evocation of Earth" (quake deals blunt damage and stuns every denizen 3 s, once per 30 s) it casts `cast quake` at 2+ denizens. Order after the shield strip: Master of Four, Hellfumes, Quake, then deepfreeze and the rest. While autobash runs, the simultaneity trigger no longer queues `fortify all` and `bind all` (two more eq actions every 30 s); outside bashing nothing changes.
+
+**Why.** Each is a 30 s room proc worth more than the every-round fillers.
+
+**How.** `M.BOON_FLAGS` latches `mnemEvocationEarth` and `mnemMasterOfFour`; `ataxiaBasher_magiMasterOfFour` and `ataxiaBasher_magiQuake` plus two branches in `ataxiaBasher_magiBashing` (`basher/002`). Both clocks are stamped on the game's CAST lines (no proc line is captured for either): `general/012_Fortify.lua` and the new `magi_offense_tracking/021_Quake_Cast.lua`. Raw: `kb/raw/live/evocation_earth_master_of_four_2026-11-27.txt`. Test: `src_new/tests/test_magi_evocations.lua`.
+
 ## 2026-11-27 - v4.7.527: Treaty run takes rawstone from the rift
 
 What: the `treaties` run now sends `outr 1 rawstone` for the Stoneback treaty, not `outr 1 stone`. Why: the user gave the rift syntax (`outr 1 rawstone`, `outr 1 charcoal`); v4.7.526 guessed `stone`, so the Stoneback step would have stopped at its 60 s limit. How: `ataxiaTreaty.COMMODITY` in `mage/007_Treaty_Run.lua`, the test in `src_new/tests/test_magi_treaty.lua`, and `.claude/classes/magi.md`.
