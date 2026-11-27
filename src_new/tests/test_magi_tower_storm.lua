@@ -1,7 +1,8 @@
 -- test_magi_tower_storm.lua -- Magi casts stormhammer at 3+ non-own denizens in the Mnemosyne tower
 -- (basher/002 ataxiaBasher_magiTowerStormhammer; tower = ataxiaBasher.inMnemosyne). Targets come from
 -- ataxia.denizensHere, not from the saved target list, and the `abshuse` toggle is not needed there.
--- One shared Lua state: every global is restored at the end.
+-- Order (v4.7.530, user 2026-11-27): erode > the 30 s procs > deepfreeze > elemental surge > tower
+-- stormhammer > the rest. One shared Lua state: every global is restored at the end.
 
 require("mock_mudlet")
 
@@ -102,11 +103,20 @@ describe("tower stormhammer", function()
     ataxiaTemp.evocationFireAt = clock
     expect(has(ataxiaBasher_magiBashing(), "cast stormhammer at")).toBe(true)
   end)
-  it("with magiKkractle or deepfreeze held, stormhammer still wins at 3+", function()
+  it("order (user, 2026-11-27): the boon abilities first -- deepfreeze, then elemental surge, then stormhammer", function()
+    -- "elemental surge or any ability on cooldown should be used first and then stormhammer"
     world(3); magiKkractle, mnemWintersHeart = true, true
+    expect(ataxiaBasher_magiBashing()).toBe("BRAGE;cast deepfreeze")
+    world(3); magiKkractle = true
+    expect(ataxiaBasher_magiBashing()).toBe("BRAGE;elemental surge")
+    world(3)
     expect(has(ataxiaBasher_magiBashing(), "cast stormhammer at")).toBe(true)
     world(2); magiKkractle = true
     expect(ataxiaBasher_magiBashing()).toBe("BRAGE;elemental surge")
+  end)
+  it("a ready 30 s proc still comes before deepfreeze and surge", function()
+    world(3); magiKkractle, mnemWintersHeart, mnemEvocationEarth = true, true, true
+    expect(ataxiaBasher_magiBashing()).toBe("BRAGE;cast quake")
   end)
 end)
 

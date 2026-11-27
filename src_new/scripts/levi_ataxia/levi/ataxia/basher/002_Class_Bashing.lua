@@ -2542,34 +2542,75 @@ function ataxiaBasher_magiQuake(sp)
 end
 
 -- STORMHAMMER AT 3+ DENIZENS IN THE TOWER (user, 2026-11-27: "use stormhammer if 3 or more denizens
--- are in the room in wading"). CAST STORMHAMMER AT <t> [AND <t> [AND <t>]] (ABADMIN 741: adventurers
--- and denizens, BASE 6.00 s eq, 1200 mana). The old branch in magiBashing needs the saved toggle
+-- are in the room in wading"; and "stormhammer only for denizens 3 plus, not 1 or 2. Staffcast is
+-- better usage there"). CAST STORMHAMMER AT <t> [AND <t> [AND <t>]] (ABADMIN 741: adventurers and
+-- denizens, BASE 6.00 s eq, 1200 mana). The old branch in magiBashing needs the saved toggle
 -- `abshuse` AND stormhammerTargets, which holds only denizens named in targetList[areaKey]; this one
 -- takes its targets straight from ataxia.denizensHere (non-own only), and in the tower it does not
 -- need the toggle. "In the tower" is ataxiaBasher.inMnemosyne (the wade lifecycle's flag, the one
 -- ataxiaBasher_areaKey and ataxiaBasher_isNoFleeArea read; basher/001), NOT M._inRun(), which also
 -- needs the reporting token. Targets: up to 3 ids, the current `target` first, the rest by id.
-function ataxiaBasher_magiTowerStormhammer(sp)
-  if not (ataxiaBasher.inMnemosyne) then return "" end
-  if ataxiaBasher.shielded then return "" end
+--
+-- The non-own denizen ids here, the current `target` first, the rest by id. Shared by the tower
+-- stormhammer and the Magi kite's hit (mnemosyne/018).
+function ataxiaBasher_magiRoomIds()
   local own = ataxiaBasher_isOwnDenizen
   local ids, tid = {}, tonumber(target)
   for id, name in pairs(ataxia.denizensHere or {}) do
     local n = tonumber(id)
     if n and not (own and own(name)) then ids[#ids + 1] = n end
   end
-  if #ids < (tonumber(ataxiaBasher.towerStormAt) or 3) then return "" end
   table.sort(ids, function(a, b)
     if (a == tid) ~= (b == tid) then return a == tid end
     return a < b
   end)
+  return ids
+end
+
+-- 1200 mana for stormhammer, never past the `manause` floor (the pattern of ataxiaBasher_monkMindCrush).
+function ataxiaBasher_magiStormMana()
   local ataxiaVitals = ataxia.vitals or {}
   local mp, maxmp = tonumber(ataxiaVitals.mp) or 0, tonumber(ataxiaVitals.maxmp) or 0
   local floor = maxmp * (((ataxia.settings.sipping or {}).manause or 30) / 100)
-  if mp - 1200 < floor then return "" end
+  return mp - 1200 >= floor
+end
+
+local function stormAt(ids)
   local list = {}
   for i = 1, math.min(3, #ids) do list[i] = tostring(ids[i]) end
-  return "cast stormhammer at "..table.concat(list, " and ")..sp
+  return "cast stormhammer at "..table.concat(list, " and ")
+end
+
+function ataxiaBasher_magiTowerStormhammer(sp)
+  if not (ataxiaBasher.inMnemosyne) then return "" end
+  if ataxiaBasher.shielded then return "" end
+  local ids = ataxiaBasher_magiRoomIds()
+  if #ids < (tonumber(ataxiaBasher.towerStormAt) or 3) then return "" end
+  if not ataxiaBasher_magiStormMana() then return "" end
+  return stormAt(ids)..sp
+end
+
+-- THE MAGI KITE'S HIT (v4.7.530, mnemosyne/018). While the kite is in its cast phase in the fight
+-- room, this is the round's hit: STORMHAMMER at 3 when 3 or more non-own denizens are here and the
+-- mana allows it, otherwise the STAFFCAST the round uses today (`staff cast horripilation at <t>`).
+-- User, 2026-11-27: "stormhammer only for denizens 3 plus, not 1 or 2. Staffcast is better usage
+-- there." The kite steps out on the game's line for whichever of the two went out (triggers
+-- magi_offense_tracking/022 and 023). Returns the command (no separator added when sp is "") and
+-- its kind, or "" and the reason.
+function ataxiaBasher_magiKiteHit(sp)
+  sp = sp or ""
+  local K = ataxia.mnemosyne and ataxia.mnemosyne.magiKite
+  if not (K and K.castReady) then return "", "no kite loaded" end
+  local ready, why = K.castReady()
+  if not ready then return "", why end
+  local ids = ataxiaBasher_magiRoomIds()
+  if #ids == 0 then return "", "no denizen here" end
+  if #ids >= 3 and ataxiaBasher_magiStormMana() then return stormAt(ids)..sp, "stormhammer" end
+  -- The staffcast hits our target if it is in this room, else the first denizen here: after a step
+  -- the basher's `target` can still name a denizen of the room we left.
+  local tid, here = tonumber(target), false
+  for _, id in ipairs(ids) do if id == tid then here = true end end
+  return "staff cast horripilation at "..tostring(here and tid or ids[1])..sp, "staffcast"
 end
 
 function ataxiaBasher_magiBashing()
@@ -2604,10 +2645,13 @@ function ataxiaBasher_magiBashing()
       command = brage..sp.."cast hellfumes"
    elseif ataxiaBasher_magiQuake(sp) ~= "" then
       command = brage..sp.."cast quake"
-   elseif ataxiaBasher_magiTowerStormhammer(sp) ~= "" then
-      -- In the tower the user wants stormhammer at 3+ denizens. The 30 s procs above still come
-      -- first, because each is ready only once per 30 s; every other round this is the cast.
-      command = brage..sp..ataxiaBasher_magiTowerStormhammer("")
+   elseif ataxiaBasher_magiKiteHit("") ~= "" then
+      -- THE MAGI KITE (v4.7.530, mnemosyne/018): in danger in the tower the hit is stormhammer at
+      -- 3+ denizens or the staffcast at 1-2, and the kite steps out on its cast line. Below the
+      -- 30 s procs (the user's order: "Cooldown Abilities via Boons > Stormhammer if not in danger
+      -- > Run if in danger > hit and run with stormhammer"); above the every-round fillers, which
+      -- would otherwise take every equilibrium and the kite would never step out.
+      command = brage..sp..ataxiaBasher_magiKiteHit("")
    elseif ataxiaBasher_winterDeepfreeze(sp) ~= "" then
       -- Winter's Heart boon: DEEPFREEZE hits every denizen in the room for cold. Same eq
       -- slot as horripilation/elemental surge, and it outranks Kkractle only in that it is
@@ -2621,6 +2665,12 @@ function ataxiaBasher_magiBashing()
       -- Same eq-cast slot horripilation used, so no extra spam vs the old unconditional attack.
       -- Needs a summoned ashbeast up (kept off the target list via ownDenizens = ...ashbeast).
       command = brage..sp.."elemental surge"
+   elseif ataxiaBasher_magiTowerStormhammer(sp) ~= "" then
+      -- In the tower the user wants stormhammer at 3+ denizens, AFTER the boon abilities (user,
+      -- 2026-11-27: "elemental surge or any ability on cooldown should be used first and then
+      -- stormhammer"). So with Aspect of Kkractle held, elemental surge (no cooldown, 3.60 s eq)
+      -- takes every round and this branch is reached only without that boon.
+      command = brage..sp..ataxiaBasher_magiTowerStormhammer("")
    elseif ataxiaBasher.stormhammer and ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
       command = brage..sp.."cast stormhammer at "..stormhammerTargets[1].. " and " ..stormhammerTargets[2].. " and " ..stormhammerTargets[3]
    else

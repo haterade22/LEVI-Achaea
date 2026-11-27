@@ -2468,6 +2468,15 @@ function S.onTick()
     return false
   end
   S._checkPursuit() -- v4.7.370
+  -- THE MAGI KITE (v4.7.530, mnemosyne/018): while it runs the tick is its own -- no pull, no
+  -- ladder, no navigation. A kite that stopped hands the tick back to the flow below.
+  do
+    local K = M.magiKite
+    if K and K.active and K.active() then
+      local okK, owns = pcall(K.step)
+      if okK and owns then return true end
+    end
+  end
 
   -- AIRBORNE WITH NOTHING THAT WILL LAND US (deep review, v4.7.321). No hover, no kite, and gmcp
   -- says "Flying above": the explorer is reading the SKY as the room (v4.7.125) and every `land` in
@@ -2657,6 +2666,15 @@ function S.onTick()
     S._armRecoverHold()
     if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
     return true
+  end
+
+  -- A Magi below the escape line kites instead of the ladder (v4.7.530, mnemosyne/018).
+  do
+    local K = M.magiKite
+    if K and K.tryStart and hpp() <= (tonumber(S._cfg().escapeAt) or 35) then
+      local okK, started = pcall(K.tryStart, hpp())
+      if okK and started then return true end
+    end
   end
 
   -- Low-HP escape (HP-gated only; see _beginEscape). Already-airborne (kiting) just
@@ -3066,6 +3084,13 @@ function S.onVitals()
      and S._maybeSeclusion(hp) then
     return
   end
+  -- THE MAGI KITE (v4.7.530, mnemosyne/018) owns every prompt while it runs: cast, step out, come
+  -- back. When it stops it says why and returns false, and the ladder below decides on this prompt.
+  local K = M.magiKite
+  if K and K.active and K.active() then
+    local okK, owns = pcall(K.step, hp)
+    if okK and owns then return end
+  end
   local wantPanic = s.panic ~= false and S._shedsPursuers() and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
   -- THE DAMAGE WATCHDOG, EVALUATED HERE (v4.7.243). It used to live only inside
@@ -3103,6 +3128,12 @@ function S.onVitals()
       S._sayOnce("shieldsafe", head .. " -- NOT leaving: " .. tostring(okWhy) .. ".")
       return
     end
+  end
+  -- A MAGI BELOW THE ESCAPE LINE KITES INSTEAD (v4.7.530, mnemosyne/018). Only on health: the
+  -- damage-rate alarm alone (byRate) is not the user's "in danger". K.tryStart says why it did not.
+  if not byRate and K and K.tryStart then
+    local okK, started = pcall(K.tryStart, hp)
+    if okK and started then return end
   end
   -- BOUND: wait for it WITHOUT the cooldown stamp, so the first free prompt leaves at once
   -- (v4.7.370, user: "retry the command when we are free").
@@ -3361,6 +3392,11 @@ end
 -- sysLoadEvent; manual `bash` toggle via the "basher disabled" event.
 function S.reset(reason)
   local wasActive = S.state ~= "idle"
+  -- The Magi kite (v4.7.530) ends with every swarm teardown: a ripple, the boon screen, a death,
+  -- the tower left, the basher off. Not the kite's own reset at its start: no kite runs yet then.
+  if M.magiKite and M.magiKite.active and M.magiKite.active() then
+    pcall(M.magiKite.stop, "swarm reset" .. (reason and (": " .. reason) or ""))
+  end
   if S._pullFallbackT then pcall(killTimer, S._pullFallbackT); S._pullFallbackT = nil end
   S._clearFunnelTimer()
   S._clearHold()

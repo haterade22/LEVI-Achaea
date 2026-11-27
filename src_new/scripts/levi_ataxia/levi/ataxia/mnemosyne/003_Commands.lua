@@ -92,6 +92,7 @@ function M.help()
     { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
     { "mnem explore glance [on|off]", "Look before stepping into a never-walked room (lava pass-through)" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
+    { "mnem swarm magikite [on|off]", "Magi in danger: cast (stormhammer at 3+, staffcast at 1-2), step out, come back" },
     { "mnem swarm greater [on|off|list|add <name>|remove <name>]", "Fight one greater elemental at a time (isolate 2+; glance skips their room)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
@@ -382,6 +383,16 @@ function M.command(rest)
         else
           M.echo("Usage: mnem swarm escapeat <hp%>  (5-90)")
         end
+      elseif sub == "magikite" then
+        -- v4.7.530: the Magi kite (mnemosyne/018): cast, step out, come back, below the escape line.
+        local v = (rest2 or ""):lower()
+        if v == "on" or v == "off" then
+          sc.magiKite = (v == "on")
+          ataxia_saveSettings(false)
+        end
+        local K = M.magiKite
+        M.echo("Magi kite " .. ((sc.magiKite == false) and "<indian_red>OFF" or "<green>ON") .. "<reset> -- "
+          .. ((K and K.status) and K.status() or "module not loaded") .. ".")
       elseif sub == "recoverat" then
         local n = tonumber(rest2)
         if n and n >= 30 and n <= 100 then

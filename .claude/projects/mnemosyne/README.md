@@ -18,6 +18,7 @@ This is distinct from the basher's Mnemosyne handling: the basher treats Mnemosy
 | `mnemosyne/006_Ripple_Map_Window.lua` | Draggable grid widget, render, click-to-walk |
 | `mnemosyne/007_History.lua` | Local per-run history + reports (boons/affixes/library) |
 | `mnemosyne/017_Affix_Registry.lua` | `M.AFFIX_REGISTRY` (what our code does about each affix), the run's affixes with telemetry off, the spawn-on-kill hold, affix permanent afflictions (v4.7.511) |
+| `mnemosyne/018_Magi_Kite.lua` | The Magi kite (v4.7.530): cast, step out, come back below the escape line ([08-magi-kite.md](08-magi-kite.md)) |
 | `mnemosyne/008_Explorer.lua` | Auto-sweep the 4×4 (drives the basher in manual mode); pauses at the boon screen with the basher left on, auto-resumes on `GO!` |
 
 Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers live in `src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/` (`001`–`016`, incl. `011_Ice_Slip` and `016_Run_Pause`); aliases in `src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/` (`001`–`002`).
@@ -33,6 +34,7 @@ Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers li
 | [05-commands.md](05-commands.md) | `mnem` subcommands and the `BOON CLAIM` intercept |
 | [06-history.md](06-history.md) | Local run history, the affix library, and the `mnem boons/affixes/library/quiet` reports |
 | [07-explorer.md](07-explorer.md) | The `mnem explore` auto-sweep: state machine, navigation, basher integration |
+| [08-magi-kite.md](08-magi-kite.md) | The Magi kite (v4.7.530): below the escape line a Magi casts (stormhammer at 3+, staffcast at 1-2), steps out on the cast line and comes back; how it replaces the one-retreat rule and what it still obeys |
 | [00-reference-from-claude-md.md](00-reference-from-claude-md.md) | The 180 KB reference that was the Mnemosyne section of `CLAUDE.md` until 2026-11-13, moved verbatim. Not yet reconciled with the files above: where they disagree, check the code |
 
 ## Persistence

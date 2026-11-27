@@ -161,6 +161,16 @@ function ataxiaBasher_attack()
   -- at S.ESCAPE_MODE_MAX, so it cannot mute the basher indefinitely.
   if ataxiaTemp.escapeMode then return end
 
+  -- THE MAGI KITE'S STEP (v4.7.530, mnemosyne/018). While the kite's step out of the fight room, or
+  -- back into it, waits in the free queue for equilibrium, an attack's `queue addclearfull` would
+  -- delete it. The kite owns the stamp and clears it when it is back in its cast phase or stops;
+  -- the age test is the backstop, so a lost kite cannot mute the basher for longer than that.
+  if ataxiaTemp.magiKiteHold then
+    local age = ((getEpoch and getEpoch()) or 0) - (tonumber(ataxiaTemp.magiKiteHold) or 0)
+    if age >= 0 and age < 15 then return end
+    ataxiaTemp.magiKiteHold = nil
+  end
+
   -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
   local danger = ataxiaBasher_dangerLevel()
 
@@ -643,6 +653,15 @@ function ataxiaBasher_dangerLevel()
     -- spend the round on that. A refusal (no validated route back) means fighting in place is
     -- genuinely the best available answer, and muting the basher there would be lethal -- so we
     -- deliberately fall through to the shield/attack tail rather than returning "wait".
+    -- THE MAGI KITE (v4.7.530, mnemosyne/018): a Magi in the tower below the escape line casts,
+    -- steps out and comes back instead of the disengage and the last stand. While it runs, the round
+    -- is its hit; its moves are held by ataxiaTemp.magiKiteHold above. It answers false, with its
+    -- reason said by the kite, in every other case, and the branch below runs unchanged.
+    local K = ataxia.mnemosyne and ataxia.mnemosyne.magiKite
+    if K and K.owns then
+      local okK, owns = pcall(K.owns, hpp)
+      if okK and owns then return "attack" end
+    end
     local fleePct = ataxiaBasher.fleeThresholdPct or 25
     local spiking = ataxiaBasher_isDamageRateExtreme()
     local noWay = "no swarm tactics loaded"
@@ -1374,7 +1393,9 @@ end
 
 -- The biggest attack taken in THIS room in the last `window` seconds: its size and age, or nil and
 -- the reason there is none.
-function ataxiaBasher_biggestHitHere(window)
+-- `anyRoom` (v4.7.530): the biggest hit in any room, for the Magi kite, which asks from the room it
+-- stepped into whether going back into the fight room is one hit from death.
+function ataxiaBasher_biggestHitHere(window, anyRoom)
   ataxiaTemp = ataxiaTemp or {}
   local list = ataxiaTemp.attackHits
   if type(list) ~= "table" or #list == 0 then return nil, "no hit recorded" end
@@ -1383,11 +1404,11 @@ function ataxiaBasher_biggestHitHere(window)
   local best, age
   for _, h in ipairs(list) do
     local since = nowT - h.last
-    if h.room == room and since >= 0 and since < window and (not best or h.sum > best) then
+    if (anyRoom or h.room == room) and since >= 0 and since < window and (not best or h.sum > best) then
       best, age = h.sum, since
     end
   end
-  if not best then return nil, "no hit in this room in " .. window .. "s" end
+  if not best then return nil, "no hit in " .. (anyRoom and "any room" or "this room") .. " in " .. window .. "s" end
   return best, age
 end
 
